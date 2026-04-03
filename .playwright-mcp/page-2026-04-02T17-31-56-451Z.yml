@@ -1,0 +1,31 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - img "Branding Background" [ref=e8]
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - img [ref=e12]
+        - generic [ref=e15]: Plataforma de Invitaciones Premium
+      - heading "Digitaliza el amor, simplifica el evento." [level=1] [ref=e16]
+      - paragraph [ref=e17]: Gestiona tus confirmaciones, mesas de regalos y detalles del evento desde un panel profesional diseñado para ti.
+    - generic [ref=e18]: © 2026 INVITTO.MX
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Bienvenido de nuevo" [level=2] [ref=e22]
+      - paragraph [ref=e23]: Ingresa tus credenciales para administrar tus invitaciones.
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]: CORREO ELECTRÓNICO
+        - generic [ref=e27]:
+          - img [ref=e28]
+          - textbox "hola@tuempresa.com" [active] [ref=e31]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: CONTRASEÑA
+          - button "¿Olvidaste tu contraseña?" [ref=e35] [cursor=pointer]
+        - generic [ref=e36]:
+          - img [ref=e37]
+          - textbox "••••••••" [ref=e40]
+      - button "ACCEDER AL PANEL" [ref=e41] [cursor=pointer]:
+        - text: ACCEDER AL PANEL
+        - img [ref=e42]
+    - button "¿No tienes cuenta? Regístrate" [ref=e45] [cursor=pointer]

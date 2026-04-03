@@ -1,0 +1,22 @@
+- generic [ref=e7]:
+  - generic [ref=e8]:
+    - heading "Bienvenido de nuevo" [level=2] [ref=e9]
+    - paragraph [ref=e10]: Ingresa tus credenciales para administrar tus invitaciones.
+  - generic [ref=e11]:
+    - generic [ref=e12]:
+      - generic [ref=e13]: CORREO ELECTRÓNICO
+      - generic [ref=e14]:
+        - img [ref=e15]
+        - textbox "hola@tuempresa.com" [ref=e18]: test@test.com
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: CONTRASEÑA
+        - button "¿Olvidaste tu contraseña?" [ref=e22] [cursor=pointer]
+      - generic [ref=e23]:
+        - img [ref=e24]
+        - textbox "••••••••" [ref=e27]: wrongpassword
+    - generic [ref=e33]: Failed to fetch
+    - button "ACCEDER AL PANEL" [ref=e28] [cursor=pointer]:
+      - text: ACCEDER AL PANEL
+      - img [ref=e34]
+  - button "¿No tienes cuenta? Regístrate" [ref=e32] [cursor=pointer]

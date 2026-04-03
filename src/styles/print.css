@@ -1,0 +1,85 @@
+/* Print Styles - Solo información esencial */
+@media print {
+
+    /* Reset básico */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    /* Ocultar elementos innecesarios */
+    header,
+    footer,
+    nav,
+    .no-print,
+    button:not(.print-only),
+    [class*="scroll"],
+    [class*="animate"],
+    [class*="sticky"],
+    [class*="fixed"],
+    [class*="floating"] {
+        display: none !important;
+    }
+
+    /* Ocultar secciones específicas que no son esenciales */
+    section:has([class*="gallery"]),
+    section:has([class*="photo"]),
+    section:has([class*="hotel"]),
+    section:has([class*="hospedaje"]),
+    section:has([class*="music"]),
+    section:has(img[class*="background"]),
+    div[class*="version-switcher"],
+    div[class*="demo"],
+    div[class*="cta"] {
+        display: none !important;
+    }
+
+    /* Layout limpio */
+    .print-section {
+        page-break-inside: avoid;
+        margin-bottom: 2rem;
+    }
+
+    /* Tipografía optimizada para impresión */
+    h1,
+    h2,
+    h3 {
+        color: #1c1917 !important;
+        page-break-after: avoid;
+    }
+
+    /* Mantener solo información esencial visible */
+    .print-essential {
+        display: block !important;
+    }
+
+    /* Iconos en impresión */
+    svg {
+        max-width: 20px;
+        max-height: 20px;
+    }
+
+    /* Links */
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    /* Optimizar mapas */
+    iframe,
+    embed,
+    object {
+        display: none !important;
+    }
+
+    /* Layout de página */
+    @page {
+        margin: 2cm;
+        size: A4;
+    }
+}
