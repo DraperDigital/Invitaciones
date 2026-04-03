@@ -39,6 +39,7 @@ export default function InvitationPage() {
     const [error, setError] = useState<string | null>(null);
 
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
+    const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
     // Admin mode: requires ?t=admin in URL + authenticated user who owns this event
     const [isAdminMode, setIsAdminMode] = useState(false);
@@ -139,6 +140,7 @@ export default function InvitationPage() {
 
         if (eventError || !eventData) {
             console.error('Event not found');
+            setNotFound(true);
             setLoading(false);
             return;
         }
@@ -289,8 +291,63 @@ END:VCALENDAR`;
         </div>;
     }
 
-    if (!event) {
-        return <div className="flex h-screen items-center justify-center bg-cream text-stone-500">Invitación no encontrada</div>;
+    if (notFound || !event) {
+        return (
+            <div className="min-h-screen bg-[#FDFBF7] flex flex-col">
+                {/* Header */}
+                <header className="w-full px-6 py-5 border-b border-[#1B2E1D]/8">
+                    <Link to="/" className="text-2xl font-serif italic tracking-tighter text-[#1B2E1D]">
+                        Invitto
+                    </Link>
+                </header>
+
+                {/* Error content */}
+                <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+                    <div className="max-w-md">
+                        {/* Icon */}
+                        <div className="w-20 h-20 rounded-full bg-stone-100 flex items-center justify-center mx-auto mb-6">
+                            <Heart className="h-9 w-9 text-stone-300" />
+                        </div>
+
+                        {/* Message */}
+                        <h1 className="text-2xl font-serif text-[#1B2E1D] mb-3">
+                            Invitación no encontrada
+                        </h1>
+                        <p className="text-stone-500 text-sm leading-relaxed mb-8">
+                            Es posible que el enlace haya expirado, que la invitación aún no esté disponible,
+                            o que el link tenga un error tipográfico. Pide al organizador que te reenvíe el link correcto.
+                        </p>
+
+                        {/* Actions */}
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <Link
+                                to="/"
+                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#1B2E1D] text-white text-sm font-medium rounded-full hover:bg-[#1B2E1D]/90 transition-colors"
+                            >
+                                <Home className="h-4 w-4" />
+                                Ir al inicio
+                            </Link>
+                            <button
+                                onClick={() => window.history.back()}
+                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-stone-200 text-stone-600 text-sm font-medium rounded-full hover:bg-stone-50 transition-colors"
+                            >
+                                Volver atrás
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <footer className="w-full px-6 py-4 text-center">
+                    <p className="text-xs text-stone-400">
+                        ¿Quieres crear tu propia invitación?{' '}
+                        <Link to="/" className="underline underline-offset-2 hover:text-stone-600 transition-colors">
+                            Conoce Invitto
+                        </Link>
+                    </p>
+                </footer>
+            </div>
+        );
     }
 
     if (!event.is_published) {
@@ -1504,7 +1561,7 @@ END:VCALENDAR`;
                 <div className="py-10 text-center space-y-4">
                     <div className="h-px w-32 mx-auto bg-white/20 mb-6" />
                     <p className="text-xs uppercase tracking-[0.3em] text-stone-400">
-                        Creado con amor · Invitaciones MX
+                        Creado con amor · Invitto
                     </p>
                     <p className="text-xs text-stone-500">
                         © 2026 Todos los derechos reservados
