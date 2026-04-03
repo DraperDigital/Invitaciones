@@ -80,7 +80,7 @@ export default function InvitationPage() {
             }
 
             setLastSaveStatus('ok');
-            toast.success('¡Guardado!', { duration: 2000 } as any);
+            toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
             setLastSaveStatus('error');
@@ -296,7 +296,7 @@ END:VCALENDAR`;
     const subtitle = cfg.subtitle || '';
     const welcomeMessage = cfg.welcome_message || null;
     // Feature flags Compatibility Layer — Support both camelCase (Dashboard) and snake_case (Legacy)
-    // Priority: new camelCase key ?? fallback to old s    // Feature flags Compatibility Layer — Support both camelCase (Dashboard) and snake_case (Legacy)
+    // Feature flags Compatibility Layer — Support both camelCase (Dashboard) and snake_case (Legacy)
     // Priority: new camelCase key ?? fallback to old snake_case ?? default value
     const isEn = (camelKey: string, snakeKey: string, def = true) => {
         const camelVal = cfg[camelKey];
@@ -318,7 +318,8 @@ END:VCALENDAR`;
     const showGallery    = isEn('showGallery',      'show_gallery',   true);
     const showGifts      = isEn('showGifts',        'show_gifts',     false);
 
-    // Advanced features toggled in SettingsPage
+    // Advanced features toggled in SettingsPage (Commented out to satisfy TS no-unused-vars)
+    /*
     const enableMetrics         = isEn('enableMetrics',         'enable_metrics',         false);
     const enableGuestList       = isEn('enableGuestList',       'enable_guest_list',       false);
     const enableReminders       = isEn('enableReminders',       'enable_reminders',       false);
@@ -327,6 +328,7 @@ END:VCALENDAR`;
     const enableQr              = isEn('enableQr',              'qr_passes',              false);
     const enableAccessControl    = isEn('enableAccessControl',    'access_control',         false);
     const enableTableManagement = isEn('enableTableManagement', 'table_management',       false);
+    */
 
     // ── Labels by event type ──
     const eventLabels: Record<string, { ceremony: string; reception: string; tagline: string }> = {
