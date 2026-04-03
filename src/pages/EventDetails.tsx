@@ -35,6 +35,8 @@ export default function EventDetails() {
     const [isSaving, setIsSaving] = useState(false);
     const [isSavingGuest, setIsSavingGuest] = useState(false);
     const [newGuest, setNewGuest] = useState({ name: '', group_name: '', max_plus_ones: 0, phone: '', email: '' });
+    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     
     // Content state
     const [registryItems, setRegistryItems] = useState<any[]>([]);
@@ -166,13 +168,25 @@ export default function EventDetails() {
     };
 
     const deleteGuest = async (guestId: string) => {
-        if (!confirm('¿Eliminar invitado?')) return;
+        setConfirmDeleteId(null);
+        setDeletingId(guestId);
         try {
-            const { error } = await supabase.from('guests').delete().eq('id', guestId);
+            const { data: deleted, error } = await supabase
+                .from('guests')
+                .delete()
+                .eq('id', guestId)
+                .select('id');
             if (error) throw error;
-            setGuests(guests.filter(g => g.id !== guestId));
-        } catch (error) {
-            console.error('Error deleting guest:', error);
+            if (!deleted || deleted.length === 0) {
+                throw new Error('Sin permisos para eliminar. Verifica las políticas RLS de Supabase.');
+            }
+            setGuests(prev => prev.filter(g => g.id !== guestId));
+            toast.success('Invitado eliminado.');
+        } catch (err: any) {
+            console.error('Error deleting guest:', err);
+            toast.error('Error al eliminar: ' + (err.message || 'Error desconocido'));
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -844,9 +858,31 @@ export default function EventDetails() {
                                                             >
                                                                 <MessageCircle className="h-4 w-4" />
                                                             </button>
-                                                            <button onClick={() => deleteGuest(guest.id)} className="p-3 bg-rose-50 text-rose-300 hover:text-rose-600 rounded-2xl transition-colors">
-                                                                <Trash2 className="h-4 w-4" />
-                                                            </button>
+                                                            {confirmDeleteId === guest.id ? (
+                                                                <div className="flex items-center gap-1">
+                                                                    <button
+                                                                        onClick={() => deleteGuest(guest.id)}
+                                                                        disabled={deletingId === guest.id}
+                                                                        className="px-2 py-1.5 bg-rose-500 text-white text-xs font-medium rounded-xl hover:bg-rose-600 transition-colors disabled:opacity-50"
+                                                                    >
+                                                                        {deletingId === guest.id ? '...' : '¿Eliminar?'}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => setConfirmDeleteId(null)}
+                                                                        className="p-1.5 text-stone-400 hover:text-stone-600 rounded-xl transition-colors"
+                                                                    >
+                                                                        <CloseIcon className="h-3 w-3" />
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setConfirmDeleteId(guest.id)}
+                                                                    disabled={deletingId === guest.id}
+                                                                    className="p-3 bg-rose-50 text-rose-300 hover:text-rose-600 rounded-2xl transition-colors disabled:opacity-50"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -902,7 +938,28 @@ export default function EventDetails() {
                                                         >
                                                             <Edit2 className="h-4 w-4" />
                                                         </button>
-                                                        <button onClick={() => deleteGuest(guest.id)} className="p-2.5 bg-rose-50 text-rose-300 rounded-xl"><Trash2 className="h-4 w-4" /></button>
+                                                        {confirmDeleteId === guest.id ? (
+                                                            <div className="flex items-center gap-1">
+                                                                <button
+                                                                    onClick={() => deleteGuest(guest.id)}
+                                                                    disabled={deletingId === guest.id}
+                                                                    className="px-2 py-1.5 bg-rose-500 text-white text-xs font-medium rounded-xl disabled:opacity-50"
+                                                                >
+                                                                    {deletingId === guest.id ? '...' : '¿Eliminar?'}
+                                                                </button>
+                                                                <button onClick={() => setConfirmDeleteId(null)} className="p-2 text-stone-400 rounded-xl">
+                                                                    <CloseIcon className="h-3 w-3" />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => setConfirmDeleteId(guest.id)}
+                                                                disabled={deletingId === guest.id}
+                                                                className="p-2.5 bg-rose-50 text-rose-300 rounded-xl disabled:opacity-50"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>

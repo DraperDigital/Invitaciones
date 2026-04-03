@@ -24,6 +24,8 @@ const EventRSVPs: React.FC = () => {
     const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
     const [editData, setEditData] = useState({ name: '', group_name: '', status: '', plus_ones_confirmed: 0, table_id: '' });
     const [selectedGuestForQR, setSelectedGuestForQR] = useState<any | null>(null);
+    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const { user } = useAuth();
     const toast = useToast();
@@ -149,13 +151,25 @@ const EventRSVPs: React.FC = () => {
     };
 
     const handleDelete = async (guestId: string) => {
-        if (!window.confirm("¿Estás seguro de que deseas eliminar a este invitado?")) return;
+        setConfirmDeleteId(null);
+        setDeletingId(guestId);
         try {
-            const { error } = await supabase.from('guests').delete().eq('id', guestId);
+            const { data: deleted, error } = await supabase
+                .from('guests')
+                .delete()
+                .eq('id', guestId)
+                .select('id');
             if (error) throw error;
-            setGuests(guests.filter(g => g.id !== guestId));
-        } catch (error) {
-            console.error(error);
+            if (!deleted || deleted.length === 0) {
+                throw new Error('Sin permisos para eliminar. Verifica las políticas RLS de Supabase.');
+            }
+            setGuests(prev => prev.filter(g => g.id !== guestId));
+            toast.success('Invitado eliminado.');
+        } catch (err: any) {
+            console.error(err);
+            toast.error('Error al eliminar: ' + (err.message || 'Error desconocido'));
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -416,6 +430,8 @@ const EventRSVPs: React.FC = () => {
                 </div>
             </div>
 
+            {/* Stats Cards Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                 {[
                     { label: 'Lugares (Pax)', value: metrics.totalInvitados, color: 'text-[#1B2E1D]', bg: 'bg-white', icon: <Users className="h-4 w-4" /> },
                     { label: 'Pax Confirm.', value: metrics.confirmados, color: 'text-emerald-500', bg: 'bg-emerald-50/20', icon: <Check className="h-4 w-4" /> },
@@ -423,16 +439,17 @@ const EventRSVPs: React.FC = () => {
                     { label: 'Pax Pendientes', value: metrics.pendientes, color: 'text-amber-500', bg: 'bg-amber-50/20', icon: <Clock className="h-4 w-4" /> },
                     { label: 'Pax Declinados', value: metrics.noAsistiran, color: 'text-rose-500', bg: 'bg-rose-50/20', icon: <X className="h-4 w-4" /> },
                 ].map((stat) => (
-                    <div key={stat.label} className={`${stat.bg} p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-stone-100/50 shadow-sm transition-all hover:translate-y-[-4px] hover:shadow-xl hover:shadow-stone-200/50 flex flex-col justify-between group`}>
+                    <div key={stat.label} className={`${stat.bg} p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 shadow-sm transition-all hover:translate-y-[-4px] hover:shadow-xl hover:shadow-stone-200/50 flex flex-col justify-between group`}>
                         <div className="flex items-center justify-between mb-4">
-                            <p className="text-[8px] md:text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 group-hover:text-stone-500 transition-colors">{stat.label}</p>
+                            <p className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 group-hover:text-stone-500 transition-colors">{stat.label}</p>
                             <div className={`p-2 rounded-xl bg-white/80 shadow-sm ${stat.color} opacity-0 group-hover:opacity-100 transition-all`}>
                                 {stat.icon}
                             </div>
                         </div>
-                        <p className={`text-3xl md:text-5xl font-serif tracking-tighter ${stat.color}`}>{stat.value}</p>
+                        <p className={`text-3xl md:text-4xl font-serif tracking-tighter ${stat.color}`}>{stat.value}</p>
                     </div>
                 ))}
+            </div>
             </div>
 
             {/* Tabs */}
@@ -597,7 +614,28 @@ const EventRSVPs: React.FC = () => {
                                                             >
                                                                 <Edit2 className="h-4 w-4" />
                                                             </button>
-                                                            <button onClick={() => handleDelete(guest.id)} className="p-2 text-stone-300 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
+                                                            {confirmDeleteId === guest.id ? (
+                                                                <div className="flex items-center gap-1">
+                                                                    <button
+                                                                        onClick={() => handleDelete(guest.id)}
+                                                                        disabled={deletingId === guest.id}
+                                                                        className="px-2 py-1 bg-rose-500 text-white text-xs font-medium rounded-lg hover:bg-rose-600 disabled:opacity-50"
+                                                                    >
+                                                                        {deletingId === guest.id ? '...' : '¿Eliminar?'}
+                                                                    </button>
+                                                                    <button onClick={() => setConfirmDeleteId(null)} className="p-1 text-stone-400 hover:text-stone-600">
+                                                                        <X className="h-3 w-3" />
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => setConfirmDeleteId(guest.id)}
+                                                                    disabled={deletingId === guest.id}
+                                                                    className="p-2 text-stone-300 hover:text-rose-500 disabled:opacity-50"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </td>
@@ -710,12 +748,28 @@ const EventRSVPs: React.FC = () => {
                                                         >
                                                             <Edit2 className="h-4 w-4" />
                                                         </button>
-                                                        <button 
-                                                            onClick={() => handleDelete(guest.id)}
-                                                            className="p-2.5 bg-stone-50 text-rose-300 rounded-xl"
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </button>
+                                                        {confirmDeleteId === guest.id ? (
+                                                            <div className="flex items-center gap-1">
+                                                                <button
+                                                                    onClick={() => handleDelete(guest.id)}
+                                                                    disabled={deletingId === guest.id}
+                                                                    className="px-2 py-1.5 bg-rose-500 text-white text-xs font-medium rounded-xl disabled:opacity-50"
+                                                                >
+                                                                    {deletingId === guest.id ? '...' : '¿Eliminar?'}
+                                                                </button>
+                                                                <button onClick={() => setConfirmDeleteId(null)} className="p-2 text-stone-400 rounded-xl">
+                                                                    <X className="h-3 w-3" />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => setConfirmDeleteId(guest.id)}
+                                                                disabled={deletingId === guest.id}
+                                                                className="p-2.5 bg-stone-50 text-rose-300 rounded-xl disabled:opacity-50"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </button>
+                                                        )}
                                                     </>
                                                 )}
                                                 {isEditing && (

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { MapPin, Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, User, Mail, Home, Calendar, Hotel, Download, Loader2, Settings, Eye, EyeOff, Shield, Activity, X } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
@@ -23,6 +24,7 @@ export default function InvitationPage() {
         rawToken ?? (sessionKey ? sessionStorage.getItem(sessionKey) : null);
 
     const toast = useToast();
+    const { user } = useAuth();
     const [event, setEvent] = useState<Event | null>(null);
     const [guest, setGuest] = useState<Guest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -30,7 +32,7 @@ export default function InvitationPage() {
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-    
+
     // Form states for General Registration
     const [guestName, setGuestName] = useState('');
     const [numGuests, setNumGuests] = useState('1');
@@ -38,7 +40,8 @@ export default function InvitationPage() {
 
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    const isAdminMode = rawToken === 'admin';
+    // Admin mode: requires ?t=admin in URL + authenticated user who owns this event
+    const [isAdminMode, setIsAdminMode] = useState(false);
     const [lastSaveStatus, setLastSaveStatus] = useState<'idle' | 'saving' | 'ok' | 'error'>('idle');
 
     const KEY_MAPPINGS: Record<string, string> = {
@@ -122,6 +125,8 @@ export default function InvitationPage() {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
             }
+            // In mock mode, allow admin if ?t=admin (no real auth available)
+            if (rawToken === 'admin') setIsAdminMode(true);
             setLoading(false);
             return;
         }
@@ -138,6 +143,14 @@ export default function InvitationPage() {
             return;
         }
         setEvent(eventData);
+
+        // Admin mode: only grant access if ?t=admin AND the logged-in user owns this event
+        if (rawToken === 'admin' && user && user.id === eventData.user_id) {
+            setIsAdminMode(true);
+        } else if (rawToken === 'admin') {
+            // Someone tried the URL trick without being the owner — silently deny
+            console.warn('[SECURITY] Admin access denied: not the event owner.');
+        }
 
         if (guestToken) {
             const { data: tokenData, error: tokenError } = await supabase
