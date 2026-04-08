@@ -402,10 +402,10 @@ END:VCALENDAR`;
 
     // ── Labels by event type ──
     const eventLabels: Record<string, { ceremony: string; reception: string; tagline: string }> = {
-        wedding:    { ceremony: 'Ceremonia Religiosa', reception: 'Recepción', tagline: 'Nos Casamos' },
-        birthday:   { ceremony: 'Celebración', reception: 'Después del evento', tagline: 'Cumpleaños' },
+        wedding:    { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos' },
+        birthday:   { ceremony: 'Misa', reception: 'Celebración', tagline: 'Cumpleaños' },
         xv:         { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años' },
-        baptism:    { ceremony: 'Bautizo', reception: 'Convivio', tagline: 'Bautizo' },
+        baptism:    { ceremony: 'Misa de Bautizo', reception: 'Celebración', tagline: 'Bautizo' },
         graduation: { ceremony: 'Ceremonia', reception: 'Festejo', tagline: 'Graduación' },
     };
     const labels = eventLabels[event.event_type] || eventLabels['birthday'];
@@ -955,55 +955,59 @@ END:VCALENDAR`;
                         <p className="text-stone-600">Gracias por estar con nosotros, aquí las ubicaciones del evento</p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-                        {/* Ceremony */}
-                        <div className="card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all">
-                            <div className="inline-flex justify-center">
-                                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center shadow-md">
-                                    <Heart className="h-10 w-10 text-rose-400" />
+                    <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
+                        {/* Ceremony - Only show if specifically configured with a name */}
+                        {cfg.misa_name && (
+                            <div className="flex-1 card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
+                                <div className="inline-flex justify-center">
+                                    <div className="h-20 w-20 rounded-full bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center shadow-md">
+                                        <Heart className="h-10 w-10 text-rose-400" />
+                                    </div>
                                 </div>
+                                <h4 className="text-2xl font-serif font-medium text-stone-900 uppercase tracking-wider">{labels.ceremony}</h4>
+                                <div className="space-y-3 text-stone-700 w-full">
+                                    <p className="flex items-center justify-center gap-3 text-lg">
+                                        <Clock className="h-5 w-5 text-accent flex-shrink-0" />
+                                        <span className="font-sans">{cfg.misa_time || "Por confirmar"} hrs</span>
+                                    </p>
+                                    <div className="flex flex-col items-center gap-1">
+                                        <p className="font-serif text-lg text-stone-900">{cfg.misa_name}</p>
+                                        <p className="text-sm font-light text-stone-500 italic max-w-[250px]">{cfg.misa_address}</p>
+                                    </div>
+                                </div>
+                                {cfg.misa_maps_link && (
+                                    <a href={cfg.misa_maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
+                                        <button className="btn-premium px-8 py-3 rounded-full text-white font-sans font-medium text-[11px] uppercase tracking-[0.2em]">
+                                            ¿Cómo llegar?
+                                        </button>
+                                    </a>
+                                )}
                             </div>
-                            <h4 className="text-2xl font-serif font-medium text-stone-900 uppercase tracking-wider">{labels.ceremony}</h4>
-                            <div className="space-y-3 text-stone-700">
-                                <p className="flex items-center justify-center gap-3 text-lg">
-                                    <Clock className="h-5 w-5 text-accent flex-shrink-0" />
-                                    <span className="font-sans">{cfg.misa_time || format(eventDate, 'HH:mm', { locale: es })} hrs</span>
-                                </p>
-                                <p className="flex items-start justify-center gap-3">
-                                    <MapPin className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
-                                    <span className="font-sans text-sm">{cfg.misa_name || event.venue_name}<br />{cfg.misa_address || event.venue_address}</span>
-                                </p>
-                            </div>
-                            {(cfg.misa_maps_link || event.maps_link) && (
-                                <a href={cfg.misa_maps_link || event.maps_link} target="_blank" rel="noreferrer">
-                                    <button className="btn-premium px-6 py-3 rounded-full text-white font-sans font-medium text-sm uppercase tracking-wider mt-4">
-                                        ¿Cómo llegar?
-                                    </button>
-                                </a>
-                            )}
-                        </div>
+                        )}
 
-                        {/* Reception */}
-                        <div className="card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all">
+                        {/* Reception - Main Event */}
+                        <div className="flex-1 card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                             <div className="inline-flex justify-center">
                                 <div className="h-20 w-20 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center shadow-md">
                                     <Music className="h-10 w-10 text-amber-500" />
                                 </div>
                             </div>
                             <h4 className="text-2xl font-serif font-medium text-stone-900 uppercase tracking-wider">{labels.reception}</h4>
-                            <div className="space-y-3 text-stone-700">
+                            <div className="space-y-3 text-stone-700 w-full">
                                 <p className="flex items-center justify-center gap-3 text-lg">
                                     <Clock className="h-5 w-5 text-accent flex-shrink-0" />
-                                    <span className="font-sans">Inmediatamente después</span>
+                                    <span className="font-sans">
+                                        {event.event_type === 'birthday' ? 'Inmediatamente después' : format(eventDate, 'HH:mm', { locale: es }) + ' hrs'}
+                                    </span>
                                 </p>
-                                <p className="flex items-start justify-center gap-3">
-                                    <MapPin className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
-                                    <span className="font-sans text-sm">{event.venue_name}<br />{event.venue_address}</span>
-                                </p>
+                                <div className="flex flex-col items-center gap-1">
+                                    <p className="font-serif text-lg text-stone-900">{event.venue_name}</p>
+                                    <p className="text-sm font-light text-stone-500 italic max-w-[250px]">{event.venue_address}</p>
+                                </div>
                             </div>
                             {event.maps_link && (
-                                <a href={event.maps_link} target="_blank" rel="noreferrer">
-                                    <button className="btn-premium px-6 py-3 rounded-full text-white font-sans font-medium text-sm uppercase tracking-wider mt-4">
+                                <a href={event.maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
+                                    <button className="btn-premium px-8 py-3 rounded-full text-white font-sans font-medium text-[11px] uppercase tracking-[0.2em] bg-stone-900 hover:bg-stone-800">
                                         ¿Cómo llegar?
                                     </button>
                                 </a>

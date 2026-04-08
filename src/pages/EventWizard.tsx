@@ -53,13 +53,18 @@ export default function EventWizard() {
     const isEditing = !!id;
 
     useEffect(() => {
-        if (id && user) {
-            const fetchEvent = async () => {
-                const { data: eventData } = await supabase
+        if (!id || !user || dataLoaded) return;
+
+        const fetchEvent = async () => {
+            try {
+                const { data: eventData, error } = await supabase
                     .from('events')
                     .select('*')
                     .eq('id', id)
                     .single();
+
+                if (error) throw error;
+
                 if (eventData) {
                     setData({
                         title: eventData.title || '',
@@ -68,90 +73,106 @@ export default function EventWizard() {
                         venue_name: eventData.venue_name || '',
                         venue_address: eventData.venue_address || '',
                         maps_link: eventData.maps_link || '',
-                        misa_name: eventData.theme_config?.misa_name || '',
-                        misa_address: eventData.theme_config?.misa_address || '',
-                        misa_maps_link: eventData.theme_config?.misa_maps_link || '',
-                        misa_time: eventData.theme_config?.misa_time || '',
+                        misa_name: eventData.theme_config?.misa_name || eventData.theme_config?.misaName || '',
+                        misa_address: eventData.theme_config?.misa_address || eventData.theme_config?.misaAddress || '',
+                        misa_maps_link: eventData.theme_config?.misa_maps_link || eventData.theme_config?.misaMapsLink || '',
+                        misa_time: eventData.theme_config?.misa_time || eventData.theme_config?.misaTime || '',
                         dress_code: eventData.dress_code || '',
                         rsvp_deadline: eventData.rsvp_deadline ? new Date(eventData.rsvp_deadline).toISOString().slice(0, 10) : '',
                         theme: eventData.theme_config?.theme || 'classic'
                     });
                 }
+            } catch (err: any) {
+                console.error('Error fetching event:', err);
+                toast.error('Error al cargar datos del evento');
+            } finally {
                 setDataLoaded(true);
-            };
-            fetchEvent();
-        } else {
-            setDataLoaded(true);
-        }
-    }, [id, user]);
+            }
+        };
+
+        fetchEvent();
+    }, [id, user, dataLoaded]);
 
     const updateData = (updates: Partial<WizardData>) => {
         setData((prev) => ({ ...prev, ...updates }));
     };
 
-    const handleNext = () => setStep((prev) => prev + 1);
-    const handleBack = () => setStep((prev) => prev - 1);
+    const handleNext = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setStep((prev) => prev + 1);
+    };
 
-    const handleSubmit = async () => {
+    const handleBack = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setStep((prev) => prev - 1);
+    };
+
+    const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
+        e.preventDefault();
         if (!user) return;
         setLoading(true);
 
-        // Validar theme_config anterior si lo hubiera? O simplificar y sobrescribir
-        // Lo sobrescribimos asegurándonos de mantener el 'theme'
-        const payload = {
-            title: data.title,
-            event_type: data.event_type as any,
-            date_time: new Date(data.date_time).toISOString(),
-            venue_name: data.venue_name,
-            venue_address: data.venue_address,
-            maps_link: data.maps_link,
-            dress_code: data.dress_code,
-            rsvp_deadline: data.rsvp_deadline ? new Date(data.rsvp_deadline).toISOString() : null,
-            // Aquí idealmente deberíamos hacer merge del theme_config en modo editar,
-            // pero si la base no tiene más configuraciones en esta pantalla, basta con asentar el theme
-        };
-
-        if (isEditing) {
-            // Obtenemos el config actual para no borrar la galería y regalos
-            const { data: oldData } = await supabase.from('events').select('theme_config').eq('id', id).single();
-            const newConfig = { 
-                ...(oldData?.theme_config || {}), 
-                theme: data.theme,
-                misa_name: data.misa_name,
-                misa_address: data.misa_address,
-                misa_maps_link: data.misa_maps_link,
-                misa_time: data.misa_time
-            };
-            
-            const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
-            setLoading(false);
-            if (error) {
-                toast.error('Error al actualizar el evento: ' + error.message);
-            } else {
-                navigate(`/dashboard/event/${id}`);
+        try {
+            // Validar fechas de forma segura
+            let dateTimeStr = '';
+            try {
+                dateTimeStr = new Date(data.date_time).toISOString();
+            } catch (e) {
+                dateTimeStr = new Date().toISOString();
             }
-        } else {
-            const insertPayload = {
-                id: crypto.randomUUID(),
-                ...payload,
-                user_id: user.id,
-                is_published: true,
-                theme_config: { 
+
+            const payload = {
+                title: data.title,
+                event_type: data.event_type as any,
+                date_time: dateTimeStr,
+                venue_name: data.venue_name,
+                venue_address: data.venue_address,
+                maps_link: data.maps_link,
+                dress_code: data.dress_code,
+                rsvp_deadline: data.rsvp_deadline ? new Date(data.rsvp_deadline).toISOString() : null,
+            };
+
+            if (isEditing) {
+                // Obtenemos el config actual para no borrar la galería y regalos
+                const { data: oldData } = await supabase.from('events').select('theme_config').eq('id', id).single();
+                const newConfig = { 
+                    ...(oldData?.theme_config || {}), 
                     theme: data.theme,
                     misa_name: data.misa_name,
                     misa_address: data.misa_address,
                     misa_maps_link: data.misa_maps_link,
                     misa_time: data.misa_time
-                },
-                slug: `${data.title.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 7)}`,
-            };
-            const { error } = await supabase.from('events').insert(insertPayload);
-            setLoading(false);
-            if (error) {
-                toast.error('Error al crear el evento: ' + error.message);
+                };
+                
+                const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
+                if (error) throw error;
+                toast.success('¡Evento actualizado!');
+                navigate(`/dashboard/event/${id}`);
             } else {
+                const insertPayload = {
+                    id: crypto.randomUUID(),
+                    ...payload,
+                    user_id: user.id,
+                    is_published: true,
+                    theme_config: { 
+                        theme: data.theme,
+                        misa_name: data.misa_name,
+                        misa_address: data.misa_address,
+                        misa_maps_link: data.misa_maps_link,
+                        misa_time: data.misa_time
+                    },
+                    slug: `${data.title.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 7)}`,
+                };
+                const { error } = await supabase.from('events').insert(insertPayload);
+                if (error) throw error;
+                toast.success('¡Evento creado con éxito!');
                 navigate('/dashboard');
             }
+        } catch (err: any) {
+            console.error('Error submitting event:', err);
+            toast.error('Error al guardar: ' + err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -238,7 +259,7 @@ export default function EventWizard() {
                         
                         {/* Sección Misa / Ceremonia */}
                         <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-[#BD7474]">Ceremonia / Misa</h3>
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-[#BD7474]">Misa</h3>
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
@@ -284,7 +305,7 @@ export default function EventWizard() {
 
                         {/* Sección Celebración */}
                         <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-stone-900">Celebración / Fiesta</h3>
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-stone-900">Celebración</h3>
                             <div>
                                 <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
                                 <input

@@ -34,6 +34,11 @@ type DesignConfig = {
     enableAccessControl: boolean;
     enableCustomDomain: boolean;
     enableTableManagement: boolean;
+    // Ubicación Detallada (Misa / Ceremonia)
+    misa_name: string;
+    misa_address: string;
+    misa_maps_link: string;
+    misa_time: string;
 };
 
 const DEFAULT_CONFIG: DesignConfig = {
@@ -61,6 +66,11 @@ const DEFAULT_CONFIG: DesignConfig = {
     enableAccessControl: false,
     enableCustomDomain: false,
     enableTableManagement: false,
+
+    misa_name: '',
+    misa_address: '',
+    misa_maps_link: '',
+    misa_time: '',
 };
 
 export default function DesignEditor() {
@@ -115,6 +125,10 @@ export default function DesignEditor() {
                     enableAccessControl:    c.enableAccessControl   ?? DEFAULT_CONFIG.enableAccessControl,
                     enableCustomDomain:     c.enableCustomDomain    ?? DEFAULT_CONFIG.enableCustomDomain,
                     enableTableManagement:  c.enableTableManagement ?? DEFAULT_CONFIG.enableTableManagement,
+                    misa_name:      c.misa_name      ?? c.misaName          ?? '',
+                    misa_address:   c.misa_address   ?? c.misaAddress       ?? '',
+                    misa_maps_link: c.misa_maps_link ?? c.misaMapsLink      ?? '',
+                    misa_time:      c.misa_time      ?? c.misaTime          ?? '',
                 });
             }
             setLoading(false);
@@ -162,6 +176,12 @@ export default function DesignEditor() {
                 enableAccessControl:  config.enableAccessControl,
                 enableCustomDomain:   config.enableCustomDomain,
                 enableTableManagement:config.enableTableManagement,
+
+                // Ubicación Misa
+                misa_name:            config.misa_name,
+                misa_address:         config.misa_address,
+                misa_maps_link:       config.misa_maps_link,
+                misa_time:            config.misa_time,
             };
 
             const { error } = await supabase
@@ -459,6 +479,61 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+
+            {/* ── Misa / Ceremonia Detail ── */}
+            <div className="bg-white rounded-[2rem] p-8 sm:p-10 border border-stone-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] space-y-8">
+                <div className="flex items-center gap-4 border-b border-stone-50 pb-6">
+                    <div className="h-12 w-12 bg-[#BD7474]/10 rounded-2xl flex items-center justify-center text-[#BD7474]">
+                        <span className="text-xl">⛪</span>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-serif text-[#1B2E1D]">Detalles de Misa</h2>
+                        <p className="text-xs text-stone-400 mt-1">Personaliza el lugar y hora de la ceremonia</p>
+                    </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Nombre del Lugar</label>
+                        <input
+                            type="text"
+                            value={config.misa_name}
+                            onChange={(e) => setConfig({ ...config, misa_name: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            placeholder="Ej. Parroquia de San Juan"
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Hora de Inicio</label>
+                        <input
+                            type="time"
+                            value={config.misa_time}
+                            onChange={(e) => setConfig({ ...config, misa_time: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                        />
+                    </div>
+                    <div className="sm:col-span-2 space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Dirección Completa</label>
+                        <input
+                            type="text"
+                            value={config.misa_address}
+                            onChange={(e) => setConfig({ ...config, misa_address: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            placeholder="Calle, Número, Colonia..."
+                        />
+                    </div>
+                    <div className="sm:col-span-2 space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Enlace de Google Maps</label>
+                        <input
+                            type="url"
+                            value={config.misa_maps_link}
+                            onChange={(e) => setConfig({ ...config, misa_maps_link: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800 font-mono text-xs"
+                            placeholder="https://maps.app.goo.gl/..."
+                        />
+                    </div>
                 </div>
             </div>
             
