@@ -475,16 +475,25 @@ export default function EventDetails() {
                             </div>
                             <div className="space-y-3">
                                 <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Acompañantes Adicionales</label>
-                                <div className="flex items-center gap-6">
-                                    <input 
-                                        type="range" 
-                                        min="0" 
-                                        max="10"
-                                        className="flex-1 accent-[#1B2E1D]"
-                                        value={newGuest.max_plus_ones} 
-                                        onChange={(e) => setNewGuest({...newGuest, max_plus_ones: parseInt(e.target.value) || 0})} 
-                                    />
-                                    <span className="text-2xl font-serif text-[#1B2E1D] w-8">{newGuest.max_plus_ones}</span>
+                                <div className="flex items-center gap-6 bg-[#FDFBF7] p-4 rounded-2xl w-full sm:w-1/2">
+                                    <button 
+                                        type="button"
+                                        onClick={() => setNewGuest({...newGuest, max_plus_ones: Math.max(0, newGuest.max_plus_ones - 1)})}
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                    >
+                                        -
+                                    </button>
+                                    <div className="flex-1 text-center">
+                                        <span className="text-2xl font-serif font-bold text-[#1B2E1D]">{newGuest.max_plus_ones}</span>
+                                        <p className="text-[9px] uppercase tracking-tighter text-stone-300 font-bold">Adicionales</p>
+                                    </div>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setNewGuest({...newGuest, max_plus_ones: newGuest.max_plus_ones + 1})}
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                    >
+                                        +
+                                    </button>
                                 </div>
                             </div>
                             <button

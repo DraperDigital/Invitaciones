@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { MapPin, Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, User, Mail, Home, Calendar, Hotel, Download, Loader2, Settings, Eye, EyeOff, Shield, Activity, X } from 'lucide-react';
+import { MapPin, Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, User, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Loader2, Settings, Eye, EyeOff, Shield, Activity, X } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -35,15 +35,19 @@ export default function InvitationPage() {
 
     // Form states for General Registration
     const [guestName, setGuestName] = useState('');
-    const [numGuests, setNumGuests] = useState('1');
     const [error, setError] = useState<string | null>(null);
 
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    // Admin mode: requires ?t=admin in URL + authenticated user who owns this event
     const [isAdminMode, setIsAdminMode] = useState(false);
     const [lastSaveStatus, setLastSaveStatus] = useState<'idle' | 'saving' | 'ok' | 'error'>('idle');
+
+    // PLUS ONES States
+    const [isAccompanied, setIsAccompanied] = useState(false);
+    const [showPlusOnesModal, setShowPlusOnesModal] = useState(false);
+    const [adultsCount, setAdultsCount] = useState(1);
+    const [kidsCount, setKidsCount] = useState(0);
 
     const KEY_MAPPINGS: Record<string, string> = {
         showMap:          'show_map',
@@ -146,12 +150,16 @@ export default function InvitationPage() {
         }
         setEvent(eventData);
 
-        // Admin mode: only grant access if ?t=admin AND the logged-in user owns this event
         if (rawToken === 'admin' && user && user.id === eventData.user_id) {
             setIsAdminMode(true);
         } else if (rawToken === 'admin') {
-            // Someone tried the URL trick without being the owner — silently deny
             console.warn('[SECURITY] Admin access denied: not the event owner.');
+        }
+
+        // If it's admin mode or simple preview, skip guest fetching
+        if (rawToken === 'admin') {
+             setLoading(false);
+             return;
         }
 
         if (guestToken) {
@@ -165,7 +173,18 @@ export default function InvitationPage() {
                     setGuest(guestData);
                     setGuestName(guestData.name);
                     if (rsvpData) {
-                        setNumGuests((rsvpData.plus_ones_confirmed + 1).toString());
+                        try {
+                            const msg = rsvpData.message || '';
+                            const adultsMatch = msg.match(/Adultos: (\d+)/);
+                            const kidsMatch = msg.match(/Niños: (\d+)/);
+                            if (adultsMatch) setAdultsCount(parseInt(adultsMatch[1]));
+                            if (kidsMatch) {
+                                setKidsCount(parseInt(kidsMatch[1]));
+                                setIsAccompanied(true);
+                            }
+                        } catch (e) {
+                            console.error('Error parsing RSVP counts', e);
+                        }
                         if (rsvpData.status === 'yes' || rsvpData.status === 'no') {
                             setRsvpSuccess(true);
                         }
@@ -198,24 +217,68 @@ export default function InvitationPage() {
         setError(null);
 
         try {
-            if (guestToken) {
+            const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount - 1) : 0;
+            const detailNote = isAccompanied ? `[Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
+
+            if (guestToken && guestToken !== 'admin') {
                 // Invitado con token personalizado: RPC valida token + slug server-side
                 const { error: rsvpError } = await supabase.rpc('submit_rsvp_by_token', {
                     p_token:     guestToken,
                     p_slug:      slug,
                     p_status:    status,
-                    p_plus_ones: (parseInt(numGuests) || 1) - 1,
+                    p_plus_ones: totalPlusOnes,
+                    p_message:   detailNote
                 });
                 if (rsvpError) throw rsvpError;
             } else {
-                // Registro general (sin token): RPC busca/crea guest y hace upsert del RSVP
-                const { error: rsvpError } = await supabase.rpc('register_rsvp_by_name', {
-                    p_slug:      slug,
-                    p_name:      cleanedName,
-                    p_status:    status,
-                    p_plus_ones: (parseInt(numGuests) || 1) - 1,
-                });
-                if (rsvpError) throw rsvpError;
+                // FALLBACK ROBUSTO: Registro general sin depender exclusivamente de RPC
+                // 1. Buscar o crear el invitado
+                let finalGuestId: string;
+                
+                const { data: existingGuest, error: findError } = await supabase
+                    .from('guests')
+                    .select('id')
+                    .eq('event_id', event.id)
+                    .ilike('name', cleanedName)
+                    .maybeSingle();
+
+                if (findError) throw findError;
+
+                if (existingGuest) {
+                    finalGuestId = existingGuest.id;
+                } else {
+                    const { data: newGuest, error: insertError } = await supabase
+                        .from('guests')
+                        .insert([{
+                            event_id: event.id,
+                            name: cleanedName,
+                            group_name: 'Registro Directo',
+                            status: 'pending',
+                            max_plus_ones: isAccompanied ? 10 : 0 // Permitir los que pidió
+                        }])
+                        .select('id')
+                        .single();
+                    if (insertError) throw insertError;
+                    finalGuestId = newGuest.id;
+                }
+
+                // 2. Upsert RSVP
+                const { error: rsvpErr } = await supabase
+                    .from('rsvps')
+                    .upsert({
+                        event_id: event.id,
+                        guest_id: finalGuestId,
+                        status: status,
+                        plus_ones_confirmed: totalPlusOnes,
+                        message: detailNote || 'Registro Directo'
+                    }, { onConflict: 'guest_id' });
+
+                if (rsvpErr) throw rsvpErr;
+
+                // 3. Update guest status
+                await supabase.from('guests').update({ 
+                    status: status === 'yes' ? 'confirmed' : 'declined' 
+                }).eq('id', finalGuestId);
             }
 
             setRsvpSuccess(true);
@@ -1160,30 +1223,36 @@ END:VCALENDAR`;
                                         />
                                     </div>
 
-                                    {/* Companion selector — only for token guests with assigned companions */}
-                                    {guest && guestToken && guest.max_plus_ones > 0 && (
-                                        <div className="space-y-4">
-                                            <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300">
-                                                ASISTENCIA
-                                            </label>
-                                            <div className="relative group">
-                                                <select
-                                                    value={numGuests}
-                                                    onChange={(e) => setNumGuests(e.target.value)}
-                                                    disabled={submitting}
-                                                    className="w-full bg-transparent border-b border-stone-200 py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-stone-800 appearance-none cursor-pointer"
-                                                >
-                                                    <option value="1">Solo yo</option>
-                                                    <option value={(guest.max_plus_ones + 1).toString()}>
-                                                        {guest.name} + {guest.max_plus_ones} acompañante{guest.max_plus_ones > 1 ? 's' : ''}
-                                                    </option>
-                                                </select>
-                                                <div className="absolute right-0 bottom-4 pointer-events-none opacity-20 group-hover:opacity-100 transition-opacity">
-                                                    <Heart className="h-4 w-4" />
-                                                </div>
+                                    {/* Companion Selection */}
+                                    <div className="flex flex-col gap-6">
+                                        <label className="flex items-center gap-4 cursor-pointer group">
+                                            <div className="relative flex items-center justify-center">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={isAccompanied}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setIsAccompanied(checked);
+                                                        if (checked) setShowPlusOnesModal(true);
+                                                    }}
+                                                    className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer"
+                                                />
+                                                <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
                                             </div>
-                                        </div>
-                                    )}
+                                            <span className="text-sm font-bold uppercase tracking-widest text-stone-500 group-hover:text-stone-900 transition-colors">
+                                                VOY ACOMPAÑADO
+                                            </span>
+                                        </label>
+
+                                        {isAccompanied && (
+                                            <button 
+                                                onClick={() => setShowPlusOnesModal(true)}
+                                                className="text-left text-[11px] text-[#BD7474] font-black uppercase tracking-widest underline underline-offset-4 animate-in fade-in slide-in-from-left-2"
+                                            >
+                                                Editar acompañantes: {adultsCount} Adultos, {kidsCount} Niños
+                                            </button>
+                                        )}
+                                    </div>
 
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
@@ -1646,6 +1715,75 @@ END:VCALENDAR`;
                     )}
                 </>
             )}
+            {/* Plus Ones Modal */}
+            {showPlusOnesModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10 animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowPlusOnesModal(false)} />
+                    <div className="relative w-full max-w-sm bg-white rounded-[2.5rem] p-10 shadow-2xl border border-stone-100 animate-in zoom-in slide-in-from-bottom-8 duration-500">
+                        <div className="text-center mb-10">
+                            <UsersIcon className="h-10 w-10 mx-auto mb-4 text-[#BD7474]" />
+                            <h3 className="text-2xl font-serif text-[#1B2E1D]">Acompañantes</h3>
+                            <p className="text-stone-400 text-xs mt-1 uppercase tracking-widest font-bold">Confirma cuántos vienen contigo</p>
+                        </div>
+
+                        <div className="space-y-8">
+                            {/* Adultos */}
+                            <div className="flex items-center justify-between bg-stone-50 p-6 rounded-2xl">
+                                <div>
+                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Adultos</p>
+                                    <p className="text-sm text-stone-600">Mayores de 12 años</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <button 
+                                        onClick={() => setAdultsCount(Math.max(1, adultsCount - 1))}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="text-xl font-bold w-6 text-center">{adultsCount}</span>
+                                    <button 
+                                        onClick={() => setAdultsCount(adultsCount + 1)}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Niños */}
+                            <div className="flex items-center justify-between bg-stone-50 p-6 rounded-2xl">
+                                <div>
+                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Niños</p>
+                                    <p className="text-sm text-stone-600">Menores de 12 años</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <button 
+                                        onClick={() => setKidsCount(Math.max(0, kidsCount - 1))}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="text-xl font-bold w-6 text-center">{kidsCount}</span>
+                                    <button 
+                                        onClick={() => setKidsCount(kidsCount + 1)}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={() => setShowPlusOnesModal(false)}
+                            className="w-full mt-10 py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                        >
+                            Confirmar Cantidad
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Final Admin Debug Badge */}
             {isAdminMode && (
                 <div className="fixed bottom-4 left-4 z-[9999]">
