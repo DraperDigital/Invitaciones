@@ -37,10 +37,35 @@ export default function EventDetails() {
     const [newGuest, setNewGuest] = useState({ name: '', group_name: '', max_plus_ones: 0, phone: '', email: '' });
     const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const handleDeleteAllGuests = async () => {
+        if (!event || !window.confirm('¿Estás seguro de que deseas borrar a TODOS los invitados de este evento? Esta acción no se puede deshacer.')) return;
+        
+        setIsSaving(true);
+        try {
+            const { error } = await supabase
+                .from('guests')
+                .delete()
+                .eq('event_id', event.id);
+
+            if (error) throw error;
+            
+            setGuests([]);
+            toast.success('Lista de invitados vaciada con éxito');
+        } catch (error: any) {
+            console.error('Error deleting guests:', error);
+            toast.error('Error al borrar invitados: ' + error.message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
     
     // Content state
     const [registryItems, setRegistryItems] = useState<any[]>([]);
     const [galleryImages, setGalleryImages] = useState<any[]>([]);
+
+    // Import errors
+    const [importErrors, setImportErrors] = useState<string[] | null>(null);
 
     useEffect(() => {
         if (!id || !user) return;
@@ -307,34 +332,84 @@ export default function EventDetails() {
         if (!file || !event) return;
         const reader = new FileReader();
         reader.onload = async (e2) => {
-            const text = e2.target?.result as string;
-            const rows = text.split(/\r?\n/).filter(line => line.trim() !== '').slice(1);
+            const buffer = e2.target?.result as ArrayBuffer;
+            let text = '';
+            
+            // Intento inteligente de detección de codificación
+            const encodings = ['utf-8', 'windows-1252', 'iso-8859-15'];
+            for (const encoding of encodings) {
+                try {
+                    const decoder = new TextDecoder(encoding, { fatal: true });
+                    const decodedText = decoder.decode(buffer);
+                    if (!decodedText.includes('\uFFFD')) { // Si no hay caracteres "diamante"
+                        text = decodedText;
+                        console.log(`Codificación detectada con éxito: ${encoding}`);
+                        break;
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+
+            // Si fallan todos los intentos de detección fatal, usamos windows-1252 como fallback seguro
+            if (!text) {
+                text = new TextDecoder('windows-1252').decode(buffer);
+            }
+            
+            // Handle UTF-8 BOM if present
+            if (text.startsWith('\uFEFF')) {
+                text = text.substring(1);
+            }
+
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 2) {
+                toast.error('El archivo está vacío o no tiene el formato correcto.');
+                return;
+            }
+
+            // Simple header/delimeter detection
+            const header = lines[0];
+            const delimiter = header.includes(';') ? ';' : ',';
+            const rows = lines.slice(1);
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const existingNames = new Set(guests.map(g => g.name.toLowerCase().trim()));
-            const existingPhones = new Set(guests.map(g => g.phone?.trim()).filter(Boolean));
-            const existingEmails = new Set(guests.map(g => g.email?.trim()).filter(Boolean));
             const seenNamesInFile = new Set<string>();
 
             const rowErrors: string[] = [];
             const validGuests: any[] = [];
 
             rows.forEach((row, i) => {
-                const lineNum = i + 2; // +2: 1-indexed + skip header
-                const cols = row.includes(';') ? row.split(';') : row.split(',');
-                const name = cols[0]?.trim() || '';
-                const group = cols[1]?.trim() || 'General';
-                const maxPlusOnes = parseInt(cols[2]?.trim() || '0') || 0;
-                const phone = cols[3]?.trim() || '';
-                const email = cols[4]?.trim() || '';
+                const lineNum = i + 2; 
+                
+                // Better CSV split handling basic quotes
+                const cols = row.split(delimiter).map(c => c.replace(/^["']|["']$/g, '').trim());
+                
+                const name = cols[0] || '';
+                const group = cols[1] || 'General';
+                const maxPlusOnes = parseInt(cols[2]) || 0;
+                const phone = cols[3] || '';
+                const email = cols[4] || '';
 
-                if (!name) { rowErrors.push(`Fila ${lineNum}: nombre vacío`); return; }
-                if (!phone && !email) { rowErrors.push(`Fila ${lineNum} (${name}): falta WhatsApp o email`); return; }
-                if (email && !emailRegex.test(email)) { rowErrors.push(`Fila ${lineNum} (${name}): email inválido "${email}"`); return; }
-                if (existingNames.has(name.toLowerCase())) { rowErrors.push(`Fila ${lineNum} (${name}): ya existe en la lista`); return; }
-                if (phone && existingPhones.has(phone)) { rowErrors.push(`Fila ${lineNum} (${name}): teléfono ${phone} ya registrado`); return; }
-                if (email && existingEmails.has(email)) { rowErrors.push(`Fila ${lineNum} (${name}): email ${email} ya registrado`); return; }
-                if (seenNamesInFile.has(name.toLowerCase())) { rowErrors.push(`Fila ${lineNum} (${name}): nombre duplicado en el archivo`); return; }
+                if (!name) { 
+                    rowErrors.push(`Fila ${lineNum}: El nombre es obligatorio.`); 
+                    return; 
+                }
+                
+                if (email && !emailRegex.test(email)) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): El correo electrónico "${email}" no es válido.`); 
+                    return; 
+                }
+                
+                if (existingNames.has(name.toLowerCase())) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): Este invitado ya existe en tu lista.`); 
+                    return; 
+                }
+                
+                if (seenNamesInFile.has(name.toLowerCase())) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): El nombre está duplicado dentro del archivo.`); 
+                    return; 
+                }
 
                 seenNamesInFile.add(name.toLowerCase());
                 validGuests.push({
@@ -350,25 +425,36 @@ export default function EventDetails() {
             });
 
             if (validGuests.length === 0) {
-                toast.error(`No se importó ningún invitado. Revisa el formato del archivo.`);
+                if (rowErrors.length > 0) {
+                    setImportErrors(rowErrors);
+                } else {
+                    toast.error(`No se encontró ningún invitado válido para importar.`);
+                }
                 if (fileInputRef.current) fileInputRef.current.value = '';
                 return;
             }
 
-            const { data, error } = await supabase.from('guests').insert(validGuests).select();
-            if (!error && data) {
-                setGuests(prev => [...prev, ...data as GuestWithRSVP[]]);
-                const errSummary = rowErrors.length > 0
-                    ? `\n\n⚠️ ${rowErrors.length} fila(s) omitidas:\n${rowErrors.slice(0, 5).join('\n')}${rowErrors.length > 5 ? `\n...y ${rowErrors.length - 5} más` : ''}`
-                    : '';
-                toast.success(`Se importaron ${data.length} invitados correctamente.${errSummary}`);
-            } else if (error) {
-                console.error('Database error importing guests:', error);
-                toast.error('Error al guardar en la base de datos. Intenta de nuevo.');
+            try {
+                const { data, error } = await supabase.from('guests').insert(validGuests).select();
+                if (error) throw error;
+                
+                if (data) {
+                    setGuests(prev => [...prev, ...data as GuestWithRSVP[]]);
+                    if (rowErrors.length > 0) {
+                        setImportErrors(rowErrors);
+                        toast.warning(`Se importaron ${data.length} invitados, pero hubo algunos problemas.`);
+                    } else {
+                        toast.success(`¡Éxito! Se importaron ${data.length} invitados correctamente.`);
+                    }
+                }
+            } catch (err: any) {
+                console.error('Error al importar:', err);
+                toast.error('Hubo un error al guardar los invitados en la base de datos.');
             }
+            
             if (fileInputRef.current) fileInputRef.current.value = '';
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
     };
 
     const filteredGuests = guests.filter(g => {
@@ -409,6 +495,47 @@ export default function EventDetails() {
                 accept=".csv" 
                 className="hidden" 
             />
+
+            {/* Modal de Errores de Importación */}
+            {importErrors && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setImportErrors(null)} />
+                    <div className="relative w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl border border-stone-100 p-10 animate-in zoom-in slide-in-from-bottom-4 duration-500 max-h-[80vh] flex flex-col">
+                        <div className="flex justify-between items-center mb-8 flex-shrink-0">
+                            <div className="flex items-center gap-4">
+                                <div className="h-12 w-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500">
+                                    <AlertTriangle className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-serif text-[#1B2E1D]">Reporte de Importación</h3>
+                                    <p className="text-stone-400 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-300 hover:text-rose-500 transition-all">
+                                <CloseIcon className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-3">
+                            {importErrors.map((err, idx) => (
+                                <div key={idx} className="p-4 bg-stone-50 border border-stone-100 rounded-2xl flex gap-4 items-start animate-in slide-in-from-left duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
+                                    <div className="h-2 w-2 rounded-full bg-amber-300 mt-1.5 flex-shrink-0" />
+                                    <p className="text-sm text-stone-600 leading-relaxed font-light">{err}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-10 flex-shrink-0">
+                            <button 
+                                onClick={() => setImportErrors(null)}
+                                className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-black transition-all"
+                            >
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Premium Add Guest Modal Overlay */}
             {isAddOpen && (
@@ -760,6 +887,9 @@ export default function EventDetails() {
                                         </button>
                                         <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+525555555555,juan@ejemplo.com')} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all border-l border-stone-100">
                                             <FileType className="h-4 w-4 text-[#BD7474]" /> Plantilla
+                                        </button>
+                                        <button onClick={handleDeleteAllGuests} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-rose-500 hover:bg-rose-50 transition-all border-l border-stone-100">
+                                            <Trash2 className="h-4 w-4" /> Borrar Lista
                                         </button>
                                     </div>
                                     

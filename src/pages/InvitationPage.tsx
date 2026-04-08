@@ -184,7 +184,13 @@ export default function InvitationPage() {
                         setGuest(guestData);
                         setGuestName(guestData.name);
 
-                        // 2. Obtener RSVP existente
+                        // Inicialización predeterminada según capacidad del invitado (Acompañantes adicionales)
+                        if (guestData.max_plus_ones > 0) {
+                            setIsAccompanied(true);
+                            setAdultsCount(guestData.max_plus_ones);
+                        }
+
+                        // 2. Obtener RSVP existente (sobrescribe la inicialización si ya respondió antes)
                         const { data: rsvpData, error: rError } = await supabase
                             .from('rsvps')
                             .select('*')
@@ -240,8 +246,8 @@ export default function InvitationPage() {
         setError(null);
 
         try {
-            const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount - 1) : 0;
-            const detailNote = isAccompanied ? `[Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
+            const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount) : 0;
+            const detailNote = isAccompanied ? `[Acompañantes - Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
 
             // 1. Identificar al invitado (por token o por nombre)
             let finalGuestId: string | null = guest?.id || null;
@@ -1270,35 +1276,46 @@ END:VCALENDAR`;
                                                 />
                                             </div>
 
-                                            <div className="flex flex-col gap-6">
-                                                <label className="flex items-center gap-4 cursor-pointer group">
-                                                    <div className="relative flex items-center justify-center">
-                                                        <input 
-                                                            type="checkbox"
-                                                            checked={isAccompanied}
-                                                            onChange={(e) => {
-                                                                const checked = e.target.checked;
-                                                                setIsAccompanied(checked);
-                                                                if (checked) setShowPlusOnesModal(true);
-                                                            }}
-                                                            className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer"
-                                                        />
-                                                        <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
-                                                    </div>
-                                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-500 group-hover:text-stone-900 transition-colors">
-                                                        VOY ACOMPAÑADO
-                                                    </span>
-                                                </label>
+                                            {guest && guest.max_plus_ones > 0 && (
+                                                <div className="flex flex-col gap-6">
+                                                    <label className="flex items-start gap-4 cursor-pointer group">
+                                                        <div className="relative flex items-center justify-center mt-1">
+                                                            <input 
+                                                                type="checkbox"
+                                                                checked={isAccompanied}
+                                                                onChange={(e) => {
+                                                                    const checked = e.target.checked;
+                                                                    setIsAccompanied(checked);
+                                                                    if (checked) setShowPlusOnesModal(true);
+                                                                }}
+                                                                className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer"
+                                                            />
+                                                            <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
+                                                        </div>
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="text-sm font-black uppercase tracking-widest text-[#1B2E1D] group-hover:text-stone-900 transition-colors">
+                                                                CONFIRMAR ACOMPAÑANTES (TOTAL: {(guest.max_plus_ones || 0) + 1} PERSONAS)
+                                                            </span>
+                                                            
+                                                            {isAccompanied && (
+                                                                <div 
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setShowPlusOnesModal(true);
+                                                                    }}
+                                                                    className="text-[10px] text-stone-400 uppercase tracking-widest font-medium hover:text-[#BD7474] transition-colors"
+                                                                >
+                                                                    {adultsCount} Adultos, {kidsCount} Niños • <span className="underline underline-offset-2">Editar</span>
+                                                                </div>
+                                                            )}
 
-                                                {isAccompanied && (
-                                                    <button 
-                                                        onClick={() => setShowPlusOnesModal(true)}
-                                                        className="text-left text-[11px] text-[#BD7474] font-black uppercase tracking-widest underline underline-offset-4 animate-in fade-in slide-in-from-left-2"
-                                                    >
-                                                        Editar acompañantes: {adultsCount} Adultos, {kidsCount} Niños
-                                                    </button>
-                                                )}
-                                            </div>
+                                                            <p className="text-[9px] text-stone-200 uppercase tracking-widest font-medium group-hover:text-stone-300 transition-colors">
+                                                                Esta invitación incluye {(guest.max_plus_ones || 0) + 1} pases totales
+                                                            </p>
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            )}
 
                                             {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
@@ -1776,20 +1793,25 @@ END:VCALENDAR`;
                             {/* Adultos */}
                             <div className="flex items-center justify-between bg-stone-50 p-6 rounded-2xl">
                                 <div>
-                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Adultos</p>
-                                    <p className="text-sm text-stone-600">Mayores de 12 años</p>
+                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Adultos Adicionales</p>
+                                    <p className="text-[10px] text-stone-400 italic">(Sin contarte a ti)</p>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <button 
-                                        onClick={() => setAdultsCount(Math.max(1, adultsCount - 1))}
+                                        onClick={() => setAdultsCount(Math.max(0, adultsCount - 1))}
                                         className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
                                     >
                                         -
                                     </button>
                                     <span className="text-xl font-bold w-6 text-center">{adultsCount}</span>
                                     <button 
-                                        onClick={() => setAdultsCount(adultsCount + 1)}
-                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                        onClick={() => {
+                                            const total = adultsCount + kidsCount;
+                                            const max = guest?.max_plus_ones || 0;
+                                            if (total < max) setAdultsCount(adultsCount + 1);
+                                        }}
+                                        disabled={(adultsCount + kidsCount) >= (guest?.max_plus_ones || 0)}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 disabled:opacity-30 disabled:hover:bg-white transition-colors"
                                     >
                                         +
                                     </button>
@@ -1799,8 +1821,8 @@ END:VCALENDAR`;
                             {/* Niños */}
                             <div className="flex items-center justify-between bg-stone-50 p-6 rounded-2xl">
                                 <div>
-                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Niños</p>
-                                    <p className="text-sm text-stone-600">Menores de 12 años</p>
+                                    <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Niños Adicionales</p>
+                                    <p className="text-xs text-stone-600">Menores de 12 años</p>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <button 
@@ -1811,8 +1833,13 @@ END:VCALENDAR`;
                                     </button>
                                     <span className="text-xl font-bold w-6 text-center">{kidsCount}</span>
                                     <button 
-                                        onClick={() => setKidsCount(kidsCount + 1)}
-                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 transition-colors"
+                                        onClick={() => {
+                                            const total = adultsCount + kidsCount;
+                                            const max = guest?.max_plus_ones || 0;
+                                            if (total < max) setKidsCount(kidsCount + 1);
+                                        }}
+                                        disabled={(adultsCount + kidsCount) >= (guest?.max_plus_ones || 0)}
+                                        className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 disabled:opacity-30 disabled:hover:bg-white transition-colors"
                                     >
                                         +
                                     </button>
