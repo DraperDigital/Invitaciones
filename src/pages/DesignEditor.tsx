@@ -39,6 +39,10 @@ type DesignConfig = {
     misa_address: string;
     misa_maps_link: string;
     misa_time: string;
+
+    // Asistencia
+    dress_code: string;
+    rsvp_deadline: string;
 };
 
 const DEFAULT_CONFIG: DesignConfig = {
@@ -71,6 +75,9 @@ const DEFAULT_CONFIG: DesignConfig = {
     misa_address: '',
     misa_maps_link: '',
     misa_time: '',
+
+    dress_code: '',
+    rsvp_deadline: '',
 };
 
 export default function DesignEditor() {
@@ -129,6 +136,8 @@ export default function DesignEditor() {
                     misa_address:   c.misa_address   ?? c.misaAddress       ?? '',
                     misa_maps_link: c.misa_maps_link ?? c.misaMapsLink      ?? '',
                     misa_time:      c.misa_time      ?? c.misaTime          ?? '',
+                    dress_code:     data.dress_code || '',
+                    rsvp_deadline:  data.rsvp_deadline ? new Date(data.rsvp_deadline).toISOString().slice(0, 10) : '',
                 });
             }
             setLoading(false);
@@ -186,7 +195,11 @@ export default function DesignEditor() {
 
             const { error } = await supabase
                 .from('events')
-                .update({ theme_config: newThemeConfig })
+                .update({ 
+                    theme_config: newThemeConfig,
+                    dress_code: config.dress_code,
+                    rsvp_deadline: config.rsvp_deadline ? new Date(config.rsvp_deadline).toISOString() : null
+                })
                 .eq('id', id);
 
             if (error) throw error;
@@ -532,6 +545,41 @@ export default function DesignEditor() {
                             onChange={(e) => setConfig({ ...config, misa_maps_link: e.target.value })}
                             className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800 font-mono text-xs"
                             placeholder="https://maps.app.goo.gl/..."
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* ── Asistencia ── */}
+            <div className="bg-white rounded-[2rem] p-8 sm:p-10 border border-stone-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] space-y-8">
+                <div className="flex items-center gap-4 border-b border-stone-50 pb-6">
+                    <div className="h-12 w-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-400">
+                        <span className="text-xl">📅</span>
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-serif text-[#1B2E1D]">Configuración de Asistencia</h2>
+                        <p className="text-xs text-stone-400 mt-1">Configura el código de vestimenta y el límite de confirmación</p>
+                    </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Código de Vestimenta (Dress Code)</label>
+                        <input
+                            type="text"
+                            value={config.dress_code}
+                            onChange={(e) => setConfig({ ...config, dress_code: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            placeholder="Ej. Formal, Cocktail..."
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 pl-1">Fecha Límite de Confirmación</label>
+                        <input
+                            type="date"
+                            value={config.rsvp_deadline}
+                            onChange={(e) => setConfig({ ...config, rsvp_deadline: e.target.value })}
+                            className="w-full bg-[#FDFBF7] px-6 py-4 rounded-2xl border-none shadow-inner focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                         />
                     </div>
                 </div>

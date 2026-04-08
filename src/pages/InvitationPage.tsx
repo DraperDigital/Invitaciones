@@ -997,7 +997,7 @@ END:VCALENDAR`;
                                 <p className="flex items-center justify-center gap-3 text-lg">
                                     <Clock className="h-5 w-5 text-accent flex-shrink-0" />
                                     <span className="font-sans">
-                                        {event.event_type === 'birthday' ? 'Inmediatamente después' : format(eventDate, 'HH:mm', { locale: es }) + ' hrs'}
+                                        {format(eventDate, 'HH:mm', { locale: es })} hrs
                                     </span>
                                 </p>
                                 <div className="flex flex-col items-center gap-1">
@@ -1046,18 +1046,7 @@ END:VCALENDAR`;
                             <Sparkles className="h-10 w-10 mx-auto mb-8 text-accent/60" />
                             <h3 className="text-4xl font-serif font-light text-stone-900 mb-6">Dress Code</h3>
                             <div className="card-premium rounded-3xl p-12 inline-block">
-                                <p className="text-3xl font-serif text-stone-900 mb-4">{event.dress_code}</p>
-                                <div className="flex gap-8 justify-center mt-6">
-                                    <div>
-                                        <p className="text-xs uppercase tracking-wider text-stone-400 mb-2">Mujer</p>
-                                        <p className="text-lg font-serif text-stone-700">Formal</p>
-                                    </div>
-                                    <div className="w-px bg-stone-200" />
-                                    <div>
-                                        <p className="text-xs uppercase tracking-wider text-stone-400 mb-2">Hombre</p>
-                                        <p className="text-lg font-serif text-stone-700">Formal</p>
-                                    </div>
-                                </div>
+                                <p className="text-3xl font-serif text-stone-900">{event.dress_code}</p>
                             </div>
                         </div>
                     </section>

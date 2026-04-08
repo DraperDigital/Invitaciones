@@ -532,6 +532,9 @@ export default function EventDetails() {
                             <div className="h-10 w-px bg-stone-50 hidden sm:block mx-1" />
 
                             <div className="flex items-center gap-2">
+                                <Link to={`/dashboard/edit/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-emerald-600 hover:border-emerald-600 rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                    <FileType className="h-3.5 w-3.5" /> <span className="xs:inline">Editar Info</span>
+                                </Link>
                                 <Link to={`/dashboard/design/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#BD7474] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                     <Edit2 className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño</span>
                                 </Link>
