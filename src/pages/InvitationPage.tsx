@@ -29,7 +29,12 @@ export default function InvitationPage() {
     const [guest, setGuest] = useState<Guest | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [isAdminMode, setIsAdminMode] = useState(false);
+    const [lastSaveStatus, setLastSaveStatus] = useState<'idle' | 'saving' | 'ok' | 'error'>('idle');
+
+    // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
+    const [rsvpChoice, setRsvpChoice] = useState<'yes' | 'no' | null>(null);
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
@@ -40,8 +45,6 @@ export default function InvitationPage() {
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    const [isAdminMode, setIsAdminMode] = useState(false);
-    const [lastSaveStatus, setLastSaveStatus] = useState<'idle' | 'saving' | 'ok' | 'error'>('idle');
 
     // PLUS ONES States
     const [isAccompanied, setIsAccompanied] = useState(false);
@@ -163,40 +166,60 @@ export default function InvitationPage() {
         }
 
         if (guestToken) {
-            const { data: tokenData, error: tokenError } = await supabase
-                .rpc('get_guest_by_token', { p_token: guestToken, p_slug: slug });
+            // FALLBACK: Intentar obtener invitado y rsvp directamente de las tablas
+            try {
+                // 1. Obtener el invitado
+                // Validar si el token parece un UUID válido antes de consultar
+                const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guestToken);
+                
+                if (isUuid) {
+                    const { data: guestData, error: gError } = await supabase
+                        .from('guests')
+                        .select('*')
+                        .eq('event_id', eventData.id)
+                        .eq('guest_token', guestToken)
+                        .maybeSingle();
 
-            if (!tokenError && tokenData) {
-                const guestData = tokenData.guest;
-                const rsvpData  = tokenData.rsvp;
-                if (guestData) {
-                    setGuest(guestData);
-                    setGuestName(guestData.name);
-                    if (rsvpData) {
-                        try {
-                            const msg = rsvpData.message || '';
-                            const adultsMatch = msg.match(/Adultos: (\d+)/);
-                            const kidsMatch = msg.match(/Niños: (\d+)/);
-                            if (adultsMatch) setAdultsCount(parseInt(adultsMatch[1]));
-                            if (kidsMatch) {
-                                setKidsCount(parseInt(kidsMatch[1]));
-                                setIsAccompanied(true);
+                    if (!gError && guestData) {
+                        setGuest(guestData);
+                        setGuestName(guestData.name);
+
+                        // 2. Obtener RSVP existente
+                        const { data: rsvpData, error: rError } = await supabase
+                            .from('rsvps')
+                            .select('*')
+                            .eq('guest_id', guestData.id)
+                            .maybeSingle();
+
+                        if (!rError && rsvpData) {
+                            try {
+                                const msg = rsvpData.message || '';
+                                const adultsMatch = msg.match(/Adultos: (\d+)/);
+                                const kidsMatch = msg.match(/Niños: (\d+)/);
+                                if (adultsMatch) {
+                                    setAdultsCount(parseInt(adultsMatch[1]));
+                                    setIsAccompanied(true);
+                                }
+                                if (kidsMatch) setKidsCount(parseInt(kidsMatch[1]));
+                            } catch (e) {
+                                console.error('Error parsing RSVP counts', e);
                             }
-                        } catch (e) {
-                            console.error('Error parsing RSVP counts', e);
+                            if (rsvpData.status === 'yes' || rsvpData.status === 'no') {
+                                setRsvpChoice(rsvpData.status as 'yes' | 'no');
+                                setRsvpSuccess(true);
+                            }
                         }
-                        if (rsvpData.status === 'yes' || rsvpData.status === 'no') {
-                            setRsvpSuccess(true);
+
+                        if (sessionKey && rawToken) {
+                            sessionStorage.setItem(sessionKey, rawToken);
+                            window.history.replaceState({}, '', window.location.pathname);
                         }
                     }
-                    // Guardar token en sessionStorage y limpiar la URL.
-                    // Así el token no queda en el historial del browser ni
-                    // se filtra via header Referer al navegar a links externos.
-                    if (sessionKey && rawToken) {
-                        sessionStorage.setItem(sessionKey, rawToken);
-                        window.history.replaceState({}, '', window.location.pathname);
-                    }
+                } else {
+                    console.log('Token is not a valid UUID:', guestToken);
                 }
+            } catch (err) {
+                console.warn('Fallback guest fetch failed:', err);
             }
         }
         setLoading(false);
@@ -220,21 +243,11 @@ export default function InvitationPage() {
             const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount - 1) : 0;
             const detailNote = isAccompanied ? `[Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
 
-            if (guestToken && guestToken !== 'admin') {
-                // Invitado con token personalizado: RPC valida token + slug server-side
-                const { error: rsvpError } = await supabase.rpc('submit_rsvp_by_token', {
-                    p_token:     guestToken,
-                    p_slug:      slug,
-                    p_status:    status,
-                    p_plus_ones: totalPlusOnes,
-                    p_message:   detailNote
-                });
-                if (rsvpError) throw rsvpError;
-            } else {
-                // FALLBACK ROBUSTO: Registro general sin depender exclusivamente de RPC
-                // 1. Buscar o crear el invitado
-                let finalGuestId: string;
-                
+            // 1. Identificar al invitado (por token o por nombre)
+            let finalGuestId: string | null = guest?.id || null;
+            
+            if (!finalGuestId) {
+                // Registro por nombre (Fallback completo)
                 const { data: existingGuest, error: findError } = await supabase
                     .from('guests')
                     .select('id')
@@ -254,33 +267,53 @@ export default function InvitationPage() {
                             name: cleanedName,
                             group_name: 'Registro Directo',
                             status: 'pending',
-                            max_plus_ones: isAccompanied ? 10 : 0 // Permitir los que pidió
+                            max_plus_ones: 10
                         }])
                         .select('id')
                         .single();
                     if (insertError) throw insertError;
                     finalGuestId = newGuest.id;
                 }
+            }
 
-                // 2. Upsert RSVP
-                const { error: rsvpErr } = await supabase
+            // 2. Insertar o Actualizar RSVP (Manual Upsert para evitar error de constraint)
+            const { data: existingRsvp, error: rsvpCheckErr } = await supabase
+                .from('rsvps')
+                .select('id')
+                .eq('guest_id', finalGuestId)
+                .maybeSingle();
+
+            if (rsvpCheckErr) throw rsvpCheckErr;
+
+            if (existingRsvp) {
+                const { error: updateErr } = await supabase
                     .from('rsvps')
-                    .upsert({
+                    .update({
+                        status: status,
+                        plus_ones_confirmed: totalPlusOnes,
+                        message: detailNote || 'Registro Directo'
+                    })
+                    .eq('id', existingRsvp.id);
+                if (updateErr) throw updateErr;
+            } else {
+                const { error: insertErr } = await supabase
+                    .from('rsvps')
+                    .insert([{
                         event_id: event.id,
                         guest_id: finalGuestId,
                         status: status,
                         plus_ones_confirmed: totalPlusOnes,
                         message: detailNote || 'Registro Directo'
-                    }, { onConflict: 'guest_id' });
-
-                if (rsvpErr) throw rsvpErr;
-
-                // 3. Update guest status
-                await supabase.from('guests').update({ 
-                    status: status === 'yes' ? 'confirmed' : 'declined' 
-                }).eq('id', finalGuestId);
+                    }]);
+                if (insertErr) throw insertErr;
             }
 
+            // 3. Actualizar estado del invitado
+            await supabase.from('guests').update({ 
+                status: status === 'yes' ? 'confirmed' : 'declined' 
+            }).eq('id', finalGuestId);
+
+            setRsvpChoice(status);
             setRsvpSuccess(true);
         } catch (err: any) {
             console.error('RSVP Error:', err);
@@ -1118,201 +1151,214 @@ END:VCALENDAR`;
 
             {/* RSVP Section */}
             {showRSVP && (
-            <section id="rsvp" className="py-16 bg-white">
-                <div className="max-w-5xl mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <section id="rsvp" className="py-16 bg-white">
+                    <div className="max-w-5xl mx-auto px-6">
+                        <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-                        {/* LEFT: Form */}
-                        <div>
-                            <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-3">Confirma tu asistencia</h3>
-                            {event.rsvp_deadline && (
-                                <p className="text-sm text-stone-400 mb-10">
-                                    Favor de confirmarte antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
-                                </p>
-                            )}
-
-                            {rsvpSuccess ? (
-                                <div className="animate-fade-in flex flex-col items-center text-center space-y-6">
-                                    {/* Check icon */}
-                                    <div className="h-16 w-16 rounded-full bg-green-50 flex items-center justify-center shadow-sm border border-green-100">
-                                        <CheckCircle2 className="h-8 w-8 text-green-500" />
+                            {/* LEFT: Content */}
+                            <div>
+                                {guest && (
+                                    <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
+                                        <span className="inline-block px-4 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest mb-4">
+                                            Invitación Personalizada
+                                        </span>
+                                        <h2 className="text-4xl sm:text-5xl font-serif text-[#1B2E1D]">¡Hola, {guest.name}!</h2>
                                     </div>
+                                )}
 
-                                    <div>
-                                        <h2 className="text-3xl font-serif text-stone-900 mb-1">¡Confirmado!</h2>
-                                        <p className="text-stone-400 text-sm">Gracias {guestName || 'por confirmar'}. Tu respuesta ha sido registrada.</p>
-                                    </div>
-
-                                    {/* QR Code card */}
-                                    {(guestToken || guest?.id) && (
-                                        <div className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs">
-                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400">Tu pase de entrada</p>
-                                            <div className="bg-white p-3 rounded-xl shadow-sm">
-                                                <QRCodeCanvas
-                                                    ref={qrCanvasRef}
-                                                    value={`${window.location.origin}/i/${slug}?t=${guestToken || guest?.id}`}
-                                                    size={180}
-                                                    level="M"
-                                                    includeMargin={false}
-                                                />
-                                            </div>
-                                            <p className="text-[10px] text-stone-400 text-center">Muestra este código en la entrada del evento</p>
-                                            <button
-                                                onClick={downloadQR}
-                                                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 hover:text-stone-900 transition-colors border border-stone-200 hover:border-stone-400 rounded-xl px-4 py-2"
-                                            >
-                                                <Download className="h-3.5 w-3.5" />
-                                                Descargar QR
-                                            </button>
-                                            <button
-                                                onClick={() => event && generateInvitationPDF(event)}
-                                                className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 hover:text-stone-900 transition-colors border border-stone-200 hover:border-stone-400 rounded-xl px-4 py-2"
-                                            >
-                                                <Download className="h-3.5 w-3.5" />
-                                                Descargar invitación PDF
-                                            </button>
+                                {rsvpSuccess ? (
+                                    <div className="animate-fade-in flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
+                                        <div className={`h-16 w-16 rounded-full flex items-center justify-center shadow-sm border ${
+                                            rsvpChoice === 'yes' ? 'bg-green-50 border-green-100' : 'bg-stone-50 border-stone-100'
+                                        }`}>
+                                            {rsvpChoice === 'yes' ? (
+                                                <CheckCircle2 className="h-8 w-8 text-green-500" />
+                                            ) : (
+                                                <X className="h-8 w-8 text-stone-400" />
+                                            )}
                                         </div>
-                                    )}
 
-                                    {/* Calendar buttons */}
-                                    <div className="w-full max-w-xs space-y-2">
-                                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400 mb-3">Agendar en mi calendario</p>
-                                        <a
-                                            href={generateGoogleCalendarLink()}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600"
-                                        >
-                                            <Calendar className="h-3.5 w-3.5" />
-                                            Google Calendar
-                                        </a>
-                                        <a
-                                            href={generateICalLink()}
-                                            download={`${slug || 'evento'}.ics`}
-                                            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600"
-                                        >
-                                            <Calendar className="h-3.5 w-3.5" />
-                                            iCal / Apple Calendar
-                                        </a>
-                                    </div>
+                                        <div>
+                                            <h2 className="text-3xl font-serif text-stone-900 mb-1">
+                                                {rsvpChoice === 'yes' ? '¡Confirmado!' : '¡Anotado!'}
+                                            </h2>
+                                            <p className="text-stone-400 text-sm">
+                                                {rsvpChoice === 'yes' 
+                                                    ? `Gracias ${guestName || 'por confirmar'}. Tu respuesta ha sido registrada.`
+                                                    : `Lamentamos que no puedas acompañarnos, ${guestName || ''}. Se ha registrado tu respuesta.`}
+                                            </p>
+                                        </div>
 
-                                    {!guestToken && (
-                                        <button
-                                            onClick={() => setRsvpSuccess(false)}
-                                            className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 hover:text-stone-600 transition-colors pt-2"
-                                        >
-                                            MODIFICAR RESPUESTA
-                                        </button>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="space-y-12">
-                                    <div className="space-y-4">
-                                        <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300">
-                                            NOMBRE COMPLETO
-                                        </label>
-                                        <input
-                                            required
-                                            type="text"
-                                            value={guestName}
-                                            onChange={(e) => setGuestName(e.target.value)}
-                                            placeholder="Tu nombre"
-                                            disabled={submitting}
-                                            className="w-full bg-transparent border-b border-stone-200 py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-stone-800 placeholder:text-stone-200"
-                                            readOnly={!!guest && !!guestToken}
-                                        />
-                                    </div>
+                                        {/* QR Code and Calendar ONLY IF YES */}
+                                        {rsvpChoice === 'yes' && (
+                                            <>
+                                                <div className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs">
+                                                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400">Tu pase de entrada</p>
+                                                    <div className="bg-white p-3 rounded-xl shadow-sm">
+                                                        <QRCodeCanvas
+                                                            ref={qrCanvasRef}
+                                                            value={`${window.location.origin}/i/${slug}?t=${guestToken || guest?.id}`}
+                                                            size={180}
+                                                            level="M"
+                                                            includeMargin={false}
+                                                        />
+                                                    </div>
+                                                    <p className="text-[10px] text-stone-400 text-center">Muestra este código en la entrada del evento</p>
+                                                    <button
+                                                        onClick={downloadQR}
+                                                        className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 hover:text-stone-900 transition-colors border border-stone-200 hover:border-stone-400 rounded-xl px-4 py-2"
+                                                    >
+                                                        <Download className="h-3.5 w-3.5" />
+                                                        Descargar QR
+                                                    </button>
+                                                </div>
 
-                                    {/* Companion Selection */}
-                                    <div className="flex flex-col gap-6">
-                                        <label className="flex items-center gap-4 cursor-pointer group">
-                                            <div className="relative flex items-center justify-center">
-                                                <input 
-                                                    type="checkbox"
-                                                    checked={isAccompanied}
-                                                    onChange={(e) => {
-                                                        const checked = e.target.checked;
-                                                        setIsAccompanied(checked);
-                                                        if (checked) setShowPlusOnesModal(true);
-                                                    }}
-                                                    className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer"
-                                                />
-                                                <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
-                                            </div>
-                                            <span className="text-sm font-bold uppercase tracking-widest text-stone-500 group-hover:text-stone-900 transition-colors">
-                                                VOY ACOMPAÑADO
-                                            </span>
-                                        </label>
-
-                                        {isAccompanied && (
-                                            <button 
-                                                onClick={() => setShowPlusOnesModal(true)}
-                                                className="text-left text-[11px] text-[#BD7474] font-black uppercase tracking-widest underline underline-offset-4 animate-in fade-in slide-in-from-left-2"
+                                                <div className="w-full max-w-xs space-y-2">
+                                                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400 mb-3">Agendar en mi calendario</p>
+                                                    <a
+                                                        href={generateGoogleCalendarLink()}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600"
+                                                    >
+                                                        <Calendar className="h-3.5 w-3.5" />
+                                                        Google Calendar
+                                                    </a>
+                                                    <a
+                                                        href={generateICalLink()}
+                                                        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600"
+                                                    >
+                                                        <Calendar className="h-3.5 w-3.5" />
+                                                        Apple Calendar / iCal
+                                                    </a>
+                                                </div>
+                                            </>
+                                        )}
+                                        
+                                        {!guestToken && (
+                                            <button
+                                                onClick={() => setRsvpSuccess(false)}
+                                                className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 hover:text-stone-600 transition-colors pt-4"
                                             >
-                                                Editar acompañantes: {adultsCount} Adultos, {kidsCount} Niños
+                                                MODIFICAR RESPUESTA
                                             </button>
                                         )}
                                     </div>
+                                ) : (
+                                    <div className="space-y-10">
+                                        <div className="space-y-2">
+                                            <h3 className="text-3xl sm:text-4xl font-serif font-light text-stone-900 mb-1">Confirma tu asistencia</h3>
+                                            {event.rsvp_deadline && (
+                                                <p className="text-sm text-stone-400 mb-8">
+                                                    Favor de confirmarte antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
+                                                </p>
+                                            )}
+                                        </div>
 
-                                    {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
+                                        <div className="space-y-8">
+                                            <div className="space-y-2">
+                                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Nombre Completo</label>
+                                                <input
+                                                    required
+                                                    type="text"
+                                                    value={guestName}
+                                                    onChange={(e) => setGuestName(e.target.value)}
+                                                    placeholder="Tu nombre"
+                                                    disabled={submitting}
+                                                    className="w-full bg-transparent border-b border-stone-200 py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-stone-800 placeholder:text-stone-200"
+                                                    readOnly={!!guest && !!guestToken}
+                                                />
+                                            </div>
 
-                                    <div className="space-y-4 pt-4">
-                                        <button
-                                            onClick={() => handleRsvp('yes')}
-                                            disabled={submitting}
-                                            className="w-full py-6 rounded-2xl text-white font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98]"
-                                            style={{ background: primaryColor }}
-                                        >
-                                            {submitting ? (
-                                                <span className="flex items-center justify-center gap-2">
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    PROCESANDO...
-                                                </span>
-                                            ) : 'SÍ, CONFIRMAR ASISTENCIA'}
-                                        </button>
-                                        
-                                        <button
-                                            onClick={() => handleRsvp('no')}
-                                            disabled={submitting}
-                                            className="w-full py-4 text-stone-400 hover:text-stone-900 font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                                        >
-                                            {submitting ? (
-                                                <>
-                                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                                    Procesando...
-                                                </>
-                                            ) : 'No podré asistir'}
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                                            <div className="flex flex-col gap-6">
+                                                <label className="flex items-center gap-4 cursor-pointer group">
+                                                    <div className="relative flex items-center justify-center">
+                                                        <input 
+                                                            type="checkbox"
+                                                            checked={isAccompanied}
+                                                            onChange={(e) => {
+                                                                const checked = e.target.checked;
+                                                                setIsAccompanied(checked);
+                                                                if (checked) setShowPlusOnesModal(true);
+                                                            }}
+                                                            className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer"
+                                                        />
+                                                        <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
+                                                    </div>
+                                                    <span className="text-sm font-bold uppercase tracking-widest text-stone-500 group-hover:text-stone-900 transition-colors">
+                                                        VOY ACOMPAÑADO
+                                                    </span>
+                                                </label>
 
-                        {/* RIGHT: Decorative card */}
-                        <div className="hidden lg:flex justify-center">
-                            <div className="relative w-72">
-                                <div className="rounded-[2rem] overflow-hidden shadow-2xl" style={{background: cardBgColor, minHeight: '420px'}}>
-                                    <div className="bg-white h-4 mx-6 mt-6 rounded-t-xl" />
-                                    {/* Botanical illustration — always white background, illustration centered */}
-                                    <div className="mx-6 bg-white rounded-xl overflow-hidden flex items-center justify-center" style={{height: '340px'}}>
-                                        <img
-                                            src="/botanical-peony.png"
-                                            alt="Botanical illustration"
-                                            className="w-full h-full object-contain p-4"
-                                        />
+                                                {isAccompanied && (
+                                                    <button 
+                                                        onClick={() => setShowPlusOnesModal(true)}
+                                                        className="text-left text-[11px] text-[#BD7474] font-black uppercase tracking-widest underline underline-offset-4 animate-in fade-in slide-in-from-left-2"
+                                                    >
+                                                        Editar acompañantes: {adultsCount} Adultos, {kidsCount} Niños
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
+
+                                            <div className="space-y-4 pt-4">
+                                                <button
+                                                    onClick={() => handleRsvp('yes')}
+                                                    disabled={submitting}
+                                                    className="w-full py-6 rounded-2xl text-white font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98]"
+                                                    style={{ background: primaryColor }}
+                                                >
+                                                    {submitting ? (
+                                                        <span className="flex items-center justify-center gap-2">
+                                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                                            PROCESANDO...
+                                                        </span>
+                                                    ) : 'SÍ, CONFIRMAR ASISTENCIA'}
+                                                </button>
+                                                
+                                                <button
+                                                    onClick={() => handleRsvp('no')}
+                                                    disabled={submitting}
+                                                    className="w-full py-4 text-stone-400 hover:text-stone-900 font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                                >
+                                                    {submitting ? (
+                                                        <>
+                                                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                                            Procesando...
+                                                        </>
+                                                    ) : 'No podré asistir'}
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="text-center py-6 px-4">
-                                        <p className="font-serif italic text-sm" style={{color: 'rgba(255,255,255,0.85)'}}>{event.title}</p>
-                                        <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.6)'}}>{format(eventDate, "dd 'de' MMMM 'de' yyyy", { locale: es })}</p>
+                                )}
+                            </div>
+
+                            {/* RIGHT: Decorative card */}
+                            <div className="hidden lg:flex justify-center">
+                                <div className="relative w-72">
+                                    <div className="rounded-[2rem] overflow-hidden shadow-2xl" style={{background: cardBgColor, minHeight: '420px'}}>
+                                        <div className="bg-white h-4 mx-6 mt-6 rounded-t-xl" />
+                                        <div className="mx-6 bg-white rounded-xl overflow-hidden flex items-center justify-center" style={{height: '340px'}}>
+                                            <img
+                                                src="/botanical-peony.png"
+                                                alt="Botanical illustration"
+                                                className="w-full h-full object-contain p-4"
+                                            />
+                                        </div>
+                                        <div className="text-center py-6 px-4">
+                                            <p className="font-serif italic text-sm" style={{color: 'rgba(255,255,255,0.85)'}}>{event.title}</p>
+                                            <p className="text-xs mt-1" style={{color: 'rgba(255,255,255,0.6)'}}>{format(eventDate, "dd 'de' MMMM 'de' yyyy", { locale: es })}</p>
+                                        </div>
+                                        <div className="bg-white h-4 mx-6 mb-6 rounded-b-xl" />
                                     </div>
-                                    <div className="bg-white h-4 mx-6 mb-6 rounded-b-xl" />
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
             )}
 
             {/* Gift Registry */}

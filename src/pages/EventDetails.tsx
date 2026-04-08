@@ -128,12 +128,12 @@ export default function EventDetails() {
                     .from('guests')
                     .update(updateData)
                     .eq('id', editingGuestId)
-                    .select()
-                    .single();
+                    .select();
                     
                 if (error) throw error;
-                if (data) {
-                    setGuests(guests.map(g => g.id === editingGuestId ? { ...g, ...data } : g));
+                if (data && data.length > 0) {
+                    const savedGuest = data[0];
+                    setGuests(guests.map(g => g.id === editingGuestId ? { ...g, ...savedGuest } : g));
                 }
             } else {
                 // Insert new guest
@@ -149,10 +149,11 @@ export default function EventDetails() {
                     status: 'pending'
                 };
 
-                const { data, error } = await supabase.from('guests').insert([insertData]).select().single();
+                const { data, error } = await supabase.from('guests').insert([insertData]).select();
                 if (error) throw error;
-                if (data) {
-                    setGuests([...guests, { ...data, rsvps: null }]);
+                if (data && data.length > 0) {
+                    const savedGuest = data[0];
+                    setGuests([...guests, { ...savedGuest, rsvps: null }]);
                 }
             }
             // Cleanup
@@ -238,12 +239,10 @@ export default function EventDetails() {
         const slug = event.slug || event.id;
         const token = (guest as any).guest_token || guest.id;
         const url = `${window.location.origin}/i/${slug}?t=${token}`;
-
-        const message = `¡Hola ${guest.name}!\n\nTe comparto tu invitación personal y pases para acompañarnos a la celebración de: ${event.title}.\n\nPor favor, ingresa al siguiente enlace para ver los detalles y confirmar tu asistencia:\n${url}\n\n¡Esperamos contar con tu presencia!`;
         
         try {
-            await navigator.clipboard.writeText(message);
-            toast.success('¡Mensaje de invitación copiado!');
+            await navigator.clipboard.writeText(url);
+            toast.success('¡Link copiado con éxito!');
         } catch (err) {
             console.error('Error al copiar', err);
         }
