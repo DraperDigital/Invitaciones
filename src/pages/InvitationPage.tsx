@@ -967,15 +967,15 @@ END:VCALENDAR`;
                             <div className="space-y-3 text-stone-700">
                                 <p className="flex items-center justify-center gap-3 text-lg">
                                     <Clock className="h-5 w-5 text-accent flex-shrink-0" />
-                                    <span className="font-sans">{format(eventDate, 'HH:mm', { locale: es })} hrs</span>
+                                    <span className="font-sans">{cfg.misa_time || format(eventDate, 'HH:mm', { locale: es })} hrs</span>
                                 </p>
                                 <p className="flex items-start justify-center gap-3">
                                     <MapPin className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
-                                    <span className="font-sans text-sm">{event.venue_name}<br />{event.venue_address}</span>
+                                    <span className="font-sans text-sm">{cfg.misa_name || event.venue_name}<br />{cfg.misa_address || event.venue_address}</span>
                                 </p>
                             </div>
-                            {event.maps_link && (
-                                <a href={event.maps_link} target="_blank" rel="noreferrer">
+                            {(cfg.misa_maps_link || event.maps_link) && (
+                                <a href={cfg.misa_maps_link || event.maps_link} target="_blank" rel="noreferrer">
                                     <button className="btn-premium px-6 py-3 rounded-full text-white font-sans font-medium text-sm uppercase tracking-wider mt-4">
                                         ¿Cómo llegar?
                                     </button>

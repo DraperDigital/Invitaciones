@@ -13,6 +13,10 @@ type WizardData = {
     venue_name: string;
     venue_address: string;
     maps_link: string;
+    misa_name: string;
+    misa_address: string;
+    misa_maps_link: string;
+    misa_time: string;
     dress_code: string;
     rsvp_deadline: string;
     theme: string;
@@ -25,6 +29,10 @@ const INITIAL_DATA: WizardData = {
     venue_name: '',
     venue_address: '',
     maps_link: '',
+    misa_name: '',
+    misa_address: '',
+    misa_maps_link: '',
+    misa_time: '',
     dress_code: '',
     rsvp_deadline: '',
     theme: 'classic',
@@ -60,6 +68,10 @@ export default function EventWizard() {
                         venue_name: eventData.venue_name || '',
                         venue_address: eventData.venue_address || '',
                         maps_link: eventData.maps_link || '',
+                        misa_name: eventData.theme_config?.misa_name || '',
+                        misa_address: eventData.theme_config?.misa_address || '',
+                        misa_maps_link: eventData.theme_config?.misa_maps_link || '',
+                        misa_time: eventData.theme_config?.misa_time || '',
                         dress_code: eventData.dress_code || '',
                         rsvp_deadline: eventData.rsvp_deadline ? new Date(eventData.rsvp_deadline).toISOString().slice(0, 10) : '',
                         theme: eventData.theme_config?.theme || 'classic'
@@ -102,7 +114,14 @@ export default function EventWizard() {
         if (isEditing) {
             // Obtenemos el config actual para no borrar la galería y regalos
             const { data: oldData } = await supabase.from('events').select('theme_config').eq('id', id).single();
-            const newConfig = { ...(oldData?.theme_config || {}), theme: data.theme };
+            const newConfig = { 
+                ...(oldData?.theme_config || {}), 
+                theme: data.theme,
+                misa_name: data.misa_name,
+                misa_address: data.misa_address,
+                misa_maps_link: data.misa_maps_link,
+                misa_time: data.misa_time
+            };
             
             const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
             setLoading(false);
@@ -117,7 +136,13 @@ export default function EventWizard() {
                 ...payload,
                 user_id: user.id,
                 is_published: true,
-                theme_config: { theme: data.theme },
+                theme_config: { 
+                    theme: data.theme,
+                    misa_name: data.misa_name,
+                    misa_address: data.misa_address,
+                    misa_maps_link: data.misa_maps_link,
+                    misa_time: data.misa_time
+                },
                 slug: `${data.title.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 7)}`,
             };
             const { error } = await supabase.from('events').insert(insertPayload);
@@ -207,36 +232,89 @@ export default function EventWizard() {
 
                 {step === 2 && (
                     <div className="space-y-6">
-                        <h2 className="text-xl font-medium">Ubicación</h2>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Nombre del Lugar</label>
-                            <input
-                                type="text"
-                                value={data.venue_name}
-                                onChange={(e) => updateData({ venue_name: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                placeholder="Ej. Hacienda Los Arcos"
-                            />
+                        <div className="flex items-center gap-2 mb-2">
+                            <h2 className="text-xl font-medium text-stone-900 font-serif">Ubicación del Evento</h2>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Dirección</label>
-                            <input
-                                type="text"
-                                value={data.venue_address}
-                                onChange={(e) => updateData({ venue_address: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                placeholder="Calle Principal 123..."
-                            />
+                        
+                        {/* Sección Misa / Ceremonia */}
+                        <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-[#BD7474]">Ceremonia / Misa</h3>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
+                                    <input
+                                        type="text"
+                                        value={data.misa_name}
+                                        onChange={(e) => updateData({ misa_name: e.target.value })}
+                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        placeholder="Ej. Parroquia de San Juan"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-stone-500 mb-1">Hora de Inicio</label>
+                                    <input
+                                        type="time"
+                                        value={data.misa_time}
+                                        onChange={(e) => updateData({ misa_time: e.target.value })}
+                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-stone-500 mb-1">Dirección</label>
+                                <input
+                                    type="text"
+                                    value={data.misa_address}
+                                    onChange={(e) => updateData({ misa_address: e.target.value })}
+                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    placeholder="Calle, Número, Colonia..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-stone-500 mb-1">Enlace de Google Maps</label>
+                                <input
+                                    type="url"
+                                    value={data.misa_maps_link}
+                                    onChange={(e) => updateData({ misa_maps_link: e.target.value })}
+                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    placeholder="https://goo.gl/maps/..."
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Enlace de Maps (Opcional)</label>
-                            <input
-                                type="url"
-                                value={data.maps_link}
-                                onChange={(e) => updateData({ maps_link: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                placeholder="https://goo.gl/maps/..."
-                            />
+
+                        {/* Sección Celebración */}
+                        <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-stone-900">Celebración / Fiesta</h3>
+                            <div>
+                                <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
+                                <input
+                                    type="text"
+                                    value={data.venue_name}
+                                    onChange={(e) => updateData({ venue_name: e.target.value })}
+                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    placeholder="Ej. Hacienda Los Arcos"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-stone-500 mb-1">Dirección</label>
+                                <input
+                                    type="text"
+                                    value={data.venue_address}
+                                    onChange={(e) => updateData({ venue_address: e.target.value })}
+                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    placeholder="Calle Principal 123..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-medium text-stone-500 mb-1">Enlace de Google Maps</label>
+                                <input
+                                    type="url"
+                                    value={data.maps_link}
+                                    onChange={(e) => updateData({ maps_link: e.target.value })}
+                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    placeholder="https://goo.gl/maps/..."
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
