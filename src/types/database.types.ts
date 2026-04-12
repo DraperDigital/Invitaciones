@@ -32,10 +32,11 @@ export type Guest = {
     group_name: string | null;
     guest_token: string;
     max_plus_ones: number;
-    status: 'pending' | 'sent' | 'viewed';
+    status: 'pending' | 'sent' | 'viewed' | 'confirmed' | 'declined';
     views_count: number;
     table_id: string | null;
     last_reminder_at: string | null;
+    invitation_sent_at: string | null;
     checked_in_at: string | null;
     created_at: string;
 };

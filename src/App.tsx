@@ -67,7 +67,7 @@ function AppRoutes() {
           <Route path="edit/:id"              element={<EventWizard />} />
           <Route path="design/:id"            element={<DesignEditor />} />
           <Route path="settings"              element={<SettingsPage />} />
-          <Route path="event/:id"             element={<EventDetails />} />
+          <Route path="event/:id"             element={<EventRSVPs />} />
         </Route>
 
         {/* Catch-all 404 Route */}

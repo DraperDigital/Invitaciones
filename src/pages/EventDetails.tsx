@@ -273,6 +273,26 @@ export default function EventDetails() {
         }
     };
 
+    const handleToggleSent = async (guest: GuestWithRSVP) => {
+        const isSent = !!guest.invitation_sent_at;
+        const newValue = isSent ? null : new Date().toISOString();
+        
+        try {
+            const { error } = await supabase
+                .from('guests')
+                .update({ invitation_sent_at: newValue })
+                .eq('id', guest.id);
+                
+            if (error) throw error;
+            
+            setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, invitation_sent_at: newValue } : g));
+            toast.success(isSent ? 'Invitación marcada como pendiente' : 'Invitación marcada como enviada');
+        } catch (error: any) {
+            console.error('Error toggling sent status:', error);
+            toast.error('Error al actualizar el estado de envío');
+        }
+    };
+
     const handleToggleRSVP = async (guest: GuestWithRSVP) => {
         if (!event) return;
         
@@ -914,6 +934,7 @@ export default function EventDetails() {
                                             <tr className="text-[10px] uppercase font-bold tracking-widest text-stone-300">
                                                 <th className="px-4 py-6">Invitado</th>
                                                 <th className="px-4 py-6">Grupo</th>
+                                                <th className="px-4 py-6 text-center">Enviado</th>
                                                 <th className="px-4 py-6 text-center">Estado Visual</th>
                                                 <th className="px-4 py-6">Estatus</th>
                                                 <th className="px-4 py-6 text-right">Acciones</th>
@@ -932,6 +953,21 @@ export default function EventDetails() {
                                                         <span className="flex items-center gap-2 text-stone-400 text-sm italic font-light">
                                                             <Tag className="h-3.5 w-3.5 text-stone-200" /> {guest.group_name}
                                                         </span>
+                                                    </td>
+                                                    <td className="px-4 py-8">
+                                                         <div className="flex justify-center">
+                                                            <button 
+                                                                onClick={() => handleToggleSent(guest)}
+                                                                className={`h-6 w-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+                                                                    guest.invitation_sent_at 
+                                                                        ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white' 
+                                                                        : 'bg-white border-stone-200 text-transparent hover:border-[#1B2E1D]/30'
+                                                                }`}
+                                                                title={guest.invitation_sent_at ? "Marcar como no enviado" : "Marcar como enviado"}
+                                                            >
+                                                                <Check className="h-4 w-4" />
+                                                            </button>
+                                                         </div>
                                                     </td>
                                                     <td className="px-4 py-8">
                                                          <div className="flex justify-center">
@@ -1049,16 +1085,31 @@ export default function EventDetails() {
                                                 </div>
 
                                                 <div className="flex items-center justify-between py-3 border-y border-stone-50/50">
-                                                    <div className="flex items-center gap-3">
-                                                        <button
-                                                            onClick={() => handleToggleRSVP(guest)}
-                                                            className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#BD7474] focus:ring-offset-2 ${
-                                                                status === 'yes' ? 'bg-[#BD7474]' : 'bg-stone-200'
-                                                            }`}
-                                                        >
-                                                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${status === 'yes' ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
-                                                        </button>
-                                                        <span className="text-[8px] uppercase tracking-widest font-bold text-stone-400">Confirmación Manual</span>
+                                                    <div className="flex flex-col gap-3">
+                                                        <div className="flex items-center gap-3">
+                                                            <button 
+                                                                onClick={() => handleToggleSent(guest)}
+                                                                className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                                    guest.invitation_sent_at 
+                                                                        ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white' 
+                                                                        : 'bg-white border-stone-200 text-transparent'
+                                                                }`}
+                                                            >
+                                                                <Check className="h-3 w-3" />
+                                                            </button>
+                                                            <span className="text-[8px] uppercase tracking-widest font-bold text-stone-400">Enviado Manual</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3">
+                                                            <button
+                                                                onClick={() => handleToggleRSVP(guest)}
+                                                                className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#BD7474] focus:ring-offset-2 ${
+                                                                    status === 'yes' ? 'bg-[#BD7474]' : 'bg-stone-200'
+                                                                }`}
+                                                            >
+                                                                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${status === 'yes' ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
+                                                            </button>
+                                                            <span className="text-[8px] uppercase tracking-widest font-bold text-stone-400">Confirmación Manual</span>
+                                                        </div>
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <button onClick={() => sendIndividualReminder(guest)} className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl"><MessageCircle className="h-4 w-4" /></button>
@@ -1113,19 +1164,33 @@ export default function EventDetails() {
 
                     {/* ALWAYS VISIBLE: Invitados sin confirmar section */}
                     <div className="mt-12 space-y-10">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
-                            <div className="space-y-1">
-                                <p className="text-[10px] uppercase font-black tracking-[0.3em] text-[#BD7474] mb-2">Seguimiento</p>
-                                <h2 className="text-3xl sm:text-4xl font-serif text-[#1B2E1D] flex items-center gap-4">
-                                    Invitados sin confirmar
-                                </h2>
-                                <p className="text-stone-400 text-sm font-light italic">Aquí aparecerán las personas que aún no responden.</p>
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
+                            <div className="space-y-4 flex-1">
+                                <div className="space-y-1">
+                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-[#BD7474] mb-2">Seguimiento</p>
+                                    <h2 className="text-3xl sm:text-4xl font-serif text-[#1B2E1D] flex items-center gap-4">
+                                        Invitados sin confirmar
+                                    </h2>
+                                    <p className="text-stone-400 text-sm font-light italic">Aquí aparecerán las personas que aún no responden.</p>
+                                </div>
+                                
+                                {/* New Search for this section */}
+                                <div className="relative max-w-md">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
+                                    <input 
+                                        type="text"
+                                        placeholder="Buscar por nombre..."
+                                        className="w-full pl-11 pr-4 py-3 bg-white border border-stone-100 rounded-xl text-sm focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all shadow-sm font-light"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
                             </div>
                             
                             {guests.filter(g => getRSVPStatus(g) === 'pending').length > 0 && (
                                 <button 
                                     onClick={sendBulkReminder}
-                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-[#1B2E1D] text-white rounded-[1.5rem] md:rounded-[2rem] text-[10px] uppercase font-black tracking-[0.2em] shadow-xl hover:bg-[#2A442E] transition-all border-b-4 border-black/20 group"
+                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-[#1B2E1D] text-white rounded-[1.5rem] md:rounded-[2rem] text-[10px] uppercase font-black tracking-[0.2em] shadow-xl hover:bg-[#2A442E] transition-all border-b-4 border-black/20 group h-fit"
                                 >
                                     <BellRing className="h-4 w-4 group-hover:rotate-12 transition-transform" /> 
                                     Enviar recordatorios masivos
@@ -1141,8 +1206,8 @@ export default function EventDetails() {
                                 <p className="text-stone-500 font-medium italic">Todos tus invitados han confirmado su asistencia. ¡Excelente!</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {guests.filter(g => getRSVPStatus(g) === 'pending').map((guest) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {filteredGuests.filter(g => getRSVPStatus(g) === 'pending').map((guest) => (
                                     <div key={guest.id} className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
                                         <div>
                                             <div className="flex justify-between items-start mb-4">

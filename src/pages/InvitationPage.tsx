@@ -322,7 +322,7 @@ export default function InvitationPage() {
             setRsvpChoice(status);
             setRsvpSuccess(true);
         } catch (err: any) {
-            console.error('RSVP Error:', err);
+            console.error('RSVP Full Error:', err);
             setError('Error al procesar tu confirmación. Reintenta por favor.');
         } finally {
             setSubmitting(false);
