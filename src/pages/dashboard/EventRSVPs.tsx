@@ -134,6 +134,22 @@ const EventRSVPs: React.FC = () => {
         return 'pending';
     };
 
+    // Helper: calcular PAX total de un invitado (1 + acompañantes)
+    const getGuestPax = (g: any): number => {
+        return (g.rsvps?.[0]?.plus_ones_confirmed || g.max_plus_ones || 0) + 1;
+    };
+
+    // Helper: calcular PAX ocupados en una mesa
+    const getTableOccupiedPax = (tableId: string): number => {
+        return guests.filter(g => g.table_id === tableId).reduce((sum, g) => sum + getGuestPax(g), 0);
+    };
+
+    // Helper: calcular PAX disponibles en una mesa
+    const getTableAvailablePax = (tableId: string): number => {
+        const table = tables.find(t => t.id === tableId);
+        return table ? table.capacity - getTableOccupiedPax(tableId) : 0;
+    };
+
     // Metrics - usando getGuestStatus
     const metrics = {
         totalInvitados: guests.reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0),
@@ -645,20 +661,43 @@ const EventRSVPs: React.FC = () => {
                                                     {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
                                                 </td>
                                                 <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
-                                                    {editingGuestId === g.id ? (
+                                                    {getGuestStatus(g) !== 'yes' ? (
+                                                        <span className="text-stone-300 text-[9px] italic" title="Solo invitados confirmados pueden tener mesa">🔒</span>
+                                                    ) : editingGuestId === g.id ? (
                                                         <select 
                                                             value={editData.table_id || ''} 
-                                                            onChange={e => setEditData({...editData, table_id: e.target.value})} 
+                                                            onChange={e => {
+                                                                const tid = e.target.value;
+                                                                if (tid) {
+                                                                    const available = getTableAvailablePax(tid) + (g.table_id === tid ? getGuestPax(g) : 0);
+                                                                    if (getGuestPax(g) > available) {
+                                                                        toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
+                                                                        return;
+                                                                    }
+                                                                }
+                                                                setEditData({...editData, table_id: tid});
+                                                            }}
                                                             className="border border-stone-200 px-2 py-1 rounded text-center text-xs bg-white cursor-pointer"
                                                         >
                                                             <option value="">Sin mesa</option>
-                                                            {tables.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                            {tables.map(t => {
+                                                                const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
+                                                                const fits = getGuestPax(g) <= avail;
+                                                                return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail} disp.)</option>;
+                                                            })}
                                                         </select>
                                                     ) : (
                                                         <select
                                                             value={g.table_id || ''}
                                                             onChange={async (e) => {
                                                                 const newTableId = e.target.value;
+                                                                if (newTableId) {
+                                                                    const available = getTableAvailablePax(newTableId) + (g.table_id === newTableId ? getGuestPax(g) : 0);
+                                                                    if (getGuestPax(g) > available) {
+                                                                        toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
+                                                                        return;
+                                                                    }
+                                                                }
                                                                 const prev = [...guests];
                                                                 setGuests(gs => gs.map(x => x.id === g.id ? {...x, table_id: newTableId || null} : x));
                                                                 try {
@@ -677,7 +716,11 @@ const EventRSVPs: React.FC = () => {
                                                             className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#1B2E1D] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
                                                         >
                                                             <option value="">-</option>
-                                                            {tables.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                            {tables.map(t => {
+                                                                const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
+                                                                const fits = getGuestPax(g) <= avail;
+                                                                return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail})</option>;
+                                                            })}
                                                         </select>
                                                     )}
                                                 </td>
@@ -846,15 +889,33 @@ const EventRSVPs: React.FC = () => {
                     <div className="grid md:grid-cols-3 gap-6">
                         {tables.map(t => {
                             const tableGuests = guests.filter(g => g.table_id === t.id);
+                            const occupiedPax = tableGuests.reduce((sum, g) => sum + getGuestPax(g), 0);
+                            const availablePax = t.capacity - occupiedPax;
+                            const fillPercent = t.capacity > 0 ? Math.min((occupiedPax / t.capacity) * 100, 100) : 0;
                             return (
-                                <div key={t.id} className="bg-white p-6 rounded-[2rem] border border-stone-100 shadow-sm space-y-4">
+                                <div key={t.id} className={`bg-white p-6 rounded-[2rem] border shadow-sm space-y-4 ${availablePax <= 0 ? 'border-emerald-200 bg-emerald-50/30' : 'border-stone-100'}`}>
                                     <div className="flex justify-between items-start">
                                         <h4 className="font-serif text-lg">{t.name}</h4>
                                         <button onClick={() => handleDeleteTable(t.id)} className="text-stone-300 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
                                     </div>
-                                    <p className="text-[8px] font-bold text-stone-400 uppercase">{tableGuests.length} de {t.capacity} PAX</p>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-center">
+                                            <p className="text-[8px] font-bold text-stone-400 uppercase">{occupiedPax} de {t.capacity} PAX</p>
+                                            <p className={`text-[8px] font-bold uppercase ${availablePax <= 0 ? 'text-emerald-600' : availablePax <= 2 ? 'text-amber-500' : 'text-stone-300'}`}>
+                                                {availablePax <= 0 ? 'COMPLETA' : `${availablePax} libres`}
+                                            </p>
+                                        </div>
+                                        <div className="w-full bg-stone-100 rounded-full h-1.5">
+                                            <div className={`h-1.5 rounded-full transition-all ${fillPercent >= 100 ? 'bg-emerald-500' : fillPercent >= 80 ? 'bg-amber-400' : 'bg-[#1B2E1D]'}`} style={{ width: `${fillPercent}%` }} />
+                                        </div>
+                                    </div>
                                     <div className="space-y-1">
-                                        {tableGuests.map(g => <p key={g.id} className="text-xs text-stone-500">• {g.name}</p>)}
+                                        {tableGuests.map(g => (
+                                            <div key={g.id} className="flex justify-between items-center text-xs">
+                                                <span className="text-stone-500">• {g.name}</span>
+                                                <span className="text-stone-300 font-bold">{getGuestPax(g)} pax</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             );
