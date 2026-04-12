@@ -166,21 +166,20 @@ export default function InvitationPage() {
         }
 
         if (guestToken) {
-            // FALLBACK: Intentar obtener invitado y rsvp directamente de las tablas
             try {
-                // 1. Obtener el invitado
-                // Validar si el token parece un UUID válido antes de consultar
+                // Validar si el token parece un UUID válido antes de consultar al RPC
                 const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guestToken);
                 
                 if (isUuid) {
-                    const { data: guestData, error: gError } = await supabase
-                        .from('guests')
-                        .select('*')
-                        .eq('event_id', eventData.id)
-                        .eq('guest_token', guestToken)
-                        .maybeSingle();
+                    const { data, error: rpcError } = await supabase.rpc('get_guest_by_token', {
+                        p_token: guestToken,
+                        p_slug: slug
+                    });
 
-                    if (!gError && guestData) {
+                    if (!rpcError && data && data.guest) {
+                        const guestData = data.guest as Guest;
+                        const rsvpData = data.rsvp;
+
                         setGuest(guestData);
                         setGuestName(guestData.name);
 
@@ -190,14 +189,8 @@ export default function InvitationPage() {
                             setAdultsCount(guestData.max_plus_ones);
                         }
 
-                        // 2. Obtener RSVP existente (sobrescribe la inicialización si ya respondió antes)
-                        const { data: rsvpData, error: rError } = await supabase
-                            .from('rsvps')
-                            .select('*')
-                            .eq('guest_id', guestData.id)
-                            .maybeSingle();
-
-                        if (!rError && rsvpData) {
+                        // Procesar RSVP existente si lo hay
+                        if (rsvpData) {
                             try {
                                 const msg = rsvpData.message || '';
                                 const adultsMatch = msg.match(/Adultos: (\d+)/);
@@ -216,16 +209,19 @@ export default function InvitationPage() {
                             }
                         }
 
+                        // Persistir token en sesión y limpiar URL
                         if (sessionKey && rawToken) {
                             sessionStorage.setItem(sessionKey, rawToken);
                             window.history.replaceState({}, '', window.location.pathname);
                         }
+                    } else if (rpcError) {
+                        console.error('RPC Error fetching guest:', rpcError);
                     }
                 } else {
                     console.log('Token is not a valid UUID:', guestToken);
                 }
             } catch (err) {
-                console.warn('Fallback guest fetch failed:', err);
+                console.warn('Guest fetch failed:', err);
             }
         }
         setLoading(false);
@@ -248,18 +244,32 @@ export default function InvitationPage() {
         try {
             const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount) : 0;
             const detailNote = isAccompanied ? `[Acompañantes - Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
+            
+            // Priorizar el ID real del invitado cargado para evitar confusiones de tokens antiguos
+            const activeToken = guest?.id || guestToken;
 
-            if (guestToken || guest?.id) {
+            console.log('Submit RSVP Debug:', {
+                slug,
+                status,
+                token: activeToken,
+                totalPlusOnes,
+                detailNote
+            });
+
+            if (activeToken) {
                 // Confirmación con token (RPC Bypass RLS)
                 const { error: rpcErr } = await supabase.rpc('submit_rsvp_by_token', {
-                    p_token: guestToken || guest?.id,
+                    p_token: activeToken,
                     p_slug: slug,
                     p_status: status,
                     p_plus_ones: totalPlusOnes,
                     p_dietary: null,
                     p_message: detailNote || 'Registro Directo'
                 });
-                if (rpcErr) throw rpcErr;
+                if (rpcErr) {
+                    console.error('RPC Submit Error:', rpcErr);
+                    throw rpcErr;
+                }
             } else {
                 // Registro por nombre público (RPC Bypass RLS)
                 const { error: rpcErr } = await supabase.rpc('register_rsvp_by_name', {
@@ -268,14 +278,19 @@ export default function InvitationPage() {
                     p_status: status,
                     p_plus_ones: totalPlusOnes
                 });
-                if (rpcErr) throw rpcErr;
+                if (rpcErr) {
+                    console.error('RPC Register Error:', rpcErr);
+                    throw rpcErr;
+                }
             }
 
+            // Solo si llegamos aquí, marcamos como éxito
             setRsvpChoice(status);
             setRsvpSuccess(true);
         } catch (err: any) {
             console.error('RSVP Full Error:', err);
-            setError('Error al procesar tu confirmación. Reintenta por favor.');
+            const dbErrorMsg = err.message || err.details || 'Error de red';
+            setError(`Error al procesar: ${dbErrorMsg}. Por favor reintenta.`);
         } finally {
             setSubmitting(false);
         }
