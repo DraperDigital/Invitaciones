@@ -7,7 +7,7 @@ import { MapPin, Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, User
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { generateInvitationPDF, generateQRAsPDF } from '../utils/generatePDF';
+import { generateInvitationPDF } from '../utils/generatePDF';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
