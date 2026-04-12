@@ -260,28 +260,21 @@ const EventRSVPs: React.FC = () => {
             if (current === 'yes') newStatus = 'no';
             if (current === 'no') newStatus = 'pending';
         }
-        console.log('[RSVP] Cambiando:', guest.name, current, '→', newStatus);
+        console.log('[RSVP] Cambiando via RPC:', guest.name, current, '→', newStatus);
         const previousGuests = [...guests];
+        // Optimistic UI
         setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
         try {
-            const { data: existingRsvp, error: selErr } = await supabase.from('rsvps').select('id').eq('guest_id', guest.id).maybeSingle();
-            if (selErr) { console.error('[RSVP] Select error:', selErr); throw selErr; }
-            console.log('[RSVP] Existente:', existingRsvp);
-            if (existingRsvp) {
-                const { error: upErr } = await supabase.from('rsvps').update({ status: newStatus }).eq('id', existingRsvp.id);
-                if (upErr) { console.error('[RSVP] Update error:', upErr); throw upErr; }
-                console.log('[RSVP] Update OK');
-            } else {
-                const { error: inErr } = await supabase.from('rsvps').insert([{ event_id: guest.event_id, guest_id: guest.id, status: newStatus, message: 'Manual', plus_ones_confirmed: guest.max_plus_ones || 0 }]);
-                if (inErr) { console.error('[RSVP] Insert error:', inErr); throw inErr; }
-                console.log('[RSVP] Insert OK');
-            }
-            const { error: gErr } = await supabase.from('guests').update({ status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending' }).eq('id', guest.id);
-            if (gErr) console.error('[RSVP] Guest update error:', gErr);
-            console.log('[RSVP] ✅ Todo OK');
+            const { data, error } = await supabase.rpc('admin_set_rsvp_status', {
+                p_guest_id: guest.id,
+                p_event_id: guest.event_id,
+                p_status: newStatus
+            });
+            if (error) { console.error('[RSVP RPC] Error:', error); throw error; }
+            console.log('[RSVP RPC] ✅ Resultado:', data);
             toast.success('Estado actualizado');
         } catch (e: any) {
-            console.error('[RSVP] ❌ FALLO:', e);
+            console.error('[RSVP RPC] ❌ FALLO:', e);
             setGuests(previousGuests);
             toast.error('Error: ' + (e?.message || 'no se pudo guardar'));
         }
