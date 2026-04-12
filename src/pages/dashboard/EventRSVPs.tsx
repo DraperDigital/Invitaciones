@@ -265,7 +265,7 @@ const EventRSVPs: React.FC = () => {
         // Optimistic UI
         setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
         try {
-            const { data, error } = await supabase.rpc('admin_set_rsvp_status', {
+            const { data, error } = await supabase.rpc('set_guest_status', {
                 p_guest_id: guest.id,
                 p_event_id: guest.event_id,
                 p_status: newStatus
