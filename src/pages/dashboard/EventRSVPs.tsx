@@ -123,13 +123,24 @@ const EventRSVPs: React.FC = () => {
         setEventId(id);
     };
 
-    // Metrics
+    // Helper: leer estado desde guests.status (fuente confiable) y mapear a formato rsvp
+    const getGuestStatus = (g: any): string => {
+        // Primero intentar rsvps (si RLS los carga), si no, usar guests.status
+        const rsvpStatus = g.rsvps?.[0]?.status;
+        if (rsvpStatus) return rsvpStatus;
+        // Mapear guests.status a formato rsvp
+        if (g.status === 'confirmed') return 'yes';
+        if (g.status === 'declined') return 'no';
+        return 'pending';
+    };
+
+    // Metrics - usando getGuestStatus
     const metrics = {
         totalInvitados: guests.reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0),
-        confirmados: guests.filter(g => g.rsvps?.[0]?.status === 'yes').reduce((acc, g) => acc + (g.rsvps[0].plus_ones_confirmed || 0) + 1, 0),
+        confirmados: guests.filter(g => getGuestStatus(g) === 'yes').reduce((acc, g) => acc + (g.rsvps?.[0]?.plus_ones_confirmed || g.max_plus_ones || 0) + 1, 0),
         ingresados: guests.filter(g => g.checked_in_at).reduce((acc, g) => acc + (g.rsvps?.[0]?.plus_ones_confirmed || 0) + 1, 0),
-        pendientes: guests.filter(g => !g.rsvps?.[0] || g.rsvps?.[0]?.status === 'pending').reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0),
-        noAsistiran: guests.filter(g => g.rsvps?.[0]?.status === 'no').length,
+        pendientes: guests.filter(g => getGuestStatus(g) === 'pending').reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0),
+        noAsistiran: guests.filter(g => getGuestStatus(g) === 'no').length,
     };
 
     const statusData = [
@@ -143,10 +154,6 @@ const EventRSVPs: React.FC = () => {
         { name: 'Ya Ingresaron', total: metrics.ingresados, fill: '#1B2E1D' },
     ];
 
-
-
-
-
     const getStatusStyles = (status: string) => {
         switch (status) {
             case 'yes': return 'bg-emerald-50 text-emerald-600 border-emerald-100';
@@ -155,11 +162,8 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
-
-
     const filteredGuests = guests.filter(g => {
-        const rsvp = g.rsvps?.[0];
-        const status = rsvp?.status || 'pending';
+        const status = getGuestStatus(g);
         const matchesSearch = g.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                              (g.group_name?.toLowerCase() || '').includes(searchQuery.toLowerCase());
         const matchesStatus = statusFilter === 'all' || status === statusFilter;
@@ -254,7 +258,7 @@ const EventRSVPs: React.FC = () => {
     };
 
     const handleQuickStatusToggle = async (guest: any, forceStatus?: string) => {
-        const current = guest.rsvps?.[0]?.status || 'pending';
+        const current = getGuestStatus(guest);
         let newStatus = forceStatus || 'yes';
         if (!forceStatus) {
             if (current === 'yes') newStatus = 'no';
@@ -263,7 +267,7 @@ const EventRSVPs: React.FC = () => {
         console.log('[RSVP] Cambiando via RPC:', guest.name, current, '→', newStatus);
         const previousGuests = [...guests];
         // Optimistic UI
-        setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
+        setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending', rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
         try {
             const { data, error } = await supabase.rpc('set_guest_status', {
                 p_guest_id: guest.id,
@@ -605,16 +609,16 @@ const EventRSVPs: React.FC = () => {
                                                     ) : (
                                                     <div className="relative inline-flex items-center group">
                                                         <select
-                                                            value={g.rsvps?.[0]?.status || 'pending'}
+                                                            value={getGuestStatus(g)}
                                                             onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
                                                             title="Cambiar estado"
-                                                            className={`appearance-none outline-none pl-3 pr-7 py-1.5 rounded-full border text-[8px] uppercase font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(g.rsvps?.[0]?.status)}`}
+                                                            className={`appearance-none outline-none pl-3 pr-7 py-1.5 rounded-full border text-[8px] uppercase font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(getGuestStatus(g))}`}
                                                         >
                                                             <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
                                                             <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
                                                             <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
                                                         </select>
-                                                        <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(g.rsvps?.[0]?.status).split(' ')[1]}`} />
+                                                        <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(getGuestStatus(g)).split(' ')[1]}`} />
                                                     </div>
                                                     )}
                                                 </td>
@@ -642,7 +646,7 @@ const EventRSVPs: React.FC = () => {
                                                                 <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleDuplicate(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Duplicar"><Users className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-300 hover:text-emerald-500" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
-                                                                <button onClick={() => { setEditingGuestId(g.id); setEditData({ name: g.name, group_name: g.group_name || '', status: g.rsvps?.[0]?.status || 'pending', plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, table_id: g.table_id || '' }); }} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Editar"><Edit2 className="h-4 w-4" /></button>
+                                                                <button onClick={() => { setEditingGuestId(g.id); setEditData({ name: g.name, group_name: g.group_name || '', status: getGuestStatus(g), plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, table_id: g.table_id || '' }); }} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Editar"><Edit2 className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                                                             </div>
                                                         )}
@@ -657,7 +661,7 @@ const EventRSVPs: React.FC = () => {
                             <div className="p-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredGuests.map(g => {
                                     const rsvp = g.rsvps?.[0];
-                                    const status = rsvp?.status || 'pending';
+                                    const status = getGuestStatus(g);
                                     const cardStyles = status === 'yes' 
                                         ? 'border-emerald-100 bg-emerald-50/10' 
                                         : status === 'no' 
@@ -811,7 +815,7 @@ const EventRSVPs: React.FC = () => {
 
             {activeTab === 'reminders' && (
                 <div className="grid md:grid-cols-3 gap-6">
-                    {guests.filter(g => !g.rsvps?.[0] || g.rsvps[0].status === 'pending').map(g => (
+                    {guests.filter(g => getGuestStatus(g) === 'pending').map(g => (
                         <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-stone-100 shadow-sm flex justify-between items-center">
                             <div>
                                 <h4 className="font-serif text-lg">{g.name}</h4>
