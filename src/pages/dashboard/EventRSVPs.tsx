@@ -222,30 +222,6 @@ const EventRSVPs: React.FC = () => {
         } catch (e) {}
     };
 
-    const handleDuplicate = async (guest: any) => {
-        try {
-            const newToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            const { data, error } = await supabase.from('guests').insert([{
-                event_id: guest.event_id,
-                name: `${guest.name} (Copia)`,
-                group_name: guest.group_name,
-                max_plus_ones: guest.max_plus_ones,
-                guest_token: newToken,
-                phone: guest.phone,
-                email: guest.email,
-                table_id: guest.table_id
-            }]).select();
-
-            if (error) throw error;
-            if (data) {
-                setGuests([...guests, data[0]]);
-                toast.success('Invitado duplicado con éxito');
-            }
-        } catch (err) {
-            toast.error('Error al duplicar invitado');
-        }
-    };
-
     const copyIndividualLink = (guest: any) => {
         const url = `${window.location.origin}/i/${guest.event?.slug || event?.slug}?t=${guest.id}`;
         navigator.clipboard.writeText(url).then(() => {
@@ -282,8 +258,9 @@ const EventRSVPs: React.FC = () => {
         }
         console.log('[RSVP] Cambiando via RPC:', guest.name, current, '→', newStatus);
         const previousGuests = [...guests];
-        // Optimistic UI
-        setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending', rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
+        // Optimistic UI — si cambia a no-confirmado, quitar mesa
+        const clearedTableId = newStatus !== 'yes' ? null : guest.table_id;
+        setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending', table_id: clearedTableId, rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
         try {
             const { data, error } = await supabase.rpc('set_guest_status', {
                 p_guest_id: guest.id,
@@ -360,12 +337,18 @@ const EventRSVPs: React.FC = () => {
     };
 
     const handleDeleteTable = async (tableId: string) => {
+        const assignedGuests = guests.filter(g => g.table_id === tableId);
+        if (assignedGuests.length > 0) {
+            toast.error(`No se puede eliminar: hay ${assignedGuests.length} invitado(s) asignado(s). Reasígnalos primero.`);
+            return;
+        }
         if (!window.confirm("¿Eliminar mesa?")) return;
         try {
             await supabase.from('event_tables').delete().eq('id', tableId);
             setTables(tables.filter(t => t.id !== tableId));
-            setGuests(guests.map(g => g.table_id === tableId ? { ...g, table_id: null } : g));
-        } catch (e) {}
+        } catch (e) {
+            toast.error('Error al eliminar mesa');
+        }
     };
 
 
@@ -655,7 +638,7 @@ const EventRSVPs: React.FC = () => {
                                                     )}
                                                 </td>
                                                 <td className="px-8 py-6 text-center font-bold text-stone-700">
-                                                    {(g.rsvps?.[0]?.plus_ones_confirmed || 0) + 1}
+                                                    {getGuestPax(g)}
                                                 </td>
                                                 <td className="px-8 py-6 text-center text-xs text-stone-400">
                                                     {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
@@ -737,7 +720,6 @@ const EventRSVPs: React.FC = () => {
                                                         ) : (
                                                             <div className="flex gap-2 justify-center">
                                                                 <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
-                                                                <button onClick={() => handleDuplicate(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Duplicar"><Users className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-300 hover:text-emerald-500" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
                                                                 <button onClick={() => { setEditingGuestId(g.id); setEditData({ name: g.name, group_name: g.group_name || '', status: getGuestStatus(g), plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, table_id: g.table_id || '' }); }} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Editar"><Edit2 className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
