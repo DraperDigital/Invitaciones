@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Layout, Users, Zap, ArrowUpRight, Plus, Calendar, Clock, Sparkles, PartyPopper, ArrowRight } from 'lucide-react';
+import { Layout, Users, Zap, ArrowUpRight, Plus, Clock, Sparkles, PartyPopper, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const DashboardHome: React.FC = () => {
@@ -45,19 +45,36 @@ const DashboardHome: React.FC = () => {
                 const eventIds = events?.map(e => e.id) || [];
                 const { data: guests, error: guestsError } = await supabase
                     .from('guests')
-                    .select('id, status')
+                    .select('event_id, status, max_plus_ones')
                     .in('event_id', eventIds);
 
                 if (guestsError) throw guestsError;
 
-                const confirmedCount = guests?.filter(g => g.status === 'confirmed').length || 0;
+                const totalGuests = guests?.reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0) || 0;
+                const confirmedCount = guests?.filter(g => g.status === 'confirmed')
+                    .reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0) || 0;
 
                 setStats({
                     totalEvents: events?.length || 0,
-                    totalGuests: guests?.length || 0,
-                    confirmedRate: guests?.length ? Math.round((confirmedCount / guests.length) * 100) : 0,
+                    totalGuests: totalGuests,
+                    confirmedRate: totalGuests ? Math.round((confirmedCount / totalGuests) * 100) : 0,
                 });
-                setRecentEvents(events?.slice(0, 3) || []);
+
+                // Calculate stats per event for recent cards
+                const eventsWithStats = events?.map(e => {
+                    const eventGuests = guests?.filter(g => g.event_id === e.id) || [];
+                    const t = eventGuests.reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0);
+                    const c = eventGuests.filter(g => g.status === 'confirmed').reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0);
+                    const d = eventGuests.filter(g => g.status === 'declined').length; // Declined using count
+                    const p = eventGuests.filter(g => g.status === 'pending').reduce((acc, g) => acc + (g.max_plus_ones || 0) + 1, 0);
+                    
+                    return {
+                        ...e,
+                        metrics: { total: t, confirmed: c, declined: d, pending: p }
+                    };
+                });
+
+                setRecentEvents(eventsWithStats?.slice(0, 3) || []);
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
                 setLoadError(true);
@@ -208,27 +225,76 @@ const DashboardHome: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="p-8">
-                                <h3 className="text-xl font-serif text-[#1B2E1D] mb-4">{event.title}</h3>
-                                <div className="space-y-3 mb-8">
-                                    <div className="flex items-center gap-3 text-stone-400 text-sm">
-                                        <Calendar className="h-4 w-4" />
-                                        <span>{new Date(event.date_time).toLocaleDateString('es-MX', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                            <div className="p-6">
+                                <h3 className="text-xl font-serif text-[#1B2E1D] mb-4 truncate" title={event.title}>{event.title}</h3>
+                                
+                                {/* Metrics Grid 2x2 */}
+                                <div className="grid grid-cols-2 gap-3 mb-6">
+                                    <div className="bg-stone-50 p-3 rounded-2xl border border-stone-100/50">
+                                        <p className="text-[7px] uppercase font-black tracking-widest text-stone-400 mb-1">Confirmados</p>
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                            <span className="text-lg font-serif text-[#1B2E1D] leading-none">{event.metrics?.confirmed || 0}</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-3 text-stone-400 text-sm">
-                                        <Clock className="h-4 w-4" />
-                                        <span>{new Date(event.date_time).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })} hrs</span>
+                                    <div className="bg-stone-50 p-3 rounded-2xl border border-stone-100/50">
+                                        <p className="text-[7px] uppercase font-black tracking-widest text-stone-400 mb-1">Pendientes</p>
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                                            <span className="text-lg font-serif text-[#1B2E1D] leading-none">{event.metrics?.pending || 0}</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-3 text-stone-400 text-sm">
-                                        <Users className="h-4 w-4" />
-                                        <span>Confirmaciones abiertas</span>
+                                    <div className="bg-stone-50 p-3 rounded-2xl border border-stone-100/50">
+                                        <p className="text-[7px] uppercase font-black tracking-widest text-stone-400 mb-1">Declinados</p>
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-1.5 w-1.5 rounded-full bg-rose-400" />
+                                            <span className="text-lg font-serif text-[#1B2E1D] leading-none">{event.metrics?.declined || 0}</span>
+                                        </div>
+                                    </div>
+                                    <div className="bg-stone-50 p-3 rounded-2xl border border-stone-100/50">
+                                        <p className="text-[7px] uppercase font-black tracking-widest text-stone-400 mb-1">PAX Total</p>
+                                        <div className="flex items-center gap-2 text-stone-300">
+                                            <Users className="h-3 w-3" />
+                                            <span className="text-lg font-serif text-stone-400 leading-none">{event.metrics?.total || 0}</span>
+                                        </div>
                                     </div>
                                 </div>
+
+                                {/* Progress Mini Bar */}
+                                {(() => {
+                                    const perc = event.metrics?.total > 0 ? Math.round((event.metrics.confirmed / event.metrics.total) * 100) : 0;
+                                    const deadlineDate = event.rsvp_deadline ? new Date(event.rsvp_deadline) : null;
+                                    const isDeadlinePassed = deadlineDate ? deadlineDate < new Date() : false;
+                                    const daysLeft = deadlineDate ? Math.max(0, Math.ceil((deadlineDate.getTime() - new Date().getTime()) / (1000 * 3600 * 24))) : null;
+
+                                    return (
+                                        <div className="space-y-4 mb-6">
+                                            <div className="space-y-1.5">
+                                                <div className="flex justify-between items-end px-1">
+                                                    <span className="text-[8px] uppercase font-bold tracking-widest text-stone-400">Progreso</span>
+                                                    <span className="text-[10px] font-serif text-emerald-600">{perc}%</span>
+                                                </div>
+                                                <div className="h-1.5 w-full bg-stone-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-emerald-500 rounded-full transition-all duration-1000" style={{ width: `${perc}%` }} />
+                                                </div>
+                                            </div>
+
+                                            {/* Deadline Badge */}
+                                            {deadlineDate && (
+                                                <div className={`inline-flex items-center gap-2 px-3 py-1 text-[8px] uppercase font-black tracking-widest rounded-lg border ${isDeadlinePassed ? 'bg-rose-50 border-rose-100 text-rose-600' : daysLeft !== null && daysLeft <= 7 ? 'bg-amber-50 border-amber-100 text-amber-600' : 'bg-stone-50 border-stone-100 text-stone-400'}`}>
+                                                    <Clock className="h-3 w-3" />
+                                                    {isDeadlinePassed ? 'Plazo Vencido' : `Cierra en ${daysLeft} días`}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
+
                                 <Link 
-                                    to={`/dashboard/event/${event.slug}`}
-                                    className="block w-full text-center py-4 bg-stone-50 border border-stone-100 rounded-xl text-[10px] uppercase font-bold tracking-widest text-stone-600 hover:bg-[#1B2E1D] hover:text-white transition-all shadow-sm"
+                                    to={`/dashboard/event/${event.id}`}
+                                    className="block w-full text-center py-4 bg-white border border-stone-200 rounded-2xl text-[10px] uppercase font-bold tracking-widest text-stone-600 hover:border-[#1B2E1D] hover:text-[#1B2E1D] transition-all"
                                 >
-                                    PANEL DE EVENTO
+                                    Panel del Evento
                                 </Link>
                             </div>
                         </div>

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { 
     Check, X, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
-    Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown
+    Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown,
+    Clock, MapPin, Eye, AlertTriangle
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
+import { differenceInDays, isPast } from 'date-fns';
 
 
 const EventRSVPs: React.FC = () => {
+    const location = useLocation();
+    const isEventDashboard = location.pathname.startsWith('/dashboard/event/');
     const [searchParams, setSearchParams] = useSearchParams();
     const eventIdFromUrl = searchParams.get('event');
     const [eventId, setEventId] = useState<string | null>(eventIdFromUrl);
@@ -41,6 +45,24 @@ const EventRSVPs: React.FC = () => {
     // New Table State
     const [isAddingTable, setIsAddingTable] = useState(false);
     const [newTable, setNewTable] = useState({ name: '', capacity: 10 });
+
+    const copyGeneralLink = async () => {
+        if (!event) return;
+        const slug = event.slug || event.id;
+        const url = `${window.location.origin}/i/${slug}`;
+        navigator.clipboard.writeText(url).then(() => {
+            toast.success('¡Link copiado con éxito!');
+        });
+    };
+
+    const shareOnWhatsApp = () => {
+        if (!event) return;
+        const slug = event.slug || event.id;
+        const url = `${window.location.origin}/i/${slug}`;
+        const message = `¡Hola! Te invito a mi evento: ${event.title}. \nConfirma tu asistencia aquí: ${url}`;
+        const wpUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(wpUrl, '_blank');
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -262,14 +284,18 @@ const EventRSVPs: React.FC = () => {
     const handleSaveInline = async (guest: any) => {
         try {
             // Update guest info via RPC
-            const { error: infoErr } = await supabase.rpc('update_guest_info', {
-                p_guest_id: guest.id,
-                p_event_id: guest.event_id,
-                p_name: editData.name,
-                p_group_name: editData.group_name,
-                p_table_id: editData.table_id || '',
-                p_max_plus_ones: editData.max_plus_ones
-            });
+            // Update guest info directly in the table to allow max_plus_ones
+            const { error: infoErr } = await supabase
+                .from('guests')
+                .update({
+                    name: editData.name,
+                    group_name: editData.group_name,
+                    table_id: editData.table_id || null,
+                    max_plus_ones: editData.max_plus_ones
+                })
+                .eq('id', guest.id)
+                .select();
+                
             if (infoErr) { console.error('[Save] Info error:', infoErr); throw infoErr; }
 
             // Update status via RPC
@@ -354,6 +380,8 @@ const EventRSVPs: React.FC = () => {
     );
 
 
+    const percentConfirmed = metrics.totalInvitados > 0 ? Math.round((metrics.confirmados / metrics.totalInvitados) * 100) : 0;
+
     return (
         <div className="max-w-7xl mx-auto px-4 py-12 space-y-12 bg-[#FDFBF7]">
             {/* Top Navigation & Fast Actions */}
@@ -370,13 +398,139 @@ const EventRSVPs: React.FC = () => {
                         <Link to="/dashboard" className="h-10 w-10 bg-stone-50 border border-stone-100 rounded-xl flex items-center justify-center text-stone-400 hover:text-[#1B2E1D] transition-all group">
                             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" />
                         </Link>
+                        
+                        {isEventDashboard && (
+                            <>
+                                <div className="h-10 w-px bg-stone-50 hidden sm:block mx-1" />
+                                <div className="flex items-center gap-2">
+                                    <Link to={`/dashboard/edit/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-emerald-600 hover:border-emerald-600 rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                        <Edit2 className="h-3.5 w-3.5" /> <span className="xs:inline">Editar Info</span>
+                                    </Link>
+                                    <Link to={`/dashboard/design/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#BD7474] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                        <LayoutDashboard className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño</span>
+                                    </Link>
+                                    <Link to={`/i/${event.slug || event.id}?t=admin`} target="_blank" className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#1B2E1D] hover:border-[#1B2E1D] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                        <Eye className="h-3.5 w-3.5" /> <span className="xs:inline">Ver</span>
+                                    </Link>
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     <div className="flex gap-2 w-full sm:w-auto">
+                        {isEventDashboard && (
+                            <button 
+                                onClick={shareOnWhatsApp}
+                                className="flex-1 sm:flex-none px-8 h-10 bg-[#25D366] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-emerald-100/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all"
+                            >
+                                <MessageSquare className="h-4 w-4" /> <span>Compartir</span>
+                            </button>
+                        )}
                         {/* Download removed from here as per user request */}
                     </div>
                 </div>
             </div>
+
+            {/* Event Hero Profile - Condicional */}
+            {isEventDashboard && (
+                <div className="bg-white rounded-[2rem] md:rounded-[4rem] border border-stone-100 p-8 md:p-20 shadow-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#BD7474]/5 transition-colors duration-1000" />
+                    
+                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-10 md:gap-16">
+                        <div className="space-y-8 md:space-y-12 flex-1">
+                            <div className="flex flex-wrap items-center gap-3 md:gap-4">
+                                <span className="px-4 md:px-6 py-1.5 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[8px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
+                                    {event.event_type}
+                                </span>
+                                <span className={`flex items-center gap-2 px-4 md:px-5 py-1.5 md:py-2 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-stone-50 text-stone-300'} rounded-full text-[8px] md:text-[9px] uppercase font-black tracking-widest`}>
+                                    <div className={`h-1 w-1 md:h-1.5 md:w-1.5 rounded-full ${percentConfirmed > 0 ? 'bg-emerald-500 animate-pulse outline outline-4 outline-emerald-100' : 'bg-stone-200'}`} />
+                                    {percentConfirmed}% Confirmado
+                                </span>
+                            </div>
+
+                            <div className="space-y-3 md:space-y-4">
+                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-serif text-[#1B2E1D] tracking-tighter leading-[0.9] md:leading-[0.8] mb-4 break-words">{event.title}</h1>
+                                <p className="text-lg md:text-2xl text-stone-400 font-light italic flex items-center gap-3 md:gap-4 ml-1 md:ml-2">
+                                    <MapPin className="h-5 w-5 md:h-6 md:w-6 text-[#BD7474]" /> {event.venue_name || 'Ubicación Premium'}
+                                </p>
+                            </div>
+
+                            {/* Event Timeline & RSVP Deadline Block */}
+                            {(() => {
+                                const deadlineDate = event.rsvp_deadline ? new Date(event.rsvp_deadline) : null;
+                                const daysRemaining = deadlineDate ? differenceInDays(deadlineDate, new Date()) : null;
+                                const isDeadlinePassed = deadlineDate ? isPast(deadlineDate) : false;
+
+                                return (
+                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-8 pt-10 border-t border-stone-50">
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha del Evento</p>
+                                            <p className="text-base font-bold text-[#1B2E1D]">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
+                                        </div>
+                                        <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre Confirm.</p>
+                                            <p className="text-base font-bold text-[#BD7474]">
+                                                {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
+                                            </p>
+                                        </div>
+                                        
+                                        {deadlineDate && (
+                                            <>
+                                                <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                                <div className="col-span-2 lg:col-span-1 space-y-3 lg:space-y-0">
+                                                    {isDeadlinePassed ? (
+                                                        <span className="px-4 py-2 w-fit bg-red-50 text-red-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                                            <AlertTriangle className="h-3 w-3" /> Vencido
+                                                        </span>
+                                                    ) : daysRemaining !== null && daysRemaining <= 14 ? (
+                                                        <div className="flex flex-col sm:flex-row items-center gap-3">
+                                                            <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-2 border border-orange-100 shadow-sm animate-pulse w-full sm:w-auto">
+                                                                <Clock className="h-3 w-3 text-orange-500" /> Faltan {daysRemaining} Días
+                                                            </span>
+                                                        </div>
+                                                    ) : daysRemaining !== null && (
+                                                        <span className="px-4 py-2 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                                            <Check className="h-3 w-3" /> Faltan {daysRemaining} días
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                );
+                            })()}
+                        </div>
+
+                        <div className="lg:w-96 space-y-8">
+                            {/* Visual Progress Bar Card */}
+                            <div className="p-8 bg-[#FDFBF7] rounded-[2.5rem] border border-stone-100 shadow-sm space-y-6">
+                                <div className="flex justify-between items-end">
+                                    <span className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#1B2E1D]">Asistencia</span>
+                                    <div className="text-right">
+                                        <span className="text-3xl md:text-4xl font-serif text-[#1B2E1D]">{metrics.confirmados}</span>
+                                        <span className="text-lg font-serif text-stone-300 ml-1">/{metrics.totalInvitados}</span>
+                                    </div>
+                                </div>
+                                <div className="h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
+                                    <div 
+                                        className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                                        style={{ width: `${percentConfirmed}%` }}
+                                    />
+                                </div>
+                                <div className="flex items-center justify-center gap-2 text-stone-400">
+                                    <Users className="h-3 w-3" />
+                                    <p className="text-[10px] uppercase font-bold tracking-widest italic">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
+                                </div>
+                            </div>
+
+                            <button onClick={copyGeneralLink} className="group w-full h-16 bg-[#1B2E1D] text-white rounded-[2rem] flex items-center justify-center gap-4 text-[10px] uppercase font-bold tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl hover:translate-y-[-4px]">
+                                <Copy className="h-4 w-4 group-hover:scale-110 transition-transform" /> <span>Copiar Link</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
 
