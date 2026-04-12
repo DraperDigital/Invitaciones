@@ -260,32 +260,30 @@ const EventRSVPs: React.FC = () => {
             if (current === 'yes') newStatus = 'no';
             if (current === 'no') newStatus = 'pending';
         }
-
+        console.log('[RSVP] Cambiando:', guest.name, current, '→', newStatus);
+        const previousGuests = [...guests];
+        setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, rsvps: [{ ...(g.rsvps?.[0] || {}), status: newStatus }] } : g) as any);
         try {
-            const { error: rsvpError } = await supabase.from('rsvps').upsert({
-                event_id: guest.event_id,
-                guest_id: guest.id,
-                status: newStatus,
-                message: 'Manual',
-                plus_ones_confirmed: guest.rsvps?.[0]?.plus_ones_confirmed || 0
-            }, { onConflict: 'guest_id' });
-            if (rsvpError) throw rsvpError;
-            await supabase.from('guests').update({ status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending' }).eq('id', guest.id);
-            
-            const newGuests = guests.map(g => {
-                if (g.id === guest.id) {
-                    return {
-                        ...g,
-                        status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending',
-                        rsvps: [{ ...g.rsvps?.[0], status: newStatus, plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed ?? (g.max_plus_ones || 0) }]
-                    };
-                }
-                return g;
-            });
-            setGuests(newGuests as any);
-            toast.success('Estado actualizado manualmente');
-        } catch (e) {
-            toast.error('Error al actualizar estado');
+            const { data: existingRsvp, error: selErr } = await supabase.from('rsvps').select('id').eq('guest_id', guest.id).maybeSingle();
+            if (selErr) { console.error('[RSVP] Select error:', selErr); throw selErr; }
+            console.log('[RSVP] Existente:', existingRsvp);
+            if (existingRsvp) {
+                const { error: upErr } = await supabase.from('rsvps').update({ status: newStatus }).eq('id', existingRsvp.id);
+                if (upErr) { console.error('[RSVP] Update error:', upErr); throw upErr; }
+                console.log('[RSVP] Update OK');
+            } else {
+                const { error: inErr } = await supabase.from('rsvps').insert([{ event_id: guest.event_id, guest_id: guest.id, status: newStatus, message: 'Manual', plus_ones_confirmed: guest.max_plus_ones || 0 }]);
+                if (inErr) { console.error('[RSVP] Insert error:', inErr); throw inErr; }
+                console.log('[RSVP] Insert OK');
+            }
+            const { error: gErr } = await supabase.from('guests').update({ status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending' }).eq('id', guest.id);
+            if (gErr) console.error('[RSVP] Guest update error:', gErr);
+            console.log('[RSVP] ✅ Todo OK');
+            toast.success('Estado actualizado');
+        } catch (e: any) {
+            console.error('[RSVP] ❌ FALLO:', e);
+            setGuests(previousGuests);
+            toast.error('Error: ' + (e?.message || 'no se pudo guardar'));
         }
     };
 
