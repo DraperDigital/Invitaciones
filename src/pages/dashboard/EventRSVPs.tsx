@@ -262,11 +262,14 @@ const EventRSVPs: React.FC = () => {
         }
 
         try {
-            if (!guest.rsvps?.length) {
-                await supabase.from('rsvps').insert([{ event_id: guest.event_id, guest_id: guest.id, status: newStatus, message: 'Manual', plus_ones_confirmed: guest.max_plus_ones || 0 }]);
-            } else {
-                await supabase.from('rsvps').update({ status: newStatus }).eq('id', guest.rsvps[0].id);
-            }
+            const { error: rsvpError } = await supabase.from('rsvps').upsert({
+                event_id: guest.event_id,
+                guest_id: guest.id,
+                status: newStatus,
+                message: 'Manual',
+                plus_ones_confirmed: guest.rsvps?.[0]?.plus_ones_confirmed || 0
+            }, { onConflict: 'guest_id' });
+            if (rsvpError) throw rsvpError;
             await supabase.from('guests').update({ status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending' }).eq('id', guest.id);
             
             const newGuests = guests.map(g => {
@@ -568,7 +571,6 @@ const EventRSVPs: React.FC = () => {
                                             <th className="px-8 py-6 text-center">Estado</th>
                                             <th className="px-8 py-6 text-center">Pax Total</th>
                                             <th className="px-8 py-6 text-center">Ingreso</th>
-                                            <th className="px-8 py-6 text-center">Vistas</th>
                                             <th className="px-8 py-6 text-center">Mesa</th>
                                             <th className="px-8 py-6 text-center">QR</th>
                                             {isManageMode && <th className="px-8 py-6 text-center">Acciones</th>}
@@ -630,9 +632,6 @@ const EventRSVPs: React.FC = () => {
                                                 </td>
                                                 <td className="px-8 py-6 text-center text-xs text-stone-400">
                                                     {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
-                                                </td>
-                                                <td className="px-8 py-6 text-center text-xs text-stone-400">
-                                                    {g.views_count || 0}
                                                 </td>
                                                 <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
                                                     {editingGuestId === g.id ? <input value={editData.table_id || ''} onChange={e => setEditData({...editData, table_id: e.target.value})} className="border border-stone-200 px-2 py-1 rounded w-16 text-center" placeholder="Mesa" /> : (g.table_id || '-')}
@@ -696,8 +695,7 @@ const EventRSVPs: React.FC = () => {
                                                 </div>
                                             </div>
                                             
-                                            {/* Detalles Adicionales en la Tarjeta */}
-                                            <div className="grid grid-cols-4 gap-2 py-2 text-center text-stone-500 border-y border-stone-100/50">
+                                            <div className="grid grid-cols-3 gap-2 py-2 text-center text-stone-500 border-y border-stone-100/50">
                                                 <div className="flex flex-col opacity-80">
                                                     <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Pax</span>
                                                     <span className="text-sm font-bold text-stone-700">{(rsvp?.plus_ones_confirmed || 0) + 1}</span>
@@ -705,10 +703,6 @@ const EventRSVPs: React.FC = () => {
                                                 <div className="flex flex-col opacity-80">
                                                     <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Ingreso</span>
                                                     <span className="text-xs font-serif mt-0.5">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
-                                                </div>
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Vistas</span>
-                                                    <span className="text-xs font-serif mt-0.5">{g.views_count || 0}</span>
                                                 </div>
                                                 <div className="flex flex-col opacity-80">
                                                     <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Mesa</span>
