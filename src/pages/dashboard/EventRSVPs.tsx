@@ -253,6 +253,37 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
+    const handleQuickStatusToggle = async (guest: any) => {
+        const current = guest.rsvps?.[0]?.status || 'pending';
+        let newStatus = 'yes';
+        if (current === 'yes') newStatus = 'no';
+        if (current === 'no') newStatus = 'pending';
+
+        try {
+            if (!guest.rsvps?.length) {
+                await supabase.from('rsvps').insert([{ event_id: guest.event_id, guest_id: guest.id, status: newStatus, message: 'Manual', plus_ones_confirmed: guest.max_plus_ones || 0 }]);
+            } else {
+                await supabase.from('rsvps').update({ status: newStatus }).eq('id', guest.rsvps[0].id);
+            }
+            await supabase.from('guests').update({ status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending' }).eq('id', guest.id);
+            
+            const newGuests = guests.map(g => {
+                if (g.id === guest.id) {
+                    return {
+                        ...g,
+                        status: newStatus === 'yes' ? 'confirmed' : newStatus === 'no' ? 'declined' : 'pending',
+                        rsvps: [{ ...g.rsvps?.[0], status: newStatus, plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed ?? (g.max_plus_ones || 0) }]
+                    };
+                }
+                return g;
+            });
+            setGuests(newGuests as any);
+            toast.success('Estado actualizado manualmente');
+        } catch (e) {
+            toast.error('Error al actualizar estado');
+        }
+    };
+
     const handleSaveInline = async (guest: any) => {
         try {
             await supabase.from('guests').update({
@@ -566,9 +597,25 @@ const EventRSVPs: React.FC = () => {
                                                      </div>
                                                 </td>
                                                 <td className="px-8 py-6 text-center">
-                                                    <div className={`mx-auto px-3 py-1.5 rounded-full border text-[8px] uppercase font-bold w-fit ${getStatusStyles(g.rsvps?.[0]?.status)}`}>
+                                                    {editingGuestId === g.id ? (
+                                                        <select 
+                                                            value={editData.status} 
+                                                            onChange={e => setEditData({...editData, status: e.target.value as any})}
+                                                            className="border border-stone-200 px-2 py-1.5 rounded-lg text-xs"
+                                                        >
+                                                            <option value="pending">Pendiente</option>
+                                                            <option value="yes">Confirmado</option>
+                                                            <option value="no">Declinado</option>
+                                                        </select>
+                                                    ) : (
+                                                    <div 
+                                                        onClick={(e) => { e.stopPropagation(); handleQuickStatusToggle(g); }}
+                                                        title="Clic para cambiar estado manualmente"
+                                                        className={`mx-auto px-3 py-1.5 rounded-full border text-[8px] uppercase font-bold w-fit cursor-pointer transition-transform hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(g.rsvps?.[0]?.status)}`}
+                                                    >
                                                         {g.rsvps?.[0]?.status === 'yes' ? 'Confirmado' : g.rsvps?.[0]?.status === 'no' ? 'Declinado' : 'Pendiente'}
                                                     </div>
+                                                    )}
                                                 </td>
                                                 <td className="px-8 py-6 text-center font-bold text-stone-700">
                                                     {(g.rsvps?.[0]?.plus_ones_confirmed || 0) + 1}
@@ -626,7 +673,11 @@ const EventRSVPs: React.FC = () => {
                                                     <h4 className="font-serif text-lg text-[#1B2E1D]">{g.name}</h4>
                                                     <p className="text-[8px] uppercase font-bold text-stone-300">{g.group_name || 'Individual'}</p>
                                                 </div>
-                                                <div className={`px-3 py-1 rounded-full border text-[8px] font-bold ${getStatusStyles(status)}`}>
+                                                <div 
+                                                    onClick={(e) => { e.stopPropagation(); handleQuickStatusToggle(g); }}
+                                                    title="Clic para cambiar estado manualmente"
+                                                    className={`px-3 py-1 rounded-full border text-[8px] font-bold cursor-pointer transition-transform hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(status)}`}
+                                                >
                                                     {status === 'yes' ? 'CONFIRMADO' : status === 'no' ? 'DECLINADO' : 'PENDIENTE'}
                                                 </div>
                                             </div>
