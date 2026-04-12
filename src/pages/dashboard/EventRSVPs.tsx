@@ -533,6 +533,10 @@ const EventRSVPs: React.FC = () => {
                                             <th className="px-8 py-6">Grupo</th>
                                             <th className="px-8 py-6 text-center">Enviado</th>
                                             <th className="px-8 py-6 text-center">Estado</th>
+                                            <th className="px-8 py-6 text-center">Pax Total</th>
+                                            <th className="px-8 py-6 text-center">Ingreso</th>
+                                            <th className="px-8 py-6 text-center">Vistas</th>
+                                            <th className="px-8 py-6 text-center">Mesa</th>
                                             <th className="px-8 py-6 text-center">QR</th>
                                             {isManageMode && <th className="px-8 py-6 text-center">Acciones</th>}
                                         </tr>
@@ -565,6 +569,18 @@ const EventRSVPs: React.FC = () => {
                                                     <div className={`mx-auto px-3 py-1.5 rounded-full border text-[8px] uppercase font-bold w-fit ${getStatusStyles(g.rsvps?.[0]?.status)}`}>
                                                         {g.rsvps?.[0]?.status === 'yes' ? 'Confirmado' : g.rsvps?.[0]?.status === 'no' ? 'Declinado' : 'Pendiente'}
                                                     </div>
+                                                </td>
+                                                <td className="px-8 py-6 text-center font-bold text-stone-700">
+                                                    {(g.rsvps?.[0]?.plus_ones_confirmed || 0) + 1}
+                                                </td>
+                                                <td className="px-8 py-6 text-center text-xs text-stone-400">
+                                                    {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
+                                                </td>
+                                                <td className="px-8 py-6 text-center text-xs text-stone-400">
+                                                    {g.views_count || 0}
+                                                </td>
+                                                <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
+                                                    {editingGuestId === g.id ? <input value={editData.table_id || ''} onChange={e => setEditData({...editData, table_id: e.target.value})} className="border border-stone-200 px-2 py-1 rounded w-16 text-center" placeholder="Mesa" /> : (g.table_id || '-')}
                                                 </td>
                                                 <td className="px-8 py-6 text-center">
                                                     <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]"><QrCode className="h-4 w-4" /></button>
@@ -614,7 +630,28 @@ const EventRSVPs: React.FC = () => {
                                                     {status === 'yes' ? 'CONFIRMADO' : status === 'no' ? 'DECLINADO' : 'PENDIENTE'}
                                                 </div>
                                             </div>
-                                            <div className="flex justify-between pt-4 border-t border-stone-100/50">
+                                            
+                                            {/* Detalles Adicionales en la Tarjeta */}
+                                            <div className="grid grid-cols-4 gap-2 py-2 text-center text-stone-500 border-y border-stone-100/50">
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Pax</span>
+                                                    <span className="text-sm font-bold text-stone-700">{(rsvp?.plus_ones_confirmed || 0) + 1}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Ingreso</span>
+                                                    <span className="text-xs font-serif mt-0.5">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Vistas</span>
+                                                    <span className="text-xs font-serif mt-0.5">{g.views_count || 0}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Mesa</span>
+                                                    <span className="text-xs font-serif mt-0.5">{g.table_id || '-'}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex justify-between pt-2">
                                                 <div className="flex flex-col gap-2">
                                                     <button 
                                                         onClick={() => handleToggleSent(g)}

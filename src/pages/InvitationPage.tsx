@@ -249,75 +249,27 @@ export default function InvitationPage() {
             const totalPlusOnes = isAccompanied ? (adultsCount + kidsCount) : 0;
             const detailNote = isAccompanied ? `[Acompañantes - Adultos: ${adultsCount}, Niños: ${kidsCount}]` : '';
 
-            // 1. Identificar al invitado (por token o por nombre)
-            let finalGuestId: string | null = guest?.id || null;
-            
-            if (!finalGuestId) {
-                // Registro por nombre (Fallback completo)
-                const { data: existingGuest, error: findError } = await supabase
-                    .from('guests')
-                    .select('id')
-                    .eq('event_id', event.id)
-                    .ilike('name', cleanedName)
-                    .maybeSingle();
-
-                if (findError) throw findError;
-
-                if (existingGuest) {
-                    finalGuestId = existingGuest.id;
-                } else {
-                    const { data: newGuest, error: insertError } = await supabase
-                        .from('guests')
-                        .insert([{
-                            event_id: event.id,
-                            name: cleanedName,
-                            group_name: 'Registro Directo',
-                            status: 'pending',
-                            max_plus_ones: 10
-                        }])
-                        .select('id')
-                        .single();
-                    if (insertError) throw insertError;
-                    finalGuestId = newGuest.id;
-                }
-            }
-
-            // 2. Insertar o Actualizar RSVP (Manual Upsert para evitar error de constraint)
-            const { data: existingRsvp, error: rsvpCheckErr } = await supabase
-                .from('rsvps')
-                .select('id')
-                .eq('guest_id', finalGuestId)
-                .maybeSingle();
-
-            if (rsvpCheckErr) throw rsvpCheckErr;
-
-            if (existingRsvp) {
-                const { error: updateErr } = await supabase
-                    .from('rsvps')
-                    .update({
-                        status: status,
-                        plus_ones_confirmed: totalPlusOnes,
-                        message: detailNote || 'Registro Directo'
-                    })
-                    .eq('id', existingRsvp.id);
-                if (updateErr) throw updateErr;
+            if (guestToken || guest?.id) {
+                // Confirmación con token (RPC Bypass RLS)
+                const { error: rpcErr } = await supabase.rpc('submit_rsvp_by_token', {
+                    p_token: guestToken || guest?.id,
+                    p_slug: slug,
+                    p_status: status,
+                    p_plus_ones: totalPlusOnes,
+                    p_dietary: null,
+                    p_message: detailNote || 'Registro Directo'
+                });
+                if (rpcErr) throw rpcErr;
             } else {
-                const { error: insertErr } = await supabase
-                    .from('rsvps')
-                    .insert([{
-                        event_id: event.id,
-                        guest_id: finalGuestId,
-                        status: status,
-                        plus_ones_confirmed: totalPlusOnes,
-                        message: detailNote || 'Registro Directo'
-                    }]);
-                if (insertErr) throw insertErr;
+                // Registro por nombre público (RPC Bypass RLS)
+                const { error: rpcErr } = await supabase.rpc('register_rsvp_by_name', {
+                    p_slug: slug,
+                    p_name: cleanedName,
+                    p_status: status,
+                    p_plus_ones: totalPlusOnes
+                });
+                if (rpcErr) throw rpcErr;
             }
-
-            // 3. Actualizar estado del invitado
-            await supabase.from('guests').update({ 
-                status: status === 'yes' ? 'confirmed' : 'declined' 
-            }).eq('id', finalGuestId);
 
             setRsvpChoice(status);
             setRsvpSuccess(true);
@@ -1276,7 +1228,7 @@ END:VCALENDAR`;
                                                 />
                                             </div>
 
-                                            {guest && guest.max_plus_ones > 0 && (
+                                            {(!guest || guest.max_plus_ones > 0) && (
                                                 <div className="flex flex-col gap-6">
                                                     <label className="flex items-start gap-4 cursor-pointer group">
                                                         <div className="relative flex items-center justify-center mt-1">
@@ -1294,7 +1246,7 @@ END:VCALENDAR`;
                                                         </div>
                                                         <div className="flex flex-col gap-1">
                                                             <span className="text-sm font-black uppercase tracking-widest text-[#1B2E1D] group-hover:text-stone-900 transition-colors">
-                                                                CONFIRMAR ACOMPAÑANTES (TOTAL: {(guest.max_plus_ones || 0) + 1} PERSONAS)
+                                                                {guest ? `CONFIRMAR ACOMPAÑANTES (TOTAL: ${(guest.max_plus_ones || 0) + 1} PERSONAS)` : `CONFIRMAR ACOMPAÑANTES`}
                                                             </span>
                                                             
                                                             {isAccompanied && (
@@ -1310,7 +1262,7 @@ END:VCALENDAR`;
                                                             )}
 
                                                             <p className="text-[9px] text-stone-200 uppercase tracking-widest font-medium group-hover:text-stone-300 transition-colors">
-                                                                Esta invitación incluye {(guest.max_plus_ones || 0) + 1} pases totales
+                                                                {guest ? `Esta invitación incluye ${(guest.max_plus_ones || 0) + 1} pases totales` : `Selecciona el número de pases requeridos para tu grupo`}
                                                             </p>
                                                         </div>
                                                     </label>
@@ -1807,10 +1759,10 @@ END:VCALENDAR`;
                                     <button 
                                         onClick={() => {
                                             const total = adultsCount + kidsCount;
-                                            const max = guest?.max_plus_ones || 0;
-                                            if (total < max) setAdultsCount(adultsCount + 1);
+                                            const maxAllowed = guest ? (guest.max_plus_ones || 0) : 10;
+                                            if (total < maxAllowed) setAdultsCount(adultsCount + 1);
                                         }}
-                                        disabled={(adultsCount + kidsCount) >= (guest?.max_plus_ones || 0)}
+                                        disabled={(adultsCount + kidsCount) >= (guest ? (guest.max_plus_ones || 0) : 10)}
                                         className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 disabled:opacity-30 disabled:hover:bg-white transition-colors"
                                     >
                                         +
@@ -1835,10 +1787,10 @@ END:VCALENDAR`;
                                     <button 
                                         onClick={() => {
                                             const total = adultsCount + kidsCount;
-                                            const max = guest?.max_plus_ones || 0;
-                                            if (total < max) setKidsCount(kidsCount + 1);
+                                            const maxAllowed = guest ? (guest.max_plus_ones || 0) : 10;
+                                            if (total < maxAllowed) setKidsCount(kidsCount + 1);
                                         }}
-                                        disabled={(adultsCount + kidsCount) >= (guest?.max_plus_ones || 0)}
+                                        disabled={(adultsCount + kidsCount) >= (guest ? (guest.max_plus_ones || 0) : 10)}
                                         className="h-10 w-10 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-stone-500 hover:bg-stone-100 disabled:opacity-30 disabled:hover:bg-white transition-colors"
                                     >
                                         +

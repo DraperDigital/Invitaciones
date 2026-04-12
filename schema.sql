@@ -39,7 +39,10 @@ create table guests (
   max_plus_ones integer default 0,
   status text default 'pending', -- pending, sent, viewed
   last_reminder_at timestamp with time zone,
+  invitation_sent_at timestamp with time zone,
   checked_in_at timestamp with time zone,
+  views_count integer default 0,
+  table_id text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
