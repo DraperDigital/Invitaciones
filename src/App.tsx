@@ -11,7 +11,7 @@ const HomePage            = React.lazy(() => import('./pages/HomePage'));
 const LoginPage           = React.lazy(() => import('./pages/LoginPage'));
 const Dashboard           = React.lazy(() => import('./pages/Dashboard'));
 const EventWizard         = React.lazy(() => import('./pages/EventWizard'));
-const EventDetails        = React.lazy(() => import('./pages/EventDetails'));
+
 const InvitationPage      = React.lazy(() => import('./pages/InvitationPage'));
 const ExamplesPage        = React.lazy(() => import('./pages/ExamplesPage'));
 const PlanesPage          = React.lazy(() => import('./pages/PlanesPage'));

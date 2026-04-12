@@ -4,12 +4,12 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { 
-    Check, X, Clock, MessageSquare, Download, User, 
-    UserPlus, Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
-    Search, LayoutDashboard, Tag, MapPin, Eye, Copy, ArrowLeft, AlertTriangle
+    Check, X, Clock, MessageSquare, Download, 
+    Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
+    Search, LayoutDashboard, MapPin, Eye, Copy, ArrowLeft, AlertTriangle
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, LabelList } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
 import { differenceInDays, isPast } from 'date-fns';
 
 const EventRSVPs: React.FC = () => {
@@ -19,18 +19,16 @@ const EventRSVPs: React.FC = () => {
     const [guests, setGuests] = useState<any[]>([]);
     const [event, setEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isManageMode, setIsManageMode] = useState(false);
+    const [isManageMode] = useState(false);
     const [activeTab, setActiveTab] = useState<'list' | 'messages' | 'tables' | 'reminders' | 'statistics'>('list');
     const [userEvents, setUserEvents] = useState<any[]>([]);
-    const [reminderTemplate, setReminderTemplate] = useState('¡Hola {nombre}! 🌟 Te escribimos para recordarte la invitación a "{evento}". \n\nPuedes ver todos los detalles y confirmar aquí: {link} \n\n¡Te esperamos!');
+    const [reminderTemplate] = useState('¡Hola {nombre}! 🌟 Te escribimos para recordarte la invitación a "{evento}". \n\nPuedes ver todos los detalles y confirmar aquí: {link} \n\n¡Te esperamos!');
     const [tables, setTables] = useState<any[]>([]);
     
     // Inline Edit State
     const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
     const [editData, setEditData] = useState({ name: '', group_name: '', status: '', plus_ones_confirmed: 0, table_id: '' });
     const [selectedGuestForQR, setSelectedGuestForQR] = useState<any | null>(null);
-    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     // Filters & Views
     const [searchQuery, setSearchQuery] = useState('');
@@ -145,15 +143,9 @@ const EventRSVPs: React.FC = () => {
         { name: 'Ya Ingresaron', total: metrics.ingresados, fill: '#1B2E1D' },
     ];
 
-    const groupMap = guests.reduce((acc, guest) => {
-        const group = guest.group_name && guest.group_name.trim() !== '' ? guest.group_name : 'Individual';
-        const pax = (guest.max_plus_ones || 0) + 1;
-        if (!acc[group]) acc[group] = 0;
-        acc[group] += pax;
-        return acc;
-    }, {} as Record<string, number>);
 
-    const groupData = Object.entries(groupMap).map(([name, value]) => ({ name, value } as { name: string, value: number })).sort((a,b) => b.value - a.value);
+
+
 
     const getStatusStyles = (status: string) => {
         switch (status) {
@@ -163,13 +155,7 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case 'yes': return <Check className="h-4 w-4" />;
-            case 'no': return <X className="h-4 w-4" />;
-            default: return <Clock className="h-4 w-4" />;
-        }
-    };
+
 
     const filteredGuests = guests.filter(g => {
         const rsvp = g.rsvps?.[0];
@@ -181,8 +167,6 @@ const EventRSVPs: React.FC = () => {
     });
 
     const handleDelete = async (guestId: string) => {
-        setConfirmDeleteId(null);
-        setDeletingId(guestId);
         try {
             const { error } = await supabase.from('guests').delete().eq('id', guestId);
             if (error) throw error;
@@ -190,8 +174,6 @@ const EventRSVPs: React.FC = () => {
             toast.success('Invitado eliminado.');
         } catch (err: any) {
             toast.error('Error al eliminar');
-        } finally {
-            setDeletingId(null);
         }
     };
 
@@ -293,14 +275,7 @@ const EventRSVPs: React.FC = () => {
         } catch (e) {}
     };
 
-    const handleExportByTables = () => {
-        const headers = ['Mesa', 'Invitado'];
-        const rows = guests.map(g => [`"${tables.find(t => t.id === g.table_id)?.name || 'Sin asignar'}"`, `"${g.name}"`].join(','));
-        const link = document.createElement("a");
-        link.href = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows].join('\n');
-        link.download = "mesas.csv";
-        link.click();
-    };
+
 
     if (loading) return <div className="flex h-screen items-center justify-center">Cargando...</div>;
 

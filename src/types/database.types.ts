@@ -36,7 +36,7 @@ export type Guest = {
     views_count: number;
     table_id: string | null;
     last_reminder_at: string | null;
-    invitation_sent_at: string | null;
+    invitation_sent_at?: string | null;
     checked_in_at: string | null;
     created_at: string;
 };
