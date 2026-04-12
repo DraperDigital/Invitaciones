@@ -286,22 +286,38 @@ const EventRSVPs: React.FC = () => {
 
     const handleSaveInline = async (guest: any) => {
         try {
-            await supabase.from('guests').update({
-                name: editData.name,
-                group_name: editData.group_name,
-                table_id: editData.table_id || null
-            }).eq('id', guest.id);
-            const rsvp = guest.rsvps?.[0];
-            const plusOnesCount = parseInt(editData.plus_ones_confirmed.toString()) || 0;
-            if (rsvp) {
-                await supabase.from('rsvps').update({ status: editData.status, plus_ones_confirmed: plusOnesCount }).eq('id', rsvp.id);
-            } else {
-                await supabase.from('rsvps').insert([{ guest_id: guest.id, event_id: guest.event_id, status: editData.status, plus_ones_confirmed: plusOnesCount }]);
+            // Update guest info via RPC
+            const { error: infoErr } = await supabase.rpc('update_guest_info', {
+                p_guest_id: guest.id,
+                p_event_id: guest.event_id,
+                p_name: editData.name,
+                p_group_name: editData.group_name,
+                p_table_id: editData.table_id || ''
+            });
+            if (infoErr) { console.error('[Save] Info error:', infoErr); throw infoErr; }
+
+            // Update status via RPC
+            if (editData.status !== getGuestStatus(guest)) {
+                await supabase.rpc('set_guest_status', {
+                    p_guest_id: guest.id,
+                    p_event_id: guest.event_id,
+                    p_status: editData.status
+                });
             }
-            setGuests(guests.map(g => g.id === guest.id ? { ...g, name: editData.name, group_name: editData.group_name, table_id: editData.table_id || null, rsvps: [{ status: editData.status, plus_ones_confirmed: plusOnesCount }] } : g));
+
+            setGuests(guests.map(g => g.id === guest.id ? { 
+                ...g, 
+                name: editData.name, 
+                group_name: editData.group_name, 
+                table_id: editData.table_id || null,
+                status: editData.status === 'yes' ? 'confirmed' : editData.status === 'no' ? 'declined' : 'pending',
+                rsvps: [{ ...(g.rsvps?.[0] || {}), status: editData.status }] 
+            } : g));
             setEditingGuestId(null);
-        } catch (e) {
-            toast.error('Error al guardar');
+            toast.success('Guardado correctamente');
+        } catch (e: any) {
+            console.error('[Save] Error:', e);
+            toast.error('Error al guardar: ' + (e?.message || ''));
         }
     };
 
@@ -629,7 +645,41 @@ const EventRSVPs: React.FC = () => {
                                                     {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
                                                 </td>
                                                 <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
-                                                    {editingGuestId === g.id ? <input value={editData.table_id || ''} onChange={e => setEditData({...editData, table_id: e.target.value})} className="border border-stone-200 px-2 py-1 rounded w-16 text-center" placeholder="Mesa" /> : (g.table_id || '-')}
+                                                    {editingGuestId === g.id ? (
+                                                        <select 
+                                                            value={editData.table_id || ''} 
+                                                            onChange={e => setEditData({...editData, table_id: e.target.value})} 
+                                                            className="border border-stone-200 px-2 py-1 rounded text-center text-xs bg-white cursor-pointer"
+                                                        >
+                                                            <option value="">Sin mesa</option>
+                                                            {tables.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                        </select>
+                                                    ) : (
+                                                        <select
+                                                            value={g.table_id || ''}
+                                                            onChange={async (e) => {
+                                                                const newTableId = e.target.value;
+                                                                const prev = [...guests];
+                                                                setGuests(gs => gs.map(x => x.id === g.id ? {...x, table_id: newTableId || null} : x));
+                                                                try {
+                                                                    const { error } = await supabase.rpc('update_guest_info', {
+                                                                        p_guest_id: g.id,
+                                                                        p_event_id: g.event_id,
+                                                                        p_table_id: newTableId || ''
+                                                                    });
+                                                                    if (error) throw error;
+                                                                    toast.success('Mesa asignada');
+                                                                } catch (err: any) {
+                                                                    setGuests(prev);
+                                                                    toast.error('Error al asignar mesa');
+                                                                }
+                                                            }}
+                                                            className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#1B2E1D] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
+                                                        >
+                                                            <option value="">-</option>
+                                                            {tables.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                                                        </select>
+                                                    )}
                                                 </td>
                                                 <td className="px-8 py-6 text-center">
                                                     <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]"><QrCode className="h-4 w-4" /></button>
