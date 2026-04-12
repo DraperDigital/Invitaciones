@@ -10,6 +10,7 @@ import { es } from 'date-fns/locale';
 import { generateInvitationPDF, generateQRAsPDF } from '../utils/generatePDF';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
+import { toPng } from 'html-to-image';
 
 export default function InvitationPage() {
     const { slug } = useParams<{ slug: string }>();
@@ -43,6 +44,7 @@ export default function InvitationPage() {
     const [error, setError] = useState<string | null>(null);
 
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
+    const qrCardRef = useRef<HTMLDivElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
 
@@ -101,20 +103,29 @@ export default function InvitationPage() {
     };
 
 
-    const downloadQR = useCallback(() => {
-        const canvas = qrCanvasRef.current;
-        if (!canvas || !event) return;
+    const downloadQR = useCallback(async () => {
+        if (!qrCardRef.current || !event) return;
         
         try {
-            const url = canvas.toDataURL('image/png');
-            generateQRAsPDF(event, guestName, url);
+            setSubmitting(true);
+            const dataUrl = await toPng(qrCardRef.current, {
+                cacheBust: true,
+                backgroundColor: '#F9F8F6',
+                quality: 1,
+                pixelRatio: 2 // Alta resolución
+            });
+            
+            const link = document.createElement('a');
+            link.download = `Pase_${guestName.replace(/\s+/g, '_') || 'Invitado'}.png`;
+            link.href = dataUrl;
+            link.click();
+            
+            toast.success('¡Pase guardado en tu dispositivo!');
         } catch (err: any) {
-            console.error('Error generating QR PDF:', err);
-            if (err?.message === 'popup_blocked') {
-                toast.warning('Permite las ventanas emergentes en tu navegador para descargar el PDF.');
-            } else {
-                toast.error('No se pudo generar el PDF. Intenta tomar una captura de pantalla.');
-            }
+            console.error('Error generating QR image:', err);
+            toast.error('No se pudo generar la imagen. Intenta tomar una captura de pantalla.');
+        } finally {
+            setSubmitting(false);
         }
     }, [event, guestName]);
 
@@ -1165,7 +1176,10 @@ END:VCALENDAR`;
                                         {/* QR Code and Calendar ONLY IF YES */}
                                         {rsvpChoice === 'yes' && (
                                             <>
-                                                <div className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs">
+                                                <div 
+                                                    ref={qrCardRef}
+                                                    className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs"
+                                                >
                                                     <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400">Tu pase de entrada</p>
                                                     <div className="bg-white p-3 rounded-xl shadow-sm">
                                                         <QRCodeCanvas
