@@ -19,7 +19,7 @@ const EventRSVPs: React.FC = () => {
     const [guests, setGuests] = useState<any[]>([]);
     const [event, setEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isManageMode] = useState(false);
+    const [isManageMode] = useState(true);
     const [activeTab, setActiveTab] = useState<'list' | 'messages' | 'tables' | 'reminders' | 'statistics'>('list');
     const [userEvents, setUserEvents] = useState<any[]>([]);
     const [reminderTemplate] = useState('¡Hola {nombre}! 🌟 Te escribimos para recordarte la invitación a "{evento}". \n\nPuedes ver todos los detalles y confirmar aquí: {link} \n\n¡Te esperamos!');
@@ -178,8 +178,8 @@ const EventRSVPs: React.FC = () => {
     };
 
     const handleSendReminder = async (guest: any) => {
-        const eventTitle = guest.event?.title || event.title;
-        const invitationLink = `${window.location.origin}/i/${guest.event?.slug}?t=${guest.id}`;
+        const eventTitle = guest.event?.title || event?.title;
+        const invitationLink = `${window.location.origin}/i/${guest.event?.slug || event?.slug}?t=${guest.id}`;
         const message = reminderTemplate
             .replace(/{nombre}/g, guest.name)
             .replace(/{evento}/g, eventTitle)
@@ -188,7 +188,6 @@ const EventRSVPs: React.FC = () => {
         
         try {
             const now = new Date().toISOString();
-            // Si es la primera vez que se envía (invitation_sent_at es nulo), lo marcamos
             const updateData: any = { last_reminder_at: now };
             if (!guest.invitation_sent_at) {
                 updateData.invitation_sent_at = now;
@@ -201,6 +200,37 @@ const EventRSVPs: React.FC = () => {
                 toast.success('¡Invitación lanzada y registrada!');
             }
         } catch (e) {}
+    };
+
+    const handleDuplicate = async (guest: any) => {
+        try {
+            const newToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            const { data, error } = await supabase.from('guests').insert([{
+                event_id: guest.event_id,
+                name: `${guest.name} (Copia)`,
+                group_name: guest.group_name,
+                max_plus_ones: guest.max_plus_ones,
+                guest_token: newToken,
+                phone: guest.phone,
+                email: guest.email,
+                table_id: guest.table_id
+            }]).select();
+
+            if (error) throw error;
+            if (data) {
+                setGuests([...guests, data[0]]);
+                toast.success('Invitado duplicado con éxito');
+            }
+        } catch (err) {
+            toast.error('Error al duplicar invitado');
+        }
+    };
+
+    const copyIndividualLink = (guest: any) => {
+        const url = `${window.location.origin}/i/${guest.event?.slug || event?.slug}?t=${guest.id}`;
+        navigator.clipboard.writeText(url).then(() => {
+            toast.success('¡Link individual copiado!');
+        });
     };
 
     const handleToggleSent = async (guest: any) => {
@@ -547,9 +577,12 @@ const EventRSVPs: React.FC = () => {
                                                                 <button onClick={() => setEditingGuestId(null)} className="text-stone-300"><X className="h-4 w-4" /></button>
                                                             </div>
                                                         ) : (
-                                                            <div className="flex gap-3 justify-center">
-                                                                <button onClick={() => { setEditingGuestId(g.id); setEditData({ name: g.name, group_name: g.group_name || '', status: g.rsvps?.[0]?.status || 'pending', plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, table_id: g.table_id || '' }); }} className="text-stone-300 hover:text-[#1B2E1D]"><Edit2 className="h-4 w-4" /></button>
-                                                                <button onClick={() => handleDelete(g.id)} className="text-stone-300 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
+                                                            <div className="flex gap-2 justify-center">
+                                                                <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleDuplicate(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Duplicar"><Users className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-300 hover:text-emerald-500" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
+                                                                <button onClick={() => { setEditingGuestId(g.id); setEditData({ name: g.name, group_name: g.group_name || '', status: g.rsvps?.[0]?.status || 'pending', plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, table_id: g.table_id || '' }); }} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Editar"><Edit2 className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                                                             </div>
                                                         )}
                                                     </td>
