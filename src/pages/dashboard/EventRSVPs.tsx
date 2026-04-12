@@ -6,7 +6,7 @@ import { useToast } from '../../context/ToastContext';
 import { 
     Check, X, Clock, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
-    Search, LayoutDashboard, MapPin, Eye, Copy, ArrowLeft, AlertTriangle
+    Search, LayoutDashboard, MapPin, Eye, Copy, ArrowLeft, AlertTriangle, ChevronDown
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
@@ -253,11 +253,13 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
-    const handleQuickStatusToggle = async (guest: any) => {
+    const handleQuickStatusToggle = async (guest: any, forceStatus?: string) => {
         const current = guest.rsvps?.[0]?.status || 'pending';
-        let newStatus = 'yes';
-        if (current === 'yes') newStatus = 'no';
-        if (current === 'no') newStatus = 'pending';
+        let newStatus = forceStatus || 'yes';
+        if (!forceStatus) {
+            if (current === 'yes') newStatus = 'no';
+            if (current === 'no') newStatus = 'pending';
+        }
 
         try {
             if (!guest.rsvps?.length) {
@@ -608,12 +610,18 @@ const EventRSVPs: React.FC = () => {
                                                             <option value="no">Declinado</option>
                                                         </select>
                                                     ) : (
-                                                    <div 
-                                                        onClick={(e) => { e.stopPropagation(); handleQuickStatusToggle(g); }}
-                                                        title="Clic para cambiar estado manualmente"
-                                                        className={`mx-auto px-3 py-1.5 rounded-full border text-[8px] uppercase font-bold w-fit cursor-pointer transition-transform hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(g.rsvps?.[0]?.status)}`}
-                                                    >
-                                                        {g.rsvps?.[0]?.status === 'yes' ? 'Confirmado' : g.rsvps?.[0]?.status === 'no' ? 'Declinado' : 'Pendiente'}
+                                                    <div className="relative inline-flex items-center group">
+                                                        <select
+                                                            value={g.rsvps?.[0]?.status || 'pending'}
+                                                            onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
+                                                            title="Cambiar estado"
+                                                            className={`appearance-none outline-none pl-3 pr-7 py-1.5 rounded-full border text-[8px] uppercase font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(g.rsvps?.[0]?.status)}`}
+                                                        >
+                                                            <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
+                                                            <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
+                                                            <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
+                                                        </select>
+                                                        <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(g.rsvps?.[0]?.status).split(' ')[1]}`} />
                                                     </div>
                                                     )}
                                                 </td>
@@ -673,12 +681,18 @@ const EventRSVPs: React.FC = () => {
                                                     <h4 className="font-serif text-lg text-[#1B2E1D]">{g.name}</h4>
                                                     <p className="text-[8px] uppercase font-bold text-stone-300">{g.group_name || 'Individual'}</p>
                                                 </div>
-                                                <div 
-                                                    onClick={(e) => { e.stopPropagation(); handleQuickStatusToggle(g); }}
-                                                    title="Clic para cambiar estado manualmente"
-                                                    className={`px-3 py-1 rounded-full border text-[8px] font-bold cursor-pointer transition-transform hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(status)}`}
-                                                >
-                                                    {status === 'yes' ? 'CONFIRMADO' : status === 'no' ? 'DECLINADO' : 'PENDIENTE'}
+                                                <div className="relative inline-flex items-center group">
+                                                    <select
+                                                        value={status}
+                                                        onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
+                                                        title="Cambiar estado"
+                                                        className={`appearance-none outline-none pl-3 pr-7 py-1 rounded-full border text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(status)}`}
+                                                    >
+                                                        <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
+                                                        <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
+                                                        <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
+                                                    </select>
+                                                    <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(status).split(' ')[1]}`} />
                                                 </div>
                                             </div>
                                             
