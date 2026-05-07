@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Sparkles, Crown, X } from 'lucide-react';
+import { ArrowLeft, Heart, Sparkles, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function PlanesPage() {
