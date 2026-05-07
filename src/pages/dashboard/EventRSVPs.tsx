@@ -42,7 +42,7 @@ const EventRSVPs: React.FC = () => {
 
     const { user } = useAuth();
     const toast = useToast();
-    const { hasFeature, loading: loadingAccess } = useFeatureAccess(eventId || undefined);
+    const { hasFeature } = useFeatureAccess(eventId || undefined);
 
     // New Table State
     const [isAddingTable, setIsAddingTable] = useState(false);

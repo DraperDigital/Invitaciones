@@ -30,7 +30,7 @@ export default function ExamplesPage() {
             'graduacion-ana-psicologia-premium',
             'comunion-gael-premium'
         ];
-        const SHOWCASE_EVENTS = MOCK_EVENTS.filter(e => SHOWCASE_SLUGS.includes(e.slug));
+        const SHOWCASE_EVENTS = MOCK_EVENTS.filter(e => e.slug && SHOWCASE_SLUGS.includes(e.slug));
 
         if (activeCategory === 'todas') {
             return SHOWCASE_EVENTS.filter(event => event.is_published);

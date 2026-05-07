@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, Image as ImageIcon, Type, Upload, X, Trash2, Plus, Gift, Camera, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Users, Sparkles, Flower2, Hotel, MapPin, Shield, ChevronDown } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Sparkles, Shield, ChevronDown, Upload, X, Flower2 } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 
@@ -70,6 +70,7 @@ type DesignConfig = {
     showMessage: boolean;
     showChambelanes: boolean;
     showHotels: boolean;
+    showGifts: boolean;
 
     // Corte de Honor
     chambelanes: string[];
@@ -104,6 +105,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     showGallery: true,
     showWhatsAppRSVP: true,
     showHotels: true,
+    showGifts: true,
 
     enableGuestList: false,
     enableReminders: false,
@@ -257,8 +259,6 @@ export default function DesignEditor() {
                     itinerary:      c.itinerary ?? [],
                     showItinerary:  c.showItinerary ?? true,
                     sectionOrder:   c.sectionOrder ?? DEFAULT_SECTION_ORDER,
-                    showMessage:    c.showMessage    ?? DEFAULT_CONFIG.showMessage,
-                    showChambelanes: c.showChambelanes ?? DEFAULT_CONFIG.showChambelanes,
                     chambelanes:     c.chambelanes ?? [],
                     damas:           c.damas       ?? [],
                     heroBgColor:     c.heroBgColor ?? c.hero_bg_color ?? '#1B2E1D',
@@ -281,9 +281,6 @@ export default function DesignEditor() {
         const r = parseInt(hex.substring(0, 2), 16) || 189;
         const g = parseInt(hex.substring(2, 4), 16) || 116;
         const b = parseInt(hex.substring(4, 6), 16) || 116;
-        
-        // Safe preset lookup
-        const preset = (TYPOGRAPHY_PRESETS as any)[config.typographyPreset] || TYPOGRAPHY_PRESETS.romantica;
         
         const styles = `
             :root, html {

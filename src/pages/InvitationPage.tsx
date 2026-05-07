@@ -3,16 +3,15 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { MapPin, Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, User, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Loader2, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { generateInvitationPDF } from '../utils/generatePDF';
 import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { getLayoutForEventType, buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 
 export default function InvitationPage() {
@@ -34,7 +33,6 @@ export default function InvitationPage() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [isAdminMode, setIsAdminMode] = useState(false);
-    const [lastSaveStatus, setLastSaveStatus] = useState<'idle' | 'saving' | 'ok' | 'error'>('idle');
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
@@ -93,7 +91,6 @@ export default function InvitationPage() {
         
         setEvent({ ...event, theme_config: updatedConfig });
         
-        setLastSaveStatus('saving');
         try {
             const { data: updated, error: updateError } = await supabase
                 .from('events')
@@ -107,11 +104,9 @@ export default function InvitationPage() {
                 throw new Error('RLS bloqueó el update (0 filas afectadas). Verifica las políticas de Supabase para la tabla events.');
             }
 
-            setLastSaveStatus('ok');
             toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
-            setLastSaveStatus('error');
             toast.error('Error al guardar: ' + (err.message || 'Error de red'));
             setEvent({ ...event, theme_config: event.theme_config });
         }
@@ -483,11 +478,9 @@ END:VCALENDAR`;
     const g = parseInt(hex.substring(2, 4), 16) || 175;
     const b = parseInt(hex.substring(4, 6), 16) || 55;
     const accentRgb = `${r} ${g} ${b}`;
-    const cardBgColor   = cfg.card_bg_color  || '#C17B6A';
-    const buttonColor   = cfg.button_color   || primaryColor;
     const heroImageUrl = cfg.hero_image_url || null;
     const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
-    const decorativeImageUrl = cfg.decorative_image_url || '/botanical-peony.png';
+    const buttonColor   = cfg.button_color   || primaryColor;
     const subtitle = cfg.subtitle || '';
     const welcomeMessage = cfg.welcome_message || null;
     const venueTime = cfg.venue_time || null;

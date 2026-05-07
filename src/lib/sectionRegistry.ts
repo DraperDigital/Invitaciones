@@ -325,8 +325,6 @@ export function buildSectionQueue(
   themeConfig: Record<string, unknown>,
   order: SectionId[] = DEFAULT_SECTION_ORDER,
 ): SectionDef[] {
-  const planRank: Record<PlanTier, number> = { clasico: 0, pro: 1, premium: 2 };
-  const currentRank = planRank[tier] ?? 0;
 
   const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
