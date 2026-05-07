@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
-import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2 } from 'lucide-react';
+import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2, ArrowRight } from 'lucide-react';
 
 export default function SettingsPage() {
     const { user } = useAuth();
@@ -71,10 +71,10 @@ export default function SettingsPage() {
         const labels: Record<string, string> = {
             'clasico':      'PLAN CLÁSICA',
             'classic':      'PLAN CLÁSICA',
-            'premium':      'PLAN PREMIUM',
             'pro':          'PLAN PRO',
-            'personalizado':'PLAN PREMIUM',
-            'personalized': 'PLAN PREMIUM',
+            'premium':      'DISEÑO PRO',
+            'personalized': 'DISEÑO PRO',
+            'concierge':    'PLAN CONCIERGE',
         };
         return labels[tier] || 'PLAN CLÁSICA';
     };
@@ -160,7 +160,7 @@ export default function SettingsPage() {
                             <h3 className="text-[10px] uppercase font-bold tracking-[0.3em] text-white/40">Cuenta Activa</h3>
                             <div className="flex flex-col items-end gap-1">
                                 <span className={`text-[8px] font-bold px-3 py-1 rounded-full ${
-                                    profile.plan_tier === 'premium' ? 'bg-[#BD7474] shadow-[0_0_15px_-5px_#BD7474]' : 'bg-white/10'
+                                    ['premium', 'concierge'].includes(profile.plan_tier) ? 'bg-[#BD7474] shadow-[0_0_15px_-5px_#BD7474]' : 'bg-white/10'
                                 } tracking-widest uppercase`}>
                                     {getPlanLabel(profile.plan_tier)}
                                 </span>
@@ -181,7 +181,7 @@ export default function SettingsPage() {
                             </div>
                         </div>
                         
-                        {profile.plan_tier?.toLowerCase() !== 'premium' && (
+                        {profile.plan_tier?.toLowerCase() !== 'concierge' && (
                             <div className="pt-4 relative z-10">
                                 <Link 
                                     to="/planes" 
@@ -189,7 +189,7 @@ export default function SettingsPage() {
                                 >
                                     <span className="flex items-center justify-center gap-2">
                                         <Sparkles className="h-3 w-3 animate-pulse" />
-                                        Mejorar a Premium
+                                        Mejorar mi Experiencia
                                     </span>
                                 </Link>
                                 <p className="text-[8px] text-center mt-4 text-white/30 font-bold uppercase tracking-widest">
@@ -199,15 +199,28 @@ export default function SettingsPage() {
                         )}
                     </div>
 
-                    <div className="bg-[#FDFBF7] rounded-[2.5rem] p-10 border border-stone-100 text-stone-900 shadow-sm space-y-4">
-                        <div className="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                            <MessageCircle className="h-6 w-6 text-emerald-600" />
+                    <Link 
+                        to={profile.plan_tier === 'concierge' ? "https://wa.me/521234567890" : "/concierge-service"}
+                        target={profile.plan_tier === 'concierge' ? "_blank" : "_self"}
+                        className="block group"
+                    >
+                        <div className="bg-[#FDFBF7] rounded-[2.5rem] p-10 border border-stone-100 text-stone-900 shadow-sm space-y-4 hover:border-[#BD7474]/30 hover:shadow-xl transition-all relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <ArrowRight className="h-4 w-4 text-[#BD7474]" />
+                            </div>
+                            <div className="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <MessageCircle className="h-6 w-6 text-emerald-600" />
+                            </div>
+                            <h4 className="text-sm font-bold uppercase tracking-widest italic text-emerald-900">
+                                {profile.plan_tier === 'concierge' ? 'Tu Concierge Dedicado' : 'Invitto Concierge'}
+                            </h4>
+                            <p className="text-sm leading-relaxed text-stone-500 font-light">
+                                {profile.plan_tier === 'concierge' 
+                                    ? 'Estamos listos para asistirte en todo momento. Haz clic para hablar con tu equipo de soporte VIP.' 
+                                    : '¿Necesitas ayuda o quieres que gestionemos todo tu evento por ti? Descubre el nivel Concierge.'}
+                            </p>
                         </div>
-                        <h4 className="text-sm font-bold uppercase tracking-widest italic text-emerald-900">Invitto Concierge</h4>
-                        <p className="text-sm leading-relaxed text-stone-500 font-light">
-                            ¿Necesitas ayuda con tu configuración? Nuestro equipo está listo para asistirte en la personalización de tu experiencia.
-                        </p>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -33,7 +33,7 @@ export default function CheckoutPage() {
 
     const plans = {
         clasico: {
-            name: 'Clásico',
+            name: 'Clásica',
             price: 499,
             icon: Heart,
             color: 'text-stone-500',
@@ -42,38 +42,53 @@ export default function CheckoutPage() {
                 'Información del evento',
                 'Cuenta regresiva',
                 'Ubicación con mapa',
-                'Galería básica',
-                'Confirmación simple por WhatsApp'
+                'Galería de fotos',
+                'Confirmación WhatsApp simple'
+            ]
+        },
+        pro: {
+            name: 'Pro',
+            price: 1699,
+            icon: Sparkles,
+            color: 'text-rose-500',
+            bg: 'bg-rose-50',
+            features: [
+                'Dashboard en tiempo real',
+                'Recordatorios automáticos',
+                'Control de pases y acompañantes',
+                'Importación masiva (Excel)',
+                'Métricas de visualización',
+                'Todo en un solo lugar'
             ]
         },
         premium: {
-            name: 'Premium',
-            price: 1699,
+            name: 'Diseño Pro',
+            price: 2499,
+            icon: Crown,
+            color: 'text-emerald-500',
+            bg: 'bg-emerald-50',
+            features: [
+                'Todo lo del plan Pro',
+                'Diseño desde cero por expertos',
+                'Código QR para invitados',
+                'Control de acceso (Check-in)',
+                'Dominio personalizado (.com)',
+                'Soporte prioritario'
+            ]
+        },
+        concierge: {
+            name: 'Concierge',
+            price: 4499,
             icon: Crown,
             color: 'text-amber-500',
             bg: 'bg-amber-50',
             features: [
-                'Ves en tiempo real quién confirmó',
-                'Confirmaciones automáticas',
-                'Control de invitados y acompañantes',
-                'Recordatorios automáticos',
-                'Importar lista desde Excel',
-                'Todo organizado en un solo lugar'
-            ]
-        },
-        pro: {
-            name: 'Personalizado',
-            price: 2999,
-            icon: Sparkles,
-            color: 'text-[#BD7474]',
-            bg: 'bg-[#BD7474]/10',
-            features: [
-                'Todo lo del plan Premium',
-                'Configuración hecha por nosotros',
-                'Invitaciones con código QR',
-                'Control de acceso en tu evento',
-                'Dominio personalizado',
-                'Soporte dedicado 24/7'
+                'Todo lo del plan Diseño Pro',
+                'Gestión de lista de invitados',
+                'Envío vía WhatsApp Profesional',
+                '4 rondas de seguimiento',
+                'Concierge dedicado 24/7',
+                'Reporte final de asistencia'
             ]
         }
     };

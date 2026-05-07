@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { 
     UserCheck, BarChart3, Heart, Shield, Sparkles, PartyPopper, 
     Check, Smartphone, Bell, MessageSquare, Star, ChevronDown, ArrowRight,
-    Layout, X, Zap, Music, Timer, AlertTriangle, Clock, Users
+    Layout, X, Zap, Music, Timer, AlertTriangle, Clock, Users, Gem
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -229,6 +229,50 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* --- CONCIERGE PREVIEW SECTION --- */}
+            <section className="py-32 bg-[#0A0C0A] text-white relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-[#BD7474]/5 rounded-full blur-[120px] -z-0 opacity-40" />
+                
+                <div className="mx-auto max-w-5xl px-6 relative z-10 grid lg:grid-cols-2 gap-20 items-center">
+                    <div className="space-y-8">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full">
+                            <Gem className="h-4 w-4 text-[#BD7474]" />
+                            <span className="text-[9px] font-black uppercase tracking-[0.3em]">Servicio Luxury</span>
+                        </div>
+                        <h2 className="text-4xl md:text-6xl font-serif leading-tight">
+                            ¿No tienes tiempo? <br />
+                            <span className="italic text-[#BD7474]">Nosotros lo hacemos todo.</span>
+                        </h2>
+                        <p className="text-lg text-white/40 font-light italic leading-relaxed">
+                            Descubre el plan Concierge: gestión humana de tus invitados, envíos personalizados por WhatsApp y seguimiento profesional. Tú solo disfruta tu fiesta.
+                        </p>
+                        <Link to="/concierge-service" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.3em] text-white hover:text-[#BD7474] transition-colors group">
+                            SABER MÁS SOBRE CONCIERGE <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                    <div className="relative">
+                        <div className="p-10 bg-white/5 border border-white/10 rounded-[3rem] backdrop-blur-xl space-y-6">
+                            <div className="flex items-center gap-4 border-b border-white/5 pb-6">
+                                <div className="h-12 w-12 bg-[#BD7474]/20 rounded-xl flex items-center justify-center text-[#BD7474]">
+                                    <Users className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-[#BD7474]">Gestión Humana</p>
+                                    <p className="text-sm font-serif italic">Tu equipo dedicado</p>
+                                </div>
+                            </div>
+                            <p className="text-sm text-white/60 leading-relaxed font-light italic">
+                                "Mi concierge se encargó de cargar mis 300 invitados de un PDF, depuró la lista y me avisó cuando el 90% ya había confirmado. La mejor inversión de mi boda."
+                            </p>
+                            <div className="pt-4 flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-full bg-white/10" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/20">— Sofía R., Novia Invitto</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- VISUAL SECTION --- */}
             <section className="py-32 bg-[#FDFBF7]">
                 <div className="mx-auto max-w-7xl px-6 items-center grid lg:grid-cols-2 gap-20">
@@ -318,107 +362,117 @@ export default function HomePage() {
                         <div className="h-1 w-20 bg-[#BD7474] mx-auto" />
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1400px] mx-auto items-stretch">
                         {/* Plan Clásico */}
-                        <div className="p-12 rounded-[3rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center">
-                             <h4 className="text-3xl font-serif mb-2">Clásica</h4>
-                             <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-8">SOLO LO BÁSICO</p>
-                             <div className="text-5xl font-serif mb-6 text-[#1B2E1D]">$499</div>
-                             <p className="text-sm font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200">“Solo quiero mi invitación bonita”</p>
+                        <div className="p-8 rounded-[2.5rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center hover:shadow-xl transition-all">
+                             <h4 className="text-2xl font-serif mb-2">Clásica</h4>
+                             <p className="text-[9px] uppercase font-bold tracking-widest text-stone-400 mb-8">SOLO LO BÁSICO</p>
+                             <div className="text-4xl font-serif mb-6 text-[#1B2E1D]">$499</div>
+                             <p className="text-[10px] font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200 uppercase tracking-tighter">“Solo quiero mi invitación bonita”</p>
                              
-                             <div className="w-full space-y-8 mb-12">
-                                <ul className="space-y-4 text-sm text-stone-400 font-light text-left w-full">
-                                    {[
-                                        'Información del evento',
-                                        'Cuenta regresiva',
-                                        'Ubicación con mapa',
-                                        'Galería básica',
-                                        'Confirmación simple por WhatsApp'
-                                    ].map((f, i) => (
-                                        <li key={i} className="flex gap-3 items-center">
-                                            <Check className="h-4 w-4 text-emerald-500 flex-shrink-0" /> <span>{f}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* FRICTION SECTION (X) */}
-                                <div className="pt-6 border-t border-stone-100 text-left w-full space-y-3 opacity-60">
-                                    {[
-                                        'No sabes realmente quién va a ir',
-                                        'Tienes que escribirle a cada invitado',
-                                        'Todo sigue desorganizado en WhatsApp'
-                                    ].map((f, i) => (
-                                        <li key={i} className="flex gap-3 items-start list-none text-[13px] text-red-800">
-                                            <X className="h-3 w-3 mt-1 text-red-500 flex-shrink-0" /> <span>{f}</span>
-                                        </li>
-                                    ))}
-                                </div>
-                             </div>
+                             <ul className="space-y-3 mb-10 text-[13px] text-stone-400 font-light text-left w-full">
+                                {[
+                                    'Información del evento',
+                                    'Cuenta regresiva',
+                                    'Ubicación con mapa',
+                                    'Galería de fotos',
+                                    'Confirmación por WhatsApp'
+                                ].map((f, i) => (
+                                    <li key={i} className="flex gap-3 items-center">
+                                        <Check className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" /> <span>{f}</span>
+                                    </li>
+                                ))}
+                             </ul>
 
                              <div className="mt-auto w-full">
                                  <Link to={user ? "/dashboard" : "/login"} className="w-full">
-                                    <button className="w-full py-4 border-2 border-stone-200 text-stone-500 rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] hover:bg-stone-50 transition-all">Solo quiero mi invitación</button>
+                                    <button className="w-full py-4 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all">Solo mi invitación</button>
                                  </Link>
                              </div>
                         </div>
 
-                        {/* Plan Premium - DESTACADO */}
-                        <div className="p-12 rounded-[3.5rem] bg-[#1B2E1D] text-white flex flex-col items-center text-center relative shadow-2xl scale-105 border-4 border-[#BD7474]/30">
-                             <div className="absolute -top-6 bg-[#BD7474] text-white px-8 py-2 rounded-full text-[11px] uppercase font-black tracking-widest flex items-center gap-2 shadow-xl shadow-[#BD7474]/20">
-                                <Sparkles className="h-4 w-4" /> MÁS POPULAR
+                        {/* Plan Pro - DESTACADO */}
+                        <div className="p-8 rounded-[2.5rem] bg-[#1B2E1D] text-white flex flex-col items-center text-center relative shadow-2xl scale-105 z-10 border-4 border-[#BD7474]/20">
+                             <div className="absolute -top-5 bg-[#BD7474] text-white px-6 py-1.5 rounded-full text-[9px] uppercase font-black tracking-widest flex items-center gap-2 shadow-lg">
+                                <Sparkles className="h-3 w-3" /> POPULAR
                              </div>
-                             <h4 className="text-3xl font-serif mb-2">Pro</h4>
-                             <p className="text-[10px] uppercase font-bold tracking-widest text-[#BD7474] mb-8">CONTROL TOTAL DE TUS INVITADOS</p>
-                             <div className="text-6xl font-serif mb-6">$1,699</div>
-                             <p className="text-sm font-medium text-[#BD7474] italic mb-10 w-full pb-6 border-b border-[#2D312E] uppercase tracking-tighter">“Ya sé exactamente quién sí va a ir”</p>
+                             <h4 className="text-2xl font-serif mb-2">Pro</h4>
+                             <p className="text-[9px] uppercase font-bold tracking-widest text-[#BD7474] mb-8">CONTROL TOTAL</p>
+                             <div className="text-5xl font-serif mb-6">$1,699</div>
+                             <p className="text-[10px] font-medium text-[#BD7474] italic mb-10 w-full pb-6 border-b border-[#2D312E] uppercase tracking-tighter">“Ya sé quién sí va a ir”</p>
                              
-                             <ul className="space-y-4 mb-12 text-sm text-stone-200 font-light text-left w-full">
+                             <ul className="space-y-3 mb-10 text-[13px] text-stone-300 font-light text-left w-full">
                                 {[
-                                    'Ves en tiempo real quién confirmó',
-                                    'Dejas de perseguir gente por WhatsApp',
-                                    'Confirmaciones automáticas sin esfuerzo',
-                                    'Control de invitados y acompañantes',
+                                    'Confirmaciones en tiempo real',
                                     'Recordatorios automáticos',
-                                    'Importa tu lista desde Excel',
-                                    'Todo organizado en un solo lugar'
+                                    'Control de pases y acompañantes',
+                                    'Métricas de visualización',
+                                    'Importación masiva (Excel)'
                                 ].map((f, i) => (
                                     <li key={i} className="flex gap-3 items-center">
-                                        <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" /> <span>{f}</span>
+                                        <Check className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" /> <span>{f}</span>
                                     </li>
                                 ))}
                              </ul>
                              <div className="mt-auto w-full">
                                  <Link to={user ? "/dashboard" : "/login"} className="w-full">
-                                    <button className="w-full py-5 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-black tracking-[0.2em] shadow-xl shadow-[#BD7474]/20 hover:scale-[1.02] hover:bg-white hover:text-[#1B2E1D] transition-all">Quiero saber quién sí va a ir</button>
+                                    <button className="w-full py-4 bg-white text-[#1B2E1D] rounded-xl text-[9px] uppercase font-black tracking-[0.2em] hover:bg-stone-100 transition-all">Quiero control total</button>
                                  </Link>
                              </div>
                         </div>
 
-                        {/* Plan Pro */}
-                        <div className="p-12 rounded-[3rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center">
-                             <h4 className="text-3xl font-serif mb-2">Premium</h4>
-                             <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-8">NOSOTROS LO HACEMOS POR TI</p>
-                             <div className="text-5xl font-serif mb-6 text-[#1B2E1D]">$2,999+</div>
-                             <p className="text-sm font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200">“Yo no me encargo de nada”</p>
+                        {/* Plan Diseño Pro */}
+                        <div className="p-8 rounded-[2.5rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center hover:shadow-xl transition-all">
+                             <h4 className="text-2xl font-serif mb-2">Diseño Pro</h4>
+                             <p className="text-[9px] uppercase font-bold tracking-widest text-stone-400 mb-8">ÚNICO Y A MEDIDA</p>
+                             <div className="text-4xl font-serif mb-6 text-[#1B2E1D]">$2,499</div>
+                             <p className="text-[10px] font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200 uppercase tracking-tighter">“Quiero algo personalizado”</p>
                              
-                             <ul className="space-y-4 mb-12 text-sm text-stone-400 font-light text-left w-full">
+                             <ul className="space-y-3 mb-10 text-[13px] text-stone-400 font-light text-left w-full">
                                 {[
-                                    'Todo lo del plan Pro', 
-                                    'Configuración completa por nuestro equipo', 
-                                    'Invitaciones con código QR', 
-                                    'Control de acceso en tu evento', 
-                                    'Dominio personalizado', 
-                                    'Soporte dedicado'
+                                    'Diseño desde cero por expertos',
+                                    'Código QR para invitados',
+                                    'Control de acceso (Check-in)',
+                                    'Dominio personalizado (.com)',
+                                    'Soporte prioritario'
                                 ].map((f, i) => (
                                     <li key={i} className="flex gap-3 items-center">
-                                        <Check className="h-4 w-4 text-stone-300 flex-shrink-0" /> <span>{f}</span>
+                                        <Check className="h-3.5 w-3.5 text-[#BD7474] flex-shrink-0" /> <span>{f}</span>
                                     </li>
                                 ))}
                              </ul>
                              <div className="mt-auto w-full">
                                  <Link to={user ? "/dashboard" : "/login"} className="w-full">
-                                    <button className="w-full py-4 border-2 border-stone-200 text-stone-500 rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] hover:bg-stone-50 transition-all">Quiero que lo hagan por mí</button>
+                                    <button className="w-full py-4 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all">Diseño a medida</button>
                                  </Link>
+                             </div>
+                        </div>
+
+                        {/* Plan Concierge */}
+                        <div className="p-8 rounded-[2.5rem] border border-[#BD7474]/20 bg-white flex flex-col items-center text-center shadow-xl hover:shadow-2xl transition-all">
+                             <h4 className="text-2xl font-serif mb-2 text-[#1B2E1D]">Concierge</h4>
+                             <p className="text-[9px] uppercase font-black tracking-[0.2em] text-[#BD7474] mb-8">NOSOTROS HACEMOS TODO</p>
+                             <div className="text-4xl font-serif mb-6 text-[#1B2E1D]">$4,499</div>
+                             <p className="text-[10px] font-medium text-[#BD7474] italic mb-10 w-full pb-6 border-b border-[#BD7474]/10 uppercase tracking-tighter">“Yo no me encargo de nada”</p>
+                             
+                             <ul className="space-y-3 mb-10 text-[13px] text-stone-600 font-light text-left w-full">
+                                {[
+                                    'Gestión total de lista',
+                                    'Envío masivo WhatsApp Pro',
+                                    '4 rondas de seguimiento',
+                                    'Concierge dedicado 24/7',
+                                    'Reporte final de asistencia'
+                                ].map((f, i) => (
+                                    <li key={i} className="flex gap-3 items-center">
+                                        <Check className="h-3.5 w-3.5 text-[#BD7474] flex-shrink-0" /> <span className="font-medium">{f}</span>
+                                    </li>
+                                ))}
+                             </ul>
+                             <div className="mt-auto w-full space-y-4">
+                                 <Link to={user ? "/dashboard" : "/login"} className="w-full">
+                                    <button className="w-full py-4 bg-[#BD7474] text-white rounded-xl text-[9px] uppercase font-black tracking-[0.2em] shadow-lg shadow-[#BD7474]/20 hover:scale-[1.02] transition-all">Servicio Completo</button>
+                                 </Link>
+                                 <Link to="/concierge-service" className="block text-[8px] uppercase font-black tracking-widest text-stone-300 hover:text-[#BD7474] transition-colors">Saber más →</Link>
                              </div>
                         </div>
                     </div>

@@ -40,12 +40,15 @@ export default function InvitationPage() {
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-    // Apply font theme attribute - MUST be before any conditional returns
+    // Apply font theme attribute and custom CSS - MUST be before any conditional returns
     useEffect(() => {
         const cfg = event?.theme_config || {};
         const preset = cfg.typography_preset || cfg.typographyPreset || 'romantica';
         document.documentElement.setAttribute('data-theme-font', preset);
     }, [event?.theme_config]);
+
+    // Custom CSS Injected from theme_config (Plan Pro/Concierge)
+    const customStyles = event?.theme_config?.custom_css || '';
 
     // Form states for General Registration
     const [guestName, setGuestName] = useState('');
@@ -510,6 +513,7 @@ END:VCALENDAR`;
         .invitation-content .font-sans { 
             font-family: "${selectedFonts.sans}", sans-serif !important; 
         }
+        ${customStyles}
     `;
 
     // ── Layout modular: sección queue ────────────────────────────────

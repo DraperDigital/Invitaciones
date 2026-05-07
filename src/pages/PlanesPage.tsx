@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 export default function PlanesPage() {
     const { user } = useAuth();
     const plans = [
-// ... (rest of the plans array remains the same)
         {
             id: 'clasico',
             name: 'Clásica',
@@ -19,55 +18,68 @@ export default function PlanesPage() {
                 'Información del evento',
                 'Cuenta regresiva',
                 'Ubicación con mapa',
-                'Galería básica',
+                'Galería de fotos',
                 'Confirmación simple por WhatsApp',
             ],
-            friction: [
-                'No sabes realmente quién va a ir',
-                'Tienes que escribirle a cada invitado',
-                'Todo sigue desorganizado en WhatsApp'
-            ],
-            cta: 'Solo quiero mi invitación',
+            cta: 'Solo mi invitación',
         },
         {
             id: 'pro',
             name: 'Pro',
             price: '$1,699',
             period: 'MXN',
-            description: 'Control total de tus invitados',
+            description: 'Control total de invitados',
             subcopy: '“Ya sé exactamente quién sí va a ir”',
             icon: Sparkles,
             color: 'rose',
             popular: true,
             features: [
-                'Ves en tiempo real quién confirmó',
-                'Dejas de perseguir gente por WhatsApp',
-                'Confirmaciones automáticas sin esfuerzo',
-                'Control de invitados y acompañantes',
+                'Dashboard en tiempo real',
                 'Recordatorios automáticos',
-                'Importa tu lista desde Excel',
-                'Todo organizado en un solo lugar',
+                'Control de pases y acompañantes',
+                'Importación masiva (Excel)',
+                'Métricas de visualización',
+                'Todo en un solo lugar',
             ],
-            cta: 'Quiero saber quién sí va a ir',
+            cta: 'Quiero control total',
         },
         {
             id: 'premium',
-            name: 'Premium',
-            price: '$2,999+',
+            name: 'Diseño Pro',
+            price: '$2,499',
             period: 'MXN',
-            description: 'Nosotros lo hacemos por ti',
-            subcopy: '“Yo no me encargo de nada”',
+            description: 'Diseño a tu medida',
+            subcopy: '“Quiero algo único para mi evento”',
             icon: Crown,
             color: 'emerald',
             features: [
                 'Todo lo del plan Pro',
-                'Configuración completa por nuestro equipo',
-                'Invitaciones con código QR',
-                'Control de acceso en tu evento',
-                'Dominio personalizado',
-                'Soporte dedicado',
+                'Diseño desde cero por expertos',
+                'Código QR para invitados',
+                'Control de acceso (Check-in)',
+                'Dominio personalizado (.com)',
+                'Soporte prioritario',
             ],
-            cta: 'Quiero que lo hagan por mí',
+            cta: 'Diseño a medida',
+        },
+        {
+            id: 'concierge',
+            name: 'Concierge',
+            price: '$4,499',
+            period: 'MXN',
+            description: 'Nosotros hacemos todo',
+            subcopy: '“Yo no me encargo de nada”',
+            icon: Crown,
+            color: 'gold',
+            features: [
+                'Todo lo del plan Diseño Pro',
+                'Gestión total de lista de invitados',
+                'Envío de invitaciones vía WhatsApp Pro',
+                '4 rondas de seguimiento y confirmación',
+                'Concierge dedicado para dudas',
+                'Reporte final de asistencia',
+            ],
+            cta: 'Quiero el servicio completo',
         }
     ];
 
@@ -115,15 +127,17 @@ export default function PlanesPage() {
             </section>
 
             {/* Pricing Cards Grid */}
-            <section className="px-8 max-w-7xl mx-auto mb-40">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
+            <section className="px-8 max-w-[1600px] mx-auto mb-40">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
                     {plans.map((plan) => (
                         <div 
                             key={plan.id} 
-                            className={`group relative flex flex-col p-12 rounded-[3.5rem] border transition-all duration-700 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] ${
+                            className={`group relative flex flex-col p-8 rounded-[2.5rem] border transition-all duration-700 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] ${
                                 plan.popular 
-                                    ? 'bg-[#1B2E1D] border-stone-800 text-white shadow-2xl scale-105 z-20 xl:scale-110' 
-                                    : 'bg-white border-stone-100 text-[#1B2E1D]'
+                                    ? 'bg-[#1B2E1D] border-stone-800 text-white shadow-2xl scale-105 z-20' 
+                                    : plan.id === 'concierge'
+                                        ? 'bg-[#FDFBF7] border-[#BD7474]/20 text-[#1B2E1D] shadow-xl'
+                                        : 'bg-white border-stone-100 text-[#1B2E1D]'
                             }`}
                         >
                             {plan.popular && (
@@ -132,65 +146,53 @@ export default function PlanesPage() {
                                 </div>
                             )}
 
-                            <div className="flex-1 space-y-12">
+                            <div className="flex-1 space-y-10">
                                 <div className="flex items-center justify-between">
-                                    <div className={`p-5 rounded-2xl ${plan.popular ? 'bg-white/10' : 'bg-[#FDFBF7]'}`}>
-                                        <plan.icon className={`h-8 w-8 ${plan.popular ? 'text-[#BD7474]' : 'text-[#BD7474]'}`} />
+                                    <div className={`p-4 rounded-2xl ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`}>
+                                        <plan.icon className={`h-6 w-6 ${plan.id === 'concierge' ? 'text-[#BD7474]' : 'text-[#BD7474]'}`} />
                                     </div>
-                                    <span className={`text-[10px] font-bold uppercase tracking-[0.4em] ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>
+                                    <span className={`text-[9px] font-bold uppercase tracking-[0.4em] ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>
                                         PLAN {plan.id}
                                     </span>
                                 </div>
 
                                 <div className="text-center lg:text-left">
-                                    <h3 className="text-4xl font-serif mb-2 tracking-tight">{plan.name}</h3>
-                                    <p className={`text-sm italic font-light opacity-70 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
+                                    <h3 className="text-3xl font-serif mb-2 tracking-tight">{plan.name}</h3>
+                                    <p className={`text-xs italic font-light opacity-70 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
                                         {plan.description}
                                     </p>
-                                    <p className={`text-[11px] mt-3 italic font-medium uppercase tracking-tighter ${plan.popular ? 'text-[#BD7474]' : 'text-[#BD7474]'}`}>
+                                    <p className={`text-[10px] mt-2 italic font-medium uppercase tracking-tighter ${plan.popular ? 'text-[#BD7474]' : 'text-[#BD7474]'}`}>
                                         {plan.subcopy}
                                     </p>
                                 </div>
 
                                 <div className="text-center lg:text-left space-y-1">
                                     <div className="flex items-baseline justify-center lg:justify-start gap-2">
-                                        <span className="text-6xl font-serif tracking-tighter">{plan.price}</span>
-                                        <span className={`text-[11px] font-bold uppercase tracking-widest ${plan.popular ? 'text-white/40' : 'text-stone-300'}`}>{plan.period}</span>
+                                        <span className="text-5xl font-serif tracking-tighter">{plan.price}</span>
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${plan.popular ? 'text-white/40' : 'text-stone-300'}`}>{plan.period}</span>
                                     </div>
-                                    <p className={`text-[9px] uppercase font-bold tracking-widest ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>Un solo pago · De por vida</p>
+                                    <p className={`text-[8px] uppercase font-bold tracking-widest ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>Un solo pago · De por vida</p>
                                 </div>
 
                                 <div className={`h-px w-full ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`} />
 
-                                <ul className="space-y-6">
+                                <ul className="space-y-4">
                                     {plan.features.map((feature, idx) => (
                                         <li key={idx} className="flex items-start gap-4 text-left">
                                             <div className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0 bg-emerald-500`} />
-                                            <span className={`text-[14px] font-light leading-tight ${
+                                            <span className={`text-[13px] font-light leading-tight ${
                                                 plan.popular ? 'text-white/90' : 'text-stone-600'
                                             }`}>
                                                 {feature}
                                             </span>
                                         </li>
                                     ))}
-                                    {plan.friction?.map((item, idx) => (
-                                        <li key={idx} className="flex items-start gap-4 text-left opacity-60">
-                                            <div className="mt-1 flex-shrink-0">
-                                                <X className="h-3 w-3 text-rose-500" />
-                                            </div>
-                                            <span className={`text-[14px] font-light leading-tight ${
-                                                plan.popular ? 'text-white/40' : 'text-stone-400'
-                                            }`}>
-                                                {item}
-                                            </span>
-                                        </li>
-                                    ))}
                                 </ul>
                             </div>
 
-                            <div className="mt-16">
+                            <div className="mt-10">
                                 <Link to={`/checkout?plan=${plan.id}`}>
-                                    <button className={`w-full py-6 rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
+                                    <button className={`w-full py-5 rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
                                         plan.popular 
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl' 
                                             : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E] shadow-xl'
@@ -198,7 +200,17 @@ export default function PlanesPage() {
                                         {plan.cta}
                                     </button>
                                 </Link>
-                                <p className={`mt-6 text-[9px] text-center uppercase font-bold tracking-[0.2em] opacity-30 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
+                                {plan.id === 'concierge' && (
+                                    <div className="mt-4 text-center">
+                                        <Link 
+                                            to="/concierge-service" 
+                                            className="text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5"
+                                        >
+                                            Saber más sobre Concierge →
+                                        </Link>
+                                    </div>
+                                )}
+                                <p className={`mt-5 text-[8px] text-center uppercase font-bold tracking-[0.2em] opacity-30 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
                                     Activación instantánea
                                 </p>
                             </div>

@@ -21,56 +21,71 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         const fetchAccess = async () => {
             setIsLoading(true);
             try {
+                // Ensure eventId is a valid UUID before calling RPC to avoid 'text = uuid' errors
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+                if (!uuidRegex.test(eventId)) {
+                    // If it's not a UUID (e.g. it's a slug or empty), skip RPC and use basic fallback
+                    throw new Error('Invalid UUID format');
+                }
+
                 // Call the Postgres RPC
                 const { data, error: rpcError } = await supabase
                     .rpc('get_event_feature_access', { p_event_id: eventId });
 
                 if (rpcError) {
-                    if (rpcError.code === 'PGRST205') {
-                        console.error('CRITICAL: Ambiguous function detection in database. Multiple versions of get_event_feature_access exist. Please run the SQL cleanup script.');
-                    }
-                    
-                    console.warn('Feature access RPC failed, trying profile fallback...', {
-                        code: rpcError.code,
-                        message: rpcError.message
-                    });
-
-                    // SECONDARY FALLBACK: Try to get plan from profile
-                    const { data: profileData } = await supabase
-                        .from('profiles')
-                        .select('plan_tier')
-                        .eq('id', (await supabase.auth.getUser()).data.user?.id)
-                        .single();
-
-                    const planTier = (profileData?.plan_tier as any) || 'clasico';
-                    const isPremiumOrPro = planTier === 'premium' || planTier === 'pro' || planTier === 'personalizado';
-
-                    setAccess({ 
-                        plan: { 
-                            code: planTier, 
-                            name: planTier === 'premium' ? 'Premium' : planTier === 'pro' ? 'Pro' : 'Clásico' 
-                        }, 
-                        features: [
-                            { code: 'show_details', status: 'enabled' },
-                            { code: 'show_countdown', status: 'enabled' },
-                            { code: 'show_map', status: 'enabled' },
-                            { code: 'show_gallery', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'show_whatsapp_rsvp', status: 'enabled' },
-                            { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' }
-                        ] 
-                    } as any);
-                    return;
+                    throw rpcError;
                 }
                 setAccess(data as FeatureAccessResponse);
             } catch (err: any) {
-                console.error('Error fetching feature access:', err);
-                setAccess({ plan: { code: 'clasico', name: 'Clásico' }, features: [] } as any);
+                // FALLBACK LOGIC
+                if (err.message !== 'Invalid UUID format') {
+                    console.warn('Feature access RPC failed, trying profile fallback...', err.message || err);
+                }
+
+                try {
+                    // Get current user session safely
+                    const { data: { user } } = await supabase.auth.getUser();
+                    
+                    if (user) {
+                        const { data: profileData, error: profileError } = await supabase
+                            .from('profiles')
+                            .select('plan_tier')
+                            .eq('id', user.id)
+                            .maybeSingle();
+
+                        if (!profileError && profileData) {
+                            const planTier = profileData.plan_tier || 'clasico';
+                            const isPremiumOrPro = planTier === 'premium' || planTier === 'pro' || planTier === 'concierge';
+
+                            setAccess({ 
+                                plan: { 
+                                    code: planTier, 
+                                    name: planTier === 'concierge' ? 'Concierge' : planTier === 'premium' ? 'Diseño Pro' : planTier === 'pro' ? 'Pro' : 'Clásica' 
+                                }, 
+                                features: [
+                                    { code: 'show_details', status: 'enabled' },
+                                    { code: 'show_countdown', status: 'enabled' },
+                                    { code: 'show_map', status: 'enabled' },
+                                    { code: 'show_gallery', status: 'enabled' },
+                                    { code: 'show_whatsapp_rsvp', status: 'enabled' },
+                                    { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' }
+                                ] 
+                            } as any);
+                            return;
+                        }
+                    }
+                } catch (fallbackErr) {
+                    console.error('Fallback also failed:', fallbackErr);
+                }
+
+                // Global default if everything else fails
+                setAccess({ plan: { code: 'clasico', name: 'Clásica' }, features: [] } as any);
                 setError(err);
             } finally {
                 setIsLoading(false);
@@ -85,9 +100,9 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         
         const plan = access.plan?.code?.toLowerCase() || '';
         const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
-        const isPremium = plan === 'premium';
+        const isPremium = plan === 'premium' || plan === 'concierge';
 
-        // Premium has access to EVERYTHING
+        // Premium or Concierge has access to EVERYTHING
         if (isPremium) return true;
 
         // Pro has access to specific dashboard features

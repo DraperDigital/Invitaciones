@@ -84,11 +84,13 @@ type DesignConfig = {
     typographyPreset: 'elegante' | 'moderna' | 'romantica';
 
     // Plan
-    plan: 'clasico' | 'pro' | 'premium';
+    plan: 'clasico' | 'pro' | 'premium' | 'concierge';
     hotels: { name: string; distance: string; description: string; price: string; link: string; isRecommended: boolean }[];
+    customCss: string;
 };
 
 const DEFAULT_CONFIG: DesignConfig = {
+    // ... existing defaults ...
     primaryColor: '#1B2E1D',
     heroTextColor: '#ffffff',
     accentColor: '#BD7474',
@@ -143,6 +145,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     typographyPreset: 'romantica',
     plan: 'clasico',
     hotels: [],
+    customCss: '',
 };
 
 const TYPOGRAPHY_PRESETS = {
@@ -265,6 +268,7 @@ export default function DesignEditor() {
                     typographyPreset: c.typography_preset ?? c.typographyPreset ?? DEFAULT_CONFIG.typographyPreset,
                     plan:           c.isPremium ? 'premium' : c.isPro ? 'pro' : 'clasico',
                     hotels:         c.hotels ?? [],
+                    customCss:      c.custom_css ?? '',
                 });
             }
             setLoading(false);
@@ -286,6 +290,7 @@ export default function DesignEditor() {
             :root, html {
                 --color-accent: ${r} ${g} ${b} !important;
             }
+            ${config.customCss}
         `;
         setLiveStyles(styles);
         
@@ -294,7 +299,7 @@ export default function DesignEditor() {
         
         // Also update document root for accent color
         document.documentElement.style.setProperty('--color-accent', `${r} ${g} ${b}`);
-    }, [config.typographyPreset, config.accentColor]);
+    }, [config.typographyPreset, config.accentColor, config.customCss]);
 
     const handleSave = async () => {
         if (!id || !event) return;
@@ -375,6 +380,9 @@ export default function DesignEditor() {
                 misa_address:         config.misa_address,
                 misa_maps_link:       config.misa_maps_link,
                 misa_time:            config.misa_time,
+
+                // EXPERT CSS
+                custom_css:           config.customCss,
             };
 
             const { error } = await supabase
@@ -417,7 +425,7 @@ export default function DesignEditor() {
     };
 
     // ── Plan Presets: auto-enable the right features when selecting a plan ──
-    const PLAN_PRESETS: Record<'clasico' | 'pro' | 'premium', Partial<DesignConfig>> = {
+    const PLAN_PRESETS: Record<'clasico' | 'pro' | 'premium' | 'concierge', Partial<DesignConfig>> = {
         clasico: {
             isPremium: false,
             isPro: false,
@@ -472,10 +480,28 @@ export default function DesignEditor() {
             enableCustomDomain: true,
             showHotels: true,
         },
+        concierge: {
+            isPremium: true,
+            isPro: true,
+            showDetails: true,
+            showCountdown: true,
+            showMap: true,
+            showGallery: true,
+            showWhatsAppRSVP: true,
+            showGifts: true,
+            showItinerary: true,
+            enableQr: true,
+            enableAccessControl: true,
+            enableTableManagement: true,
+            enableAi: true,
+            enableMetrics: true,
+            enableCustomDomain: true,
+            showHotels: true,
+        },
     };
 
-    const applyPlan = (planId: 'clasico' | 'pro' | 'premium') => {
-        const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, personalizado: 1 };
+    const applyPlan = (planId: 'clasico' | 'pro' | 'premium' | 'concierge') => {
+        const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, concierge: 3, personalizado: 1 };
         const paidPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
         const paidRank = ranks[paidPlanCode] ?? 0;
         const targetRank = ranks[planId] ?? 0;
@@ -485,7 +511,7 @@ export default function DesignEditor() {
             return;
         }
 
-        setConfig(prev => ({ ...prev, ...PLAN_PRESETS[planId], plan: planId }));
+        setConfig(prev => ({ ...prev, ...PLAN_PRESETS[planId], plan: planId as any }));
     };
 
     if (loading || loadingAccess) {
@@ -547,14 +573,15 @@ export default function DesignEditor() {
                 >
                     <div className="space-y-8">
                         {/* Plan Buttons */}
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {([
                                 { id: 'clasico' as const, label: 'Clásica', icon: '💌', color: 'border-stone-300 bg-stone-50 hover:border-stone-400', active: 'border-[#1B2E1D] bg-[#1B2E1D]' },
                                 { id: 'pro' as const, label: 'Pro', icon: '✦', color: 'border-blue-200 bg-blue-50 hover:border-blue-400', active: 'border-blue-600 bg-blue-600' },
                                 { id: 'premium' as const, label: 'Premium', icon: '♛', color: 'border-amber-200 bg-amber-50 hover:border-amber-400', active: 'border-amber-500 bg-amber-500' },
+                                { id: 'concierge' as const, label: 'Concierge', icon: '💎', color: 'border-stone-800 bg-stone-900 hover:border-black', active: 'border-black bg-black' },
                             ]).map(tier => {
                                 const isActive = config.plan === tier.id;
-                                const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, personalizado: 1 };
+                                const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, concierge: 3, personalizado: 1 };
                                 const paidPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
                                 const isLocked = (ranks[tier.id] ?? 0) > (ranks[paidPlanCode] ?? 0);
 
@@ -579,11 +606,11 @@ export default function DesignEditor() {
                                                     <Shield className="h-2 w-2" /> Bloqueado
                                                 </span>
                                                 <Link 
-                                                    to="/planes" 
+                                                    to="/concierge-service" 
                                                     onClick={(e) => e.stopPropagation()}
                                                     className="mt-2 px-3 py-1 bg-[#BD7474]/10 text-[#BD7474] text-[8px] font-black uppercase tracking-widest rounded-lg hover:bg-[#BD7474] hover:text-white transition-colors"
                                                 >
-                                                    Mejorar
+                                                    Saber más
                                                 </Link>
                                             </>
                                         )}
@@ -594,31 +621,32 @@ export default function DesignEditor() {
 
                         {/* Feature Matrix */}
                         <div className="rounded-2xl border border-stone-100 overflow-hidden">
-                            <div className="grid grid-cols-4 text-[10px] font-black uppercase tracking-widest">
+                            <div className="grid grid-cols-5 text-[9px] font-black uppercase tracking-widest">
                                 <div className="p-3 bg-stone-50 text-stone-500 border-r border-stone-100">Funcionalidad</div>
                                 <div className="p-3 bg-stone-50 text-stone-700 text-center border-r border-stone-100">💌 Clásica</div>
                                 <div className="p-3 bg-blue-50 text-blue-700 text-center border-r border-stone-100">✦ Pro</div>
-                                <div className="p-3 bg-amber-50 text-amber-700 text-center">♛ Premium</div>
+                                <div className="p-3 bg-amber-50 text-amber-700 text-center border-r border-stone-100">♛ Premium</div>
+                                <div className="p-3 bg-stone-900 text-white text-center">💎 Concierge</div>
                             </div>
                             {([
-                                { label: 'Información del evento', clasico: true, pro: true, premium: true },
-                                { label: 'Cuenta regresiva', clasico: true, pro: true, premium: true },
-                                { label: 'Mapa / Ubicación', clasico: true, pro: true, premium: true },
-                                { label: 'RSVP por WhatsApp', clasico: true, pro: true, premium: true },
-                                { label: 'Código de vestimenta', clasico: false, pro: true, premium: true },
-                                { label: 'QR de acceso digital', clasico: false, pro: true, premium: true },
-                                { label: 'Itinerario del evento', clasico: false, pro: true, premium: true },
-                                { label: 'Damas / Chambelanes', clasico: false, pro: true, premium: true },
-                                { label: 'Mesa de regalos', clasico: false, pro: true, premium: true },
-                                { label: 'Galería de fotos', clasico: false, pro: false, premium: true },
-                                { label: 'Transmisión en vivo', clasico: false, pro: false, premium: true },
-                                { label: 'Sobre de bienvenida', clasico: false, pro: false, premium: true },
-                                { label: 'Música de fondo', clasico: false, pro: false, premium: true },
+                                { label: 'Información del evento', clasico: true, pro: true, premium: true, concierge: true },
+                                { label: 'Cuenta regresiva', clasico: true, pro: true, premium: true, concierge: true },
+                                { label: 'Mapa / Ubicación', clasico: true, pro: true, premium: true, concierge: true },
+                                { label: 'RSVP por WhatsApp', clasico: true, pro: true, premium: true, concierge: true },
+                                { label: 'Código de vestimenta', clasico: false, pro: true, premium: true, concierge: true },
+                                { label: 'QR de acceso digital', clasico: false, pro: true, premium: true, concierge: true },
+                                { label: 'Itinerario del evento', clasico: false, pro: true, premium: true, concierge: true },
+                                { label: 'Damas / Chambelanes', clasico: false, pro: true, premium: true, concierge: true },
+                                { label: 'Mesa de regalos', clasico: false, pro: true, premium: true, concierge: true },
+                                { label: 'Galería de fotos', clasico: false, pro: false, premium: true, concierge: true },
+                                { label: 'Diseño Personalizado', clasico: false, pro: false, premium: true, concierge: true },
+                                { label: 'Envío Profesional WA', clasico: false, pro: false, premium: false, concierge: true },
+                                { label: 'Seguimiento Humano', clasico: false, pro: false, premium: false, concierge: true },
                             ]).map((row, i) => {
                                 const activePlan = config.plan;
-                                const rowEnabled = row[activePlan as 'clasico' | 'pro' | 'premium'];
+                                const rowEnabled = (row as any)[activePlan as string];
                                 return (
-                                    <div key={i} className={`grid grid-cols-4 text-xs border-t border-stone-100 transition-colors ${
+                                    <div key={i} className={`grid grid-cols-5 text-[11px] border-t border-stone-100 transition-colors ${
                                         rowEnabled ? 'bg-white' : 'bg-stone-50/50'
                                     }`}>
                                         <div className={`p-3 border-r border-stone-100 font-medium ${
@@ -626,7 +654,8 @@ export default function DesignEditor() {
                                         }`}>{row.label}</div>
                                         <div className="p-3 text-center border-r border-stone-100">{row.clasico ? '✓' : '—'}</div>
                                         <div className="p-3 text-center border-r border-stone-100">{row.pro ? '✓' : '—'}</div>
-                                        <div className="p-3 text-center">{row.premium ? '✓' : '—'}</div>
+                                        <div className="p-3 text-center border-r border-stone-100">{row.premium ? '✓' : '—'}</div>
+                                        <div className="p-3 text-center bg-stone-900/5">{row.concierge ? '✓' : '—'}</div>
                                     </div>
                                 );
                             })}
@@ -1524,6 +1553,44 @@ export default function DesignEditor() {
                         </div>
                     </CollapsibleCard>
                 )}
+                {/* ── 5. Estilos Expertos (CSS) ── */}
+                {config.plan === 'concierge' && (
+                    <CollapsibleCard
+                        id="expert"
+                        title="Estilos Expertos"
+                        subtitle="Inyección de CSS para Diseño Pro y Concierge"
+                        icon="⚡"
+                        activeSection={activeSection}
+                        setActiveSection={setActiveSection}
+                    >
+                        <div className="space-y-6">
+                            <div className="p-6 bg-amber-50 border border-amber-100 rounded-2xl flex items-start gap-4">
+                                <Shield className="h-6 w-6 text-amber-600 mt-1" />
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-amber-800">Uso Avanzado</p>
+                                    <p className="text-xs text-amber-700 font-medium leading-relaxed">
+                                        Este campo permite inyectar estilos CSS directamente en la invitación. Usa selectores específicos como <code>.invitation-content</code> para evitar conflictos. Los cambios se reflejan en la Vista Previa.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-[#BD7474]/20 to-[#1B2E1D]/20 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition-all" />
+                                <textarea
+                                    value={config.customCss}
+                                    onChange={(e) => setConfig({ ...config, customCss: e.target.value })}
+                                    placeholder="/* Ejemplo: .invitation-content h1 { color: gold; } */"
+                                    className="relative w-full h-64 bg-[#1B2E1D] text-emerald-400 p-8 rounded-[2rem] font-mono text-xs leading-relaxed focus:ring-2 focus:ring-[#BD7474] border-none shadow-2xl selection:bg-[#BD7474]/40"
+                                />
+                            </div>
+
+                            <p className="text-[9px] text-stone-400 text-center uppercase tracking-widest font-bold">
+                                Cualquier error en el CSS puede afectar la visualización de la invitación.
+                            </p>
+                        </div>
+                    </CollapsibleCard>
+                )}
+
             {/* Live Preview Button */}
             <div className="flex justify-center pt-8 border-t border-stone-200">
                 <Link to={`/preview/${id}`} target="_blank" className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/30 pb-1">

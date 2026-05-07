@@ -224,23 +224,37 @@ const CheckIn: React.FC = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="bg-stone-800/80 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/5 shadow-2xl space-y-8">
+                            <div className="bg-stone-800/80 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/5 shadow-2xl space-y-6">
                                 <div className="text-center space-y-2">
                                     <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-500">INVITADO DETECTADO</p>
                                     <h2 className="text-3xl font-serif italic text-white">{guestData?.name}</h2>
                                     <p className="text-stone-400 text-xs">{guestData?.group_name || 'Individual'}</p>
                                 </div>
 
+                                {/* Table Display - Much more prominent */}
+                                <div className="py-2">
+                                    {guestData?.event_tables?.name ? (
+                                        <div className="bg-gradient-to-r from-[#D9B880]/20 to-[#BD7474]/20 border border-[#D9B880]/30 p-6 rounded-[2rem] text-center space-y-1 group hover:scale-[1.02] transition-transform">
+                                            <p className="text-[9px] uppercase font-black tracking-[0.4em] text-[#D9B880]">Mesa Asignada</p>
+                                            <h3 className="text-4xl font-serif text-white">{guestData.event_tables.name}</h3>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-stone-900/40 border border-white/5 p-4 rounded-2xl text-center">
+                                            <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Ubicación: Acceso Libre / Sin Mesa</p>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-stone-900/50 p-6 rounded-3xl border border-white/5 space-y-2">
                                         <Users className="h-5 w-5 text-stone-500" />
                                         <p className="text-2xl font-serif">{1 + (guestData?.rsvps?.[0]?.plus_ones_confirmed || 0)}</p>
-                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">INVITADOS (PAX)</p>
+                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Personas (PAX)</p>
                                     </div>
                                     <div className="bg-stone-900/50 p-6 rounded-3xl border border-white/5 space-y-2">
-                                        <MapPin className="h-5 w-5 text-stone-500" />
-                                        <p className="text-xl font-serif">{guestData?.event_tables?.name || 'Mesa Lib.'}</p>
-                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">UBICACIÓN</p>
+                                        <CheckCircle2 className="h-5 w-5 text-stone-500" />
+                                        <p className="text-lg font-serif">{guestData?.checked_in_at ? 'Ya ingresó' : 'Pendiente'}</p>
+                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Estado</p>
                                     </div>
                                 </div>
 
@@ -248,15 +262,16 @@ const CheckIn: React.FC = () => {
                                     <div className="bg-amber-500/10 border border-amber-500/20 p-6 rounded-3xl text-center space-y-3">
                                         <CheckCircle2 className="h-8 w-8 text-amber-500 mx-auto" />
                                         <p className="text-amber-500 text-xs font-bold uppercase tracking-widest">Ya ingresó al evento</p>
-                                        <p className="text-stone-500 text-[10px]">Marcado como asistido anteriormente.</p>
-                                        <button onClick={resetScanner} className="w-full mt-4 py-3 border border-stone-700 text-stone-400 rounded-xl text-[10px] uppercase font-bold tracking-widest">
+                                        <button onClick={resetScanner} className="w-full mt-2 py-3 border border-stone-700 text-stone-400 rounded-xl text-[10px] uppercase font-bold tracking-widest">
                                             Siguiente Invitado
                                         </button>
                                     </div>
                                 ) : status === 'success' ? (
                                     <div className="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-3xl text-center space-y-4">
-                                        <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto animate-bounce" />
-                                        <p className="text-emerald-500 text-sm font-bold uppercase tracking-widest">Ingreso Confirmado</p>
+                                        <div className="flex items-center justify-center gap-3 text-emerald-500">
+                                            <CheckCircle2 className="h-6 w-6 animate-bounce" />
+                                            <p className="text-sm font-bold uppercase tracking-widest">Ingreso Confirmado</p>
+                                        </div>
                                         <button onClick={resetScanner} className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-emerald-900/20">
                                             Siguiente Invitado
                                         </button>
@@ -270,8 +285,8 @@ const CheckIn: React.FC = () => {
                                         >
                                             Confirmar Ingreso <ArrowRight className="h-4 w-4" />
                                         </button>
-                                        <button onClick={resetScanner} className="w-full py-4 text-stone-500 text-[10px] uppercase font-bold tracking-widest hover:text-white transition-colors">
-                                            Cancelar y Volver a Escanear
+                                        <button onClick={resetScanner} className="w-full py-2 text-stone-500 text-[10px] uppercase font-bold tracking-widest hover:text-white transition-colors">
+                                            Cancelar
                                         </button>
                                     </div>
                                 )}

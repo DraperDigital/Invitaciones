@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -7,12 +7,14 @@ import {
     Check, X, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
     Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown,
-    Clock, MapPin, Eye, AlertTriangle
+    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
 import { differenceInDays, isPast } from 'date-fns';
 import { useFeatureAccess } from '../../hooks/useFeatureAccess';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 const EventRSVPs: React.FC = () => {
@@ -47,6 +49,18 @@ const EventRSVPs: React.FC = () => {
     // New Table State
     const [isAddingTable, setIsAddingTable] = useState(false);
     const [newTable, setNewTable] = useState({ name: '', capacity: 10 });
+
+    // Add Guest State
+    const [isAddGuestOpen, setIsAddGuestOpen] = useState(false);
+    const [isSavingGuest, setIsSavingGuest] = useState(false);
+    const [newGuest, setNewGuest] = useState({ name: '', group_name: '', max_plus_ones: 0, phone: '', email: '' });
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [importErrors, setImportErrors] = useState<string[] | null>(null);
+
+    // Bulk Selection State
+    const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [isDeletingBulk, setIsDeletingBulk] = useState(false);
+    const [isBulkConfirmOpen, setIsBulkConfirmOpen] = useState(false);
 
     const copyGeneralLink = async () => {
         if (!event) return;
@@ -330,16 +344,56 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
-    const handleExportCSV = () => {
-        const headers = ['Nombre Invitado', 'Grupo/Canal', 'Estado RSVP', 'Num. Acompañantes'];
-        const rows = guests.map(guest => [
-            `"${guest.name}"`, `"${guest.group_name || 'Individual'}"`, 
-            `"${guest.rsvps?.[0]?.status || 'pending'}"`, `"${guest.rsvps?.[0]?.plus_ones_confirmed || 0}"`
-        ].join(','));
-        const link = document.createElement("a");
-        link.href = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows].join('\n');
-        link.download = "invitados.csv";
-        link.click();
+    const handleExportPDF = () => {
+        console.log('[ExportPDF] Iniciando exportación de invitados...');
+        try {
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.setTextColor(27, 46, 29);
+            doc.text(event?.title || 'Lista de Invitados', 14, 22);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Generado el: ${new Date().toLocaleString()}`, 14, 30);
+
+            const tableData = filteredGuests.map(g => [
+                g.name,
+                g.group_name || 'Individual',
+                getGuestStatus(g) === 'yes' ? 'Confirmado' : getGuestStatus(g) === 'no' ? 'Declinado' : 'Pendiente',
+                getGuestPax(g).toString(),
+                g.checked_in_at ? 'SÍ' : 'NO'
+            ]);
+
+            autoTable(doc, {
+                startY: 35,
+                head: [['Invitado', 'Grupo', 'Estado', 'PAX', 'Check-in']],
+                body: tableData,
+                headStyles: { fillColor: [27, 46, 29] },
+                alternateRowStyles: { fillColor: [253, 251, 247] },
+                margin: { top: 35 }
+            });
+
+            // 1. Intentar descarga directa vía DataURI (Mejor para Desktop)
+            const dataUri = doc.output('datauristring');
+            const link = document.createElement('a');
+            link.href = dataUri;
+            link.download = `Invitados_${(event?.title || 'Evento').replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 2. Abrir en pestaña nueva (Mejor para Móvil y respaldo)
+            // Usamos un timeout para no bloquear el hilo principal de UI
+            setTimeout(() => {
+                window.open(doc.output('bloburl'), '_blank');
+            }, 100);
+            
+            toast.success('Reporte de invitados generado');
+        } catch (error) {
+            console.error('[ExportPDF] Error fatal:', error);
+            toast.error('Error al generar PDF. Revisa la consola.');
+        }
     };
 
     const handleAddTable = async () => {
@@ -367,7 +421,301 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
+    // ── Add Guest Handler ──────────────────────────────────────────────
+    const saveNewGuest = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newGuest.name.trim() || !eventId) return;
+        setIsSavingGuest(true);
+        try {
+            const newToken = crypto.randomUUID();
+            const insertData: any = {
+                event_id: eventId,
+                name: newGuest.name,
+                group_name: newGuest.group_name || 'General',
+                max_plus_ones: newGuest.max_plus_ones,
+                phone: newGuest.phone,
+                email: newGuest.email,
+                guest_token: newToken,
+                status: 'pending'
+            };
 
+            const { data, error } = await supabase.from('guests').insert([insertData]).select('*, rsvps(*), event:events(title, slug)');
+            if (error) throw error;
+            if (data && data.length > 0) {
+                setGuests(prev => [data[0], ...prev]);
+            }
+            setNewGuest({ name: '', group_name: '', max_plus_ones: 0, phone: '', email: '' });
+            setIsAddGuestOpen(false);
+            toast.success('¡Invitado agregado con éxito!');
+        } catch (error: any) {
+            console.error('Error saving guest:', error);
+            toast.error('Error al guardar invitado: ' + error.message);
+        } finally {
+            setIsSavingGuest(false);
+        }
+    };
+
+    // ── CSV Import Handler ─────────────────────────────────────────────
+    const handleImportCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !eventId) return;
+        const reader = new FileReader();
+        reader.onload = async (e2) => {
+            const buffer = e2.target?.result as ArrayBuffer;
+            let text = '';
+            
+            const encodings = ['utf-8', 'windows-1252', 'iso-8859-15'];
+            for (const encoding of encodings) {
+                try {
+                    const decoder = new TextDecoder(encoding, { fatal: true });
+                    const decodedText = decoder.decode(buffer);
+                    if (!decodedText.includes('\uFFFD')) {
+                        text = decodedText;
+                        break;
+                    }
+                } catch (_e) {
+                    continue;
+                }
+            }
+
+            if (!text) {
+                text = new TextDecoder('windows-1252').decode(buffer);
+            }
+            
+            if (text.startsWith('\uFEFF')) {
+                text = text.substring(1);
+            }
+
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            if (lines.length < 2) {
+                toast.error('El archivo está vacío o no tiene el formato correcto.');
+                return;
+            }
+
+            const header = lines[0];
+            const delimiter = header.includes(';') ? ';' : ',';
+            const rows = lines.slice(1);
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const existingNames = new Set(guests.map(g => g.name.toLowerCase().trim()));
+            const seenNamesInFile = new Set<string>();
+
+            const rowErrors: string[] = [];
+            const validGuests: any[] = [];
+
+            rows.forEach((row, i) => {
+                const lineNum = i + 2;
+                const cols = row.split(delimiter).map(c => c.replace(/^["']|["']$/g, '').trim());
+                
+                const name = cols[0] || '';
+                const group = cols[1] || 'General';
+                const maxPlusOnes = parseInt(cols[2]) || 0;
+                const phone = cols[3] || '';
+                const email = cols[4] || '';
+
+                if (!name) { 
+                    rowErrors.push(`Fila ${lineNum}: El nombre es obligatorio.`); 
+                    return; 
+                }
+                
+                if (email && !emailRegex.test(email)) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): El correo electrónico "${email}" no es válido.`); 
+                    return; 
+                }
+                
+                if (existingNames.has(name.toLowerCase())) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): Este invitado ya existe en tu lista.`); 
+                    return; 
+                }
+                
+                if (seenNamesInFile.has(name.toLowerCase())) { 
+                    rowErrors.push(`Fila ${lineNum} (${name}): El nombre está duplicado dentro del archivo.`); 
+                    return; 
+                }
+
+                seenNamesInFile.add(name.toLowerCase());
+                validGuests.push({
+                    event_id: eventId,
+                    name,
+                    group_name: group,
+                    max_plus_ones: maxPlusOnes,
+                    phone,
+                    email,
+                    guest_token: crypto.randomUUID(),
+                    status: 'pending'
+                });
+            });
+
+            if (validGuests.length === 0) {
+                if (rowErrors.length > 0) {
+                    setImportErrors(rowErrors);
+                } else {
+                    toast.error('No se encontró ningún invitado válido para importar.');
+                }
+                if (fileInputRef.current) fileInputRef.current.value = '';
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase.from('guests').insert(validGuests).select('*, rsvps(*), event:events(title, slug)');
+                if (error) throw error;
+                
+                if (data) {
+                    setGuests(prev => [...data, ...prev]);
+                    if (rowErrors.length > 0) {
+                        setImportErrors(rowErrors);
+                        toast.warning(`Se importaron ${data.length} invitados, pero hubo algunos problemas.`);
+                    } else {
+                        toast.success(`¡Éxito! Se importaron ${data.length} invitados correctamente.`);
+                    }
+                }
+            } catch (err: any) {
+                console.error('Error al importar:', err);
+                toast.error('Hubo un error al guardar los invitados en la base de datos.');
+            }
+            
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        };
+        reader.readAsArrayBuffer(file);
+    };
+
+    // ── Bulk Selection & Delete ───────────────────────────────────────
+    const toggleSelectGuest = (id: string) => {
+        setSelectedIds(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.size === filteredGuests.length) {
+            setSelectedIds(new Set());
+        } else {
+            setSelectedIds(new Set(filteredGuests.map(g => g.id)));
+        }
+    };
+
+    const handleBulkDelete = async () => {
+        if (selectedIds.size === 0) return;
+        
+        setIsDeletingBulk(true);
+        const ids = Array.from(selectedIds);
+        const deletedIds: string[] = [];
+        const failedIds: string[] = [];
+
+        try {
+            console.log(`[BulkDelete] Starting deletion of ${ids.length} guests...`);
+            // Process in sequential batches of 5 to avoid overwhelming the API
+            for (let i = 0; i < ids.length; i += 5) {
+                const batch = ids.slice(i, i + 5);
+                const results = await Promise.all(
+                    batch.map(async (id) => {
+                        try {
+                            // Exact same pattern as the working single handleDelete
+                            const { error } = await supabase.from('guests').delete().eq('id', id);
+                            if (error) {
+                                console.error(`[BulkDelete] Error for guest ${id}:`, error);
+                                return { id, success: false };
+                            }
+                            return { id, success: true };
+                        } catch (e) {
+                            console.error(`[BulkDelete] Exception for guest ${id}:`, e);
+                            return { id, success: false };
+                        }
+                    })
+                );
+                results.forEach(r => {
+                    if (r.success) deletedIds.push(r.id);
+                    else failedIds.push(r.id);
+                });
+            }
+
+            console.log(`[BulkDelete] Finished. Deleted: ${deletedIds.length}, Failed: ${failedIds.length}`);
+
+            // Update UI
+            if (deletedIds.length > 0) {
+                const deletedSet = new Set(deletedIds);
+                setGuests(prev => prev.filter(g => !deletedSet.has(g.id)));
+            }
+            
+            setSelectedIds(new Set());
+            setIsBulkConfirmOpen(false);
+
+            if (failedIds.length === 0) {
+                toast.success(`${deletedIds.length} invitado(s) eliminado(s).`);
+            } else if (deletedIds.length > 0) {
+                toast.warning(`${deletedIds.length} eliminado(s), ${failedIds.length} fallaron.`);
+            } else {
+                toast.error('No se pudo eliminar ningún invitado. Revisa la consola para más detalles.');
+            }
+        } catch (err: any) {
+            console.error('[BulkDelete] Fatal error:', err);
+            toast.error('Error crítico al eliminar: ' + (err.message || 'Error desconocido'));
+        } finally {
+            setIsDeletingBulk(false);
+        }
+    };
+
+    const handleExportTablesPDF = () => {
+        console.log('[ExportTables] Iniciando exportación de mesas...');
+        try {
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.setTextColor(27, 46, 29);
+            doc.text(`Distribución de Mesas - ${event?.title || 'Evento'}`, 14, 22);
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Reporte de asignación de asientos`, 14, 30);
+
+            const tableData: any[] = [];
+            tables.forEach(table => {
+                const tableGuests = guests.filter(g => g.table_id === table.id);
+                if (tableGuests.length === 0) {
+                    tableData.push([{ content: table.name, styles: { fontStyle: 'bold', fillColor: [240, 240, 240] } }, '(Mesa Vacía)', '0']);
+                } else {
+                    tableGuests.forEach((g, index) => {
+                        tableData.push([
+                            index === 0 ? { content: table.name, styles: { fontStyle: 'bold', fillColor: [240, 240, 240] } } : '',
+                            g.name,
+                            getGuestPax(g).toString()
+                        ]);
+                    });
+                }
+            });
+
+            autoTable(doc, {
+                startY: 35,
+                head: [['Mesa', 'Invitado', 'PAX']],
+                body: tableData,
+                headStyles: { fillColor: [189, 116, 116] }, // #BD7474
+                theme: 'grid',
+                margin: { top: 35 }
+            });
+
+            // 1. Intentar descarga directa
+            const dataUri = doc.output('datauristring');
+            const link = document.createElement('a');
+            link.href = dataUri;
+            link.download = `Mesas_${(event?.title || 'Evento').replace(/\s+/g, '_')}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // 2. Abrir en pestaña nueva
+            setTimeout(() => {
+                window.open(doc.output('bloburl'), '_blank');
+            }, 100);
+
+            toast.success('Reporte de mesas generado');
+        } catch (error) {
+            console.error('[ExportTables] Error fatal:', error);
+            toast.error('Error al generar PDF de mesas.');
+        }
+    };
 
     if (loading) return <div className="flex h-screen items-center justify-center">Cargando...</div>;
 
@@ -386,6 +734,157 @@ const EventRSVPs: React.FC = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-12 space-y-12 bg-[#FDFBF7]">
+            {/* Hidden CSV Input */}
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleImportCSV} 
+                accept=".csv" 
+                className="hidden" 
+            />
+
+            {/* Import Errors Modal */}
+            {importErrors && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setImportErrors(null)} />
+                    <div className="relative w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl border border-stone-100 p-10 max-h-[80vh] flex flex-col">
+                        <div className="flex justify-between items-center mb-8 flex-shrink-0">
+                            <div className="flex items-center gap-4">
+                                <div className="h-12 w-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500">
+                                    <AlertTriangle className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-serif text-[#1B2E1D]">Reporte de Importación</h3>
+                                    <p className="text-stone-400 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-300 hover:text-rose-500 transition-all">
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto pr-4 space-y-3">
+                            {importErrors.map((err, idx) => (
+                                <div key={idx} className="p-4 bg-stone-50 border border-stone-100 rounded-2xl flex gap-4 items-start">
+                                    <div className="h-2 w-2 rounded-full bg-amber-300 mt-1.5 flex-shrink-0" />
+                                    <p className="text-sm text-stone-600 leading-relaxed font-light">{err}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-10 flex-shrink-0">
+                            <button 
+                                onClick={() => setImportErrors(null)}
+                                className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-black transition-all"
+                            >
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Guest Modal */}
+            {isAddGuestOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10 animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setIsAddGuestOpen(false)} />
+                    <div className="relative w-full max-w-2xl bg-white rounded-[3rem] p-10 sm:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-stone-100">
+                        <div className="flex justify-between items-start mb-12">
+                            <div className="space-y-2">
+                                <h3 className="text-4xl font-serif text-[#1B2E1D]">Nuevo Invitado</h3>
+                                <p className="text-stone-400 text-sm italic">Genera un enlace único de confirmación.</p>
+                            </div>
+                            <button onClick={() => setIsAddGuestOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-50 text-stone-300 hover:text-rose-500 flex items-center justify-center transition-all">
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+                        
+                        <form onSubmit={saveNewGuest} className="space-y-6">
+                            <div className="grid sm:grid-cols-2 gap-8">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Nombre del Invitado</label>
+                                    <input 
+                                        type="text" 
+                                        required 
+                                        autoFocus
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] text-lg font-serif" 
+                                        placeholder="Ej. Sofía Velázquez"
+                                        value={newGuest.name} 
+                                        onChange={(e) => setNewGuest({...newGuest, name: e.target.value})} 
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Grupo / Familia</label>
+                                    <input 
+                                        type="text" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        placeholder="Ej. Familia Velázquez"
+                                        value={newGuest.group_name} 
+                                        onChange={(e) => setNewGuest({...newGuest, group_name: e.target.value})} 
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-8">
+                                <div className="space-y-3">
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">WhatsApp <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
+                                    <input 
+                                        type="tel" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        placeholder="Ej. +525512345678"
+                                        value={newGuest.phone} 
+                                        onChange={(e) => setNewGuest({...newGuest, phone: e.target.value})} 
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Email <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
+                                    <input 
+                                        type="email" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        placeholder="Ej. juan@correo.com"
+                                        value={newGuest.email} 
+                                        onChange={(e) => setNewGuest({...newGuest, email: e.target.value})} 
+                                    />
+                                </div>
+                            </div>
+                            <div className="space-y-3">
+                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Acompañantes Adicionales</label>
+                                <div className="flex items-center gap-6 bg-[#FDFBF7] p-4 rounded-2xl w-full sm:w-1/2">
+                                    <button 
+                                        type="button"
+                                        onClick={() => setNewGuest({...newGuest, max_plus_ones: Math.max(0, newGuest.max_plus_ones - 1)})}
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                    >
+                                        -
+                                    </button>
+                                    <div className="flex-1 text-center">
+                                        <span className="text-2xl font-serif font-bold text-[#1B2E1D]">{newGuest.max_plus_ones}</span>
+                                        <p className="text-[9px] uppercase tracking-tighter text-stone-300 font-bold">Adicionales</p>
+                                    </div>
+                                    <button 
+                                        type="button"
+                                        onClick={() => setNewGuest({...newGuest, max_plus_ones: newGuest.max_plus_ones + 1})}
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSavingGuest}
+                                className="w-full py-6 bg-[#1B2E1D] text-white rounded-2xl text-[11px] uppercase font-bold tracking-[0.3em] shadow-2xl hover:bg-[#2C482F] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                            >
+                                {isSavingGuest ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        Guardando...
+                                    </>
+                                ) : 'Guardar y Generar Enlace'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
             {/* Top Navigation & Fast Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
                 <div className="flex flex-col gap-2">
@@ -592,6 +1091,23 @@ const EventRSVPs: React.FC = () => {
             {/* Content Rendering */}
             {activeTab === 'list' && (
                 <div className="space-y-6">
+                    {/* Action Buttons Row */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <button 
+                            onClick={() => setIsAddGuestOpen(true)}
+                            className="flex-1 sm:flex-none px-8 h-14 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
+                        >
+                            <UserPlus className="h-5 w-5" /> Añadir Invitado
+                        </button>
+                        <button 
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex-1 sm:flex-none px-8 h-14 bg-white text-[#1B2E1D] border-2 border-dashed border-stone-300 rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-3 hover:border-[#1B2E1D] hover:bg-stone-50 transition-all"
+                        >
+                            <Upload className="h-5 w-5" /> Importar CSV
+                        </button>
+                    </div>
+
+                    {/* Search & Filters */}
                     <div className="flex flex-col md:flex-row gap-4 justify-between bg-white p-4 rounded-2xl border border-stone-100 shadow-sm">
                         <div className="relative flex-1">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
@@ -616,7 +1132,7 @@ const EventRSVPs: React.FC = () => {
                                     {f.label}
                                 </button>
                             ))}
-                            <button onClick={handleExportCSV} className="p-3 bg-stone-50 rounded-xl text-stone-400 hover:text-[#1B2E1D]" title="Exportar CSV">
+                            <button onClick={handleExportPDF} className="p-3 bg-stone-50 rounded-xl text-stone-400 hover:text-[#1B2E1D]" title="Exportar PDF">
                                 <Download className="h-4 w-4" />
                             </button>
                             <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="p-3 bg-stone-50 rounded-xl text-stone-400">
@@ -625,12 +1141,80 @@ const EventRSVPs: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Bulk Actions Bar */}
+                    {selectedIds.size > 0 && (
+                        <div className="flex items-center justify-between bg-rose-50 border border-rose-100 p-4 rounded-2xl shadow-sm animate-in slide-in-from-top-2 duration-300">
+                            <div className="flex items-center gap-3">
+                                <div className="h-10 w-10 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 font-bold text-sm">
+                                    {selectedIds.size}
+                                </div>
+                                <span className="text-sm text-rose-700 font-medium">
+                                    {isBulkConfirmOpen 
+                                        ? `¿Confirmas eliminar ${selectedIds.size} invitado${selectedIds.size > 1 ? 's' : ''}?`
+                                        : `invitado${selectedIds.size > 1 ? 's' : ''} seleccionado${selectedIds.size > 1 ? 's' : ''}`}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                {isBulkConfirmOpen ? (
+                                    <>
+                                        <button 
+                                            onClick={() => setIsBulkConfirmOpen(false)}
+                                            className="px-5 py-2.5 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                        >
+                                            No, cancelar
+                                        </button>
+                                        <button 
+                                            onClick={handleBulkDelete}
+                                            disabled={isDeletingBulk}
+                                            className="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all disabled:opacity-60 flex items-center gap-2"
+                                        >
+                                            {isDeletingBulk ? (
+                                                <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Borrando...</>
+                                            ) : (
+                                                <><Check className="h-3.5 w-3.5" /> Sí, eliminar ahora</>
+                                            )}
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button 
+                                            onClick={() => { setSelectedIds(new Set()); setIsBulkConfirmOpen(false); }}
+                                            className="px-5 py-2.5 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                        >
+                                            Cancelar
+                                        </button>
+                                        <button 
+                                            onClick={() => setIsBulkConfirmOpen(true)}
+                                            className="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all flex items-center gap-2"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" /> Eliminar Seleccionados
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     <div className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden">
                         {viewMode === 'table' ? (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                     <thead className="bg-[#FDFBF7] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
                                         <tr>
+                                            <th className="px-4 py-6 w-12">
+                                                <button 
+                                                    onClick={toggleSelectAll}
+                                                    className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                        selectedIds.size > 0 && selectedIds.size === filteredGuests.length
+                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                            : selectedIds.size > 0 
+                                                                ? 'bg-[#1B2E1D]/30 border-[#1B2E1D] text-white'
+                                                                : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
+                                                    }`}
+                                                >
+                                                    <Check className="h-3 w-3" />
+                                                </button>
+                                            </th>
                                             <th className="px-8 py-6">Invitado</th>
                                             <th className="px-8 py-6">Grupo</th>
                                             <th className="px-8 py-6 text-center">Enviado</th>
@@ -644,7 +1228,19 @@ const EventRSVPs: React.FC = () => {
                                     </thead>
                                     <tbody className="divide-y divide-stone-50">
                                         {filteredGuests.map(g => (
-                                            <tr key={g.id} className="hover:bg-stone-50/50 transition-all">
+                                            <tr key={g.id} className={`transition-all ${selectedIds.has(g.id) ? 'bg-rose-50/50' : 'hover:bg-stone-50/50'}`}>
+                                                <td className="px-4 py-6">
+                                                    <button 
+                                                        onClick={() => toggleSelectGuest(g.id)}
+                                                        className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                            selectedIds.has(g.id)
+                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                                : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
+                                                        }`}
+                                                    >
+                                                        <Check className="h-3 w-3" />
+                                                    </button>
+                                                </td>
                                                 <td className="px-8 py-6 font-medium text-[#1B2E1D]">
                                                     {editingGuestId === g.id ? <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-200 px-3 py-1.5 rounded-lg w-full" /> : g.name}
                                                 </td>
@@ -943,11 +1539,22 @@ const EventRSVPs: React.FC = () => {
 
             {activeTab === 'tables' && (
                 <div className="space-y-8">
-                    <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm flex justify-between items-center">
+                    <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
                         <h3 className="font-serif text-xl">Distribución de Mesas</h3>
-                        <button onClick={() => setIsAddingTable(!isAddingTable)} className="px-6 py-3 bg-[#BD7474] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest">
-                            {isAddingTable ? 'Cancelar' : 'Nueva Mesa'}
-                        </button>
+                        <div className="flex gap-3 w-full sm:w-auto">
+                            <button 
+                                onClick={handleExportTablesPDF}
+                                className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-200 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#1B2E1D] transition-all"
+                            >
+                                <Download className="h-4 w-4" /> Exportar PDF
+                            </button>
+                            <button 
+                                onClick={() => setIsAddingTable(!isAddingTable)} 
+                                className="flex-1 sm:flex-none px-6 py-3 bg-[#BD7474] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#A65B5B] transition-all"
+                            >
+                                {isAddingTable ? 'Cancelar' : 'Nueva Mesa'}
+                            </button>
+                        </div>
                     </div>
                     {isAddingTable && (
                         <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid md:grid-cols-3 gap-6 items-end">

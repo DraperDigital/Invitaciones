@@ -23,6 +23,7 @@ const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn')
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
 const PrivacyPolicy       = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Concierge           = React.lazy(() => import('./pages/Concierge'));
+const ConciergeLanding    = React.lazy(() => import('./pages/ConciergeLanding'));
 const DesignEditor        = React.lazy(() => import('./pages/DesignEditor'));
 
 // Minimal inline fallback — no external imports, matches app background
@@ -52,6 +53,7 @@ function AppRoutes() {
         <Route path="/i/:slug"       element={<InvitationPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/concierge"     element={<Concierge />} />
+        <Route path="/concierge-service" element={<ConciergeLanding />} />
 
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={
@@ -77,6 +79,8 @@ function AppRoutes() {
   );
 }
 
+import ScrollToTop from './components/ScrollToTop';
+
 function App() {
   return (
     // Boundary externo: captura errores en AuthProvider o BrowserRouter
@@ -84,6 +88,8 @@ function App() {
       <ToastProvider>
         <AuthProvider>
           <BrowserRouter>
+            {/* Reset scroll on navigation */}
+            <ScrollToTop />
             {/* Boundary interno: captura errores de render en cualquier ruta */}
             <ErrorBoundary>
               <AppRoutes />
