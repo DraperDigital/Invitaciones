@@ -21,11 +21,33 @@ export default function ExamplesPage() {
     const { user } = useAuth();
 
     const filteredExamples = useMemo(() => {
+        const SHOWCASE_SLUGS = [
+            'boda-isabel-rodrigo', 
+            'boda-gabriela-arturo-premium', 
+            'xv-regina-2026-premium', 
+            'cumple-miguel-40', 
+            'bautizo-victoria', 
+            'graduacion-ana-psicologia-premium',
+            'comunion-gael-premium'
+        ];
+        const SHOWCASE_EVENTS = MOCK_EVENTS.filter(e => SHOWCASE_SLUGS.includes(e.slug));
+
         if (activeCategory === 'todas') {
-            return MOCK_EVENTS.filter(event => event.is_published);
+            return SHOWCASE_EVENTS.filter(event => event.is_published);
         }
-        return MOCK_EVENTS.filter(
-            event => event.is_published && event.event_type.toLowerCase().includes(activeCategory)
+        
+        const mapCategoryToEventType = (cat: string) => {
+            switch (cat) {
+                case 'boda': return 'wedding';
+                case 'cumpleanos': return 'birthday';
+                default: return cat;
+            }
+        };
+        
+        const targetType = mapCategoryToEventType(activeCategory);
+        
+        return SHOWCASE_EVENTS.filter(
+            event => event.is_published && event.event_type.toLowerCase() === targetType
         );
     }, [activeCategory]);
 
@@ -130,9 +152,12 @@ export default function ExamplesPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredExamples.map((event) => {
-                            const categoryInfo = categories.find(c =>
-                                event.event_type.toLowerCase().includes(c.id)
-                            ) || categories[0];
+                            const eventTypeToCategory: Record<string, string> = {
+                                wedding: 'boda', xv: 'xv', birthday: 'cumpleanos',
+                                bautizo: 'bautizo', graduacion: 'graduacion', comunion: 'comunion'
+                            };
+                            const catId = eventTypeToCategory[event.event_type] || 'todas';
+                            const categoryInfo = categories.find(c => c.id === catId) || categories[1];
 
                             return (
                                 <Link
@@ -140,51 +165,86 @@ export default function ExamplesPage() {
                                     to={`/i/${event.slug}?t=token-preview`}
                                     className="group"
                                 >
-                                    <div className="bg-white border-2 border-stone-200 rounded-2xl overflow-hidden hover:border-accent hover:shadow-xl transition-all">
-                                        {/* Preview - Themed gradient by event type */}
+                                    <div className="bg-white border border-stone-200 rounded-[2rem] overflow-hidden hover:border-stone-300 hover:shadow-2xl transition-all duration-500 relative flex flex-col h-full">
+                                        
+                                        {/* Thumbnail Area */}
                                         {(() => {
-                                            const gradients: Record<string, string> = {
-                                                wedding: 'from-stone-100 via-amber-50 to-stone-200',
-                                                xv: 'from-pink-50 via-rose-100 to-pink-200',
-                                                birthday: 'from-sky-50 via-blue-100 to-indigo-100',
-                                                bautizo: 'from-cyan-50 via-teal-100 to-cyan-200',
-                                                graduacion: 'from-violet-50 via-purple-100 to-violet-200',
-                                                comunion: 'from-stone-50 via-slate-100 to-stone-200',
+                                            const thumbnails: Record<string, string[]> = {
+                                                wedding: [
+                                                    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop',
+                                                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop',
+                                                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop'
+                                                ],
+                                                xv: [
+                                                    'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop',
+                                                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800&auto=format&fit=crop'
+                                                ],
+                                                birthday: [
+                                                    'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?q=80&w=800&auto=format&fit=crop',
+                                                    'https://images.unsplash.com/photo-1513271239644-245c61eb6e60?q=80&w=800&auto=format&fit=crop'
+                                                ],
+                                                bautizo: [
+                                                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop'
+                                                ],
+                                                graduacion: [
+                                                    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop'
+                                                ],
+                                                comunion: [
+                                                    'https://images.unsplash.com/photo-1438032005730-c7aedb098c71?q=80&w=800&auto=format&fit=crop'
+                                                ],
                                             };
-                                            const gradient = gradients[event.event_type] || 'from-stone-50 via-stone-100 to-stone-200';
-                                            const Icon = categoryInfo.icon;
+                                            const typeThumbnails = thumbnails[event.event_type] || thumbnails.wedding;
+                                            const hash = event.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                            const thumbnailUrl = event.theme_config?.thumbnail_url || typeThumbnails[hash % typeThumbnails.length];
+                                            
+                                            const isPremium = event.theme_config?.isPremium || event.slug?.endsWith('-premium');
+                                            const isPro = event.theme_config?.isPro || event.slug?.endsWith('-pro');
+                                            const planLabel = isPremium ? 'Premium' : isPro ? 'Pro' : 'Clásica';
+                                            const planColor = isPremium ? 'bg-stone-900/80 text-amber-300 border border-amber-300/30' : isPro ? 'bg-stone-900/80 text-white border border-stone-600/50' : 'bg-white/80 text-stone-700 border border-stone-200/50';
+
                                             return (
-                                                <div className={`aspect-[3/4] bg-gradient-to-br ${gradient} flex flex-col items-center justify-center relative overflow-hidden`}>
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    <Icon className={`h-14 w-14 mb-4 ${categoryInfo.color} opacity-60`} />
-                                                    <p className="text-[10px] uppercase tracking-widest text-stone-500 font-bold">
-                                                        {event.event_type}
-                                                    </p>
+                                                <div className="relative aspect-[3/4] w-full overflow-hidden">
+                                                    <img 
+                                                        src={thumbnailUrl} 
+                                                        alt={event.title} 
+                                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    />
+                                                    
+                                                    {/* Gradient Overlay */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20 opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                                                    
+                                                    {/* Plan Badge */}
+                                                    <div className="absolute top-4 right-4 z-10">
+                                                        <span className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold backdrop-blur-md shadow-lg ${planColor}`}>
+                                                            {planLabel}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Hover "Ver Ejemplo" Button */}
+                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
+                                                        <div className="px-6 py-3 bg-white/90 backdrop-blur-md text-stone-900 rounded-full font-serif text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl border border-white/50">
+                                                            <Sparkles className="h-4 w-4 text-accent" />
+                                                            Ver Plantilla
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             );
                                         })()}
 
-                                        {/* Card Content */}
-                                        <div className="p-4">
-                                            <div className="mb-2">
-                                                <span className="inline-block px-2 py-1 rounded-full bg-accent-light/20 text-accent text-xs font-medium">
-                                                    {event.event_type}
+                                        {/* Card Content Footer */}
+                                        <div className="p-6 bg-white flex flex-col flex-grow relative z-30">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <categoryInfo.icon className={`h-4 w-4 ${categoryInfo.color}`} />
+                                                <span className="text-xs uppercase tracking-widest text-stone-500 font-medium">
+                                                    {categoryInfo.name}
                                                 </span>
                                             </div>
-                                            <h3 className="text-lg font-semibold text-stone-900 mb-1 group-hover:text-accent transition-colors">
+                                            <h3 className="text-xl font-serif text-stone-900 mb-2 line-clamp-1 group-hover:text-accent transition-colors">
                                                 {event.title}
                                             </h3>
-                                            <p className="text-sm text-stone-500 mb-3">
-                                                {new Date(event.date_time).toLocaleDateString('es-MX', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}
+                                            <p className="text-sm text-stone-400 mt-auto">
+                                                Diseño Exclusivo Invitto
                                             </p>
-                                            <div className="text-accent text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                                                Ver ejemplo
-                                                <span>→</span>
-                                            </div>
                                         </div>
                                     </div>
                                 </Link>

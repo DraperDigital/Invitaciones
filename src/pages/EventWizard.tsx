@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Button } from '../components/ui/Button';
 import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper } from 'lucide-react';
+import { getLayoutForEventType } from '../lib/sectionRegistry';
 
 type WizardData = {
     title: string;
@@ -20,6 +21,7 @@ type WizardData = {
     dress_code: string;
     rsvp_deadline: string;
     theme: string;
+    venue_time: string;
 };
 
 const INITIAL_DATA: WizardData = {
@@ -36,6 +38,76 @@ const INITIAL_DATA: WizardData = {
     dress_code: '',
     rsvp_deadline: '',
     theme: 'classic',
+    venue_time: '',
+};
+
+// ── Presets por tipo de evento ────────────────────────────────────────────
+// Solo se aplican al CREAR (no al editar). Definen qué módulos van activos
+// por defecto según el tipo de evento seleccionado.
+const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
+    xv: {
+        showDetails:      true,   // Dress Code
+        showItinerary:    true,   // Itinerario
+        showGallery:      true,   // Galería
+        showMap:          true,   // Mapa
+        showWhatsAppRSVP: true,   // RSVP
+        showCountdown:    true,   // Cuenta regresiva
+        showGifts:        false,  // Mesa de regalos (opcional)
+    },
+    wedding: {
+        showDetails:      true,   // Dress Code
+        showItinerary:    true,   // Itinerario
+        showMap:          true,   // Mapa
+        showWhatsAppRSVP: true,   // RSVP
+        showCountdown:    true,   // Cuenta regresiva
+        showGifts:        true,   // Mesa de regalos
+        showGallery:      false,  // Galería (opcional por plan)
+    },
+    birthday: {
+        showMap:          true,   // Mapa
+        showWhatsAppRSVP: true,   // RSVP
+        showCountdown:    true,   // Cuenta regresiva
+        showDetails:      false,  // Sin dress code por defecto
+        showItinerary:    false,  // Sin itinerario
+        showGallery:      false,
+        showGifts:        false,
+    },
+    bautizo: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      true,
+        showItinerary:    false,
+        showGallery:      false,
+        showGifts:        true,
+    },
+    graduacion: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      false,
+        showItinerary:    true,
+        showGallery:      false,
+        showGifts:        false,
+    },
+    corporate: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    false,
+        showDetails:      true,
+        showItinerary:    true,
+        showGallery:      false,
+        showGifts:        false,
+    },
+    other: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      false,
+        showItinerary:    false,
+        showGallery:      false,
+        showGifts:        false,
+    },
 };
 
 export default function EventWizard() {
@@ -53,7 +125,12 @@ export default function EventWizard() {
     const isEditing = !!id;
 
     useEffect(() => {
-        if (!id || !user || dataLoaded) return;
+        if (!user || dataLoaded) return;
+
+        if (!id) {
+            setDataLoaded(true);
+            return;
+        }
 
         const fetchEvent = async () => {
             try {
@@ -79,7 +156,8 @@ export default function EventWizard() {
                         misa_time: eventData.theme_config?.misa_time || eventData.theme_config?.misaTime || '',
                         dress_code: eventData.dress_code || '',
                         rsvp_deadline: eventData.rsvp_deadline ? new Date(eventData.rsvp_deadline).toISOString().slice(0, 10) : '',
-                        theme: eventData.theme_config?.theme || 'classic'
+                        theme: eventData.theme_config?.theme || 'classic',
+                        venue_time: eventData.theme_config?.venue_time || ''
                     });
                 }
             } catch (err: any) {
@@ -141,7 +219,8 @@ export default function EventWizard() {
                     misa_name: data.misa_name,
                     misa_address: data.misa_address,
                     misa_maps_link: data.misa_maps_link,
-                    misa_time: data.misa_time
+                    misa_time: data.misa_time,
+                    venue_time: data.venue_time
                 };
                 
                 const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
@@ -149,17 +228,24 @@ export default function EventWizard() {
                 toast.success('¡Evento actualizado!');
                 navigate(`/dashboard/event/${id}`);
             } else {
+                const eventPreset = EVENT_TYPE_PRESETS[data.event_type] || EVENT_TYPE_PRESETS.other;
+                const layoutOrder = getLayoutForEventType(data.event_type);
                 const insertPayload = {
                     id: crypto.randomUUID(),
                     ...payload,
                     user_id: user.id,
                     is_published: true,
-                    theme_config: { 
+                    theme_config: {
                         theme: data.theme,
                         misa_name: data.misa_name,
                         misa_address: data.misa_address,
                         misa_maps_link: data.misa_maps_link,
-                        misa_time: data.misa_time
+                        misa_time: data.misa_time,
+                        venue_time: data.venue_time,
+                        // Preset de módulos activos según tipo de evento
+                        ...eventPreset,
+                        // Preset de orden de secciones según tipo de evento
+                        sectionOrder: layoutOrder,
                     },
                     slug: `${data.title.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 7)}`,
                 };
@@ -306,15 +392,26 @@ export default function EventWizard() {
                         {/* Sección Celebración */}
                         <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-900">Celebración</h3>
-                            <div>
-                                <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
-                                <input
-                                    type="text"
-                                    value={data.venue_name}
-                                    onChange={(e) => updateData({ venue_name: e.target.value })}
-                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                    placeholder="Ej. Hacienda Los Arcos"
-                                />
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
+                                    <input
+                                        type="text"
+                                        value={data.venue_name}
+                                        onChange={(e) => updateData({ venue_name: e.target.value })}
+                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        placeholder="Ej. Hacienda Los Arcos"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-stone-500 mb-1">Hora de Inicio</label>
+                                    <input
+                                        type="time"
+                                        value={data.venue_time}
+                                        onChange={(e) => updateData({ venue_time: e.target.value })}
+                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    />
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-xs font-medium text-stone-500 mb-1">Dirección</label>

@@ -8,9 +8,30 @@
     background-color: #ffffff;
   }
 
-  h1,
-  h2,
-  h3 {
+  :root {
+    --color-accent: 212 175 55; /* Default Classic gold (#d4af37) */
+    --font-serif: "Playfair Display", serif;
+    --font-sans: "Inter", sans-serif;
+  }
+
+  [data-theme-font="elegante"] {
+    --font-serif: "Playfair Display", serif;
+    --font-sans: "Manrope", sans-serif;
+  }
+
+  [data-theme-font="moderna"] {
+    --font-serif: "Outfit", sans-serif;
+    --font-sans: "Inter", sans-serif;
+  }
+
+  [data-theme-font="romantica"] {
+    --font-serif: "Libre Baskerville", serif;
+    --font-sans: "Lato", sans-serif;
+  }
+
+  .invitation-content h1,
+  .invitation-content h2,
+  .invitation-content h3 {
     @apply font-serif;
   }
 }
@@ -26,8 +47,8 @@
   .card-premium {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 
   .btn-premium {

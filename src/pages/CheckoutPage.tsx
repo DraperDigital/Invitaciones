@@ -125,7 +125,11 @@ export default function CheckoutPage() {
 
             setIsSuccess(true);
             setTimeout(() => {
-                navigate(`/dashboard/design/${eventId}?upgrade=success`);
+                if (eventId) {
+                    navigate(`/dashboard/design/${eventId}?upgrade=success`);
+                } else {
+                    navigate(`/dashboard/new`);
+                }
             }, 3000);
 
         } catch (err: any) {

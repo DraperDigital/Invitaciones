@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { FeatureAccessResponse } from '../types/database.types';
 
-export function useFeatureAccess(eventId: string | undefined) {
+export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasico' | 'pro' | 'premium') {
     const [isLoading, setIsLoading] = useState(true);
     const [access, setAccess] = useState<FeatureAccessResponse | null>(null);
     const [error, setError] = useState<any>(null);
@@ -10,9 +10,10 @@ export function useFeatureAccess(eventId: string | undefined) {
     useEffect(() => {
         if (!eventId) return;
 
-        // MOCK MODE: return clasico plan so feature gates work correctly in dev
+        // MOCK MODE: use the actual plan passed in (from theme_config)
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            setAccess({ plan: { code: 'clasico', name: 'Clásico' }, features: [] } as any);
+            const plan = eventPlan || 'clasico';
+            setAccess({ plan: { code: plan, name: plan === 'premium' ? 'Premium' : plan === 'pro' ? 'Pro' : 'Clásico' }, features: [] } as any);
             setIsLoading(false);
             return;
         }
@@ -25,28 +26,43 @@ export function useFeatureAccess(eventId: string | undefined) {
                     .rpc('get_event_feature_access', { p_event_id: eventId });
 
                 if (rpcError) {
-                    console.warn('Feature access RPC failed, falling back to classic:', rpcError);
+                    if (rpcError.code === 'PGRST205') {
+                        console.error('CRITICAL: Ambiguous function detection in database. Multiple versions of get_event_feature_access exist. Please run the SQL cleanup script.');
+                    }
+                    
+                    console.warn('Feature access RPC failed, trying profile fallback...', {
+                        code: rpcError.code,
+                        message: rpcError.message
+                    });
+
+                    // SECONDARY FALLBACK: Try to get plan from profile
+                    const { data: profileData } = await supabase
+                        .from('profiles')
+                        .select('plan_tier')
+                        .eq('id', (await supabase.auth.getUser()).data.user?.id)
+                        .single();
+
+                    const planTier = (profileData?.plan_tier as any) || 'clasico';
+                    const isPremiumOrPro = planTier === 'premium' || planTier === 'pro' || planTier === 'personalizado';
+
                     setAccess({ 
-                        plan: { code: 'clasico', name: 'Clásico' }, 
+                        plan: { 
+                            code: planTier, 
+                            name: planTier === 'premium' ? 'Premium' : planTier === 'pro' ? 'Pro' : 'Clásico' 
+                        }, 
                         features: [
-                            // Basic features (Enabled)
-                            { code: 'show_details', name: 'Información General', status: 'enabled' },
-                            { code: 'show_countdown', name: 'Cuenta Regresiva', status: 'enabled' },
-                            { code: 'show_map', name: 'Ubicación', status: 'enabled' },
-                            { code: 'show_gallery', name: 'Galería Básica', status: 'enabled' },
-                            { code: 'show_whatsapp_rsvp', name: 'Confirmación WhatsApp', status: 'enabled' },
-                            { code: 'show_gifts', name: 'Mesa de Regalos', status: 'enabled' },
-                            
-                            // Premium/Pro features (Locked by status 'disabled')
-                            { code: 'guest_dashboard', status: 'disabled' },
-                            { code: 'reminders_automatic', status: 'disabled' },
-                            { code: 'export_excel', status: 'disabled' },
-                            { code: 'metrics_dashboard', status: 'disabled' },
-                            { code: 'ai_assistant', status: 'disabled' },
-                            { code: 'qr_passes', status: 'disabled' },
-                            { code: 'access_control', status: 'disabled' },
-                            { code: 'custom_domain', status: 'disabled' },
-                            { code: 'table_management', status: 'disabled' }
+                            { code: 'show_details', status: 'enabled' },
+                            { code: 'show_countdown', status: 'enabled' },
+                            { code: 'show_map', status: 'enabled' },
+                            { code: 'show_gallery', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'show_whatsapp_rsvp', status: 'enabled' },
+                            { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' }
                         ] 
                     } as any);
                     return;
@@ -62,26 +78,27 @@ export function useFeatureAccess(eventId: string | undefined) {
         };
 
         fetchAccess();
-    }, [eventId]);
+    }, [eventId, eventPlan]);
 
     const hasFeature = (featureCode: string): boolean => {
         if (!access) return false;
         
         const plan = access.plan?.code?.toLowerCase() || '';
-        const isPersonalized = ['pro', 'personalized', 'personalizado'].includes(plan);
-        const isPremium = plan === 'premium' || isPersonalized;
+        const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
+        const isPremium = plan === 'premium';
 
-        // Pro/Personalizado has access to EVERYTHING
-        if (isPersonalized) return true;
+        // Premium has access to EVERYTHING
+        if (isPremium) return true;
 
-        // Premium has access to specific dashboard features
-        const premiumFeatures = [
+        // Pro has access to specific dashboard features
+        const proFeatures = [
             'metrics_dashboard', 
             'guest_dashboard', 
             'reminders_automatic', 
-            'guest_import_excel'
+            'guest_import_excel',
+            'table_management'
         ];
-        if (isPremium && premiumFeatures.includes(featureCode)) return true;
+        if (isPro && proFeatures.includes(featureCode)) return true;
 
         const feature = access.features.find(f => f.code === featureCode);
         return feature?.status === 'enabled';

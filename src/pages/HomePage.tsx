@@ -321,7 +321,7 @@ export default function HomePage() {
                     <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
                         {/* Plan Clásico */}
                         <div className="p-12 rounded-[3rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center">
-                             <h4 className="text-3xl font-serif mb-2">Clásico</h4>
+                             <h4 className="text-3xl font-serif mb-2">Clásica</h4>
                              <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-8">SOLO LO BÁSICO</p>
                              <div className="text-5xl font-serif mb-6 text-[#1B2E1D]">$499</div>
                              <p className="text-sm font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200">“Solo quiero mi invitación bonita”</p>
@@ -367,7 +367,7 @@ export default function HomePage() {
                              <div className="absolute -top-6 bg-[#BD7474] text-white px-8 py-2 rounded-full text-[11px] uppercase font-black tracking-widest flex items-center gap-2 shadow-xl shadow-[#BD7474]/20">
                                 <Sparkles className="h-4 w-4" /> MÁS POPULAR
                              </div>
-                             <h4 className="text-3xl font-serif mb-2">Premium</h4>
+                             <h4 className="text-3xl font-serif mb-2">Pro</h4>
                              <p className="text-[10px] uppercase font-bold tracking-widest text-[#BD7474] mb-8">CONTROL TOTAL DE TUS INVITADOS</p>
                              <div className="text-6xl font-serif mb-6">$1,699</div>
                              <p className="text-sm font-medium text-[#BD7474] italic mb-10 w-full pb-6 border-b border-[#2D312E] uppercase tracking-tighter">“Ya sé exactamente quién sí va a ir”</p>
@@ -396,14 +396,14 @@ export default function HomePage() {
 
                         {/* Plan Pro */}
                         <div className="p-12 rounded-[3rem] border border-stone-100 bg-[#FDFBF7] flex flex-col items-center text-center">
-                             <h4 className="text-3xl font-serif mb-2">Personalizado</h4>
+                             <h4 className="text-3xl font-serif mb-2">Premium</h4>
                              <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-8">NOSOTROS LO HACEMOS POR TI</p>
                              <div className="text-5xl font-serif mb-6 text-[#1B2E1D]">$2,999+</div>
                              <p className="text-sm font-medium text-stone-500 italic mb-10 w-full pb-6 border-b border-stone-200">“Yo no me encargo de nada”</p>
                              
                              <ul className="space-y-4 mb-12 text-sm text-stone-400 font-light text-left w-full">
                                 {[
-                                    'Todo lo del plan Premium', 
+                                    'Todo lo del plan Pro', 
                                     'Configuración completa por nuestro equipo', 
                                     'Invitaciones con código QR', 
                                     'Control de acceso en tu evento', 
@@ -426,7 +426,7 @@ export default function HomePage() {
                     {/* LÍNEA DE CIERRE */}
                     <div className="mt-20 text-center max-w-2xl mx-auto">
                         <p className="text-stone-400 font-light italic text-lg leading-relaxed px-10">
-                            "La mayoría de eventos se desorganizan porque no saben quién va a ir. <span className="text-[#BD7474] font-semibold not-italic">Premium elimina ese problema por completo.</span>"
+                            "La mayoría de eventos se desorganizan porque no saben quién va a ir. <span className="text-[#BD7474] font-semibold not-italic">El plan Pro elimina ese problema por completo.</span>"
                         </p>
                     </div>
                 </div>

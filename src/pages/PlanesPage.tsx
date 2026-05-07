@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Heart, Sparkles, Crown, X } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function PlanesPage() {
+    const { user } = useAuth();
     const plans = [
+// ... (rest of the plans array remains the same)
         {
             id: 'clasico',
-            name: 'Clásico',
+            name: 'Clásica',
             price: '$499',
             period: 'MXN',
             description: 'Solo lo básico',
@@ -27,13 +30,13 @@ export default function PlanesPage() {
             cta: 'Solo quiero mi invitación',
         },
         {
-            id: 'premium',
-            name: 'Premium',
+            id: 'pro',
+            name: 'Pro',
             price: '$1,699',
             period: 'MXN',
             description: 'Control total de tus invitados',
             subcopy: '“Ya sé exactamente quién sí va a ir”',
-            icon: Crown,
+            icon: Sparkles,
             color: 'rose',
             popular: true,
             features: [
@@ -48,16 +51,16 @@ export default function PlanesPage() {
             cta: 'Quiero saber quién sí va a ir',
         },
         {
-            id: 'pro',
-            name: 'Personalizado',
+            id: 'premium',
+            name: 'Premium',
             price: '$2,999+',
             period: 'MXN',
             description: 'Nosotros lo hacemos por ti',
             subcopy: '“Yo no me encargo de nada”',
-            icon: Sparkles,
+            icon: Crown,
             color: 'emerald',
             features: [
-                'Todo lo del plan Premium',
+                'Todo lo del plan Pro',
                 'Configuración completa por nuestro equipo',
                 'Invitaciones con código QR',
                 'Control de acceso en tu evento',
@@ -80,8 +83,16 @@ export default function PlanesPage() {
                         Invitto
                     </Link>
                     <div className="flex items-center gap-8">
-                        <Link to="/login" className="text-[10px] uppercase font-bold tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-colors">Ingresar</Link>
-                        <Link to="/login" className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">Comenzar</Link>
+                        {user ? (
+                            <Link to="/dashboard" className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">
+                                Panel de Control
+                            </Link>
+                        ) : (
+                            <>
+                                <Link to="/login" className="text-[10px] uppercase font-bold tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-colors">Ingresar</Link>
+                                <Link to="/login" className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">Comenzar</Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </header>
@@ -201,7 +212,7 @@ export default function PlanesPage() {
                 <div className="max-w-4xl mx-auto px-8 text-center space-y-8">
                     <p className="text-stone-400 font-light italic text-2xl leading-relaxed">
                         "La mayoría de eventos se desorganizan porque no saben quién va a ir. <br />
-                        <span className="text-[#BD7474] font-semibold not-italic">Premium elimina ese problema por completo.</span>"
+                        <span className="text-[#BD7474] font-semibold not-italic">El plan Pro elimina ese problema por completo.</span>"
                     </p>
                 </div>
             </section>

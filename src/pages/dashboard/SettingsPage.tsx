@@ -69,14 +69,14 @@ export default function SettingsPage() {
 
     const getPlanLabel = (tier: string) => {
         const labels: Record<string, string> = {
-            'clasico':      'PLAN CLÁSICO',
-            'classic':      'PLAN CLÁSICO',
+            'clasico':      'PLAN CLÁSICA',
+            'classic':      'PLAN CLÁSICA',
             'premium':      'PLAN PREMIUM',
-            'pro':          'PLAN PERSONALIZADO',
-            'personalizado':'PLAN PERSONALIZADO',
-            'personalized': 'PLAN PERSONALIZADO',
+            'pro':          'PLAN PRO',
+            'personalizado':'PLAN PREMIUM',
+            'personalized': 'PLAN PREMIUM',
         };
-        return labels[tier] || 'PLAN CLÁSICO';
+        return labels[tier] || 'PLAN CLÁSICA';
     };
 
     return (
@@ -181,11 +181,20 @@ export default function SettingsPage() {
                             </div>
                         </div>
                         
-                        {!['pro', 'personalized', 'personalizado'].includes(profile.plan_tier?.toLowerCase() || '') && (
+                        {profile.plan_tier?.toLowerCase() !== 'premium' && (
                             <div className="pt-4 relative z-10">
-                                <Link to="/planes" className="block text-center p-4 rounded-2xl border border-white/10 hover:bg-white hover:text-[#1B2E1D] transition-all text-[9px] uppercase font-bold tracking-widest">
-                                    MEJORAR PLAN
+                                <Link 
+                                    to="/planes" 
+                                    className="group block text-center p-4 rounded-2xl bg-white text-[#1B2E1D] hover:bg-[#BD7474] hover:text-white transition-all text-[9px] font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-[#BD7474]/40 hover:-translate-y-1"
+                                >
+                                    <span className="flex items-center justify-center gap-2">
+                                        <Sparkles className="h-3 w-3 animate-pulse" />
+                                        Mejorar a Premium
+                                    </span>
                                 </Link>
+                                <p className="text-[8px] text-center mt-4 text-white/30 font-bold uppercase tracking-widest">
+                                    Desbloquea todas las funciones
+                                </p>
                             </div>
                         )}
                     </div>

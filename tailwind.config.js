@@ -11,8 +11,8 @@ export default {
                 primary: "#000000", // Pure black
                 secondary: "#1a1a1a", // Dark charcoal
 
-                // Accent - Gold
-                accent: "#d4af37", // Classic gold
+                // Accent - Dynamic via CSS variables
+                accent: "rgb(var(--color-accent) / <alpha-value>)",
                 'accent-light': "#f0e68c", // Light gold
                 'accent-dark': "#b8941e", // Dark gold
 
@@ -34,8 +34,8 @@ export default {
                 }
             },
             fontFamily: {
-                serif: ["Playfair Display", "serif"],
-                sans: ["Inter", "sans-serif"],
+                serif: 'var(--font-serif)',
+                sans: 'var(--font-sans)',
             },
             animation: {
                 'fade-in-up': 'fadeInUp 0.8s ease-out forwards',

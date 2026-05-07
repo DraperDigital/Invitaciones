@@ -50,17 +50,35 @@ export default function Dashboard() {
             return;
         }
 
-        // 2. Delete event
-        setDeletingId(deleteModal.eventId);
-        const { error } = await supabase.from('events').delete().eq('id', deleteModal.eventId);
-        if (error) {
-            setDeleteError('Error al eliminar: ' + error.message);
-        } else {
-            setEvents(prev => prev.filter(e => e.id !== deleteModal.eventId));
-            closeDeleteModal();
+        // 2. Delete related records first (RSVPs and Guests)
+        try {
+            // 1. Limpiar dependencias (RSVPs, Guests, Tables)
+            await supabase.from('rsvps').delete().eq('event_id', deleteModal.eventId);
+            await supabase.from('guests').delete().eq('event_id', deleteModal.eventId);
+            await supabase.from('event_tables').delete().eq('event_id', deleteModal.eventId);
+
+            // 2. Borrar el evento asegurando el user_id
+            const { data, error } = await supabase
+                .from('events')
+                .delete()
+                .eq('id', deleteModal.eventId)
+                .eq('user_id', user.id)
+                .select();
+            
+            if (error) {
+                setDeleteError('Error en la base de datos: ' + error.message);
+            } else if (!data || data.length === 0) {
+                setDeleteError('No se pudo borrar el evento. Verifica tus permisos.');
+            } else {
+                setEvents(prev => prev.filter(e => e.id !== deleteModal.eventId));
+                closeDeleteModal();
+            }
+        } catch (err: any) {
+            setDeleteError('Error inesperado: ' + err.message);
+        } finally {
+            setDeletingId(null);
+            setDeleteLoading(false);
         }
-        setDeletingId(null);
-        setDeleteLoading(false);
     };
 
     useEffect(() => {
@@ -136,12 +154,22 @@ export default function Dashboard() {
                 <div id="events-grid" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {events.map((event) => (
                         <div key={event.id} className="group relative flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-xl border border-stone-100">
-                            {/* Card Image Placeholder */}
+                            {/* Card Image */}
                             <div className="h-40 w-full bg-stone-200 relative overflow-hidden">
-                                <div className={`absolute inset-0 bg-gradient-to-br ${event.event_type === 'wedding' ? 'from-rose-100 to-teal-50' : 'from-indigo-50 to-pink-50'}`}></div>
-                                <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                                    <Calendar className="h-20 w-20" />
-                                </div>
+                                {(event.theme_config as any)?.hero_image_url ? (
+                                    <img 
+                                        src={(event.theme_config as any).hero_image_url} 
+                                        alt={event.title} 
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <>
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${event.event_type === 'wedding' ? 'from-rose-100 to-teal-50' : 'from-indigo-50 to-pink-50'}`}></div>
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                                            <Calendar className="h-20 w-20" />
+                                        </div>
+                                    </>
+                                )}
                                 <div className="absolute top-4 right-4">
                                     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-wider uppercase ${event.is_published ? 'bg-green-100 text-green-800' : 'bg-stone-100 text-stone-600'}`}>
                                         {event.is_published ? 'Publicado' : 'Borrador'}

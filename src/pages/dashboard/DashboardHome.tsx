@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Layout, Users, Zap, ArrowUpRight, Plus, Clock, Sparkles, PartyPopper, ArrowRight } from 'lucide-react';
+import { Layout, Users, Zap, ArrowUpRight, Plus, Clock, Sparkles, PartyPopper, ArrowRight, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const DashboardHome: React.FC = () => {
@@ -11,6 +11,7 @@ const DashboardHome: React.FC = () => {
     });
     const [recentEvents, setRecentEvents] = useState<any[]>([]);
     const [isPersonalized, setIsPersonalized] = useState(false);
+    const [tier, setTier] = useState('clasico');
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState(false);
 
@@ -35,11 +36,16 @@ const DashboardHome: React.FC = () => {
 
                 if (eventsError) throw eventsError;
 
-                // Check if any event has a pro/personalized plan
-                const hasPro = events?.some((e: any) =>
-                    ['pro', 'personalized', 'personalizado'].includes(e.plan?.toLowerCase() || '')
-                ) || false;
-                setIsPersonalized(hasPro);
+                // Check user plan from profile
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('plan_tier')
+                    .eq('id', user.id)
+                    .single();
+                
+                const currentTier = profile?.plan_tier?.toLowerCase() || 'clasico';
+                setTier(currentTier);
+                setIsPersonalized(['pro', 'premium', 'personalizado'].includes(currentTier));
 
                 // Fetch total guests for these events
                 const eventIds = events?.map(e => e.id) || [];
@@ -208,7 +214,7 @@ const DashboardHome: React.FC = () => {
                         <div key={event.id} className="group bg-white rounded-[2rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-xl transition-all">
                             <div className="aspect-video bg-stone-100 relative overflow-hidden">
                                 <img
-                                    src={event.theme_config?.theme === 'cecilia-70' ? '/images/cecilia_roses_hero.png' : 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=75'}
+                                    src={event.theme_config?.hero_image_url || event.theme_config?.heroImage || (event.theme_config?.theme === 'cecilia-70' ? '/images/cecilia_roses_hero.png' : 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=75')}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     alt={event.title}
                                     loading="lazy"
@@ -217,12 +223,23 @@ const DashboardHome: React.FC = () => {
                                 />
                                 <div className="absolute top-4 right-4 flex flex-col items-end gap-2">
                                     <div className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] uppercase font-bold tracking-tighter text-[#1B2E1D] shadow-sm">
-                                        {event.event_type === 'birthday' ? 'Cumpleaños' : 'Boda'}
+                                        {{
+                                            wedding: 'Boda',
+                                            xv: 'XV Años',
+                                            birthday: 'Cumpleaños',
+                                            bautizo: 'Bautizo',
+                                            graduacion: 'Graduación',
+                                            comunion: 'Comunión',
+                                            corporate: 'Corporativo',
+                                            other: 'Otro'
+                                        }[event.event_type as string] || event.event_type}
                                     </div>
-                                    <div className="px-3 py-1 bg-[#1B2E1D] text-white rounded-full text-[8px] uppercase font-black tracking-widest shadow-xl flex items-center gap-1.5 animate-pulse">
-                                        <Sparkles className="h-2.5 w-2.5 text-[#BD7474]" />
-                                        Personalizado
-                                    </div>
+                                    {isPersonalized && (
+                                        <div className="px-3 py-1 bg-[#1B2E1D] text-white rounded-full text-[8px] uppercase font-black tracking-widest shadow-xl flex items-center gap-1.5 animate-pulse">
+                                            <Sparkles className="h-2.5 w-2.5 text-[#BD7474]" />
+                                            {tier === 'premium' ? 'Premium' : 'Pro'}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="p-6">
@@ -290,12 +307,23 @@ const DashboardHome: React.FC = () => {
                                     );
                                 })()}
 
-                                <Link 
-                                    to={`/dashboard/event/${event.id}`}
-                                    className="block w-full text-center py-4 bg-white border border-stone-200 rounded-2xl text-[10px] uppercase font-bold tracking-widest text-stone-600 hover:border-[#1B2E1D] hover:text-[#1B2E1D] transition-all"
-                                >
-                                    Panel del Evento
-                                </Link>
+                                <div className="flex gap-2">
+                                    <Link 
+                                        to={`/dashboard/event/${event.id}`}
+                                        className="flex-1 text-center py-4 bg-white border border-stone-200 rounded-2xl text-[10px] uppercase font-bold tracking-widest text-stone-600 hover:border-[#1B2E1D] hover:text-[#1B2E1D] transition-all"
+                                    >
+                                        Panel del Evento
+                                    </Link>
+                                    {isPersonalized && (
+                                        <Link 
+                                            to={`/dashboard/checkin/${event.id}`}
+                                            className="px-6 py-4 bg-[#1B2E1D] text-white rounded-2xl flex items-center justify-center hover:bg-[#2D312E] transition-all"
+                                            title="Check-in"
+                                        >
+                                            <QrCode className="h-4 w-4 text-[#BD7474]" />
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}

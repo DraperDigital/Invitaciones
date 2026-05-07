@@ -12,6 +12,7 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
 import { differenceInDays, isPast } from 'date-fns';
+import { useFeatureAccess } from '../../hooks/useFeatureAccess';
 
 
 const EventRSVPs: React.FC = () => {
@@ -41,6 +42,7 @@ const EventRSVPs: React.FC = () => {
 
     const { user } = useAuth();
     const toast = useToast();
+    const { hasFeature, loading: loadingAccess } = useFeatureAccess(eventId || undefined);
 
     // New Table State
     const [isAddingTable, setIsAddingTable] = useState(false);
@@ -419,12 +421,22 @@ const EventRSVPs: React.FC = () => {
 
                     <div className="flex gap-2 w-full sm:w-auto">
                         {isEventDashboard && (
-                            <button 
-                                onClick={shareOnWhatsApp}
-                                className="flex-1 sm:flex-none px-8 h-10 bg-[#25D366] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-emerald-100/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all"
-                            >
-                                <MessageSquare className="h-4 w-4" /> <span>Compartir</span>
-                            </button>
+                            <>
+                                <button 
+                                    onClick={shareOnWhatsApp}
+                                    className="flex-1 sm:flex-none px-8 h-10 bg-[#25D366] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-emerald-100/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all"
+                                >
+                                    <MessageSquare className="h-4 w-4" /> <span>Compartir</span>
+                                </button>
+                                {hasFeature('access_control') && (
+                                    <Link 
+                                        to={`/dashboard/checkin/${event.id}`}
+                                        className="flex-1 sm:flex-none px-8 h-10 bg-[#1B2E1D] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
+                                    >
+                                        <QrCode className="h-4 w-4 text-[#BD7474]" /> <span>Check-in</span>
+                                    </Link>
+                                )}
+                            </>
                         )}
                         {/* Download removed from here as per user request */}
                     </div>
@@ -552,12 +564,29 @@ const EventRSVPs: React.FC = () => {
 
             {/* Tabs */}
             <div className="flex border-b border-stone-100 gap-6 overflow-x-auto pb-1">
-                {['list', 'statistics', 'messages', 'tables', 'reminders'].map(t => (
-                    <button key={t} onClick={() => setActiveTab(t as any)} className={`pb-4 text-[10px] uppercase font-bold tracking-widest relative ${activeTab === t ? 'text-[#1B2E1D]' : 'text-stone-300'}`}>
-                        {t === 'list' ? 'Lista' : t === 'statistics' ? 'Estadísticas' : t === 'messages' ? 'Mensajes' : t === 'tables' ? 'Mesas' : 'Avisos'}
-                        {activeTab === t && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B2E1D]" />}
-                    </button>
-                ))}
+                {[
+                    { id: 'list', label: 'Lista', feature: null },
+                    { id: 'statistics', label: 'Estadísticas', feature: 'metrics_dashboard' },
+                    { id: 'messages', label: 'Mensajes', feature: 'guest_dashboard' },
+                    { id: 'tables', label: 'Mesas', feature: 'table_management' },
+                    { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' }
+                ].map(t => {
+                    const isLocked = t.feature ? !hasFeature(t.feature as any) : false;
+                    
+                    return (
+                        <button 
+                            key={t.id} 
+                            onClick={() => !isLocked && setActiveTab(t.id as any)} 
+                            className={`pb-4 text-[10px] uppercase font-bold tracking-widest relative flex items-center gap-2 ${
+                                activeTab === t.id ? 'text-[#1B2E1D]' : 'text-stone-300'
+                            } ${isLocked ? 'cursor-not-allowed opacity-50' : ''}`}
+                        >
+                            {t.label}
+                            {isLocked && <span className="text-[8px] bg-stone-100 text-stone-400 px-1.5 py-0.5 rounded-full">PRO</span>}
+                            {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B2E1D]" />}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Content Rendering */}
@@ -607,9 +636,9 @@ const EventRSVPs: React.FC = () => {
                                             <th className="px-8 py-6 text-center">Enviado</th>
                                             <th className="px-8 py-6 text-center">Estado</th>
                                             <th className="px-8 py-6 text-center">Pax Total</th>
-                                            <th className="px-8 py-6 text-center">Ingreso</th>
-                                            <th className="px-8 py-6 text-center">Mesa</th>
-                                            <th className="px-8 py-6 text-center">QR</th>
+                                            {hasFeature('access_control') && <th className="px-8 py-6 text-center">Ingreso</th>}
+                                            {hasFeature('table_management') && <th className="px-8 py-6 text-center">Mesa</th>}
+                                            {hasFeature('access_control') && <th className="px-8 py-6 text-center">QR</th>}
                                             {isManageMode && <th className="px-8 py-6 text-center">Acciones</th>}
                                         </tr>
                                     </thead>
@@ -683,76 +712,82 @@ const EventRSVPs: React.FC = () => {
                                                          getGuestPax(g)
                                                      )}
                                                  </td>
-                                                <td className="px-8 py-6 text-center text-xs text-stone-400">
-                                                    {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
-                                                </td>
-                                                <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
-                                                    {getGuestStatus(g) !== 'yes' ? (
-                                                        <span className="text-stone-300 text-[9px] italic" title="Solo invitados confirmados pueden tener mesa">🔒</span>
-                                                    ) : editingGuestId === g.id ? (
-                                                        <select 
-                                                            value={editData.table_id || ''} 
-                                                            onChange={e => {
-                                                                const tid = e.target.value;
-                                                                if (tid) {
-                                                                    const available = getTableAvailablePax(tid) + (g.table_id === tid ? getGuestPax(g) : 0);
-                                                                    if (getGuestPax(g) > available) {
-                                                                        toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
-                                                                        return;
+                                                {hasFeature('access_control') && (
+                                                    <td className="px-8 py-6 text-center text-xs text-stone-400">
+                                                        {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
+                                                    </td>
+                                                )}
+                                                {hasFeature('table_management') && (
+                                                    <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
+                                                        {getGuestStatus(g) !== 'yes' ? (
+                                                            <span className="text-stone-300 text-[9px] italic" title="Solo invitados confirmados pueden tener mesa">🔒</span>
+                                                        ) : editingGuestId === g.id ? (
+                                                            <select 
+                                                                value={editData.table_id || ''} 
+                                                                onChange={e => {
+                                                                    const tid = e.target.value;
+                                                                    if (tid) {
+                                                                        const available = getTableAvailablePax(tid) + (g.table_id === tid ? getGuestPax(g) : 0);
+                                                                        if (getGuestPax(g) > available) {
+                                                                            toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
+                                                                            return;
+                                                                        }
                                                                     }
-                                                                }
-                                                                setEditData({...editData, table_id: tid});
-                                                            }}
-                                                            className="border border-stone-200 px-2 py-1 rounded text-center text-xs bg-white cursor-pointer"
-                                                        >
-                                                            <option value="">Sin mesa</option>
-                                                            {tables.map(t => {
-                                                                const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
-                                                                const fits = getGuestPax(g) <= avail;
-                                                                return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail} disp.)</option>;
-                                                            })}
-                                                        </select>
-                                                    ) : (
-                                                        <select
-                                                            value={g.table_id || ''}
-                                                            onChange={async (e) => {
-                                                                const newTableId = e.target.value;
-                                                                if (newTableId) {
-                                                                    const available = getTableAvailablePax(newTableId) + (g.table_id === newTableId ? getGuestPax(g) : 0);
-                                                                    if (getGuestPax(g) > available) {
-                                                                        toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
-                                                                        return;
+                                                                    setEditData({...editData, table_id: tid});
+                                                                }}
+                                                                className="border border-stone-200 px-2 py-1 rounded text-center text-xs bg-white cursor-pointer"
+                                                            >
+                                                                <option value="">Sin mesa</option>
+                                                                {tables.map(t => {
+                                                                    const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
+                                                                    const fits = getGuestPax(g) <= avail;
+                                                                    return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail} disp.)</option>;
+                                                                })}
+                                                            </select>
+                                                        ) : (
+                                                            <select
+                                                                value={g.table_id || ''}
+                                                                onChange={async (e) => {
+                                                                    const newTableId = e.target.value;
+                                                                    if (newTableId) {
+                                                                        const available = getTableAvailablePax(newTableId) + (g.table_id === newTableId ? getGuestPax(g) : 0);
+                                                                        if (getGuestPax(g) > available) {
+                                                                            toast.error(`No caben ${getGuestPax(g)} PAX — solo ${available} disponibles`);
+                                                                            return;
+                                                                        }
                                                                     }
-                                                                }
-                                                                const prev = [...guests];
-                                                                setGuests(gs => gs.map(x => x.id === g.id ? {...x, table_id: newTableId || null} : x));
-                                                                try {
-                                                                    const { error } = await supabase.rpc('update_guest_info', {
-                                                                        p_guest_id: g.id,
-                                                                        p_event_id: g.event_id,
-                                                                        p_table_id: newTableId || ''
-                                                                    });
-                                                                    if (error) throw error;
-                                                                    toast.success('Mesa asignada');
-                                                                } catch (err: any) {
-                                                                    setGuests(prev);
-                                                                    toast.error('Error al asignar mesa');
-                                                                }
-                                                            }}
-                                                            className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#1B2E1D] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
-                                                        >
-                                                            <option value="">-</option>
-                                                            {tables.map(t => {
-                                                                const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
-                                                                const fits = getGuestPax(g) <= avail;
-                                                                return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail})</option>;
-                                                            })}
-                                                        </select>
-                                                    )}
-                                                </td>
-                                                <td className="px-8 py-6 text-center">
-                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]"><QrCode className="h-4 w-4" /></button>
-                                                </td>
+                                                                    const prev = [...guests];
+                                                                    setGuests(gs => gs.map(x => x.id === g.id ? {...x, table_id: newTableId || null} : x));
+                                                                    try {
+                                                                        const { error } = await supabase.rpc('update_guest_info', {
+                                                                            p_guest_id: g.id,
+                                                                            p_event_id: g.event_id,
+                                                                            p_table_id: newTableId || ''
+                                                                        });
+                                                                        if (error) throw error;
+                                                                        toast.success('Mesa asignada');
+                                                                    } catch (err: any) {
+                                                                        setGuests(prev);
+                                                                        toast.error('Error al asignar mesa');
+                                                                    }
+                                                                }}
+                                                                className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#1B2E1D] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
+                                                            >
+                                                                <option value="">-</option>
+                                                                {tables.map(t => {
+                                                                    const avail = getTableAvailablePax(t.id) + (g.table_id === t.id ? getGuestPax(g) : 0);
+                                                                    const fits = getGuestPax(g) <= avail;
+                                                                    return <option key={t.id} value={t.id} disabled={!fits}>{t.name} ({avail})</option>;
+                                                                })}
+                                                            </select>
+                                                        )}
+                                                    </td>
+                                                )}
+                                                {hasFeature('access_control') && (
+                                                    <td className="px-8 py-6 text-center">
+                                                        <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]"><QrCode className="h-4 w-4" /></button>
+                                                    </td>
+                                                )}
                                                 {isManageMode && (
                                                     <td className="px-8 py-6 text-center">
                                                         {editingGuestId === g.id ? (
