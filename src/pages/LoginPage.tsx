@@ -178,20 +178,20 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side: Auth Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-16">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 md:p-16">
                 <div className="max-w-md w-full">
 
                     {/* ── VISTA: Nueva contraseña (tras clic en el link del correo) ── */}
                     {isPasswordRecovery ? (
                         <>
-                            <div className="mb-12">
-                                <h2 className="text-4xl font-serif text-[#1B2E1D] mb-4">Nueva contraseña</h2>
-                                <p className="text-stone-500 font-light italic">
+                            <div className="mb-8 md:mb-12">
+                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">Nueva contraseña</h2>
+                                <p className="text-stone-500 font-light italic text-sm md:text-base">
                                     Elige una contraseña segura de al menos 8 caracteres.
                                 </p>
                             </div>
 
-                            <form onSubmit={handleUpdatePassword} className="space-y-6">
+                            <form onSubmit={handleUpdatePassword} className="space-y-5 md:space-y-6">
                                 <div>
                                     <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
                                         NUEVA CONTRASEÑA
@@ -204,7 +204,7 @@ export default function LoginPage() {
                                             placeholder="Mínimo 8 caracteres"
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300"
+                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
                                         />
                                         <button
                                             type="button"
@@ -230,7 +230,7 @@ export default function LoginPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
+                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
                                 >
                                     {loading ? 'GUARDANDO...' : 'GUARDAR CONTRASEÑA'}
                                     {!loading && <ArrowRight className="h-4 w-4" />}
@@ -243,19 +243,19 @@ export default function LoginPage() {
                         <>
                             <button
                                 onClick={() => { setIsForgotPassword(false); setMessage(null); }}
-                                className="flex items-center gap-2 text-stone-400 hover:text-[#1B2E1D] transition-colors text-[10px] uppercase tracking-widest font-bold mb-10"
+                                className="flex items-center gap-2 text-stone-400 hover:text-[#1B2E1D] transition-colors text-[10px] uppercase tracking-widest font-bold mb-8 md:mb-10"
                             >
                                 <ArrowLeft className="h-4 w-4" /> Volver al inicio de sesión
                             </button>
 
-                            <div className="mb-12">
-                                <h2 className="text-4xl font-serif text-[#1B2E1D] mb-4">Recuperar acceso</h2>
-                                <p className="text-stone-500 font-light italic">
+                            <div className="mb-8 md:mb-12">
+                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">Recuperar acceso</h2>
+                                <p className="text-stone-500 font-light italic text-sm md:text-base">
                                     Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
                                 </p>
                             </div>
 
-                            <form onSubmit={handleForgotPassword} className="space-y-6">
+                            <form onSubmit={handleForgotPassword} className="space-y-5 md:space-y-6">
                                 <div>
                                     <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
                                         CORREO ELECTRÓNICO
@@ -268,7 +268,7 @@ export default function LoginPage() {
                                             placeholder="hola@tuempresa.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300"
+                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
                                         />
                                     </div>
                                 </div>
@@ -287,9 +287,9 @@ export default function LoginPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
+                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
                                 >
-                                    {loading ? 'ENVIANDO...' : 'ENVIAR ENLACE DE RECUPERACIÓN'}
+                                    {loading ? 'ENVIANDO...' : 'ENVIAR ENLACE'}
                                     {!loading && <ArrowRight className="h-4 w-4" />}
                                 </button>
                             </form>
@@ -298,23 +298,23 @@ export default function LoginPage() {
                     ) : (
                         /* ── VISTA: Login / Registro (existente) ── */
                         <>
-                            <div className="mb-12">
-                                <h2 className="text-4xl font-serif text-[#1B2E1D] mb-4">
+                            <div className="mb-8 md:mb-12">
+                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">
                                     {isLogin ? 'Bienvenido de nuevo' : 'Crea tu panel'}
                                 </h2>
-                                <p className="text-stone-500 font-light italic">
+                                <p className="text-stone-500 font-light italic text-sm md:text-base">
                                     {isLogin
                                         ? 'Ingresa tus credenciales para administrar tus invitaciones.'
                                         : 'Comienza hoy mismo a crear experiencias inolvidables para tus clientes.'}
                                 </p>
                             </div>
 
-                            <div className="space-y-4 mb-8">
+                            <div className="grid grid-cols-1 gap-3 md:gap-4 mb-8">
                                 <button
                                     type="button"
                                     onClick={() => handleOAuthLogin('google')}
                                     disabled={loading}
-                                    className="w-full flex items-center justify-center gap-3 bg-white border border-stone-200 text-stone-700 py-4 rounded-xl text-[11px] uppercase font-bold tracking-widest hover:bg-stone-50 transition-all shadow-sm disabled:opacity-50"
+                                    className="w-full flex items-center justify-center gap-3 bg-white border border-stone-200 text-stone-700 py-3.5 rounded-xl text-[10px] md:text-[11px] uppercase font-bold tracking-widest hover:bg-stone-50 transition-all shadow-sm disabled:opacity-50"
                                 >
                                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -323,18 +323,18 @@ export default function LoginPage() {
                                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                         <path fill="none" d="M1 1h22v22H1z"/>
                                     </svg>
-                                    Continuar con Google
+                                    Google
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => handleOAuthLogin('facebook')}
                                     disabled={loading}
-                                    className="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-4 rounded-xl text-[11px] uppercase font-bold tracking-widest hover:bg-[#1864D9] transition-all shadow-sm disabled:opacity-50"
+                                    className="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3.5 rounded-xl text-[10px] md:text-[11px] uppercase font-bold tracking-widest hover:bg-[#1864D9] transition-all shadow-sm disabled:opacity-50"
                                 >
                                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                     </svg>
-                                    Continuar con Facebook
+                                    Facebook
                                 </button>
                             </div>
 
@@ -342,12 +342,12 @@ export default function LoginPage() {
                                 <div className="absolute inset-0 flex items-center">
                                     <div className="w-full border-t border-stone-200"></div>
                                 </div>
-                                <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
+                                <div className="relative flex justify-center text-[9px] md:text-[10px] uppercase font-bold tracking-widest">
                                     <span className="bg-[#FDFBF7] px-4 text-stone-400">O {isLogin ? 'ingresa' : 'regístrate'} con tu correo</span>
                                 </div>
                             </div>
 
-                            <form onSubmit={handleAuth} className="space-y-6">
+                            <form onSubmit={handleAuth} className="space-y-5 md:space-y-6">
                                 {!isLogin && (
                                     <div>
                                         <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">NOMBRE COMPLETO</label>
@@ -359,7 +359,7 @@ export default function LoginPage() {
                                                 placeholder="Tu nombre"
                                                 value={fullName}
                                                 onChange={(e) => setFullName(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300"
+                                                className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
                                             />
                                         </div>
                                     </div>
@@ -375,7 +375,7 @@ export default function LoginPage() {
                                             placeholder="hola@tuempresa.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300"
+                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
                                         />
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@ export default function LoginPage() {
                                             <button
                                                 type="button"
                                                 onClick={() => { setIsForgotPassword(true); setMessage(null); }}
-                                                className="text-[10px] text-[#BD7474] hover:text-[#1B2E1D] font-bold transition-colors"
+                                                className="text-[9px] md:text-[10px] text-[#BD7474] hover:text-[#1B2E1D] font-bold transition-colors"
                                             >
                                                 ¿Olvidaste tu contraseña?
                                             </button>
@@ -401,7 +401,7 @@ export default function LoginPage() {
                                             placeholder="••••••••"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300"
+                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
                                         />
                                         <button
                                             type="button"
@@ -425,17 +425,17 @@ export default function LoginPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all transform active:scale-[0.98] shadow-lg shadow-[#1B2E1D]/10 flex items-center justify-center gap-3 disabled:bg-stone-400"
+                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all transform active:scale-[0.98] shadow-lg shadow-[#1B2E1D]/10 flex items-center justify-center gap-3 disabled:bg-stone-400"
                                 >
                                     {loading ? 'PROCESANDO...' : (isLogin ? 'ACCEDER AL PANEL' : 'CREAR CUENTA')}
                                     {!loading && <ArrowRight className="h-4 w-4" />}
                                 </button>
                             </form>
 
-                            <div className="mt-12 text-center">
+                            <div className="mt-8 md:mt-12 text-center">
                                 <button
                                     onClick={() => { setIsLogin(!isLogin); setMessage(null); }}
-                                    className="text-stone-400 font-light"
+                                    className="text-stone-400 font-light text-sm"
                                 >
                                     {isLogin ? '¿No tienes cuenta? ' : '¿Ya eres miembro? '}
                                     <span className="text-[#1B2E1D] font-bold underline underline-offset-4 decoration-[#BD7474]/40 hover:decoration-[#BD7474] transition-all">

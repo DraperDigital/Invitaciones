@@ -84,25 +84,31 @@ export default function PlanesPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] selection:bg-[#BD7474]/10 pb-32">
+        <div className="min-h-screen bg-[#FDFBF7] selection:bg-[#BD7474]/10 pb-20 md:pb-32 overflow-x-hidden">
             {/* Header / Navigation */}
-            <header className="pt-12 pb-20 sticky top-0 bg-[#FDFBF7]/80 backdrop-blur-md z-50 border-b border-stone-100">
-                <div className="mx-auto max-w-7xl px-8 flex justify-between items-center">
-                    <Link to="/" className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-all">
-                        <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> Inicio
+            <header className="pt-4 pb-4 md:pt-12 md:pb-20 sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-50 border-b border-stone-100 px-4 md:px-8">
+                <div className="mx-auto max-w-7xl flex justify-between items-center relative h-12 md:h-auto">
+                    {/* Back link */}
+                    <Link to="/" className="group flex items-center gap-2 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-all">
+                        <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" /> 
+                        <span className="hidden xs:inline">Inicio</span>
                     </Link>
-                    <Link to="/" className="text-4xl font-serif italic tracking-tighter text-[#1B2E1D] absolute left-1/2 -translate-x-1/2">
+
+                    {/* Center Logo */}
+                    <Link to="/" className="absolute left-1/2 -translate-x-1/2 text-2xl md:text-4xl font-serif italic tracking-tighter text-[#1B2E1D]">
                         Invitto
                     </Link>
-                    <div className="flex items-center gap-8">
+
+                    {/* Right CTA */}
+                    <div className="flex items-center gap-3 md:gap-8">
                         {user ? (
-                            <Link to="/dashboard" className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">
-                                Panel de Control
+                            <Link to="/dashboard" className="px-3.5 py-2 md:px-6 md:py-3 bg-[#1B2E1D] text-white rounded-lg md:rounded-xl text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">
+                                Dashboard
                             </Link>
                         ) : (
                             <>
-                                <Link to="/login" className="text-[10px] uppercase font-bold tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-colors">Ingresar</Link>
-                                <Link to="/login" className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">Comenzar</Link>
+                                <Link to="/login" className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-colors">Ingresar</Link>
+                                <Link to="/login" className="px-4 py-2.5 md:px-6 md:py-3 bg-[#1B2E1D] text-white rounded-lg md:rounded-xl text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shadow-lg hover:scale-105 transition-all">Comenzar</Link>
                             </>
                         )}
                     </div>
@@ -110,77 +116,77 @@ export default function PlanesPage() {
             </header>
 
             {/* Hero Section */}
-            <section className="text-center space-y-8 py-32 px-8 relative overflow-hidden">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#BD7474]/5 rounded-full blur-[120px] -z-0" />
-                <div className="relative z-10 space-y-6">
-                    <span className="inline-block px-5 py-2 bg-[#BD7474]/10 text-[#BD7474] text-[9px] uppercase font-bold tracking-[0.5em] rounded-full">
+            <section className="text-center space-y-6 md:space-y-8 py-12 md:py-32 px-6 md:px-8 relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[300px] md:max-w-[800px] h-[300px] md:h-[800px] bg-[#BD7474]/5 rounded-full blur-[60px] md:blur-[120px] -z-0" />
+                <div className="relative z-10 space-y-4 md:space-y-6">
+                    <span className="inline-block px-4 py-1 md:px-5 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[7px] md:text-[9px] uppercase font-bold tracking-[0.4em] md:tracking-[0.5em] rounded-full">
                         Inversiones con Propósito
                     </span>
-                    <h1 className="text-6xl md:text-8xl font-serif text-[#1B2E1D] leading-[0.9] tracking-tighter">
-                        Tu evento merece <br />
+                    <h1 className="text-3xl xs:text-4xl md:text-8xl font-serif text-[#1B2E1D] leading-[1.1] md:leading-[0.9] tracking-tighter">
+                        Tu evento merece <br className="hidden xs:block" />
                         <span className="italic font-light opacity-30 text-stone-400">distinción total.</span>
                     </h1>
-                    <p className="text-xl text-stone-400 font-light italic max-w-2xl mx-auto">
-                        Selecciona el nivel de control y personalización que <br className="hidden md:block" /> mejor se adapte a tu celebración.
+                    <p className="text-sm md:text-xl text-stone-400 font-light italic max-w-xl mx-auto px-2 leading-relaxed">
+                        Selecciona el nivel de control y personalización que mejor se adapte a tu celebración.
                     </p>
                 </div>
             </section>
 
             {/* Pricing Cards Grid */}
-            <section className="px-8 max-w-[1600px] mx-auto mb-40">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
+            <section className="px-6 md:px-8 max-w-[1600px] mx-auto mb-24 md:mb-40">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 md:gap-6 items-stretch">
                     {plans.map((plan) => (
                         <div 
                             key={plan.id} 
-                            className={`group relative flex flex-col p-8 rounded-[2.5rem] border transition-all duration-700 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] ${
+                            className={`group relative flex flex-col p-7 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border transition-all duration-700 hover:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] ${
                                 plan.popular 
-                                    ? 'bg-[#1B2E1D] border-stone-800 text-white shadow-2xl scale-105 z-20' 
+                                    ? 'bg-[#1B2E1D] border-stone-800 text-white shadow-2xl md:scale-105 z-20' 
                                     : plan.id === 'concierge'
                                         ? 'bg-[#FDFBF7] border-[#BD7474]/20 text-[#1B2E1D] shadow-xl'
                                         : 'bg-white border-stone-100 text-[#1B2E1D]'
                             }`}
                         >
                             {plan.popular && (
-                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-8 py-3 bg-[#BD7474] text-white text-[10px] uppercase font-black tracking-[0.3em] rounded-full shadow-2xl flex items-center gap-2">
-                                    <Sparkles className="h-4 w-4" /> MÁS POPULAR
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 md:px-8 md:py-3 bg-[#BD7474] text-white text-[8px] md:text-[10px] uppercase font-black tracking-[0.3em] rounded-full shadow-2xl flex items-center gap-2 whitespace-nowrap">
+                                    <Sparkles className="h-3 w-3 md:h-4 md:w-4" /> MÁS POPULAR
                                 </div>
                             )}
 
-                            <div className="flex-1 space-y-10">
+                            <div className="flex-1 space-y-8 md:space-y-10">
                                 <div className="flex items-center justify-between">
-                                    <div className={`p-4 rounded-2xl ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`}>
-                                        <plan.icon className={`h-6 w-6 ${plan.id === 'concierge' ? 'text-[#BD7474]' : 'text-[#BD7474]'}`} />
+                                    <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`}>
+                                        <plan.icon className={`h-5 w-5 md:h-6 md:w-6 text-[#BD7474]`} />
                                     </div>
-                                    <span className={`text-[9px] font-bold uppercase tracking-[0.4em] ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>
+                                    <span className={`text-[8px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>
                                         PLAN {plan.id}
                                     </span>
                                 </div>
 
-                                <div className="text-center lg:text-left">
-                                    <h3 className="text-3xl font-serif mb-2 tracking-tight">{plan.name}</h3>
-                                    <p className={`text-xs italic font-light opacity-70 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-2xl md:text-3xl font-serif mb-1 tracking-tight">{plan.name}</h3>
+                                    <p className={`text-[11px] italic font-light opacity-70 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
                                         {plan.description}
                                     </p>
-                                    <p className={`text-[10px] mt-2 italic font-medium uppercase tracking-tighter ${plan.popular ? 'text-[#BD7474]' : 'text-[#BD7474]'}`}>
+                                    <p className={`text-[9px] mt-2 italic font-medium uppercase tracking-tighter ${plan.popular ? 'text-[#BD7474]' : 'text-[#BD7474]'}`}>
                                         {plan.subcopy}
                                     </p>
                                 </div>
 
-                                <div className="text-center lg:text-left space-y-1">
-                                    <div className="flex items-baseline justify-center lg:justify-start gap-2">
-                                        <span className="text-5xl font-serif tracking-tighter">{plan.price}</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${plan.popular ? 'text-white/40' : 'text-stone-300'}`}>{plan.period}</span>
+                                <div className="text-center md:text-left space-y-1">
+                                    <div className="flex items-baseline justify-center md:justify-start gap-1.5 md:gap-2">
+                                        <span className="text-4xl md:text-5xl font-serif tracking-tighter">{plan.price}</span>
+                                        <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest ${plan.popular ? 'text-white/40' : 'text-stone-300'}`}>{plan.period}</span>
                                     </div>
-                                    <p className={`text-[8px] uppercase font-bold tracking-widest ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>Un solo pago · De por vida</p>
+                                    <p className={`text-[7px] md:text-[8px] uppercase font-bold tracking-widest ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>Un solo pago · De por vida</p>
                                 </div>
 
                                 <div className={`h-px w-full ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`} />
 
-                                <ul className="space-y-4">
+                                <ul className="space-y-3 md:space-y-4">
                                     {plan.features.map((feature, idx) => (
-                                        <li key={idx} className="flex items-start gap-4 text-left">
+                                        <li key={idx} className="flex items-start gap-3 md:gap-4 text-left">
                                             <div className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0 bg-emerald-500`} />
-                                            <span className={`text-[13px] font-light leading-tight ${
+                                            <span className={`text-[12px] md:text-[13px] font-light leading-tight ${
                                                 plan.popular ? 'text-white/90' : 'text-stone-600'
                                             }`}>
                                                 {feature}
@@ -190,9 +196,9 @@ export default function PlanesPage() {
                                 </ul>
                             </div>
 
-                            <div className="mt-10">
+                            <div className="mt-8 md:mt-10">
                                 <Link to={`/checkout?plan=${plan.id}`}>
-                                    <button className={`w-full py-5 rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
+                                    <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
                                         plan.popular 
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl' 
                                             : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E] shadow-xl'
@@ -204,13 +210,13 @@ export default function PlanesPage() {
                                     <div className="mt-4 text-center">
                                         <Link 
                                             to="/concierge-service" 
-                                            className="text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5"
+                                            className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5"
                                         >
                                             Saber más sobre Concierge →
                                         </Link>
                                     </div>
                                 )}
-                                <p className={`mt-5 text-[8px] text-center uppercase font-bold tracking-[0.2em] opacity-30 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
+                                <p className={`mt-4 md:mt-5 text-[7px] md:text-[8px] text-center uppercase font-bold tracking-[0.2em] opacity-30 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
                                     Activación instantánea
                                 </p>
                             </div>
@@ -220,10 +226,10 @@ export default function PlanesPage() {
             </section>
 
             {/* Final Statement */}
-            <section className="py-24 border-t border-stone-100">
-                <div className="max-w-4xl mx-auto px-8 text-center space-y-8">
-                    <p className="text-stone-400 font-light italic text-2xl leading-relaxed">
-                        "La mayoría de eventos se desorganizan porque no saben quién va a ir. <br />
+            <section className="py-16 md:py-24 border-t border-stone-100">
+                <div className="max-w-4xl mx-auto px-6 md:px-8 text-center space-y-6 md:space-y-8">
+                    <p className="text-stone-400 font-light italic text-lg md:text-2xl leading-relaxed">
+                        "La mayoría de eventos se desorganizan porque no saben quién va a ir. <br className="hidden md:block" />
                         <span className="text-[#BD7474] font-semibold not-italic">El plan Pro elimina ese problema por completo.</span>"
                     </p>
                 </div>

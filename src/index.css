@@ -111,4 +111,43 @@
       transform: translateY(-10px);
     }
   }
+
+  /* Custom Scrollbar for Premium feel */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-stone-200 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-stone-300;
+  }
+
+  /* Mobile Specific Utilities */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Fluid typography foundation */
+  .text-fluid-h1 {
+    font-size: clamp(2.5rem, 8vw + 1rem, 6rem);
+  }
+  .text-fluid-h2 {
+    font-size: clamp(2rem, 5vw + 1rem, 4rem);
+  }
 }

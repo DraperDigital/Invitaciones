@@ -576,7 +576,7 @@ END:VCALENDAR`;
                         <p className="text-sm uppercase tracking-[0.4em] mb-6 font-sans" style={{color: heroTextColor, opacity: 0.85}}>
                             {subtitle || labels.tagline}
                         </p>
-                        <h1 className="text-6xl sm:text-7xl md:text-8xl font-serif font-light mb-6 leading-none drop-shadow-sm" style={{color: heroTextColor}}>
+                        <h1 className="text-5xl xs:text-6xl sm:text-7xl md:text-8xl font-serif font-light mb-6 leading-[1.1] md:leading-none drop-shadow-sm" style={{color: heroTextColor}}>
                             {event.title}
                         </h1>
                         {welcomeMessage && (
@@ -638,7 +638,7 @@ END:VCALENDAR`;
                             <p className="text-xs sm:text-sm uppercase tracking-[0.6em] mb-8 font-sans text-accent font-black">
                                 {subtitle || labels.tagline}
                             </p>
-                            <h1 className="text-6xl sm:text-8xl md:text-9xl font-serif font-light mb-10 leading-tight tracking-tight text-white drop-shadow-2xl">
+                            <h1 className="text-5xl xs:text-6xl sm:text-8xl md:text-9xl font-serif font-light mb-10 leading-[1.1] md:leading-tight tracking-tight text-white drop-shadow-2xl">
                                 {event.title}
                             </h1>
                             <div className="h-px w-24 bg-gradient-to-r from-transparent via-accent/50 to-transparent mx-auto mt-2" />
@@ -715,10 +715,10 @@ END:VCALENDAR`;
                 <div className="relative z-10 text-center px-6 w-full max-w-6xl">
                     <div className="space-y-12 mb-20">
                         <div className="space-y-6 animate-in fade-in slide-in-from-top-12 duration-1000">
-                            <p className="text-xs sm:text-sm uppercase tracking-[0.8em] font-sans text-accent font-black mb-8">
+                            <p className="text-[10px] sm:text-sm uppercase tracking-[0.4em] sm:tracking-[0.8em] font-sans text-accent font-black mb-6 sm:mb-8">
                                 {subtitle || labels.tagline}
                             </p>
-                            <h1 className="text-7xl sm:text-9xl md:text-[11rem] font-serif font-light leading-[0.85] tracking-tighter text-white drop-shadow-2xl">
+                            <h1 className="text-6xl xs:text-7xl sm:text-9xl md:text-[11rem] font-serif font-light leading-[1.1] sm:leading-[0.85] tracking-tighter text-white drop-shadow-2xl">
                                 {event.title}
                             </h1>
                         </div>
@@ -939,15 +939,15 @@ END:VCALENDAR`;
 
                             return (
                                 <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                    <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-white border-4 border-stone-100 flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
-                                        <ItemIcon className="h-6 w-6" />
+                                    <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-white border-4 border-stone-100 flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
+                                        <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
                                     </div>
-                                    <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
-                                        <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-stone-100/50 shadow-sm hover:shadow-md transition-shadow">
-                                            <span className="inline-block px-3 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
+                                    <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
+                                        <div className="bg-white/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-stone-100/50 shadow-sm hover:shadow-md transition-shadow">
+                                            <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
                                                 {item.time}
                                             </span>
-                                            <h4 className="text-xl font-serif text-stone-900">{item.title}</h4>
+                                            <h4 className="text-lg xs:text-xl font-serif text-stone-900">{item.title}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -1074,10 +1074,10 @@ END:VCALENDAR`;
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
                                     <div className="space-y-4 pt-4">
-                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full py-6 rounded-2xl text-white font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98]" style={{ background: buttonColor }}>
+                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-white font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center" style={{ background: buttonColor }}>
                                             {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}
                                         </button>
-                                        <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full py-4 text-stone-400 hover:text-stone-900 font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+                                        <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full h-12 text-stone-400 hover:text-stone-900 font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                                             No podré asistir
                                         </button>
                                     </div>
@@ -1410,16 +1410,6 @@ END:VCALENDAR`;
                                     </div>
                                 </div>
                                 <button onClick={() => setShowPlusOnesModal(false)} className="w-full mt-10 py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg">Confirmar</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Admin Debug Badge */}
-                    {isAdminMode && (
-                        <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-[9999]">
-                            <div className="bg-black/95 text-white p-5 rounded-3xl border border-accent/30 text-[10px] font-mono shadow-2xl">
-                                <p className="text-accent font-bold uppercase tracking-widest mb-3">persistence_diagnostics</p>
-                                <pre className="text-[9px] text-amber-100/90 overflow-auto max-h-32">{JSON.stringify(event.theme_config || {}, null, 2)}</pre>
                             </div>
                         </div>
                     )}

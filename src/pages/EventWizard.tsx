@@ -3,7 +3,6 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Button } from '../components/ui/Button';
 import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 
@@ -284,152 +283,163 @@ export default function EventWizard() {
                 </div>
             )}
 
-            <div className="mb-8">
-                <h1 className="text-3xl font-serif font-bold text-stone-900">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
-                <p className="text-stone-500">Paso {step} de 3</p>
-                <div className="mt-4 h-2 w-full rounded-full bg-stone-200">
+            <div className="mb-8 md:mb-12">
+                <h1 className="text-2xl md:text-4xl font-serif text-[#1B2E1D] tracking-tight mb-2">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
+                <div className="flex items-center justify-between mb-4">
+                    <p className="text-stone-400 text-[10px] md:text-xs uppercase font-black tracking-widest">Progreso del Asistente</p>
+                    <p className="text-[#BD7474] font-serif italic text-sm">Paso {step} de 3</p>
+                </div>
+                <div className="h-1.5 md:h-2 w-full rounded-full bg-stone-100 p-0.5 md:p-1 overflow-hidden">
                     <div
-                        className="h-2 rounded-full bg-stone-900 transition-all duration-300"
+                        className="h-full rounded-full bg-[#1B2E1D] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(27,46,29,0.3)]"
                         style={{ width: `${(step / 3) * 100}%` }}
                     />
                 </div>
             </div>
 
-            <div className="rounded-lg border border-stone-200 bg-white p-8 shadow-sm">
+            <div className="rounded-[2rem] md:rounded-[3rem] border border-stone-100 bg-white p-6 md:p-12 shadow-sm">
                 {step === 1 && (
-                    <div className="space-y-6">
-                        <h2 className="text-xl font-medium">Información Básica</h2>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Título del Evento</label>
-                            <input
-                                type="text"
-                                required
-                                value={data.title}
-                                onChange={(e) => updateData({ title: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                placeholder="Ej. Boda de Ana y Carlos"
-                            />
+                    <div className="space-y-6 md:space-y-8">
+                        <div className="space-y-1">
+                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Información Básica</h2>
+                            <p className="text-xs md:text-sm text-stone-400 font-light">Comencemos con los detalles generales de tu evento.</p>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Tipo de Evento</label>
-                            <select
-                                value={data.event_type}
-                                onChange={(e) => updateData({ event_type: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                            >
-                                <option value="wedding">Boda</option>
-                                <option value="xv">XV Años</option>
-                                <option value="birthday">Cumpleaños</option>
-                                <option value="corporate">Corporativo</option>
-                                <option value="other">Otro</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Fecha y Hora</label>
-                            <input
-                                type="datetime-local"
-                                required
-                                value={data.date_time}
-                                onChange={(e) => updateData({ date_time: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                            />
+                        
+                        <div className="space-y-4 md:space-y-6">
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Título del Evento</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={data.title}
+                                    onChange={(e) => updateData({ title: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                    placeholder="Ej. Boda de Ana y Carlos"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Tipo de Evento</label>
+                                <select
+                                    value={data.event_type}
+                                    onChange={(e) => updateData({ event_type: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none"
+                                >
+                                    <option value="wedding">Boda</option>
+                                    <option value="xv">XV Años</option>
+                                    <option value="birthday">Cumpleaños</option>
+                                    <option value="bautizo">Bautizo</option>
+                                    <option value="graduacion">Graduación</option>
+                                    <option value="corporate">Corporativo</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha y Hora</label>
+                                <input
+                                    type="datetime-local"
+                                    required
+                                    value={data.date_time}
+                                    onChange={(e) => updateData({ date_time: e.target.value })}
+                                />
+                            </div>
                         </div>
                     </div>
                 )}
 
                 {step === 2 && (
-                    <div className="space-y-6">
-                        <div className="flex items-center gap-2 mb-2">
-                            <h2 className="text-xl font-medium text-stone-900 font-serif">Ubicación del Evento</h2>
+                    <div className="space-y-6 md:space-y-10">
+                        <div className="space-y-1">
+                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Ubicación del Evento</h2>
+                            <p className="text-xs md:text-sm text-stone-400 font-light">Define dónde ocurrirá la magia.</p>
                         </div>
                         
                         {/* Sección Misa / Ceremonia */}
-                        <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-[#BD7474]">Misa</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-5 md:p-8 border border-stone-100 bg-stone-50/30 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
+                            <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#BD7474]">Misa / Ceremonia</h3>
+                            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                                 <div>
-                                    <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
+                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Lugar</label>
                                     <input
                                         type="text"
                                         value={data.misa_name}
                                         onChange={(e) => updateData({ misa_name: e.target.value })}
-                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
                                         placeholder="Ej. Parroquia de San Juan"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-medium text-stone-500 mb-1">Hora de Inicio</label>
+                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Hora</label>
                                     <input
                                         type="time"
                                         value={data.misa_time}
                                         onChange={(e) => updateData({ misa_time: e.target.value })}
-                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-stone-500 mb-1">Dirección</label>
+                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Dirección</label>
                                 <input
                                     type="text"
                                     value={data.misa_address}
                                     onChange={(e) => updateData({ misa_address: e.target.value })}
-                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
                                     placeholder="Calle, Número, Colonia..."
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-stone-500 mb-1">Enlace de Google Maps</label>
+                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Link de Google Maps</label>
                                 <input
                                     type="url"
                                     value={data.misa_maps_link}
                                     onChange={(e) => updateData({ misa_maps_link: e.target.value })}
-                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
                                     placeholder="https://goo.gl/maps/..."
                                 />
                             </div>
                         </div>
 
                         {/* Sección Celebración */}
-                        <div className="p-5 border border-stone-100 bg-stone-50/50 rounded-2xl space-y-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-stone-900">Celebración</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-5 md:p-8 border border-stone-100 bg-stone-50/30 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
+                            <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#1B2E1D]">Celebración / Recepción</h3>
+                            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                                 <div>
-                                    <label className="block text-xs font-medium text-stone-500 mb-1">Nombre del Lugar</label>
+                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Lugar</label>
                                     <input
                                         type="text"
                                         value={data.venue_name}
                                         onChange={(e) => updateData({ venue_name: e.target.value })}
-                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
                                         placeholder="Ej. Hacienda Los Arcos"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-medium text-stone-500 mb-1">Hora de Inicio</label>
+                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Hora</label>
                                     <input
                                         type="time"
                                         value={data.venue_time}
                                         onChange={(e) => updateData({ venue_time: e.target.value })}
-                                        className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-stone-500 mb-1">Dirección</label>
+                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Dirección</label>
                                 <input
                                     type="text"
                                     value={data.venue_address}
                                     onChange={(e) => updateData({ venue_address: e.target.value })}
-                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
                                     placeholder="Calle Principal 123..."
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-stone-500 mb-1">Enlace de Google Maps</label>
+                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Link de Google Maps</label>
                                 <input
                                     type="url"
                                     value={data.maps_link}
                                     onChange={(e) => updateData({ maps_link: e.target.value })}
-                                    className="block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
                                     placeholder="https://goo.gl/maps/..."
                                 />
                             </div>
@@ -438,65 +448,77 @@ export default function EventWizard() {
                 )}
 
                 {step === 3 && (
-                    <div className="space-y-6">
-                        <h2 className="text-xl font-medium">Detalles Finales</h2>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Código de Vestimenta</label>
-                            <input
-                                type="text"
-                                value={data.dress_code}
-                                onChange={(e) => updateData({ dress_code: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                                placeholder="Ej. Formal, Etiqueta Rigurosa..."
-                            />
+                    <div className="space-y-8">
+                        <div className="space-y-1">
+                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Detalles Finales</h2>
+                            <p className="text-xs md:text-sm text-stone-400 font-light">Personaliza la experiencia para tus invitados.</p>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Fecha Límite de RSVP</label>
-                            <input
-                                type="date"
-                                value={data.rsvp_deadline}
-                                onChange={(e) => updateData({ rsvp_deadline: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-stone-700">Tema Visual</label>
-                            <select
-                                value={data.theme}
-                                onChange={(e) => updateData({ theme: e.target.value })}
-                                className="mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
-                            >
-                                <option value="classic">Clásico (Blanco y Negro)</option>
-                                <option value="gold">Gold (Tonos Dorados)</option>
-                                <option value="botanical">Botánico (Verdes)</option>
-                            </select>
+                        
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Código de Vestimenta</label>
+                                <input
+                                    type="text"
+                                    value={data.dress_code}
+                                    onChange={(e) => updateData({ dress_code: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                    placeholder="Ej. Formal, Etiqueta Rigurosa..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha Límite para Confirmar</label>
+                                <input
+                                    type="date"
+                                    value={data.rsvp_deadline}
+                                    onChange={(e) => updateData({ rsvp_deadline: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Estilo Visual</label>
+                                <select
+                                    value={data.theme}
+                                    onChange={(e) => updateData({ theme: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none"
+                                >
+                                    <option value="classic">Clásico (Blanco y Negro)</option>
+                                    <option value="gold">Gold (Tonos Dorados)</option>
+                                    <option value="botanical">Botánico (Verdes)</option>
+                                    <option value="cecilia-70">Atemporal (Floral)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 )}
 
-                <div className="mt-8 flex justify-between pt-6 border-t border-stone-100">
+                <div className="mt-12 flex items-center justify-between pt-8 border-t border-stone-100">
                     {step > 1 ? (
-                        <Button variant="outline" onClick={handleBack}>
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Atrás
-                        </Button>
+                        <button onClick={handleBack} className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors">
+                            <ArrowLeft className="h-4 w-4" /> Atrás
+                        </button>
                     ) : (
-                        <Button variant="ghost" onClick={() => navigate('/dashboard')}>
+                        <button onClick={() => navigate('/dashboard')} className="text-[10px] uppercase font-bold tracking-widest text-stone-300 hover:text-stone-500 transition-colors">
                             Cancelar
-                        </Button>
+                        </button>
                     )}
 
                     {step < 3 ? (
-                        <Button onClick={handleNext} disabled={!data.title || !data.date_time}>
-                            Siguiente
-                            <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
+                        <button 
+                            onClick={handleNext} 
+                            disabled={!data.title || !data.date_time}
+                            className="px-8 py-4 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest shadow-xl shadow-stone-200/50 hover:bg-[#2D312E] transition-all disabled:opacity-30 disabled:grayscale flex items-center gap-2"
+                        >
+                            Siguiente <ArrowRight className="h-4 w-4" />
+                        </button>
                     ) : (
-                        <Button onClick={handleSubmit} disabled={loading}>
-                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {isEditing ? 'Guardar Cambios' : 'Publicar'}
-                            {!loading && <Save className="ml-2 h-4 w-4" />}
-                        </Button>
+                        <button 
+                            onClick={handleSubmit} 
+                            disabled={loading}
+                            className="px-10 py-4 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest shadow-xl shadow-rose-100 hover:bg-[#A65B5B] transition-all disabled:opacity-50 flex items-center gap-3"
+                        >
+                            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                            {isEditing ? 'Guardar Cambios' : 'Publicar Evento'}
+                        </button>
                     )}
                 </div>
             </div>

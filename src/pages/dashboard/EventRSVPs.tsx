@@ -944,25 +944,25 @@ const EventRSVPs: React.FC = () => {
 
             {/* Event Hero Profile - Condicional */}
             {isEventDashboard && (
-                <div className="bg-white rounded-[2rem] md:rounded-[4rem] border border-stone-100 p-8 md:p-20 shadow-sm relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#BD7474]/5 transition-colors duration-1000" />
+                <div className="bg-white rounded-[2rem] md:rounded-[4rem] border border-stone-100 p-6 md:p-20 shadow-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-[30rem] md:w-[50rem] h-[30rem] md:h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#BD7474]/5 transition-colors duration-1000" />
                     
                     <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-10 md:gap-16">
-                        <div className="space-y-8 md:space-y-12 flex-1">
-                            <div className="flex flex-wrap items-center gap-3 md:gap-4">
-                                <span className="px-4 md:px-6 py-1.5 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[8px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
+                        <div className="space-y-6 md:space-y-12 flex-1">
+                            <div className="flex flex-wrap items-center gap-2 md:gap-4">
+                                <span className="px-3 md:px-6 py-1 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[7px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
                                     {event.event_type}
                                 </span>
-                                <span className={`flex items-center gap-2 px-4 md:px-5 py-1.5 md:py-2 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-stone-50 text-stone-300'} rounded-full text-[8px] md:text-[9px] uppercase font-black tracking-widest`}>
+                                <span className={`flex items-center gap-2 px-3 md:px-5 py-1 md:py-2 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-stone-50 text-stone-300'} rounded-full text-[7px] md:text-[9px] uppercase font-black tracking-widest`}>
                                     <div className={`h-1 w-1 md:h-1.5 md:w-1.5 rounded-full ${percentConfirmed > 0 ? 'bg-emerald-500 animate-pulse outline outline-4 outline-emerald-100' : 'bg-stone-200'}`} />
-                                    {percentConfirmed}% Confirmado
+                                    {percentConfirmed}% Conf.
                                 </span>
                             </div>
 
-                            <div className="space-y-3 md:space-y-4">
-                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-serif text-[#1B2E1D] tracking-tighter leading-[0.9] md:leading-[0.8] mb-4 break-words">{event.title}</h1>
-                                <p className="text-lg md:text-2xl text-stone-400 font-light italic flex items-center gap-3 md:gap-4 ml-1 md:ml-2">
-                                    <MapPin className="h-5 w-5 md:h-6 md:w-6 text-[#BD7474]" /> {event.venue_name || 'Ubicación Premium'}
+                            <div className="space-y-2 md:space-y-4">
+                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-serif text-[#1B2E1D] tracking-tighter leading-tight md:leading-[0.8] mb-2 break-words">{event.title}</h1>
+                                <p className="text-sm md:text-2xl text-stone-400 font-light italic flex items-center gap-2 md:gap-4 ml-0.5 md:ml-2">
+                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#BD7474]" /> <span className="truncate">{event.venue_name || 'Ubicación Premium'}</span>
                                 </p>
                             </div>
 
@@ -973,15 +973,15 @@ const EventRSVPs: React.FC = () => {
                                 const isDeadlinePassed = deadlineDate ? isPast(deadlineDate) : false;
 
                                 return (
-                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-8 pt-10 border-t border-stone-50">
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha del Evento</p>
-                                            <p className="text-base font-bold text-[#1B2E1D]">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
+                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-4 md:gap-8 pt-6 md:pt-10 border-t border-stone-50">
+                                        <div className="space-y-0.5">
+                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha</p>
+                                            <p className="text-xs md:text-base font-bold text-[#1B2E1D] truncate">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
                                         </div>
                                         <div className="h-10 w-px bg-stone-100 hidden lg:block" />
-                                        <div className="space-y-1">
-                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre Confirm.</p>
-                                            <p className="text-base font-bold text-[#BD7474]">
+                                        <div className="space-y-0.5">
+                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre</p>
+                                            <p className="text-xs md:text-base font-bold text-[#BD7474] truncate">
                                                 {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
                                             </p>
                                         </div>
@@ -989,20 +989,18 @@ const EventRSVPs: React.FC = () => {
                                         {deadlineDate && (
                                             <>
                                                 <div className="h-10 w-px bg-stone-100 hidden lg:block" />
-                                                <div className="col-span-2 lg:col-span-1 space-y-3 lg:space-y-0">
+                                                <div className="col-span-2 lg:col-span-1">
                                                     {isDeadlinePassed ? (
-                                                        <span className="px-4 py-2 w-fit bg-red-50 text-red-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                                        <span className="px-3 py-1.5 w-fit bg-red-50 text-red-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
                                                             <AlertTriangle className="h-3 w-3" /> Vencido
                                                         </span>
                                                     ) : daysRemaining !== null && daysRemaining <= 14 ? (
-                                                        <div className="flex flex-col sm:flex-row items-center gap-3">
-                                                            <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-2 border border-orange-100 shadow-sm animate-pulse w-full sm:w-auto">
-                                                                <Clock className="h-3 w-3 text-orange-500" /> Faltan {daysRemaining} Días
-                                                            </span>
-                                                        </div>
+                                                        <span className="px-3 py-1.5 bg-orange-50 text-orange-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 border border-orange-100 shadow-sm animate-pulse w-fit">
+                                                            <Clock className="h-3 w-3 text-orange-500" /> {daysRemaining} Días rest.
+                                                        </span>
                                                     ) : daysRemaining !== null && (
-                                                        <span className="px-4 py-2 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
-                                                            <Check className="h-3 w-3" /> Faltan {daysRemaining} días
+                                                        <span className="px-3 py-1.5 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
+                                                            <Check className="h-3 w-3" /> {daysRemaining} días
                                                         </span>
                                                     )}
                                                 </div>
@@ -1013,17 +1011,17 @@ const EventRSVPs: React.FC = () => {
                             })()}
                         </div>
 
-                        <div className="lg:w-96 space-y-8">
+                        <div className="lg:w-96 space-y-6 md:space-y-8">
                             {/* Visual Progress Bar Card */}
-                            <div className="p-8 bg-[#FDFBF7] rounded-[2.5rem] border border-stone-100 shadow-sm space-y-6">
+                            <div className="p-6 md:p-8 bg-[#FDFBF7] rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 shadow-sm space-y-4 md:space-y-6">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#1B2E1D]">Asistencia</span>
+                                    <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#1B2E1D]">Asistencia</span>
                                     <div className="text-right">
-                                        <span className="text-3xl md:text-4xl font-serif text-[#1B2E1D]">{metrics.confirmados}</span>
-                                        <span className="text-lg font-serif text-stone-300 ml-1">/{metrics.totalInvitados}</span>
+                                        <span className="text-2xl md:text-4xl font-serif text-[#1B2E1D]">{metrics.confirmados}</span>
+                                        <span className="text-sm md:text-lg font-serif text-stone-300 ml-1">/{metrics.totalInvitados}</span>
                                     </div>
                                 </div>
-                                <div className="h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
+                                <div className="h-2 md:h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
                                     <div 
                                         className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(16,185,129,0.4)]"
                                         style={{ width: `${percentConfirmed}%` }}
@@ -1031,11 +1029,11 @@ const EventRSVPs: React.FC = () => {
                                 </div>
                                 <div className="flex items-center justify-center gap-2 text-stone-400">
                                     <Users className="h-3 w-3" />
-                                    <p className="text-[10px] uppercase font-bold tracking-widest italic">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
+                                    <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-widest italic">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
                                 </div>
                             </div>
 
-                            <button onClick={copyGeneralLink} className="group w-full h-16 bg-[#1B2E1D] text-white rounded-[2rem] flex items-center justify-center gap-4 text-[10px] uppercase font-bold tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl hover:translate-y-[-4px]">
+                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-16 bg-[#1B2E1D] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-3 md:gap-4 text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl hover:translate-y-[-4px]">
                                 <Copy className="h-4 w-4 group-hover:scale-110 transition-transform" /> <span>Copiar Link</span>
                             </button>
                         </div>
@@ -1043,10 +1041,8 @@ const EventRSVPs: React.FC = () => {
                 </div>
             )}
 
-
-
             {/* Metrics Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                 {[
                     { label: 'Total', value: metrics.totalInvitados, color: 'text-stone-900' },
                     { label: 'Confirm.', value: metrics.confirmados, color: 'text-emerald-500' },
@@ -1054,9 +1050,9 @@ const EventRSVPs: React.FC = () => {
                     { label: 'Pend.', value: metrics.pendientes, color: 'text-amber-500' },
                     { label: 'Decl.', value: metrics.noAsistiran, color: 'text-rose-500' },
                 ].map(m => (
-                    <div key={m.label} className="bg-white p-6 rounded-[1.5rem] border border-stone-100 shadow-sm">
-                        <p className="text-[8px] uppercase font-bold text-stone-400 mb-2">{m.label}</p>
-                        <p className={`text-2xl font-serif ${m.color}`}>{m.value}</p>
+                    <div key={m.label} className="bg-white p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-stone-100 shadow-sm">
+                        <p className="text-[7px] md:text-[8px] uppercase font-bold text-stone-400 mb-1 md:mb-2">{m.label}</p>
+                        <p className={`text-xl md:text-2xl font-serif ${m.color}`}>{m.value}</p>
                     </div>
                 ))}
             </div>
@@ -1091,103 +1087,115 @@ const EventRSVPs: React.FC = () => {
             {/* Content Rendering */}
             {activeTab === 'list' && (
                 <div className="space-y-6">
-                    {/* Action Buttons Row */}
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                         <button 
-                            onClick={() => setIsAddGuestOpen(true)}
-                            className="flex-1 sm:flex-none px-8 h-14 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
+                            onClick={() => setIsAddGuestOpen(!isAddGuestOpen)} 
+                            className="w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 bg-[#BD7474] text-white rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-lg shadow-rose-100/50 hover:bg-[#A65B5B] transition-all flex items-center justify-center gap-3"
                         >
-                            <UserPlus className="h-5 w-5" /> Añadir Invitado
+                            <UserPlus className="h-4 w-4 md:h-5 md:w-5" /> <span>Nueva Invitación</span>
                         </button>
                         <button 
-                            onClick={() => fileInputRef.current?.click()}
-                            className="flex-1 sm:flex-none px-8 h-14 bg-white text-[#1B2E1D] border-2 border-dashed border-stone-300 rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-3 hover:border-[#1B2E1D] hover:bg-stone-50 transition-all"
+                            onClick={() => {
+                                if (!hasFeature('guest_import_excel')) {
+                                    toast.error('La importación masiva no está disponible en el plan Clásico. Sube de plan para habilitar esta función.');
+                                    return;
+                                }
+                                fileInputRef.current?.click();
+                            }}
+                            className={`w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 border-2 border-dashed rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-3 transition-all ${
+                                hasFeature('guest_import_excel') 
+                                    ? 'bg-white text-[#1B2E1D] border-stone-200 hover:border-[#1B2E1D] hover:bg-stone-50' 
+                                    : 'bg-stone-50 text-stone-300 border-stone-100 cursor-not-allowed opacity-60'
+                            }`}
                         >
-                            <Upload className="h-5 w-5" /> Importar CSV
+                            <Upload className="h-4 w-4 md:h-5 md:w-5" /> 
+                            <span>Importar CSV</span>
+                            {!hasFeature('guest_import_excel') && <span className="text-[8px] bg-[#BD7474] text-white px-1.5 py-0.5 rounded-full ml-1">PRO</span>}
                         </button>
                     </div>
 
                     {/* Search & Filters */}
-                    <div className="flex flex-col md:flex-row gap-4 justify-between bg-white p-4 rounded-2xl border border-stone-100 shadow-sm">
-                        <div className="relative flex-1">
+                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white p-4 md:p-6 rounded-[2rem] border border-stone-100 shadow-sm">
+                        <div className="relative w-full lg:max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
-                            <input type="text" placeholder="Buscar..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-11 pr-4 py-3 bg-stone-50 rounded-xl text-sm outline-none" />
+                            <input type="text" placeholder="Buscar por nombre o grupo..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-11 pr-4 py-3 bg-stone-50 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all" />
                         </div>
-                        <div className="flex gap-2">
-                            {[
-                                { id: 'all', label: 'Todos', color: 'bg-stone-50 text-stone-400' },
-                                { id: 'yes', label: 'Conf.', color: 'bg-emerald-50 text-emerald-600 border border-emerald-100' },
-                                { id: 'pending', label: 'Pend.', color: 'bg-amber-50 text-amber-600 border border-amber-100' },
-                                { id: 'no', label: 'Decl.', color: 'bg-rose-50 text-rose-600 border border-rose-100' }
-                            ].map(f => (
-                                <button 
-                                    key={f.id} 
-                                    onClick={() => setStatusFilter(f.id as any)} 
-                                    className={`px-4 py-2 rounded-xl text-[8px] uppercase font-bold tracking-widest transition-all ${
-                                        statusFilter === f.id 
-                                        ? (f.id === 'all' ? 'bg-[#1B2E1D] text-white' : f.color.replace('bg-', 'bg-').split(' ')[0] + ' ' + f.color.split(' ')[1] + ' ring-2 ring-offset-1 ring-[#1B2E1D]/10 shadow-md')
-                                        : 'bg-stone-50 text-stone-400 opacity-60 hover:opacity-100'
-                                    }`}
-                                >
-                                    {f.label}
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                            <div className="flex overflow-x-auto pb-1 sm:pb-0 gap-2 no-scrollbar flex-1 lg:flex-none">
+                                {[
+                                    { id: 'all', label: 'Todos', color: 'bg-stone-50 text-stone-400' },
+                                    { id: 'yes', label: 'Conf.', color: 'bg-emerald-50 text-emerald-600 border border-emerald-100' },
+                                    { id: 'pending', label: 'Pend.', color: 'bg-amber-50 text-amber-600 border border-amber-100' },
+                                    { id: 'no', label: 'Decl.', color: 'bg-rose-50 text-rose-600 border border-rose-100' }
+                                ].map(f => (
+                                    <button 
+                                        key={f.id} 
+                                        onClick={() => setStatusFilter(f.id as any)} 
+                                        className={`flex-none px-4 py-2.5 rounded-xl text-[7px] sm:text-[8px] uppercase font-bold tracking-widest transition-all ${
+                                            statusFilter === f.id 
+                                            ? (f.id === 'all' ? 'bg-[#1B2E1D] text-white shadow-md' : f.color.replace('bg-', 'bg-').split(' ')[0] + ' ' + f.color.split(' ')[1] + ' ring-2 ring-offset-1 ring-[#1B2E1D]/10 shadow-md')
+                                            : 'bg-stone-50 text-stone-400 opacity-60 hover:opacity-100'
+                                        }`}
+                                    >
+                                        {f.label}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="flex gap-2 ml-auto">
+                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 hover:text-[#1B2E1D] flex items-center justify-center transition-colors" title="Exportar PDF">
+                                    <Download className="h-4 w-4" />
                                 </button>
-                            ))}
-                            <button onClick={handleExportPDF} className="p-3 bg-stone-50 rounded-xl text-stone-400 hover:text-[#1B2E1D]" title="Exportar PDF">
-                                <Download className="h-4 w-4" />
-                            </button>
-                            <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="p-3 bg-stone-50 rounded-xl text-stone-400">
-                                {viewMode === 'table' ? <Users className="h-4 w-4" /> : <LayoutDashboard className="h-4 w-4" />}
-                            </button>
+                                <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 flex items-center justify-center transition-colors">
+                                    {viewMode === 'table' ? <LayoutDashboard className="h-4 w-4" /> : <Users className="h-4 w-4" />}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     {/* Bulk Actions Bar */}
                     {selectedIds.size > 0 && (
-                        <div className="flex items-center justify-between bg-rose-50 border border-rose-100 p-4 rounded-2xl shadow-sm animate-in slide-in-from-top-2 duration-300">
-                            <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 bg-rose-100 rounded-xl flex items-center justify-center text-rose-600 font-bold text-sm">
+                        <div className="flex flex-col sm:flex-row items-center justify-between bg-rose-50 border border-rose-100 p-4 md:p-6 rounded-[2rem] shadow-md animate-in slide-in-from-top-4 duration-500 gap-4">
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
+                                <div className="h-10 w-10 md:h-12 md:w-12 bg-rose-100 rounded-xl md:rounded-2xl flex items-center justify-center text-rose-600 font-bold text-base md:text-lg">
                                     {selectedIds.size}
                                 </div>
-                                <span className="text-sm text-rose-700 font-medium">
-                                    {isBulkConfirmOpen 
-                                        ? `¿Confirmas eliminar ${selectedIds.size} invitado${selectedIds.size > 1 ? 's' : ''}?`
-                                        : `invitado${selectedIds.size > 1 ? 's' : ''} seleccionado${selectedIds.size > 1 ? 's' : ''}`}
-                                </span>
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] md:text-xs text-rose-700 font-bold uppercase tracking-widest">Seleccionados</span>
+                                    <span className="text-xs md:text-sm text-rose-600/70 italic">
+                                        {isBulkConfirmOpen ? '¿Estás seguro de eliminar?' : 'Acción en bloque disponible'}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
                                 {isBulkConfirmOpen ? (
                                     <>
                                         <button 
                                             onClick={() => setIsBulkConfirmOpen(false)}
-                                            className="px-5 py-2.5 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
                                         >
-                                            No, cancelar
+                                            Cancelar
                                         </button>
                                         <button 
                                             onClick={handleBulkDelete}
                                             disabled={isDeletingBulk}
-                                            className="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all disabled:opacity-60 flex items-center gap-2"
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                                         >
-                                            {isDeletingBulk ? (
-                                                <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Borrando...</>
-                                            ) : (
-                                                <><Check className="h-3.5 w-3.5" /> Sí, eliminar ahora</>
-                                            )}
+                                            {isDeletingBulk ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Confirmar'}
                                         </button>
                                     </>
                                 ) : (
                                     <>
                                         <button 
                                             onClick={() => { setSelectedIds(new Set()); setIsBulkConfirmOpen(false); }}
-                                            className="px-5 py-2.5 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
                                         >
-                                            Cancelar
+                                            Limpiar
                                         </button>
                                         <button 
                                             onClick={() => setIsBulkConfirmOpen(true)}
-                                            className="px-5 py-2.5 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all flex items-center gap-2"
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all flex items-center justify-center gap-2"
                                         >
-                                            <Trash2 className="h-3.5 w-3.5" /> Eliminar Seleccionados
+                                            <Trash2 className="h-3.5 w-3.5" /> Eliminar
                                         </button>
                                     </>
                                 )}
@@ -1197,7 +1205,7 @@ const EventRSVPs: React.FC = () => {
 
                     <div className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden">
                         {viewMode === 'table' ? (
-                            <div className="overflow-x-auto">
+                            <div className="hidden md:block overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                     <thead className="bg-[#FDFBF7] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
                                         <tr>
@@ -1415,9 +1423,12 @@ const EventRSVPs: React.FC = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                                <div className="md:hidden p-8 text-center text-stone-400 italic text-sm">
+                                    Esta vista no es óptima para móviles. Cambia a vista de tarjetas arriba.
+                                </div>
                             </div>
                         ) : (
-                            <div className="p-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {filteredGuests.map(g => {
                                     const rsvp = g.rsvps?.[0];
                                     const status = getGuestStatus(g);
@@ -1428,18 +1439,31 @@ const EventRSVPs: React.FC = () => {
                                             : 'border-stone-100 bg-white';
 
                                     return (
-                                        <div key={g.id} className={`${cardStyles} p-6 rounded-[2rem] border shadow-sm space-y-4 hover:shadow-md transition-all`}>
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h4 className="font-serif text-lg text-[#1B2E1D]">{g.name}</h4>
-                                                    <p className="text-[8px] uppercase font-bold text-stone-300">{g.group_name || 'Individual'}</p>
+                                        <div key={g.id} className={`${cardStyles} p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border shadow-sm space-y-4 hover:shadow-md transition-all relative group/card`}>
+                                            <div className="absolute top-4 left-4">
+                                                <button 
+                                                    onClick={() => toggleSelectGuest(g.id)}
+                                                    className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                        selectedIds.has(g.id)
+                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                            : 'bg-white border-stone-200 text-transparent group-hover/card:border-stone-300'
+                                                    }`}
+                                                >
+                                                    <Check className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-start pt-2">
+                                                <div className="pl-8">
+                                                    <h4 className="font-serif text-base sm:text-lg text-[#1B2E1D] leading-tight mb-1">{g.name}</h4>
+                                                    <p className="text-[7px] sm:text-[8px] uppercase font-bold text-stone-300 tracking-widest">{g.group_name || 'Individual'}</p>
                                                 </div>
                                                 <div className="relative inline-flex items-center group">
                                                     <select
                                                         value={status}
                                                         onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
                                                         title="Cambiar estado"
-                                                        className={`appearance-none outline-none pl-3 pr-7 py-1 rounded-full border text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(status)}`}
+                                                        className={`appearance-none outline-none pl-3 pr-6 py-1 rounded-full border text-[7px] sm:text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm ${getStatusStyles(status)}`}
                                                     >
                                                         <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
                                                         <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
@@ -1449,45 +1473,69 @@ const EventRSVPs: React.FC = () => {
                                                 </div>
                                             </div>
                                             
-                                            <div className="grid grid-cols-3 gap-2 py-2 text-center text-stone-500 border-y border-stone-100/50">
+                                            <div className="grid grid-cols-3 gap-2 py-3 text-center text-stone-500 border-y border-stone-100/30">
                                                 <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Pax</span>
-                                                    <span className="text-sm font-bold text-stone-700">{(rsvp?.plus_ones_confirmed || 0) + 1}</span>
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Pax</span>
+                                                    <span className="text-sm font-bold text-stone-700">{getGuestPax(g)}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80 border-x border-stone-100/50">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Ingreso</span>
+                                                    <span className="text-[10px] font-serif font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
                                                 </div>
                                                 <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Ingreso</span>
-                                                    <span className="text-xs font-serif mt-0.5">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
-                                                </div>
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D]">Mesa</span>
-                                                    <span className="text-xs font-serif mt-0.5">{g.table_id || '-'}</span>
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Mesa</span>
+                                                    <span className="text-[10px] font-bold text-stone-700 truncate px-1">
+                                                        {g.table_id ? (tables.find(t => t.id === g.table_id)?.name || '-') : '-'}
+                                                    </span>
                                                 </div>
                                             </div>
 
-                                            <div className="flex justify-between pt-2">
-                                                <div className="flex flex-col gap-2">
+                                            <div className="flex items-center justify-between pt-2">
+                                                <div className="flex items-center gap-3">
                                                     <button 
                                                         onClick={() => handleToggleSent(g)}
-                                                        className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                        className={`h-6 w-6 rounded-lg border flex items-center justify-center transition-all ${
                                                             g.invitation_sent_at 
-                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white' 
-                                                                : 'bg-white border-stone-200 text-transparent'
+                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white shadow-md' 
+                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#1B2E1D]'
                                                         }`}
+                                                        title="Marcar enviado"
                                                     >
-                                                        <Check className="h-3 w-3" />
+                                                        <Check className="h-3.5 w-3.5" />
                                                     </button>
-                                                    <button onClick={() => handleSendReminder(g)} className={`text-[8px] font-bold uppercase tracking-widest flex items-center gap-2 ${status === 'yes' ? 'text-emerald-600' : 'text-[#BD7474]'}`}>
-                                                        <SendIcon className="h-3 w-3" /> {g.invitation_sent_at ? 'Recordar' : 'Enviar'}
+                                                    <button 
+                                                        onClick={() => handleSendReminder(g)} 
+                                                        className={`h-6 w-6 rounded-lg border border-stone-200 flex items-center justify-center transition-all hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 text-stone-400`}
+                                                        title="WhatsApp"
+                                                    >
+                                                        <MessageSquare className="h-3.5 w-3.5" />
                                                     </button>
-                                                    {g.invitation_sent_at && (
-                                                        <span className="text-[7px] text-stone-300 font-medium italic">
-                                                            Enviada: {new Date(g.invitation_sent_at).toLocaleDateString()}
-                                                        </span>
-                                                    )}
                                                 </div>
-                                                <button onClick={() => setSelectedGuestForQR(g)} className="text-stone-300 hover:text-[#1B2E1D]">
-                                                    <QrCode className="h-4 w-4" />
-                                                </button>
+                                                
+                                                <div className="flex items-center gap-2">
+                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D] transition-colors">
+                                                        <QrCode className="h-4 w-4" />
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => {
+                                                            setEditingGuestId(g.id);
+                                                            setEditData({
+                                                                name: g.name,
+                                                                group_name: g.group_name || '',
+                                                                status: status,
+                                                                plus_ones_confirmed: rsvp?.plus_ones_confirmed || 0,
+                                                                max_plus_ones: g.max_plus_ones || 0,
+                                                                table_id: g.table_id || ''
+                                                            });
+                                                        }}
+                                                        className="p-2 text-stone-300 hover:text-blue-500 transition-colors"
+                                                    >
+                                                        <Edit2 className="h-4 w-4" />
+                                                    </button>
+                                                    <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500 transition-colors">
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     );

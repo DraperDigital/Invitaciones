@@ -114,38 +114,43 @@ const DashboardHome: React.FC = () => {
                 </div>
             )}
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-4xl font-serif text-[#1B2E1D] tracking-tight">Bienvenido al Panel</h1>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-10">
+                <div className="space-y-1">
+                    <div className="flex flex-wrap items-center gap-3">
+                        <h1 className="text-3xl md:text-5xl font-serif text-[#1B2E1D] tracking-tight leading-tight">Bienvenido,</h1>
                         {isPersonalized && (
-                            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[9px] uppercase font-black tracking-widest flex items-center gap-1.5 shadow-sm">
+                            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full text-[8px] md:text-[9px] uppercase font-black tracking-widest flex items-center gap-1.5 shadow-sm">
                                 <Sparkles className="h-3 w-3 text-emerald-500" />
                                 Personalizado
                             </span>
                         )}
                     </div>
-                    <p className="text-stone-500 font-light italic">Aquí tienes un resumen de tus celebraciones activas.</p>
+                    <p className="text-sm md:text-xl text-stone-400 font-light italic">Aquí tienes un resumen de tus celebraciones.</p>
                 </div>
                 <Link 
                     id="new-event-btn"
                     to="/dashboard/new"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-xs uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-[#1B2E1D]/10"
+                    className="group relative h-14 md:h-16 px-8 bg-[#1B2E1D] text-white rounded-2xl md:rounded-[2rem] text-[10px] md:text-[11px] uppercase font-bold tracking-[0.3em] hover:bg-[#2D312E] transition-all shadow-xl shadow-[#1B2E1D]/10 flex items-center justify-center gap-3 overflow-hidden"
                 >
-                    <Plus className="h-4 w-4" />
-                    Nueva Invitación
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    <Plus className="h-4 w-4 group-hover:rotate-90 transition-transform" />
+                    <span>Nueva Invitación</span>
                 </Link>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
                 {statCards.map((stat, index) => (
-                    <div key={stat.name} id={index === 0 ? 'total-events-card' : undefined} className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-shadow">
-                        <div className={`p-4 rounded-2xl ${stat.bg} w-fit mb-6`}>
-                            <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                    <div 
+                        key={stat.name} 
+                        id={index === 0 ? 'total-events-card' : undefined} 
+                        className={`bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border border-stone-100 shadow-sm hover:shadow-md transition-all group ${index === 2 ? 'col-span-2 md:col-span-1' : ''}`}
+                    >
+                        <div className={`p-3 md:p-4 rounded-xl md:rounded-2xl ${stat.bg} w-fit mb-4 md:mb-6 group-hover:scale-110 transition-transform`}>
+                            <stat.icon className={`h-5 w-5 md:h-6 md:w-6 ${stat.color}`} />
                         </div>
-                        <p className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">{stat.name}</p>
-                        <p className="text-4xl font-serif text-[#1B2E1D]">{stat.value}</p>
+                        <p className="text-[7px] md:text-[10px] uppercase tracking-[0.2em] font-black text-stone-300 mb-1 md:mb-2">{stat.name}</p>
+                        <p className="text-2xl md:text-5xl font-serif text-[#1B2E1D]">{stat.value}</p>
                     </div>
                 ))}
             </div>

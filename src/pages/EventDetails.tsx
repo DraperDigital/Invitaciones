@@ -724,10 +724,10 @@ export default function EventDetails() {
                                 </span>
                             </div>
 
-                            <div className="space-y-3 md:space-y-4">
-                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-[9rem] font-serif text-[#1B2E1D] tracking-tighter leading-[0.9] md:leading-[0.8] mb-4 break-words">{event.title}</h1>
-                                <p className="text-lg md:text-2xl text-stone-400 font-light italic flex items-center gap-3 md:gap-4 ml-1 md:ml-2">
-                                    <MapPin className="h-5 w-5 md:h-6 md:w-6 text-[#BD7474]" /> {event.venue_name || 'Ubicación Premium'}
+                            <div className="space-y-2 md:space-y-4">
+                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-[9rem] font-serif text-[#1B2E1D] tracking-tighter leading-[0.9] md:leading-[0.8] mb-2 md:mb-4 break-words">{event.title}</h1>
+                                <p className="text-base md:text-2xl text-stone-400 font-light italic flex items-center gap-2 md:gap-4 ml-1 md:ml-2">
+                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#BD7474]" /> {event.venue_name || 'Ubicación Premium'}
                                 </p>
                             </div>
 
@@ -806,7 +806,7 @@ export default function EventDetails() {
                                 </div>
                             </div>
 
-                            <button onClick={copyGeneralLink} className="group w-full h-16 md:h-20 bg-[#1B2E1D] text-white rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center gap-4 text-[10px] md:text-[11px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl hover:translate-y-[-4px]">
+                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-20 bg-[#1B2E1D] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-4 text-[10px] md:text-[11px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl active:scale-[0.98]">
                                 <Copy className="h-4 w-4 md:h-5 md:w-5 group-hover:scale-110 transition-transform" /> <span className="hidden xs:inline">Copiar Enlace</span><span className="xs:hidden">Copiar Link</span>
                             </button>
                         </div>
@@ -815,7 +815,7 @@ export default function EventDetails() {
 
             {activeTab === 'guests' ? (
                 /* GUESTS TAB CONTENT */
-                <div className="space-y-12">
+                <div className="space-y-12 animate-in fade-in duration-500">
                     {/* Stats & Priority Metrics */}
                     <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                         {[
@@ -888,28 +888,25 @@ export default function EventDetails() {
                         </div>
                     ) : (
                         /* GUEST LIST TABLE */
-                        <div className="bg-white rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden animate-in fade-in duration-500">
-                             <div className="p-10 border-b border-stone-100 bg-[#FDFBF7] flex flex-col lg:flex-row gap-8 justify-between items-center">
+                        <>
+                            <div className="bg-white rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden animate-in fade-in duration-500">
+                             <div className="p-6 md:p-10 border-b border-stone-100 bg-[#FDFBF7] flex flex-col lg:flex-row gap-6 md:gap-8 justify-between items-center">
                                 <div className="relative w-full lg:w-[35rem]">
-                                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
+                                    <Search className="absolute left-5 md:left-6 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-stone-300" />
                                     <input 
                                         type="text" 
                                         placeholder="Buscar por nombre o grupo..."
-                                        className="w-full pl-16 pr-6 py-4 bg-white border border-stone-100 rounded-2xl text-base focus:ring-2 focus:ring-[#1B2E1D]/10 outline-none transition-all shadow-sm font-light text-stone-600"
+                                        className="w-full pl-12 md:pl-16 pr-6 py-3.5 md:py-4 bg-white border border-stone-100 rounded-xl md:rounded-2xl text-sm md:text-base focus:ring-2 focus:ring-[#1B2E1D]/10 outline-none transition-all shadow-sm font-light text-stone-600"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
                                 </div>
-                                <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
-                                    <div className="flex bg-white p-1 rounded-2xl border border-stone-100 shadow-sm flex-1 lg:flex-none">
-                                        <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all">
-                                            <Upload className="h-4 w-4 text-emerald-500" /> Importar
+                                    <div className="flex bg-white p-1 rounded-xl border border-stone-100 shadow-sm">
+                                        <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+525555555555,juan@ejemplo.com')} className="flex items-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all border-l border-stone-100 whitespace-nowrap">
+                                            <FileType className="h-3.5 w-3.5 md:h-4 md:w-4 text-[#BD7474]" /> Plantilla
                                         </button>
-                                        <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+525555555555,juan@ejemplo.com')} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all border-l border-stone-100">
-                                            <FileType className="h-4 w-4 text-[#BD7474]" /> Plantilla
-                                        </button>
-                                        <button onClick={handleDeleteAllGuests} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-rose-500 hover:bg-rose-50 transition-all border-l border-stone-100">
-                                            <Trash2 className="h-4 w-4" /> Borrar Lista
+                                        <button onClick={handleDeleteAllGuests} className="flex items-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-rose-500 hover:bg-rose-50 transition-all border-l border-stone-100 whitespace-nowrap">
+                                            <Trash2 className="h-3.5 w-3.5 md:h-4 md:w-4" /> Borrar
                                         </button>
                                     </div>
                                     
@@ -919,9 +916,9 @@ export default function EventDetails() {
                                             setEditingGuestId(null);
                                             setIsAddOpen(true);
                                         }}
-                                        className="bg-[#BD7474] text-white hover:bg-[#A05C5C] px-10 py-5 rounded-2xl shadow-xl shadow-[#BD7474]/20 flex-1 lg:flex-none text-[10px] uppercase tracking-widest"
+                                        className="bg-[#BD7474] text-white hover:bg-[#A05C5C] px-6 md:px-10 h-12 md:h-16 rounded-xl md:rounded-2xl shadow-xl shadow-[#BD7474]/20 flex-1 lg:flex-none text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-widest transition-all active:scale-95"
                                     >
-                                        <UserPlus className="mr-2 h-5 w-5" /> Agregar invitado
+                                        <UserPlus className="mr-2 h-4 w-4 md:h-5 md:w-5" /> Agregar <span className="hidden xs:inline">Invitado</span>
                                     </Button>
                                 </div>
                             </div>
@@ -929,13 +926,13 @@ export default function EventDetails() {
                             <div className="md:rounded-[2.5rem] overflow-hidden">
                                 {/* Desktop Table View */}
                                 <div className="hidden md:block overflow-x-auto p-10">
-                                    <table className="w-full text-left">
+                                    <table className="w-full text-left table-auto">
                                         <thead>
                                             <tr className="text-[10px] uppercase font-bold tracking-widest text-stone-300">
-                                                <th className="px-4 py-6">Invitado</th>
-                                                <th className="px-4 py-6">Grupo</th>
+                                                <th className="px-4 py-6 min-w-[200px]">Invitado</th>
+                                                <th className="px-4 py-6 min-w-[150px]">Grupo</th>
                                                 <th className="px-4 py-6 text-center">Enviado</th>
-                                                <th className="px-4 py-6 text-center">Estado Visual</th>
+                                                <th className="px-4 py-6 text-center">Visual</th>
                                                 <th className="px-4 py-6">Estatus</th>
                                                 <th className="px-4 py-6 text-right">Acciones</th>
                                             </tr>
@@ -1073,47 +1070,70 @@ export default function EventDetails() {
                                     {filteredGuests.map((guest) => {
                                         const status = getRSVPStatus(guest);
                                         return (
-                                            <div key={guest.id} className="p-6 space-y-4 hover:bg-[#FDFBF7] transition-all">
-                                                <div className="flex justify-between items-start">
-                                                    <div className="space-y-1">
-                                                        <h4 className="font-serif text-lg text-[#1B2E1D] leading-tight">{guest.name}</h4>
-                                                        <p className="text-[10px] uppercase font-bold tracking-widest text-[#BD7474]">
-                                                            Pax: {1 + (guest.max_plus_ones || 0)} • {guest.group_name || 'Individual'}
-                                                        </p>
+                                            <div key={guest.id} className="p-5 xs:p-6 space-y-5 hover:bg-[#FDFBF7] transition-all border-b border-stone-50 last:border-0">
+                                                <div className="flex justify-between items-start gap-4">
+                                                    <div className="space-y-1.5 flex-1 min-w-0">
+                                                        <h4 className="font-serif text-lg xs:text-xl text-[#1B2E1D] leading-tight truncate">{guest.name}</h4>
+                                                        <div className="flex flex-wrap items-center gap-2">
+                                                            <span className="px-2 py-0.5 bg-stone-100 text-stone-500 rounded text-[8px] uppercase font-bold tracking-widest whitespace-nowrap">
+                                                                {guest.group_name || 'Individual'}
+                                                            </span>
+                                                            <span className="text-[10px] font-bold text-[#BD7474] whitespace-nowrap">
+                                                                Pax: {1 + (guest.max_plus_ones || 0)}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                    <GuestStatusBadge status={status} />
+                                                    <div className="flex-shrink-0">
+                                                        <GuestStatusBadge status={status} />
+                                                    </div>
                                                 </div>
 
-                                                <div className="flex items-center justify-between py-3 border-y border-stone-50/50">
-                                                    <div className="flex flex-col gap-3">
-                                                        <div className="flex items-center gap-3">
-                                                            <button 
-                                                                onClick={() => handleToggleSent(guest)}
-                                                                className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                                                    guest.invitation_sent_at 
-                                                                        ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white' 
-                                                                        : 'bg-white border-stone-200 text-transparent'
-                                                                }`}
-                                                            >
-                                                                <Check className="h-3 w-3" />
-                                                            </button>
-                                                            <span className="text-[8px] uppercase tracking-widest font-bold text-stone-400">Enviado Manual</span>
+                                                <div className="grid grid-cols-2 gap-4 py-4 border-y border-stone-50/80">
+                                                    <button 
+                                                        onClick={() => handleToggleSent(guest)}
+                                                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                                                            guest.invitation_sent_at 
+                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white shadow-md shadow-[#1B2E1D]/20' 
+                                                                : 'bg-white border-stone-100 text-stone-400'
+                                                        }`}
+                                                    >
+                                                        <div className={`h-5 w-5 rounded-md flex items-center justify-center ${guest.invitation_sent_at ? 'bg-white/20' : 'bg-stone-50'}`}>
+                                                            <Check className="h-3 w-3" />
                                                         </div>
-                                                        <div className="flex items-center gap-3">
-                                                            <button
-                                                                onClick={() => handleToggleRSVP(guest)}
-                                                                className={`relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#BD7474] focus:ring-offset-2 ${
-                                                                    status === 'yes' ? 'bg-[#BD7474]' : 'bg-stone-200'
-                                                                }`}
-                                                            >
-                                                                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${status === 'yes' ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
-                                                            </button>
-                                                            <span className="text-[8px] uppercase tracking-widest font-bold text-stone-400">Confirmación Manual</span>
+                                                        <span className="text-[9px] uppercase tracking-wider font-bold">Enviado</span>
+                                                    </button>
+
+                                                    <button
+                                                        onClick={() => handleToggleRSVP(guest)}
+                                                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                                                            status === 'yes' 
+                                                                ? 'bg-[#BD7474] border-[#BD7474] text-white shadow-md shadow-[#BD7474]/20' 
+                                                                : 'bg-white border-stone-100 text-stone-400'
+                                                        }`}
+                                                    >
+                                                        <div className={`h-5 w-5 rounded-md flex items-center justify-center ${status === 'yes' ? 'bg-white/20' : 'bg-stone-50'}`}>
+                                                            <Check className="h-3 w-3" />
                                                         </div>
-                                                    </div>
+                                                        <span className="text-[9px] uppercase tracking-wider font-bold">Manual</span>
+                                                    </button>
+                                                </div>
+
+                                                <div className="flex items-center justify-between gap-2 pt-1">
                                                     <div className="flex items-center gap-2">
-                                                        <button onClick={() => sendIndividualReminder(guest)} className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl"><MessageCircle className="h-4 w-4" /></button>
-                                                        <button onClick={() => copyGuestLink(guest)} className="p-2.5 bg-stone-50 text-stone-500 rounded-xl"><Copy className="h-4 w-4" /></button>
+                                                        <button 
+                                                            onClick={() => sendIndividualReminder(guest)} 
+                                                            className="h-12 w-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center active:scale-95 transition-transform"
+                                                            title="WhatsApp"
+                                                        >
+                                                            <MessageCircle className="h-5 w-5" />
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => copyGuestLink(guest)} 
+                                                            className="h-12 w-12 bg-stone-50 text-stone-500 rounded-xl flex items-center justify-center active:scale-95 transition-transform"
+                                                            title="Copiar Link"
+                                                        >
+                                                            <Copy className="h-5 w-5" />
+                                                        </button>
                                                         <button 
                                                             onClick={() => {
                                                                 setNewGuest({
@@ -1126,30 +1146,35 @@ export default function EventDetails() {
                                                                 setEditingGuestId(guest.id);
                                                                 setIsAddOpen(true);
                                                             }}
-                                                            className="p-2.5 bg-stone-50 text-stone-400 rounded-xl"
+                                                            className="h-12 w-12 bg-slate-50 text-slate-500 rounded-xl flex items-center justify-center active:scale-95 transition-transform"
+                                                            title="Editar"
                                                         >
-                                                            <Edit2 className="h-4 w-4" />
+                                                            <Edit2 className="h-5 w-5" />
                                                         </button>
+                                                    </div>
+
+                                                    <div className="flex-1 flex justify-end">
                                                         {confirmDeleteId === guest.id ? (
-                                                            <div className="flex items-center gap-1">
+                                                            <div className="flex items-center gap-2 bg-rose-50 p-1.5 rounded-xl border border-rose-100 animate-in slide-in-from-right-4 duration-300">
                                                                 <button
                                                                     onClick={() => deleteGuest(guest.id)}
                                                                     disabled={deletingId === guest.id}
-                                                                    className="px-2 py-1.5 bg-rose-500 text-white text-xs font-medium rounded-xl disabled:opacity-50"
+                                                                    className="px-4 py-2 bg-rose-500 text-white text-[10px] uppercase font-black tracking-widest rounded-lg shadow-sm"
                                                                 >
-                                                                    {deletingId === guest.id ? '...' : '¿Eliminar?'}
+                                                                    {deletingId === guest.id ? '...' : 'Borrar'}
                                                                 </button>
-                                                                <button onClick={() => setConfirmDeleteId(null)} className="p-2 text-stone-400 rounded-xl">
-                                                                    <CloseIcon className="h-3 w-3" />
+                                                                <button onClick={() => setConfirmDeleteId(null)} className="p-2 text-stone-400">
+                                                                    <CloseIcon className="h-4 w-4" />
                                                                 </button>
                                                             </div>
                                                         ) : (
                                                             <button
                                                                 onClick={() => setConfirmDeleteId(guest.id)}
                                                                 disabled={deletingId === guest.id}
-                                                                className="p-2.5 bg-rose-50 text-rose-300 rounded-xl disabled:opacity-50"
+                                                                className="h-12 w-12 bg-rose-50 text-rose-300 rounded-xl flex items-center justify-center active:scale-95 transition-transform"
+                                                                title="Eliminar"
                                                             >
-                                                                <Trash2 className="h-4 w-4" />
+                                                                <Trash2 className="h-5 w-5" />
                                                             </button>
                                                         )}
                                                     </div>
@@ -1159,8 +1184,9 @@ export default function EventDetails() {
                                     })}
                                 </div>
                             </div>
-                        </div>
+                        </>
                     )}
+                    
 
                     {/* ALWAYS VISIBLE: Invitados sin confirmar section */}
                     <div className="mt-12 space-y-10">
@@ -1227,71 +1253,71 @@ export default function EventDetails() {
                                                 <MessageCircle className="h-4 w-4" /> Recordar por WhatsApp
                                             </button>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+</div>
+                            ))}
+                        </div>
+                    )}
                 </div>
+            </div>
             ) : (
                 /* CONTENT TAB CONTENT */
                 <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="flex justify-between items-end mb-8">
-                        <div className="space-y-2">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8 px-2">
+                        <div className="space-y-1">
                              <h2 className="text-3xl font-serif text-[#1B2E1D]">Contenido Multimedia</h2>
                              <p className="text-stone-400 text-sm font-light italic">Configura tu mesa de regalos y galería de fotos.</p>
                         </div>
                         <button 
                             onClick={handleSaveContent} 
                             disabled={isSaving}
-                            className="bg-[#1B2E1D] text-white px-10 py-5 rounded-2xl shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
+                            className="w-full sm:w-auto bg-[#1B2E1D] text-white px-8 h-14 rounded-2xl shadow-xl flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all"
                         >
                             {isSaving ? 'Guardando...' : <><Save className="h-5 w-5" /> Guardar Todo</>}
                         </button>
                     </div>
 
                     {/* Mesa de Regalos Configuration */}
-                    <div className="bg-white rounded-[2.5rem] border border-stone-100 p-10 shadow-sm space-y-10">
-                         <div className="flex items-center gap-4 border-b border-stone-50 pb-8">
-                            <div className="h-14 w-14 bg-[#BD7474]/10 rounded-[1.5rem] flex items-center justify-center text-[#BD7474]">
-                                <Gift className="h-7 w-7" />
+                    <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 p-6 md:p-10 shadow-sm space-y-8 md:space-y-10">
+                         <div className="flex items-center gap-4 border-b border-stone-50 pb-6 md:pb-8">
+                            <div className="h-12 w-12 md:h-14 md:w-14 bg-[#BD7474]/10 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-[#BD7474]">
+                                <Gift className="h-6 w-6 md:h-7 md:w-7" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-serif text-[#1B2E1D]">Mesa de Regalos</h3>
-                                <p className="text-stone-400 text-xs tracking-widest uppercase font-bold mt-1">Soporta transferencias y links externos</p>
+                                <h3 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Mesa de Regalos</h3>
+                                <p className="text-stone-400 text-[10px] tracking-widest uppercase font-bold mt-0.5">Soporta transferencias y links</p>
                             </div>
                          </div>
 
-                         <div className="grid md:grid-cols-2 gap-8">
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                             {registryItems.map((item, index) => (
-                                <div key={index} className="p-8 bg-[#FDFBF7] rounded-[2rem] border border-stone-100 relative group">
+                                <div key={index} className="p-6 md:p-8 bg-[#FDFBF7] rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 relative group">
                                     <button 
                                         onClick={() => setRegistryItems(registryItems.filter((_, i) => i !== index))}
-                                        className="absolute top-4 right-4 h-8 w-8 bg-white text-stone-300 hover:text-rose-500 rounded-full flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-all"
+                                        className="absolute top-4 right-4 h-8 w-8 bg-white text-stone-300 hover:text-rose-500 rounded-full flex items-center justify-center shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-all"
                                     >
                                         <CloseIcon className="h-4 w-4" />
                                     </button>
                                     
-                                    <div className="space-y-6">
+                                    <div className="space-y-4 md:space-y-6">
                                         <div className="flex items-center gap-3">
                                             <span className="px-3 py-1 bg-white border border-stone-100 rounded-full text-[8px] uppercase font-bold text-stone-400">{item.type}</span>
-                                            <h4 className="font-serif text-lg">{item.title}</h4>
+                                            <h4 className="font-serif text-base md:text-lg">{item.title}</h4>
                                         </div>
                                         
                                         {item.type === 'bank' ? (
-                                            <div className="space-y-4">
-                                                <input placeholder="Banco" className="w-full bg-white p-3 rounded-xl border-none shadow-sm text-sm" value={item.bank_name} onChange={e => {
+                                            <div className="space-y-3 md:space-y-4">
+                                                <input placeholder="Banco" className="w-full bg-white p-3.5 rounded-xl border-none shadow-sm text-sm" value={item.bank_name} onChange={e => {
                                                     const n = [...registryItems]; n[index].bank_name = e.target.value; setRegistryItems(n);
                                                 }} />
-                                                <input placeholder="CLABE" className="w-full bg-white p-3 rounded-xl border-none shadow-sm text-sm" value={item.clabe} onChange={e => {
+                                                <input placeholder="CLABE" className="w-full bg-white p-3.5 rounded-xl border-none shadow-sm text-sm" value={item.clabe} onChange={e => {
                                                     const n = [...registryItems]; n[index].clabe = e.target.value; setRegistryItems(n);
                                                 }} />
-                                                <input placeholder="Beneficiario" className="w-full bg-white p-3 rounded-xl border-none shadow-sm text-sm" value={item.beneficiary} onChange={e => {
+                                                <input placeholder="Beneficiario" className="w-full bg-white p-3.5 rounded-xl border-none shadow-sm text-sm" value={item.beneficiary} onChange={e => {
                                                     const n = [...registryItems]; n[index].beneficiary = e.target.value; setRegistryItems(n);
                                                 }} />
                                             </div>
                                         ) : (
-                                            <input placeholder="URL de la mesa" className="w-full bg-white p-3 rounded-xl border-none shadow-sm text-sm" value={item.url} onChange={e => {
+                                            <input placeholder="URL de la mesa" className="w-full bg-white p-3.5 rounded-xl border-none shadow-sm text-sm" value={item.url} onChange={e => {
                                                 const n = [...registryItems]; n[index].url = e.target.value; setRegistryItems(n);
                                             }} />
                                         )}
@@ -1300,23 +1326,23 @@ export default function EventDetails() {
                             ))}
                             <button 
                                 onClick={() => setRegistryItems([...registryItems, { type: 'bank', title: 'Nueva Cuenta', bank_name: '', clabe: '', beneficiary: '' }])}
-                                className="p-8 border-2 border-dashed border-stone-100 rounded-[2rem] flex flex-col items-center justify-center text-stone-300 hover:border-[#BD7474] hover:text-[#BD7474] transition-all gap-4 group"
+                                className="p-8 border-2 border-dashed border-stone-100 rounded-[1.5rem] md:rounded-[2rem] flex flex-col items-center justify-center text-stone-300 hover:border-[#BD7474] hover:text-[#BD7474] transition-all gap-4 group min-h-[200px]"
                             >
                                 <Plus className="h-8 w-8 transition-transform group-hover:rotate-90" />
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-inherit">Agregar Transferencia</span>
+                                <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-inherit">Agregar Transferencia</span>
                             </button>
                          </div>
                     </div>
 
                     {/* Gallery Configuration */}
-                    <div className="bg-white rounded-[2.5rem] border border-stone-100 p-10 shadow-sm space-y-10">
-                        <div className="flex items-center gap-4 border-b border-stone-50 pb-8">
-                            <div className="h-14 w-14 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center text-emerald-600">
-                                <ImageIcon className="h-7 w-7" />
+                    <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 p-6 md:p-10 shadow-sm space-y-8 md:space-y-10">
+                        <div className="flex items-center gap-4 border-b border-stone-50 pb-6 md:pb-8">
+                            <div className="h-12 w-12 md:h-14 md:w-14 bg-emerald-50 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-emerald-600">
+                                <ImageIcon className="h-6 w-6 md:h-7 md:w-7" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-serif text-[#1B2E1D]">Galería de Fotos</h3>
-                                <p className="text-stone-400 text-xs tracking-widest uppercase font-bold mt-1">Imágenes para tu invitación</p>
+                                <h3 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Galería de Fotos</h3>
+                                <p className="text-stone-400 text-[10px] tracking-widest uppercase font-bold mt-0.5">Imágenes de tu evento</p>
                             </div>
                          </div>
 
@@ -1353,7 +1379,7 @@ export default function EventDetails() {
                                 <span className="text-[8px] uppercase font-bold tracking-widest text-inherit text-center">Añadir Foto<br />(vía URL)</span>
                             </button>
                          </div>
-                         </div>
+                    </div>
                 </div>
             )}
             </div>

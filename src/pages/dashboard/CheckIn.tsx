@@ -163,20 +163,20 @@ const CheckIn: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-stone-900 text-white font-sans flex flex-col">
-            <div className="p-6 flex items-center gap-4 bg-stone-800/50 backdrop-blur-md sticky top-0 z-50">
-                <button onClick={() => navigate(-1)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+        <div className="min-h-screen bg-stone-900 text-white font-sans flex flex-col overflow-x-hidden">
+            <div className="p-4 md:p-6 flex items-center gap-4 bg-stone-800/50 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+                <button onClick={() => navigate(-1)} className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90">
                     <ChevronLeft className="h-6 w-6" />
                 </button>
-                <div>
-                    <h1 className="text-lg font-serif italic">{eventTitle}</h1>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-stone-400">Escáner de Check-in</p>
+                <div className="flex-1 min-w-0">
+                    <h1 className="text-base md:text-lg font-serif italic truncate">{eventTitle}</h1>
+                    <p className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-stone-400">Escáner de Check-in</p>
                 </div>
             </div>
 
-            <div className="flex-1 relative flex flex-col items-center justify-center p-6">
+            <div className="flex-1 relative flex flex-col items-center justify-center p-4 md:p-6">
                 {!scannedId ? (
-                    <div className="w-full max-w-sm aspect-square relative rounded-[3rem] overflow-hidden border-4 border-stone-800 shadow-2xl">
+                    <div className="w-full max-w-sm aspect-square relative rounded-[2.5rem] md:rounded-[3rem] overflow-hidden border-4 border-stone-800 shadow-2xl bg-black">
                         {/* El div #reader siempre está en el DOM para que html5-qrcode pueda montarse */}
                         <div id="reader" className="w-full h-full" />
 
@@ -184,10 +184,10 @@ const CheckIn: React.FC = () => {
                         {!isScannerReady && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-stone-900/90 z-10">
                                 <Loader2 className="h-10 w-10 animate-spin text-[#BD7474]" />
-                                <p className="text-xs font-bold uppercase tracking-widest text-[#BD7474]">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-[#BD7474]">
                                     Iniciando cámara...
                                 </p>
-                                <p className="text-[10px] text-stone-500 text-center px-8">
+                                <p className="text-[9px] text-stone-500 text-center px-8 leading-relaxed">
                                     Acepta el permiso de cámara si el navegador lo solicita
                                 </p>
                             </div>
@@ -196,10 +196,10 @@ const CheckIn: React.FC = () => {
                         {/* Overlay: escaneando (solo visible cuando la cámara está lista) */}
                         {isScannerReady && (
                             <>
-                                <div className="absolute inset-0 border-[40px] border-stone-900/40 pointer-events-none z-10">
+                                <div className="absolute inset-0 border-[30px] md:border-[40px] border-stone-900/40 pointer-events-none z-10">
                                     <div className="w-full h-full border-2 border-[#BD7474] rounded-2xl animate-pulse" />
                                 </div>
-                                <p className="absolute bottom-10 left-0 right-0 text-center text-xs font-bold uppercase tracking-widest text-[#BD7474] drop-shadow-md z-10">
+                                <p className="absolute bottom-8 md:bottom-10 left-0 right-0 text-center text-[10px] font-bold uppercase tracking-widest text-[#BD7474] drop-shadow-md z-10">
                                     Escaneando Código QR...
                                 </p>
                             </>
@@ -209,83 +209,83 @@ const CheckIn: React.FC = () => {
                     <div className="w-full max-w-md animate-in slide-in-from-bottom-10 duration-500">
                         {loading ? (
                             <div className="flex flex-col items-center gap-4 p-12">
-                                <Loader2 className="h-12 w-12 animate-spin text-[#BD7474]" />
+                                <Loader2 className="h-10 w-10 animate-spin text-[#BD7474]" />
                                 <p className="text-stone-400 font-serif italic">Validando invitado...</p>
                             </div>
                         ) : status === 'error' ? (
-                            <div className="bg-rose-500/10 border border-rose-500/20 rounded-[2.5rem] p-10 text-center space-y-6">
-                                <XCircle className="h-16 w-16 text-rose-500 mx-auto" />
+                            <div className="bg-rose-500/10 border border-rose-500/20 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-10 text-center space-y-6">
+                                <XCircle className="h-12 w-12 md:h-16 md:w-16 text-rose-500 mx-auto" />
                                 <div>
-                                    <h2 className="text-2xl font-serif">Error de Lectura</h2>
-                                    <p className="text-stone-400 text-sm mt-2">Código inválido o invitado no pertenece a este evento.</p>
+                                    <h2 className="text-xl md:text-2xl font-serif">Error de Lectura</h2>
+                                    <p className="text-stone-400 text-xs md:text-sm mt-2 leading-relaxed">Código inválido o invitado no pertenece a este evento.</p>
                                 </div>
-                                <button onClick={resetScanner} className="w-full py-4 bg-white text-stone-900 rounded-2xl font-bold uppercase text-xs tracking-widest">
+                                <button onClick={resetScanner} className="w-full py-4 bg-white text-stone-900 rounded-xl md:rounded-2xl font-bold uppercase text-xs tracking-widest active:scale-95 transition-all">
                                     Reintentar
                                 </button>
                             </div>
                         ) : (
-                            <div className="bg-stone-800/80 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/5 shadow-2xl space-y-6">
+                            <div className="bg-stone-800/80 backdrop-blur-xl rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 border border-white/5 shadow-2xl space-y-6 md:space-y-8">
                                 <div className="text-center space-y-2">
-                                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-500">INVITADO DETECTADO</p>
-                                    <h2 className="text-3xl font-serif italic text-white">{guestData?.name}</h2>
-                                    <p className="text-stone-400 text-xs">{guestData?.group_name || 'Individual'}</p>
+                                    <p className="text-[9px] uppercase tracking-[0.3em] font-bold text-stone-500">INVITADO DETECTADO</p>
+                                    <h2 className="text-2xl md:text-3xl font-serif italic text-white leading-tight">{guestData?.name}</h2>
+                                    <p className="text-stone-400 text-[10px] md:text-xs">{guestData?.group_name || 'Individual'}</p>
                                 </div>
 
                                 {/* Table Display - Much more prominent */}
-                                <div className="py-2">
+                                <div className="py-1">
                                     {guestData?.event_tables?.name ? (
-                                        <div className="bg-gradient-to-r from-[#D9B880]/20 to-[#BD7474]/20 border border-[#D9B880]/30 p-6 rounded-[2rem] text-center space-y-1 group hover:scale-[1.02] transition-transform">
-                                            <p className="text-[9px] uppercase font-black tracking-[0.4em] text-[#D9B880]">Mesa Asignada</p>
-                                            <h3 className="text-4xl font-serif text-white">{guestData.event_tables.name}</h3>
+                                        <div className="bg-gradient-to-r from-[#D9B880]/20 to-[#BD7474]/20 border border-[#D9B880]/30 p-5 md:p-6 rounded-[1.5rem] md:rounded-[2rem] text-center space-y-1 group hover:scale-[1.02] transition-transform">
+                                            <p className="text-[8px] md:text-[9px] uppercase font-black tracking-[0.4em] text-[#D9B880]">Mesa Asignada</p>
+                                            <h3 className="text-3xl md:text-4xl font-serif text-white">{guestData.event_tables.name}</h3>
                                         </div>
                                     ) : (
-                                        <div className="bg-stone-900/40 border border-white/5 p-4 rounded-2xl text-center">
-                                            <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Ubicación: Acceso Libre / Sin Mesa</p>
+                                        <div className="bg-stone-900/40 border border-white/5 p-4 rounded-xl md:rounded-2xl text-center">
+                                            <p className="text-[8px] md:text-[9px] uppercase font-bold text-stone-500 tracking-widest">Ubicación: Acceso Libre / Sin Mesa</p>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-stone-900/50 p-6 rounded-3xl border border-white/5 space-y-2">
-                                        <Users className="h-5 w-5 text-stone-500" />
-                                        <p className="text-2xl font-serif">{1 + (guestData?.rsvps?.[0]?.plus_ones_confirmed || 0)}</p>
-                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Personas (PAX)</p>
+                                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                                    <div className="bg-stone-900/50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5 space-y-2">
+                                        <Users className="h-4 w-4 md:h-5 md:w-5 text-stone-500" />
+                                        <p className="text-xl md:text-2xl font-serif">{1 + (guestData?.rsvps?.[0]?.plus_ones_confirmed || 0)}</p>
+                                        <p className="text-[8px] md:text-[9px] uppercase font-bold text-stone-500 tracking-widest">Personas (PAX)</p>
                                     </div>
-                                    <div className="bg-stone-900/50 p-6 rounded-3xl border border-white/5 space-y-2">
-                                        <CheckCircle2 className="h-5 w-5 text-stone-500" />
-                                        <p className="text-lg font-serif">{guestData?.checked_in_at ? 'Ya ingresó' : 'Pendiente'}</p>
-                                        <p className="text-[9px] uppercase font-bold text-stone-500 tracking-widest">Estado</p>
+                                    <div className="bg-stone-900/50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5 space-y-2">
+                                        <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-stone-500" />
+                                        <p className="text-base md:text-lg font-serif">{guestData?.checked_in_at ? 'Ya ingresó' : 'Pendiente'}</p>
+                                        <p className="text-[8px] md:text-[9px] uppercase font-bold text-stone-500 tracking-widest">Estado</p>
                                     </div>
                                 </div>
 
                                 {status === 'already_checked' ? (
-                                    <div className="bg-amber-500/10 border border-amber-500/20 p-6 rounded-3xl text-center space-y-3">
-                                        <CheckCircle2 className="h-8 w-8 text-amber-500 mx-auto" />
-                                        <p className="text-amber-500 text-xs font-bold uppercase tracking-widest">Ya ingresó al evento</p>
-                                        <button onClick={resetScanner} className="w-full mt-2 py-3 border border-stone-700 text-stone-400 rounded-xl text-[10px] uppercase font-bold tracking-widest">
+                                    <div className="bg-amber-500/10 border border-amber-500/20 p-5 md:p-6 rounded-2xl md:rounded-3xl text-center space-y-3">
+                                        <CheckCircle2 className="h-6 w-6 md:h-8 md:w-8 text-amber-500 mx-auto" />
+                                        <p className="text-amber-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">Ya ingresó al evento</p>
+                                        <button onClick={resetScanner} className="w-full mt-2 py-3 border border-stone-700 text-stone-400 rounded-lg md:rounded-xl text-[9px] md:text-[10px] uppercase font-bold tracking-widest active:scale-95 transition-all">
                                             Siguiente Invitado
                                         </button>
                                     </div>
                                 ) : status === 'success' ? (
-                                    <div className="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-3xl text-center space-y-4">
+                                    <div className="bg-emerald-500/10 border border-emerald-500/20 p-5 md:p-6 rounded-2xl md:rounded-3xl text-center space-y-4">
                                         <div className="flex items-center justify-center gap-3 text-emerald-500">
-                                            <CheckCircle2 className="h-6 w-6 animate-bounce" />
-                                            <p className="text-sm font-bold uppercase tracking-widest">Ingreso Confirmado</p>
+                                            <CheckCircle2 className="h-5 w-5 md:h-6 md:w-6 animate-bounce" />
+                                            <p className="text-[10px] md:text-sm font-bold uppercase tracking-widest">Ingreso Confirmado</p>
                                         </div>
-                                        <button onClick={resetScanner} className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-emerald-900/20">
+                                        <button onClick={resetScanner} className="w-full py-4 bg-emerald-600 text-white rounded-xl md:rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg shadow-emerald-900/20 active:scale-95 transition-all">
                                             Siguiente Invitado
                                         </button>
                                     </div>
                                 ) : (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 md:space-y-5">
                                         <button 
                                             onClick={handleConfirm}
                                             disabled={loading}
-                                            className="w-full py-5 bg-[#BD7474] text-white rounded-2xl font-bold uppercase text-xs tracking-widest shadow-xl shadow-rose-900/20 flex items-center justify-center gap-3 active:scale-98 transition-all"
+                                            className="w-full py-4 md:py-5 bg-[#BD7474] text-white rounded-xl md:rounded-2xl font-bold uppercase text-xs tracking-widest shadow-xl shadow-rose-900/20 flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50"
                                         >
                                             Confirmar Ingreso <ArrowRight className="h-4 w-4" />
                                         </button>
-                                        <button onClick={resetScanner} className="w-full py-2 text-stone-500 text-[10px] uppercase font-bold tracking-widest hover:text-white transition-colors">
+                                        <button onClick={resetScanner} className="w-full py-2 text-stone-500 text-[9px] md:text-[10px] uppercase font-bold tracking-widest hover:text-white transition-colors active:scale-90">
                                             Cancelar
                                         </button>
                                     </div>
@@ -296,10 +296,10 @@ const CheckIn: React.FC = () => {
                 )}
             </div>
 
-            <div className="p-8 bg-stone-800/30 border-t border-white/5 text-center">
-                <p className="text-stone-500 text-[9px] uppercase tracking-[0.4em] font-bold mb-4">SEGURIDAD Y CONTROL DE ACCESO</p>
-                <div className="flex justify-center gap-8 text-stone-400 text-[10px] font-bold">
-                    <span>V.1.0</span>
+            <div className="p-6 md:p-8 bg-stone-800/30 border-t border-white/5 text-center mt-auto">
+                <p className="text-stone-500 text-[8px] md:text-[9px] uppercase tracking-[0.4em] font-bold mb-4">SEGURIDAD Y CONTROL DE ACCESO</p>
+                <div className="flex justify-center gap-6 md:gap-8 text-stone-400 text-[9px] md:text-[10px] font-bold">
+                    <span>V.1.2</span>
                     <span>•</span>
                     <span>STITCH PROTOCOL</span>
                 </div>
