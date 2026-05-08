@@ -1304,32 +1304,32 @@ END:VCALENDAR`;
                 <div className="invitation-content min-h-screen bg-stone-900 flex items-center justify-center p-6 relative overflow-hidden">
                     <div className="relative z-10 max-w-3xl w-full">
                         <div className="relative bg-white rounded-2xl border border-stone-200 overflow-hidden">
-                            <div className="p-12 sm:p-16 text-center relative">
-                                <div className="mb-12 relative">
-                                    <div className="w-80 h-64 mx-auto relative">
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-72 h-8 bg-black/10 blur-xl rounded-full" />
+                            <div className="p-6 xs:p-10 sm:p-16 text-center relative">
+                                <div className="mb-8 sm:mb-12 relative">
+                                    <div className="w-full max-w-[260px] sm:w-80 h-48 sm:h-64 mx-auto relative">
+                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[240px] sm:w-72 h-8 bg-black/10 blur-xl rounded-full" />
                                         <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-stone-100 to-stone-200 rounded-2xl shadow-xl" style={{ clipPath: 'polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%)' }} />
                                         <div className="absolute inset-4 border-2 border-stone-300/50 rounded-xl" style={{ clipPath: 'polygon(5% 20%, 50% 50%, 95% 20%, 95% 95%, 5% 95%)' }} />
-                                        <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-stone-200 shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
-                                        <div className="absolute top-24 left-1/2 -translate-x-1/2 z-20">
-                                            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30">
-                                                <Heart className="h-10 w-10 text-red-100 animate-pulse" fill="currentColor" />
+                                        <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-stone-200 shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
+                                        <div className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 z-20">
+                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30">
+                                                <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" fill="currentColor" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 {guest && (
-                                    <div className="mb-8">
-                                        <p className="text-xs uppercase tracking-[0.5em] text-accent font-semibold mb-3">Para</p>
-                                        <h2 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-2">{guest.name}</h2>
-                                        <div className="h-px w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
+                                    <div className="mb-6 sm:mb-8">
+                                        <p className="text-[10px] uppercase tracking-[0.5em] text-accent font-semibold mb-2 sm:mb-3">Para</p>
+                                        <h2 className="text-3xl sm:text-5xl font-serif font-light text-stone-900 mb-2">{guest.name}</h2>
+                                        <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
                                     </div>
                                 )}
-                                <div className="mb-10">
-                                    <h3 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-4 leading-tight">{event.title}</h3>
-                                    <p className="text-stone-600 text-sm uppercase tracking-[0.4em] font-medium">{event.event_type === 'wedding' ? 'Boda' : event.event_type === 'xv' ? 'XV Años' : 'Celebración'}</p>
+                                <div className="mb-8 sm:mb-10">
+                                    <h3 className="text-3xl xs:text-4xl sm:text-7xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
+                                    <p className="text-stone-600 text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">{event.event_type === 'wedding' ? 'Boda' : event.event_type === 'xv' ? 'XV Años' : 'Celebración'}</p>
                                 </div>
-                                <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-3 px-12 py-5 bg-accent text-white rounded-full font-sans font-bold uppercase tracking-widest text-sm hover:bg-accent-dark transition-colors"><Mail className="h-6 w-6" /><span>Abrir Invitación</span></button>
+                                <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-white rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
                     </div>
