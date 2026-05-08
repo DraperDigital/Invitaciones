@@ -40,7 +40,7 @@ const EventRSVPs: React.FC = () => {
     // Filters & Views
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'yes' | 'no'>('all');
-    const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+    const [viewMode, setViewMode] = useState<'table' | 'cards'>(window.innerWidth < 768 ? 'cards' : 'table');
 
     const { user } = useAuth();
     const toast = useToast();
@@ -1204,8 +1204,122 @@ const EventRSVPs: React.FC = () => {
                     )}
 
                     <div className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden">
-                        {viewMode === 'table' ? (
-                            <div className="hidden md:block overflow-x-auto">
+                        {(viewMode === 'cards' || (typeof window !== 'undefined' && window.innerWidth < 1024)) ? (
+                            <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                                {filteredGuests.map(g => {
+                                    const rsvp = g.rsvps?.[0];
+                                    const status = getGuestStatus(g);
+                                    const cardStyles = status === 'yes' 
+                                        ? 'border-emerald-100 bg-emerald-50/10' 
+                                        : status === 'no' 
+                                            ? 'border-rose-100 bg-rose-50/10' 
+                                            : 'border-stone-100 bg-white';
+
+                                    return (
+                                        <div key={g.id} className={`${cardStyles} p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border shadow-sm space-y-4 hover:shadow-md transition-all relative group/card`}>
+                                            <div className="absolute top-4 left-4">
+                                                <button 
+                                                    onClick={() => toggleSelectGuest(g.id)}
+                                                    className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
+                                                        selectedIds.has(g.id)
+                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                            : 'bg-white border-stone-200 text-transparent group-hover/card:border-stone-300'
+                                                    }`}
+                                                >
+                                                    <Check className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                            
+                                            <div className="flex justify-between items-start pt-2">
+                                                <div className="pl-8">
+                                                    <h4 className="font-serif text-base sm:text-lg text-[#1B2E1D] leading-tight mb-1">{g.name}</h4>
+                                                    <p className="text-[7px] sm:text-[8px] uppercase font-bold text-stone-300 tracking-widest">{g.group_name || 'Individual'}</p>
+                                                </div>
+                                                <div className="relative inline-flex items-center group">
+                                                    <select
+                                                        value={status}
+                                                        onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
+                                                        title="Cambiar estado"
+                                                        className={`appearance-none outline-none pl-3 pr-6 py-1 rounded-full border text-[7px] sm:text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm ${getStatusStyles(status)}`}
+                                                    >
+                                                        <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
+                                                        <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
+                                                        <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
+                                                    </select>
+                                                    <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(status).split(' ')[1]}`} />
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="grid grid-cols-3 gap-2 py-3 text-center text-stone-500 border-y border-stone-100/30">
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Pax</span>
+                                                    <span className="text-sm font-bold text-stone-700">{getGuestPax(g)}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80 border-x border-stone-100/50">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Ingreso</span>
+                                                    <span className="text-[10px] font-serif font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
+                                                </div>
+                                                <div className="flex flex-col opacity-80">
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Mesa</span>
+                                                    <span className="text-[10px] font-bold text-stone-700 truncate px-1">
+                                                        {g.table_id ? (tables.find(t => t.id === g.table_id)?.name || '-') : '-'}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-2">
+                                                <div className="flex items-center gap-3">
+                                                    <button 
+                                                        onClick={() => handleToggleSent(g)}
+                                                        className={`h-6 w-6 rounded-lg border flex items-center justify-center transition-all ${
+                                                            g.invitation_sent_at 
+                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white shadow-md' 
+                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#1B2E1D]'
+                                                        }`}
+                                                        title="Marcar enviado"
+                                                    >
+                                                        <Check className="h-3.5 w-3.5" />
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => handleSendReminder(g)} 
+                                                        className={`h-6 w-6 rounded-lg border border-stone-200 flex items-center justify-center transition-all hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 text-stone-400`}
+                                                        title="WhatsApp"
+                                                    >
+                                                        <MessageSquare className="h-3.5 w-3.5" />
+                                                    </button>
+                                                </div>
+                                                
+                                                <div className="flex items-center gap-2">
+                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D] transition-colors">
+                                                        <QrCode className="h-4 w-4" />
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => {
+                                                            setEditingGuestId(g.id);
+                                                            setEditData({
+                                                                name: g.name,
+                                                                group_name: g.group_name || '',
+                                                                status: status,
+                                                                plus_ones_confirmed: rsvp?.plus_ones_confirmed || 0,
+                                                                max_plus_ones: g.max_plus_ones || 0,
+                                                                table_id: g.table_id || ''
+                                                            });
+                                                        }}
+                                                        className="p-2 text-stone-300 hover:text-blue-500 transition-colors"
+                                                    >
+                                                        <Edit2 className="h-4 w-4" />
+                                                    </button>
+                                                    <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500 transition-colors">
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                     <thead className="bg-[#FDFBF7] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
                                         <tr>
@@ -1423,123 +1537,6 @@ const EventRSVPs: React.FC = () => {
                                         ))}
                                     </tbody>
                                 </table>
-                                <div className="md:hidden p-8 text-center text-stone-400 italic text-sm">
-                                    Esta vista no es óptima para móviles. Cambia a vista de tarjetas arriba.
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                {filteredGuests.map(g => {
-                                    const rsvp = g.rsvps?.[0];
-                                    const status = getGuestStatus(g);
-                                    const cardStyles = status === 'yes' 
-                                        ? 'border-emerald-100 bg-emerald-50/10' 
-                                        : status === 'no' 
-                                            ? 'border-rose-100 bg-rose-50/10' 
-                                            : 'border-stone-100 bg-white';
-
-                                    return (
-                                        <div key={g.id} className={`${cardStyles} p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border shadow-sm space-y-4 hover:shadow-md transition-all relative group/card`}>
-                                            <div className="absolute top-4 left-4">
-                                                <button 
-                                                    onClick={() => toggleSelectGuest(g.id)}
-                                                    className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                                                        selectedIds.has(g.id)
-                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
-                                                            : 'bg-white border-stone-200 text-transparent group-hover/card:border-stone-300'
-                                                    }`}
-                                                >
-                                                    <Check className="h-3 w-3" />
-                                                </button>
-                                            </div>
-                                            
-                                            <div className="flex justify-between items-start pt-2">
-                                                <div className="pl-8">
-                                                    <h4 className="font-serif text-base sm:text-lg text-[#1B2E1D] leading-tight mb-1">{g.name}</h4>
-                                                    <p className="text-[7px] sm:text-[8px] uppercase font-bold text-stone-300 tracking-widest">{g.group_name || 'Individual'}</p>
-                                                </div>
-                                                <div className="relative inline-flex items-center group">
-                                                    <select
-                                                        value={status}
-                                                        onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
-                                                        title="Cambiar estado"
-                                                        className={`appearance-none outline-none pl-3 pr-6 py-1 rounded-full border text-[7px] sm:text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm ${getStatusStyles(status)}`}
-                                                    >
-                                                        <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
-                                                        <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
-                                                        <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
-                                                    </select>
-                                                    <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(status).split(' ')[1]}`} />
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="grid grid-cols-3 gap-2 py-3 text-center text-stone-500 border-y border-stone-100/30">
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Pax</span>
-                                                    <span className="text-sm font-bold text-stone-700">{getGuestPax(g)}</span>
-                                                </div>
-                                                <div className="flex flex-col opacity-80 border-x border-stone-100/50">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Ingreso</span>
-                                                    <span className="text-[10px] font-serif font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
-                                                </div>
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Mesa</span>
-                                                    <span className="text-[10px] font-bold text-stone-700 truncate px-1">
-                                                        {g.table_id ? (tables.find(t => t.id === g.table_id)?.name || '-') : '-'}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-center justify-between pt-2">
-                                                <div className="flex items-center gap-3">
-                                                    <button 
-                                                        onClick={() => handleToggleSent(g)}
-                                                        className={`h-6 w-6 rounded-lg border flex items-center justify-center transition-all ${
-                                                            g.invitation_sent_at 
-                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white shadow-md' 
-                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#1B2E1D]'
-                                                        }`}
-                                                        title="Marcar enviado"
-                                                    >
-                                                        <Check className="h-3.5 w-3.5" />
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => handleSendReminder(g)} 
-                                                        className={`h-6 w-6 rounded-lg border border-stone-200 flex items-center justify-center transition-all hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 text-stone-400`}
-                                                        title="WhatsApp"
-                                                    >
-                                                        <MessageSquare className="h-3.5 w-3.5" />
-                                                    </button>
-                                                </div>
-                                                
-                                                <div className="flex items-center gap-2">
-                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D] transition-colors">
-                                                        <QrCode className="h-4 w-4" />
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => {
-                                                            setEditingGuestId(g.id);
-                                                            setEditData({
-                                                                name: g.name,
-                                                                group_name: g.group_name || '',
-                                                                status: status,
-                                                                plus_ones_confirmed: rsvp?.plus_ones_confirmed || 0,
-                                                                max_plus_ones: g.max_plus_ones || 0,
-                                                                table_id: g.table_id || ''
-                                                            });
-                                                        }}
-                                                        className="p-2 text-stone-300 hover:text-blue-500 transition-colors"
-                                                    >
-                                                        <Edit2 className="h-4 w-4" />
-                                                    </button>
-                                                    <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500 transition-colors">
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
                             </div>
                         )}
                     </div>
