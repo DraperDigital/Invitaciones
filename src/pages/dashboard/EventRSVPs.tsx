@@ -40,7 +40,7 @@ const EventRSVPs: React.FC = () => {
     // Filters & Views
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'yes' | 'no'>('all');
-    const [viewMode, setViewMode] = useState<'table' | 'cards'>(window.innerWidth < 768 ? 'cards' : 'table');
+    const [viewMode, setViewMode] = useState<'table' | 'cards'>( (typeof window !== 'undefined' && window.innerWidth < 1024) ? 'cards' : 'table');
 
     const { user } = useAuth();
     const toast = useToast();
@@ -1204,7 +1204,7 @@ const EventRSVPs: React.FC = () => {
                     )}
 
                     <div className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden">
-                        {(viewMode === 'cards' || (typeof window !== 'undefined' && window.innerWidth < 1024)) ? (
+                        {viewMode === 'cards' ? (
                             <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {filteredGuests.map(g => {
                                     const rsvp = g.rsvps?.[0];
