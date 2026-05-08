@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2, ArrowLeft, Eye, EyeOff, X } from 'lucide-react';
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -63,23 +64,33 @@ export default function LoginPage() {
                 if (error) throw error;
                 navigate('/dashboard');
             } else {
-                const { error } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
                         data: {
                             full_name: fullName,
                         },
+                        emailRedirectTo: `${window.location.origin}/dashboard`
                     },
                 });
                 if (error) throw error;
-                // Redirect new user directly to wizard with welcome flag
-                navigate('/dashboard/new?welcome=true');
+                
+                if (data.user && !data.session) {
+                    // Email confirmation required
+                    setShowSuccessModal(true);
+                } else {
+                    // Redirect new user directly to wizard with welcome flag
+                    navigate('/dashboard/new?welcome=true');
+                }
             }
         } catch (err: any) {
             const isNetworkError = err.message === 'Failed to fetch';
+            const isEmailNotConfirmed = err.message === 'Email not confirmed';
             const msg = isNetworkError
                 ? 'No se pudo conectar al servidor. Verifica tu conexión e intenta de nuevo.'
+                : isEmailNotConfirmed
+                ? 'Por favor verifica tu correo electrónico para activar tu cuenta. Revisa también tu carpeta de Spam.'
                 : err.message === 'Invalid login credentials'
                 ? 'Correo o contraseña incorrectos. Verifica tus datos.'
                 : err.message || 'Ocurrió un error inesperado.';
@@ -149,7 +160,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] flex">
+        <div className="min-h-screen bg-[#FDFBF7] flex relative">
             {/* Left Side: Illustration & Branding */}
             <div className="hidden lg:flex w-1/2 bg-[#1B2E1D] relative items-center justify-center p-20 overflow-hidden">
                 <div className="absolute inset-0 z-0">
@@ -447,6 +458,39 @@ export default function LoginPage() {
                     )}
                 </div>
             </div>
+
+            {/* Success Modal for Signup */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowSuccessModal(false)} />
+                    <div className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 md:p-12 shadow-2xl animate-in zoom-in duration-500 text-center">
+                        <button 
+                            onClick={() => setShowSuccessModal(false)}
+                            className="absolute top-6 right-6 p-2 text-stone-400 hover:text-stone-900 transition-colors"
+                        >
+                            <X className="h-6 w-6" />
+                        </button>
+                        
+                        <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <Mail className="h-10 w-10 text-emerald-600" />
+                        </div>
+                        
+                        <h3 className="text-3xl font-serif text-[#1B2E1D] mb-4">¡Casi listo!</h3>
+                        <p className="text-stone-500 font-light leading-relaxed mb-8">
+                            Hemos enviado un enlace de activación a <span className="font-bold text-[#1B2E1D]">{email}</span>. 
+                            <br/><br/>
+                            Por favor revisa tu bandeja de entrada (y la carpeta de spam) para confirmar tu cuenta y empezar a crear tus invitaciones.
+                        </p>
+                        
+                        <button 
+                            onClick={() => setShowSuccessModal(false)}
+                            className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg hover:bg-[#2D312E] transition-all"
+                        >
+                            ENTENDIDO
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

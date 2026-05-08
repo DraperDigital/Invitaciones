@@ -114,11 +114,11 @@ export default function DashboardLayout() {
             )}
 
             {/* Mobile Sidebar */}
-            <aside className={`lg:hidden fixed left-0 top-0 h-full w-72 bg-[#1B2E1D] text-white z-[60] transition-transform duration-500 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`lg:hidden fixed left-0 top-0 h-full w-72 bg-[#1B2E1D] text-white z-[60] flex flex-col transition-transform duration-500 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                  <div className="p-8 h-16 flex items-center border-b border-white/5">
                     <span className="text-xl font-serif italic tracking-tighter">Invitto</span>
                 </div>
-                <nav className="p-4 space-y-2 mt-8">
+                <nav className="flex-1 p-4 space-y-2 mt-8">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         return (
@@ -136,6 +136,26 @@ export default function DashboardLayout() {
                         );
                     })}
                 </nav>
+
+                <div className="p-8 mt-auto border-t border-white/5">
+                    <div className="flex items-center gap-4 mb-8 p-4 bg-white/5 rounded-2xl border border-white/5">
+                        <div className="h-10 w-10 rounded-full bg-stone-700 flex items-center justify-center text-xs font-bold ring-2 ring-white/10">
+                            {user?.email?.[0].toUpperCase()}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[10px] uppercase font-bold tracking-widest truncate">{user?.email?.split('@')[0]}</p>
+                            <p className="text-[10px] text-white/30 truncate">{user?.email}</p>
+                        </div>
+                    </div>
+                    
+                    <button
+                        onClick={handleSignOut}
+                        className="w-full flex items-center gap-4 px-4 py-4 text-xs uppercase tracking-widest font-bold text-white/40 hover:text-white transition-colors"
+                    >
+                        <LogOut className="h-5 w-5" />
+                        Cerrar Sesión
+                    </button>
+                </div>
             </aside>
 
             {/* Main Content Area */}
