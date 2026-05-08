@@ -253,9 +253,26 @@ const CheckIn: React.FC = () => {
                                     </div>
                                     <div className="bg-stone-900/50 p-4 md:p-6 rounded-2xl md:rounded-3xl border border-white/5 space-y-2">
                                         <CheckCircle2 className="h-4 w-4 md:h-5 md:w-5 text-stone-500" />
-                                        <p className="text-base md:text-lg font-serif">{guestData?.checked_in_at ? 'Ya ingresó' : 'Pendiente'}</p>
-                                        <p className="text-[8px] md:text-[9px] uppercase font-bold text-stone-500 tracking-widest">Estado</p>
+                                        <p className="text-base md:text-lg font-serif">
+                                            {(() => {
+                                                const rsvpStatus = guestData?.rsvps?.[0]?.status || guestData?.status || 'pending';
+                                                if (rsvpStatus === 'yes') return 'Confirmado';
+                                                if (rsvpStatus === 'no') return 'Declinado';
+                                                return 'Pendiente';
+                                            })()}
+                                        </p>
+                                        <p className="text-[8px] md:text-[9px] uppercase font-bold text-stone-500 tracking-widest">Confirmación</p>
                                     </div>
+                                </div>
+
+                                <div className="bg-stone-900/30 p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`h-2 w-2 rounded-full ${guestData?.checked_in_at ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]'}`} />
+                                        <p className="text-xs font-medium text-stone-300">Estado de Ingreso:</p>
+                                    </div>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${guestData?.checked_in_at ? 'text-emerald-500' : 'text-amber-500'}`}>
+                                        {guestData?.checked_in_at ? 'YA INGRESÓ' : 'POR INGRESAR'}
+                                    </span>
                                 </div>
 
                                 {status === 'already_checked' ? (
