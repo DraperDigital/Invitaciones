@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2, ArrowLeft, Eye, EyeOff, X, Gem } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, Eye, EyeOff, X, Gem } from 'lucide-react';
 
 export default function LoginPage() {
     const navigate = useNavigate();

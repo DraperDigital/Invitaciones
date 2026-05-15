@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { 
     UserCheck, BarChart3, Heart, Shield, Sparkles, PartyPopper, 
-    Check, Smartphone, Bell, MessageSquare, Star, ChevronDown, ArrowRight,
+    Check, Bell, MessageSquare, Star, ChevronDown, ArrowRight,
     Layout, X, Zap, Music, Timer, AlertTriangle, Clock, Users, Gem
 } from 'lucide-react';
 import { useState } from 'react';

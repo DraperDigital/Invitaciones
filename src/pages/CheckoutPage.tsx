@@ -1,5 +1,5 @@
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, CreditCard, ArrowLeft, Heart, Sparkles, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { Check, ArrowLeft, Heart, Sparkles, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
