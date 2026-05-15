@@ -12,6 +12,7 @@ export default function DashboardLayout() {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [hasEvents, setHasEvents] = useState<boolean | null>(null);
+    const [hasPlan, setHasPlan] = useState<boolean>(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
 
     useEffect(() => {
@@ -25,6 +26,15 @@ export default function DashboardLayout() {
                 const noEvents = (count ?? 0) === 0;
                 setHasEvents(!noEvents);
                 setShowOnboarding(noEvents);
+            });
+
+        supabase.from('profiles').select('plan_tier')
+            .eq('id', user.id)
+            .single()
+            .then(({ data }) => {
+                if (data && data.plan_tier !== 'free') {
+                    setHasPlan(true);
+                }
             });
     }, [user, location.pathname]);
 
@@ -184,7 +194,8 @@ export default function DashboardLayout() {
                                 <div className="flex flex-wrap gap-3">
                                     {[
                                         { label: 'Cuenta creada', done: true },
-                                        { label: 'Crear primer evento', done: hasEvents === true, href: '/dashboard/new' },
+                                        { label: 'Crear evento', done: hasEvents === true, href: '/dashboard/new' },
+                                        { label: 'Activar plan', done: hasPlan, href: hasEvents ? '/planes' : undefined },
                                         { label: 'Agregar invitados', done: false, href: '/dashboard/rsvps' },
                                     ].map((step, i) => (
                                         step.href && !step.done ? (

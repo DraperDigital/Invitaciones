@@ -14,6 +14,11 @@ export default function CheckoutPage() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const [couponCode, setCouponCode] = useState('');
+    const [couponError, setCouponError] = useState<string | null>(null);
+    const [isCouponSuccess, setIsCouponSuccess] = useState(false);
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
     const [formData, setFormData] = useState({
         name: '',
         email: user?.email || '',
@@ -97,6 +102,37 @@ export default function CheckoutPage() {
 
     const eventId = searchParams.get('id');
 
+    const handleApplyCoupon = async () => {
+        if (!couponCode) return;
+        setIsApplyingCoupon(true);
+        setCouponError(null);
+
+        try {
+            if (!eventId) {
+                throw new Error("No hay un evento activo asociado.");
+            }
+            
+            const { data, error } = await supabase.functions.invoke('apply-coupon', {
+                body: { 
+                    couponCode: couponCode,
+                    eventId: eventId,
+                    planId: planId
+                }
+            });
+
+            if (error || (data && data.error)) {
+                throw new Error(error?.message || data?.error || "Error al aplicar el cupón.");
+            }
+
+            setIsCouponSuccess(true);
+        } catch (err: any) {
+            console.error('Coupon error:', err);
+            setCouponError(err.message);
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
@@ -105,51 +141,47 @@ export default function CheckoutPage() {
         setError(null);
 
         try {
-            // Simular procesamiento de pago
-            await new Promise(resolve => setTimeout(resolve, 2500));
-
-            // Actualizar la suscripción del evento
-            // Nota: En una app real, esto lo haría un webhook de Stripe
-            if (eventId) {
-                // Primero buscamos el UUID del plan basándonos en el código (premium, pro, etc)
-                const { data: planData } = await supabase
-                    .from('plans')
-                    .select('id')
-                    .eq('code', planId)
-                    .single();
-
-                if (planData) {
-                    const { error: subError } = await supabase
-                        .from('event_subscriptions')
-                        .upsert({ 
-                            event_id: eventId,
-                            plan_id: planData.id,
-                            status: 'active',
-                            updated_at: new Date().toISOString()
-                        }, { onConflict: 'event_id' });
-
-                    if (subError) throw subError;
-                }
+            if (!eventId) {
+                // If they don't have an event yet, we can't tie the subscription to an event.
+                // Best practice is to create the event first or handle it differently.
+                // For now, if no eventId, just redirect to dashboard/new
+                navigate('/dashboard/new');
+                return;
             }
 
-            // También actualizamos el perfil para consistencia legacy si es necesario
-            await supabase
-                .from('profiles')
-                .update({ plan_tier: planId })
-                .eq('id', user.id);
-
-            setIsSuccess(true);
-            setTimeout(() => {
-                if (eventId) {
+            // Si el cupón fue exitoso, ya se actualizó la BD, simplemente redirigir.
+            if (isCouponSuccess) {
+                setIsSuccess(true);
+                setTimeout(() => {
                     navigate(`/dashboard/design/${eventId}?upgrade=success`);
-                } else {
-                    navigate(`/dashboard/new`);
+                }, 2000);
+                return;
+            }
+
+            // Call our Edge Function to create a Stripe Checkout Session
+            const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+                body: { 
+                    planId: planId,
+                    eventId: eventId,
+                    origin: window.location.origin
                 }
-            }, 3000);
+            });
+
+            if (error) {
+                console.error("Function error:", error);
+                throw error;
+            }
+
+            if (data?.url) {
+                // Redirect user to Stripe Checkout
+                window.location.href = data.url;
+            } else {
+                throw new Error("No se pudo obtener la URL de pago.");
+            }
 
         } catch (err: any) {
             console.error('Checkout error:', err);
-            setError('Error en la pasarela de pago: ' + err.message);
+            setError('Error al iniciar la pasarela de pago: ' + err.message);
             setIsProcessing(false);
         }
     };
@@ -241,64 +273,39 @@ export default function CheckoutPage() {
                                     </div>
                                 </div>
 
-                                {/* Metodo de Pago Moderno */}
+                                {/* Sección de Código de Descuento */}
                                 <div className="p-10 bg-white rounded-[2.5rem] border border-stone-100 shadow-sm space-y-8">
-                                    <div className="flex items-center justify-between border-b border-stone-50 pb-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="h-12 w-12 bg-[#FDFBF7] rounded-2xl flex items-center justify-center text-[#1B2E1D]">
-                                                <CreditCard className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-2xl font-serif text-[#1B2E1D]">Método de Pago</h3>
+                                    <div className="flex items-center gap-4 border-b border-stone-50 pb-6">
+                                        <div className="h-12 w-12 bg-[#FDFBF7] rounded-2xl flex items-center justify-center text-[#1B2E1D]">
+                                            <Crown className="h-6 w-6" />
                                         </div>
-                                        <div className="flex gap-2">
-                                            {['VISA', 'MC', 'AMEX'].map(m => (
-                                                <span key={m} className="px-2 py-1 bg-stone-50 border border-stone-100 rounded text-[8px] font-bold text-stone-300">{m}</span>
-                                            ))}
-                                        </div>
+                                        <h3 className="text-2xl font-serif text-[#1B2E1D]">¿Tienes un código?</h3>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Número de Tarjeta</label>
-                                            <div className="relative">
-                                                <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-200" />
-                                                <input 
-                                                    type="text" 
-                                                    required
-                                                    className="w-full pl-14 p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] font-mono tracking-widest" 
-                                                    placeholder="XXXX XXXX XXXX XXXX"
-                                                    maxLength={19}
-                                                    value={formData.cardNumber}
-                                                    onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
-                                                />
-                                            </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Código de promoción</label>
+                                        <div className="flex gap-4">
+                                            <input 
+                                                type="text" 
+                                                className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] font-mono tracking-widest uppercase" 
+                                                placeholder="Ej. INVITTO26"
+                                                value={couponCode}
+                                                onChange={(e) => {
+                                                    setCouponCode(e.target.value.toUpperCase());
+                                                    setCouponError(null);
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleApplyCoupon}
+                                                disabled={!couponCode || isApplyingCoupon || isCouponSuccess}
+                                                className="px-8 bg-stone-100 text-stone-600 rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:bg-stone-200 transition-all disabled:opacity-50"
+                                            >
+                                                {isApplyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Aplicar'}
+                                            </button>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-8">
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Expiración</label>
-                                                <input 
-                                                    type="text" 
-                                                    required
-                                                    className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
-                                                    placeholder="MM/AA"
-                                                    maxLength={5}
-                                                    value={formData.expiry}
-                                                    onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
-                                                />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">CVC / CVV</label>
-                                                <input 
-                                                    type="password" 
-                                                    required
-                                                    className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
-                                                    placeholder="***"
-                                                    maxLength={4}
-                                                    value={formData.cvv}
-                                                    onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
+                                        {couponError && <p className="text-xs text-rose-500 ml-1">{couponError}</p>}
+                                        {isCouponSuccess && <p className="text-xs text-emerald-500 ml-1 font-bold">¡Cupón aplicado exitosamente! Este plan es gratis.</p>}
                                     </div>
                                 </div>
 
@@ -316,10 +323,14 @@ export default function CheckoutPage() {
                                     {isProcessing ? (
                                         <div className="flex items-center justify-center gap-4">
                                             <Loader2 className="h-5 w-5 animate-spin" />
-                                            Procesando Pago Seguro...
+                                            Procesando...
                                         </div>
                                     ) : (
-                                        <span>Confirmar y Pagar - ${selectedPlan.price} MXN</span>
+                                        <span>
+                                            {isCouponSuccess 
+                                                ? "Continuar al Dashboard" 
+                                                : `Confirmar y Pagar - $${selectedPlan.price} MXN`}
+                                        </span>
                                     )}
                                     <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>

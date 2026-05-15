@@ -13,7 +13,7 @@ export default function SettingsPage() {
     const [profile, setProfile] = useState({
         full_name: '',
         whatsapp_number: '',
-        plan_tier: 'clasico',
+        plan_tier: 'free',
     });
 
     useEffect(() => {
@@ -23,12 +23,12 @@ export default function SettingsPage() {
                 const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
                 if (error && error.code !== 'PGRST116') throw error;
                 
-                const profileData = data || { full_name: '', whatsapp_number: '', plan_tier: 'clasico' };
+                const profileData = data || { full_name: '', whatsapp_number: '', plan_tier: 'free' };
 
                 setProfile({
                     full_name: profileData.full_name || '',
                     whatsapp_number: (profileData as any).whatsapp_number || '',
-                    plan_tier: profileData.plan_tier || 'clasico',
+                    plan_tier: profileData.plan_tier || 'free',
                 });
             } catch (error: any) {
                 console.error('Error fetching profile:', error);
@@ -69,6 +69,7 @@ export default function SettingsPage() {
 
     const getPlanLabel = (tier: string) => {
         const labels: Record<string, string> = {
+            'free':         'CUENTA GRATUITA',
             'clasico':      'PLAN CLÁSICA',
             'classic':      'PLAN CLÁSICA',
             'pro':          'PLAN PRO',
@@ -76,7 +77,7 @@ export default function SettingsPage() {
             'personalized': 'DISEÑO PRO',
             'concierge':    'PLAN CONCIERGE',
         };
-        return labels[tier] || 'PLAN CLÁSICA';
+        return labels[tier] || 'CUENTA GRATUITA';
     };
 
     return (

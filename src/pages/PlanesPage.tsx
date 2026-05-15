@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Sparkles, Crown } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Heart, Gem, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function PlanesPage() {
     const { user } = useAuth();
+    const [searchParams] = useSearchParams();
+    const eventId = searchParams.get('id');
     const plans = [
         {
             id: 'clasico',
@@ -22,6 +24,7 @@ export default function PlanesPage() {
                 'Confirmación simple por WhatsApp',
             ],
             cta: 'Solo mi invitación',
+            demoUrl: '/i/bautizo-victoria'
         },
         {
             id: 'pro',
@@ -30,7 +33,7 @@ export default function PlanesPage() {
             period: 'MXN',
             description: 'Control total de invitados',
             subcopy: '“Ya sé exactamente quién sí va a ir”',
-            icon: Sparkles,
+            icon: Gem,
             color: 'rose',
             popular: true,
             features: [
@@ -42,6 +45,7 @@ export default function PlanesPage() {
                 'Todo en un solo lugar',
             ],
             cta: 'Quiero control total',
+            demoUrl: '/i/boda-isabel-rodrigo-pro'
         },
         {
             id: 'premium',
@@ -61,6 +65,7 @@ export default function PlanesPage() {
                 'Soporte prioritario',
             ],
             cta: 'Diseño a medida',
+            demoUrl: '/i/xv-regina-2026-premium'
         },
         {
             id: 'concierge',
@@ -80,6 +85,7 @@ export default function PlanesPage() {
                 'Reporte final de asistencia',
             ],
             cta: 'Quiero el servicio completo',
+            demoUrl: '/i/boda-gabriela-arturo-premium'
         }
     ];
 
@@ -148,7 +154,7 @@ export default function PlanesPage() {
                         >
                             {plan.popular && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 md:px-8 md:py-3 bg-[#BD7474] text-white text-[8px] md:text-[10px] uppercase font-black tracking-[0.3em] rounded-full shadow-2xl flex items-center gap-2 whitespace-nowrap">
-                                    <Sparkles className="h-3 w-3 md:h-4 md:w-4" /> MÁS POPULAR
+                                    <Gem className="h-3 w-3 md:h-4 md:w-4" /> MÁS POPULAR
                                 </div>
                             )}
 
@@ -197,7 +203,7 @@ export default function PlanesPage() {
                             </div>
 
                             <div className="mt-8 md:mt-10">
-                                <Link to={`/checkout?plan=${plan.id}`}>
+                                <Link to={`/checkout?plan=${plan.id}${eventId ? `&id=${eventId}` : ''}`}>
                                     <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
                                         plan.popular 
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl' 
@@ -206,13 +212,28 @@ export default function PlanesPage() {
                                         {plan.cta}
                                     </button>
                                 </Link>
-                                {plan.id === 'concierge' && (
-                                    <div className="mt-4 text-center">
+                                {plan.id === 'concierge' ? (
+                                    <div className="mt-4 text-center space-y-3">
                                         <Link 
                                             to="/concierge-service" 
-                                            className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5"
+                                            className="block text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5 mx-auto w-fit"
                                         >
                                             Saber más sobre Concierge →
+                                        </Link>
+                                        <Link 
+                                            to={plan.demoUrl} 
+                                            className={`block text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors mx-auto w-fit ${plan.popular ? 'text-white/60 hover:text-white' : 'text-stone-400 hover:text-[#1B2E1D]'}`}
+                                        >
+                                            Ver invitación de prueba
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="mt-4 text-center">
+                                        <Link 
+                                            to={plan.demoUrl} 
+                                            className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors ${plan.popular ? 'text-white/60 hover:text-white' : 'text-stone-400 hover:text-[#1B2E1D]'}`}
+                                        >
+                                            Ver invitación de prueba
                                         </Link>
                                     </div>
                                 )}

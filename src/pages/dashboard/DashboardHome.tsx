@@ -43,7 +43,7 @@ const DashboardHome: React.FC = () => {
                     .eq('id', user.id)
                     .single();
                 
-                const currentTier = profile?.plan_tier?.toLowerCase() || 'clasico';
+                const currentTier = profile?.plan_tier?.toLowerCase() || 'free';
                 setTier(currentTier);
                 setIsPersonalized(['pro', 'premium', 'personalizado'].includes(currentTier));
 

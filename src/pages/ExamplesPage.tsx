@@ -22,11 +22,11 @@ export default function ExamplesPage() {
 
     const filteredExamples = useMemo(() => {
         const SHOWCASE_SLUGS = [
-            'boda-isabel-rodrigo', 
+            'boda-isabel-rodrigo-pro', 
             'boda-gabriela-arturo-premium', 
             'xv-regina-2026-premium', 
-            'cumple-miguel-40', 
-            'bautizo-victoria', 
+            'cumple-emilia-premium', 
+            'bautizo-victoria-premium', 
             'graduacion-ana-psicologia-premium',
             'comunion-gael-premium'
         ];

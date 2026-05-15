@@ -9,7 +9,19 @@ import { useAuth } from '../context/AuthContext';
 
 export default function HomePage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const [isLeadSubmitting, setIsLeadSubmitting] = useState(false);
+    const [isLeadSuccess, setIsLeadSuccess] = useState(false);
     const { user } = useAuth();
+
+    const handleLeadSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLeadSubmitting(true);
+        // TODO: Conectar con backend (Supabase, Resend, Zapier, etc.)
+        setTimeout(() => {
+            setIsLeadSubmitting(false);
+            setIsLeadSuccess(true);
+        }, 1500);
+    };
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
@@ -43,7 +55,7 @@ export default function HomePage() {
                                 <Link to="/login" className="hidden xs:inline-block text-[9px] md:text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
                                     Ingresar
                                 </Link>
-                                <Link to="/login">
+                                <Link to="/planes">
                                     <button className="px-4 py-2.5 md:px-6 md:py-3 bg-[#1B2E1D] text-white rounded-lg md:rounded-xl text-[9px] md:text-xs uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-[#1B2E1D]/10">
                                         Comenzar
                                     </button>
@@ -285,16 +297,67 @@ export default function HomePage() {
                                 </li>
                             ))}
                         </ul>
+                        <div className="pt-4 md:pt-6 flex justify-center lg:justify-start">
+                            <Link to="/i/cecilia-70" className="inline-flex items-center gap-3 text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[#1B2E1D] hover:text-[#BD7474] transition-colors group">
+                                PROBAR DEMO INTERACTIVA <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
                     </div>
-                    <div className="relative">
-                        <div className="h-[450px] md:h-[600px] w-full bg-stone-100 rounded-[2rem] md:rounded-[3rem] border border-stone-200 shadow-inner overflow-hidden flex items-center justify-center">
-                            <Smartphone className="h-16 w-16 md:h-20 md:w-20 text-stone-200" />
-                            <div className="absolute inset-0 p-4 md:p-8">
-                                <div className="h-full w-full bg-white rounded-2xl md:rounded-3xl shadow-2xl p-0 overflow-hidden relative border border-stone-100">
-                                    <img src="/images/cecilia_roses_hero.png" className="w-full h-1/2 object-cover" alt="Previsualización" loading="lazy" />
-                                    <div className="p-6 md:p-8 text-center space-y-4">
-                                        <p className="font-serif italic text-xl md:text-2xl">Bienvenido al Evento</p>
-                                        <button className="w-full py-4 bg-[#BD7474] text-white rounded-xl text-[9px] md:text-[10px] uppercase font-bold tracking-widest active:scale-95 transition-all">Confirmar Asistencia</button>
+                    <div className="relative h-[400px] md:h-[500px] w-full flex items-center justify-center mt-10 lg:mt-0">
+                        {/* Background glow */}
+                        <div className="absolute inset-0 bg-[#BD7474]/5 rounded-full blur-[80px]" />
+                        
+                        {/* Card 1: RSVP Success */}
+                        <div className="absolute top-0 md:top-10 left-0 md:left-4 z-20 w-56 md:w-64 p-5 md:p-6 bg-white rounded-3xl shadow-2xl border border-stone-100 transform -rotate-6 hover:rotate-0 transition-transform duration-500 hover:scale-105 hover:z-30">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                                    <Check className="h-5 w-5 md:h-6 md:w-6 text-emerald-500" />
+                                </div>
+                                <div>
+                                    <p className="font-serif text-base md:text-lg text-stone-900 leading-tight">¡Confirmado!</p>
+                                    <p className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold text-stone-400 mt-1">Mesa 12 • 4 pax</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 2: Date & Countdown */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-64 md:w-72 p-6 md:p-8 bg-[#1B2E1D] text-white rounded-[2.5rem] shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 hover:scale-105 hover:z-30">
+                            <p className="text-[8px] md:text-[10px] uppercase tracking-[0.3em] font-black text-[#BD7474] mb-5 md:mb-6 text-center">Boda Isabel & Rodrigo</p>
+                            <div className="flex justify-center gap-4 md:gap-6 mb-6 md:mb-8">
+                                <div className="text-center">
+                                    <p className="text-3xl md:text-4xl font-serif">45</p>
+                                    <p className="text-[8px] md:text-[9px] uppercase tracking-widest text-white/50 mt-1">Días</p>
+                                </div>
+                                <div className="w-px bg-white/10" />
+                                <div className="text-center">
+                                    <p className="text-3xl md:text-4xl font-serif">12</p>
+                                    <p className="text-[8px] md:text-[9px] uppercase tracking-widest text-white/50 mt-1">Hrs</p>
+                                </div>
+                            </div>
+                            <button className="w-full py-3 md:py-4 bg-[#BD7474] rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-white shadow-lg shadow-[#BD7474]/20">
+                                Confirmar Asistencia
+                            </button>
+                        </div>
+
+                        {/* Card 3: Timeline/Location */}
+                        <div className="absolute bottom-0 md:bottom-10 right-0 md:right-4 z-20 w-56 md:w-64 p-5 md:p-6 bg-stone-50/90 backdrop-blur-sm rounded-3xl shadow-xl border border-stone-200 transform rotate-6 hover:rotate-0 transition-transform duration-500 hover:scale-105 hover:z-30">
+                            <div className="space-y-3 md:space-y-4">
+                                <div className="flex items-center gap-3 md:gap-4 bg-white p-2.5 md:p-3 rounded-2xl shadow-sm">
+                                    <div className="p-1.5 md:p-2 bg-stone-50 rounded-full">
+                                        <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-[#BD7474]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold text-stone-400">Ceremonia</p>
+                                        <p className="font-serif text-xs md:text-sm text-stone-900">16:00 hrs</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 md:gap-4 bg-white p-2.5 md:p-3 rounded-2xl shadow-sm">
+                                    <div className="p-1.5 md:p-2 bg-stone-50 rounded-full">
+                                        <Heart className="h-3.5 w-3.5 md:h-4 md:w-4 text-[#BD7474]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold text-stone-400">Recepción</p>
+                                        <p className="font-serif text-xs md:text-sm text-stone-900">18:00 hrs</p>
                                     </div>
                                 </div>
                             </div>
@@ -380,17 +443,18 @@ export default function HomePage() {
                                 ))}
                              </ul>
 
-                             <div className="mt-auto w-full">
-                                 <Link to={user ? "/dashboard" : "/login"} className="w-full">
+                             <div className="mt-auto w-full space-y-4">
+                                 <Link to={user ? "/dashboard" : "/login"} className="block w-full">
                                     <button className="w-full py-4 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all active:scale-95">Solo mi invitación</button>
                                  </Link>
+                                 <Link to="/i/bautizo-victoria" className="block text-[8px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors">Ver Ejemplo →</Link>
                              </div>
                         </div>
 
                         {/* Plan Pro - DESTACADO */}
                         <div className="p-7 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-[#1B2E1D] text-white flex flex-col items-center text-center relative shadow-2xl md:scale-105 z-10 border-4 border-[#BD7474]/20">
                              <div className="absolute -top-4 md:-top-5 bg-[#BD7474] text-white px-5 md:px-6 py-1.5 rounded-full text-[8px] md:text-[9px] uppercase font-black tracking-widest flex items-center gap-2 shadow-lg">
-                                <Sparkles className="h-3 w-3" /> POPULAR
+                                <Gem className="h-3 w-3" /> POPULAR
                              </div>
                              <h4 className="text-xl md:text-2xl font-serif mb-2">Pro</h4>
                              <p className="text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-[#BD7474] mb-6 md:mb-8">CONTROL TOTAL</p>
@@ -410,10 +474,11 @@ export default function HomePage() {
                                     </li>
                                 ))}
                              </ul>
-                             <div className="mt-auto w-full">
-                                 <Link to={user ? "/dashboard" : "/login"} className="w-full">
+                             <div className="mt-auto w-full space-y-4">
+                                 <Link to={user ? "/dashboard" : "/login"} className="block w-full">
                                     <button className="w-full py-4 bg-white text-[#1B2E1D] rounded-xl text-[9px] uppercase font-black tracking-[0.2em] hover:bg-stone-100 transition-all active:scale-95">Quiero control total</button>
                                  </Link>
+                                 <Link to="/i/boda-isabel-rodrigo-pro" className="block text-[8px] uppercase font-bold tracking-widest text-white/60 hover:text-white transition-colors">Ver Ejemplo <ArrowRight className="inline-block h-3 w-3" /></Link>
                              </div>
                         </div>
 
@@ -437,10 +502,11 @@ export default function HomePage() {
                                     </li>
                                 ))}
                              </ul>
-                             <div className="mt-auto w-full">
-                                 <Link to={user ? "/dashboard" : "/login"} className="w-full">
+                             <div className="mt-auto w-full space-y-4">
+                                 <Link to={user ? "/dashboard" : "/login"} className="block w-full">
                                     <button className="w-full py-4 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all active:scale-95">Diseño a medida</button>
                                  </Link>
+                                 <Link to="/i/xv-regina-2026-premium" className="block text-[8px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors">Ver Ejemplo →</Link>
                              </div>
                         </div>
 
@@ -465,10 +531,13 @@ export default function HomePage() {
                                 ))}
                              </ul>
                              <div className="mt-auto w-full space-y-4">
-                                 <Link to={user ? "/dashboard" : "/login"} className="w-full">
+                                 <Link to={user ? "/dashboard" : "/login"} className="block w-full">
                                     <button className="w-full py-4 bg-[#BD7474] text-white rounded-xl text-[9px] uppercase font-black tracking-[0.2em] shadow-lg shadow-[#BD7474]/20 hover:scale-[1.02] transition-all active:scale-95">Servicio Completo</button>
                                  </Link>
-                                 <Link to="/concierge-service" className="block text-[8px] uppercase font-black tracking-widest text-stone-300 hover:text-[#BD7474] transition-colors">Saber más →</Link>
+                                 <div className="flex flex-col gap-2">
+                                    <Link to="/concierge-service" className="block text-[8px] uppercase font-black tracking-widest text-stone-300 hover:text-[#BD7474] transition-colors">Saber más del servicio →</Link>
+                                    <Link to="/i/boda-gabriela-arturo-premium" className="block text-[8px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors">Ver Ejemplo de Invitación →</Link>
+                                 </div>
                              </div>
                         </div>
                     </div>
@@ -520,6 +589,101 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>
+        </section>
+
+            {/* --- LEAD CAPTURE SECTION --- */}
+            <section className="py-24 bg-[#BD7474] px-6">
+                <div className="mx-auto max-w-6xl grid lg:grid-cols-2 gap-16 items-center">
+                    {/* Left Content */}
+                    <div className="text-white space-y-8">
+                        <h2 className="text-4xl md:text-6xl font-serif leading-tight">Empieza a organizar tu evento hoy</h2>
+                        <p className="text-lg md:text-xl font-light text-white/90 leading-relaxed max-w-lg">
+                            Completa el formulario para acceder a la plataforma, ver ejemplos reales o solicitar información sobre nuestro servicio Concierge.
+                        </p>
+                        
+                        <div className="space-y-4 pt-4">
+                            {[
+                                'Acceso inmediato a la plataforma',
+                                'Soporte personalizado',
+                                'Garantía libre de estrés'
+                            ].map((text, i) => (
+                                <div key={i} className="flex items-center gap-4 text-white/90">
+                                    <Check className="h-5 w-5 shrink-0" />
+                                    <span className="text-lg font-light">{text}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right Form Card */}
+                    <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-2xl min-h-[500px] flex flex-col justify-center">
+                        {isLeadSuccess ? (
+                            <div className="text-center space-y-6 animate-fade-in">
+                                <div className="mx-auto w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-6">
+                                    <Check className="h-12 w-12 text-green-500" />
+                                </div>
+                                <h3 className="text-3xl font-serif text-[#1B2E1D]">¡Gracias por tu interés!</h3>
+                                <p className="text-stone-500 text-lg leading-relaxed px-4">
+                                    Hemos recibido tus datos correctamente. Nuestro equipo Concierge se pondrá en contacto contigo muy pronto.
+                                </p>
+                                <button 
+                                    onClick={() => setIsLeadSuccess(false)}
+                                    className="mt-8 text-sm font-bold text-[#BD7474] uppercase tracking-widest hover:text-[#a66262] transition-colors"
+                                >
+                                    Enviar otra solicitud
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <h3 className="text-3xl font-serif text-[#1B2E1D] text-center mb-10">Regístrate para comenzar</h3>
+                                <form className="space-y-6 animate-fade-in" onSubmit={handleLeadSubmit}>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-stone-500">Nombre</label>
+                                            <input type="text" className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-[#BD7474] transition-colors text-stone-800" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold uppercase tracking-wider text-stone-500">Apellido</label>
+                                            <input type="text" className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-[#BD7474] transition-colors text-stone-800" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-stone-500">Correo Electrónico *</label>
+                                        <input type="email" required className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-[#BD7474] transition-colors text-stone-800" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-stone-500">Teléfono (WhatsApp)</label>
+                                        <input type="tel" placeholder="+52 ..." className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-[#BD7474] transition-colors text-stone-800" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold uppercase tracking-wider text-stone-500">Cuéntanos sobre tu evento (Opcional)</label>
+                                        <textarea rows={3} placeholder="Tipo de evento, fecha tentativa..." className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 outline-none focus:border-[#BD7474] transition-colors text-stone-800 resize-none" />
+                                    </div>
+
+                                    <button 
+                                        type="submit" 
+                                        disabled={isLeadSubmitting}
+                                        className="w-full mt-4 bg-[#BD7474] hover:bg-[#a66262] disabled:bg-stone-300 disabled:cursor-not-allowed text-white rounded-xl py-4 font-bold tracking-widest uppercase text-sm transition-colors shadow-lg flex justify-center items-center gap-2"
+                                    >
+                                        {isLeadSubmitting ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                Enviando...
+                                            </>
+                                        ) : 'Obtener Acceso Ahora'}
+                                    </button>
+                                    
+                                    <p className="text-[10px] text-stone-400 text-center leading-relaxed mt-6 px-4">
+                                        Tus datos están seguros. Al enviar este formulario aceptas nuestra política de privacidad.
+                                    </p>
+                                </form>
+                            </>
+                        )}
+                    </div>
+                </div>
             </section>
 
             {/* --- FAQ SECTION --- */}
@@ -550,12 +714,12 @@ export default function HomePage() {
             {/* --- CIERRE FINAL --- */}
             <section className="py-24 md:py-40 bg-[#1B2E1D] text-white text-center relative overflow-hidden px-6">
                  <div className="absolute inset-0 z-0 overflow-hidden">
-                    <img src="/images/cecilia_roses_hero.png" alt="" className="w-full h-full object-cover opacity-5 md:opacity-10 grayscale scale-110" loading="lazy" />
+                    <img src="https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?auto=format&fit=crop&q=80" alt="Event Background" className="w-full h-full object-cover opacity-10 md:opacity-15 grayscale scale-110" loading="lazy" />
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto space-y-10 md:space-y-12">
                     <h2 className="text-4xl md:text-8xl font-serif leading-tight">Organiza tu evento <br /> <span className="italic text-[#BD7474]">sin estrés</span></h2>
                     <p className="text-lg md:text-xl text-stone-300 font-light italic max-w-2xl mx-auto leading-relaxed">Empieza hoy y ten control total de tus invitados en minutos.</p>
-                    <Link to={user ? "/dashboard" : "/login"} className="inline-block w-full xs:w-auto">
+                    <Link to={user ? "/dashboard" : "/planes"} className="inline-block w-full xs:w-auto">
                         <button className="w-full px-12 md:px-16 py-5 md:py-6 bg-[#BD7474] text-white rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] shadow-2xl hover:bg-[#B06060] transition-all transform active:scale-95">
                             {user ? 'ENTRAR AL PANEL' : 'CREAR MI INVITACIÓN'}
                         </button>

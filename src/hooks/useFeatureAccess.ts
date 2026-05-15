@@ -12,8 +12,8 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
 
         // MOCK MODE: use the actual plan passed in (from theme_config)
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            const plan = eventPlan || 'clasico';
-            setAccess({ plan: { code: plan, name: plan === 'premium' ? 'Premium' : plan === 'pro' ? 'Pro' : 'Clásico' }, features: [] } as any);
+            const plan = eventPlan || 'free';
+            setAccess({ plan: { code: plan, name: plan === 'premium' ? 'Premium' : plan === 'pro' ? 'Pro' : plan === 'clasico' ? 'Clásica' : 'Gratis' }, features: [] } as any);
             setIsLoading(false);
             return;
         }
@@ -54,13 +54,13 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                             .maybeSingle();
 
                         if (!profileError && profileData) {
-                            const planTier = profileData.plan_tier || 'clasico';
+                            const planTier = profileData.plan_tier || 'free';
                             const isPremiumOrPro = planTier === 'premium' || planTier === 'pro' || planTier === 'concierge';
 
                             setAccess({ 
                                 plan: { 
                                     code: planTier, 
-                                    name: planTier === 'concierge' ? 'Concierge' : planTier === 'premium' ? 'Diseño Pro' : planTier === 'pro' ? 'Pro' : 'Clásica' 
+                                    name: planTier === 'concierge' ? 'Concierge' : planTier === 'premium' ? 'Diseño Pro' : planTier === 'pro' ? 'Pro' : planTier === 'clasico' ? 'Clásica' : 'Gratuita' 
                                 }, 
                                 features: [
                                     { code: 'show_details', status: 'enabled' },
@@ -85,7 +85,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                 }
 
                 // Global default if everything else fails
-                setAccess({ plan: { code: 'clasico', name: 'Clásica' }, features: [] } as any);
+                setAccess({ plan: { code: 'free', name: 'Cuenta Gratuita' }, features: [] } as any);
                 setError(err);
             } finally {
                 setIsLoading(false);

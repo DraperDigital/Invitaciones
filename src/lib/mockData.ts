@@ -321,7 +321,21 @@ export const MOCK_EVENTS: Event[] = [
                 bride: { father: 'Ing. Ricardo Torres', mother: 'Dra. Patricia López' },
                 groom: { father: 'Lic. Arturo Mendoza Sr.', mother: 'Arq. Sofía Ramírez' }
             },
-            photoGallery: { enabled: true, uploadEnabled: true },
+            padrinos: [
+                { role: 'Madrina de Anillos', names: 'Valeria López' },
+                { role: 'Padrino de Lazo', names: 'Carlos Mendoza' },
+                { role: 'Padrinos de Velación', names: 'Roberto y Elena Gómez' }
+            ],
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'Facebook',
@@ -390,7 +404,20 @@ export const MOCK_EVENTS: Event[] = [
                 bride: { father: 'Dr. Fernando Ruiz', mother: 'Lic. Laura Martínez' },
                 groom: { father: 'Mtro. Rodrigo Sánchez Sr.', mother: 'Chef Ana María Torres' }
             },
-            message: 'Entre viñedos y bajo el cielo abierto, queremos compartir el inicio de nuestra historia como esposos.'
+            padrinos: [
+                { role: 'Madrina de Anillos', names: 'Valeria López' },
+                { role: 'Padrino de Lazo', names: 'Carlos Mendoza' },
+                { role: 'Padrinos de Velación', names: 'Roberto y Elena Gómez' }
+            ],
+            message: 'Entre viñedos y bajo el cielo abierto, queremos compartir el inicio de nuestra historia como esposos.',
+            photoGallery: {
+                enabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80'
+                ]
+            }
         },
         slug: 'boda-isabel-rodrigo-pro',
         created_at: new Date().toISOString(),
@@ -438,7 +465,20 @@ export const MOCK_EVENTS: Event[] = [
                 bride: { father: 'Dr. Fernando Ruiz', mother: 'Lic. Laura Martínez' },
                 groom: { father: 'Mtro. Rodrigo Sánchez Sr.', mother: 'Chef Ana María Torres' }
             },
-            photoGallery: { enabled: true, uploadEnabled: true },
+            padrinos: [
+                { role: 'Madrina de Anillos', names: 'Valeria López' },
+                { role: 'Padrino de Lazo', names: 'Carlos Mendoza' },
+                { role: 'Padrinos de Velación', names: 'Roberto y Elena Gómez' }
+            ],
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'Instagram',
@@ -764,7 +804,15 @@ export const MOCK_EVENTS: Event[] = [
                 { role: 'Padrinos de Tiara', names: 'Madrinas Andrea y Beatriz' },
                 { role: 'Padrinos de Brindis', names: 'Padrinos Jorge y Elena' }
             ],
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1518049362265-e5b450092420?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1522413452208-99613f8e7150?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'Facebook',
@@ -873,7 +921,15 @@ export const MOCK_EVENTS: Event[] = [
                 { time: '18:00', event: 'Baile y Show Musical', location: 'Pista' },
                 { time: '18:30', event: 'Sorpresa Final', location: 'Jardín' }
             ],
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: { 
+                enabled: true, 
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1513271239644-245c61eb6e60?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'Facebook',
@@ -905,7 +961,21 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
         is_published: true,
         plan: 'clasico',
-        theme_config: { theme: 'angel' },
+        theme_config: {
+            theme: 'angel',
+            hero_image_url: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1600&q=80',
+            message: 'Acompáñanos a celebrar el bautizo de nuestra pequeña Victoria. Será un día lleno de bendiciones.',
+            photoGallery: {
+                enabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1602052793312-b99c2a9ee797?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            parents: { father: 'Luis Sánchez', mother: 'Ana Fernanda Gómez' },
+            padrinos: [{ role: 'Padrinos', names: 'Carlos y Valeria' }]
+        },
         slug: 'bautizo-victoria',
         created_at: new Date().toISOString(),
     },
@@ -979,7 +1049,15 @@ export const MOCK_EVENTS: Event[] = [
                 { role: 'Padrinos de Bautizo', names: 'Tíos Ricardo y Martha' },
                 { role: 'Padrinos de Veladora', names: 'Abuelos José y Rosa' }
             ],
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: { 
+                enabled: true, 
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1602052793312-b99c2a9ee797?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'YouTube',
@@ -1178,7 +1256,15 @@ export const MOCK_EVENTS: Event[] = [
                 { time: '15:00', event: 'Comida de Celebración', location: 'Restaurante Vista' },
                 { time: '17:00', event: 'Entrega de Recuerdos', location: 'Restaurante' }
             ],
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: { 
+                enabled: true, 
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'YouTube',
@@ -1377,7 +1463,15 @@ export const MOCK_EVENTS: Event[] = [
                 { role: 'Padrinos de Rosario', names: 'Abuelos Maternos' },
                 { role: 'Padrinos de Biblia', names: 'Abuelos Paternos' }
             ],
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: { 
+                enabled: true, 
+                uploadEnabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1438032005730-c7aedb098c71?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1544365558-35aa4afcf11f?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1507676184212-d0330a156f97?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
             liveStream: {
                 enabled: true,
                 platform: 'YouTube',

@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -399,7 +399,7 @@ END:VCALENDAR`;
     if (loading) {
         return <div className="flex h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-cream to-amber-50">
             <div className="text-center space-y-4">
-                <Sparkles className="h-12 w-12 animate-pulse text-accent mx-auto" />
+                <Flower2 className="h-12 w-12 animate-pulse text-accent mx-auto" strokeWidth={1.5} />
                 <p className="text-stone-500 font-serif italic">Preparando tu invitación...</p>
             </div>
         </div>;
@@ -571,7 +571,7 @@ END:VCALENDAR`;
 
                     <div className="relative z-10 text-center px-6 py-20 max-w-2xl">
                         <div className="mb-8">
-                            <Sparkles className="h-12 w-12 mx-auto mb-6 animate-pulse" style={{color: heroTextColor, opacity: 0.8}} />
+                            <Flower2 className="h-12 w-12 mx-auto mb-6 animate-pulse" strokeWidth={1.5} style={{color: heroTextColor, opacity: 0.8}} />
                         </div>
                         <p className="text-sm uppercase tracking-[0.4em] mb-6 font-sans" style={{color: heroTextColor, opacity: 0.85}}>
                             {subtitle || labels.tagline}
@@ -770,7 +770,7 @@ END:VCALENDAR`;
             <div className="max-w-4xl mx-auto px-6 text-center">
                 <div className="mb-12 inline-flex items-center justify-center gap-4">
                     <div className="h-px w-12 bg-accent/30" />
-                    <Sparkles className="h-6 w-6 text-accent/40" />
+                    <Flower2 className="h-6 w-6 text-accent/40" strokeWidth={1.5} />
                     <div className="h-px w-12 bg-accent/30" />
                 </div>
                 
@@ -906,7 +906,7 @@ END:VCALENDAR`;
     const renderDressCode = () => (
         <section id="dress_code" key="dress_code" className="py-20 bg-gradient-to-br from-stone-50 to-rose-50/20">
             <div className="max-w-3xl mx-auto px-6 text-center">
-                <Sparkles className="h-10 w-10 mx-auto mb-8 text-accent/60" />
+                <Flower2 className="h-10 w-10 mx-auto mb-8 text-accent/60" strokeWidth={1.5} />
                 <h3 className="text-4xl font-serif font-light text-stone-900 mb-6">Dress Code</h3>
                 <div className="card-premium rounded-3xl p-12 inline-block">
                     <p className="text-3xl font-serif text-stone-900">{event.dress_code}</p>
@@ -915,49 +915,58 @@ END:VCALENDAR`;
         </section>
     );
 
-    const renderItinerary = () => (
-        <section id="itinerary" key="itinerary" className="py-24 bg-gradient-to-br from-amber-50/50 to-rose-50/30">
-            <div className="max-w-4xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Itinerario</h3>
-                    <p className="text-stone-600">Programa del día</p>
-                </div>
-                
-                <div className="relative max-w-2xl mx-auto py-8">
-                    <div className="absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 bg-stone-300 md:-translate-x-1/2" />
+    const renderItinerary = () => {
+        const items = (cfg?.itinerary?.length > 0 ? cfg.itinerary : cfg?.schedule) || [];
+        if (items.length === 0) return null;
+        
+        return (
+            <section id="itinerary" key="itinerary" className="py-24 bg-gradient-to-br from-amber-50/50 to-rose-50/30">
+                <div className="max-w-4xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Itinerario</h3>
+                        <p className="text-stone-600">Programa del día</p>
+                    </div>
                     
-                    <div className="space-y-12">
-                        {(cfg.itinerary || []).map((item: any, idx: number) => {
-                            const isEven = idx % 2 === 0;
-                            let ItemIcon = Heart;
-                            if (item.icon === 'wine') ItemIcon = Wine;
-                            if (item.icon === 'utensils') ItemIcon = Utensils;
-                            if (item.icon === 'music') ItemIcon = Music;
-                            if (item.icon === 'party') ItemIcon = PartyPopper;
-                            if (item.icon === 'moon') ItemIcon = Moon;
-                            if (item.icon === 'clock') ItemIcon = Clock;
+                    <div className="relative max-w-2xl mx-auto py-8">
+                        <div className="absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 bg-stone-300 md:-translate-x-1/2" />
+                        
+                        <div className="space-y-12">
+                            {items.map((item: any, idx: number) => {
+                                const isEven = idx % 2 === 0;
+                                let ItemIcon = Heart;
+                                if (item.icon === 'wine') ItemIcon = Wine;
+                                if (item.icon === 'utensils') ItemIcon = Utensils;
+                                if (item.icon === 'music') ItemIcon = Music;
+                                if (item.icon === 'party') ItemIcon = PartyPopper;
+                                if (item.icon === 'moon') ItemIcon = Moon;
+                                if (item.icon === 'clock') ItemIcon = Clock;
 
-                            return (
-                                <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                    <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-white border-4 border-stone-100 flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
-                                        <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
-                                    </div>
-                                    <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
-                                        <div className="bg-white/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-stone-100/50 shadow-sm hover:shadow-md transition-shadow">
-                                            <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
-                                                {item.time}
-                                            </span>
-                                            <h4 className="text-lg xs:text-xl font-serif text-stone-900">{item.title}</h4>
+                                const itemTitle = item.title || item.event;
+                                const itemDesc = item.description || item.location;
+
+                                return (
+                                    <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                                        <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-white border-4 border-stone-100 flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
+                                            <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
+                                        </div>
+                                        <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
+                                            <div className="bg-white/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-stone-100/50 shadow-sm hover:shadow-md transition-shadow">
+                                                <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
+                                                    {item.time}
+                                                </span>
+                                                <h4 className="text-lg xs:text-xl font-serif text-stone-900">{itemTitle}</h4>
+                                                {itemDesc && <p className="text-stone-500 mt-2 text-sm xs:text-base leading-relaxed">{itemDesc}</p>}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    );
+            </section>
+        );
+    };
 
     const renderRSVP = () => (
         <section id="rsvp" key="rsvp" className="py-16 bg-white">
@@ -1153,88 +1162,120 @@ END:VCALENDAR`;
         </section>
     );
 
-    const renderGallery = () => (
-        <div id="gallery" key="gallery">
-            {cfg?.gallery_images?.length > 0 ? (
-                <PhotoGallery images={cfg.gallery_images} />
-            ) : (
-                <section className="py-20 bg-white">
-                    <div className="max-w-3xl mx-auto px-6 text-center">
-                        <Camera className="h-16 w-16 mx-auto mb-8 text-stone-300" />
-                        <h3 className="text-3xl font-serif font-light text-stone-900 mb-4">Galería de Fotos</h3>
-                        <p className="text-stone-500 text-sm max-w-md mx-auto">
-                            Será un gusto poder compartir este día contigo. Después del evento, podrás encontrar aquí las fotos del día.
-                        </p>
-                    </div>
-                </section>
-            )}
-            
-            {/* Premium Extra Gallery */}
-            {isPremium && cfg?.photoGallery?.enabled && (
-                <section className="py-32 bg-gradient-to-br from-black via-stone-900 to-amber-900 relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10">
-                        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '60px 60px' }} />
-                    </div>
-                    <div className="relative z-10 max-w-7xl mx-auto px-6">
-                        <div className="text-center mb-20">
-                            <div className="inline-flex items-center gap-4 mb-6">
-                                <div className="h-px w-16 bg-gradient-to-r from-transparent to-accent" />
-                                <Camera className="h-10 w-10 text-accent animate-pulse" />
-                                <div className="h-px w-16 bg-gradient-to-l from-transparent to-accent" />
-                            </div>
-                            <h3 className="text-5xl sm:text-6xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-accent to-amber-600 mb-4">Galería Premium</h3>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                                <div key={i} className="relative h-44 rounded-2xl overflow-hidden group cursor-pointer bg-stone-800">
-                                    <div className="absolute inset-0 flex items-center justify-center opacity-30">
-                                        <Camera className="h-10 w-10 text-accent" />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
-        </div>
-    );
+    const renderGallery = () => {
+        const rawImages = cfg?.gallery_images || cfg?.photoGallery?.images || [];
+        // Map string arrays to the {url, caption} format expected by PhotoGallery
+        const galleryImages = rawImages.map((img: any) => 
+            typeof img === 'string' ? { url: img } : img
+        );
 
-    const renderChambelanes = () => (
-        <section id="chambelanes" key="chambelanes" className="py-24 bg-white">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Corte de Honor</h3>
-                    <p className="text-stone-600">Mis acompañantes especiales</p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-12">
-                    {cfg.chambelanes && (
-                        <div>
-                            <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Chambelanes</h4>
-                            <div className="space-y-4">
-                                {cfg.chambelanes.map((name: string, idx: number) => (
-                                    <div key={idx} className="card-premium rounded-xl p-4 text-center">
-                                        <p className="text-lg text-stone-800">{name}</p>
-                                    </div>
-                                ))}
-                            </div>
+        return (
+            <div id="gallery" key="gallery">
+                {galleryImages.length > 0 ? (
+                    <PhotoGallery images={galleryImages} />
+                ) : (
+                    <section className="py-20 bg-white">
+                        <div className="max-w-3xl mx-auto px-6 text-center">
+                            <Camera className="h-16 w-16 mx-auto mb-8 text-stone-300" />
+                            <h3 className="text-3xl font-serif font-light text-stone-900 mb-4">Galería de Fotos</h3>
+                            <p className="text-stone-500 text-sm max-w-md mx-auto">
+                                Será un gusto poder compartir este día contigo. Después del evento, podrás encontrar aquí las fotos del día.
+                            </p>
                         </div>
-                    )}
-                    {cfg.damas && (
-                        <div>
-                            <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Damas</h4>
-                            <div className="space-y-4">
-                                {cfg.damas.map((name: string, idx: number) => (
-                                    <div key={idx} className="card-premium rounded-xl p-4 text-center">
-                                        <p className="text-lg text-stone-800">{name}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    </section>
+                )}
             </div>
-        </section>
-    );
+        );
+    };
+
+    const renderChambelanes = () => {
+        const hasChambelanes = cfg.chambelanes && cfg.chambelanes.length > 0;
+        const hasDamas = cfg.damas && cfg.damas.length > 0;
+        const hasPadrinos = cfg.padrinos && cfg.padrinos.length > 0;
+        const hasParents = !!cfg.parents;
+
+        if (!hasChambelanes && !hasDamas && !hasPadrinos && !hasParents) return null;
+
+        return (
+            <section id="chambelanes" key="chambelanes" className="py-24 bg-white">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Corte de Honor</h3>
+                        <p className="text-stone-600">Mis acompañantes especiales</p>
+                    </div>
+
+                    {hasParents && (
+                        <div className="mb-16">
+                            <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Nuestros Padres</h4>
+                            {cfg.parents.bride || cfg.parents.groom ? (
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    {cfg.parents.bride && (
+                                        <div className="card-premium rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-4 font-bold" style={{color: accentColor}}>Padres de la Novia</p>
+                                            {cfg.parents.bride.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.bride.father}</p>}
+                                            {cfg.parents.bride.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.bride.mother}</p>}
+                                        </div>
+                                    )}
+                                    {cfg.parents.groom && (
+                                        <div className="card-premium rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-4 font-bold" style={{color: accentColor}}>Padres del Novio</p>
+                                            {cfg.parents.groom.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.groom.father}</p>}
+                                            {cfg.parents.groom.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.groom.mother}</p>}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="max-w-md mx-auto card-premium rounded-xl p-6 text-center">
+                                    {cfg.parents.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.father}</p>}
+                                    {cfg.parents.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.mother}</p>}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className={`grid gap-12 ${hasChambelanes && hasDamas ? 'md:grid-cols-2' : hasPadrinos ? 'grid-cols-1' : 'max-w-2xl mx-auto'}`}>
+                        {hasChambelanes && (
+                            <div>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Chambelanes</h4>
+                                <div className="space-y-4">
+                                    {cfg.chambelanes.map((name: string, idx: number) => (
+                                        <div key={idx} className="card-premium rounded-xl p-4 text-center">
+                                            <p className="text-lg text-stone-800">{name}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        {hasDamas && (
+                            <div>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Damas</h4>
+                                <div className="space-y-4">
+                                    {cfg.damas.map((name: string, idx: number) => (
+                                        <div key={idx} className="card-premium rounded-xl p-4 text-center">
+                                            <p className="text-lg text-stone-800">{name}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        {hasPadrinos && (
+                            <div className={hasChambelanes || hasDamas ? 'md:col-span-2' : ''}>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Padrinos</h4>
+                                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                                    {cfg.padrinos.map((padrino: {role: string, names: string}, idx: number) => (
+                                        <div key={idx} className="card-premium rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-2 font-bold" style={{color: accentColor}}>{padrino.role}</p>
+                                            <p className="text-lg font-serif text-stone-800">{padrino.names}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
+        );
+    };
 
     const renderAccommodation = () => (
         <section id="hotels" key="hotels" className="py-24 bg-gradient-to-br from-stone-50 to-amber-50/20">
@@ -1291,7 +1332,7 @@ END:VCALENDAR`;
                 <div className="fixed top-4 right-4 z-50 flex flex-wrap gap-2 items-center">
                     <Link to="/planes" className="mr-2 sm:mr-4">
                         <button className="px-5 py-2 rounded-full text-sm font-bold bg-[#1B2E1D] text-white hover:bg-stone-800 shadow-xl flex items-center gap-2 border-2 border-[#1B2E1D]/20">
-                            <Sparkles className="h-4 w-4 text-amber-200" />
+                            <Flower2 className="h-4 w-4 text-amber-200" />
                             Quiero usar esta plantilla
                         </button>
                     </Link>

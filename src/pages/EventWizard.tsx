@@ -250,8 +250,8 @@ export default function EventWizard() {
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;
-                toast.success('¡Evento creado con éxito!');
-                navigate('/dashboard');
+                toast.success('¡Evento creado con éxito! Selecciona tu plan.');
+                navigate(`/planes?id=${insertPayload.id}`);
             }
         } catch (err: any) {
             console.error('Error submitting event:', err);

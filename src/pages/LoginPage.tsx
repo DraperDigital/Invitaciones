@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2, ArrowLeft, Eye, EyeOff, X } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Mail, Lock, User, ArrowRight, Sparkles, CheckCircle2, ArrowLeft, Eye, EyeOff, X, Gem } from 'lucide-react';
 
 export default function LoginPage() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const redirectUrl = searchParams.get('redirect') || '/dashboard';
+
     const [isLogin, setIsLogin] = useState(true);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
@@ -19,15 +22,15 @@ export default function LoginPage() {
 
     // Redirect if already logged in
     useEffect(() => {
-        // MOCK MODE: already logged in via AuthContext, go straight to dashboard
+        // MOCK MODE: already logged in via AuthContext, go straight to redirectUrl
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            navigate('/dashboard');
+            navigate(redirectUrl);
             return;
         }
 
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
-                navigate('/dashboard');
+                navigate(redirectUrl);
             }
         });
 
@@ -37,12 +40,12 @@ export default function LoginPage() {
                 return;
             }
             if (session) {
-                navigate('/dashboard');
+                navigate(redirectUrl);
             }
         });
 
         return () => subscription.unsubscribe();
-    }, [navigate]);
+    }, [navigate, redirectUrl]);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,7 +65,7 @@ export default function LoginPage() {
                     password,
                 });
                 if (error) throw error;
-                navigate('/dashboard');
+                navigate(redirectUrl);
             } else {
                 const { data, error } = await supabase.auth.signUp({
                     email,
@@ -71,7 +74,7 @@ export default function LoginPage() {
                         data: {
                             full_name: fullName,
                         },
-                        emailRedirectTo: `${window.location.origin}/dashboard`
+                        emailRedirectTo: `${window.location.origin}${redirectUrl}`
                     },
                 });
                 if (error) throw error;
@@ -80,8 +83,12 @@ export default function LoginPage() {
                     // Email confirmation required
                     setShowSuccessModal(true);
                 } else {
-                    // Redirect new user directly to wizard with welcome flag
-                    navigate('/dashboard/new?welcome=true');
+                    // Redirect to the intended URL, or to the wizard if none specified
+                    if (redirectUrl === '/dashboard') {
+                        navigate('/dashboard/new?welcome=true');
+                    } else {
+                        navigate(redirectUrl);
+                    }
                 }
             }
         } catch (err: any) {
@@ -165,8 +172,8 @@ export default function LoginPage() {
             <div className="hidden lg:flex w-1/2 bg-[#1B2E1D] relative items-center justify-center p-20 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="/images/cecilia_roses_hero.png"
-                        alt="Branding Background"
+                        src="https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?auto=format&fit=crop&q=80"
+                        alt="Event Branding Background"
                         className="w-full h-full object-cover opacity-20 grayscale"
                     />
                     <div className="absolute inset-0 bg-[#1B2E1D]/80" />
@@ -174,12 +181,12 @@ export default function LoginPage() {
                 
                 <div className="relative z-10 text-white max-w-lg">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase font-bold tracking-widest mb-10 border border-white/10">
-                        <Sparkles className="h-4 w-4 text-[#BD7474]" />
+                        <Gem className="h-4 w-4 text-[#BD7474]" />
                         <span>Plataforma de Invitaciones Premium</span>
                     </div>
-                    <h1 className="text-6xl font-serif mb-8 leading-tight">Digitaliza el amor, simplifica el evento.</h1>
+                    <h1 className="text-6xl font-serif mb-8 leading-tight">Eleva tu evento, simplifica la organización.</h1>
                     <p className="text-xl text-stone-400 font-light leading-relaxed">
-                        Gestiona tus confirmaciones, mesas de regalos y detalles del evento desde un panel profesional diseñado para ti.
+                        Gestiona confirmaciones, accesos y todos los detalles de tu celebración desde un panel profesional diseñado para ti.
                     </p>
                 </div>
 
