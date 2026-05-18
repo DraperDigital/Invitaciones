@@ -50,18 +50,41 @@ serve(async (req) => {
           return new Response('Plan not found in DB', { status: 400 });
         }
 
-        // 2. Update Event Subscription securely bypassing RLS
-        const { error: subError } = await supabase
+        // Check if subscription already exists to avoid ON CONFLICT database constraint issues
+        const { data: existingSub, error: findSubError } = await supabase
           .from('event_subscriptions')
-          .upsert({ 
-            event_id: eventId,
-            plan_id: planData.id,
-            status: 'active',
-            updated_at: new Date().toISOString()
-          }, { onConflict: 'event_id' });
+          .select('id')
+          .eq('event_id', eventId)
+          .maybeSingle();
+
+        if (findSubError) {
+          console.error(`Error finding subscription for event ${eventId}:`, findSubError);
+          return new Response('DB Error checking subscription', { status: 500 });
+        }
+
+        let subError;
+        if (existingSub) {
+          const { error } = await supabase
+            .from('event_subscriptions')
+            .update({ 
+              plan_id: planData.id,
+              status: 'active'
+            })
+            .eq('event_id', eventId);
+          subError = error;
+        } else {
+          const { error } = await supabase
+            .from('event_subscriptions')
+            .insert({ 
+              event_id: eventId,
+              plan_id: planData.id,
+              status: 'active'
+            });
+          subError = error;
+        }
 
         if (subError) {
-          console.error(`Error upserting subscription for event ${eventId}:`, subError);
+          console.error(`Error updating subscription for event ${eventId}:`, subError);
           return new Response('DB Error updating subscription', { status: 500 });
         }
 

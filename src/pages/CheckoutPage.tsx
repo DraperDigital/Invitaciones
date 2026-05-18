@@ -120,8 +120,20 @@ export default function CheckoutPage() {
                 }
             });
 
-            if (error || (data && data.error)) {
-                throw new Error(error?.message || data?.error || "Error al aplicar el cupón.");
+            if (error) {
+                let errorMessage = error.message;
+                try {
+                    // Access response body context for FunctionsHttpError
+                    const body = await error.context.json();
+                    if (body && body.error) {
+                        errorMessage = body.error;
+                    }
+                } catch (_) {}
+                throw new Error(errorMessage);
+            }
+
+            if (data && data.error) {
+                throw new Error(data.error);
             }
 
             setIsCouponSuccess(true);

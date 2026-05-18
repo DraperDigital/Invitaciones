@@ -81,15 +81,35 @@ serve(async (req) => {
       throw new Error('Plan not found')
     }
 
-    // 4. Update Event Subscription
-    const { error: subError } = await supabase
+    // Check if subscription already exists to avoid ON CONFLICT database constraint issues
+    const { data: existingSub, error: findSubError } = await supabase
       .from('event_subscriptions')
-      .upsert({ 
-        event_id: eventId,
-        plan_id: planData.id,
-        status: 'active',
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'event_id' });
+      .select('id')
+      .eq('event_id', eventId)
+      .maybeSingle();
+
+    if (findSubError) throw findSubError;
+
+    let subError;
+    if (existingSub) {
+      const { error } = await supabase
+        .from('event_subscriptions')
+        .update({ 
+          plan_id: planData.id,
+          status: 'active'
+        })
+        .eq('event_id', eventId);
+      subError = error;
+    } else {
+      const { error } = await supabase
+        .from('event_subscriptions')
+        .insert({ 
+          event_id: eventId,
+          plan_id: planData.id,
+          status: 'active'
+        });
+      subError = error;
+    }
 
     if (subError) throw subError;
 
