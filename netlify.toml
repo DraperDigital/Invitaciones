@@ -3,6 +3,11 @@
   command = "npm run build"
   publish = "dist"
 
+# Edge Functions configuration
+[[edge-functions]]
+  path = "/i/*"
+  function = "og-tags"
+
 # SPA routing — all paths serve index.html
 [[redirects]]
   from = "/*"

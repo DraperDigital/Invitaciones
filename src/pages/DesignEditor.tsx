@@ -206,6 +206,7 @@ export default function DesignEditor() {
     const [event, setEvent] = useState<any>(null);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const logoInputRef = useRef<HTMLInputElement>(null);
 
 
     useEffect(() => {
@@ -419,6 +420,27 @@ export default function DesignEditor() {
             setConfig(prev => ({ ...prev, heroImage: publicUrl }));
         } catch (err: any) {
             toast.error('Error al subir imagen. Alternativa: pega la URL de la imagen en el campo de texto.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleLogoUpload = async (file: File) => {
+        if (!id || !file) return;
+        setUploading(true);
+        try {
+            const ext = file.name.split('.').pop();
+            const path = `events/${id}/logo.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setConfig(prev => ({ ...prev, decorativeImage: publicUrl }));
+            toast.success('¡Logo subido exitosamente!');
+        } catch (err: any) {
+            toast.error('Error al subir el logo. Alternativa: pega la URL de la imagen en el campo de texto.');
         } finally {
             setUploading(false);
         }
@@ -736,6 +758,32 @@ export default function DesignEditor() {
                         <div className="space-y-6 md:space-y-8">
                              <div className="space-y-4 md:space-y-6">
                                 <label className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.2em] text-stone-800">Logo o Firma Digital</label>
+                                
+                                <input
+                                    ref={logoInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={e => {
+                                        const f = e.target.files?.[0];
+                                        if (f) handleLogoUpload(f);
+                                    }}
+                                />
+                                
+                                <button
+                                    onClick={() => logoInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className="group w-full flex flex-col items-center justify-center gap-4 py-6 md:py-10 rounded-[1.5rem] md:rounded-[2.5rem] border-2 border-dashed border-stone-100 bg-stone-50/30 hover:bg-white hover:border-[#BD7474]/30 transition-all disabled:opacity-50"
+                                >
+                                    <div className="h-10 w-10 md:h-12 md:w-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] shadow-sm group-hover:scale-110 transition-transform">
+                                        {uploading ? <Loader2 className="h-5 w-5 md:h-6 md:w-6 animate-spin" /> : <Upload className="h-5 w-5 md:h-6 md:w-6" />}
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-stone-800 mb-1">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
+                                        <p className="text-[8px] md:text-[9px] text-stone-400 font-medium">PNG, JPG hasta 5MB</p>
+                                    </div>
+                                </button>
+
                                 <input
                                     type="url"
                                     placeholder="https://... o pega el enlace aquí"
@@ -1415,13 +1463,62 @@ export default function DesignEditor() {
                                 {config.galleryImages.map((img, idx) => (
                                     <div key={idx} className="group p-5 bg-stone-50/50 rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
                                         <div className="flex flex-col gap-5">
-                                            <div className="w-full aspect-video bg-white rounded-xl md:rounded-2xl shadow-inner border border-stone-100 overflow-hidden relative group-hover:scale-[1.02] transition-transform">
+                                            <div className="w-full aspect-video bg-white rounded-xl md:rounded-2xl shadow-inner border border-stone-100 overflow-hidden relative group-hover:scale-[1.02] transition-transform flex items-center justify-center">
                                                 {img.url ? (
-                                                    <img src={img.url} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
+                                                    <>
+                                                        <img src={img.url} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newImages = [...config.galleryImages];
+                                                                newImages[idx].url = '';
+                                                                setConfig({ ...config, galleryImages: newImages });
+                                                            }}
+                                                            className="absolute top-2 right-2 bg-stone-950/60 hover:bg-rose-600 text-white rounded-full p-1.5 transition-all shadow-md"
+                                                        >
+                                                            <X className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </>
                                                 ) : (
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-stone-200">
-                                                        <ImageIcon className="h-10 w-10" />
-                                                        <span className="text-[8px] uppercase font-black tracking-widest">Sin imagen</span>
+                                                    <div className="flex flex-col items-center gap-2 text-stone-300 w-full p-4">
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            id={`gallery-upload-${idx}`}
+                                                            className="hidden"
+                                                            onChange={async (e) => {
+                                                                const f = e.target.files?.[0];
+                                                                if (!f) return;
+                                                                setUploading(true);
+                                                                try {
+                                                                    const ext = f.name.split('.').pop();
+                                                                    const path = `events/${id}/gallery_${idx}_${Date.now()}.${ext}`;
+                                                                    const { error: uploadError } = await supabase.storage
+                                                                        .from('event-images')
+                                                                        .upload(path, f, { upsert: true, contentType: f.type });
+                                                                    if (uploadError) throw uploadError;
+                                                                    const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+                                                                    const newImages = [...config.galleryImages];
+                                                                    newImages[idx].url = urlData.publicUrl;
+                                                                    setConfig({ ...config, galleryImages: newImages });
+                                                                    toast.success('¡Imagen de galería subida exitosamente!');
+                                                                } catch (err: any) {
+                                                                    toast.error('Error al subir imagen de galería.');
+                                                                } finally {
+                                                                    setUploading(false);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label
+                                                            htmlFor={`gallery-upload-${idx}`}
+                                                            className="flex flex-col items-center gap-1.5 cursor-pointer hover:text-stone-600 transition-colors text-center"
+                                                        >
+                                                            <div className="h-9 w-9 bg-stone-50 rounded-xl flex items-center justify-center text-stone-400 group-hover:scale-105 transition-transform shadow-sm">
+                                                                {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                                            </div>
+                                                            <span className="text-[8px] uppercase font-black tracking-widest">{uploading ? 'Subiendo...' : 'Subir Foto'}</span>
+                                                            <span className="text-[7px] text-stone-400 font-medium">PNG, JPG hasta 5MB</span>
+                                                        </label>
                                                     </div>
                                                 )}
                                             </div>

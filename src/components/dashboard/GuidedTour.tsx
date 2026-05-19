@@ -2,8 +2,152 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Joyride, STATUS } from 'react-joyride';
 import { useLocation } from 'react-router-dom';
-import { PartyPopper } from 'lucide-react';
+import { PartyPopper, X, ChevronRight } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+
+// Custom Tooltip Component for premium UI/UX
+const TooltipComponent = ({
+  index,
+  step,
+  backProps,
+  primaryProps,
+  skipProps,
+  tooltipProps,
+  isLastStep,
+}: any) => {
+  const isIntro = index === 0;
+
+  if (isIntro) {
+    return (
+      <div 
+        {...tooltipProps} 
+        className="relative bg-[#1B2E1D] text-white rounded-[2.5rem] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] p-8 md:p-10 max-w-[440px] text-center font-sans overflow-hidden animate-in fade-in zoom-in-95 duration-300"
+      >
+        {/* Decorative highlights */}
+        <div className="absolute -top-32 -left-32 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-64 h-64 bg-[#BD7474]/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Close/Skip button at top right */}
+        <button 
+          {...skipProps} 
+          className="absolute top-6 right-6 text-white/30 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5"
+          title="Saltar recorrido"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        {/* Welcome Icon */}
+        <div className="flex justify-center mb-6">
+          <div className="p-5 bg-white/5 rounded-[2rem] border border-white/10 animate-bounce shadow-xl relative group">
+            <div className="absolute inset-0 bg-[#BD7474]/20 rounded-[2rem] blur-xl opacity-50" />
+            <PartyPopper className="h-10 w-10 text-[#BD7474] relative z-10" />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-3xl font-serif text-white mb-4 italic tracking-tight">
+          ¡Hola! Permítenos guiarte
+        </h3>
+
+        {/* Body Description */}
+        <p className="text-stone-300 text-sm font-light leading-relaxed max-w-[320px] mx-auto opacity-90 mb-8">
+          Hemos preparado un breve recorrido para que aproveches al máximo esta sección de Invitto.
+        </p>
+
+        {/* Footer controls */}
+        <div className="flex flex-col gap-5 pt-4 border-t border-white/5">
+          {/* Progress dots */}
+          <div className="flex justify-center gap-1.5">
+            <div className="h-1.5 w-8 bg-[#BD7474] rounded-full shadow-lg shadow-[#BD7474]/20 transition-all duration-300" />
+            <div className="h-1.5 w-2 bg-white/10 rounded-full transition-all duration-300" />
+            <div className="h-1.5 w-2 bg-white/10 rounded-full transition-all duration-300" />
+            <div className="h-1.5 w-2 bg-white/10 rounded-full transition-all duration-300" />
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center justify-between gap-4 mt-2">
+            <button 
+              {...skipProps} 
+              className="text-[10px] uppercase font-black tracking-[0.2em] text-white/40 hover:text-white transition-colors py-3 px-4 rounded-xl hover:bg-white/5"
+            >
+              Saltar
+            </button>
+            <button 
+              {...primaryProps} 
+              className="flex-1 bg-[#BD7474] hover:bg-[#A35D5D] active:scale-[0.98] text-white text-[10px] uppercase font-black tracking-[0.2em] py-4 px-6 rounded-2xl shadow-xl shadow-[#BD7474]/10 hover:shadow-[#BD7474]/20 transition-all flex items-center justify-center gap-2"
+            >
+              Empezar <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Regular Step Tooltip (Spotlight description popups)
+  return (
+    <div 
+      {...tooltipProps} 
+      className="relative bg-[#1B2E1D] text-white rounded-[2rem] border border-white/10 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.5)] p-6 max-w-[320px] font-sans overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+    >
+      {/* Sleek highlights */}
+      <div className="absolute -top-20 -left-20 w-40 h-40 bg-white/5 rounded-full blur-2xl pointer-events-none" />
+
+      {/* Header Info */}
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[9px] uppercase font-black tracking-widest text-[#BD7474] bg-[#BD7474]/10 px-2.5 py-1 rounded-full border border-[#BD7474]/20">
+          Paso {index + 1}
+        </span>
+        <button 
+          {...skipProps} 
+          className="text-white/35 hover:text-white transition-colors text-[9px] uppercase font-black tracking-wider"
+        >
+          Saltar
+        </button>
+      </div>
+
+      {/* Content description */}
+      <div className="text-stone-200 text-xs font-light leading-relaxed mb-5">
+        {step.content}
+      </div>
+
+      {/* Footer controls */}
+      <div className="flex items-center justify-between pt-4 border-t border-white/5">
+        {/* Progress indicator dots */}
+        <div className="flex gap-1">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div 
+              key={i} 
+              className={`h-1 rounded-full transition-all duration-300 ${
+                i === index 
+                  ? 'w-4 bg-[#BD7474]' 
+                  : 'w-1 bg-white/15'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-2">
+          {index > 0 && (
+            <button 
+              {...backProps} 
+              className="text-[9px] uppercase font-black tracking-widest text-white/50 hover:text-white transition-colors py-2 px-2.5 rounded-lg hover:bg-white/5"
+            >
+              Atrás
+            </button>
+          )}
+          <button 
+            {...primaryProps} 
+            className="bg-[#BD7474] hover:bg-[#A35D5D] active:scale-[0.97] text-white text-[9px] uppercase font-black tracking-widest py-2.5 px-4 rounded-xl shadow-lg shadow-[#BD7474]/15 hover:shadow-[#BD7474]/25 transition-all"
+          >
+            {isLastStep ? 'Entendido' : 'Siguiente'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface GuidedTourProps {
   onComplete?: () => void;
@@ -51,36 +195,8 @@ const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {
     // All tours start with a welcome/onboarding indicator
     const introStep = {
         target: 'body',
-        content: (
-            <div className="py-8 px-4 text-center bg-[#1B2E1D] rounded-[2rem] border border-white/10 shadow-2xl">
-                <div className="flex justify-center mb-8">
-                    <div className="p-5 bg-white/5 rounded-[2.5rem] border border-white/10 animate-bounce shadow-xl">
-                        <PartyPopper className="h-10 w-10 text-[#BD7474]" />
-                    </div>
-                </div>
-                <h3 className="text-3xl font-serif text-white mb-4 italic tracking-tight">¡Hola! Permítenos guiarte</h3>
-                <p className="text-stone-300 text-sm font-light leading-relaxed max-w-[280px] mx-auto opacity-90">
-                    Hemos preparado un breve recorrido para que aproveches al máximo esta sección de Invitto.
-                </p>
-                <div className="mt-10 flex justify-center gap-3">
-                    <div className="h-1.5 w-10 bg-[#BD7474] rounded-full shadow-lg shadow-[#BD7474]/20"></div>
-                    <div className="h-1.5 w-3 bg-white/10 rounded-full"></div>
-                    <div className="h-1.5 w-3 bg-white/10 rounded-full"></div>
-                </div>
-            </div>
-        ),
+        content: 'Hemos preparado un breve recorrido para que aproveches al máximo esta sección de Invitto.',
         placement: 'center' as const,
-        styles: {
-            options: {
-                width: 450,
-            },
-            tooltip: {
-                backgroundColor: '#1B2E1D',
-                padding: 0,
-                borderRadius: '32px',
-                overflow: 'hidden'
-            }
-        }
     };
 
     if (path === '/dashboard' || path === '/dashboard/') {
@@ -183,6 +299,7 @@ const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {
       showProgress={false}
       showSkipButton={true}
       callback={handleJoyrideCallback}
+      tooltipComponent={TooltipComponent}
       locale={{
         back: 'Atrás',
         close: 'Entendido',
@@ -192,51 +309,8 @@ const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {
       }}
       styles={{
         options: {
-          primaryColor: '#BD7474',
-          arrowColor: '#1B2E1D',
-          backgroundColor: '#1B2E1D',
-          textColor: '#FFFFFF',
           zIndex: 10000,
-          overlayColor: 'rgba(0, 0, 0, 0.6)',
-        },
-        tooltip: {
-            backgroundColor: '#1B2E1D',
-            color: '#FFFFFF',
-            borderRadius: '24px',
-            padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(10px)',
-        },
-        tooltipContainer: {
-          textAlign: 'center',
-          color: '#FFFFFF',
-        },
-        buttonNext: {
-            borderRadius: '14px',
-            fontSize: '10px',
-            textTransform: 'uppercase',
-            fontWeight: '900',
-            letterSpacing: '2px',
-            padding: '12px 24px',
-            backgroundColor: '#BD7474',
-            marginLeft: '10px',
-            transition: 'all 0.2s ease-in-out'
-        },
-        buttonBack: {
-            fontSize: '10px',
-            textTransform: 'uppercase',
-            fontWeight: '900',
-            letterSpacing: '2px',
-            color: 'rgba(255,255,255,0.4)',
-            marginRight: '12px'
-        },
-        buttonSkip: {
-            fontSize: '10px',
-            textTransform: 'uppercase',
-            fontWeight: '900',
-            letterSpacing: '2px',
-            color: 'rgba(255,255,255,0.3)',
+          overlayColor: 'rgba(27, 46, 29, 0.75)', // Elegant branded forest-green overlay
         },
         spotlight: {
             borderRadius: '24px',
