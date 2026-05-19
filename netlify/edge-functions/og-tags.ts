@@ -120,7 +120,7 @@ export default async (request: Request, context: Context) => {
 
     const eventBody = `
       <!-- SEO Fallback Content for Crawlers & AI Scrapers (Replaced by React on mount) -->
-      <div class="seo-event-fallback" style="display: none;">
+      <div class="seo-event-fallback" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;">
         <h1>${title}</h1>
         <p>${description}</p>
         <h2>Detalles del Evento</h2>
