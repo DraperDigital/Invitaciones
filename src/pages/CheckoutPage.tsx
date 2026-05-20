@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 export default function CheckoutPage() {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const { user } = useAuth();
     const planId = searchParams.get('plan') || 'pro';
@@ -19,6 +19,10 @@ export default function CheckoutPage() {
     const [isCouponSuccess, setIsCouponSuccess] = useState(false);
     const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
+    // Fallback when ?id= is missing from the URL (browser back, manual nav, etc.)
+    const [draftEvents, setDraftEvents] = useState<{ id: string; title: string; date_time: string | null }[]>([]);
+    const [draftLookupDone, setDraftLookupDone] = useState(false);
+
     const [formData, setFormData] = useState({
         name: '',
         email: user?.email || '',
@@ -30,11 +34,39 @@ export default function CheckoutPage() {
         eventDate: ''
     });
 
+    const eventId = searchParams.get('id');
+
     useEffect(() => {
         if (!user) {
             navigate(`/login?redirect=/checkout?plan=${planId}`);
         }
     }, [user, navigate, planId]);
+
+    // If user landed here without ?id=, look up their latest draft events
+    // (typically caused by hitting the browser back button or pasting a URL).
+    useEffect(() => {
+        if (!user || eventId || draftLookupDone) return;
+        let cancelled = false;
+        (async () => {
+            const { data } = await supabase
+                .from('events')
+                .select('id, title, date_time')
+                .eq('user_id', user.id)
+                .eq('is_published', false)
+                .order('created_at', { ascending: false })
+                .limit(5);
+            if (cancelled) return;
+            setDraftEvents(data ?? []);
+            setDraftLookupDone(true);
+        })();
+        return () => { cancelled = true; };
+    }, [user, eventId, draftLookupDone]);
+
+    const selectDraftEvent = (id: string) => {
+        const next = new URLSearchParams(searchParams);
+        next.set('id', id);
+        setSearchParams(next, { replace: true });
+    };
 
     const plans = {
         clasico: {
@@ -100,8 +132,6 @@ export default function CheckoutPage() {
 
     const selectedPlan = plans[planId as keyof typeof plans] || plans.premium;
 
-    const eventId = searchParams.get('id');
-
     const handleApplyCoupon = async () => {
         if (!couponCode) return;
         setIsApplyingCoupon(true);
@@ -109,7 +139,7 @@ export default function CheckoutPage() {
 
         try {
             if (!eventId) {
-                throw new Error("No hay un evento activo asociado.");
+                throw new Error("Selecciona la invitación para la que quieres aplicar el cupón.");
             }
             
             const { data, error } = await supabase.functions.invoke('apply-coupon', {
@@ -154,10 +184,8 @@ export default function CheckoutPage() {
 
         try {
             if (!eventId) {
-                // If they don't have an event yet, we can't tie the subscription to an event.
-                // Best practice is to create the event first or handle it differently.
-                // For now, if no eventId, just redirect to dashboard/new
-                navigate('/dashboard/new');
+                setError('Selecciona o crea una invitación antes de continuar con el pago.');
+                setIsProcessing(false);
                 return;
             }
 
@@ -237,7 +265,62 @@ export default function CheckoutPage() {
 
             <div className="py-20 px-8">
                 <div className="mx-auto max-w-7xl">
-                    <div className="grid lg:grid-cols-12 gap-16 items-start">
+                    {/* Draft selector — shown only when user landed without ?id= (e.g. browser back) */}
+                    {!eventId && draftLookupDone && (
+                        <div className="mb-12 p-8 md:p-10 bg-amber-50 border border-amber-200 rounded-[2rem] max-w-3xl mx-auto">
+                            {draftEvents.length > 0 ? (
+                                <>
+                                    <div className="flex items-start gap-4 mb-6">
+                                        <div className="h-10 w-10 bg-amber-100 rounded-xl flex items-center justify-center text-amber-700 flex-shrink-0">
+                                            <Sparkles className="h-5 w-5" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-serif text-[#1B2E1D] mb-1">¿Para qué invitación es este pago?</h3>
+                                            <p className="text-sm text-stone-500 font-light">Selecciona tu evento o crea uno nuevo.</p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2 mb-6">
+                                        {draftEvents.map((d) => (
+                                            <button
+                                                key={d.id}
+                                                onClick={() => selectDraftEvent(d.id)}
+                                                className="w-full flex items-center justify-between gap-4 p-4 bg-white border border-stone-100 rounded-2xl hover:border-[#1B2E1D] hover:shadow-md transition-all text-left"
+                                            >
+                                                <div>
+                                                    <p className="font-serif text-base text-[#1B2E1D]">{d.title || 'Evento sin título'}</p>
+                                                    {d.date_time && (
+                                                        <p className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mt-1">
+                                                            {new Date(d.date_time).toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <span className="text-[9px] uppercase font-bold tracking-widest text-[#BD7474]">Borrador →</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <Link
+                                        to={`/dashboard/new?plan=${planId}`}
+                                        className="inline-flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                                    >
+                                        + Crear una nueva invitación
+                                    </Link>
+                                </>
+                            ) : (
+                                <div className="text-center">
+                                    <h3 className="text-xl font-serif text-[#1B2E1D] mb-3">Necesitas crear una invitación primero</h3>
+                                    <p className="text-sm text-stone-500 font-light mb-6">El pago se asocia a un evento específico. Crea tu invitación y luego vuelves a pagar.</p>
+                                    <Link
+                                        to={`/dashboard/new?plan=${planId}`}
+                                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all"
+                                    >
+                                        Crear mi invitación
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className={`grid lg:grid-cols-12 gap-16 items-start ${!eventId ? 'opacity-40 pointer-events-none' : ''}`}>
                         {/* Form Section */}
                         <div className="lg:col-span-7 space-y-12">
                             <form onSubmit={handleSubmit} className="space-y-10">

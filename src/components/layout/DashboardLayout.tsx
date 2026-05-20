@@ -25,7 +25,10 @@ export default function DashboardLayout() {
             .then(({ count }) => {
                 const noEvents = (count ?? 0) === 0;
                 setHasEvents(!noEvents);
-                setShowOnboarding(noEvents);
+                // Banner only shows when user already has at least one event.
+                // When the dashboard is empty, the big empty state on DashboardHome
+                // already carries the onboarding message — showing both creates noise.
+                setShowOnboarding(!noEvents);
             });
 
         supabase.from('profiles').select('plan_tier')

@@ -162,7 +162,17 @@ const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {
   useEffect(() => {
     const checkEligibility = async () => {
       if (!user) return;
-      
+
+      // Only run when explicitly requested via `?tour=true`. Auto-trigger on
+      // empty account was removed because the dashboard empty state and the
+      // onboarding banner already guide new users — three overlapping prompts
+      // were creating noise.
+      const params = new URLSearchParams(location.search);
+      if (params.get('tour') !== 'true') {
+        setRun(false);
+        return;
+      }
+
       const tourKey = `tour_seen_${user.id}_${location.pathname.replace(/\//g, '_')}`;
       const hasSeenTour = localStorage.getItem(tourKey);
 
@@ -171,22 +181,12 @@ const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {
         return;
       }
 
-      // ONLY show if they have 0 events (New Account)
-      const { count, error } = await supabase
-        .from('events')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id);
-
-      if (!error && count === 0) {
-        defineSteps();
-        setRun(true);
-      } else {
-        setRun(false);
-      }
+      defineSteps();
+      setRun(true);
     };
 
     checkEligibility();
-  }, [location.pathname, user]);
+  }, [location.pathname, location.search, user]);
 
   const defineSteps = () => {
     const path = location.pathname;
