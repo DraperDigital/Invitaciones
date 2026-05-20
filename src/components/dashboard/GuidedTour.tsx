@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import { Joyride, STATUS } from 'react-joyride';
 import { useLocation } from 'react-router-dom';
 import { PartyPopper, X, ChevronRight } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 
 // Custom Tooltip Component for premium UI/UX
 const TooltipComponent = ({
