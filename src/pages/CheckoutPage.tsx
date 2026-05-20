@@ -252,7 +252,7 @@ export default function CheckoutPage() {
             {/* Elegant Header */}
             <header className="pt-10 pb-8 border-b border-stone-50 bg-white/50 backdrop-blur-xl sticky top-0 z-50">
                 <div className="mx-auto max-w-7xl px-8 flex justify-between items-center">
-                    <Link to="/planes" className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-all">
+                    <Link to={eventId ? `/planes?id=${eventId}` : "/planes"} className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-all">
                         <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" /> Volver a Planes
                     </Link>
                     <span className="text-3xl font-serif italic text-[#1B2E1D]">Finalizar Orden</span>
