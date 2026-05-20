@@ -21,11 +21,33 @@ const DashboardHome       = React.lazy(() => import('./pages/dashboard/Dashboard
 const EventRSVPs          = React.lazy(() => import('./pages/dashboard/EventRSVPs'));
 const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn'));
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
-const PrivacyPolicy       = React.lazy(() => import('./pages/PrivacyPolicy'));
+const AvisoPrivacidadPage  = React.lazy(() => import('./pages/AvisoPrivacidadPage'));
 const Terms               = React.lazy(() => import('./pages/Terms'));
 const Concierge           = React.lazy(() => import('./pages/Concierge'));
 const ConciergeLanding    = React.lazy(() => import('./pages/ConciergeLanding'));
 const DesignEditor        = React.lazy(() => import('./pages/DesignEditor'));
+
+// Plan landing pages
+const PlanClasica          = React.lazy(() => import('./pages/planes/PlanClasicaPage'));
+const PlanPro              = React.lazy(() => import('./pages/planes/PlanProPage'));
+const PlanPremium          = React.lazy(() => import('./pages/planes/PlanPremiumPage'));
+const PlanConcierge        = React.lazy(() => import('./pages/planes/PlanConciergePage'));
+
+// Blog pages
+const BlogIndex            = React.lazy(() => import('./pages/blog/BlogIndexPage'));
+const BlogPost             = React.lazy(() => import('./pages/blog/BlogPostPage'));
+
+// SEO programmatic landing pages
+const InvitacionesBoda       = React.lazy(() => import('./pages/seo/InvitacionesBodaPage'));
+const InvitacionesXV         = React.lazy(() => import('./pages/seo/InvitacionesXVPage'));
+const InvitacionesCumpleanos = React.lazy(() => import('./pages/seo/InvitacionesCumpleanosPage'));
+const InvitacionesCDMX       = React.lazy(() => import('./pages/seo/InvitacionesCDMXPage'));
+const InvitacionesGDL        = React.lazy(() => import('./pages/seo/InvitacionesGuadalajaraPage'));
+const InvitacionesMTY        = React.lazy(() => import('./pages/seo/InvitacionesMonterreyPage'));
+const InvitacionesVsPapel    = React.lazy(() => import('./pages/seo/InvitacionesVsPapelPage'));
+const InvittoVsPaperless     = React.lazy(() => import('./pages/seo/InvittoVsPaperlessPage'));
+const InvittoVsGreenvelope   = React.lazy(() => import('./pages/seo/InvittoVsGreenvelopePage'));
+const ComparativasHub        = React.lazy(() => import('./pages/seo/ComparativasHub'));
 
 // Minimal inline fallback — no external imports, matches app background
 const PageFallback = () => (
@@ -56,10 +78,32 @@ function AppRoutes() {
         <Route path="/checkout"      element={<CheckoutPage />} />
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/i/:slug"       element={<InvitationPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
         <Route path="/terminos"      element={<Terms />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
+
+        {/* SEO Programmatic Landing Pages */}
+        <Route path="/invitaciones-digitales-boda"         element={<InvitacionesBoda />} />
+        <Route path="/invitaciones-digitales-xv-anos"      element={<InvitacionesXV />} />
+        <Route path="/invitaciones-digitales-cumpleanos"   element={<InvitacionesCumpleanos />} />
+        <Route path="/invitaciones-digitales-cdmx"         element={<InvitacionesCDMX />} />
+        <Route path="/invitaciones-digitales-guadalajara"  element={<InvitacionesGDL />} />
+        <Route path="/invitaciones-digitales-monterrey"    element={<InvitacionesMTY />} />
+        <Route path="/invitaciones-digitales-vs-papel"     element={<InvitacionesVsPapel />} />
+        <Route path="/invitto-vs-paperless-post"           element={<InvittoVsPaperless />} />
+        <Route path="/invitto-vs-greenvelope"              element={<InvittoVsGreenvelope />} />
+        <Route path="/comparativas"                        element={<ComparativasHub />} />
+
+        {/* Plan Landing Pages */}
+        <Route path="/planes/clasica"                      element={<PlanClasica />} />
+        <Route path="/planes/pro"                          element={<PlanPro />} />
+        <Route path="/planes/premium"                      element={<PlanPremium />} />
+        <Route path="/planes/concierge"                    element={<PlanConcierge />} />
+
+        {/* Blog Routes */}
+        <Route path="/blog"                                element={<BlogIndex />} />
+        <Route path="/blog/:slug"                          element={<BlogPost />} />
 
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={

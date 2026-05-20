@@ -1,0 +1,60 @@
+# Default: allow all crawlers everywhere except private routes
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /checkout
+Disallow: /login
+Disallow: /i/
+
+# ── AI search & assistant crawlers ───────────────────────────────────────────
+# Explicitly allowed so they can cite Invitto in AI-generated answers.
+# (Inherits the Disallow rules above by virtue of the wildcard policy.)
+
+# OpenAI — ChatGPT search + on-demand fetches
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic — Claude with web search / Claude.ai citations
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google Gemini + AI Overviews (Google-Extended controls AI features
+# independently from regular Googlebot indexing)
+User-agent: Google-Extended
+Allow: /
+
+# Microsoft Copilot — covered by Bingbot, which uses the wildcard above
+
+# Apple — Applebot-Extended powers Apple Intelligence summaries
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI (Llama, Meta AI Search)
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Sitemap
+Sitemap: https://invitto.com.mx/sitemap.xml

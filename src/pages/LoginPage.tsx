@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, Eye, EyeOff, X, Gem } from 'lucide-react';
+import Seo from '../components/Seo';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -171,6 +172,12 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7] flex relative">
+            <Seo
+                title={isLogin ? 'Iniciar sesión' : 'Crear cuenta'}
+                description="Accede a tu panel de Invitto para gestionar tus invitaciones y confirmaciones."
+                path="/login"
+                noindex
+            />
             {/* Left Side: Illustration & Branding */}
             <div className="hidden lg:flex w-1/2 bg-[#1B2E1D] relative items-center justify-center p-20 overflow-hidden">
                 <div className="absolute inset-0 z-0">

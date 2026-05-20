@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -573,6 +573,29 @@ END:VCALENDAR`;
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder);
 
     // ── Helpers ─────────────────────────────────────────────────────
+    const getSealIcon = () => {
+        const type = (event?.event_type || '').toLowerCase();
+        if (type.includes('wedding') || type.includes('boda')) {
+            return <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" fill="currentColor" />;
+        }
+        if (type.includes('graduation') || type.includes('graduacion') || type.includes('graduación')) {
+            return <GraduationCap className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        }
+        if (type.includes('xv') || type.includes('quince')) {
+            return <Crown className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        }
+        if (type.includes('birthday') || type.includes('cumple')) {
+            return <Cake className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        }
+        if (type.includes('bapt') || type.includes('bautizo')) {
+            return <Baby className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        }
+        if (type.includes('comunion') || type.includes('communion')) {
+            return <Church className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        }
+        return <Flower2 className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+    };
+
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
@@ -1389,7 +1412,7 @@ END:VCALENDAR`;
                                         <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-stone-200 shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
                                         <div className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 z-20">
                                             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30">
-                                                <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" fill="currentColor" />
+                                                {getSealIcon()}
                                             </div>
                                         </div>
                                     </div>
@@ -1403,7 +1426,15 @@ END:VCALENDAR`;
                                 )}
                                 <div className="mb-8 sm:mb-10">
                                     <h3 className="text-3xl xs:text-4xl sm:text-7xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
-                                    <p className="text-stone-600 text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">{event.event_type === 'wedding' ? 'Boda' : event.event_type === 'xv' ? 'XV Años' : 'Celebración'}</p>
+                                    <p className="text-stone-600 text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">
+                                        {(event.event_type as string) === 'wedding' ? 'Boda' 
+                                            : (event.event_type as string) === 'xv' ? 'XV Años' 
+                                            : (event.event_type as string) === 'graduacion' || (event.event_type as string) === 'graduation' ? 'Graduación' 
+                                            : (event.event_type as string) === 'birthday' || (event.event_type as string) === 'cumpleanos' ? 'Cumpleaños' 
+                                            : (event.event_type as string) === 'bautizo' || (event.event_type as string) === 'baptism' ? 'Bautizo' 
+                                            : (event.event_type as string) === 'comunion' ? 'Primera Comunión' 
+                                            : 'Celebración'}
+                                    </p>
                                 </div>
                                 <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-white rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>

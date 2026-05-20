@@ -1,19 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-    MessageCircle, 
-    Sparkles, 
-    ArrowRight, 
-    CheckCircle2, 
-    Clock, 
+import {
+    MessageCircle,
+    Sparkles,
+    ArrowRight,
+    CheckCircle2,
+    Clock,
     Gem,
     ArrowLeft,
     PhoneCall
 } from 'lucide-react';
+import Seo from '../components/Seo';
+
+const SERVICE_JSONLD = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Concierge para invitaciones digitales',
+    provider: { '@type': 'Organization', name: 'Invitto' },
+    areaServed: { '@type': 'Country', name: 'México' },
+    description: 'Servicio de guante blanco: cargamos tu lista de invitados, enviamos cada invitación por WhatsApp y hacemos 4 rondas de seguimiento hasta la fecha de tu evento.',
+    offers: {
+        '@type': 'Offer',
+        price: '4499',
+        priceCurrency: 'MXN',
+        availability: 'https://schema.org/InStock',
+    },
+};
 
 const ConciergeLanding: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#0A0C0A] text-white font-sans selection:bg-[#BD7474]/30 overflow-x-hidden">
+            <Seo
+                title="Servicio Concierge — Tu evento sin estrés"
+                description="Nosotros cargamos tus invitados, enviamos invitaciones por WhatsApp y hacemos seguimiento. Tú disfrutas tu evento. Servicio Concierge $4,499 MXN."
+                path="/concierge-service"
+                jsonLd={SERVICE_JSONLD}
+            />
             {/* Elegant Header */}
             <header className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/5 px-6 md:px-8 py-4 md:py-6">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">

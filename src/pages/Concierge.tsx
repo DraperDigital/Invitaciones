@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Clock, Calendar, Info } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import Seo from '../components/Seo';
 
 const Concierge: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -62,6 +63,12 @@ const Concierge: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7] text-[#1B2E1D] font-sans selection:bg-[#BD7474]/20 flex flex-col items-center justify-center p-6 py-20">
+            <Seo
+                title="Contacto Concierge"
+                description="Página de contacto del concierge de tu evento."
+                path="/concierge"
+                noindex
+            />
             <div className="max-w-xl w-full">
                 <Link 
                     to={eventData?.slug === 'cecilia-70' ? '/cecilia-70' : (eventData?.slug ? `/i/${eventData.slug}` : '/')} 

@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, EyeOff } from 'lucide-react';
+import Seo from '../components/Seo';
 
-const PrivacyPolicy: React.FC = () => {
+const AvisoPrivacidadPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#FDFBF7] text-[#1B2E1D] font-sans selection:bg-[#BD7474]/20 py-20 md:py-32">
+            <Seo
+                title="Aviso de Privacidad — Invitto"
+                description="Aviso de Privacidad de Invitto.mx conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)."
+                path="/aviso-de-privacidad"
+            />
             <div className="max-w-4xl mx-auto px-6">
                 <Link to="/" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-stone-400 hover:text-[#1B2E1D] transition-colors mb-16">
                     <ArrowLeft className="h-4 w-4" /> VOLVER AL INICIO
@@ -46,7 +52,7 @@ const PrivacyPolicy: React.FC = () => {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-serif font-medium border-b border-stone-100 pb-4">1. Responsable del tratamiento</h2>
                         <p className="text-stone-500 font-light leading-relaxed">
-                            Invitto.mx (en adelante &quot;Invitto&quot;) es responsable del uso y protección de tus datos personales. Para cualquier asunto relacionado con este Aviso, puedes contactarnos en {/* TODO: contacto */}<strong>{'{{EMAIL_CONTACTO}}'}</strong>.
+                            Invitto.mx (en adelante &quot;Invitto&quot;) es responsable del uso y protección de tus datos personales. Para cualquier asunto relacionado con este Aviso, puedes contactarnos en <strong>soporte@invitto.com.mx</strong>.
                         </p>
                     </section>
 
@@ -92,7 +98,7 @@ const PrivacyPolicy: React.FC = () => {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-serif font-medium border-b border-stone-100 pb-4">6. Derechos ARCO</h2>
                         <p className="text-stone-500 font-light leading-relaxed">
-                            Tienes derecho a Acceder, Rectificar, Cancelar u Oponerte al tratamiento de tus datos personales, así como a limitar o revocar el consentimiento que nos hayas otorgado. Para ejercer cualquiera de estos derechos, escríbenos a <strong>{'{{EMAIL_CONTACTO}}'}</strong> con asunto &quot;ARCO&quot; y responderemos en un plazo máximo de 20 días hábiles.
+                            Tienes derecho a Acceder, Rectificar, Cancelar u Oponerte al tratamiento de tus datos personales, así como a limitar o revocar el consentimiento que nos hayas otorgado. Para ejercer cualquiera de estos derechos, escríbenos a <strong>soporte@invitto.com.mx</strong> con asunto &quot;ARCO&quot; y responderemos en un plazo máximo de 20 días hábiles.
                         </p>
                     </section>
 
@@ -119,4 +125,4 @@ const PrivacyPolicy: React.FC = () => {
     );
 };
 
-export default PrivacyPolicy;
+export default AvisoPrivacidadPage;

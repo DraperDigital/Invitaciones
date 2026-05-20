@@ -6,6 +6,47 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import Seo from '../components/Seo';
+
+const FAQ_ITEMS = [
+    { q: '¿Mis invitados necesitan descargar una app?', a: 'No, ninguno de tus invitados tiene que descargar nada. Tu invitación es una página web responsiva optimizada para móviles que se abre instantáneamente al tocar el enlace.' },
+    { q: '¿Cuánto tiempo estará disponible mi invitación?', a: 'Tu invitación estará totalmente activa desde el momento en que la creas hasta 30 días después de que finalice tu evento, permitiéndote consultar y descargar la lista final de asistentes.' },
+    { q: '¿Puedo editar la información después de publicarla?', a: 'Sí, por supuesto. Puedes modificar horarios, ubicaciones, textos, fotos y detalles de tus mesas en cualquier momento desde tu panel de control. Los cambios se actualizan al instante en el mismo enlace.' },
+    { q: '¿Cómo funciona el RSVP inteligente?', a: 'Cada invitado o familia tiene asignado un número de pases personalizados. Al ingresar su nombre en la invitación, el sistema detecta sus pases disponibles (ej. "3 adultos, 1 de niño") y les permite confirmar quién asistirá. La confirmación actualiza tu panel en tiempo real.' },
+    { q: '¿Puedo crear mi invitación sin pagar de inmediato?', a: 'Sí, puedes diseñar tu invitación, cargar tus fotos y configurar todas las secciones de manera totalmente gratuita en modo borrador. Solo realizas el pago único cuando decidas publicarla y compartirla.' },
+    { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos todas las tarjetas de crédito y débito (Visa, Mastercard, American Express) de forma segura a través de Stripe, además de transferencias bancarias (SPEI).' },
+    { q: '¿Necesito tarjeta de crédito para empezar a crear?', a: 'No, para registrarte y empezar a diseñar tu invitación en borrador no necesitas ingresar ninguna tarjeta de crédito ni método de pago.' },
+    { q: '¿Sirve para XV años y eventos en México?', a: 'Sí, está diseñada especialmente para el mercado mexicano y latinoamericano. Funciona perfecto para bodas, XV años, cumpleaños, bautizos, graduaciones y cualquier evento que requiera control de asistencia.' },
+    { q: '¿Cómo comparto la invitación por WhatsApp o redes?', a: 'Una vez que publiques tu invitación, obtendrás un enlace personalizado (ej. invitto.mx/i/mi-evento). Puedes copiar y pegar este enlace en chats de WhatsApp, grupos o redes sociales. Al compartirlo, generará una vista previa automática y elegante de tu evento.' }
+];
+
+const HOMEPAGE_JSONLD = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Invitto',
+        url: 'https://invitto.com.mx',
+        logo: 'https://invitto.com.mx/logo.png',
+        description: 'Invitaciones digitales con control de confirmaciones para bodas, XV años y eventos privados en México.',
+        areaServed: { '@type': 'Country', name: 'México' },
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Invitto',
+        url: 'https://invitto.com.mx',
+        inLanguage: 'es-MX',
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ_ITEMS.map((f) => ({
+            '@type': 'Question',
+            name: f.q,
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+    },
+];
 
 export default function HomePage() {
     const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -17,6 +58,13 @@ export default function HomePage() {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7] font-sans text-[#1B2E1D]">
+            <Seo
+                title="Invitaciones digitales para bodas, XV años y eventos"
+                description="Crea tu invitación digital con confirmación automática, recordatorios por WhatsApp y seguimiento en tiempo real. Sin perseguir invitados. Planes desde $499 MXN."
+                path="/"
+                image="https://invitto.com.mx/logo.png"
+                jsonLd={HOMEPAGE_JSONLD}
+            />
             {/* Header */}
             <header className="fixed top-0 w-full z-50 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#1B2E1D]/5 px-4 md:px-6">
                 <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
@@ -29,6 +77,15 @@ export default function HomePage() {
                         </Link>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
                             Planes
+                        </Link>
+                        <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                            Comparativas
+                        </Link>
+                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                            Concierge
+                        </Link>
+                        <Link to="/blog" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                            Blog
                         </Link>
                     </nav>
                     <div className="flex items-center gap-3 md:gap-8">
@@ -316,18 +373,44 @@ export default function HomePage() {
                     <h2 className="text-3xl font-serif text-center mb-16 md:mb-20 text-stone-400 opacity-50 uppercase tracking-[0.2em] text-[10px] md:text-sm font-bold">Para eventos con control total</h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
                         {[
-                            { name: 'Bodas', icon: Heart },
-                            { name: 'XV años', icon: PartyPopper },
-                            { name: 'Fiestas grandes', icon: Music },
-                            { name: 'Eventos especiales', icon: Star }
+                            { name: 'Bodas', icon: Heart, href: '/invitaciones-digitales-boda' },
+                            { name: 'XV años', icon: PartyPopper, href: '/invitaciones-digitales-xv-anos' },
+                            { name: 'Cumpleaños', icon: Music, href: '/invitaciones-digitales-cumpleanos' },
+                            { name: 'Más eventos', icon: Star, href: '/ejemplos' }
                         ].map((item, i) => (
-                            <div key={i} className="flex flex-col items-center gap-4 md:gap-6 group cursor-default">
+                            <Link
+                                key={i}
+                                to={item.href}
+                                className="flex flex-col items-center gap-4 md:gap-6 group"
+                            >
                                 <div className="h-20 w-20 md:h-28 md:w-28 rounded-full border border-stone-200 flex items-center justify-center group-hover:border-[#BD7474] group-hover:bg-[#BD7474]/5 transition-all">
                                     <item.icon className="h-8 w-8 md:h-10 md:w-10 text-stone-300 group-hover:text-[#BD7474] transition-colors" />
                                 </div>
-                                <span className="font-serif italic text-xl md:text-2xl">{item.name}</span>
-                            </div>
+                                <span className="font-serif italic text-xl md:text-2xl group-hover:text-[#BD7474] transition-colors">{item.name}</span>
+                            </Link>
                         ))}
+                    </div>
+
+                    {/* SEO internal linking: ciudades */}
+                    <div className="mt-12 md:mt-16 text-center">
+                        <p className="text-[10px] md:text-xs uppercase font-bold tracking-widest text-stone-400 mb-4">Disponible en todo México</p>
+                        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm md:text-base">
+                            <Link to="/invitaciones-digitales-cdmx" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
+                                CDMX
+                            </Link>
+                            <span className="text-stone-200">·</span>
+                            <Link to="/invitaciones-digitales-guadalajara" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
+                                Guadalajara
+                            </Link>
+                            <span className="text-stone-200">·</span>
+                            <Link to="/invitaciones-digitales-monterrey" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
+                                Monterrey
+                            </Link>
+                            <span className="text-stone-200">·</span>
+                            <Link to="/comparativas" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
+                                Comparativas
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -524,14 +607,9 @@ export default function HomePage() {
             {/* --- FAQ SECTION --- */}
             <section className="py-20 md:py-32 bg-white px-6">
                 <div className="mx-auto max-w-3xl">
-                    <h2 className="text-3xl md:text-5xl font-serif text-center mb-16 md:mb-20 leading-tight">Preguntas frecuentes</h2>
+                    <h2 className="text-3xl md:text-5xl font-serif text-center mb-16 md:mb-20 leading-tight">Todo lo que necesitas saber</h2>
                     <div className="space-y-4 md:space-y-6">
-                        {[
-                            { q: '¿Mis invitados tienen que descargar algo?', a: 'No, todo funciona desde su celular con un enlace directo que se abre en su navegador.' },
-                            { q: '¿Puedo ver quién ya confirmó?', a: 'Sí, en tiempo real desde tu propio panel de administración (Dashboard).' },
-                            { q: '¿Funciona con WhatsApp?', a: 'Sí, puedes compartir tu invitación y el enlace personalizado fácilmente por WhatsApp.' },
-                            { q: '¿Puedo enviar recordatorios?', a: 'Sí, la plataforma permite gestionar recordatorios para tus invitados fácilmente.' }
-                        ].map((item, i) => (
+                        {FAQ_ITEMS.map((item, i) => (
                             <div key={i} className="border-b border-stone-100 pb-5 md:pb-6 group cursor-pointer" onClick={() => toggleFaq(i)}>
                                 <div className="flex items-center justify-between gap-4">
                                     <h4 className="text-base md:text-lg font-medium">{item.q}</h4>
@@ -563,65 +641,103 @@ export default function HomePage() {
             </section>
 
             {/* Footer */}
-            <footer className="py-16 md:py-20 bg-white border-t border-stone-100 px-6">
-                <div className="mx-auto max-w-7xl">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8 mb-12 md:mb-16">
-                        {/* Brand */}
-                        <div className="space-y-4">
-                            <Link to="/" className="text-2xl font-serif italic tracking-tighter text-[#1B2E1D] hover:text-stone-600 transition-colors">
-                                Invitto
-                            </Link>
-                            <p className="text-xs text-stone-400 font-light leading-relaxed max-w-xs">
-                                Invitaciones digitales con control total de tus invitados. Para anfitriones que prefieren disfrutar su evento.
+            <footer className="py-16 md:py-24 bg-[#0F1C11] text-white/80 border-t border-white/5 px-6">
+                <div className="mx-auto max-w-7xl space-y-16">
+                    {/* Top reassurance banners */}
+                    <div className="pb-12 border-b border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+                        <div className="space-y-1">
+                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#BD7474]">
+                                El camino más fácil a tu evento
+                            </p>
+                            <p className="text-xs text-white/50 font-light">
+                                Sin mensualidades · Crea gratis · Paga solo al publicar · Sin tarjeta
                             </p>
                         </div>
-
-                        {/* Producto */}
-                        <div className="space-y-4">
-                            <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-[#1B2E1D]">Producto</h4>
-                            <ul className="space-y-3">
-                                <li><Link to="/planes" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Planes y precios</Link></li>
-                                <li><Link to="/ejemplos" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Ejemplos</Link></li>
-                                <li><Link to="/concierge-service" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Servicio Concierge</Link></li>
-                                <li><Link to="/login" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Ingresar</Link></li>
-                            </ul>
-                        </div>
-
-                        {/* Legal */}
-                        <div className="space-y-4">
-                            <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-[#1B2E1D]">Legal</h4>
-                            <ul className="space-y-3">
-                                <li><Link to="/terminos" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Términos y Condiciones</Link></li>
-                                <li><Link to="/terminos#4-pol-tica-de-reembolso-y-cancelaci-n" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Política de reembolso</Link></li>
-                                <li><Link to="/privacy-policy" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">Aviso de privacidad</Link></li>
-                            </ul>
-                        </div>
-
-                        {/* Contacto */}
-                        <div className="space-y-4">
-                            <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-[#1B2E1D]">Contacto</h4>
-                            <ul className="space-y-3">
-                                {/* TODO: Reemplazar con email real */}
-                                <li>
-                                    <a href="mailto:{{EMAIL_CONTACTO}}" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">
-                                        {'{{EMAIL_CONTACTO}}'}
-                                    </a>
-                                </li>
-                                {/* TODO: Reemplazar con WhatsApp real (formato wa.me/52XXXXXXXXXX) */}
-                                <li>
-                                    <a href="https://wa.me/{{WHATSAPP_CONTACTO}}" target="_blank" rel="noopener noreferrer" className="text-xs text-stone-400 hover:text-[#1B2E1D] transition-colors">
-                                        WhatsApp
-                                    </a>
-                                </li>
-                            </ul>
+                        <div className="md:text-right">
+                            <p className="text-xs text-white/60 font-light">
+                                ¿Dudas o algo no cuadra? Escríbenos a{' '}
+                                <a href="mailto:soporte@invitto.com.mx" className="text-white hover:text-[#BD7474] font-medium transition-colors">
+                                    soporte@invitto.com.mx
+                                </a>
+                            </p>
+                            <p className="text-[10px] text-white/40 font-light mt-0.5">
+                                — atención prioritaria para los primeros clientes.
+                            </p>
                         </div>
                     </div>
 
-                    <div className="pt-8 border-t border-stone-100 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-stone-300 font-bold">
+                    {/* Main content grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+                        {/* Left column: Tagline & CTA */}
+                        <div className="lg:col-span-5 space-y-6">
+                            <h3 className="text-3xl md:text-4xl font-serif text-white leading-tight">
+                                La invitación digital <br />
+                                <span className="italic text-[#BD7474]">que merece tu historia</span>
+                            </h3>
+                            <p className="text-xs text-white/50 font-light leading-relaxed max-w-sm">
+                                Crea gratis y publica cuando estés listo: RSVP, pases individuales, código QR y detalles del evento en un solo enlace.
+                            </p>
+                            <div className="pt-2">
+                                <Link to={user ? "/dashboard" : "/dashboard/new"} className="inline-block w-full xs:w-auto">
+                                    <button className="w-full xs:w-auto px-8 py-4 bg-[#BD7474] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#B06060] transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                                        Crear invitación
+                                        <ArrowRight className="h-3.5 w-3.5" />
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Middle column: Logo & statement */}
+                        <div className="lg:col-span-3 space-y-4 lg:border-l lg:border-white/5 lg:pl-12">
+                            <span className="text-2xl font-serif italic tracking-tighter text-white block">
+                                Invitto
+                            </span>
+                            <p className="text-xs text-white/40 font-light leading-relaxed max-w-xs">
+                                Invitaciones digitales de alta gama con control de pases y confirmación inteligente. Diseñado para anfitriones exigentes en México y Latinoamérica.
+                            </p>
+                        </div>
+
+                        {/* Right columns: Links */}
+                        <div className="lg:col-span-4 grid grid-cols-2 gap-8">
+                            {/* Col 1: Links */}
+                            <div className="space-y-4">
+                                <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-white/40">Producto</h4>
+                                <ul className="space-y-3">
+                                    <li><Link to="/planes" className="text-xs text-white/60 hover:text-white transition-colors font-light">Planes y precios</Link></li>
+                                    <li><Link to="/ejemplos" className="text-xs text-white/60 hover:text-white transition-colors font-light">Ejemplos</Link></li>
+                                    <li><Link to="/concierge-service" className="text-xs text-white/60 hover:text-white transition-colors font-light">Servicio Concierge</Link></li>
+                                    <li><Link to="/comparativas" className="text-xs text-white/60 hover:text-white transition-colors font-light">Comparativas</Link></li>
+                                    <li><Link to="/blog" className="text-xs text-white/60 hover:text-white transition-colors font-light">Blog y consejos</Link></li>
+                                </ul>
+                            </div>
+
+                            {/* Col 2: Legal & Contacto */}
+                            <div className="space-y-6">
+                                <div className="space-y-4">
+                                    <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-white/40">Legal</h4>
+                                    <ul className="space-y-3">
+                                        <li><Link to="/terminos" className="text-xs text-white/60 hover:text-white transition-colors font-light">Términos</Link></li>
+                                        <li><Link to="/terminos#4-politica-de-reembolso-y-cancelacion" className="text-xs text-white/60 hover:text-white transition-colors font-light">Reembolsos</Link></li>
+                                        <li><Link to="/aviso-de-privacidad" className="text-xs text-white/60 hover:text-white transition-colors font-light">Aviso de privacidad</Link></li>
+                                    </ul>
+                                </div>
+                                <div className="space-y-4">
+                                    <h4 className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-white/40">Contacto</h4>
+                                    <ul className="space-y-3">
+                                        <li><a href="https://wa.me/525544332211" target="_blank" rel="noopener noreferrer" className="text-xs text-white/60 hover:text-white transition-colors font-light">WhatsApp Soporte</a></li>
+                                        <li><Link to="/login" className="text-xs text-white/60 hover:text-white transition-colors font-light">Iniciar sesión</Link></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom copyright line */}
+                    <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
                             © 2026 Invitto.mx · Todos los derechos reservados
                         </p>
-                        <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-stone-300 font-bold">
+                        <p className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30 font-medium">
                             Hecho con cariño en México
                         </p>
                     </div>

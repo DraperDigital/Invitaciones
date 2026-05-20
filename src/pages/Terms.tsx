@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, FileText, RefreshCw } from 'lucide-react';
+import Seo from '../components/Seo';
 
 const Terms: React.FC = () => {
     return (
         <div className="min-h-screen bg-[#FDFBF7] text-[#1B2E1D] font-sans selection:bg-[#BD7474]/20 py-20 md:py-32">
+            <Seo
+                title="Términos y Condiciones"
+                description="Términos y Condiciones de uso de Invitto.mx, incluyendo política de reembolso de 7 días."
+                path="/terminos"
+            />
             <div className="max-w-4xl mx-auto px-6">
                 <Link to="/" className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-stone-400 hover:text-[#1B2E1D] transition-colors mb-16">
                     <ArrowLeft className="h-4 w-4" /> VOLVER AL INICIO
@@ -46,7 +52,7 @@ const Terms: React.FC = () => {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-serif font-medium border-b border-stone-100 pb-4">1. Aceptación de los términos</h2>
                         <p className="text-stone-500 font-light leading-relaxed">
-                            Al crear una cuenta o contratar un plan en Invitto.mx, aceptas estos Términos y Condiciones, junto con nuestro <Link to="/privacy-policy" className="text-[#BD7474] underline">Aviso de Privacidad</Link>. Si no estás de acuerdo con alguna parte, no utilices el servicio.
+                            Al crear una cuenta o contratar un plan en Invitto.mx, aceptas estos Términos y Condiciones, junto con nuestro <Link to="/aviso-de-privacidad" className="text-[#BD7474] underline">Aviso de Privacidad</Link>. Si no estás de acuerdo con alguna parte, no utilices el servicio.
                         </p>
                     </section>
 
@@ -62,12 +68,12 @@ const Terms: React.FC = () => {
                         <ul className="list-disc pl-6 text-stone-500 font-light space-y-2">
                             <li>Todos los pagos se realizan en pesos mexicanos (MXN) vía Stripe.</li>
                             <li>Cada plan es de pago único. No se aplican cargos recurrentes.</li>
-                            <li>Tu factura electrónica se emite a solicitud, contactándonos en {/* TODO: contacto */}<strong>{'{{EMAIL_CONTACTO}}'}</strong>.</li>
+                            <li>Tu factura electrónica se emite a solicitud, contactándonos en <strong>soporte@invitto.com.mx</strong>.</li>
                             <li>Los precios pueden cambiar; el precio que aplica es el mostrado al momento de tu compra.</li>
                         </ul>
                     </section>
 
-                    <section className="space-y-4 bg-emerald-50/40 border border-emerald-100 rounded-2xl p-8 -mx-2">
+                    <section id="4-politica-de-reembolso-y-cancelacion" className="space-y-4 bg-emerald-50/40 border border-emerald-100 rounded-2xl p-8 -mx-2">
                         <h2 className="text-2xl font-serif font-medium border-b border-emerald-100 pb-4">4. Política de reembolso y cancelación</h2>
                         <p className="text-stone-600 font-light leading-relaxed">
                             <strong className="text-[#1B2E1D]">Tienes 7 días naturales desde tu compra para solicitar un reembolso completo</strong>, siempre y cuando:
@@ -78,7 +84,7 @@ const Terms: React.FC = () => {
                             <li>No hayas solicitado ya un diseño personalizado en el plan Diseño Pro o Concierge.</li>
                         </ul>
                         <p className="text-stone-600 font-light leading-relaxed">
-                            Para solicitar tu reembolso, escribe a <strong>{'{{EMAIL_CONTACTO}}'}</strong> con el asunto &quot;Reembolso&quot; y tu correo de compra. Procesamos los reembolsos en un máximo de 10 días hábiles a la misma tarjeta o método con el que pagaste.
+                            Para solicitar tu reembolso, escribe a <strong>soporte@invitto.com.mx</strong> con el asunto &quot;Reembolso&quot; y tu correo de compra. Procesamos los reembolsos en un máximo de 10 días hábiles a la misma tarjeta o método con el que pagaste.
                         </p>
                         <p className="text-stone-600 font-light leading-relaxed">
                             Pasados los 7 días o si tu invitación ya está activa, no aplican reembolsos. Esto se debe a que el servicio ya se considera prestado.
@@ -133,7 +139,7 @@ const Terms: React.FC = () => {
                     <section className="space-y-4">
                         <h2 className="text-2xl font-serif font-medium border-b border-stone-100 pb-4">11. Contacto</h2>
                         <p className="text-stone-500 font-light leading-relaxed">
-                            Para cualquier duda sobre estos términos, escríbenos a <strong>{'{{EMAIL_CONTACTO}}'}</strong> o por WhatsApp al <strong>{'{{WHATSAPP_CONTACTO}}'}</strong>.
+                            Para cualquier duda sobre estos términos, escríbenos a <strong>soporte@invitto.com.mx</strong> o por WhatsApp al <strong>+52 55 4433 2211</strong>.
                         </p>
                     </section>
                 </article>

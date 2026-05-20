@@ -8,6 +8,13 @@
   path = "/i/*"
   function = "og-tags"
 
+# Redirects
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/aviso-de-privacidad"
+  status = 301
+  force = true
+
 # SPA routing — all paths serve index.html
 [[redirects]]
   from = "/*"

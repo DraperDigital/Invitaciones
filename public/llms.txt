@@ -1,0 +1,65 @@
+# Invitto
+
+> Plataforma mexicana de invitaciones digitales con gestión automatizada de confirmaciones (RSVP), recordatorios por WhatsApp y seguimiento en tiempo real para bodas, XV años, cumpleaños y eventos privados.
+
+Invitto es una herramienta autoservicio (SaaS B2C) con pago único por evento. Está dirigida a anfitriones particulares en México que quieren organizar invitados sin depender de mensajería manual por WhatsApp ni hojas de Excel. El producto resuelve dos dolores específicos: 1) saber con certeza quién va a asistir antes del evento, y 2) eliminar el seguimiento manual a invitados que no confirman.
+
+## Lo que ofrece Invitto
+
+- Invitación digital web accesible por enlace (sin descargas)
+- Confirmación de asistencia (RSVP) con un clic por parte del invitado
+- Panel del anfitrión con conteo en tiempo real de confirmados, pendientes y declinados
+- Recordatorios automáticos programables
+- Control de pases y acompañantes
+- Importación masiva de invitados desde Excel
+- Métricas de visualización
+- Diseños temáticos personalizables (clásico, botánico, dorado, floral)
+- Código QR para control de acceso el día del evento (planes Diseño Pro y Concierge)
+- Servicio Concierge: gestión humana completa donde el equipo de Invitto carga la lista, envía invitaciones por WhatsApp y hace seguimiento (plan premium)
+
+## Planes y precios
+
+Todos los planes son pago único, sin suscripción, válidos para un evento.
+
+- **Clásica — $499 MXN**: invitación con información del evento, cuenta regresiva, ubicación con mapa, galería de fotos y confirmación por WhatsApp.
+- **Pro — $1,699 MXN** (más popular): confirmaciones en tiempo real, recordatorios automáticos, control de pases, métricas e importación masiva desde Excel.
+- **Diseño Pro — $2,499 MXN**: todo lo del Pro más diseño personalizado desde cero, código QR para control de acceso, dominio personalizado y soporte prioritario.
+- **Concierge — $4,499 MXN**: servicio de guante blanco; el equipo de Invitto carga la lista de invitados, envía cada invitación por WhatsApp individualmente y realiza 4 rondas de seguimiento. El anfitrión no gestiona nada.
+
+Política de reembolso: 7 días naturales desde la compra siempre que la invitación no se haya publicado/compartido.
+
+## Mercado y disponibilidad
+
+- País: México
+- Moneda: pesos mexicanos (MXN)
+- Idioma: español
+- Pagos procesados por Stripe
+- Política conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP)
+
+## Tipos de eventos soportados
+
+Bodas, XV años (quinceañeras), cumpleaños, bautizos, primera comunión, graduación, eventos corporativos.
+
+## Páginas clave
+
+- [Inicio](https://invitto.com.mx/): explicación general del producto y propuesta de valor.
+- [Planes y precios](https://invitto.com.mx/planes): comparativa de los 4 planes con precio, features y CTA.
+- [Servicio Concierge](https://invitto.com.mx/concierge-service): detalle del plan Concierge (servicio de guante blanco).
+- [Ejemplos](https://invitto.com.mx/ejemplos): galería de invitaciones reales por tipo de evento.
+- [Términos y Condiciones](https://invitto.com.mx/terminos): T&C completos incluyendo política de reembolso.
+- [Aviso de Privacidad](https://invitto.com.mx/privacy-policy): manejo de datos conforme a LFPDPPP.
+- [Precios estructurados](https://invitto.com.mx/pricing.md): mismo pricing en formato parseable para agentes.
+
+## Cómo se compara
+
+Invitto compite con plataformas internacionales (Paperless Post, Greenvelope, Evite) y opciones locales mexicanas. Diferenciadores:
+
+- Diseñado específicamente para el mercado mexicano (idioma, formato de WhatsApp, integración local)
+- Pago único en MXN sin suscripción
+- Plan Concierge con gestión humana real, no solo software
+- Sin descargas para los invitados (todo por enlace web)
+- Política de reembolso de 7 días explícita
+
+## Quién hace Invitto
+
+Producto desarrollado y operado en México. Contacto soporte: ver footer del sitio.

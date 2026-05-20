@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Invitto — Invitaciones digitales elegantes para bodas, XV años, cumpleaños y más. Crea, comparte y gestiona tus eventos en minutos." />
+    <!-- Per-route <title>, <meta description>, canonical, OG tags and JSON-LD are
+         injected at runtime by <Seo /> (react-helmet-async). For /i/:slug routes,
+         netlify/edge-functions/og-tags.ts overrides server-side for crawlers.
+         Pre-rendering (todo: vite-plugin-prerender) will serialize per-route tags
+         into the HTML shipped from the CDN. -->
+
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/logo.png" />
@@ -26,7 +31,9 @@
       rel="stylesheet"
     />
 
-    <title>Invitto — Invitaciones Digitales</title>
+    <!-- <title> intentionally omitted — react-helmet-async injects per-route titles at runtime,
+         and the prerender build serializes them into static HTML for crawlers. -->
+
   </head>
   <body>
     <div id="root">

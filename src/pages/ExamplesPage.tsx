@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, Sparkles } from 'lucide-react';
 import { MOCK_EVENTS } from '../lib/mockData';
+import Seo from '../components/Seo';
 
 const categories = [
     { id: 'todas', name: 'Todas', icon: Sparkles, color: 'text-accent' },
@@ -63,6 +64,11 @@ export default function ExamplesPage() {
 
     return (
         <div className="min-h-screen bg-[#FDFBF7]">
+            <Seo
+                title="Ejemplos de invitaciones digitales — Bodas, XV años, eventos"
+                description="Mira ejemplos reales de invitaciones digitales para bodas, XV años, cumpleaños, bautizos y más. Estilos elegantes con RSVP integrado."
+                path="/ejemplos"
+            />
             {/* Header */}
             <header className="fixed top-0 w-full z-50 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#1B2E1D]/5">
                 <div className="mx-auto max-w-7xl px-6 h-20 flex items-center justify-between">
@@ -187,7 +193,7 @@ export default function ExamplesPage() {
                                                     'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop'
                                                 ],
                                                 graduacion: [
-                                                    'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop'
+                                                    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop'
                                                 ],
                                                 comunion: [
                                                     'https://images.unsplash.com/photo-1438032005730-c7aedb098c71?q=80&w=800&auto=format&fit=crop'
@@ -222,8 +228,7 @@ export default function ExamplesPage() {
 
                                                     {/* Hover "Ver Ejemplo" Button */}
                                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
-                                                        <div className="px-6 py-3 bg-white/90 backdrop-blur-md text-stone-900 rounded-full font-serif text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl border border-white/50">
-                                                            <Sparkles className="h-4 w-4 text-accent" />
+                                                        <div className="px-6 py-3 bg-white/90 backdrop-blur-md text-stone-900 rounded-full font-serif text-sm flex items-center justify-center transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl border border-white/50">
                                                             Ver Plantilla
                                                         </div>
                                                     </div>

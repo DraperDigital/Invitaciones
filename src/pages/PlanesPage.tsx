@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Heart, Gem, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import Seo from '../components/Seo';
 
 export default function PlanesPage() {
     const { user } = useAuth();
@@ -89,8 +90,29 @@ export default function PlanesPage() {
         }
     ];
 
+    const productJsonLd = plans.map((plan) => ({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: `Plan ${plan.name}`,
+        description: plan.description,
+        brand: { '@type': 'Brand', name: 'Invitto' },
+        offers: {
+            '@type': 'Offer',
+            price: plan.price.replace(/[^0-9]/g, ''),
+            priceCurrency: 'MXN',
+            availability: 'https://schema.org/InStock',
+            url: `https://invitto.com.mx/checkout?plan=${plan.id}`,
+        },
+    }));
+
     return (
         <div className="min-h-screen bg-[#FDFBF7] selection:bg-[#BD7474]/10 pb-20 md:pb-32 overflow-x-hidden">
+            <Seo
+                title="Planes y precios — Invitaciones digitales desde $499 MXN"
+                description="4 planes diseñados para tu evento: Clásica $499, Pro $1,699, Diseño Pro $2,499 y Concierge $4,499. Un solo pago, sin suscripciones."
+                path="/planes"
+                jsonLd={productJsonLd}
+            />
             {/* Header / Navigation */}
             <header className="pt-4 pb-4 md:pt-12 md:pb-20 sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-50 border-b border-stone-100 px-4 md:px-8">
                 <div className="mx-auto max-w-7xl flex justify-between items-center relative h-12 md:h-auto">
