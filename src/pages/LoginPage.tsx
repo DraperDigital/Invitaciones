@@ -7,8 +7,11 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const redirectUrl = searchParams.get('redirect') || '/dashboard';
+    // User came from a "buy plan" click on landing/pricing → wants to create + buy
+    const isFromCheckout = redirectUrl.includes('/checkout') || redirectUrl.includes('/dashboard/new');
 
-    const [isLogin, setIsLogin] = useState(true);
+    // If user lands here from a "buy plan" click, default to signup, not login
+    const [isLogin, setIsLogin] = useState(!isFromCheckout);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -114,7 +117,7 @@ export default function LoginPage() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    redirectTo: `${window.location.origin}/dashboard`
+                    redirectTo: `${window.location.origin}${redirectUrl}`
                 }
             });
             if (error) throw error;
@@ -184,9 +187,9 @@ export default function LoginPage() {
                         <Gem className="h-4 w-4 text-[#BD7474]" />
                         <span>Plataforma de Invitaciones Premium</span>
                     </div>
-                    <h1 className="text-6xl font-serif mb-8 leading-tight">Eleva tu evento, simplifica la organización.</h1>
+                    <h1 className="text-6xl font-serif mb-8 leading-tight">Tu evento, <span className="italic text-[#BD7474]">sin estrés.</span></h1>
                     <p className="text-xl text-stone-400 font-light leading-relaxed">
-                        Gestiona confirmaciones, accesos y todos los detalles de tu celebración desde un panel profesional diseñado para ti.
+                        Confirma a tus invitados, manda recordatorios y ve quién va — todo desde un solo lugar. Sin perseguir a nadie por WhatsApp.
                     </p>
                 </div>
 
@@ -283,7 +286,7 @@ export default function LoginPage() {
                                         <input
                                             required
                                             type="email"
-                                            placeholder="hola@tuempresa.com"
+                                            placeholder="tu@correo.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
@@ -318,16 +321,20 @@ export default function LoginPage() {
                         <>
                             <div className="mb-8 md:mb-12">
                                 <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">
-                                    {isLogin ? 'Bienvenido de nuevo' : 'Crea tu panel'}
+                                    {isLogin
+                                        ? 'Bienvenido de nuevo'
+                                        : isFromCheckout ? 'Crea tu cuenta para continuar' : 'Crea tu cuenta'}
                                 </h2>
                                 <p className="text-stone-500 font-light italic text-sm md:text-base">
                                     {isLogin
-                                        ? 'Ingresa tus credenciales para administrar tus invitaciones.'
-                                        : 'Comienza hoy mismo a crear experiencias inolvidables para tus clientes.'}
+                                        ? 'Ingresa para administrar tu evento.'
+                                        : isFromCheckout
+                                            ? 'Solo te toma 30 segundos. Después creamos tu invitación.'
+                                            : 'Empieza a organizar tu evento sin estrés. Solo te toma 30 segundos.'}
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-3 md:gap-4 mb-8">
+                            <div className="mb-8">
                                 <button
                                     type="button"
                                     onClick={() => handleOAuthLogin('google')}
@@ -341,19 +348,8 @@ export default function LoginPage() {
                                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                                         <path fill="none" d="M1 1h22v22H1z"/>
                                     </svg>
-                                    Google
+                                    Continuar con Google
                                 </button>
-                                {/* <button
-                                    type="button"
-                                    onClick={() => handleOAuthLogin('facebook')}
-                                    disabled={loading}
-                                    className="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-3.5 rounded-xl text-[10px] md:text-[11px] uppercase font-bold tracking-widest hover:bg-[#1864D9] transition-all shadow-sm disabled:opacity-50"
-                                >
-                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                    </svg>
-                                    Facebook
-                                </button> */}
                             </div>
 
                             <div className="relative mb-8">
@@ -368,11 +364,12 @@ export default function LoginPage() {
                             <form onSubmit={handleAuth} className="space-y-5 md:space-y-6">
                                 {!isLogin && (
                                     <div>
-                                        <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">NOMBRE COMPLETO</label>
+                                        <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
+                                            NOMBRE <span className="text-stone-300 normal-case tracking-normal font-normal">(opcional)</span>
+                                        </label>
                                         <div className="relative">
                                             <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
                                             <input
-                                                required
                                                 type="text"
                                                 placeholder="Tu nombre"
                                                 value={fullName}
@@ -390,7 +387,7 @@ export default function LoginPage() {
                                         <input
                                             required
                                             type="email"
-                                            placeholder="hola@tuempresa.com"
+                                            placeholder="tu@correo.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
@@ -429,6 +426,9 @@ export default function LoginPage() {
                                             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                         </button>
                                     </div>
+                                    {!isLogin && (
+                                        <p className="text-[10px] text-stone-400 font-light mt-2 italic">Mínimo 6 caracteres.</p>
+                                    )}
                                 </div>
 
                                 {message && (
@@ -445,7 +445,11 @@ export default function LoginPage() {
                                     disabled={loading}
                                     className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all transform active:scale-[0.98] shadow-lg shadow-[#1B2E1D]/10 flex items-center justify-center gap-3 disabled:bg-stone-400"
                                 >
-                                    {loading ? 'PROCESANDO...' : (isLogin ? 'ACCEDER AL PANEL' : 'CREAR CUENTA')}
+                                    {loading
+                                        ? 'PROCESANDO...'
+                                        : isLogin
+                                            ? 'ENTRAR'
+                                            : isFromCheckout ? 'CREAR MI INVITACIÓN' : 'CREAR CUENTA'}
                                     {!loading && <ArrowRight className="h-4 w-4" />}
                                 </button>
                             </form>

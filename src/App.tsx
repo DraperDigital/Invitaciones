@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import DashboardLayout from './components/layout/DashboardLayout';
@@ -22,6 +22,7 @@ const EventRSVPs          = React.lazy(() => import('./pages/dashboard/EventRSVP
 const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn'));
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
 const PrivacyPolicy       = React.lazy(() => import('./pages/PrivacyPolicy'));
+const Terms               = React.lazy(() => import('./pages/Terms'));
 const Concierge           = React.lazy(() => import('./pages/Concierge'));
 const ConciergeLanding    = React.lazy(() => import('./pages/ConciergeLanding'));
 const DesignEditor        = React.lazy(() => import('./pages/DesignEditor'));
@@ -35,8 +36,12 @@ const PageFallback = () => (
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { session, loading } = useAuth();
+  const location = useLocation();
   if (loading) return <PageFallback />;
-  if (!session) return <Navigate to="/login" replace />;
+  if (!session) {
+    const redirect = location.pathname + location.search;
+    return <Navigate to={`/login?redirect=${encodeURIComponent(redirect)}`} replace />;
+  }
   return <>{children}</>;
 };
 
@@ -52,6 +57,7 @@ function AppRoutes() {
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/i/:slug"       element={<InvitationPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terminos"      element={<Terms />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
 

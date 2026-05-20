@@ -465,7 +465,42 @@ END:VCALENDAR`;
     }
 
     if (!event.is_published) {
-        return <div className="flex h-screen items-center justify-center bg-cream text-stone-500">Este evento aún no está publicado.</div>;
+        const isOwner = user && user.id === event.user_id;
+        if (isOwner) {
+            return (
+                <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
+                    <div className="max-w-lg w-full bg-white rounded-[2.5rem] p-10 md:p-14 text-center shadow-xl border border-stone-100">
+                        <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-amber-50 mb-8">
+                            <Eye className="h-10 w-10 text-amber-500" />
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-4">Tu invitación está casi lista</h2>
+                        <p className="text-stone-500 font-light leading-relaxed mb-10">
+                            Esta es la vista previa de tu invitación. Para que tus invitados puedan verla y confirmar su asistencia, necesitas activar tu plan.
+                        </p>
+                        <Link
+                            to={`/planes?id=${event.id}`}
+                            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#A65B5B] transition-all shadow-xl shadow-[#BD7474]/20"
+                        >
+                            Activar mi invitación
+                        </Link>
+                        <Link
+                            to="/dashboard"
+                            className="block mt-6 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                        >
+                            Volver al panel
+                        </Link>
+                    </div>
+                </div>
+            );
+        }
+        return (
+            <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6 text-center">
+                <div>
+                    <p className="text-stone-400 font-serif text-2xl italic mb-2">Esta invitación aún no está activa</p>
+                    <p className="text-stone-300 text-sm">Pídele al anfitrión que la publique para poder verla.</p>
+                </div>
+            </div>
+        );
     }
 
     const eventDate = new Date(event.date_time);

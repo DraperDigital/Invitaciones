@@ -88,18 +88,60 @@ serve(async (req) => {
           return new Response('DB Error updating subscription', { status: 500 });
         }
 
-        // 3. We also need to get the user ID for this event to update their profile tier
-        const { data: eventData } = await supabase
+        // 3. Get the user ID and current theme_config to update profile tier and publish the event
+        const { data: eventData, error: eventFetchError } = await supabase
           .from('events')
-          .select('user_id')
+          .select('user_id, theme_config')
           .eq('id', eventId)
           .single();
 
-        if (eventData?.user_id) {
-          await supabase
-            .from('profiles')
-            .update({ plan_tier: planId })
-            .eq('id', eventData.user_id);
+        if (eventFetchError) {
+          console.error(`Error fetching event data for ${eventId}:`, eventFetchError);
+        } else {
+          // Parse theme_config safely
+          let themeConfig = eventData.theme_config || {};
+          if (typeof themeConfig === 'string') {
+            try {
+              themeConfig = JSON.parse(themeConfig);
+            } catch {
+              themeConfig = {};
+            }
+          }
+
+          // Add or update the plan_tier in the theme_config JSON
+          const updatedThemeConfig = {
+            ...themeConfig,
+            plan_tier: planId
+          };
+
+          // Update events table (publish event and save updated theme_config)
+          const { error: eventUpdateError } = await supabase
+            .from('events')
+            .update({
+              is_published: true,
+              theme_config: updatedThemeConfig
+            })
+            .eq('id', eventId);
+
+          if (eventUpdateError) {
+            console.error(`Error updating event ${eventId}:`, eventUpdateError);
+          } else {
+            console.log(`Successfully published event ${eventId} and updated theme_config`);
+          }
+
+          // Update user's profile plan tier
+          if (eventData.user_id) {
+            const { error: profileUpdateError } = await supabase
+              .from('profiles')
+              .update({ plan_tier: planId })
+              .eq('id', eventData.user_id);
+
+            if (profileUpdateError) {
+              console.error(`Error updating profile for user ${eventData.user_id}:`, profileUpdateError);
+            } else {
+              console.log(`Successfully updated profile tier to ${planId} for user ${eventData.user_id}`);
+            }
+          }
         }
 
         console.log(`Successfully upgraded event ${eventId} to plan ${planId}`);

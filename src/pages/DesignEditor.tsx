@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Sparkles, Shield, ChevronDown, Upload, X, Flower2 } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
+import CelebrationModal from '../components/CelebrationModal';
+import { trackEvent } from '../lib/analytics';
 
 type DesignConfig = {
     primaryColor: string;
@@ -195,8 +197,9 @@ const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSe
 
 export default function DesignEditor() {
     const { id } = useParams<{ id: string }>();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined);
-    
+
     const { user } = useAuth();
     const toast = useToast();
     const [loading, setLoading] = useState(true);
@@ -205,8 +208,23 @@ export default function DesignEditor() {
     const [uploading, setUploading] = useState(false);
     const [event, setEvent] = useState<any>(null);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
+    const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const logoInputRef = useRef<HTMLInputElement>(null);
+
+    // Fire purchase event once when user lands from successful checkout
+    useEffect(() => {
+        if (showCelebration) {
+            trackEvent('purchase', { eventId: id });
+        }
+    }, [showCelebration, id]);
+
+    const handleCloseCelebration = () => {
+        setShowCelebration(false);
+        // Clean URL so refresh doesn't replay the celebration
+        searchParams.delete('upgrade');
+        setSearchParams(searchParams, { replace: true });
+    };
 
 
     useEffect(() => {
@@ -551,6 +569,14 @@ export default function DesignEditor() {
     return (
         <div className="max-w-5xl mx-auto space-y-8 md:space-y-12 animate-in fade-in duration-500 py-6 md:py-10 px-4 md:px-6">
             <style>{liveStyles}</style>
+
+            <CelebrationModal
+                open={showCelebration}
+                onClose={handleCloseCelebration}
+                invitationUrl={event?.slug ? `${window.location.origin}/i/${event.slug}` : ''}
+                eventTitle={event?.title}
+            />
+
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>

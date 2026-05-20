@@ -203,10 +203,10 @@ export default function PlanesPage() {
                             </div>
 
                             <div className="mt-8 md:mt-10">
-                                <Link to={`/checkout?plan=${plan.id}${eventId ? `&id=${eventId}` : ''}`}>
+                                <Link to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}`}>
                                     <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
-                                        plan.popular 
-                                            ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl' 
+                                        plan.popular
+                                            ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl'
                                             : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E] shadow-xl'
                                     }`}>
                                         {plan.cta}

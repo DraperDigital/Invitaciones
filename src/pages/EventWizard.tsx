@@ -120,7 +120,8 @@ export default function EventWizard() {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [searchParams] = useSearchParams();
     const isWelcome = searchParams.get('welcome') === 'true';
-    
+    const preselectedPlan = searchParams.get('plan');
+
     const isEditing = !!id;
 
     useEffect(() => {
@@ -233,7 +234,8 @@ export default function EventWizard() {
                     id: crypto.randomUUID(),
                     ...payload,
                     user_id: user.id,
-                    is_published: true,
+                    // Draft until payment confirmed. Stripe webhook flips this to true on successful checkout.
+                    is_published: false,
                     theme_config: {
                         theme: data.theme,
                         misa_name: data.misa_name,
@@ -250,8 +252,13 @@ export default function EventWizard() {
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;
-                toast.success('¡Evento creado con éxito! Selecciona tu plan.');
-                navigate(`/planes?id=${insertPayload.id}`);
+                toast.success('¡Evento creado! Último paso: elige tu plan para publicarlo.');
+                // If user preselected a plan from the landing, skip /planes and go straight to checkout
+                if (preselectedPlan) {
+                    navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}`);
+                } else {
+                    navigate(`/planes?id=${insertPayload.id}`);
+                }
             }
         } catch (err: any) {
             console.error('Error submitting event:', err);
@@ -511,13 +518,13 @@ export default function EventWizard() {
                             Siguiente <ArrowRight className="h-4 w-4" />
                         </button>
                     ) : (
-                        <button 
-                            onClick={handleSubmit} 
+                        <button
+                            onClick={handleSubmit}
                             disabled={loading}
                             className="px-10 py-4 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest shadow-xl shadow-rose-100 hover:bg-[#A65B5B] transition-all disabled:opacity-50 flex items-center gap-3"
                         >
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                            {isEditing ? 'Guardar Cambios' : 'Publicar Evento'}
+                            {isEditing ? 'Guardar Cambios' : (preselectedPlan ? 'Continuar al Pago' : 'Elegir Plan y Publicar')}
                         </button>
                     )}
                 </div>

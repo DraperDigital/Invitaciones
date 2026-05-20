@@ -20,14 +20,12 @@ export default async (request: Request, context: Context) => {
   let title = "Invitto — Invitación Digital";
   let description = "Estás invitado a nuestro evento especial. Ver detalles aquí.";
   let imageUrl = "https://invitto.com.mx/logo.png"; // Imagen por defecto
-  let eventDetails: any = null;
 
   if (supabaseUrl && supabaseAnonKey) {
     try {
       // Petición REST directa a Supabase para máxima velocidad
-      // Solicitamos los datos del evento necesarios para el preview y para el cuerpo indexable
       const response = await fetch(
-        `${supabaseUrl}/rest/v1/events?slug=eq.${slug}&select=title,event_type,theme_config,date_time,venue_name,venue_address,dress_code,rsvp_deadline`,
+        `${supabaseUrl}/rest/v1/events?slug=eq.${slug}&select=title,event_type,theme_config`,
         {
           headers: {
             apikey: supabaseAnonKey,
@@ -59,9 +57,6 @@ export default async (request: Request, context: Context) => {
           };
           
           description = cfg.subtitle || cfg.welcome_message || templates[type] || templates.default;
-
-          // Guardamos el objeto event para poder inyectarlo en el body
-          eventDetails = event;
         }
       }
     } catch (error) {
@@ -107,40 +102,6 @@ export default async (request: Request, context: Context) => {
   `;
 
   modifiedHtml = modifiedHtml.replace(/<\/head>/i, `${ogTags}\n</head>`);
-
-  // 4. Inyectar el contenido del evento en el body (dentro de <div id="root">)
-  // Esto permite que scrapers de IA (como Claude o ChatGPT) puedan leer el texto de la invitación
-  if (eventDetails) {
-    const formattedDate = eventDetails.date_time 
-      ? new Date(eventDetails.date_time).toLocaleString("es-MX", { dateStyle: "long", timeStyle: "short", timeZone: "UTC" })
-      : "";
-    const formattedDeadline = eventDetails.rsvp_deadline
-      ? new Date(eventDetails.rsvp_deadline).toLocaleDateString("es-MX", { dateStyle: "long", timeZone: "UTC" })
-      : "";
-
-    const eventBody = `
-      <!-- SEO Fallback Content for Crawlers & AI Scrapers (Replaced by React on mount) -->
-      <div class="seo-event-fallback" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;">
-        <h1>${title}</h1>
-        <p>${description}</p>
-        <h2>Detalles del Evento</h2>
-        <ul>
-          <li><strong>Tipo de evento:</strong> ${eventDetails.event_type || "Celebración"}</li>
-          ${formattedDate ? `<li><strong>Fecha y Hora:</strong> ${formattedDate}</li>` : ""}
-          ${eventDetails.venue_name ? `<li><strong>Lugar:</strong> ${eventDetails.venue_name}</li>` : ""}
-          ${eventDetails.venue_address ? `<li><strong>Dirección:</strong> ${eventDetails.venue_address}</li>` : ""}
-          ${eventDetails.dress_code ? `<li><strong>Código de vestimenta:</strong> ${eventDetails.dress_code}</li>` : ""}
-          ${formattedDeadline ? `<li><strong>Fecha límite de confirmación (RSVP):</strong> ${formattedDeadline}</li>` : ""}
-        </ul>
-      </div>
-    `;
-
-    // Reemplazamos el div#root genérico con el div#root personalizado de este evento
-    modifiedHtml = modifiedHtml.replace(
-      /<div\s+id=["']root["']>([\s\S]*?)<\/div>/i,
-      `<div id="root">${eventBody}</div>`
-    );
-  }
 
   // Retornar la respuesta modificada con los headers originales
   return new Response(modifiedHtml, {
