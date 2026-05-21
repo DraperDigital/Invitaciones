@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { FeatureAccessResponse } from '../types/database.types';
 
-export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasico' | 'pro' | 'premium') {
+export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasico' | 'pro' | 'premium' | 'concierge') {
     const [isLoading, setIsLoading] = useState(true);
     const [access, setAccess] = useState<FeatureAccessResponse | null>(null);
     const [error, setError] = useState<any>(null);
@@ -85,7 +85,9 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                 }
 
                 // Global default if everything else fails
-                setAccess({ plan: { code: 'free', name: 'Cuenta Gratuita' }, features: [] } as any);
+                const finalPlan = eventPlan || 'clasico';
+                const finalName = finalPlan === 'premium' ? 'Premium' : finalPlan === 'pro' ? 'Pro' : finalPlan === 'concierge' ? 'Concierge' : 'Clásica';
+                setAccess({ plan: { code: finalPlan, name: finalName }, features: [] } as any);
                 setError(err);
             } finally {
                 setIsLoading(false);

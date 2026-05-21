@@ -199,11 +199,18 @@ export default function CheckoutPage() {
 
             // Si el cupón fue exitoso, ya se actualizó la BD, simplemente redirigir.
             if (isCouponSuccess) {
-                // FALLBACK CLIENTE: Asegurar que la invitación quede publicada por si la Edge Function antigua no lo hizo
-                await supabase
-                    .from('events')
-                    .update({ is_published: true })
-                    .eq('id', eventId);
+                // FALLBACK CLIENTE: Asegurar que todo se actualice si la Edge Function antigua falló en algo
+                
+                // 1. Actualizar is_published y plan_tier en el evento
+                const { data: eventData } = await supabase.from('events').select('theme_config').eq('id', eventId).single();
+                if (eventData) {
+                    let tc = eventData.theme_config || {};
+                    if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
+                    await supabase.from('events').update({ is_published: true, theme_config: { ...tc, plan_tier: planId } }).eq('id', eventId);
+                }
+                
+                // 2. Forzar actualización del plan en el perfil del usuario (para arreglar el dashboard)
+                await supabase.from('profiles').update({ plan_tier: planId }).eq('id', user.id);
 
                 setIsSuccess(true);
                 setTimeout(() => {
@@ -414,7 +421,7 @@ export default function CheckoutPage() {
                                             </button>
                                         </div>
                                         {couponError && <p className="text-xs text-rose-500 ml-1">{couponError}</p>}
-                                        {isCouponSuccess && <p className="text-xs text-emerald-500 ml-1 font-bold">¡Cupón aplicado exitosamente! Este plan es gratis.</p>}
+                                        {isCouponSuccess && <p className="text-xs text-emerald-500 ml-1 font-bold">¡Cupón aplicado exitosamente! El plan {selectedPlan.name} ha sido cubierto.</p>}
                                     </div>
                                 </div>
 

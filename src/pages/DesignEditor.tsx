@@ -198,7 +198,9 @@ const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSe
 export default function DesignEditor() {
     const { id } = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
-    const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined);
+    const [event, setEvent] = useState<any>(null);
+    const eventPlanFromConfig = event?.theme_config?.plan_tier || (event?.theme_config?.isPremium ? 'premium' : event?.theme_config?.isPro ? 'pro' : 'clasico');
+    const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
 
     const { user } = useAuth();
     const toast = useToast();
@@ -206,7 +208,6 @@ export default function DesignEditor() {
     const [activeSection, setActiveSection] = useState<string | null>('matrix');
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [event, setEvent] = useState<any>(null);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
     const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -285,7 +286,7 @@ export default function DesignEditor() {
                     damas:           c.damas       ?? [],
                     heroBgColor:     c.heroBgColor ?? c.hero_bg_color ?? '#1B2E1D',
                     typographyPreset: c.typography_preset ?? c.typographyPreset ?? DEFAULT_CONFIG.typographyPreset,
-                    plan:           c.isPremium ? 'premium' : c.isPro ? 'pro' : 'clasico',
+                    plan:           c.plan_tier || (c.isPremium ? 'premium' : c.isPro ? 'pro' : 'clasico'),
                     hotels:         c.hotels ?? [],
                     customCss:      c.custom_css ?? '',
                 });
