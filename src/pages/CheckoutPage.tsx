@@ -35,12 +35,20 @@ export default function CheckoutPage() {
     });
 
     const eventId = searchParams.get('id');
+    const promoCoupon = searchParams.get('coupon');
 
     useEffect(() => {
         if (!user) {
             navigate(`/login?redirect=/checkout?plan=${planId}`);
         }
     }, [user, navigate, planId]);
+
+    // Pre-fill the coupon field if it arrived via ?coupon= (from the launch promo popup)
+    useEffect(() => {
+        if (promoCoupon && !couponCode) {
+            setCouponCode(promoCoupon.toUpperCase());
+        }
+    }, [promoCoupon, couponCode]);
 
     // If user landed here without ?id=, look up their latest draft events
     // (typically caused by hitting the browser back button or pasting a URL).
@@ -191,6 +199,12 @@ export default function CheckoutPage() {
 
             // Si el cupón fue exitoso, ya se actualizó la BD, simplemente redirigir.
             if (isCouponSuccess) {
+                // FALLBACK CLIENTE: Asegurar que la invitación quede publicada por si la Edge Function antigua no lo hizo
+                await supabase
+                    .from('events')
+                    .update({ is_published: true })
+                    .eq('id', eventId);
+
                 setIsSuccess(true);
                 setTimeout(() => {
                     navigate(`/dashboard/design/${eventId}?upgrade=success`);

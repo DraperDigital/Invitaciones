@@ -130,6 +130,7 @@ function AppRoutes() {
 }
 
 import ScrollToTop from './components/ScrollToTop';
+const LaunchPromoPopup = React.lazy(() => import('./components/LaunchPromoPopup'));
 
 function App() {
   return (
@@ -144,6 +145,10 @@ function App() {
             <ErrorBoundary>
               <AppRoutes />
             </ErrorBoundary>
+            {/* Launch promo popup — self-contained, only renders on public routes */}
+            <Suspense fallback={null}>
+              <LaunchPromoPopup />
+            </Suspense>
           </BrowserRouter>
         </AuthProvider>
         {/* Toaster fuera del router para que sobreviva navegaciones */}

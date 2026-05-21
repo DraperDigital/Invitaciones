@@ -121,6 +121,7 @@ export default function EventWizard() {
     const [searchParams] = useSearchParams();
     const isWelcome = searchParams.get('welcome') === 'true';
     const preselectedPlan = searchParams.get('plan');
+    const preselectedCoupon = searchParams.get('coupon');
 
     const isEditing = !!id;
 
@@ -255,7 +256,8 @@ export default function EventWizard() {
                 toast.success('¡Evento creado! Último paso: elige tu plan para publicarlo.');
                 // If user preselected a plan from the landing, skip /planes and go straight to checkout
                 if (preselectedPlan) {
-                    navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}`);
+                    const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
+                    navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}${couponQs}`);
                 } else {
                     navigate(`/planes?id=${insertPayload.id}`);
                 }

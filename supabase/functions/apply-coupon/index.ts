@@ -119,6 +119,29 @@ serve(async (req) => {
       .update({ plan_tier: planId })
       .eq('id', user.id);
 
+    // 6. Get current theme_config to add plan_tier and publish the event
+    const { data: eventData } = await supabase
+      .from('events')
+      .select('theme_config')
+      .eq('id', eventId)
+      .single();
+
+    if (eventData) {
+      let themeConfig = eventData.theme_config || {};
+      if (typeof themeConfig === 'string') {
+        try { themeConfig = JSON.parse(themeConfig); } catch { themeConfig = {}; }
+      }
+      const updatedThemeConfig = { ...themeConfig, plan_tier: planId };
+
+      await supabase
+        .from('events')
+        .update({
+          is_published: true,
+          theme_config: updatedThemeConfig
+        })
+        .eq('id', eventId);
+    }
+
     return new Response(
       JSON.stringify({ success: true, message: 'Cupón aplicado con éxito.' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
