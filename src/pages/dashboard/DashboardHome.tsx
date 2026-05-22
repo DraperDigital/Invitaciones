@@ -43,9 +43,28 @@ const DashboardHome: React.FC = () => {
                     .eq('id', user.id)
                     .single();
                 
-                const currentTier = profile?.plan_tier?.toLowerCase() || 'free';
+                let currentTier = profile?.plan_tier?.toLowerCase() || 'free';
+
+                // FALLBACK: Calculate the highest plan from user's events in case profiles.plan_tier is missing/stale
+                if (events && events.length > 0) {
+                    const ranks: Record<string, number> = { 'free': 0, 'clasico': 1, 'classic': 1, 'pro': 2, 'personalized': 2, 'premium': 3, 'concierge': 4 };
+                    let currentMaxRank = ranks[currentTier] || 0;
+                    
+                    for (const ev of events) {
+                        let tc = ev.theme_config;
+                        if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
+                        tc = tc || {};
+                        const p = tc.plan_tier || (tc.isPremium ? 'premium' : tc.isPro ? 'pro' : 'clasico');
+                        const r = ranks[p] || 0;
+                        if (r > currentMaxRank) {
+                            currentTier = p;
+                            currentMaxRank = r;
+                        }
+                    }
+                }
+
                 setTier(currentTier);
-                setIsPersonalized(['pro', 'premium', 'personalizado'].includes(currentTier));
+                setIsPersonalized(['pro', 'premium', 'personalizado', 'concierge'].includes(currentTier));
 
                 // Fetch total guests for these events
                 const eventIds = events?.map(e => e.id) || [];

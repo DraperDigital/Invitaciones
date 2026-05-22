@@ -23,12 +23,33 @@ export default function SettingsPage() {
                 const { data, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
                 if (error && error.code !== 'PGRST116') throw error;
                 
-                const profileData = data || { full_name: '', whatsapp_number: '', plan_tier: 'free' };
+                let highestPlan = data?.plan_tier || 'free';
+
+                // FALLBACK: Calculate the highest plan from user's events in case profiles.plan_tier is missing/stale
+                const { data: eventsData } = await supabase.from('events').select('theme_config').eq('user_id', user.id);
+                if (eventsData && eventsData.length > 0) {
+                    const ranks: Record<string, number> = { 'free': 0, 'clasico': 1, 'classic': 1, 'pro': 2, 'personalized': 2, 'premium': 3, 'concierge': 4 };
+                    let currentMaxRank = ranks[highestPlan] || 0;
+                    
+                    for (const ev of eventsData) {
+                        let tc = ev.theme_config;
+                        if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
+                        tc = tc || {};
+                        const p = tc.plan_tier || (tc.isPremium ? 'premium' : tc.isPro ? 'pro' : 'clasico');
+                        const r = ranks[p] || 0;
+                        if (r > currentMaxRank) {
+                            highestPlan = p;
+                            currentMaxRank = r;
+                        }
+                    }
+                }
+
+                const profileData = data || { full_name: '', whatsapp_number: '' };
 
                 setProfile({
                     full_name: profileData.full_name || '',
                     whatsapp_number: (profileData as any).whatsapp_number || '',
-                    plan_tier: profileData.plan_tier || 'free',
+                    plan_tier: highestPlan,
                 });
             } catch (error: any) {
                 console.error('Error fetching profile:', error);
