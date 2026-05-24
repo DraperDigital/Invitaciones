@@ -8,53 +8,6 @@
   path = "/i/*"
   function = "og-tags"
 
-# Redirects
-[[redirects]]
-  from = "/privacy-policy"
-  to = "/aviso-de-privacidad"
-  status = 301
-  force = true
-
-# SPA routing — all paths serve index.html
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# ── index.html ──────────────────────────────────────────────────────────────
-# Never cache the SPA shell — browsers must always fetch the latest HTML
-# so they pick up new hashed asset filenames after each deploy.
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-# ── Hashed JS / CSS / media assets ─────────────────────────────────────────
-# Vite fingerprints every asset filename — safe to cache for 1 year.
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# ── Static files in /public (favicon, images, etc.) ────────────────────────
-[[headers]]
-  for = "/*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-# ── Security + performance headers on every response ────────────────────────
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options              = "DENY"
-    X-Content-Type-Options       = "nosniff"
-    Referrer-Policy              = "strict-origin-when-cross-origin"
-    X-DNS-Prefetch-Control       = "on"
-    # HSTS — tell browsers to always use HTTPS for the next year
-    Strict-Transport-Security    = "max-age=31536000; includeSubDomains"
-    # Allow Brotli / gzip negotiation
-    Vary                         = "Accept-Encoding"
-
 # Environment variables — configure in Netlify UI, not here
 # VITE_SUPABASE_URL
 # VITE_SUPABASE_ANON_KEY
