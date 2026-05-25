@@ -48,6 +48,22 @@ export default function LoginPage() {
             }
         });
 
+        // Parse error from hash if any (e.g., Magic Link expired)
+        if (window.location.hash) {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            const errorDesc = hashParams.get('error_description');
+            if (errorDesc) {
+                setMessage({
+                    text: errorDesc.includes('expired') || errorDesc.includes('invalid')
+                        ? 'El enlace ha expirado o es inválido. Por favor, solicita uno nuevo.' 
+                        : errorDesc.replace(/\+/g, ' '),
+                    type: 'error'
+                });
+                // Clean URL
+                window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+        }
+
         return () => subscription.unsubscribe();
     }, [navigate, redirectUrl]);
 
@@ -439,11 +455,22 @@ export default function LoginPage() {
                                 </div>
 
                                 {message && (
-                                    <div className={`flex items-center gap-3 p-4 rounded-xl text-sm ${
+                                    <div className={`flex flex-col gap-3 p-4 rounded-xl text-sm ${
                                         message.type === 'error' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'
                                     }`}>
-                                        {message.type === 'success' && <CheckCircle2 className="h-5 w-5" />}
-                                        {message.text}
+                                        <div className="flex items-start gap-3">
+                                            {message.type === 'success' && <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />}
+                                            <span>{message.text}</span>
+                                        </div>
+                                        {message.type === 'error' && (message.text.includes('expirado') || message.text.includes('inválido')) && (
+                                            <button 
+                                                type="button" 
+                                                onClick={() => { setIsForgotPassword(true); setMessage(null); }} 
+                                                className="self-start text-[10px] uppercase font-bold tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors bg-white/50 px-3 py-1.5 rounded-lg border border-red-200 hover:border-[#1B2E1D]"
+                                            >
+                                                Solicitar nuevo enlace
+                                            </button>
+                                        )}
                                     </div>
                                 )}
 

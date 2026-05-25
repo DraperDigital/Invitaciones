@@ -76,10 +76,10 @@ export default function ExamplesPage() {
                         Invitto
                     </Link>
                     <nav className="hidden md:flex items-center gap-8">
-                        <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-[#BD7474]">
+                        <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-[#BD7474] hover:opacity-70 transition-colors">
                             Ejemplos
                         </Link>
-                        <Link to="/planes" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/planes" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Planes
                         </Link>
                     </nav>
@@ -95,7 +95,7 @@ export default function ExamplesPage() {
                                 <Link to="/login" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
                                     Ingresar
                                 </Link>
-                                <Link to="/login">
+                                <Link to="/login" className="hidden sm:block">
                                     <button className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-xs uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-[#1B2E1D]/10">
                                         Comenzar
                                     </button>
@@ -206,7 +206,7 @@ export default function ExamplesPage() {
                                             const isPremium = event.theme_config?.isPremium || event.slug?.endsWith('-premium');
                                             const isPro = event.theme_config?.isPro || event.slug?.endsWith('-pro');
                                             const planLabel = isPremium ? 'Premium' : isPro ? 'Pro' : 'Clásica';
-                                            const planColor = isPremium ? 'bg-stone-900/80 text-amber-300 border border-amber-300/30' : isPro ? 'bg-stone-900/80 text-white border border-stone-600/50' : 'bg-white/80 text-stone-700 border border-stone-200/50';
+                                            const planColor = isPremium ? 'bg-stone-900/95 text-amber-300 border border-amber-300/30' : isPro ? 'bg-stone-900/95 text-white border border-stone-600/50' : 'bg-white/95 text-stone-700 border border-stone-200/50';
 
                                             return (
                                                 <div className="relative aspect-[3/4] w-full overflow-hidden">
@@ -217,7 +217,7 @@ export default function ExamplesPage() {
                                                     />
                                                     
                                                     {/* Gradient Overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/20 opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30 opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
                                                     
                                                     {/* Plan Badge */}
                                                     <div className="absolute top-4 right-4 z-10">

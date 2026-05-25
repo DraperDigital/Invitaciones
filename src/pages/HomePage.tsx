@@ -72,19 +72,19 @@ export default function HomePage() {
                         Invitto
                     </Link>
                     <nav className="hidden lg:flex items-center gap-8">
-                        <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Ejemplos
                         </Link>
-                        <Link to="/planes" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/planes" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Planes
                         </Link>
-                        <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Comparativas
                         </Link>
-                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Concierge
                         </Link>
-                        <Link to="/blog" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
+                        <Link to="/blog" className="text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] hover:underline underline-offset-4 transition-all">
                             Blog
                         </Link>
                     </nav>
@@ -100,7 +100,7 @@ export default function HomePage() {
                                 <Link to="/login" className="hidden xs:inline-block text-[9px] md:text-xs uppercase font-bold tracking-widest hover:text-[#BD7474] transition-colors">
                                     Ingresar
                                 </Link>
-                                <Link to="/planes">
+                                <Link to="/planes" className="hidden sm:block">
                                     <button className="px-4 py-2.5 md:px-6 md:py-3 bg-[#1B2E1D] text-white rounded-lg md:rounded-xl text-[9px] md:text-xs uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-[#1B2E1D]/10">
                                         Comenzar
                                     </button>
