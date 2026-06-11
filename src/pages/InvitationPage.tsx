@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2 } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -14,6 +14,7 @@ import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
+import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
 import RomanticBotanicalHero from '../components/themes/RomanticBotanicalHero';
 import SplitScreenHero from '../components/themes/SplitScreenHero';
@@ -56,6 +57,7 @@ export default function InvitationPage() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [isAdminMode, setIsAdminMode] = useState(false);
+    const [editingSection, setEditingSection] = useState<SectionId | null>(null);
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
@@ -189,6 +191,27 @@ export default function InvitationPage() {
             console.error('[SYNC_ERROR]', err);
             toast.error('Error al guardar: ' + (err.message || 'Error de red'));
             setEvent({ ...event, theme_config: event.theme_config });
+        }
+    };
+
+    const handleUpdateEventColumn = async (column: string, value: any) => {
+        if (!event) return;
+        
+        const updatedEvent = { ...event, [column]: value };
+        setEvent(updatedEvent as Event);
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .update({ [column]: value })
+                .eq('id', event.id);
+
+            if (error) throw error;
+            toast.success('¡Guardado!');
+        } catch (err: any) {
+            console.error('[SYNC_ERROR]', err);
+            toast.error('Error al guardar: ' + (err.message || 'Error de red'));
+            setEvent(event); // revert
         }
     };
 
@@ -1641,9 +1664,18 @@ END:VCALENDAR`;
                                                                 <button 
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
+                                                                        setEditingSection(sec.id);
+                                                                    }}
+                                                                    className="ml-2 p-2 rounded-lg transition-colors text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                                                                >
+                                                                    <Edit2 className="h-4 w-4" />
+                                                                </button>
+                                                                <button 
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
                                                                         if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
                                                                     }}
-                                                                    className={`ml-2 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
+                                                                    className={`ml-1 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
                                                                 >
                                                                     {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                                                                 </button>
@@ -1654,6 +1686,16 @@ END:VCALENDAR`;
                                             })}
                                         </div>
                                     </div>
+
+                                    {editingSection && event && (
+                                        <InlineSectionEditor 
+                                            sectionId={editingSection}
+                                            event={event}
+                                            onClose={() => setEditingSection(null)}
+                                            onUpdateThemeConfig={handleUpdateFeature}
+                                            onUpdateEventColumn={handleUpdateEventColumn}
+                                        />
+                                    )}
                                 </div>
                             )}
                         </>
