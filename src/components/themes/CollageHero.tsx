@@ -10,13 +10,12 @@ interface Props {
     scrollToSection: (id: string) => void;
 }
 
-export default function CollageHero({ event, cfg, countdown, labels, heroImageUrl }: Props) {
+export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
     const eventDate = new Date(event.date_time);
     
     // Default colors inspired by the Renderforest template
     const heroBgColor = cfg.heroBgColor || cfg.hero_bg_color || '#F8F5F0';
     const primaryColor = cfg.primary_color || '#767A6B'; // Dark olive green for the details bar
-    const accentColor = cfg.accent_color || '#8B907D';
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#4A4A4A';
     
     // Images for collage

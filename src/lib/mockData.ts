@@ -316,7 +316,11 @@ export const MOCK_EVENTS: Event[] = [
         title: 'Helena & Austin',
         event_type: 'wedding',
         date_time: new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString(),
-        status: 'published',
+        venue_name: 'Jardín Las Rosas',
+        venue_address: 'Blvd. Las Palmas 456',
+        maps_link: 'https://maps.google.com',
+        dress_code: 'Formal',
+        rsvp_deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
         is_published: true,
         plan: 'premium',
         theme_config: {

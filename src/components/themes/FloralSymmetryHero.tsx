@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+
 
 interface Props {
     event: any;
