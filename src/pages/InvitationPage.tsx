@@ -1502,7 +1502,7 @@ END:VCALENDAR`;
             {/* Version Switcher (Demo Only) */}
             {isDemo && (
                 <div className="fixed bottom-6 right-6 z-[999] flex flex-wrap gap-2 items-center">
-                    <Link to="/planes" className="mr-2 sm:mr-4">
+                    <Link to={`/planes?theme=${cfg.theme || 'classic'}`} className="mr-2 sm:mr-4">
                         <button className="px-5 py-2 rounded-full text-sm font-bold bg-[#1B2E1D] text-white hover:bg-stone-800 shadow-xl flex items-center gap-2 border-2 border-[#1B2E1D]/20">
                             <Flower2 className="h-4 w-4 text-amber-200" />
                             Quiero usar esta plantilla

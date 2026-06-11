@@ -129,6 +129,10 @@ export default function EventWizard() {
         if (!user || dataLoaded) return;
 
         if (!id) {
+            const preselectedTheme = searchParams.get('theme');
+            if (preselectedTheme) {
+                setData(prev => ({ ...prev, theme: preselectedTheme }));
+            }
             setDataLoaded(true);
             return;
         }

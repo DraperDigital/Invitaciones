@@ -7,6 +7,7 @@ export default function PlanesPage() {
     const { user } = useAuth();
     const [searchParams] = useSearchParams();
     const eventId = searchParams.get('id');
+    const theme = searchParams.get('theme');
     const plans = [
         {
             id: 'clasico',
@@ -147,9 +148,7 @@ export default function PlanesPage() {
             <section className="text-center space-y-6 md:space-y-8 py-12 md:py-32 px-6 md:px-8 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[300px] md:max-w-[800px] h-[300px] md:h-[800px] bg-[#BD7474]/5 rounded-full blur-[60px] md:blur-[120px] -z-0" />
                 <div className="relative z-10 space-y-4 md:space-y-6">
-                    <span className="inline-block px-4 py-1 md:px-5 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[7px] md:text-[9px] uppercase font-bold tracking-[0.4em] md:tracking-[0.5em] rounded-full">
-                        Inversiones con Propósito
-                    </span>
+
                     <h1 className="text-3xl xs:text-4xl md:text-8xl font-serif text-[#1B2E1D] leading-[1.1] md:leading-[0.9] tracking-tighter">
                         Tu evento merece <br className="hidden xs:block" />
                         <span className="italic font-light opacity-30 text-stone-400">distinción total.</span>
@@ -225,7 +224,7 @@ export default function PlanesPage() {
                             </div>
 
                             <div className="mt-8 md:mt-10">
-                                <Link to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}`}>
+                                <Link to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}`}>
                                     <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
                                         plan.popular
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl'
