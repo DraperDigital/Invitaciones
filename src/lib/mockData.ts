@@ -258,6 +258,92 @@ export const MOCK_EVENTS: Event[] = [
         slug: 'boda-gabriela-arturo',
         created_at: new Date().toISOString(),
     },
+    // GABRIELA Y ARTURO - PREMIUM
+    {
+        id: 'evt-collage-premium',
+        user_id: MOCK_USER.id,
+        title: 'Carlo & Sofia',
+        event_type: 'wedding',
+        date_time: new Date(Date.now() + 86400000 * 45).toISOString(),
+        venue_name: 'Driftwood Road',
+        venue_address: '259 Driftwood Road, SF',
+        maps_link: 'https://maps.google.com/?q=37.7749,-122.4194',
+        dress_code: 'Green and Cream',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 30).toISOString(),
+        is_published: true,
+        plan: 'premium',
+        theme_config: {
+            isPremium: true,
+            theme: 'collage',
+            heroBgColor: '#F8F5F0',
+            primary_color: '#767A6B',
+            accent_color: '#8B907D',
+            hero_text_color: '#767A6B',
+            welcome_message: 'Estás invitado a celebrar el gran día de',
+            subtitle: 'Y así comienza la aventura',
+            misa_time: '16:00',
+            schedule: [
+                { time: '16:00', event: 'Ceremonia', location: '1174 Lynch St., SF' },
+                { time: '17:00', event: 'Hora del cóctel', location: 'Driftwood Road' },
+                { time: '19:00', event: 'Cena y discursos', location: 'Salón Principal' },
+                { time: '20:30', event: 'Bebidas y baile', location: 'Pista de baile' }
+            ],
+            gallery_images: [
+                { url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80', caption: '1' },
+                { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', caption: '2' },
+                { url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80', caption: '3' },
+                { url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80', caption: '4' },
+                { url: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80', caption: '5' }
+            ],
+            photoGallery: {
+                enabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            message: '¡Por favor, ven con tu mejor atuendo verde o crema y disfruta la celebración con nosotros!'
+        },
+        slug: 'boda-collage-premium',
+        created_at: new Date().toISOString(),
+    },
+    // HELENA & AUSTIN - FLORAL SYMMETRY
+    {
+        id: 'evt-floral-symmetry',
+        user_id: MOCK_USER.id,
+        title: 'Helena & Austin',
+        event_type: 'wedding',
+        date_time: new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString(),
+        status: 'published',
+        is_published: true,
+        plan: 'premium',
+        theme_config: {
+            theme: 'floral-symmetry',
+            heroBgColor: '#FAF9F2',
+            primary_color: '#456A5B',
+            accent_color: '#F47C62',
+            save_the_date_text: 'Reserva la fecha',
+            subtitle: 'comienzan su gran aventura juntos',
+            banner_subtitle: 'Junto con nuestras familias',
+            banner_title: 'Te invitamos a nuestra boda',
+            story_title: 'Nos encantaría que nos acompañes',
+            story_subtitle: 'En nuestro día tan especial',
+            welcome_message: 'Como ocupas un lugar muy especial en nuestros corazones, tu presencia significaría el mundo para nosotros. Únete a nosotros para compartir nuestra historia de amor, vivir momentos inolvidables y crear recuerdos que atesoraremos por siempre.',
+            schedule: [
+                { time: '16:00', event: 'Ceremonia', location: 'Parroquia San Antonio\nAv. Principal 123' },
+                { time: '17:30', event: 'Recepción', location: 'Jardín Las Rosas\nBlvd. Las Palmas 456' },
+            ],
+            gallery_images: [
+                { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80', caption: '1' },
+            ],
+            countdown: true,
+            message: ''
+        },
+        slug: 'boda-simetria-floral',
+        created_at: new Date().toISOString(),
+    },
     // GABRIELA Y ARTURO - PRO
     {
         id: 'evt-4-pro',
@@ -307,7 +393,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'romantic-luxury',
+            theme: 'modern-minimalist', hero_image_url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80',
             schedule: [
                 { time: '16:30', event: 'Ceremonia Civil', location: 'Jardín Las Palomas' },
                 { time: '17:30', event: 'Ceremonia Religiosa', location: 'Capilla del Jardín' },
@@ -438,7 +524,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'vintage-luxury',
+            theme: 'classic-elegance', hero_image_url: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=1600&q=80',
             ceremony: {
                 name: 'Ceremonia Simbólica',
                 location: 'Entre las Vides',
@@ -753,7 +839,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'princess-luxury',
+            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1545239351-ef35f43d514b?auto=format&fit=crop&w=1600&q=80',
             message: 'Con la ilusión de una princesa que cumple un sueño, te invito a celebrar conmigo el día que tanto he esperado.',
             ceremony: {
                 name: 'Ceremonia Religiosa',
@@ -908,7 +994,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'unicorn-luxury',
+            theme: 'neon-glow', hero_image_url: 'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?auto=format&fit=crop&w=1600&q=80',
             message: '¡Celebra conmigo mi primera década de vida! Será una fiesta mágica llena de diversión y magia.',
             schedule: [
                 { time: '15:00', event: 'Llegada de Invitados', location: 'Jardín Principal' },
@@ -1026,7 +1112,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'angel-luxury',
+            theme: 'whimsical-kids', hero_image_url: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=1600&q=80',
             message: 'Con inmensa alegría invitamos a compartir el sacramento del bautismo de nuestra amada Victoria.',
             ceremony: {
                 name: 'Ceremonia de Bautizo',
@@ -1236,7 +1322,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'achievement-luxury',
+            theme: 'polaroid-vintage', hero_image_url: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1600&q=80',
             message: '¡Después de años de esfuerzo, sueños y dedicación, finalmente soy Licenciada en Psicología! Quiero compartir este logro contigo.',
             ceremony: {
                 name: 'Ceremonia de Graduación',
@@ -1558,6 +1644,100 @@ export const MOCK_EVENTS: Event[] = [
         },
         slug: 'boda-ana-y-carlos-premium',
         created_at: new Date().toISOString(),
+    },
+
+    // ==================== NEW 10 THEMES MOCK DATA ====================
+    {
+        id: 'mock-sofia-mateo',
+        slug: 'boda-sofia-mateo-premium',
+        user_id: 'mock-user-1',
+        title: 'Sofía y Mateo',
+        event_type: 'wedding',
+        date_time: '2026-10-15T18:00:00Z',
+        venue_name: 'Hacienda Los Arcángeles',
+        venue_address: 'Carretera San Miguel de Allende',
+        maps_link: 'https://goo.gl/maps/example',
+        dress_code: 'Etiqueta Rigurosa',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'split-screen', hero_image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80',
+            typography_preset: 'moderna',
+            primary_color: '#2d3748',
+            accent_color: '#e2e8f0',
+            isPremium: true
+        }
+    },
+    {
+        id: 'mock-valeria-xv',
+        slug: 'xv-valeria-premium',
+        user_id: 'mock-user-1',
+        title: 'Valeria',
+        event_type: 'xv',
+        date_time: '2026-11-20T20:00:00Z',
+        venue_name: 'Salón Metropolitan',
+        venue_address: 'Av. Reforma 123',
+        maps_link: 'https://goo.gl/maps/example',
+        dress_code: 'Cocktail',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'magazine', hero_image_url: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80',
+            typography_preset: 'editorial',
+            primary_color: '#000000',
+            accent_color: '#ffffff',
+            isPremium: true
+        }
+    },
+    {
+        id: 'mock-gala',
+        slug: 'gala-aniversario-premium',
+        user_id: 'mock-user-1',
+        title: 'Gala de Aniversario',
+        event_type: 'wedding',
+        date_time: '2026-12-31T21:00:00Z',
+        venue_name: 'Gran Hotel',
+        venue_address: 'Centro Histórico',
+        maps_link: 'https://goo.gl/maps/example',
+        dress_code: 'Black Tie',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'luxury-gold', hero_image_url: 'https://images.unsplash.com/photo-1519671482749-fd09871171dd?auto=format&fit=crop&w=1600&q=80',
+            typography_preset: 'clasica',
+            primary_color: '#000000',
+            accent_color: '#d4af37',
+            isPremium: true
+        }
+    },
+    {
+        id: 'mock-destino',
+        slug: 'boda-destino-premium',
+        user_id: 'mock-user-1',
+        title: 'Laura & David',
+        event_type: 'wedding',
+        date_time: '2026-08-10T17:00:00Z',
+        venue_name: 'Playa del Carmen Resort',
+        venue_address: 'Riviera Maya',
+        maps_link: 'https://goo.gl/maps/example',
+        dress_code: 'Guayabera y Vestido Largo',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'passport', hero_image_url: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80',
+            typography_preset: 'moderna',
+            primary_color: '#006B7D',
+            accent_color: '#FFB5A7',
+            isPremium: true
+        }
     }
 ];
 

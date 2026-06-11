@@ -7,18 +7,7 @@ import {
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
-
-const FAQ_ITEMS = [
-    { q: '¿Mis invitados necesitan descargar una app?', a: 'No, ninguno de tus invitados tiene que descargar nada. Tu invitación es una página web responsiva optimizada para móviles que se abre instantáneamente al tocar el enlace.' },
-    { q: '¿Cuánto tiempo estará disponible mi invitación?', a: 'Tu invitación estará totalmente activa desde el momento en que la creas hasta 30 días después de que finalice tu evento, permitiéndote consultar y descargar la lista final de asistentes.' },
-    { q: '¿Puedo editar la información después de publicarla?', a: 'Sí, por supuesto. Puedes modificar horarios, ubicaciones, textos, fotos y detalles de tus mesas en cualquier momento desde tu panel de control. Los cambios se actualizan al instante en el mismo enlace.' },
-    { q: '¿Cómo funciona el RSVP inteligente?', a: 'Cada invitado o familia tiene asignado un número de pases personalizados. Al ingresar su nombre en la invitación, el sistema detecta sus pases disponibles (ej. "3 adultos, 1 de niño") y les permite confirmar quién asistirá. La confirmación actualiza tu panel en tiempo real.' },
-    { q: '¿Puedo crear mi invitación sin pagar de inmediato?', a: 'Sí, puedes diseñar tu invitación, cargar tus fotos y configurar todas las secciones de manera totalmente gratuita en modo borrador. Solo realizas el pago único cuando decidas publicarla y compartirla.' },
-    { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos todas las tarjetas de crédito y débito (Visa, Mastercard, American Express) de forma segura a través de Stripe, además de transferencias bancarias (SPEI).' },
-    { q: '¿Necesito tarjeta de crédito para empezar a crear?', a: 'No, para registrarte y empezar a diseñar tu invitación en borrador no necesitas ingresar ninguna tarjeta de crédito ni método de pago.' },
-    { q: '¿Sirve para XV años y eventos en México?', a: 'Sí, está diseñada especialmente para el mercado mexicano y latinoamericano. Funciona perfecto para bodas, XV años, cumpleaños, bautizos, graduaciones y cualquier evento que requiera control de asistencia.' },
-    { q: '¿Cómo comparto la invitación por WhatsApp o redes?', a: 'Una vez que publiques tu invitación, obtendrás un enlace personalizado (ej. invitto.mx/i/mi-evento). Puedes copiar y pegar este enlace en chats de WhatsApp, grupos o redes sociales. Al compartirlo, generará una vista previa automática y elegante de tu evento.' }
-];
+import { FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
 
 const HOMEPAGE_JSONLD = [
     {
@@ -37,15 +26,7 @@ const HOMEPAGE_JSONLD = [
         url: 'https://invitto.com.mx',
         inLanguage: 'es-MX',
     },
-    {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: FAQ_ITEMS.map((f) => ({
-            '@type': 'Question',
-            name: f.q,
-            acceptedAnswer: { '@type': 'Answer', text: f.a },
-        })),
-    },
+    FAQ_JSONLD,
 ];
 
 export default function HomePage() {
@@ -367,6 +348,77 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* --- WHATSAPP SECTION --- */}
+            <section className="py-20 md:py-32 bg-white px-6 overflow-hidden">
+                <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 md:gap-20 items-center">
+                    {/* Mockup WhatsApp */}
+                    <div className="order-2 lg:order-1 relative flex justify-center">
+                        <div className="relative z-10 w-full max-w-[280px] md:max-w-[320px] bg-[#EFEAE2] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border-8 border-stone-800 shadow-2xl flex flex-col h-[500px]">
+                            {/* WhatsApp Header */}
+                            <div className="bg-[#075E54] px-4 py-3 flex items-center gap-3 text-white shadow-md z-20">
+                                <div className="h-8 w-8 rounded-full bg-stone-300 flex-shrink-0 overflow-hidden">
+                                    <img src="/images/cecilia_roses_hero.png" className="w-full h-full object-cover" alt="Profile" />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold leading-tight">Familia García</p>
+                                    <p className="text-[10px] text-white/80">en línea</p>
+                                </div>
+                            </div>
+                            {/* Chat body */}
+                            <div className="flex-1 p-4 flex flex-col gap-3 overflow-hidden bg-[url('https://i.pinimg.com/originals/8f/ba/cb/8fbacbd464e996966eb9d4a6b7a9c21e.jpg')] bg-cover opacity-90">
+                                {/* Our message bubble */}
+                                <div className="self-end bg-[#DCF8C6] rounded-lg rounded-tr-none p-2 max-w-[85%] shadow-sm relative pb-4">
+                                    <p className="text-[13px] text-stone-800 mb-2 leading-snug">¡Hola! Nos casamos y nos encantaría que nos acompañaran. Pueden ver los detalles y confirmar su asistencia aquí: 👇</p>
+                                    {/* Link Preview */}
+                                    <div className="bg-[#F0F2F5] rounded border border-black/5 overflow-hidden mb-1">
+                                        <div className="h-28 bg-stone-300 overflow-hidden relative">
+                                             <img src="/images/cecilia_roses_hero.png" className="w-full h-full object-cover" alt="Preview" />
+                                        </div>
+                                        <div className="p-2 bg-[#F0F2F5]">
+                                            <p className="text-xs font-bold text-stone-800 truncate">Boda de Isabel y Rodrigo</p>
+                                            <p className="text-[10px] text-stone-500 line-clamp-2 mt-0.5 leading-tight">Nos complace invitarte a nuestra celebración. Haz clic para ver detalles y confirmar tu asistencia.</p>
+                                            <p className="text-[9px] text-stone-400 mt-1 uppercase tracking-widest">invitto.com.mx</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-blue-500 hover:underline break-all">https://invitto.com.mx/i/boda-isa-rodrigo</p>
+                                    <span className="text-[9px] text-stone-400 absolute bottom-1 right-2">14:30 ✓✓</span>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Decorative elements */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] aspect-square bg-[#25D366]/10 rounded-full blur-[80px] -z-10 pointer-events-none" />
+                    </div>
+
+                    {/* Copy */}
+                    <div className="order-1 lg:order-2 space-y-6 md:space-y-8 text-center lg:text-left">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#25D366]/10 rounded-full text-[10px] uppercase font-bold tracking-widest text-[#075E54]">
+                            <MessageSquare className="h-3.5 w-3.5" />
+                            <span>Envío Rápido y Elegante</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-serif leading-tight text-[#1B2E1D]">
+                            Comparte por WhatsApp en <span className="italic text-[#25D366]">segundos</span>
+                        </h2>
+                        <p className="text-lg md:text-xl text-stone-500 font-light leading-relaxed max-w-xl mx-auto lg:mx-0">
+                            Copia y pega tu enlace en cualquier chat. WhatsApp generará automáticamente una elegante tarjeta de presentación que enamorará a tus invitados desde el primer vistazo.
+                        </p>
+                        <ul className="space-y-4 max-w-sm mx-auto lg:mx-0 pt-2 text-left">
+                            <li className="flex items-start gap-3 text-[12px] md:text-sm font-medium text-stone-600">
+                                <Check className="h-5 w-5 text-[#25D366] flex-shrink-0" />
+                                <span>Tus invitados no tienen que instalar absolutamente nada.</span>
+                            </li>
+                            <li className="flex items-start gap-3 text-[12px] md:text-sm font-medium text-stone-600">
+                                <Check className="h-5 w-5 text-[#25D366] flex-shrink-0" />
+                                <span>La previsualización incluye la foto principal de tu evento.</span>
+                            </li>
+                            <li className="flex items-start gap-3 text-[12px] md:text-sm font-medium text-stone-600">
+                                <Check className="h-5 w-5 text-[#25D366] flex-shrink-0" />
+                                <span>Se abre como una página web rápida y ligera.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
             {/* --- CASOS DE USO --- */}
             <section className="py-20 md:py-24 bg-[#FDFBF7] px-6">
                 <div className="mx-auto max-w-7xl">
@@ -407,8 +459,8 @@ export default function HomePage() {
                                 Monterrey
                             </Link>
                             <span className="text-stone-200">·</span>
-                            <Link to="/comparativas" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
-                                Comparativas
+                            <Link to="/invitaciones-digitales-leon" className="text-stone-500 hover:text-[#BD7474] font-serif italic transition-colors">
+                                León, Gto
                             </Link>
                         </div>
                     </div>
@@ -708,6 +760,7 @@ export default function HomePage() {
                                     <li><Link to="/concierge-service" className="text-xs text-white/60 hover:text-white transition-colors font-light">Servicio Concierge</Link></li>
                                     <li><Link to="/comparativas" className="text-xs text-white/60 hover:text-white transition-colors font-light">Comparativas</Link></li>
                                     <li><Link to="/blog" className="text-xs text-white/60 hover:text-white transition-colors font-light">Blog y consejos</Link></li>
+                                    <li><Link to="/faq" className="text-xs text-white/60 hover:text-white transition-colors font-light">Preguntas frecuentes (FAQ)</Link></li>
                                 </ul>
                             </div>
 

@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, Sparkles } from 'lucide-react';
-import { MOCK_EVENTS } from '../lib/mockData';
 import Seo from '../components/Seo';
 
 const categories = [
@@ -22,33 +21,27 @@ export default function ExamplesPage() {
     const { user } = useAuth();
 
     const filteredExamples = useMemo(() => {
-        const SHOWCASE_SLUGS = [
-            'boda-isabel-rodrigo-pro', 
-            'boda-gabriela-arturo-premium', 
-            'xv-regina-2026-premium', 
-            'cumple-emilia-premium', 
-            'bautizo-victoria-premium', 
-            'graduacion-ana-psicologia-premium',
-            'comunion-gael-premium'
+const TEMPLATES = [
+            { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', slug: 'boda-gabriela-arturo-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop' },
+            { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', slug: 'boda-sofia-mateo-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop' },
+            { id: 'classic-elegance', name: 'Clásica Atemporal', category: 'boda', slug: 'boda-isabel-rodrigo-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=800&auto=format&fit=crop' },
+            { id: 'magazine', name: 'Estilo Editorial', category: 'xv', slug: 'xv-valeria-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop' },
+            { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'xv', slug: 'xv-regina-2026-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1545239351-ef35f43d514b?q=80&w=800&auto=format&fit=crop' },
+            { id: 'neon-glow', name: 'Fiesta Neón', category: 'cumpleanos', slug: 'cumple-emilia-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?q=80&w=800&auto=format&fit=crop' },
+            { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', slug: 'gala-aniversario-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop' },
+            { id: 'passport', name: 'Pase de Abordaje', category: 'boda', slug: 'boda-destino-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
+            { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', slug: 'graduacion-ana-psicologia-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
+            { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'bautizo', slug: 'bautizo-victoria-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
+            { id: 'collage', name: 'Collage Elegante', category: 'boda', slug: 'boda-collage-premium', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
+            { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', slug: 'boda-simetria-floral', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1546842631-8ea8736a58fc?q=80&w=800&auto=format&fit=crop' }
         ];
-        const SHOWCASE_EVENTS = MOCK_EVENTS.filter(e => e.slug && SHOWCASE_SLUGS.includes(e.slug));
 
         if (activeCategory === 'todas') {
-            return SHOWCASE_EVENTS.filter(event => event.is_published);
+            return TEMPLATES;
         }
         
-        const mapCategoryToEventType = (cat: string) => {
-            switch (cat) {
-                case 'boda': return 'wedding';
-                case 'cumpleanos': return 'birthday';
-                default: return cat;
-            }
-        };
-        
-        const targetType = mapCategoryToEventType(activeCategory);
-        
-        return SHOWCASE_EVENTS.filter(
-            event => event.is_published && event.event_type.toLowerCase() === targetType
+        return TEMPLATES.filter(
+            tpl => tpl.category === activeCategory
         );
     }, [activeCategory]);
 
@@ -157,84 +150,42 @@ export default function ExamplesPage() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {filteredExamples.map((event) => {
-                            const eventTypeToCategory: Record<string, string> = {
-                                wedding: 'boda', xv: 'xv', birthday: 'cumpleanos',
-                                bautizo: 'bautizo', graduacion: 'graduacion', comunion: 'comunion'
-                            };
-                            const catId = eventTypeToCategory[event.event_type] || 'todas';
-                            const categoryInfo = categories.find(c => c.id === catId) || categories[1];
+                        {filteredExamples.map((tpl) => {
+                            const categoryInfo = categories.find(c => c.id === tpl.category) || categories[1];
 
                             return (
                                 <Link
-                                    key={event.id}
-                                    to={`/i/${event.slug}?t=token-preview`}
+                                    key={tpl.id}
+                                    to={`/i/${tpl.slug}?t=token-preview`}
                                     className="group"
                                 >
                                     <div className="bg-white border border-stone-200 rounded-[2rem] overflow-hidden hover:border-stone-300 hover:shadow-2xl transition-all duration-500 relative flex flex-col h-full">
                                         
                                         {/* Thumbnail Area */}
-                                        {(() => {
-                                            const thumbnails: Record<string, string[]> = {
-                                                wedding: [
-                                                    'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop',
-                                                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop',
-                                                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                                xv: [
-                                                    'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop',
-                                                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                                birthday: [
-                                                    'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?q=80&w=800&auto=format&fit=crop',
-                                                    'https://images.unsplash.com/photo-1513271239644-245c61eb6e60?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                                bautizo: [
-                                                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                                graduacion: [
-                                                    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                                comunion: [
-                                                    'https://images.unsplash.com/photo-1438032005730-c7aedb098c71?q=80&w=800&auto=format&fit=crop'
-                                                ],
-                                            };
-                                            const typeThumbnails = thumbnails[event.event_type] || thumbnails.wedding;
-                                            const hash = event.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                            const thumbnailUrl = event.theme_config?.thumbnail_url || typeThumbnails[hash % typeThumbnails.length];
+                                        <div className="relative aspect-[3/4] w-full overflow-hidden">
+                                            <img 
+                                                src={tpl.thumbnail} 
+                                                alt={tpl.name} 
+                                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
                                             
-                                            const isPremium = event.theme_config?.isPremium || event.slug?.endsWith('-premium');
-                                            const isPro = event.theme_config?.isPro || event.slug?.endsWith('-pro');
-                                            const planLabel = isPremium ? 'Premium' : isPro ? 'Pro' : 'Clásica';
-                                            const planColor = isPremium ? 'bg-stone-900/95 text-amber-300 border border-amber-300/30' : isPro ? 'bg-stone-900/95 text-white border border-stone-600/50' : 'bg-white/95 text-stone-700 border border-stone-200/50';
+                                            {/* Gradient Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30 opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
+                                            
+                                            {/* Plan Badge */}
+                                            <div className="absolute top-4 right-4 z-10">
+                                                <span className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold backdrop-blur-md shadow-lg ${tpl.plan === 'Premium' ? 'bg-stone-900/95 text-amber-300 border border-amber-300/30' : 'bg-stone-900/95 text-white border border-stone-600/50'}`}>
+                                                    {tpl.plan}
+                                                </span>
+                                            </div>
 
-                                            return (
-                                                <div className="relative aspect-[3/4] w-full overflow-hidden">
-                                                    <img 
-                                                        src={thumbnailUrl} 
-                                                        alt={event.title} 
-                                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                    />
-                                                    
-                                                    {/* Gradient Overlay */}
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/30 opacity-70 group-hover:opacity-90 transition-opacity duration-500" />
-                                                    
-                                                    {/* Plan Badge */}
-                                                    <div className="absolute top-4 right-4 z-10">
-                                                        <span className={`px-3 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold backdrop-blur-md shadow-lg ${planColor}`}>
-                                                            {planLabel}
-                                                        </span>
-                                                    </div>
-
-                                                    {/* Hover "Ver Ejemplo" Button */}
-                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
-                                                        <div className="px-6 py-3 bg-white/90 backdrop-blur-md text-stone-900 rounded-full font-serif text-sm flex items-center justify-center transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl border border-white/50">
-                                                            Ver Plantilla
-                                                        </div>
-                                                    </div>
+                                            {/* Hover "Ver Ejemplo" Button */}
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
+                                                <div className="px-6 py-3 bg-[#1B2E1D]/90 backdrop-blur-md text-white rounded-full font-serif text-sm flex items-center justify-center transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 shadow-xl border border-white/20">
+                                                    Ver Previa
                                                 </div>
-                                            );
-                                        })()}
+                                            </div>
+                                        </div>
 
                                         {/* Card Content Footer */}
                                         <div className="p-6 bg-white flex flex-col flex-grow relative z-30">
@@ -245,11 +196,8 @@ export default function ExamplesPage() {
                                                 </span>
                                             </div>
                                             <h3 className="text-xl font-serif text-stone-900 mb-2 line-clamp-1 group-hover:text-accent transition-colors">
-                                                {event.title}
+                                                {tpl.name}
                                             </h3>
-                                            <p className="text-sm text-stone-400 mt-auto">
-                                                Diseño Exclusivo Invitto
-                                            </p>
                                         </div>
                                     </div>
                                 </Link>

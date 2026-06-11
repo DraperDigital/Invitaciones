@@ -401,6 +401,44 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
   },
 
+  // ── 6.5 Invitaciones Digitales León ────────────────────────────────
+  'invitaciones-digitales-leon': {
+    slug: 'invitaciones-digitales-leon',
+    seo: {
+      title: 'Invitaciones Digitales en León, Gto — Bodas y XV Años',
+      description: 'Crea invitaciones digitales en León, Guanajuato para bodas y XV años. Diseño premium con RSVP integrado. Envía por WhatsApp en segundos.',
+      path: '/invitaciones-digitales-leon',
+    },
+    hero: {
+      badge: 'León, Guanajuato',
+      h1: 'Invitaciones digitales para eventos en León',
+      subtitle: 'La plataforma ideal para invitaciones de boda, XV años y celebraciones en el Bajío. Diseño premium con RSVP.',
+      cta: 'Crear mi invitación',
+    },
+    benefits: [
+      { icon: MapPin, title: 'Hecho para León y el Bajío', description: 'Incluye mapas con las mejores ubicaciones de salones, ex-haciendas y jardines de León, Silao y Guanajuato.' },
+      { icon: Zap, title: 'Rápido y moderno', description: 'Tu invitación lista en minutos. Sorprende a tus invitados con una experiencia totalmente digital.' },
+      { icon: Send, title: 'Comparte por WhatsApp', description: 'Un link único para compartir tu invitación con todos tus familiares y amigos al instante.' },
+      { icon: BarChart3, title: 'Control total de invitados', description: 'Dashboard en tiempo real para ver confirmaciones, ideal para eventos grandes en la región.' },
+      { icon: Palette, title: 'Diseño elegante', description: 'Plantillas de alta gama que reflejan el buen gusto y la importancia de tu celebración.' },
+      { icon: Shield, title: 'Plataforma mexicana', description: 'Soporte rápido en español. Hecho en México para las tradiciones mexicanas.' },
+    ],
+    steps: DEFAULT_STEPS,
+    testimonials: TESTIMONIALS_GENERAL,
+    faq: [
+      { question: '¿Invitto funciona para eventos en todo Guanajuato?', answer: 'Sí, funciona perfectamente para León, Irapuato, Celaya, Guanajuato capital y todo el Bajío. Incluye mapas interactivos para cualquier recinto.' },
+      { question: '¿Puedo enviar las invitaciones a invitados foráneos?', answer: '¡Por supuesto! Las invitaciones digitales son ideales para compartir la ubicación, opciones de hotel y detalles del evento a familiares que vienen de otras ciudades.' },
+      { question: '¿Los invitados necesitan alguna aplicación?', answer: 'No, la invitación se abre directamente en el navegador de cualquier celular. Sin apps ni descargas.' },
+      { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $349 MXN. Sin límite de envíos ni costos por invitado adicional.' },
+    ],
+    ctaFinal: {
+      title: 'Tu evento en León merece la mejor invitación',
+      subtitle: 'Crea tu invitación premium en minutos y compártela con un click.',
+      cta: 'Empezar ahora',
+    },
+    get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
+  },
+
   // ── 7. Invitaciones Digitales vs Papel ─────────────────────────────
   'invitaciones-digitales-vs-papel': {
     slug: 'invitaciones-digitales-vs-papel',
@@ -560,6 +598,58 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       title: 'La mejor alternativa a Greenvelope en México',
       subtitle: 'Más funciones, mejor precio, hecho para ti.',
       cta: 'Comenzar con Invitto',
+    },
+    get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
+  },
+
+  // ── 10. Invitto vs Otras Plataformas ──────────────────────────────
+  'invitto-vs-otras-plataformas': {
+    slug: 'invitto-vs-otras-plataformas',
+    seo: {
+      title: 'Invitto vs Otras Plataformas de Invitaciones Digitales',
+      description: 'Comparativa de Invitto contra Canva, Paperless Post, Greenvelope y otras alternativas. Analizamos precios, funciones y facilidad de envío por WhatsApp.',
+      path: '/invitto-vs-otras-plataformas',
+    },
+    hero: {
+      badge: 'Comparativa General',
+      h1: 'Invitto vs Otras Plataformas de Invitaciones',
+      subtitle: '¿Por qué elegir Invitto en lugar de opciones gratuitas o plataformas extranjeras? Descubre la diferencia en funciones, diseño y RSVP inteligente.',
+      cta: 'Diseñar con Invitto',
+    },
+    benefits: [
+      { icon: Zap, title: 'Más que un simple diseño plano', description: 'A diferencia de enviar un PDF o imagen estática, Invitto es una web interactiva con botones, mapas y animaciones.' },
+      { icon: BarChart3, title: 'Control de asistencia (RSVP) real', description: 'Otras plataformas solo te dan diseño. Invitto te da tecnología para saber quién asiste y gestionar tus pases.' },
+      { icon: MessageCircle, title: 'El mejor envío por WhatsApp', description: 'Las plataformas globales están pensadas para email. Invitto genera las mejores tarjetas de previsualización para WhatsApp.' },
+      { icon: QrCode, title: 'Boletos QR integrados', description: 'La mayoría de las plataformas te cobran extra por accesos. En Invitto, el control por código QR viene incluido en tu plan.' },
+      { icon: DollarSign, title: 'Precios claros en pesos (MXN)', description: 'Sin suscripciones mensuales ocultas ni cargos en dólares. Paga una sola vez por evento en tu propia moneda.' },
+      { icon: Shield, title: 'Soporte humano en español', description: 'Si tienes dudas, no hablas con un robot en inglés. Tienes soporte dedicado en México listo para ayudarte.' },
+    ],
+    steps: DEFAULT_STEPS,
+    comparison: {
+      title: 'Comparativa General',
+      subtitle: 'Invitto frente a las alternativas más comunes del mercado.',
+      invittoLabel: 'Invitto',
+      competitorLabel: 'Otras (Canva, PDFs, etc.)',
+      rows: [
+        { feature: 'Formatos interactivos', invitto: true, competitor: 'No (Suelen ser imágenes o PDFs)' },
+        { feature: 'RSVP y conteo de asistentes', invitto: true, competitor: false },
+        { feature: 'Envío nativo para WhatsApp', invitto: true, competitor: 'Parcial' },
+        { feature: 'Control de pases por familia', invitto: true, competitor: false },
+        { feature: 'Música de fondo', invitto: true, competitor: false },
+        { feature: 'Google Maps y Waze', invitto: true, competitor: 'A veces' },
+        { feature: 'Soporte y diseño en México', invitto: true, competitor: false },
+      ],
+    },
+    testimonials: TESTIMONIALS_BODA,
+    faq: [
+      { question: '¿Por qué pagar por Invitto si puedo hacer una invitación gratis en Canva?', answer: 'Una imagen gratis solo cumple la función de avisar. Invitto resuelve la organización: te permite limitar el número de pases por invitado, te da un panel de confirmaciones (RSVP) en tiempo real y ofrece una experiencia web con botones y música. El ahorro en tiempo y control compensa el costo.' },
+      { question: '¿Cuáles son las alternativas a Invitto?', answer: 'Existen creadores de PDFs interactivos, agencias de diseño web y plataformas extranjeras como Paperless Post o Greenvelope. Invitto se posiciona en el punto dulce: la tecnología de una plataforma global pero tropicalizada para los precios, el idioma y las costumbres de México.' },
+      { question: '¿Invitto es solo para bodas?', answer: 'No, la plataforma y sus funciones tecnológicas se adaptan perfectamente a XV años, Bautizos, Cumpleaños y Eventos Corporativos. El control de accesos funciona igual para cualquier celebración.' },
+    ],
+    ctaFinal: {
+      title: 'La decisión inteligente para tu evento',
+      subtitle: 'Más tecnología. Mejor precio. La herramienta definitiva.',
+      cta: 'Empieza a crear gratis',
     },
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
   },

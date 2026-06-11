@@ -15,6 +15,7 @@ export interface BlogPost {
     name: string;
     role: string;
     avatar: string;
+    bio: string;
   };
   seo: {
     title: string;
@@ -25,6 +26,70 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'cuanto-cuesta-invitacion-digital-mexico',
+    title: '¿Cuánto cuesta una invitación digital en México? (Precios reales 2026)',
+    description: 'Analizamos los precios reales de las invitaciones digitales para bodas y XV años en México, desde opciones gratis hasta diseños premium a la medida.',
+    date: '08 de junio, 2026',
+    readTime: '4 min de lectura',
+    category: 'Precios',
+    author: {
+      name: 'Sofía Martínez',
+      role: 'Wedding Planner & Editora Invitto',
+      avatar: 'SM',
+      bio: 'Sofía es Wedding Planner certificada con más de 8 años de experiencia en la industria nupcial mexicana. Ha coordinado más de 100 bodas y es experta en optimización de presupuestos.'
+    },
+    seo: {
+      title: '¿Cuánto cuesta una invitación digital en México? Precios 2026',
+      description: 'Conoce los precios de las invitaciones digitales en México. Comparamos opciones básicas, profesionales con RSVP y diseños a medida.',
+    },
+    content: [
+      {
+        type: 'paragraph',
+        content: 'Una de las primeras preguntas que surgen al planear una boda o unos XV años es sobre el presupuesto. ¿Cuánto cuesta realmente una invitación digital en México hoy en día? La respuesta corta es que hay opciones para todos los bolsillos, variando drásticamente según las funciones que necesites (especialmente si requieres control de pases o gestión de confirmaciones).'
+      },
+      {
+        type: 'heading',
+        content: 'Opción 1: Plantillas Gratis o de Bajo Costo (Desde $0 hasta $300 MXN)'
+      },
+      {
+        type: 'paragraph',
+        content: 'Existen herramientas de diseño como Canva donde puedes crear una imagen estática o un PDF de forma gratuita o pagando una pequeña suscripción. La principal desventaja es que solo envías una "foto" plana por WhatsApp. No hay botones en los que se pueda hacer clic fácilmente, no hay Google Maps interactivo, y lo más importante: no hay un sistema automático para que los invitados confirmen su asistencia.'
+      },
+      {
+        type: 'heading',
+        content: 'Opción 2: Invitaciones Web Básicas (Desde $400 hasta $800 MXN)'
+      },
+      {
+        type: 'paragraph',
+        content: 'Aquí entramos al terreno de las verdaderas "invitaciones digitales" (páginas web). En este rango de precio, obtienes un enlace web responsivo que incluye cuenta regresiva, mapas integrados y botones que llevan directamente a un chat de WhatsApp para confirmar. Por ejemplo, en Invitto, el Plan Clásico de $499 MXN cubre perfectamente esta necesidad.'
+      },
+      {
+        type: 'heading',
+        content: 'Opción 3: Invitaciones Inteligentes con RSVP y Pases (Desde $1,200 hasta $2,000 MXN)'
+      },
+      {
+        type: 'paragraph',
+        content: 'Si tu evento es formal y pagas un banquete por persona, necesitas saber exactamente quién asistirá. Las invitaciones inteligentes en este rango (como el Plan Pro de Invitto por $1,699 MXN) incluyen un sistema de RSVP (confirmación). Tú cargas tu lista de invitados con el número de pases permitidos por familia, y la plataforma lleva el conteo automático en tiempo real. Te ahorra decenas de horas de estar persiguiendo gente.'
+      },
+      {
+        type: 'heading',
+        content: 'Opción 4: Diseño A Medida y Servicio Concierge (Desde $2,500 hasta $5,000+ MXN)'
+      },
+      {
+        type: 'paragraph',
+        content: 'Para eventos de lujo o parejas que no tienen tiempo, existen servicios premium. Por un lado, puedes contratar a un diseñador para que programe una página web única y a la medida (aproximadamente $2,499 MXN). Por otro lado, servicios como el Plan Concierge de Invitto ($4,499 MXN) van más allá del diseño: un equipo humano se encarga de enviar masivamente las invitaciones por WhatsApp, hacer rondas de seguimiento telefónico a quienes no han respondido, y entregarte la lista final confirmada en Excel.'
+      },
+      {
+        type: 'heading',
+        content: 'Conclusión'
+      },
+      {
+        type: 'paragraph',
+        content: 'Reemplazar las tradicionales invitaciones de papel (que pueden costar arriba de $10,000 MXN para 100 personas) por una invitación digital inteligente no solo reduce tu presupuesto a una fracción, sino que te brinda herramientas tecnológicas que te quitarán un enorme estrés organizativo.'
+      }
+    ]
+  },
+  {
     slug: 'ventajas-invitaciones-digitales-boda',
     title: '5 Ventajas de usar invitaciones digitales para tu boda',
     description: 'Conoce por qué las parejas modernas en México están prefiriendo las invitaciones web frente al papel: ahorro, control de asistencia y cuidado ambiental.',
@@ -34,7 +99,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Sofía Martínez',
       role: 'Wedding Planner & Editora Invitto',
-      avatar: 'SM'
+      avatar: 'SM',
+      bio: 'Sofía es Wedding Planner certificada con más de 8 años de experiencia en la industria nupcial mexicana. Ha coordinado más de 100 bodas y es experta en optimización de presupuestos.'
     },
     seo: {
       title: '5 Ventajas de usar invitaciones digitales para tu boda — Invitto',
@@ -106,7 +172,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Mariana Flores',
       role: 'Especialista en Eventos Juveniles',
-      avatar: 'MF'
+      avatar: 'MF',
+      bio: 'Mariana ha organizado más de 200 fiestas de XV años en toda la República Mexicana. Se especializa en tendencias juveniles y en mediar entre los gustos de las quinceañeras y el protocolo de los padres.'
     },
     seo: {
       title: 'Confirmación de invitados en XV años: Guía Práctica — Invitto',
@@ -157,7 +224,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alejandro Sanz',
       role: 'Consultor de Etiqueta y Protocolo',
-      avatar: 'AS'
+      avatar: 'AS',
+      bio: 'Alejandro es consultor de protocolo social y etiqueta digital. Escribe sobre cómo adaptar las reglas clásicas de cortesía al mundo de la tecnología moderna.'
     },
     seo: {
       title: '¿Es correcto enviar invitaciones de boda por WhatsApp? Etiqueta — Invitto',
@@ -208,7 +276,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Sofía Martínez',
       role: 'Wedding Planner & Editora Invitto',
-      avatar: 'SM'
+      avatar: 'SM',
+      bio: 'Sofía es Wedding Planner certificada con más de 8 años de experiencia en la industria nupcial mexicana. Ha coordinado más de 100 bodas y es experta en optimización de presupuestos.'
     },
     seo: {
       title: 'Cómo redactar el texto de tu invitación de boda — Invitto',
@@ -256,7 +325,8 @@ export const BLOG_POSTS: BlogPost[] = [
     author: {
       name: 'Alejandro Sanz',
       role: 'Consultor de Etiqueta y Sostenibilidad',
-      avatar: 'AS'
+      avatar: 'AS',
+      bio: 'Alejandro es consultor de protocolo social y etiqueta digital. Escribe sobre cómo adaptar las reglas clásicas de cortesía al mundo de la tecnología moderna.'
     },
     seo: {
       title: 'Invitaciones Digitales vs Papel: Análisis de Costo y Ecología',

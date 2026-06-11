@@ -11,6 +11,12 @@ const COMPARISONS = [
         cta: 'Ver comparativa',
     },
     {
+        slug: 'invitto-vs-otras-plataformas',
+        title: 'Invitto vs Otras Plataformas',
+        description: 'Comparativa de Invitto contra Canva, Paperless Post, Greenvelope y PDFs interactivos. Analizamos precios y funciones.',
+        cta: 'Ver comparativa',
+    },
+    {
         slug: 'invitto-vs-paperless-post',
         title: 'Invitto vs Paperless Post',
         description: 'Comparativa completa: precios en pesos mexicanos, funciones, soporte local y experiencia para anfitriones en México.',

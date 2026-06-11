@@ -13,6 +13,29 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
+import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
+import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
+import RomanticBotanicalHero from '../components/themes/RomanticBotanicalHero';
+import SplitScreenHero from '../components/themes/SplitScreenHero';
+import MagazineHero from '../components/themes/MagazineHero';
+import NeonGlowHero from '../components/themes/NeonGlowHero';
+import LuxuryGoldHero from '../components/themes/LuxuryGoldHero';
+import PassportHero from '../components/themes/PassportHero';
+import PolaroidVintageHero from '../components/themes/PolaroidVintageHero';
+import WhimsicalKidsHero from '../components/themes/WhimsicalKidsHero';
+import CollageHero from '../components/themes/CollageHero';
+import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
+
+function getContrastColor(hexColor: string) {
+    if (!hexColor) return '#ffffff';
+    let hex = hexColor.replace('#', '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    const r = parseInt(hex.substring(0,2), 16) || 0;
+    const g = parseInt(hex.substring(2,4), 16) || 0;
+    const b = parseInt(hex.substring(4,6), 16) || 0;
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#111111' : '#ffffff';
+}
 
 export default function InvitationPage() {
     const { slug } = useParams<{ slug: string }>();
@@ -39,6 +62,60 @@ export default function InvitationPage() {
     const [rsvpChoice, setRsvpChoice] = useState<'yes' | 'no' | null>(null);
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    // Dynamic Theming Variables
+    const themeName = event?.theme_config?.theme || 'classic';
+    
+    // Default Light Palette
+    let sectionBg = '#ffffff';
+    let sectionBgAlt = '#FDFBF7';
+    let cardBg = '#ffffff';
+    let textPrimary = '#1c1917';
+    let textSecondary = '#57534e';
+    let borderColor = '#f5f5f4';
+    let cardBorder = '#e7e5e4';
+
+    // Theme Overrides
+    if (themeName === 'modern-minimalist' || themeName === 'neon-glow' || themeName === 'luxury-gold' || themeName === 'magazine') {
+        sectionBg = '#1a1a1a';
+        sectionBgAlt = '#151515';
+        cardBg = '#242424';
+        textPrimary = '#ffffff';
+        textSecondary = '#a3a3a3';
+        borderColor = '#333333';
+        cardBorder = '#404040';
+    } else if (themeName === 'polaroid-vintage') {
+        sectionBg = '#Eae6df';
+        sectionBgAlt = '#Dcd7cf';
+        cardBg = '#ffffff';
+    } else if (themeName === 'whimsical-kids') {
+        sectionBg = '#FDFBF7';
+        sectionBgAlt = '#FFF5F3';
+        cardBg = '#ffffff';
+        cardBorder = '#FFB5A7';
+    } else if (themeName === 'passport') {
+        sectionBg = '#F0F4F8';
+        sectionBgAlt = '#E1E8ED';
+        cardBg = '#ffffff';
+        cardBorder = '#006B7D33';
+    }
+
+    const _accentColor = event?.theme_config?.accent_color || event?.theme_config?.primary_color || '#BD7474';
+    const _buttonColor = event?.theme_config?.button_color || event?.theme_config?.primary_color || '#1B2E1D';
+    const accentContrast = getContrastColor(_accentColor);
+    const buttonContrast = getContrastColor(_buttonColor);
+
+    const globalStyles = {
+        '--section-bg': sectionBg,
+        '--section-bg-alt': sectionBgAlt,
+        '--card-bg': cardBg,
+        '--text-primary': textPrimary,
+        '--text-secondary': textSecondary,
+        '--border-color': borderColor,
+        '--card-border': cardBorder,
+        '--accent-contrast': accentContrast,
+        '--button-contrast': buttonContrast,
+    } as React.CSSProperties;
 
     // Apply font theme attribute and custom CSS - MUST be before any conditional returns
     useEffect(() => {
@@ -400,7 +477,7 @@ END:VCALENDAR`;
         return <div className="flex h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-cream to-amber-50">
             <div className="text-center space-y-4">
                 <Flower2 className="h-12 w-12 animate-pulse text-accent mx-auto" strokeWidth={1.5} />
-                <p className="text-stone-500 font-serif italic">Preparando tu invitación...</p>
+                <p className="text-[var(--text-secondary)] font-serif italic">Preparando tu invitación...</p>
             </div>
         </div>;
     }
@@ -419,7 +496,7 @@ END:VCALENDAR`;
                 <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
                     <div className="max-w-md">
                         {/* Icon */}
-                        <div className="w-20 h-20 rounded-full bg-stone-100 flex items-center justify-center mx-auto mb-6">
+                        <div className="w-20 h-20 rounded-full bg-[var(--section-bg-alt)] flex items-center justify-center mx-auto mb-6">
                             <Heart className="h-9 w-9 text-stone-300" />
                         </div>
 
@@ -427,7 +504,7 @@ END:VCALENDAR`;
                         <h1 className="text-2xl font-serif text-[#1B2E1D] mb-3">
                             Invitación no encontrada
                         </h1>
-                        <p className="text-stone-500 text-sm leading-relaxed mb-8">
+                        <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-8">
                             Es posible que el enlace haya expirado, que la invitación aún no esté disponible,
                             o que el link tenga un error tipográfico. Pide al organizador que te reenvíe el link correcto.
                         </p>
@@ -443,7 +520,7 @@ END:VCALENDAR`;
                             </Link>
                             <button
                                 onClick={() => window.history.back()}
-                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-stone-200 text-stone-600 text-sm font-medium rounded-full hover:bg-stone-50 transition-colors"
+                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--card-border)] text-[var(--text-secondary)] text-sm font-medium rounded-full hover:bg-[var(--section-bg-alt)] transition-colors"
                             >
                                 Volver atrás
                             </button>
@@ -453,9 +530,9 @@ END:VCALENDAR`;
 
                 {/* Footer */}
                 <footer className="w-full px-6 py-4 text-center">
-                    <p className="text-xs text-stone-400">
+                    <p className="text-xs text-[var(--text-secondary)]">
                         ¿Quieres crear tu propia invitación?{' '}
-                        <Link to="/" className="underline underline-offset-2 hover:text-stone-600 transition-colors">
+                        <Link to="/" className="underline underline-offset-2 hover:text-[var(--text-secondary)] transition-colors">
                             Conoce Invitto
                         </Link>
                     </p>
@@ -469,12 +546,12 @@ END:VCALENDAR`;
         if (isOwner) {
             return (
                 <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-                    <div className="max-w-lg w-full bg-white rounded-[2.5rem] p-10 md:p-14 text-center shadow-xl border border-stone-100">
+                    <div className="max-w-lg w-full bg-[var(--section-bg)] rounded-[2.5rem] p-10 md:p-14 text-center shadow-xl border border-[var(--border-color)]">
                         <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-amber-50 mb-8">
                             <Eye className="h-10 w-10 text-amber-500" />
                         </div>
                         <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-4">Tu invitación está casi lista</h2>
-                        <p className="text-stone-500 font-light leading-relaxed mb-10">
+                        <p className="text-[var(--text-secondary)] font-light leading-relaxed mb-10">
                             Esta es la vista previa de tu invitación. Para que tus invitados puedan verla y confirmar su asistencia, necesitas activar tu plan.
                         </p>
                         <Link
@@ -485,7 +562,7 @@ END:VCALENDAR`;
                         </Link>
                         <Link
                             to="/dashboard"
-                            className="block mt-6 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                            className="block mt-6 text-[10px] uppercase font-bold tracking-widest text-[var(--text-secondary)] hover:text-[#1B2E1D] transition-colors"
                         >
                             Volver al panel
                         </Link>
@@ -496,7 +573,7 @@ END:VCALENDAR`;
         return (
             <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6 text-center">
                 <div>
-                    <p className="text-stone-400 font-serif text-2xl italic mb-2">Esta invitación aún no está activa</p>
+                    <p className="text-[var(--text-secondary)] font-serif text-2xl italic mb-2">Esta invitación aún no está activa</p>
                     <p className="text-stone-300 text-sm">Pídele al anfitrión que la publique para poder verla.</p>
                 </div>
             </div>
@@ -557,6 +634,7 @@ END:VCALENDAR`;
     const isDemo = baseSlug && [
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
+        'boda-collage', 'boda-simetria-floral',
         'cumple-emilia', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael'
     ].includes(baseSlug);
@@ -642,7 +720,7 @@ END:VCALENDAR`;
                                 {welcomeMessage}
                             </p>
                         )}
-                        <div className={`inline-block rounded-full p-8 mb-12 ${heroImageUrl ? 'bg-white/20 backdrop-blur-sm border border-white/30' : 'card-premium'}`}>
+                        <div className={`inline-block rounded-full p-8 mb-12 ${heroImageUrl ? 'bg-[var(--section-bg)]/20 backdrop-blur-sm border border-white/30' : 'bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl'}`}>
                             <p className="text-5xl font-serif font-light mb-2" style={{color: accentColor}}>
                                 {format(eventDate, 'dd', { locale: es })}
                             </p>
@@ -715,7 +793,7 @@ END:VCALENDAR`;
                                             <p className="text-4xl sm:text-6xl font-serif text-white mb-2 transition-transform group-hover:scale-110 duration-300">
                                                 {item.value.toString().padStart(2, '0')}
                                             </p>
-                                            <div className="absolute -inset-2 bg-white/5 rounded-2xl scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+                                            <div className="absolute -inset-2 bg-[var(--section-bg)]/5 rounded-2xl scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
                                         </div>
                                         <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-accent/80 font-bold">{item.label}</p>
                                     </div>
@@ -725,7 +803,7 @@ END:VCALENDAR`;
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-white/90 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500">
                             <div className="flex items-center gap-4 group">
-                                <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                <div className="h-12 w-12 rounded-2xl bg-[var(--section-bg)]/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
                                     <Calendar className="h-5 w-5 text-accent" />
                                 </div>
                                 <div className="text-left">
@@ -733,9 +811,9 @@ END:VCALENDAR`;
                                     <p className="text-lg font-serif">{format(eventDate, "EEEE d 'de' MMMM", { locale: es })}</p>
                                 </div>
                             </div>
-                            <div className="h-12 w-px bg-white/10 hidden sm:block" />
+                            <div className="h-12 w-px bg-[var(--section-bg)]/10 hidden sm:block" />
                             <div className="flex items-center gap-4 group">
-                                <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                <div className="h-12 w-12 rounded-2xl bg-[var(--section-bg)]/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
                                     <Clock className="h-5 w-5 text-accent" />
                                 </div>
                                 <div className="text-left">
@@ -755,7 +833,43 @@ END:VCALENDAR`;
             );
         }
 
-        // PREMIUM HERO
+        // FULL-PAGE THEMES
+        if (cfg.theme === 'floral-symmetry') {
+            return <FloralSymmetryHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'collage') {
+            return <CollageHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'modern-minimalist') {
+            return <ModernMinimalistHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'classic-elegance') {
+            return <ClassicEleganceHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'romantic-botanical') {
+            return <RomanticBotanicalHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'split-screen') {
+            return <SplitScreenHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'magazine') {
+            return <MagazineHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'neon-glow') {
+            return <NeonGlowHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'luxury-gold') {
+            return <LuxuryGoldHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'passport') {
+            return <PassportHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'polaroid-vintage') {
+            return <PolaroidVintageHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'whimsical-kids') {
+            return <WhimsicalKidsHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
         return (
             <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: heroBgColor }}>
                 {heroImageUrl && (
@@ -794,7 +908,7 @@ END:VCALENDAR`;
                                             <p className="text-5xl sm:text-8xl font-serif font-light text-white mb-2">{item.value.toString().padStart(2, '0')}</p>
                                             <p className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-accent/60 font-bold">{item.label}</p>
                                         </div>
-                                        {idx < 3 && <div className="h-12 w-px bg-white/10 hidden sm:block" />}
+                                        {idx < 3 && <div className="h-12 w-px bg-[var(--section-bg)]/10 hidden sm:block" />}
                                     </div>
                                 ))}
                             </div>
@@ -824,7 +938,7 @@ END:VCALENDAR`;
     };
 
     const renderGuestWelcome = () => (
-        <section id="guest_welcome" key="guest_welcome" className="py-24 bg-white border-b border-stone-50">
+        <section id="guest_welcome" key="guest_welcome" className="py-24 bg-[var(--section-bg)] border-b border-[var(--border-color)]">
             <div className="max-w-4xl mx-auto px-6 text-center">
                 <div className="mb-12 inline-flex items-center justify-center gap-4">
                     <div className="h-px w-12 bg-accent/30" />
@@ -832,7 +946,7 @@ END:VCALENDAR`;
                     <div className="h-px w-12 bg-accent/30" />
                 </div>
                 
-                <h2 className="text-4xl sm:text-6xl font-serif font-light text-stone-900 mb-8 leading-tight">
+                <h2 className="text-4xl sm:text-6xl font-serif font-light text-[var(--text-primary)] mb-8 leading-tight">
                     {guest ? (
                         <>
                             ¡Hola, <span className="text-accent">{guest.name.split(' ')[0]}</span>!
@@ -842,7 +956,7 @@ END:VCALENDAR`;
                     )}
                 </h2>
                 
-                <p className="text-xl font-serif italic text-stone-500 leading-relaxed max-w-2xl mx-auto">
+                <p className="text-xl font-serif italic text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
                     {event.event_type === 'wedding' 
                         ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
                         : event.event_type === 'xv'
@@ -854,7 +968,7 @@ END:VCALENDAR`;
     );
 
     const renderMessage = () => (
-        <section id="message" key="message" className="py-20 bg-white">
+        <section id="message" key="message" className="py-20 bg-[var(--section-bg)]">
             <div className="max-w-3xl mx-auto px-6 text-center space-y-8">
                 <div className="relative inline-block">
                     <Heart className="h-12 w-12 text-accent/20 mx-auto" />
@@ -863,7 +977,7 @@ END:VCALENDAR`;
                     </div>
                 </div>
                 <div className="space-y-6">
-                    <p className="text-stone-600 leading-relaxed text-lg">
+                    <p className="text-[var(--text-secondary)] leading-relaxed text-lg">
                         Es un honor para nosotros invitarte a ser parte de este momento tan especial.
                         Tu presencia hará este día aún más memorable.
                     </p>
@@ -873,35 +987,35 @@ END:VCALENDAR`;
     );
 
     const renderLocation = () => (
-        <section id="location" key="location" className="py-24 bg-white">
+        <section id="location" key="location" className="py-24 bg-[var(--section-bg)]">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
-                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Ubicación</h3>
-                    <p className="text-stone-600">Gracias por estar con nosotros, aquí las ubicaciones del evento</p>
+                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Ubicación</h3>
+                    <p className="text-[var(--text-secondary)]">Gracias por estar con nosotros, aquí las ubicaciones del evento</p>
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
                     {cfg.misa_name && (
-                        <div className="flex-1 card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
+                        <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                             <div className="inline-flex justify-center">
                                 <div className="h-20 w-20 rounded-full bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center shadow-md">
                                     <Heart className="h-10 w-10 text-rose-400" />
                                 </div>
                             </div>
-                            <h4 className="text-2xl font-serif font-medium text-stone-900 uppercase tracking-wider">{labels.ceremony}</h4>
-                            <div className="space-y-3 text-stone-700 w-full">
+                            <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.ceremony}</h4>
+                            <div className="space-y-3 text-[var(--text-secondary)] w-full">
                                 <p className="flex items-center justify-center gap-3 text-lg">
                                     <Clock className="h-5 w-5 text-accent flex-shrink-0" />
                                     <span className="font-sans">{cfg.misa_time || "Por confirmar"} hrs</span>
                                 </p>
                                 <div className="flex flex-col items-center gap-1">
-                                    <p className="font-serif text-lg text-stone-900">{cfg.misa_name}</p>
-                                    <p className="text-sm font-light text-stone-500 italic max-w-[250px]">{cfg.misa_address}</p>
+                                    <p className="font-serif text-lg text-[var(--text-primary)]">{cfg.misa_name}</p>
+                                    <p className="text-sm font-light text-[var(--text-secondary)] italic max-w-[250px]">{cfg.misa_address}</p>
                                 </div>
                             </div>
                             {cfg.misa_maps_link && (
                                 <a href={cfg.misa_maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
-                                    <button className="px-8 py-3 rounded-full text-white font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
+                                    <button className="px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
                                         ¿Cómo llegar?
                                     </button>
                                 </a>
@@ -909,14 +1023,14 @@ END:VCALENDAR`;
                         </div>
                     )}
 
-                    <div className="flex-1 card-premium rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
+                    <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                         <div className="inline-flex justify-center">
                             <div className="h-20 w-20 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center shadow-md">
                                 <Music className="h-10 w-10 text-amber-500" />
                             </div>
                         </div>
-                        <h4 className="text-2xl font-serif font-medium text-stone-900 uppercase tracking-wider">{labels.reception}</h4>
-                        <div className="space-y-3 text-stone-700 w-full">
+                        <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.reception}</h4>
+                        <div className="space-y-3 text-[var(--text-secondary)] w-full">
                             <p className="flex items-center justify-center gap-3 text-lg">
                                 <Clock className="h-5 w-5 text-accent flex-shrink-0" />
                                 <span className="font-sans">
@@ -924,13 +1038,13 @@ END:VCALENDAR`;
                                 </span>
                             </p>
                             <div className="flex flex-col items-center gap-1">
-                                <p className="font-serif text-lg text-stone-900">{event.venue_name}</p>
-                                <p className="text-sm font-light text-stone-500 italic max-w-[250px]">{event.venue_address}</p>
+                                <p className="font-serif text-lg text-[var(--text-primary)]">{event.venue_name}</p>
+                                <p className="text-sm font-light text-[var(--text-secondary)] italic max-w-[250px]">{event.venue_address}</p>
                             </div>
                         </div>
                         {event.maps_link && (
                             <a href={event.maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
-                                <button className="px-8 py-3 rounded-full text-white font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
+                                <button className="px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
                                     ¿Cómo llegar?
                                 </button>
                             </a>
@@ -940,7 +1054,7 @@ END:VCALENDAR`;
 
                 {event.maps_link && (
                     <div className="mt-16 max-w-5xl mx-auto">
-                        <div className="card-premium rounded-3xl overflow-hidden shadow-2xl">
+                        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl overflow-hidden shadow-2xl">
                             <iframe
                                 src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}&q=${encodeURIComponent(event.venue_address || '')}`}
                                 width="100%"
@@ -952,7 +1066,7 @@ END:VCALENDAR`;
                                 className="w-full"
                             />
                         </div>
-                        <p className="text-center text-sm text-stone-500 mt-4">
+                        <p className="text-center text-sm text-[var(--text-secondary)] mt-4">
                             Toca el mapa para ver la ubicación en Google Maps
                         </p>
                     </div>
@@ -962,12 +1076,12 @@ END:VCALENDAR`;
     );
 
     const renderDressCode = () => (
-        <section id="dress_code" key="dress_code" className="py-20 bg-gradient-to-br from-stone-50 to-rose-50/20">
+        <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6 text-center">
                 <Flower2 className="h-10 w-10 mx-auto mb-8 text-accent/60" strokeWidth={1.5} />
-                <h3 className="text-4xl font-serif font-light text-stone-900 mb-6">Dress Code</h3>
-                <div className="card-premium rounded-3xl p-12 inline-block">
-                    <p className="text-3xl font-serif text-stone-900">{event.dress_code}</p>
+                <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Dress Code</h3>
+                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-12 inline-block">
+                    <p className="text-3xl font-serif text-[var(--text-primary)]">{event.dress_code}</p>
                 </div>
             </div>
         </section>
@@ -978,11 +1092,11 @@ END:VCALENDAR`;
         if (items.length === 0) return null;
         
         return (
-            <section id="itinerary" key="itinerary" className="py-24 bg-gradient-to-br from-amber-50/50 to-rose-50/30">
+            <section id="itinerary" key="itinerary" className="py-24 bg-[var(--section-bg-alt)]">
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Itinerario</h3>
-                        <p className="text-stone-600">Programa del día</p>
+                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Itinerario</h3>
+                        <p className="text-[var(--text-secondary)]">Programa del día</p>
                     </div>
                     
                     <div className="relative max-w-2xl mx-auto py-8">
@@ -1004,16 +1118,16 @@ END:VCALENDAR`;
 
                                 return (
                                     <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                        <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-white border-4 border-stone-100 flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
+                                        <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
                                             <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
                                         </div>
                                         <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
-                                            <div className="bg-white/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-stone-100/50 shadow-sm hover:shadow-md transition-shadow">
+                                            <div className="bg-[var(--section-bg)]/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-md transition-shadow">
                                                 <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
                                                     {item.time}
                                                 </span>
-                                                <h4 className="text-lg xs:text-xl font-serif text-stone-900">{itemTitle}</h4>
-                                                {itemDesc && <p className="text-stone-500 mt-2 text-sm xs:text-base leading-relaxed">{itemDesc}</p>}
+                                                <h4 className="text-lg xs:text-xl font-serif text-[var(--text-primary)]">{itemTitle}</h4>
+                                                {itemDesc && <p className="text-[var(--text-secondary)] mt-2 text-sm xs:text-base leading-relaxed">{itemDesc}</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -1027,7 +1141,7 @@ END:VCALENDAR`;
     };
 
     const renderRSVP = () => (
-        <section id="rsvp" key="rsvp" className="py-16 bg-white">
+        <section id="rsvp" key="rsvp" className="py-16 bg-[var(--section-bg)]">
             <div className="max-w-5xl mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
@@ -1043,20 +1157,20 @@ END:VCALENDAR`;
                         {rsvpSuccess ? (
                             <div className="animate-fade-in flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
                                 <div className={`h-16 w-16 rounded-full flex items-center justify-center shadow-sm border ${
-                                    rsvpChoice === 'yes' ? 'bg-green-50 border-green-100' : 'bg-stone-50 border-stone-100'
+                                    rsvpChoice === 'yes' ? 'bg-green-50 border-green-100' : 'bg-[var(--section-bg-alt)] border-[var(--border-color)]'
                                 }`}>
                                     {rsvpChoice === 'yes' ? (
                                         <CheckCircle2 className="h-8 w-8 text-green-500" />
                                     ) : (
-                                        <X className="h-8 w-8 text-stone-400" />
+                                        <X className="h-8 w-8 text-[var(--text-secondary)]" />
                                     )}
                                 </div>
 
                                 <div>
-                                    <h2 className="text-3xl font-serif text-stone-900 mb-1">
+                                    <h2 className="text-3xl font-serif text-[var(--text-primary)] mb-1">
                                         {rsvpChoice === 'yes' ? '¡Confirmado!' : '¡Anotado!'}
                                     </h2>
-                                    <p className="text-stone-400 text-sm">
+                                    <p className="text-[var(--text-secondary)] text-sm">
                                         {rsvpChoice === 'yes' 
                                             ? `Gracias ${guestName || 'por confirmar'}. Tu respuesta ha sido registrada.`
                                             : `Lamentamos que no puedas acompañarnos, ${guestName || ''}. Se ha registrado tu respuesta.`}
@@ -1065,9 +1179,9 @@ END:VCALENDAR`;
 
                                 {rsvpChoice === 'yes' && (
                                     <div className="lg:hidden w-full flex flex-col items-center gap-6">
-                                        <div ref={qrCardRef} className="bg-stone-50 border border-stone-100 rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs">
-                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400">Tu pase de entrada</p>
-                                            <div className="bg-white p-3 rounded-xl shadow-sm">
+                                        <div ref={qrCardRef} className="bg-[var(--section-bg-alt)] border border-[var(--border-color)] rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs">
+                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">Tu pase de entrada</p>
+                                            <div className="bg-[var(--section-bg)] p-3 rounded-xl shadow-sm">
                                                 <QRCodeCanvas
                                                     ref={qrCanvasRef}
                                                     value={`${window.location.origin}/i/${slug}?t=${guestToken || guest?.id}`}
@@ -1076,18 +1190,18 @@ END:VCALENDAR`;
                                                     includeMargin={false}
                                                 />
                                             </div>
-                                            <p className="text-[10px] text-stone-400 text-center">Muestra este código en la entrada del evento</p>
-                                            <button onClick={() => downloadQR(false)} className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 hover:text-stone-900 transition-colors border border-stone-200 hover:border-stone-400 rounded-xl px-4 py-2">
+                                            <p className="text-[10px] text-[var(--text-secondary)] text-center">Muestra este código en la entrada del evento</p>
+                                            <button onClick={() => downloadQR(false)} className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors border border-[var(--card-border)] hover:border-stone-400 rounded-xl px-4 py-2">
                                                 <Download className="h-3.5 w-3.5" /> Descargar QR
                                             </button>
                                         </div>
 
                                         <div className="w-full max-w-xs space-y-2">
-                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400 mb-3 text-center">Agendar en mi calendario</p>
-                                            <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600">
+                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] mb-3 text-center">Agendar en mi calendario</p>
+                                            <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
                                                 <Calendar className="h-3.5 w-3.5" /> Google Calendar
                                             </a>
-                                            <a href={generateICalLink()} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50 transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-stone-600">
+                                            <a href={generateICalLink()} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
                                                 <Calendar className="h-3.5 w-3.5" /> Apple Calendar / iCal
                                             </a>
                                         </div>
@@ -1095,7 +1209,7 @@ END:VCALENDAR`;
                                 )}
                                 
                                 {!guestToken && (
-                                    <button onClick={() => setRsvpSuccess(false)} className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 hover:text-stone-600 transition-colors pt-4">
+                                    <button onClick={() => setRsvpSuccess(false)} className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 hover:text-[var(--text-secondary)] transition-colors pt-4">
                                         MODIFICAR RESPUESTA
                                     </button>
                                 )}
@@ -1103,9 +1217,9 @@ END:VCALENDAR`;
                         ) : (
                             <div className="space-y-10">
                                 <div className="space-y-2">
-                                    <h3 className="text-3xl sm:text-4xl font-serif font-light text-stone-900 mb-1">Confirma tu asistencia</h3>
+                                    <h3 className="text-3xl sm:text-4xl font-serif font-light text-[var(--text-primary)] mb-1">Confirma tu asistencia</h3>
                                     {event.rsvp_deadline && (
-                                        <p className="text-sm text-stone-400 mb-8">
+                                        <p className="text-sm text-[var(--text-secondary)] mb-8">
                                             Favor de confirmarte antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
                                         </p>
                                     )}
@@ -1113,23 +1227,23 @@ END:VCALENDAR`;
 
                                 <div className="space-y-8">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">Nombre Completo</label>
-                                        <input required type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Tu nombre" disabled={submitting} className="w-full bg-transparent border-b border-stone-200 py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-stone-800 placeholder:text-stone-200" readOnly={!!guest && !!guestToken} />
+                                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Nombre Completo</label>
+                                        <input required type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Tu nombre" disabled={submitting} className="w-full bg-transparent border-b border-[var(--card-border)] py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-[var(--text-primary)] placeholder:text-stone-200" readOnly={!!guest && !!guestToken} />
                                     </div>
 
                                     {(!guest || guest.max_plus_ones > 0) && (
                                         <div className="flex flex-col gap-6">
                                             <label className="flex items-start gap-4 cursor-pointer group">
                                                 <div className="relative flex items-center justify-center mt-1">
-                                                    <input type="checkbox" checked={isAccompanied} onChange={(e) => { const checked = e.target.checked; setIsAccompanied(checked); if (checked) setShowPlusOnesModal(true); }} className="peer h-6 w-6 rounded-md border-2 border-stone-200 checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer" />
+                                                    <input type="checkbox" checked={isAccompanied} onChange={(e) => { const checked = e.target.checked; setIsAccompanied(checked); if (checked) setShowPlusOnesModal(true); }} className="peer h-6 w-6 rounded-md border-2 border-[var(--card-border)] checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer" />
                                                     <X className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
                                                 </div>
                                                 <div className="flex flex-col gap-1">
-                                                    <span className="text-sm font-black uppercase tracking-widest text-[#1B2E1D] group-hover:text-stone-900 transition-colors">
+                                                    <span className="text-sm font-black uppercase tracking-widest text-[#1B2E1D] group-hover:text-[var(--text-primary)] transition-colors">
                                                         {guest ? `CONFIRMAR ACOMPAÑANTES (TOTAL: ${(guest.max_plus_ones || 0) + 1} PERSONAS)` : `CONFIRMAR ACOMPAÑANTES`}
                                                     </span>
                                                     {isAccompanied && (
-                                                        <div onClick={(e) => { e.preventDefault(); setShowPlusOnesModal(true); }} className="text-[10px] text-stone-400 uppercase tracking-widest font-medium hover:text-[#BD7474] transition-colors">
+                                                        <div onClick={(e) => { e.preventDefault(); setShowPlusOnesModal(true); }} className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-medium hover:text-[#BD7474] transition-colors">
                                                             {adultsCount} Adultos, {kidsCount} Niños • <span className="underline underline-offset-2">Editar</span>
                                                         </div>
                                                     )}
@@ -1141,10 +1255,10 @@ END:VCALENDAR`;
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
                                     <div className="space-y-4 pt-4">
-                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-white font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center" style={{ background: buttonColor }}>
+                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center" style={{ background: buttonColor }}>
                                             {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}
                                         </button>
-                                        <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full h-12 text-stone-400 hover:text-stone-900 font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+                                        <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full h-12 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
                                             No podré asistir
                                         </button>
                                     </div>
@@ -1156,9 +1270,9 @@ END:VCALENDAR`;
                     <div className="hidden lg:flex flex-col items-center justify-center w-full max-w-md mx-auto">
                         {rsvpSuccess && rsvpChoice === 'yes' ? (
                             <div className="w-full flex flex-col items-center gap-8">
-                                <div ref={qrCardDesktopRef} className="bg-white border border-stone-100 rounded-[2rem] p-8 flex flex-col items-center gap-4 w-full shadow-2xl">
+                                <div ref={qrCardDesktopRef} className="bg-[var(--section-bg)] border border-[var(--border-color)] rounded-[2rem] p-8 flex flex-col items-center gap-4 w-full shadow-2xl">
                                     <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent">Tu Pase de Entrada</p>
-                                    <div className="bg-stone-50 p-4 rounded-2xl shadow-inner border border-stone-200">
+                                    <div className="bg-[var(--section-bg-alt)] p-4 rounded-2xl shadow-inner border border-[var(--card-border)]">
                                         <QRCodeCanvas
                                             id={`qr-desktop-${guest?.id}`}
                                             value={`${window.location.origin}/i/${slug}?t=${guestToken || guest?.id}`}
@@ -1167,15 +1281,15 @@ END:VCALENDAR`;
                                             fgColor={primaryColor}
                                         />
                                     </div>
-                                    <button onClick={() => downloadQR(true)} className="mt-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 hover:text-stone-900 transition-colors border border-stone-200 hover:border-stone-400 rounded-xl px-6 py-3 shadow-sm">
+                                    <button onClick={() => downloadQR(true)} className="mt-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors border border-[var(--card-border)] hover:border-stone-400 rounded-xl px-6 py-3 shadow-sm">
                                         <Download className="h-4 w-4" /> Guardar Código
                                     </button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="bg-gradient-to-br from-stone-50 to-white border border-stone-100 rounded-[2rem] p-12 flex flex-col items-center text-center gap-6 w-full shadow-2xl relative overflow-hidden opacity-50">
-                                <Shield className="h-10 w-10 text-stone-300" />
-                                <h4 className="font-serif text-3xl text-stone-900">Pase de Acceso</h4>
+                            <div className="bg-gradient-to-br from-[var(--section-bg-alt)] to-[var(--card-bg)] border border-[var(--border-color)] rounded-[2rem] p-12 flex flex-col items-center text-center gap-6 w-full shadow-2xl relative overflow-hidden opacity-50">
+                                <Shield className="h-10 w-10 text-[var(--text-secondary)]" />
+                                <h4 className="font-serif text-3xl text-[var(--text-primary)]">Pase de Acceso</h4>
                             </div>
                         )}
                     </div>
@@ -1185,21 +1299,21 @@ END:VCALENDAR`;
     );
 
     const renderGifts = () => (
-        <section id="gifts" key="gifts" className="py-24 bg-gradient-to-br from-amber-50/30 to-rose-50/20">
+        <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6">
                 <div className="text-center mb-12">
-                    <h3 className="text-4xl font-serif font-light text-stone-900 mb-4">Mesa de Regalos</h3>
-                    <p className="text-stone-600 leading-relaxed max-w-xl mx-auto">
+                    <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">Mesa de Regalos</h3>
+                    <p className="text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
                         Nuestro mejor regalo es que estés con nosotros en nuestro día, pero si quieres hacernos un obsequio aquí están nuestras opciones
                     </p>
                 </div>
 
-                <div className="card-premium rounded-3xl p-6 sm:p-12 text-center">
+                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-6 sm:p-12 text-center">
                     <Gift className="h-16 w-16 mx-auto mb-8 text-accent" />
                     {cfg?.registry_items?.length > 0 ? (
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 flex-wrap">
                             {cfg.registry_items.map((item: any, idx: number) => (
-                                <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer" className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-white font-sans font-medium uppercase tracking-wider transition-all hover:scale-105 flex flex-col gap-1 items-center justify-center">
+                                <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer" className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105 flex flex-col gap-1 items-center justify-center">
                                     <span>{item.store}</span>
                                     {item.description && <span className="text-[9px] opacity-80 normal-case tracking-normal">{item.description}</span>}
                                 </a>
@@ -1207,13 +1321,13 @@ END:VCALENDAR`;
                         </div>
                     ) : (
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-white font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Liverpool</button>
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-white font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Amazon</button>
+                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Liverpool</button>
+                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Amazon</button>
                         </div>
                     )}
-                    <div className="mt-12 pt-8 border-t border-stone-200">
-                        <p className="text-sm uppercase tracking-wider text-stone-400 mb-4">Lluvia de Sobres</p>
-                        <p className="text-stone-600 max-w-md mx-auto text-sm">Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho</p>
+                    <div className="mt-12 pt-8 border-t border-[var(--card-border)]">
+                        <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">Lluvia de Sobres</p>
+                        <p className="text-[var(--text-secondary)] max-w-md mx-auto text-sm">Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho</p>
                     </div>
                 </div>
             </div>
@@ -1232,11 +1346,11 @@ END:VCALENDAR`;
                 {galleryImages.length > 0 ? (
                     <PhotoGallery images={galleryImages} />
                 ) : (
-                    <section className="py-20 bg-white">
+                    <section className="py-20 bg-[var(--section-bg)]">
                         <div className="max-w-3xl mx-auto px-6 text-center">
                             <Camera className="h-16 w-16 mx-auto mb-8 text-stone-300" />
-                            <h3 className="text-3xl font-serif font-light text-stone-900 mb-4">Galería de Fotos</h3>
-                            <p className="text-stone-500 text-sm max-w-md mx-auto">
+                            <h3 className="text-3xl font-serif font-light text-[var(--text-primary)] mb-4">Galería de Fotos</h3>
+                            <p className="text-[var(--text-secondary)] text-sm max-w-md mx-auto">
                                 Será un gusto poder compartir este día contigo. Después del evento, podrás encontrar aquí las fotos del día.
                             </p>
                         </div>
@@ -1255,37 +1369,37 @@ END:VCALENDAR`;
         if (!hasChambelanes && !hasDamas && !hasPadrinos && !hasParents) return null;
 
         return (
-            <section id="chambelanes" key="chambelanes" className="py-24 bg-white">
+            <section id="chambelanes" key="chambelanes" className="py-24 bg-[var(--section-bg)]">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">Corte de Honor</h3>
-                        <p className="text-stone-600">Mis acompañantes especiales</p>
+                        <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Corte de Honor</h3>
+                        <p className="text-[var(--text-secondary)]">Mis acompañantes especiales</p>
                     </div>
 
                     {hasParents && (
                         <div className="mb-16">
-                            <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Nuestros Padres</h4>
+                            <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Nuestros Padres</h4>
                             {cfg.parents.bride || cfg.parents.groom ? (
                                 <div className="grid md:grid-cols-2 gap-8">
                                     {cfg.parents.bride && (
-                                        <div className="card-premium rounded-xl p-6 text-center">
-                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-4 font-bold" style={{color: accentColor}}>Padres de la Novia</p>
-                                            {cfg.parents.bride.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.bride.father}</p>}
-                                            {cfg.parents.bride.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.bride.mother}</p>}
+                                        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4 font-bold" style={{color: accentColor}}>Padres de la Novia</p>
+                                            {cfg.parents.bride.father && <p className="text-lg font-serif text-[var(--text-primary)] mb-2">{cfg.parents.bride.father}</p>}
+                                            {cfg.parents.bride.mother && <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents.bride.mother}</p>}
                                         </div>
                                     )}
                                     {cfg.parents.groom && (
-                                        <div className="card-premium rounded-xl p-6 text-center">
-                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-4 font-bold" style={{color: accentColor}}>Padres del Novio</p>
-                                            {cfg.parents.groom.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.groom.father}</p>}
-                                            {cfg.parents.groom.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.groom.mother}</p>}
+                                        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4 font-bold" style={{color: accentColor}}>Padres del Novio</p>
+                                            {cfg.parents.groom.father && <p className="text-lg font-serif text-[var(--text-primary)] mb-2">{cfg.parents.groom.father}</p>}
+                                            {cfg.parents.groom.mother && <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents.groom.mother}</p>}
                                         </div>
                                     )}
                                 </div>
                             ) : (
-                                <div className="max-w-md mx-auto card-premium rounded-xl p-6 text-center">
-                                    {cfg.parents.father && <p className="text-lg font-serif text-stone-800 mb-2">{cfg.parents.father}</p>}
-                                    {cfg.parents.mother && <p className="text-lg font-serif text-stone-800">{cfg.parents.mother}</p>}
+                                <div className="max-w-md mx-auto bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                    {cfg.parents.father && <p className="text-lg font-serif text-[var(--text-primary)] mb-2">{cfg.parents.father}</p>}
+                                    {cfg.parents.mother && <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents.mother}</p>}
                                 </div>
                             )}
                         </div>
@@ -1294,11 +1408,11 @@ END:VCALENDAR`;
                     <div className={`grid gap-12 ${hasChambelanes && hasDamas ? 'md:grid-cols-2' : hasPadrinos ? 'grid-cols-1' : 'max-w-2xl mx-auto'}`}>
                         {hasChambelanes && (
                             <div>
-                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Chambelanes</h4>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Chambelanes</h4>
                                 <div className="space-y-4">
                                     {cfg.chambelanes.map((name: string, idx: number) => (
-                                        <div key={idx} className="card-premium rounded-xl p-4 text-center">
-                                            <p className="text-lg text-stone-800">{name}</p>
+                                        <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-4 text-center">
+                                            <p className="text-lg text-[var(--text-primary)]">{name}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -1306,11 +1420,11 @@ END:VCALENDAR`;
                         )}
                         {hasDamas && (
                             <div>
-                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Damas</h4>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Damas</h4>
                                 <div className="space-y-4">
                                     {cfg.damas.map((name: string, idx: number) => (
-                                        <div key={idx} className="card-premium rounded-xl p-4 text-center">
-                                            <p className="text-lg text-stone-800">{name}</p>
+                                        <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-4 text-center">
+                                            <p className="text-lg text-[var(--text-primary)]">{name}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -1318,12 +1432,12 @@ END:VCALENDAR`;
                         )}
                         {hasPadrinos && (
                             <div className={hasChambelanes || hasDamas ? 'md:col-span-2' : ''}>
-                                <h4 className="text-2xl font-serif text-center mb-8 text-stone-900">Padrinos</h4>
+                                <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Padrinos</h4>
                                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
                                     {cfg.padrinos.map((padrino: {role: string, names: string}, idx: number) => (
-                                        <div key={idx} className="card-premium rounded-xl p-6 text-center">
-                                            <p className="text-sm uppercase tracking-wider text-stone-500 mb-2 font-bold" style={{color: accentColor}}>{padrino.role}</p>
-                                            <p className="text-lg font-serif text-stone-800">{padrino.names}</p>
+                                        <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                            <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-2 font-bold" style={{color: accentColor}}>{padrino.role}</p>
+                                            <p className="text-lg font-serif text-[var(--text-primary)]">{padrino.names}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -1336,17 +1450,17 @@ END:VCALENDAR`;
     };
 
     const renderAccommodation = () => (
-        <section id="hotels" key="hotels" className="py-24 bg-gradient-to-br from-stone-50 to-amber-50/20">
+        <section id="hotels" key="hotels" className="py-24 bg-[var(--section-bg-alt)]">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
                     <Hotel className="h-12 w-12 mx-auto mb-6 text-accent" />
-                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-stone-900 mb-4">¿Dónde Hospedarse?</h3>
+                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">¿Dónde Hospedarse?</h3>
                 </div>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {(cfg.hotels || []).map((hotel: any, idx: number) => (
-                        <div key={idx} className="bg-white rounded-2xl overflow-hidden border border-stone-200 p-8">
-                            <h4 className="text-xl font-serif font-semibold text-stone-900 mb-2">{hotel.name}</h4>
-                            <p className="text-sm text-stone-600">{hotel.description}</p>
+                        <div key={idx} className="bg-[var(--section-bg)] rounded-2xl overflow-hidden border border-[var(--card-border)] p-8">
+                            <h4 className="text-xl font-serif font-semibold text-[var(--text-primary)] mb-2">{hotel.name}</h4>
+                            <p className="text-sm text-[var(--text-secondary)]">{hotel.description}</p>
                         </div>
                     ))}
                 </div>
@@ -1355,12 +1469,12 @@ END:VCALENDAR`;
     );
 
     const renderFooter = () => (
-        <footer id="footer" key="footer" className="bg-stone-900 text-white py-10 text-center space-y-4">
+        <footer id="footer" key="footer" className="bg-[var(--section-bg-alt)] text-[var(--text-primary)] py-10 text-center space-y-4">
             <div className="h-px w-32 mx-auto mb-6" style={{backgroundColor: accentColor, opacity: 0.4}} />
-            <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400">
-                Creado con amor · <a href="https://invitto.com.mx/" target="_blank" rel="noopener noreferrer" className="hover:text-stone-300 transition-colors">Invitto</a>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-secondary)]">
+                Creado con amor · <a href="https://invitto.com.mx/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Invitto</a>
             </p>
-            <p className="text-[10px] text-stone-500">© 2026 Todos los derechos reservados</p>
+            <p className="text-[10px] text-[var(--text-secondary)]">© 2026 Todos los derechos reservados</p>
         </footer>
     );
 
@@ -1382,34 +1496,34 @@ END:VCALENDAR`;
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-stone-50 via-white to-rose-50/20">
+        <div className={`min-h-screen bg-[var(--section-bg)] text-[var(--text-primary)] transition-colors duration-500 theme-${themeName}`} style={globalStyles}>
             <style>{commonStyles}</style>
             
             {/* Version Switcher (Demo Only) */}
             {isDemo && (
-                <div className="fixed top-4 right-4 z-50 flex flex-wrap gap-2 items-center">
+                <div className="fixed bottom-6 right-6 z-[999] flex flex-wrap gap-2 items-center">
                     <Link to="/planes" className="mr-2 sm:mr-4">
                         <button className="px-5 py-2 rounded-full text-sm font-bold bg-[#1B2E1D] text-white hover:bg-stone-800 shadow-xl flex items-center gap-2 border-2 border-[#1B2E1D]/20">
                             <Flower2 className="h-4 w-4 text-amber-200" />
                             Quiero usar esta plantilla
                         </button>
                     </Link>
-                    <Link to="/"><button className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-stone-900 hover:bg-stone-100 border-2 border-stone-200 transition-all flex items-center gap-2 shadow-sm"><Home className="h-4 w-4" /><span className="hidden sm:inline">Inicio</span></button></Link>
+                    <Link to="/"><button className="px-4 py-2 rounded-full text-sm font-semibold bg-[var(--section-bg)] text-[var(--text-primary)] hover:bg-[var(--section-bg-alt)] border-2 border-[var(--card-border)] transition-all flex items-center gap-2 shadow-sm"><Home className="h-4 w-4" /><span className="hidden sm:inline">Inicio</span></button></Link>
                 </div>
             )}
 
             {/* PRE-RENDER Intro (Premium Envelope) */}
             {isPremium && !envelopeOpened ? (
-                <div className="invitation-content min-h-screen bg-stone-900 flex items-center justify-center p-6 relative overflow-hidden">
+                <div className="invitation-content min-h-screen bg-[var(--section-bg-alt)] flex items-center justify-center p-6 relative overflow-hidden">
                     <div className="relative z-10 max-w-3xl w-full">
-                        <div className="relative bg-white rounded-2xl border border-stone-200 overflow-hidden">
+                        <div className="relative bg-[var(--section-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
                             <div className="p-6 xs:p-10 sm:p-16 text-center relative">
                                 <div className="mb-8 sm:mb-12 relative">
                                     <div className="w-full max-w-[260px] sm:w-80 h-48 sm:h-64 mx-auto relative">
                                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[240px] sm:w-72 h-8 bg-black/10 blur-xl rounded-full" />
                                         <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-stone-100 to-stone-200 rounded-2xl shadow-xl" style={{ clipPath: 'polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%)' }} />
                                         <div className="absolute inset-4 border-2 border-stone-300/50 rounded-xl" style={{ clipPath: 'polygon(5% 20%, 50% 50%, 95% 20%, 95% 95%, 5% 95%)' }} />
-                                        <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-stone-200 shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
+                                        <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-[var(--card-border)] shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
                                         <div className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 z-20">
                                             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30">
                                                 {getSealIcon()}
@@ -1420,13 +1534,13 @@ END:VCALENDAR`;
                                 {guest && (
                                     <div className="mb-6 sm:mb-8">
                                         <p className="text-[10px] uppercase tracking-[0.5em] text-accent font-semibold mb-2 sm:mb-3">Para</p>
-                                        <h2 className="text-3xl sm:text-5xl font-serif font-light text-stone-900 mb-2">{guest.name}</h2>
+                                        <h2 className="text-3xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-2">{guest.name}</h2>
                                         <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
                                     </div>
                                 )}
                                 <div className="mb-8 sm:mb-10">
                                     <h3 className="text-3xl xs:text-4xl sm:text-7xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
-                                    <p className="text-stone-600 text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">
+                                    <p className="text-[var(--text-secondary)] text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">
                                         {(event.event_type as string) === 'wedding' ? 'Boda' 
                                             : (event.event_type as string) === 'xv' ? 'XV Años' 
                                             : (event.event_type as string) === 'graduacion' || (event.event_type as string) === 'graduation' ? 'Graduación' 
@@ -1436,7 +1550,7 @@ END:VCALENDAR`;
                                             : 'Celebración'}
                                     </p>
                                 </div>
-                                <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-white rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
+                                <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-[var(--accent-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
                     </div>
@@ -1456,7 +1570,7 @@ END:VCALENDAR`;
                         <>
                             <button 
                                 onClick={() => setIsAdminOpen(true)} 
-                                className={`fixed ${isDemo ? 'top-20' : 'top-4'} right-4 z-[60] bg-white/90 backdrop-blur px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl border border-stone-200 flex items-center gap-3 hover:scale-105 transition-all text-[#1B2E1D]`}
+                                className={`fixed ${isDemo ? 'top-20' : 'top-4'} right-4 z-[60] bg-[var(--section-bg)]/90 backdrop-blur px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl border border-[var(--card-border)] flex items-center gap-3 hover:scale-105 transition-all text-[#1B2E1D]`}
                             >
                                 <Settings className="h-4 w-4 sm:h-5 sm:w-5 spin-slow" />
                                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest hidden xs:inline">Editor Directo</span>
@@ -1464,23 +1578,23 @@ END:VCALENDAR`;
                             {isAdminOpen && (
                                 <div className="fixed inset-0 z-[70] flex justify-end">
                                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)} />
-                                    <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
+                                    <div className="relative w-full max-w-sm bg-[var(--section-bg)] h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
                                         <div className="flex items-center justify-between mb-12">
                                             <div className="flex items-center gap-3">
                                                 <div className="p-3 bg-[#1B2E1D] rounded-xl text-white"><Activity className="h-5 w-5" /></div>
-                                                <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-400 uppercase tracking-widest font-bold">Admin Panel</p></div>
+                                                <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Admin Panel</p></div>
                                             </div>
-                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-50 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
+                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-[var(--section-bg-alt)] rounded-full transition-colors"><X className="h-6 w-6 text-[var(--text-secondary)]" /></button>
                                         </div>
                                         <div className="space-y-4">
-                                            <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-6">Secciones del Layout</h4>
+                                            <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-[var(--text-secondary)] mb-6">Secciones del Layout</h4>
                                             {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).map((sec) => {
                                                 const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
                                                 return (
                                                     <div 
                                                         key={sec.id} 
                                                         onClick={() => scrollToSection(sec.id)}
-                                                        className="group flex items-center justify-between p-4 bg-stone-50 rounded-xl border border-stone-100 hover:bg-stone-100 hover:border-stone-200 transition-all cursor-pointer"
+                                                        className="group flex items-center justify-between p-4 bg-[var(--section-bg-alt)] rounded-xl border border-[var(--border-color)] hover:bg-[var(--section-bg-alt)] hover:border-[var(--card-border)] transition-all cursor-pointer"
                                                     >
                                                         <span className="text-sm font-bold text-[#1B2E1D]">{sec.label}</span>
                                                         {!sec.fixed && (
@@ -1489,7 +1603,7 @@ END:VCALENDAR`;
                                                                     e.stopPropagation();
                                                                     if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
                                                                 }}
-                                                                className={`p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-300 bg-stone-100'}`}
+                                                                className={`p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-300 bg-[var(--section-bg-alt)]'}`}
                                                             >
                                                                 {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                                                             </button>
@@ -1508,12 +1622,12 @@ END:VCALENDAR`;
                     {showPlusOnesModal && (
                         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
                             <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowPlusOnesModal(false)} />
-                            <div className="relative w-full max-w-sm bg-white rounded-[2.5rem] p-10 shadow-2xl animate-in zoom-in duration-500">
+                            <div className="relative w-full max-w-sm bg-[var(--section-bg)] rounded-[2.5rem] p-10 shadow-2xl animate-in zoom-in duration-500">
                                 <div className="text-center mb-10"><UsersIcon className="h-10 w-10 mx-auto mb-4 text-[#BD7474]" /><h3 className="text-2xl font-serif text-[#1B2E1D]">Acompañantes</h3></div>
                                 <div className="space-y-8">
-                                    <div className="flex items-center justify-between bg-stone-50 p-6 rounded-2xl">
-                                        <div><p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Adultos</p></div>
-                                        <div className="flex items-center gap-4"><button onClick={() => setAdultsCount(Math.max(0, adultsCount - 1))} className="h-10 w-10 rounded-xl bg-white border border-stone-100">-</button><span className="text-xl font-bold w-6 text-center">{adultsCount}</span><button onClick={() => setAdultsCount(adultsCount + 1)} className="h-10 w-10 rounded-xl bg-white border border-stone-100">+</button></div>
+                                    <div className="flex items-center justify-between bg-[var(--section-bg-alt)] p-6 rounded-2xl">
+                                        <div><p className="text-[10px] uppercase font-bold tracking-widest text-[var(--text-secondary)]">Adultos</p></div>
+                                        <div className="flex items-center gap-4"><button onClick={() => setAdultsCount(Math.max(0, adultsCount - 1))} className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)]">-</button><span className="text-xl font-bold w-6 text-center">{adultsCount}</span><button onClick={() => setAdultsCount(adultsCount + 1)} className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)]">+</button></div>
                                     </div>
                                 </div>
                                 <button onClick={() => setShowPlusOnesModal(false)} className="w-full mt-10 py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg">Confirmar</button>

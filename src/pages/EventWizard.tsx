@@ -494,6 +494,8 @@ export default function EventWizard() {
                                     <option value="gold">Gold (Tonos Dorados)</option>
                                     <option value="botanical">Botánico (Verdes)</option>
                                     <option value="cecilia-70">Atemporal (Floral)</option>
+                                    <option value="collage">Collage Elegante</option>
+                                    <option value="floral-symmetry">Simetría Floral</option>
                                 </select>
                             </div>
                         </div>

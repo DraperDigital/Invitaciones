@@ -205,6 +205,20 @@ export default function BlogPostPage() {
                 );
               }
             })}
+
+            {/* Author Bio Box */}
+            <div className="lg:col-span-2 mt-12 bg-[#FDFBF7] border border-stone-200 rounded-2xl p-8 flex flex-col sm:flex-row items-start gap-6 shadow-sm">
+              <div className="w-16 h-16 rounded-full bg-[#1B2E1D] text-white font-serif flex items-center justify-center text-xl font-bold flex-shrink-0">
+                {post.author.avatar}
+              </div>
+              <div>
+                <h3 className="text-lg font-serif text-[#1B2E1D] mb-1">Acerca de {post.author.name}</h3>
+                <p className="text-xs uppercase tracking-wider text-stone-400 font-bold mb-3">{post.author.role}</p>
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  {post.author.bio || `Especialista y colaborador habitual en el blog de Invitto, compartiendo consejos sobre ${post.category.toLowerCase()}.`}
+                </p>
+              </div>
+            </div>
           </article>
 
           {/* Sticky Sidebar CTA */}

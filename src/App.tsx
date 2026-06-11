@@ -15,6 +15,7 @@ const EventWizard         = React.lazy(() => import('./pages/EventWizard'));
 const InvitationPage      = React.lazy(() => import('./pages/InvitationPage'));
 const ExamplesPage        = React.lazy(() => import('./pages/ExamplesPage'));
 const PlanesPage          = React.lazy(() => import('./pages/PlanesPage'));
+const FaqPage             = React.lazy(() => import('./pages/FaqPage'));
 const CheckoutPage        = React.lazy(() => import('./pages/CheckoutPage'));
 const NotFoundPage        = React.lazy(() => import('./pages/NotFoundPage'));
 const DashboardHome       = React.lazy(() => import('./pages/dashboard/DashboardHome'));
@@ -44,9 +45,11 @@ const InvitacionesCumpleanos = React.lazy(() => import('./pages/seo/Invitaciones
 const InvitacionesCDMX       = React.lazy(() => import('./pages/seo/InvitacionesCDMXPage'));
 const InvitacionesGDL        = React.lazy(() => import('./pages/seo/InvitacionesGuadalajaraPage'));
 const InvitacionesMTY        = React.lazy(() => import('./pages/seo/InvitacionesMonterreyPage'));
+const InvitacionesLeon       = React.lazy(() => import('./pages/seo/InvitacionesLeonPage'));
 const InvitacionesVsPapel    = React.lazy(() => import('./pages/seo/InvitacionesVsPapelPage'));
 const InvittoVsPaperless     = React.lazy(() => import('./pages/seo/InvittoVsPaperlessPage'));
 const InvittoVsGreenvelope   = React.lazy(() => import('./pages/seo/InvittoVsGreenvelopePage'));
+const InvittoVsOtras         = React.lazy(() => import('./pages/seo/InvittoVsOtrasPage'));
 const ComparativasHub        = React.lazy(() => import('./pages/seo/ComparativasHub'));
 
 // Minimal inline fallback — no external imports, matches app background
@@ -75,6 +78,7 @@ function AppRoutes() {
         <Route path="/"              element={<HomePage />} />
         <Route path="/ejemplos"      element={<ExamplesPage />} />
         <Route path="/planes"        element={<PlanesPage />} />
+        <Route path="/faq"           element={<FaqPage />} />
         <Route path="/checkout"      element={<CheckoutPage />} />
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/i/:slug"       element={<InvitationPage />} />
@@ -90,9 +94,11 @@ function AppRoutes() {
         <Route path="/invitaciones-digitales-cdmx"         element={<InvitacionesCDMX />} />
         <Route path="/invitaciones-digitales-guadalajara"  element={<InvitacionesGDL />} />
         <Route path="/invitaciones-digitales-monterrey"    element={<InvitacionesMTY />} />
+        <Route path="/invitaciones-digitales-leon"         element={<InvitacionesLeon />} />
         <Route path="/invitaciones-digitales-vs-papel"     element={<InvitacionesVsPapel />} />
         <Route path="/invitto-vs-paperless-post"           element={<InvittoVsPaperless />} />
         <Route path="/invitto-vs-greenvelope"              element={<InvittoVsGreenvelope />} />
+        <Route path="/invitto-vs-otras-plataformas"        element={<InvittoVsOtras />} />
         <Route path="/comparativas"                        element={<ComparativasHub />} />
 
         {/* Plan Landing Pages */}

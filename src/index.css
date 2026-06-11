@@ -151,3 +151,39 @@
     font-size: clamp(2rem, 5vw + 1rem, 4rem);
   }
 }
+
+/* ── Theme: Simetría Floral (Floral Symmetry) ── */
+.theme-floral-symmetry #guest_welcome {
+  display: none !important;
+}
+
+.theme-floral-symmetry #message {
+  display: none !important;
+}
+
+/* Subtle floral background for bottom sections */
+.theme-floral-symmetry #location,
+.theme-floral-symmetry #itinerary {
+  position: relative;
+  overflow: hidden;
+}
+.theme-floral-symmetry #location::before,
+.theme-floral-symmetry #itinerary::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-image: url('/floral_ornament.png');
+  background-size: cover;
+  background-position: bottom;
+  opacity: 0.05; /* Very subtle */
+  pointer-events: none;
+  z-index: 0;
+}
+.theme-floral-symmetry #location > div,
+.theme-floral-symmetry #itinerary > div {
+  position: relative;
+  z-index: 10;
+}
