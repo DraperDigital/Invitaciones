@@ -1578,23 +1578,23 @@ END:VCALENDAR`;
                             {isAdminOpen && (
                                 <div className="fixed inset-0 z-[70] flex justify-end">
                                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)} />
-                                    <div className="relative w-full max-w-sm bg-[var(--section-bg)] h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
+                                    <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
                                         <div className="flex items-center justify-between mb-12">
                                             <div className="flex items-center gap-3">
                                                 <div className="p-3 bg-[#1B2E1D] rounded-xl text-white"><Activity className="h-5 w-5" /></div>
-                                                <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-bold">Admin Panel</p></div>
+                                                <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Admin Panel</p></div>
                                             </div>
-                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-[var(--section-bg-alt)] rounded-full transition-colors"><X className="h-6 w-6 text-[var(--text-secondary)]" /></button>
+                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
                                         <div className="space-y-4">
-                                            <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-[var(--text-secondary)] mb-6">Secciones del Layout</h4>
+                                            <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-6">Secciones del Layout</h4>
                                             {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).map((sec) => {
                                                 const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
                                                 return (
                                                     <div 
                                                         key={sec.id} 
                                                         onClick={() => scrollToSection(sec.id)}
-                                                        className="group flex items-center justify-between p-4 bg-[var(--section-bg-alt)] rounded-xl border border-[var(--border-color)] hover:bg-[var(--section-bg-alt)] hover:border-[var(--card-border)] transition-all cursor-pointer"
+                                                        className="group flex items-center justify-between p-4 bg-white rounded-xl border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-all cursor-pointer shadow-sm"
                                                     >
                                                         <span className="text-sm font-bold text-[#1B2E1D]">{sec.label}</span>
                                                         {!sec.fixed && (
@@ -1603,7 +1603,7 @@ END:VCALENDAR`;
                                                                     e.stopPropagation();
                                                                     if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
                                                                 }}
-                                                                className={`p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-300 bg-[var(--section-bg-alt)]'}`}
+                                                                className={`p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
                                                             >
                                                                 {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
                                                             </button>
