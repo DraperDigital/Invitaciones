@@ -1056,7 +1056,7 @@ END:VCALENDAR`;
                     <div className="mt-16 max-w-5xl mx-auto">
                         <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl overflow-hidden shadow-2xl">
                             <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}&q=${encodeURIComponent(event.venue_address || '')}`}
+                                src={`https://maps.google.com/maps?q=${encodeURIComponent(event.venue_address || event.venue_name || '')}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                                 width="100%"
                                 height="450"
                                 style={{ border: 0 }}
