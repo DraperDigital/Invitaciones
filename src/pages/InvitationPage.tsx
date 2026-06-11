@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -1570,7 +1570,7 @@ END:VCALENDAR`;
                         <>
                             <button 
                                 onClick={() => setIsAdminOpen(true)} 
-                                className={`fixed ${isDemo ? 'top-20' : 'top-4'} right-4 z-[60] bg-[var(--section-bg)]/90 backdrop-blur px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl border border-[var(--card-border)] flex items-center gap-3 hover:scale-105 transition-all text-[#1B2E1D]`}
+                                className={`fixed ${isDemo ? 'top-20' : 'top-4'} right-4 z-[60] bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl border border-stone-200 flex items-center gap-3 hover:scale-105 hover:bg-stone-50 transition-all text-[#1B2E1D]`}
                             >
                                 <Settings className="h-4 w-4 sm:h-5 sm:w-5 spin-slow" />
                                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest hidden xs:inline">Editor Directo</span>
@@ -1588,7 +1588,14 @@ END:VCALENDAR`;
                                         </div>
                                         <div className="space-y-4">
                                             <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-6">Secciones del Layout</h4>
-                                            {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).map((sec) => {
+                                            {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
+                                                const indexA = savedOrder.indexOf(a.id);
+                                                const indexB = savedOrder.indexOf(b.id);
+                                                if (indexA === -1 && indexB === -1) return 0;
+                                                if (indexA === -1) return 1;
+                                                if (indexB === -1) return -1;
+                                                return indexA - indexB;
+                                            }).map((sec, idx, arr) => {
                                                 const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
                                                 return (
                                                     <div 
@@ -1598,15 +1605,49 @@ END:VCALENDAR`;
                                                     >
                                                         <span className="text-sm font-bold text-[#1B2E1D]">{sec.label}</span>
                                                         {!sec.fixed && (
-                                                            <button 
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
-                                                                }}
-                                                                className={`p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
-                                                            >
-                                                                {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-                                                            </button>
+                                                            <div className="flex items-center gap-1">
+                                                                <button 
+                                                                    onClick={async (e) => {
+                                                                        e.stopPropagation();
+                                                                        if (idx === 0) return;
+                                                                        const newOrder = [...savedOrder];
+                                                                        const secIndex = newOrder.indexOf(sec.id);
+                                                                        if (secIndex > 0) {
+                                                                            [newOrder[secIndex - 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex - 1]];
+                                                                            await handleUpdateFeature('sectionOrder', newOrder);
+                                                                        }
+                                                                    }}
+                                                                    disabled={idx === 0}
+                                                                    className={`p-1.5 rounded-lg transition-colors ${idx === 0 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
+                                                                >
+                                                                    <ChevronUp className="h-4 w-4" />
+                                                                </button>
+                                                                <button 
+                                                                    onClick={async (e) => {
+                                                                        e.stopPropagation();
+                                                                        if (idx === arr.length - 1) return;
+                                                                        const newOrder = [...savedOrder];
+                                                                        const secIndex = newOrder.indexOf(sec.id);
+                                                                        if (secIndex !== -1 && secIndex < newOrder.length - 1) {
+                                                                            [newOrder[secIndex + 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex + 1]];
+                                                                            await handleUpdateFeature('sectionOrder', newOrder);
+                                                                        }
+                                                                    }}
+                                                                    disabled={idx === arr.length - 1}
+                                                                    className={`p-1.5 rounded-lg transition-colors ${idx === arr.length - 1 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
+                                                                >
+                                                                    <ChevronDown className="h-4 w-4" />
+                                                                </button>
+                                                                <button 
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
+                                                                    }}
+                                                                    className={`ml-2 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
+                                                                >
+                                                                    {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                                                </button>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 );
