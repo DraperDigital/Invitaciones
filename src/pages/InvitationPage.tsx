@@ -156,7 +156,7 @@ export default function InvitationPage() {
         showHotels:       'show_hotels'
     };
 
-    const handleUpdateFeature = async (key: string, value: boolean) => {
+    const handleUpdateFeature = async (key: string, value: any) => {
         if (!event) return;
         
         // Feedbak local instantáneo (UI reactiva)
