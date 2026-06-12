@@ -63,20 +63,22 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     };
 
     return (
-        <div className="absolute inset-y-0 right-0 w-full bg-white shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 z-10 border-l border-stone-200">
-            <div className="flex items-center justify-between p-6 border-b border-stone-100">
-                <div>
-                    <h3 className="text-lg font-serif text-[#1B2E1D]">Editar Sección</h3>
-                    <p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">
-                        {sectionTitles[sectionId as string] || sectionId}
-                    </p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="relative w-full max-w-lg bg-white shadow-2xl rounded-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden">
+                <div className="flex items-center justify-between p-6 border-b border-stone-100 bg-white">
+                    <div>
+                        <h3 className="text-lg font-serif text-[#1B2E1D]">Editar Sección</h3>
+                        <p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">
+                            {sectionTitles[sectionId as string] || sectionId}
+                        </p>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition-colors">
+                        <X className="h-5 w-5 text-stone-400" />
+                    </button>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition-colors">
-                    <X className="h-5 w-5 text-stone-400" />
-                </button>
-            </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6 bg-white">
                 {sectionId === 'message' && (
                     <>
                         <div className="space-y-2">
@@ -85,7 +87,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 type="text" 
                                 value={title} 
                                 onChange={e => setTitle(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10"
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                             />
                         </div>
                         <div className="space-y-2">
@@ -94,7 +96,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 rows={4}
                                 value={welcomeMessage} 
                                 onChange={e => setWelcomeMessage(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none"
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none text-stone-800"
                             />
                         </div>
                     </>
@@ -107,7 +109,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             type="datetime-local" 
                             value={dateTime} 
                             onChange={e => setDateTime(e.target.value)}
-                            className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10"
+                            className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                         />
                     </div>
                 )}
@@ -120,7 +122,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 type="text" 
                                 value={venueName} 
                                 onChange={e => setVenueName(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10"
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                             />
                         </div>
                         <div className="space-y-2">
@@ -129,7 +131,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 rows={2}
                                 value={venueAddress} 
                                 onChange={e => setVenueAddress(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none"
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none text-stone-800"
                             />
                         </div>
                     </>
@@ -142,17 +144,23 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             type="text" 
                             value={dressCode} 
                             onChange={e => setDressCode(e.target.value)}
-                            className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10"
+                            className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                         />
                     </div>
                 )}
                 
                 {/* Fallback for unmapped sections */}
                 {!['message', 'countdown', 'location', 'dress_code'].includes(sectionId) && (
-                    <div className="text-center py-8">
-                        <p className="text-stone-400 text-sm font-light">
-                            La edición rápida para esta sección estará disponible pronto.
+                    <div className="text-center py-8 space-y-4">
+                        <p className="text-stone-500 text-sm font-medium">
+                            Esta sección requiere herramientas avanzadas (como subir fotos o agregar listas).
                         </p>
+                        <a 
+                            href={`/dashboard/edit/${event.id}`}
+                            className="inline-block px-6 py-3 bg-[#1B2E1D] text-white text-xs font-bold rounded-xl shadow hover:scale-105 transition-all"
+                        >
+                            Editar en Dashboard
+                        </a>
                     </div>
                 )}
             </div>
@@ -173,5 +181,6 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 </button>
             </div>
         </div>
+    </div>
     );
 }
