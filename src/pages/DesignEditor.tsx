@@ -205,7 +205,7 @@ export default function DesignEditor() {
     const { user } = useAuth();
     const toast = useToast();
     const [loading, setLoading] = useState(true);
-    const [activeSection, setActiveSection] = useState<string | null>('matrix');
+    const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);

@@ -82,6 +82,18 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         'dress_code': 'Código de Vestimenta',
     };
 
+    const getDesignSection = (id: string) => {
+        switch(id) {
+            case 'itinerary': return 'itinerary';
+            case 'gallery': return 'gallery';
+            case 'gifts': return 'gifts';
+            case 'rsvp': return 'logistics';
+            case 'hero': return 'imagery';
+            case 'guest_welcome': return 'message';
+            default: return 'matrix';
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
@@ -244,10 +256,10 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             Esta sección requiere herramientas avanzadas (como subir fotos o agregar listas).
                         </p>
                         <a 
-                            href={`/dashboard/edit/${event.id}`}
+                            href={`/dashboard/design/${event.id}?section=${getDesignSection(sectionId)}`}
                             className="inline-block px-6 py-3 bg-[#1B2E1D] text-white text-xs font-bold rounded-xl shadow hover:scale-105 transition-all"
                         >
-                            Editar en Dashboard
+                            Ir a Herramienta Avanzada
                         </a>
                     </div>
                 )}
