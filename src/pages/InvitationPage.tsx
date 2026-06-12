@@ -969,22 +969,24 @@ END:VCALENDAR`;
                     <div className="h-px w-12 bg-accent/30" />
                 </div>
                 
-                <h2 className="text-4xl sm:text-6xl font-serif font-light text-[var(--text-primary)] mb-8 leading-tight">
+                <h2 className="text-4xl sm:text-6xl font-serif font-light text-[var(--text-primary)] mb-8 leading-tight whitespace-pre-line">
                     {guest ? (
                         <>
                             ¡Hola, <span className="text-accent">{guest.name.split(' ')[0]}</span>!
                         </>
                     ) : (
-                        "¡Bienvenidos!"
+                        event.title || "¡Bienvenidos!"
                     )}
                 </h2>
                 
-                <p className="text-xl font-serif italic text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto">
-                    {event.event_type === 'wedding' 
-                        ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
-                        : event.event_type === 'xv'
-                        ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
-                        : '"Un momento especial que quiero compartir contigo"'}
+                <p className="text-xl font-serif italic text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
+                    {welcomeMessage ? welcomeMessage : (
+                        event.event_type === 'wedding' 
+                            ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
+                            : event.event_type === 'xv'
+                            ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
+                            : '"Un momento especial que quiero compartir contigo"'
+                    )}
                 </p>
             </div>
         </section>
@@ -1000,9 +1002,13 @@ END:VCALENDAR`;
                     </div>
                 </div>
                 <div className="space-y-6">
-                    <p className="text-[var(--text-secondary)] leading-relaxed text-lg">
-                        Es un honor para nosotros invitarte a ser parte de este momento tan especial.
-                        Tu presencia hará este día aún más memorable.
+                    {event.title && (
+                        <h3 className="text-3xl font-serif text-[var(--text-primary)] mb-4 whitespace-pre-line">
+                            {event.title}
+                        </h3>
+                    )}
+                    <p className="text-[var(--text-secondary)] leading-relaxed text-lg whitespace-pre-line">
+                        {welcomeMessage ? welcomeMessage : `Es un honor para nosotros invitarte a ser parte de este momento tan especial.\nTu presencia hará este día aún más memorable.`}
                     </p>
                 </div>
             </div>

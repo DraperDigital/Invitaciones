@@ -21,6 +21,14 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [venueName, setVenueName] = useState(event.venue_name || '');
     const [venueAddress, setVenueAddress] = useState(event.venue_address || '');
+    const [mapsLink, setMapsLink] = useState(event.maps_link || '');
+    const [venueTime, setVenueTime] = useState(cfg.venue_time || '');
+    
+    const [misaName, setMisaName] = useState(cfg.misa_name || '');
+    const [misaTime, setMisaTime] = useState(cfg.misa_time || '');
+    const [misaAddress, setMisaAddress] = useState(cfg.misa_address || '');
+    const [misaMapsLink, setMisaMapsLink] = useState(cfg.misa_maps_link || '');
+
     const [dressCode, setDressCode] = useState(event.dress_code || '');
 
     useEffect(() => {
@@ -29,6 +37,12 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setDateTime(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
         setVenueName(event.venue_name || '');
         setVenueAddress(event.venue_address || '');
+        setMapsLink(event.maps_link || '');
+        setVenueTime(cfg.venue_time || '');
+        setMisaName(cfg.misa_name || '');
+        setMisaTime(cfg.misa_time || '');
+        setMisaAddress(cfg.misa_address || '');
+        setMisaMapsLink(cfg.misa_maps_link || '');
         setDressCode(event.dress_code || '');
     }, [event, sectionId]);
 
@@ -45,6 +59,12 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
             if (sectionId === 'location') {
                 if (venueName !== event.venue_name) await onUpdateEventColumn('venue_name', venueName);
                 if (venueAddress !== event.venue_address) await onUpdateEventColumn('venue_address', venueAddress);
+                if (mapsLink !== event.maps_link) await onUpdateEventColumn('maps_link', mapsLink);
+                if (venueTime !== cfg.venue_time) await onUpdateThemeConfig('venue_time', venueTime);
+                if (misaName !== cfg.misa_name) await onUpdateThemeConfig('misa_name', misaName);
+                if (misaTime !== cfg.misa_time) await onUpdateThemeConfig('misa_time', misaTime);
+                if (misaAddress !== cfg.misa_address) await onUpdateThemeConfig('misa_address', misaAddress);
+                if (misaMapsLink !== cfg.misa_maps_link) await onUpdateThemeConfig('misa_maps_link', misaMapsLink);
             }
             if (sectionId === 'dress_code') {
                 if (dressCode !== event.dress_code) await onUpdateEventColumn('dress_code', dressCode);
@@ -115,26 +135,94 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 )}
 
                 {sectionId === 'location' && (
-                    <>
-                        <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Lugar</label>
-                            <input 
-                                type="text" 
-                                value={venueName} 
-                                onChange={e => setVenueName(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
-                            />
+                    <div className="space-y-8">
+                        {/* Ceremonia */}
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-serif font-bold text-[#1B2E1D] border-b border-stone-100 pb-2">Datos de la Ceremonia (Misa)</h4>
+                            
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Lugar</label>
+                                <input 
+                                    type="text" 
+                                    value={misaName} 
+                                    onChange={e => setMisaName(e.target.value)}
+                                    placeholder="Ej. Parroquia San Miguel"
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Hora</label>
+                                <input 
+                                    type="time" 
+                                    value={misaTime} 
+                                    onChange={e => setMisaTime(e.target.value)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Dirección</label>
+                                <textarea 
+                                    rows={2}
+                                    value={misaAddress} 
+                                    onChange={e => setMisaAddress(e.target.value)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Link de Google Maps</label>
+                                <input 
+                                    type="url" 
+                                    value={misaMapsLink} 
+                                    onChange={e => setMisaMapsLink(e.target.value)}
+                                    placeholder="https://maps.app.goo.gl/..."
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Dirección</label>
-                            <textarea 
-                                rows={2}
-                                value={venueAddress} 
-                                onChange={e => setVenueAddress(e.target.value)}
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none text-stone-800"
-                            />
+
+                        {/* Recepción */}
+                        <div className="space-y-4">
+                            <h4 className="text-sm font-serif font-bold text-[#1B2E1D] border-b border-stone-100 pb-2">Datos de la Recepción</h4>
+                            
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Lugar</label>
+                                <input 
+                                    type="text" 
+                                    value={venueName} 
+                                    onChange={e => setVenueName(e.target.value)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Hora</label>
+                                <input 
+                                    type="time" 
+                                    value={venueTime} 
+                                    onChange={e => setVenueTime(e.target.value)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Dirección</label>
+                                <textarea 
+                                    rows={2}
+                                    value={venueAddress} 
+                                    onChange={e => setVenueAddress(e.target.value)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 resize-none text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Link de Google Maps</label>
+                                <input 
+                                    type="url" 
+                                    value={mapsLink} 
+                                    onChange={e => setMapsLink(e.target.value)}
+                                    placeholder="https://maps.app.goo.gl/..."
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                />
+                            </div>
                         </div>
-                    </>
+                    </div>
                 )}
 
                 {sectionId === 'dress_code' && (
