@@ -17,6 +17,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     
     // Local state for specific fields based on section
     const [title, setTitle] = useState(event.title || '');
+    const [subtitle, setSubtitle] = useState(cfg.subtitle || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [venueName, setVenueName] = useState(event.venue_name || '');
@@ -33,6 +34,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
     useEffect(() => {
         setTitle(event.title || '');
+        setSubtitle(cfg.subtitle || '');
         setWelcomeMessage(cfg.welcome_message || '');
         setDateTime(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
         setVenueName(event.venue_name || '');
@@ -49,6 +51,10 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const handleSave = async () => {
         setIsSaving(true);
         try {
+            if (sectionId === 'hero') {
+                if (title !== event.title) await onUpdateEventColumn('title', title);
+                if (subtitle !== cfg.subtitle) await onUpdateThemeConfig('subtitle', subtitle);
+            }
             if (sectionId === 'message') {
                 if (title !== event.title) await onUpdateEventColumn('title', title);
                 if (welcomeMessage !== cfg.welcome_message) await onUpdateThemeConfig('welcome_message', welcomeMessage);
@@ -76,6 +82,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     };
 
     const sectionTitles: Record<string, string> = {
+        'hero': 'Portada Principal',
         'message': 'Mensaje de Bienvenida',
         'countdown': 'Cuenta Regresiva',
         'location': 'Mapa y Ubicación',
@@ -111,6 +118,28 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 </div>
 
                 <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6 bg-white">
+                {sectionId === 'hero' && (
+                    <>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Subtítulo (ej. 70 Años)</label>
+                            <input 
+                                type="text" 
+                                value={subtitle} 
+                                onChange={e => setSubtitle(e.target.value)}
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Título Principal</label>
+                            <input 
+                                type="text" 
+                                value={title} 
+                                onChange={e => setTitle(e.target.value)}
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            />
+                        </div>
+                    </>
+                )}
                 {sectionId === 'message' && (
                     <>
                         <div className="space-y-2">
@@ -250,7 +279,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 )}
                 
                 {/* Fallback for unmapped sections */}
-                {!['message', 'countdown', 'location', 'dress_code'].includes(sectionId) && (
+                {!['hero', 'message', 'countdown', 'location', 'dress_code'].includes(sectionId) && (
                     <div className="text-center py-8 space-y-4">
                         <p className="text-stone-500 text-sm font-medium">
                             Esta sección requiere herramientas avanzadas (como subir fotos o agregar listas).

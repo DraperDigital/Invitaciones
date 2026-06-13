@@ -975,18 +975,16 @@ END:VCALENDAR`;
                             ¡Hola, <span className="text-accent">{guest.name.split(' ')[0]}</span>!
                         </>
                     ) : (
-                        event.title || "¡Bienvenidos!"
+                        "¡Bienvenidos!"
                     )}
                 </h2>
                 
                 <p className="text-xl font-serif italic text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
-                    {welcomeMessage ? welcomeMessage : (
-                        event.event_type === 'wedding' 
-                            ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
-                            : event.event_type === 'xv'
-                            ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
-                            : '"Un momento especial que quiero compartir contigo"'
-                    )}
+                    {event.event_type === 'wedding' 
+                        ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
+                        : event.event_type === 'xv'
+                        ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
+                        : '"Un momento especial que quiero compartir contigo"'}
                 </p>
             </div>
         </section>
