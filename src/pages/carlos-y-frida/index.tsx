@@ -116,6 +116,7 @@ export default function CarlosYFridaLanding() {
     const containerRef = useRef<HTMLDivElement>(null);
     
     const [showRotateHint, setShowRotateHint] = useState(false);
+    const [showRotateBackHint, setShowRotateBackHint] = useState(false);
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
     const [showDevPanel, setShowDevPanel] = useState(false);
@@ -148,9 +149,24 @@ export default function CarlosYFridaLanding() {
 
     const handleVideoEnded = () => {
         setShowVideo(false);
+        
+        const isLandscape = window.innerWidth > window.innerHeight;
+        const isMobile = window.innerWidth <= 1024 || window.innerHeight <= 1024;
+        
+        if (isLandscape && isMobile) {
+            setShowRotateBackHint(true);
+        } else {
+            setTimeout(() => {
+                setShowQuiniela(true);
+            }, 500); // Pequeño delay para que no sea tan brusco
+        }
+    };
+
+    const handleRotatedBack = () => {
+        setShowRotateBackHint(false);
         setTimeout(() => {
             setShowQuiniela(true);
-        }, 500); // Pequeño delay para que no sea tan brusco
+        }, 500);
     };
 
     // Prevent body scroll when in this page to avoid double scrollbars
@@ -304,6 +320,25 @@ export default function CarlosYFridaLanding() {
                 </div>
             )}
 
+            {/* Hint Rotate Back Device (Mobile Only) */}
+            {showRotateBackHint && (
+                <div className="fixed inset-0 z-[100] bg-stone-900/95 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-300">
+                    <div className="animate-spin-slow mb-8">
+                        <Smartphone className="w-24 h-24 text-amber-400" />
+                    </div>
+                    <h3 className="text-3xl font-black text-white mb-4">¡Gira tu teléfono a Vertical!</h3>
+                    <p className="text-stone-300 text-lg mb-10 max-w-sm">
+                        Para participar en la quiniela familiar, por favor acomoda tu celular de vuelta a modo vertical.
+                    </p>
+                    <button 
+                        onClick={handleRotatedBack}
+                        className="bg-amber-500 hover:bg-amber-600 text-stone-900 font-bold px-8 py-4 rounded-full text-lg shadow-xl shadow-amber-500/20 transition-all hover:scale-105"
+                    >
+                        📲 ¡Listo, ya lo giré!
+                    </button>
+                </div>
+            )}
+
             {/* Video Modal */}
             <VideoModal 
                 isOpen={showVideo} 
@@ -317,65 +352,6 @@ export default function CarlosYFridaLanding() {
                 isOpen={showQuiniela}
                 onClose={() => setShowQuiniela(false)}
             />
-
-            {/* Developer Tools */}
-            <div className="fixed bottom-4 right-4 z-[200]">
-                {showDevPanel ? (
-                    <div className="bg-white rounded-2xl shadow-2xl p-4 border border-stone-200 w-64 animate-in slide-in-from-bottom-4">
-                        <div className="flex justify-between items-center mb-4 border-b border-stone-100 pb-2">
-                            <h4 className="font-bold text-stone-800 text-sm">Dev Tools</h4>
-                            <button onClick={() => setShowDevPanel(false)} className="text-stone-400 hover:text-stone-600">
-                                <Settings className="w-4 h-4" />
-                            </button>
-                        </div>
-                        <div className="space-y-2 flex flex-col">
-                            <button 
-                                onClick={() => containerRef.current?.scrollTo({ top: containerRef.current.clientHeight * 8, behavior: 'smooth' })}
-                                className="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 py-2 rounded-lg font-medium text-left px-3"
-                            >
-                                Saltar a Clímax (Slide 9)
-                            </button>
-                            <button 
-                                onClick={() => setShowVideo(true)}
-                                className="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 py-2 rounded-lg font-medium text-left px-3"
-                            >
-                                Probar Video
-                            </button>
-                            <button 
-                                onClick={() => setShowQuiniela(true)}
-                                className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 py-2 rounded-lg font-medium text-left px-3"
-                            >
-                                Probar Quiniela
-                            </button>
-                            <button 
-                                onClick={() => {
-                                    localStorage.removeItem('quiniela_carlos_frida');
-                                    alert('Voto borrado');
-                                }}
-                                className="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-2 rounded-lg font-medium text-left px-3"
-                            >
-                                Limpiar LocalStorage
-                            </button>
-                            <div className="mt-2 pt-2 border-t border-stone-100">
-                                <label className="text-[10px] uppercase font-bold text-stone-500 mb-1 block">Custom Video URL</label>
-                                <input 
-                                    type="text" 
-                                    value={videoUrl}
-                                    onChange={(e) => setVideoUrl(e.target.value)}
-                                    className="w-full text-xs p-2 bg-stone-50 border border-stone-200 rounded"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <button 
-                        onClick={() => setShowDevPanel(true)}
-                        className="bg-stone-900 text-white p-3 rounded-full shadow-xl opacity-50 hover:opacity-100 transition-opacity"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </button>
-                )}
-            </div>
 
             {/* Global style for noise */}
             <style>{`
