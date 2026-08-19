@@ -18,6 +18,7 @@ const PlanesPage          = React.lazy(() => import('./pages/PlanesPage'));
 const FaqPage             = React.lazy(() => import('./pages/FaqPage'));
 const CheckoutPage        = React.lazy(() => import('./pages/CheckoutPage'));
 const NotFoundPage        = React.lazy(() => import('./pages/NotFoundPage'));
+const CarlosYFrida        = React.lazy(() => import('./pages/carlos-y-frida'));
 const DashboardHome       = React.lazy(() => import('./pages/dashboard/DashboardHome'));
 const EventRSVPs          = React.lazy(() => import('./pages/dashboard/EventRSVPs'));
 const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn'));
@@ -99,13 +100,15 @@ function AppRoutes() {
         <Route path="/invitto-vs-paperless-post"           element={<InvittoVsPaperless />} />
         <Route path="/invitto-vs-greenvelope"              element={<InvittoVsGreenvelope />} />
         <Route path="/invitto-vs-otras-plataformas"        element={<InvittoVsOtras />} />
-        <Route path="/comparativas"                        element={<ComparativasHub />} />
+        <Route path="/ejemplos"                            element={<ExamplesPage />} />
+        <Route path="/carlos-y-frida"                      element={<CarlosYFrida />} />
 
-        {/* Plan Landing Pages */}
+        {/* SEO programmatic landing pages */}
         <Route path="/planes/clasica"                      element={<PlanClasica />} />
         <Route path="/planes/pro"                          element={<PlanPro />} />
         <Route path="/planes/premium"                      element={<PlanPremium />} />
         <Route path="/planes/concierge"                    element={<PlanConcierge />} />
+        <Route path="/comparativas"                        element={<ComparativasHub />} />
 
         {/* Blog Routes */}
         <Route path="/blog"                                element={<BlogIndex />} />
