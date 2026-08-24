@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Gift, User, Calendar, Save, Loader2 } from 'lucide-react';
+import { X, Gift, User, Calendar, Save, Loader2 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 interface QuinielaModalProps {
