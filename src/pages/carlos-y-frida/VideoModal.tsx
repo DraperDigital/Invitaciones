@@ -12,9 +12,11 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isMuted, setIsMuted] = useState(true);
     const [showUnmuteHint, setShowUnmuteHint] = useState(true);
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
         if (isOpen && videoRef.current) {
+            setHasError(false);
             videoRef.current.currentTime = 0;
             setIsMuted(true);
             setShowUnmuteHint(true);
@@ -32,6 +34,11 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
         }
     };
 
+    const handleVideoError = () => {
+        console.error("Error al cargar el video desde:", videoUrl);
+        setHasError(true);
+    };
+
     return (
         <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center animate-in fade-in duration-500">
             {/* Controles superiores */}
@@ -47,38 +54,58 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                 </div>
             </div>
 
-            <video 
-                ref={videoRef}
-                src={videoUrl}
-                className="w-full h-full object-cover sm:object-contain"
-                playsInline
-                muted={isMuted}
-                onEnded={onEnded}
-            />
+            {hasError ? (
+                <div className="text-center p-8 max-w-md bg-stone-900/90 rounded-3xl border border-stone-800 text-white z-30">
+                    <div className="text-4xl mb-4">⚠️</div>
+                    <h3 className="text-xl font-bold mb-2">No se pudo cargar el video</h3>
+                    <p className="text-stone-400 text-sm mb-6">
+                        Verifica que el archivo esté disponible en la dirección: <br/>
+                        <code className="text-amber-400 text-xs break-all bg-black/50 p-2 rounded block mt-2">{videoUrl}</code>
+                    </p>
+                    <button
+                        onClick={onEnded}
+                        className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold rounded-xl transition-all"
+                    >
+                        Continuar a la Quiniela ➔
+                    </button>
+                </div>
+            ) : (
+                <>
+                    <video 
+                        ref={videoRef}
+                        src={videoUrl}
+                        className="w-full h-full object-cover sm:object-contain"
+                        playsInline
+                        muted={isMuted}
+                        onEnded={onEnded}
+                        onError={handleVideoError}
+                    />
 
-            {/* Hint para activar sonido */}
-            {showUnmuteHint && (
-                <button 
-                    onClick={handleToggleMute}
-                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-sm z-20 group"
-                >
-                    <div className="bg-white/20 p-6 rounded-full group-hover:bg-white/30 transition-all mb-4 animate-bounce">
-                        <VolumeX className="w-12 h-12 text-white" />
-                    </div>
-                    <span className="text-white font-bold text-xl drop-shadow-md">
-                        Toca para activar el sonido
-                    </span>
-                </button>
-            )}
+                    {/* Hint para activar sonido */}
+                    {showUnmuteHint && (
+                        <button 
+                            onClick={handleToggleMute}
+                            className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-sm z-20 group"
+                        >
+                            <div className="bg-white/20 p-6 rounded-full group-hover:bg-white/30 transition-all mb-4 animate-bounce">
+                                <VolumeX className="w-12 h-12 text-white" />
+                            </div>
+                            <span className="text-white font-bold text-xl drop-shadow-md">
+                                Toca para activar el sonido
+                            </span>
+                        </button>
+                    )}
 
-            {/* Control flotante de volumen (solo si ya se quitó el hint) */}
-            {!showUnmuteHint && (
-                <button 
-                    onClick={handleToggleMute}
-                    className="absolute bottom-10 right-6 p-4 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-md text-white transition-all z-10"
-                >
-                    {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
-                </button>
+                    {/* Control flotante de volumen (solo si ya se quitó el hint) */}
+                    {!showUnmuteHint && (
+                        <button 
+                            onClick={handleToggleMute}
+                            className="absolute bottom-10 right-6 p-4 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-md text-white transition-all z-10"
+                        >
+                            {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+                        </button>
+                    )}
+                </>
             )}
         </div>
     );
