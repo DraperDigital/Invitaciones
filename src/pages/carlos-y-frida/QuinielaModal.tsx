@@ -257,12 +257,6 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                                 >
                                     Cerrar
                                 </button>
-                                <button 
-                                    onClick={handleClear}
-                                    className="text-xs text-stone-400 hover:text-stone-600 mt-2"
-                                >
-                                    (Dev) Borrar mi voto en este navegador
-                                </button>
                             </div>
                         </div>
                     )}
