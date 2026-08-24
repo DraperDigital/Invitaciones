@@ -47,8 +47,10 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
 
         if (!youtubeId && !streamableId && videoRef.current) {
             videoRef.current.currentTime = 0;
-            setIsMuted(true);
-            setShowUnmuteHint(true);
+            videoRef.current.volume = 1.0;
+            videoRef.current.muted = false;
+            setIsMuted(false);
+            setShowUnmuteHint(false);
 
             videoRef.current.play()
                 .then(() => {
@@ -60,7 +62,15 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                         }
                     }
                 })
-                .catch(e => console.error("Auto-play failed:", e));
+                .catch(e => {
+                    console.warn("Unmuted play blocked by browser, falling back to muted:", e);
+                    if (videoRef.current) {
+                        videoRef.current.muted = true;
+                        setIsMuted(true);
+                        setShowUnmuteHint(true);
+                        videoRef.current.play().catch(err => console.error("Muted play failed:", err));
+                    }
+                });
         }
     }, [isOpen, videoUrl, youtubeId, streamableId]);
 
