@@ -90,13 +90,7 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
         fetchPredictions();
     };
 
-    const handleClear = () => {
-        localStorage.removeItem('quiniela_carlos_frida');
-        setIsSubmitted(false);
-        setName('');
-        setGender(null);
-        setDate('');
-    };
+
 
     const formatGenderLabel = (g: string) => {
         if (g === 'niño') return '👦 Niño';
