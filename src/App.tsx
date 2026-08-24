@@ -48,6 +48,7 @@ const InvitacionesGDL        = React.lazy(() => import('./pages/seo/Invitaciones
 const InvitacionesMTY        = React.lazy(() => import('./pages/seo/InvitacionesMonterreyPage'));
 const InvitacionesLeon       = React.lazy(() => import('./pages/seo/InvitacionesLeonPage'));
 const InvitacionesVsPapel    = React.lazy(() => import('./pages/seo/InvitacionesVsPapelPage'));
+const InvitacionesRevelacion = React.lazy(() => import('./pages/seo/InvitacionesRevelacionPage'));
 const InvittoVsPaperless     = React.lazy(() => import('./pages/seo/InvittoVsPaperlessPage'));
 const InvittoVsGreenvelope   = React.lazy(() => import('./pages/seo/InvittoVsGreenvelopePage'));
 const InvittoVsOtras         = React.lazy(() => import('./pages/seo/InvittoVsOtrasPage'));
@@ -97,6 +98,7 @@ function AppRoutes() {
         <Route path="/invitaciones-digitales-monterrey"    element={<InvitacionesMTY />} />
         <Route path="/invitaciones-digitales-leon"         element={<InvitacionesLeon />} />
         <Route path="/invitaciones-digitales-vs-papel"     element={<InvitacionesVsPapel />} />
+        <Route path="/invitaciones-digitales-revelacion-de-genero" element={<InvitacionesRevelacion />} />
         <Route path="/invitto-vs-paperless-post"           element={<InvittoVsPaperless />} />
         <Route path="/invitto-vs-greenvelope"              element={<InvittoVsGreenvelope />} />
         <Route path="/invitto-vs-otras-plataformas"        element={<InvittoVsOtras />} />

@@ -653,4 +653,61 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     },
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
   },
+  'invitaciones-digitales-revelacion-de-genero': {
+    slug: 'invitaciones-digitales-revelacion-de-genero',
+    seo: {
+      title: 'Invitaciones Digitales para Revelación de Género y Baby Shower | Invitto',
+      description: 'Crea invitaciones digitales interactivas para revelación de género y baby shower con quiniela en vivo, contador regresivo, video de la revelación y confirmación por WhatsApp.',
+      path: '/invitaciones-digitales-revelacion-de-genero',
+    },
+    hero: {
+      badge: '✨ Revelación de Género & Baby Shower',
+      h1: 'Invitaciones Digitales Interactivas para Revelación de Género',
+      subtitle: 'Emociona a tus invitados con quiniela familiar en tiempo real, cuenta regresiva, video sorpresa de revelación y confirmación por WhatsApp.',
+      cta: 'Crear mi invitación de revelación',
+    },
+    benefits: [
+      { icon: PartyPopper, title: 'Quiniela en Tiempo Real', description: 'Permite a familiares y amigos votar si creen que será niño o niña antes de la gran revelación.' },
+      { icon: Heart, title: 'Video Sorpresa en Pantalla Completa', description: 'Muestra el video de la revelación o la ecografía como el momento culminante de la invitación.' },
+      { icon: Clock, title: 'Cuenta Regresiva Emocionante', description: 'Reloj contador dinámico para la fecha de la fiesta o la llegada estimada del bebé.' },
+      { icon: MessageCircle, title: 'RSVP y Pases por WhatsApp', description: 'Confirmación directa de asistencia y gestión de pases para familiares y amigos.' },
+      { icon: Music, title: 'Música de Fondo & Cronología', description: 'Agrega tu canción favorita y comparte la historia del embarazo paso a paso.' },
+      { icon: DollarSign, title: 'Mesa de Regalos & Transferencias', description: 'Conecta tus mesas de regalos departamentales o datos para depósitos para el bebé.' },
+    ],
+    steps: [
+      { number: '01', title: 'Elige tu plantilla de revelación', description: 'Selecciona un diseño interactivo moderno pensado para baby shower y revelación de género.' },
+      { number: '02', title: 'Configura la quiniela y el video', description: 'Personaliza los nombres, habilita las votaciones en vivo y sube el video o ecografía.' },
+      { number: '03', title: 'Envía por WhatsApp', description: 'Comparte el enlace con tu familia y observa en tiempo real los votos de la quiniela.' },
+    ],
+    comparison: {
+      title: 'Invitto vs Invitaciones Convencionales',
+      subtitle: 'La diferencia entre una simple imagen y una experiencia inolvidable.',
+      invittoLabel: 'Invitto Revelaciones',
+      competitorLabel: 'Imagen o PDF estático',
+      rows: [
+        { feature: 'Quiniela interactiva niño/niña', invitto: true, competitor: false },
+        { feature: 'Video de revelación integrado', invitto: true, competitor: false },
+        { feature: 'Conteo regresivo animado', invitto: true, competitor: false },
+        { feature: 'Confirmación RSVP por WhatsApp', invitto: true, competitor: false },
+        { feature: 'Música de fondo personalizada', invitto: true, competitor: false },
+        { feature: 'Direcciones GPS (Google Maps / Waze)', invitto: true, competitor: 'Solo texto' },
+      ],
+    },
+    testimonials: [
+      { quote: 'La quiniela en vivo hizo que toda la familia estuviera súper emocionada votando días antes del evento. ¡El video al final sacó lágrimas a todos!', name: 'Frida & Carlos', event: 'Revelación de Género (CDMX)' },
+      { quote: 'Súper fácil de enviar por WhatsApp. Todos nuestros amigos amaron la cuenta regresiva y votar si era niño o niña.', name: 'Mariana & Roberto', event: 'Baby Shower & Revelación (Monterrey)' },
+    ],
+    faq: [
+      { question: '¿Cómo funciona la quiniela en vivo para los invitados?', answer: 'Cada invitado puede seleccionar su predicción (Niño, Niña o Sorpresa) y la fecha en que cree que nacerá el bebé. Los resultados acumulados se muestran en tiempo real.' },
+      { question: '¿Puedo mantener el secreto del género hasta que vean el video?', answer: 'Sí, la invitación oculta la noticia principal hasta que el invitado presiona el botón de la revelación y reproduce el video en pantalla completa.' },
+      { question: '¿Cómo confirman su asistencia los invitados?', answer: 'Los invitados confirman el número de pases que usarán directamente en la web y el sistema les permite enviar la respuesta confirmada por WhatsApp.' },
+      { question: '¿Puedo agregar mesa de regalos o número de cuenta?', answer: 'Sí, puedes enlazar tus listas de regalos de Liverpool, Amazon, Palacio de Hierro o colocar tus datos bancarios para regalos en efectivo.' },
+    ],
+    ctaFinal: {
+      title: 'Prepara la revelación más emotiva para tu bebé',
+      subtitle: 'Crea tu invitación digital en minutos y sorprende a toda tu familia.',
+      cta: 'Empezar mi invitación gratis',
+    },
+    get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
+  },
 };

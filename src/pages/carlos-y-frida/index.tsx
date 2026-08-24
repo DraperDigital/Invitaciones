@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useCountdown } from './useCountdown';
 import QuinielaModal from './QuinielaModal';
 import VideoModal from './VideoModal';
@@ -130,6 +131,7 @@ export default function CarlosYFridaLanding() {
     const [showRotateBackHint, setShowRotateBackHint] = useState(false);
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
+    const [quinielaMode, setQuinielaMode] = useState<'vote' | 'results'>('vote');
     const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
     const videoUrl = 'https://iyunljflpqfztmwnlgup.supabase.co/storage/v1/object/public/videos/Web.mp4';
 
@@ -327,10 +329,10 @@ export default function CarlosYFridaLanding() {
                                 <CountdownDisplay targetDate="2027-01-15T00:00:00" accentColor="text-rose-500" />
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4 items-center">
+                            <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
                                 <button 
-                                    onClick={() => setShowQuiniela(true)}
-                                    className="relative group overflow-hidden rounded-full bg-amber-600 text-white px-8 py-4 font-bold text-lg shadow-xl transition-all hover:scale-105 active:scale-95"
+                                    onClick={() => { setQuinielaMode('vote'); setShowQuiniela(true); }}
+                                    className="relative group overflow-hidden rounded-full bg-amber-600 hover:bg-amber-700 text-white px-7 py-3.5 font-bold text-base shadow-xl transition-all hover:scale-105 active:scale-95"
                                 >
                                     <span className="relative flex items-center gap-2">
                                         🎲 Participar en la Quiniela
@@ -338,11 +340,29 @@ export default function CarlosYFridaLanding() {
                                 </button>
 
                                 <button 
+                                    onClick={() => { setQuinielaMode('results'); setShowQuiniela(true); }}
+                                    className="rounded-full bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-200 px-5 py-3.5 font-semibold text-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                                >
+                                    📊 Ver resultados
+                                </button>
+
+                                <button 
                                     onClick={handleRevealClick}
-                                    className="rounded-full bg-stone-200 hover:bg-stone-300 text-stone-800 px-6 py-4 font-semibold text-sm transition-all"
+                                    className="rounded-full bg-stone-200 hover:bg-stone-300 text-stone-800 px-5 py-3.5 font-semibold text-sm transition-all hover:scale-105 active:scale-95"
                                 >
                                     🎥 Volver a ver el video
                                 </button>
+                            </div>
+
+                            {/* Subtle Footer */}
+                            <div className="mt-8 text-center">
+                                <Link 
+                                    to="/invitaciones-digitales-revelacion-de-genero"
+                                    className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-widest text-stone-400 hover:text-amber-600 transition-colors opacity-60 hover:opacity-100 font-medium"
+                                >
+                                    <span>Powered by</span>
+                                    <span className="font-serif italic font-bold tracking-tight text-stone-600 hover:text-amber-700 text-xs sm:text-sm">Invitto</span>
+                                </Link>
                             </div>
                         </div>
                     )}
@@ -400,6 +420,7 @@ export default function CarlosYFridaLanding() {
             {/* Quiniela Modal */}
             <QuinielaModal 
                 isOpen={showQuiniela}
+                initialMode={quinielaMode}
                 onClose={() => setShowQuiniela(false)}
             />
 

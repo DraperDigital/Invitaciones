@@ -5,6 +5,7 @@ import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 interface QuinielaModalProps {
     isOpen: boolean;
     onClose: () => void;
+    initialMode?: 'vote' | 'results';
 }
 
 interface PredictionItem {
@@ -20,11 +21,12 @@ const DEFAULT_PREDICTIONS: PredictionItem[] = [
     { name: 'Primo Alex', gender: 'sorpresa', date: '2027-01-22' }
 ];
 
-export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
+export default function QuinielaModal({ isOpen, onClose, initialMode = 'vote' }: QuinielaModalProps) {
     const [name, setName] = useState('');
     const [gender, setGender] = useState<'niño' | 'niña' | 'sorpresa' | null>(null);
     const [date, setDate] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [showResults, setShowResults] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [predictions, setPredictions] = useState<PredictionItem[]>(DEFAULT_PREDICTIONS);
     const [loadingPredictions, setLoadingPredictions] = useState(false);
@@ -57,9 +59,14 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
             if (saved) {
                 setIsSubmitted(true);
             }
+            if (initialMode === 'results') {
+                setShowResults(true);
+            } else {
+                setShowResults(saved ? true : false);
+            }
             fetchPredictions();
         }
-    }, [isOpen]);
+    }, [isOpen, initialMode]);
 
     if (!isOpen) return null;
 
@@ -112,6 +119,10 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
         return d;
     };
 
+    const boyVotes = predictions.filter(p => p.gender === 'niño').length;
+    const girlVotes = predictions.filter(p => p.gender === 'niña').length;
+    const surpriseVotes = predictions.filter(p => p.gender === 'sorpresa').length;
+
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
             <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
@@ -123,14 +134,20 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                 </button>
 
                 <div className="p-6 sm:p-8">
-                    {!isSubmitted ? (
+                    {!showResults ? (
                         <>
-                            <div className="text-center mb-8">
-                                <h2 className="text-2xl font-serif text-stone-800 mb-2">¡Haz tu Predicción! 👶</h2>
+                            <div className="text-center mb-6">
+                                <h2 className="text-2xl font-serif text-stone-800 mb-1">¡Haz tu Predicción! 👶</h2>
                                 <p className="text-stone-500 text-sm">Quiniela Familiar Carlos & Frida</p>
+                                <button 
+                                    onClick={() => setShowResults(true)}
+                                    className="mt-2 text-xs text-amber-600 font-semibold hover:underline"
+                                >
+                                    📊 Ver resultados de la quiniela ({predictions.length} votos)
+                                </button>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-6">
+                            <form onSubmit={handleSubmit} className="space-y-5">
                                 <div>
                                     <label className="block text-sm font-medium text-stone-700 mb-2">
                                         Tu Nombre o Apodo
@@ -144,14 +161,14 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                                             required
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
-                                            className="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow bg-stone-50 text-stone-800 placeholder-stone-400"
+                                            className="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow bg-stone-50 text-stone-800 placeholder-stone-400 text-sm"
                                             placeholder="Ej. Tía Rosa"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-stone-700 mb-3">
+                                    <label className="block text-sm font-medium text-stone-700 mb-2">
                                         ¿Qué crees que será?
                                     </label>
                                     <div className="grid grid-cols-3 gap-3">
@@ -192,16 +209,16 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                                             max="2027-01-31"
                                             value={date}
                                             onChange={(e) => setDate(e.target.value)}
-                                            className="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow bg-stone-50 text-stone-800"
+                                            className="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow bg-stone-50 text-stone-800 text-sm"
                                         />
                                     </div>
-                                    <p className="text-xs text-stone-500 mt-2 ml-1">Debe ser en Enero de 2027.</p>
+                                    <p className="text-xs text-stone-500 mt-1 ml-1">Debe ser en Enero de 2027.</p>
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={!name || !gender || !date || isSubmitting}
-                                    className="w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2
+                                    className="w-full py-3.5 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2 text-sm
                                         disabled:bg-stone-300 disabled:cursor-not-allowed
                                         bg-amber-600 hover:bg-amber-700 hover:scale-[1.02] active:scale-[0.98]"
                                 >
@@ -220,23 +237,45 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                             </form>
                         </>
                     ) : (
-                        <div className="text-center py-6 space-y-6">
-                            <div className="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <CheckCircle2 className="w-10 h-10" />
+                        <div className="py-2 space-y-4">
+                            <div className="text-center">
+                                <h2 className="text-2xl font-serif text-stone-800">Resultados de la Quiniela 📊</h2>
+                                <p className="text-stone-500 text-xs mt-1">Predicciones acumuladas de la familia</p>
                             </div>
-                            <h2 className="text-3xl font-serif text-stone-800">¡Gracias!</h2>
-                            <p className="text-stone-600 text-lg">Tu predicción ha sido guardada.</p>
+
+                            {/* Resumen numérico */}
+                            <div className="grid grid-cols-3 gap-2 text-center">
+                                <div className="bg-blue-50 border border-blue-100 p-2.5 rounded-2xl">
+                                    <div className="text-xl">👦</div>
+                                    <div className="text-xs text-blue-700 font-medium">Niño</div>
+                                    <div className="text-lg font-bold text-blue-800">{boyVotes}</div>
+                                </div>
+                                <div className="bg-pink-50 border border-pink-100 p-2.5 rounded-2xl">
+                                    <div className="text-xl">👧</div>
+                                    <div className="text-xs text-pink-700 font-medium">Niña</div>
+                                    <div className="text-lg font-bold text-pink-800">{girlVotes}</div>
+                                </div>
+                                <div className="bg-purple-50 border border-purple-100 p-2.5 rounded-2xl">
+                                    <div className="text-xl">❓</div>
+                                    <div className="text-xs text-purple-700 font-medium">Sorpresa</div>
+                                    <div className="text-lg font-bold text-purple-800">{surpriseVotes}</div>
+                                </div>
+                            </div>
                             
-                            <div className="bg-stone-50 p-4 rounded-2xl text-left border border-stone-100 max-h-60 overflow-y-auto">
-                                <h3 className="font-semibold text-stone-800 mb-3 text-sm uppercase tracking-wider flex items-center gap-2 sticky top-0 bg-stone-50 py-1">
-                                    <Gift className="w-4 h-4 text-amber-500" />
-                                    Predicciones de la familia {loadingPredictions && <Loader2 className="w-3 h-3 animate-spin text-stone-400" />}
+                            {/* Lista de predicciones */}
+                            <div className="bg-stone-50 p-4 rounded-2xl text-left border border-stone-100 max-h-56 overflow-y-auto">
+                                <h3 className="font-semibold text-stone-800 mb-3 text-xs uppercase tracking-wider flex items-center justify-between sticky top-0 bg-stone-50 py-1">
+                                    <span className="flex items-center gap-1.5">
+                                        <Gift className="w-4 h-4 text-amber-500" />
+                                        Todos los votos ({predictions.length})
+                                    </span>
+                                    {loadingPredictions && <Loader2 className="w-3 h-3 animate-spin text-stone-400" />}
                                 </h3>
-                                <div className="space-y-3">
+                                <div className="space-y-2.5">
                                     {predictions.map((p, idx) => (
-                                        <div key={p.id || idx} className="flex justify-between items-center text-sm border-b border-stone-200 pb-2 last:border-0">
-                                            <span className="text-stone-700 font-medium">{p.name}</span>
-                                            <span className="text-stone-500 font-mono text-xs">
+                                        <div key={p.id || idx} className="flex justify-between items-center text-xs border-b border-stone-200 pb-2 last:border-0">
+                                            <span className="text-stone-800 font-semibold">{p.name}</span>
+                                            <span className="text-stone-500 font-mono">
                                                 {formatGenderLabel(p.gender)} - {formatDateLabel(p.date)}
                                             </span>
                                         </div>
@@ -244,10 +283,16 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                                 </div>
                             </div>
                             
-                            <div className="pt-4 flex flex-col gap-2">
+                            <div className="pt-2 flex flex-col sm:flex-row gap-2">
+                                <button 
+                                    onClick={() => setShowResults(false)}
+                                    className="flex-1 py-2.5 bg-stone-100 text-stone-700 font-semibold text-xs rounded-xl hover:bg-stone-200 transition-colors"
+                                >
+                                    ✍️ {isSubmitted ? 'Votar de nuevo' : 'Votar ahora'}
+                                </button>
                                 <button 
                                     onClick={onClose}
-                                    className="w-full py-3 bg-stone-100 text-stone-700 font-semibold rounded-xl hover:bg-stone-200 transition-colors"
+                                    className="flex-1 py-2.5 bg-amber-600 text-white font-semibold text-xs rounded-xl hover:bg-amber-700 transition-colors"
                                 >
                                     Cerrar
                                 </button>
