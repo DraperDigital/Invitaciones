@@ -47,10 +47,9 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
 
         if (!youtubeId && !streamableId && videoRef.current) {
             videoRef.current.currentTime = 0;
-            videoRef.current.volume = 1.0;
-            videoRef.current.muted = false;
-            setIsMuted(false);
-            setShowUnmuteHint(false);
+            videoRef.current.muted = true;
+            setIsMuted(true);
+            setShowUnmuteHint(true);
 
             videoRef.current.play()
                 .then(() => {
@@ -62,15 +61,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                         }
                     }
                 })
-                .catch(e => {
-                    console.warn("Unmuted play blocked by browser, falling back to muted:", e);
-                    if (videoRef.current) {
-                        videoRef.current.muted = true;
-                        setIsMuted(true);
-                        setShowUnmuteHint(true);
-                        videoRef.current.play().catch(err => console.error("Muted play failed:", err));
-                    }
-                });
+                .catch(e => console.warn("Autoplay muted warning:", e));
         }
     }, [isOpen, videoUrl, youtubeId, streamableId]);
 
@@ -137,8 +128,10 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
 
     const handleToggleMute = () => {
         if (videoRef.current) {
-            videoRef.current.muted = !videoRef.current.muted;
-            setIsMuted(videoRef.current.muted);
+            const nextMuted = !videoRef.current.muted;
+            videoRef.current.muted = nextMuted;
+            videoRef.current.volume = 1.0;
+            setIsMuted(nextMuted);
             setShowUnmuteHint(false);
         }
     };
@@ -147,9 +140,12 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
         setRotation(prev => (prev + 90) % 360);
     };
 
-    const handleVideoError = () => {
-        console.error("Error al cargar el video desde:", videoUrl);
-        setHasError(true);
+    const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+        const video = e.currentTarget;
+        if (video.error && video.error.code > 2) {
+            console.error("Error al cargar el video desde:", videoUrl, video.error);
+            setHasError(true);
+        }
     };
 
     const isRotated = rotation === 90 || rotation === 270;
