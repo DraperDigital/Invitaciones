@@ -131,7 +131,7 @@ export default function CarlosYFridaLanding() {
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
     const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
-    const videoUrl = '/assets/Web.mp4';
+    const videoUrl = '/media/Web.mp4';
 
     const wasRotatedByHintRef = useRef(false);
 
