@@ -26,3 +26,9 @@ dist-ssr
 *.sln
 *.sw?
 .gstack/
+
+# Heavy media files
+*.mp4
+*.mov
+*.avi
+

@@ -1,16 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Gift, User, Calendar, Save } from 'lucide-react';
+import { X, CheckCircle2, Gift, User, Calendar, Save, Loader2 } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 interface QuinielaModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+interface PredictionItem {
+    id?: string;
+    name: string;
+    gender: 'niño' | 'niña' | 'sorpresa';
+    date: string;
+}
+
+const DEFAULT_PREDICTIONS: PredictionItem[] = [
+    { name: 'Tío Roberto', gender: 'niño', date: '2027-01-15' },
+    { name: 'Abuela Carmen', gender: 'niña', date: '2027-01-10' },
+    { name: 'Primo Alex', gender: 'sorpresa', date: '2027-01-22' }
+];
+
 export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
     const [name, setName] = useState('');
     const [gender, setGender] = useState<'niño' | 'niña' | 'sorpresa' | null>(null);
     const [date, setDate] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [predictions, setPredictions] = useState<PredictionItem[]>(DEFAULT_PREDICTIONS);
+    const [loadingPredictions, setLoadingPredictions] = useState(false);
+
+    // Fetch predictions from Supabase or localStorage
+    const fetchPredictions = async () => {
+        if (isSupabaseConfigured) {
+            setLoadingPredictions(true);
+            try {
+                const { data, error } = await supabase
+                    .from('quiniela_predictions')
+                    .select('id, name, gender, date')
+                    .eq('invitation_slug', 'carlos-y-frida')
+                    .order('created_at', { ascending: false });
+
+                if (!error && data && data.length > 0) {
+                    setPredictions(data as PredictionItem[]);
+                }
+            } catch (e) {
+                console.warn('Could not fetch predictions from Supabase, using defaults', e);
+            } finally {
+                setLoadingPredictions(false);
+            }
+        }
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -18,17 +57,37 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
             if (saved) {
                 setIsSubmitted(true);
             }
+            fetchPredictions();
         }
     }, [isOpen]);
 
     if (!isOpen) return null;
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!name || !gender || !date) return;
-        
-        localStorage.setItem('quiniela_carlos_frida', JSON.stringify({ name, gender, date }));
+
+        setIsSubmitting(true);
+        const newPrediction: PredictionItem = { name, gender, date };
+
+        if (isSupabaseConfigured) {
+            try {
+                await supabase.from('quiniela_predictions').insert([{
+                    invitation_slug: 'carlos-y-frida',
+                    name,
+                    gender,
+                    date
+                }]);
+            } catch (err) {
+                console.error('Error saving to Supabase:', err);
+            }
+        }
+
+        // Save locally
+        localStorage.setItem('quiniela_carlos_frida', JSON.stringify(newPrediction));
         setIsSubmitted(true);
+        setIsSubmitting(false);
+        fetchPredictions();
     };
 
     const handleClear = () => {
@@ -37,6 +96,26 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
         setName('');
         setGender(null);
         setDate('');
+    };
+
+    const formatGenderLabel = (g: string) => {
+        if (g === 'niño') return '👦 Niño';
+        if (g === 'niña') return '👧 Niña';
+        return '❓ Sorpresa';
+    };
+
+    const formatDateLabel = (d: string) => {
+        if (!d) return '';
+        try {
+            const parts = d.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[2], 10);
+                return `${day} Ene`;
+            }
+        } catch {
+            // fallback
+        }
+        return d;
     };
 
     return (
@@ -127,13 +206,22 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
 
                                 <button
                                     type="submit"
-                                    disabled={!name || !gender || !date}
+                                    disabled={!name || !gender || !date || isSubmitting}
                                     className="w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2
                                         disabled:bg-stone-300 disabled:cursor-not-allowed
                                         bg-amber-600 hover:bg-amber-700 hover:scale-[1.02] active:scale-[0.98]"
                                 >
-                                    <Save className="w-5 h-5" />
-                                    Enviar mi Predicción
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            Guardando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="w-5 h-5" />
+                                            Enviar mi Predicción
+                                        </>
+                                    )}
                                 </button>
                             </form>
                         </>
@@ -145,24 +233,20 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                             <h2 className="text-3xl font-serif text-stone-800">¡Gracias!</h2>
                             <p className="text-stone-600 text-lg">Tu predicción ha sido guardada.</p>
                             
-                            <div className="bg-stone-50 p-4 rounded-2xl text-left border border-stone-100">
-                                <h3 className="font-semibold text-stone-800 mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <div className="bg-stone-50 p-4 rounded-2xl text-left border border-stone-100 max-h-60 overflow-y-auto">
+                                <h3 className="font-semibold text-stone-800 mb-3 text-sm uppercase tracking-wider flex items-center gap-2 sticky top-0 bg-stone-50 py-1">
                                     <Gift className="w-4 h-4 text-amber-500" />
-                                    Otras predicciones de la familia
+                                    Predicciones de la familia {loadingPredictions && <Loader2 className="w-3 h-3 animate-spin text-stone-400" />}
                                 </h3>
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center text-sm border-b border-stone-200 pb-2">
-                                        <span className="text-stone-600 font-medium">Tío Roberto</span>
-                                        <span className="text-stone-500">👦 Niño - 15 Ene</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm border-b border-stone-200 pb-2">
-                                        <span className="text-stone-600 font-medium">Abuela Carmen</span>
-                                        <span className="text-stone-500">👧 Niña - 10 Ene</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm pb-1">
-                                        <span className="text-stone-600 font-medium">Primo Alex</span>
-                                        <span className="text-stone-500">❓ Sorpresa - 22 Ene</span>
-                                    </div>
+                                    {predictions.map((p, idx) => (
+                                        <div key={p.id || idx} className="flex justify-between items-center text-sm border-b border-stone-200 pb-2 last:border-0">
+                                            <span className="text-stone-700 font-medium">{p.name}</span>
+                                            <span className="text-stone-500 font-mono text-xs">
+                                                {formatGenderLabel(p.gender)} - {formatDateLabel(p.date)}
+                                            </span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                             
@@ -177,7 +261,7 @@ export default function QuinielaModal({ isOpen, onClose }: QuinielaModalProps) {
                                     onClick={handleClear}
                                     className="text-xs text-stone-400 hover:text-stone-600 mt-2"
                                 >
-                                    (Dev) Borrar mi voto
+                                    (Dev) Borrar mi voto en este navegador
                                 </button>
                             </div>
                         </div>

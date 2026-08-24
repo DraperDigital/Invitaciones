@@ -6,17 +6,6 @@ import { ChevronUp, Smartphone, Settings, PlayCircle } from 'lucide-react';
 
 const SLIDES = [
     {
-        id: 'sept15',
-        theme: 'bg-gradient-to-br from-emerald-900 via-green-800 to-teal-950',
-        textColor: 'text-emerald-50',
-        accentColor: 'text-emerald-300',
-        title: 'para el 15 de Septiembre',
-        subtitle: '(Grito de Independencia)',
-        description: 'El repicar de las campanas de Dolores, mariachi, pozole y el orgullo mexicano retumbando en el corazón. ¡Viva México!',
-        targetDate: '2026-09-15T00:00:00',
-        emoji: '🇲🇽'
-    },
-    {
         id: 'ninos_heroes',
         theme: 'bg-gradient-to-br from-slate-900 via-stone-800 to-zinc-950',
         textColor: 'text-slate-50',
@@ -26,6 +15,17 @@ const SLIDES = [
         description: 'Homenaje solemne en el Castillo de Chapultepec recordando el valor, la lealtad y el sacrificio de nuestros jóvenes héroes.',
         targetDate: '2026-09-13T00:00:00',
         emoji: '🏰'
+    },
+    {
+        id: 'sept15',
+        theme: 'bg-gradient-to-br from-emerald-900 via-green-800 to-teal-950',
+        textColor: 'text-emerald-50',
+        accentColor: 'text-emerald-300',
+        title: 'para el 15 de Septiembre',
+        subtitle: '(Grito de Independencia)',
+        description: 'El repicar de las campanas de Dolores, mariachi, pozole y el orgullo mexicano retumbando en el corazón. ¡Viva México!',
+        targetDate: '2026-09-15T00:00:00',
+        emoji: '🇲🇽'
     },
     {
         id: 'halloween',
@@ -81,6 +81,17 @@ const SLIDES = [
         description: 'Rebanadas de Rosca de Reyes con chocolate caliente, la ilusión de la mañana y descubrir a quién le toca el niño en el pan.',
         targetDate: '2027-01-06T00:00:00',
         emoji: '👑'
+    },
+    {
+        id: 'aniversario',
+        theme: 'bg-gradient-to-br from-rose-950 via-pink-900/50 to-amber-950',
+        textColor: 'text-rose-50',
+        accentColor: 'text-pink-300',
+        title: 'para nuestro Aniversario de Bodas',
+        subtitle: '(25 de Enero)',
+        description: 'Recordando el día en que unimos nuestras vidas: celebrando el amor, la complicidad y cada momento único compartido juntos.',
+        targetDate: '2027-01-25T00:00:00',
+        emoji: '💍'
     }
 ];
 
@@ -120,7 +131,10 @@ export default function CarlosYFridaLanding() {
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
     const [showDevPanel, setShowDevPanel] = useState(false);
-    const [videoUrl, setVideoUrl] = useState('https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'); // Placeholder
+    const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('https://invitto.com.mx/assets/web.mp4');
+
+    const wasRotatedByHintRef = useRef(false);
 
     // Update active slide based on scroll position
     const handleScroll = () => {
@@ -136,8 +150,10 @@ export default function CarlosYFridaLanding() {
         const isPortrait = window.innerHeight > window.innerWidth;
         
         if (isMobile && isPortrait) {
+            wasRotatedByHintRef.current = true;
             setShowRotateHint(true);
         } else {
+            wasRotatedByHintRef.current = false;
             setShowVideo(true);
         }
     };
@@ -149,13 +165,15 @@ export default function CarlosYFridaLanding() {
 
     const handleVideoEnded = () => {
         setShowVideo(false);
+        setHasWatchedVideo(true);
         
-        const isLandscape = window.innerWidth > window.innerHeight;
-        const isMobile = window.innerWidth <= 1024 || window.innerHeight <= 1024;
+        const isMobile = window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth <= 1024);
         
-        if (isLandscape && isMobile) {
+        if (wasRotatedByHintRef.current && isMobile) {
+            wasRotatedByHintRef.current = false;
             setShowRotateBackHint(true);
         } else {
+            wasRotatedByHintRef.current = false;
             setTimeout(() => {
                 setShowQuiniela(true);
             }, 500); // Pequeño delay para que no sea tan brusco
@@ -270,34 +288,66 @@ export default function CarlosYFridaLanding() {
                     <div className="absolute top-0 inset-x-0 h-64 bg-gradient-to-b from-amber-100/50 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 inset-x-0 h-64 bg-gradient-to-t from-rose-100/30 to-transparent pointer-events-none" />
                     
-                    <div className="z-10 max-w-2xl flex flex-col items-center">
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold tracking-widest uppercase mb-8 shadow-sm">
-                            🍼 La Gran Noticia
-                        </span>
-                        
-                        <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-4 tracking-tight">
-                            Nacimiento del bebé
-                        </h2>
-                        <h3 className="text-2xl sm:text-3xl font-serif italic text-stone-500 mb-10">
-                            Enero 2027
-                        </h3>
-
-                        {/* Cuenta regresiva bebé */}
-                        <div className="mb-16">
-                            <CountdownDisplay targetDate="2027-01-15T00:00:00" accentColor="text-rose-500" />
-                        </div>
-
-                        <button 
-                            onClick={handleRevealClick}
-                            className="relative group overflow-hidden rounded-full bg-stone-900 text-white px-10 py-5 font-bold text-xl sm:text-2xl shadow-2xl transition-all hover:scale-105 active:scale-95"
-                        >
-                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
-                            <span className="relative flex items-center gap-3">
-                                <PlayCircle className="w-6 h-6 sm:w-8 sm:h-8" />
-                                ¿Quieres conocerlo?
+                    {!hasWatchedVideo ? (
+                        <div className="z-10 max-w-2xl flex flex-col items-center animate-in fade-in duration-700">
+                            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold tracking-widest uppercase mb-8 shadow-sm">
+                                ✨ La Gran Revelación
                             </span>
-                        </button>
-                    </div>
+                            
+                            <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-6 tracking-tight leading-tight">
+                                El secreto mejor guardado...
+                            </h2>
+                            <p className="text-xl sm:text-2xl text-stone-500 font-serif italic mb-10 max-w-md">
+                                Tenemos algo muy especial que queremos compartir con todos ustedes.
+                            </p>
+
+                            <button 
+                                onClick={handleRevealClick}
+                                className="relative group overflow-hidden rounded-full bg-stone-900 text-white px-10 py-5 font-bold text-xl sm:text-2xl shadow-2xl transition-all hover:scale-105 active:scale-95"
+                            >
+                                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
+                                <span className="relative flex items-center gap-3">
+                                    <PlayCircle className="w-6 h-6 sm:w-8 sm:h-8" />
+                                    ¿Quieres saber qué es?
+                                </span>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="z-10 max-w-2xl flex flex-col items-center animate-in fade-in duration-700">
+                            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold tracking-widest uppercase mb-8 shadow-sm">
+                                🍼 La Gran Noticia
+                            </span>
+                            
+                            <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-4 tracking-tight">
+                                Nacimiento del bebé
+                            </h2>
+                            <h3 className="text-2xl sm:text-3xl font-serif italic text-stone-500 mb-8">
+                                Enero 2027
+                            </h3>
+
+                            <div className="mb-10">
+                                <CountdownDisplay targetDate="2027-01-15T00:00:00" accentColor="text-rose-500" />
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row gap-4 items-center">
+                                <button 
+                                    onClick={() => setShowQuiniela(true)}
+                                    className="relative group overflow-hidden rounded-full bg-amber-600 text-white px-8 py-4 font-bold text-lg shadow-xl transition-all hover:scale-105 active:scale-95"
+                                >
+                                    <span className="relative flex items-center gap-2">
+                                        🎲 Participar en la Quiniela
+                                    </span>
+                                </button>
+
+                                <button 
+                                    onClick={handleRevealClick}
+                                    className="rounded-full bg-stone-200 hover:bg-stone-300 text-stone-800 px-6 py-4 font-semibold text-sm transition-all"
+                                >
+                                    🎥 Volver a ver el video
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
