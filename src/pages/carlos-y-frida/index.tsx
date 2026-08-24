@@ -129,7 +129,7 @@ export default function CarlosYFridaLanding() {
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
     const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
-    const videoUrl = 'https://invitto.com.mx/assets/web.mp4';
+    const videoUrl = 'https://streamable.com/qcg6yz';
 
     // Update active slide based on scroll position
     const handleScroll = () => {
