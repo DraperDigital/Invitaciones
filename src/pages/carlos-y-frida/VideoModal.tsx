@@ -47,9 +47,10 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
 
         if (!youtubeId && !streamableId && videoRef.current) {
             videoRef.current.currentTime = 0;
-            videoRef.current.muted = true;
-            setIsMuted(true);
-            setShowUnmuteHint(true);
+            videoRef.current.volume = 1.0;
+            videoRef.current.muted = false;
+            setIsMuted(false);
+            setShowUnmuteHint(false);
 
             videoRef.current.play()
                 .then(() => {
@@ -61,7 +62,15 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                         }
                     }
                 })
-                .catch(e => console.warn("Autoplay muted warning:", e));
+                .catch(e => {
+                    console.warn("Unmuted play blocked by browser policy, falling back to muted:", e);
+                    if (videoRef.current) {
+                        videoRef.current.muted = true;
+                        setIsMuted(true);
+                        setShowUnmuteHint(true);
+                        videoRef.current.play().catch(err => console.error("Muted play failed:", err));
+                    }
+                });
         }
     }, [isOpen, videoUrl, youtubeId, streamableId]);
 
@@ -126,13 +135,27 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
 
     if (!isOpen) return null;
 
-    const handleToggleMute = () => {
+    const handleUnmuteTap = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (videoRef.current) {
+            videoRef.current.muted = false;
+            videoRef.current.volume = 1.0;
+            setIsMuted(false);
+            setShowUnmuteHint(false);
+            videoRef.current.play().catch(err => console.error("Play after unmute failed:", err));
+        }
+    };
+
+    const handleToggleMute = (e: React.MouseEvent) => {
+        e.stopPropagation();
         if (videoRef.current) {
             const nextMuted = !videoRef.current.muted;
             videoRef.current.muted = nextMuted;
             videoRef.current.volume = 1.0;
             setIsMuted(nextMuted);
-            setShowUnmuteHint(false);
+            if (!nextMuted) {
+                videoRef.current.play().catch(() => {});
+            }
         }
     };
 
@@ -247,7 +270,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                             {/* Hint para activar sonido */}
                             {showUnmuteHint && (
                                 <button 
-                                    onClick={handleToggleMute}
+                                    onClick={handleUnmuteTap}
                                     className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-sm z-20 group"
                                 >
                                     <div className="bg-white/20 p-6 rounded-full group-hover:bg-white/30 transition-all mb-4 animate-bounce">
