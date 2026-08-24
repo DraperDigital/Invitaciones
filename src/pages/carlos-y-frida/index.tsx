@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useCountdown } from './useCountdown';
 import QuinielaModal from './QuinielaModal';
 import VideoModal from './VideoModal';
-import { ChevronUp, Smartphone, PlayCircle } from 'lucide-react';
+import { ChevronUp, PlayCircle } from 'lucide-react';
 
 const SLIDES = [
     {
@@ -126,14 +126,10 @@ export default function CarlosYFridaLanding() {
     const [activeSlide, setActiveSlide] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     
-    const [showRotateHint, setShowRotateHint] = useState(false);
-    const [showRotateBackHint, setShowRotateBackHint] = useState(false);
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
     const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
     const videoUrl = 'https://invitto.com.mx/media/web.mp4';
-
-    const wasRotatedByHintRef = useRef(false);
 
     // Update active slide based on scroll position
     const handleScroll = () => {
@@ -144,43 +140,12 @@ export default function CarlosYFridaLanding() {
     };
 
     const handleRevealClick = () => {
-        // Detect if mobile portrait
-        const isMobile = window.innerWidth < 768;
-        const isPortrait = window.innerHeight > window.innerWidth;
-        
-        if (isMobile && isPortrait) {
-            wasRotatedByHintRef.current = true;
-            setShowRotateHint(true);
-        } else {
-            wasRotatedByHintRef.current = false;
-            setShowVideo(true);
-        }
-    };
-
-    const handleReadyToWatch = () => {
-        setShowRotateHint(false);
         setShowVideo(true);
     };
 
     const handleVideoEnded = () => {
         setShowVideo(false);
         setHasWatchedVideo(true);
-        
-        const isMobile = window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth <= 1024);
-        
-        if (wasRotatedByHintRef.current && isMobile) {
-            wasRotatedByHintRef.current = false;
-            setShowRotateBackHint(true);
-        } else {
-            wasRotatedByHintRef.current = false;
-            setTimeout(() => {
-                setShowQuiniela(true);
-            }, 500); // Pequeño delay para que no sea tan brusco
-        }
-    };
-
-    const handleRotatedBack = () => {
-        setShowRotateBackHint(false);
         setTimeout(() => {
             setShowQuiniela(true);
         }, 500);
@@ -350,43 +315,7 @@ export default function CarlosYFridaLanding() {
                 </div>
             </div>
 
-            {/* Hint Rotate Device (Mobile Only) */}
-            {showRotateHint && (
-                <div className="fixed inset-0 z-[100] bg-stone-900/95 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-300">
-                    <div className="animate-spin-slow mb-8">
-                        <Smartphone className="w-24 h-24 text-amber-400 rotate-90" />
-                    </div>
-                    <h3 className="text-3xl font-black text-white mb-4">¡Gira tu teléfono!</h3>
-                    <p className="text-stone-300 text-lg mb-10 max-w-sm">
-                        Para disfrutar al máximo el video de revelación, por favor gira tu celular horizontalmente.
-                    </p>
-                    <button 
-                        onClick={handleReadyToWatch}
-                        className="bg-amber-500 hover:bg-amber-600 text-stone-900 font-bold px-8 py-4 rounded-full text-lg shadow-xl shadow-amber-500/20 transition-all hover:scale-105"
-                    >
-                        ▶️ ¡Listo, Ver Video!
-                    </button>
-                </div>
-            )}
 
-            {/* Hint Rotate Back Device (Mobile Only) */}
-            {showRotateBackHint && (
-                <div className="fixed inset-0 z-[100] bg-stone-900/95 backdrop-blur-md flex flex-col items-center justify-center p-8 text-center animate-in fade-in zoom-in duration-300">
-                    <div className="animate-spin-slow mb-8">
-                        <Smartphone className="w-24 h-24 text-amber-400" />
-                    </div>
-                    <h3 className="text-3xl font-black text-white mb-4">¡Gira tu teléfono a Vertical!</h3>
-                    <p className="text-stone-300 text-lg mb-10 max-w-sm">
-                        Para participar en la quiniela familiar, por favor acomoda tu celular de vuelta a modo vertical.
-                    </p>
-                    <button 
-                        onClick={handleRotatedBack}
-                        className="bg-amber-500 hover:bg-amber-600 text-stone-900 font-bold px-8 py-4 rounded-full text-lg shadow-xl shadow-amber-500/20 transition-all hover:scale-105"
-                    >
-                        📲 ¡Listo, ya lo giré!
-                    </button>
-                </div>
-            )}
 
             {/* Video Modal */}
             <VideoModal 
