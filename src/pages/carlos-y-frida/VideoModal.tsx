@@ -15,14 +15,9 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
     const [hasError, setHasError] = useState(false);
     const [rotation, setRotation] = useState<number>(0);
 
-    const [currentUrl, setCurrentUrl] = useState(videoUrl);
-    const [attempt, setAttempt] = useState(0);
-
     useEffect(() => {
         if (isOpen && videoRef.current) {
             setHasError(false);
-            setAttempt(0);
-            setCurrentUrl(videoUrl);
             videoRef.current.currentTime = 0;
             setIsMuted(true);
             setShowUnmuteHint(true);
@@ -61,19 +56,8 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
     };
 
     const handleVideoError = () => {
-        console.warn("Video failed to load from:", currentUrl);
-        if (attempt === 0) {
-            const nextUrl = currentUrl.includes('/media/') 
-                ? 'https://invitto.com.mx/assets/web.mp4' 
-                : 'https://invitto.com.mx/media/web.mp4';
-            setAttempt(1);
-            setCurrentUrl(nextUrl);
-        } else if (attempt === 1) {
-            setAttempt(2);
-            setCurrentUrl('https://invitto.com.mx/web.mp4');
-        } else {
-            setHasError(true);
-        }
+        console.error("Error al cargar el video desde:", videoUrl);
+        setHasError(true);
     };
 
     const isRotated = rotation === 90 || rotation === 270;
@@ -111,7 +95,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                     <h3 className="text-xl font-bold mb-2">No se pudo cargar el video</h3>
                     <p className="text-stone-400 text-sm mb-6">
                         Verifica que el archivo esté disponible en la dirección: <br/>
-                        <code className="text-amber-400 text-xs break-all bg-black/50 p-2 rounded block mt-2">{currentUrl}</code>
+                        <code className="text-amber-400 text-xs break-all bg-black/50 p-2 rounded block mt-2">{videoUrl}</code>
                     </p>
                     <button
                         onClick={onEnded}
@@ -124,7 +108,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                 <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
                     <video 
                         ref={videoRef}
-                        src={currentUrl}
+                        src={videoUrl}
                         className="transition-transform duration-300 ease-in-out object-cover"
                         style={{
                             transform: `rotate(${rotation}deg)`,
