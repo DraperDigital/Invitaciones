@@ -31,7 +31,18 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
             const isMobilePortrait = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
             setRotation(isMobilePortrait ? 90 : 0);
 
-            videoRef.current.play().catch(e => console.error("Auto-play failed:", e));
+            videoRef.current.play()
+                .then(() => {
+                    // Request native full screen on devices that support it
+                    if (videoRef.current) {
+                        if (videoRef.current.requestFullscreen) {
+                            videoRef.current.requestFullscreen().catch(() => {});
+                        } else if ((videoRef.current as any).webkitEnterFullscreen) {
+                            (videoRef.current as any).webkitEnterFullscreen();
+                        }
+                    }
+                })
+                .catch(e => console.error("Auto-play failed:", e));
         }
     }, [isOpen, videoUrl]);
 
@@ -114,7 +125,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                     <video 
                         ref={videoRef}
                         src={currentUrl}
-                        className="transition-transform duration-300 ease-in-out object-contain"
+                        className="transition-transform duration-300 ease-in-out object-cover"
                         style={{
                             transform: `rotate(${rotation}deg)`,
                             width: isRotated ? '100vh' : '100%',
