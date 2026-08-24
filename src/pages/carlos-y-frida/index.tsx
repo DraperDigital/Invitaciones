@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useCountdown } from './useCountdown';
 import QuinielaModal from './QuinielaModal';
 import VideoModal from './VideoModal';
-import { ChevronUp, Smartphone, Settings, PlayCircle } from 'lucide-react';
+import { ChevronUp, Smartphone, PlayCircle } from 'lucide-react';
 
 const SLIDES = [
     {
@@ -130,9 +130,8 @@ export default function CarlosYFridaLanding() {
     const [showRotateBackHint, setShowRotateBackHint] = useState(false);
     const [showVideo, setShowVideo] = useState(false);
     const [showQuiniela, setShowQuiniela] = useState(false);
-    const [showDevPanel, setShowDevPanel] = useState(false);
     const [hasWatchedVideo, setHasWatchedVideo] = useState(false);
-    const [videoUrl, setVideoUrl] = useState('https://invitto.com.mx/assets/web.mp4');
+    const videoUrl = 'https://invitto.com.mx/assets/web.mp4';
 
     const wasRotatedByHintRef = useRef(false);
 
