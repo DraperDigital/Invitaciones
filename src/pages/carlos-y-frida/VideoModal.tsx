@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Volume2, VolumeX, X } from 'lucide-react';
+import { Volume2, VolumeX, X, RotateCw } from 'lucide-react';
 
 interface VideoModalProps {
     isOpen: boolean;
@@ -13,6 +13,7 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
     const [isMuted, setIsMuted] = useState(true);
     const [showUnmuteHint, setShowUnmuteHint] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [rotation, setRotation] = useState<number>(0);
 
     useEffect(() => {
         if (isOpen && videoRef.current) {
@@ -20,6 +21,11 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
             videoRef.current.currentTime = 0;
             setIsMuted(true);
             setShowUnmuteHint(true);
+
+            // Default to 90deg rotation on mobile portrait so horizontal video fits vertically
+            const isMobilePortrait = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+            setRotation(isMobilePortrait ? 90 : 0);
+
             videoRef.current.play().catch(e => console.error("Auto-play failed:", e));
         }
     }, [isOpen, videoUrl]);
@@ -34,24 +40,42 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
         }
     };
 
+    const handleRotate = () => {
+        setRotation(prev => (prev + 90) % 360);
+    };
+
     const handleVideoError = () => {
         console.error("Error al cargar el video desde:", videoUrl);
         setHasError(true);
     };
 
+    const isRotated = rotation === 90 || rotation === 270;
+
     return (
-        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center animate-in fade-in duration-500 overflow-hidden">
             {/* Controles superiores */}
-            <div className="absolute top-0 inset-x-0 p-6 flex justify-between items-center z-10 bg-gradient-to-b from-black/80 to-transparent">
+            <div className="absolute top-0 inset-x-0 p-6 flex justify-between items-center z-30 bg-gradient-to-b from-black/80 to-transparent">
                 <button 
                     onClick={onClose}
                     className="p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md text-white transition-all"
+                    title="Cerrar"
                 >
                     <X className="w-6 h-6" />
                 </button>
-                <div className="text-white/60 text-sm font-medium tracking-widest uppercase">
+
+                <div className="text-white/60 text-xs sm:text-sm font-medium tracking-widest uppercase">
                     La Gran Revelación
                 </div>
+
+                {/* Botón de girar contenedor */}
+                <button 
+                    onClick={handleRotate}
+                    className="p-3 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md text-white transition-all flex items-center gap-2 text-xs font-semibold"
+                    title="Girar video"
+                >
+                    <RotateCw className="w-5 h-5" />
+                    <span className="hidden sm:inline">Girar</span>
+                </button>
             </div>
 
             {hasError ? (
@@ -70,11 +94,18 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                     </button>
                 </div>
             ) : (
-                <>
+                <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
                     <video 
                         ref={videoRef}
                         src={videoUrl}
-                        className="w-full h-full object-cover sm:object-contain"
+                        className="transition-transform duration-300 ease-in-out object-contain"
+                        style={{
+                            transform: `rotate(${rotation}deg)`,
+                            width: isRotated ? '100vh' : '100%',
+                            height: isRotated ? '100vw' : '100%',
+                            maxWidth: isRotated ? '100vh' : '100%',
+                            maxHeight: isRotated ? '100vw' : '100%',
+                        }}
                         playsInline
                         muted={isMuted}
                         onEnded={onEnded}
@@ -100,12 +131,12 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                     {!showUnmuteHint && (
                         <button 
                             onClick={handleToggleMute}
-                            className="absolute bottom-10 right-6 p-4 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-md text-white transition-all z-10"
+                            className="absolute bottom-10 right-6 p-4 bg-black/50 hover:bg-black/70 rounded-full backdrop-blur-md text-white transition-all z-20"
                         >
                             {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
                         </button>
                     )}
-                </>
+                </div>
             )}
         </div>
     );
