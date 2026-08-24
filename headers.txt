@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+Date: Mon, 24 Aug 2026 17:06:26 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+last-modified: Mon, 24 Aug 2026 17:04:40 GMT
+etag: W/"12310-6a8c79a8-f9c79a3a66083e8b;gz"
+platform: hostinger
+panel: hpanel
+content-security-policy: upgrade-insecure-requests
+Age: 44
+Server: hcdn
+alt-svc: h3=":443"; ma=86400
+x-hcdn-request-id: ee01384600f257b67811f7d8d3067ee3-phx-edge7
+x-hcdn-cache-status: HIT
+
