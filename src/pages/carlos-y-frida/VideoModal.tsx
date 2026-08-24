@@ -132,8 +132,8 @@ export default function VideoModal({ isOpen, videoUrl, onEnded, onClose }: Video
                             <div className="bg-white/20 p-6 rounded-full group-hover:bg-white/30 transition-all mb-4 animate-bounce">
                                 <VolumeX className="w-12 h-12 text-white" />
                             </div>
-                            <span className="text-white font-bold text-xl drop-shadow-md">
-                                Toca para activar el sonido
+                            <span className="text-white font-bold text-xl sm:text-2xl drop-shadow-md text-center px-4">
+                                Toca para activar el sonido y sube tu volumen 🔊
                             </span>
                         </button>
                     )}
