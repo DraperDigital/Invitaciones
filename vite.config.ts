@@ -38,27 +38,32 @@ const PRERENDER_ROUTES = [
   '/blog/invitaciones-digitales-vs-papel-ecologia',
 ]
 
+const isPrerenderDisabled = process.env.DISABLE_PRERENDER === 'true';
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    // Pre-rendering only runs during `vite build`, not in dev.
-    prerender({
-      routes: PRERENDER_ROUTES,
-      renderer: '@prerenderer/renderer-puppeteer',
-      rendererOptions: {
-        // Wait long enough for the React app to mount and helmet-async to inject tags.
-        renderAfterTime: 1500,
-        maxConcurrentRoutes: 2,
-      },
-      postProcess(renderedRoute) {
-        // Strip any localhost remnants picked up during pre-render.
-        renderedRoute.html = renderedRoute.html.replace(
-          /localhost:\d+/g,
-          'invitto.com.mx'
-        )
-      },
-    }),
+    // Pre-rendering only runs during `vite build`, unless DISABLE_PRERENDER is set.
+    ...(!isPrerenderDisabled ? [
+      prerender({
+        routes: PRERENDER_ROUTES,
+        renderer: '@prerenderer/renderer-puppeteer',
+        rendererOptions: {
+          // Wait long enough for the React app to mount and helmet-async to inject tags.
+          renderAfterTime: 1500,
+          maxConcurrentRoutes: 2,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        },
+        postProcess(renderedRoute) {
+          // Strip any localhost remnants picked up during pre-render.
+          renderedRoute.html = renderedRoute.html.replace(
+            /localhost:\d+/g,
+            'invitto.com.mx'
+          )
+        },
+      })
+    ] : []),
   ],
   build: {
     // Target modern browsers — smaller, faster output
