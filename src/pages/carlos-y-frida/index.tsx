@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useCountdown } from './useCountdown';
 import QuinielaModal from './QuinielaModal';
 import VideoModal from './VideoModal';
-import { ChevronUp, PlayCircle } from 'lucide-react';
+import { ChevronUp, Smartphone, PlayCircle } from 'lucide-react';
 
 const SLIDES = [
     {
