@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Html5Qrcode } from 'html5-qrcode';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { ChevronLeft, Loader2, XCircle, Users, CheckCircle2, QrCode, Calendar } from 'lucide-react';
+import { ChevronLeft, Loader2, XCircle, Users, CheckCircle2, Calendar } from 'lucide-react';
 import { getPlatformContext } from '../../utils/context';
 
 const CheckIn: React.FC = () => {
     const { eventId: urlEventId } = useParams();
-    const navigate = useNavigate();
     const { user } = useAuth();
     const toast = useToast();
     const { isCorporate } = getPlatformContext();

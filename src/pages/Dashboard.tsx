@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import type { Event } from '../types/database.types';
@@ -14,7 +14,6 @@ export default function Dashboard() {
     const { isCorporate } = getPlatformContext();
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
-    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     // Delete Modal State
     const [deleteModal, setDeleteModal] = useState<{ eventId: string; eventTitle: string } | null>(null);

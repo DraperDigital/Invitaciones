@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../../components/ui/Button';
 import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2 } from 'lucide-react';
 import { getPlatformContext } from '../../utils/context';
 
