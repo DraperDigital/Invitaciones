@@ -68,9 +68,7 @@ export default function DashboardLayout() {
                 <div className="p-6 md:p-8">
                     <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
                         {isCorporate ? (
-                            <div className="bg-white px-3.5 py-2 rounded-xl shadow-md border border-slate-100 flex items-center justify-center">
-                                <img src="/logo-one.png?v=1" alt="Invitto One" className="h-7 w-auto object-contain" />
-                            </div>
+                            <img src="/logo-one-white.png?v=1" alt="Invitto One" className="h-10 w-auto object-contain" />
                         ) : (
                             <img src="/logo.png?v=3" alt="Invitto" className="h-8 md:h-9 w-auto object-contain brightness-0 invert" />
                         )}
@@ -127,9 +125,7 @@ export default function DashboardLayout() {
                 <header className="lg:hidden bg-[#222B38] text-white p-4 flex items-center justify-between sticky top-0 z-40 border-b border-slate-800">
                     <Link to="/" className="flex items-center gap-2">
                         {isCorporate ? (
-                            <div className="bg-white px-3 py-1 rounded-lg shadow-sm flex items-center justify-center">
-                                <img src="/logo-one.png?v=1" alt="Invitto One" className="h-6 w-auto object-contain" />
-                            </div>
+                            <img src="/logo-one-white.png?v=1" alt="Invitto One" className="h-8 w-auto object-contain" />
                         ) : (
                             <img src="/logo.png?v=3" alt="Invitto" className="h-7 w-auto object-contain brightness-0 invert" />
                         )}

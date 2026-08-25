@@ -62,9 +62,7 @@ export default function OneHomePage() {
       <header className="fixed top-0 w-full z-50 bg-[#0F172A]/90 backdrop-blur-md border-b border-slate-800 px-4 md:px-8">
         <div className="mx-auto max-w-7xl h-20 flex items-center justify-between">
           <Link to="/one" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
-            <div className="bg-white px-3.5 py-2 rounded-xl shadow-md border border-slate-100 flex items-center justify-center">
-              <img src="/logo-one.png?v=1" alt="Invitto One" className="h-7 md:h-8 w-auto object-contain" />
-            </div>
+            <img src="/logo-one-white.png?v=1" alt="Invitto One" className="h-10 md:h-12 w-auto object-contain" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -485,9 +483,7 @@ export default function OneHomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4 space-y-4">
               <Link to="/one" className="inline-flex items-center gap-2 hover:opacity-90 transition-opacity">
-                <div className="bg-white px-3 py-1.5 rounded-xl shadow-md flex items-center justify-center">
-                  <img src="/logo-one.png?v=1" alt="Invitto One" className="h-7 w-auto object-contain" />
-                </div>
+                <img src="/logo-one-white.png?v=1" alt="Invitto One" className="h-9 w-auto object-contain" />
               </Link>
               <p className="text-xs text-slate-400 font-normal leading-relaxed">
                 Vertical B2B de Invitto para la gestión tecnológica, acreditación QR y control de asistentes en congresos, cumbres y eventos institucionales.
