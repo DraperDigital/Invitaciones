@@ -1,5 +1,5 @@
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, Home, Users, Settings, Layout, Menu, X, Sparkles, ChevronRight, PartyPopper, Check, QrCode } from 'lucide-react';
+import { LogOut, Home, Users, Settings, Layout, Menu, X, QrCode } from 'lucide-react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { supabase } from '../../lib/supabase';

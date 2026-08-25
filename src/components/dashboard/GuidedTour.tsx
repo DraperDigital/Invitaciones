@@ -150,6 +150,9 @@ const TooltipComponent = ({
 
 interface GuidedTourProps {
   onComplete?: () => void;
+  onDismiss?: () => void;
+  hasEvents?: boolean;
+  hasPlan?: boolean;
 }
 
 const GuidedTour: React.FC<GuidedTourProps> = ({ onComplete }) => {

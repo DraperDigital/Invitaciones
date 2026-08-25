@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Layout, Users, Zap, ArrowUpRight, Plus, Sparkles, PartyPopper, ArrowRight, QrCode } from 'lucide-react';
+import { Layout, Users, Zap, ArrowUpRight, Plus, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getPlatformContext } from '../../utils/context';
 
