@@ -56,6 +56,8 @@ export default function OneHomePage() {
         title="Invitto One — Plataforma B2B para Eventos Corporativos e Institucionales"
         description="Gestión de asistentes, agenda multi-track, ponentes, acreditación QR y control de acceso para congresos, cumbres y eventos de empresa en México."
         path="/one"
+        image="/logo-one.png?v=1"
+        favicon="/favicon-one.png"
         jsonLd={CORPORATE_JSONLD}
       />
 
@@ -63,10 +65,7 @@ export default function OneHomePage() {
       <header className="fixed top-0 w-full z-50 bg-[#0F172A]/90 backdrop-blur-md border-b border-slate-800 px-4 md:px-8">
         <div className="mx-auto max-w-7xl h-20 flex items-center justify-between">
           <Link to="/one" className="flex items-center gap-3 hover:opacity-95 transition-opacity">
-            <img src="/logo.png?v=3" alt="Invitto One" className="h-8 md:h-9 w-auto object-contain brightness-0 invert" />
-            <span className="px-2.5 py-1 bg-[#2563EB]/20 border border-[#2563EB]/40 text-[#60A5FA] rounded-md text-[10px] uppercase font-mono font-bold tracking-widest">
-              ONE B2B
-            </span>
+            <img src="/logo-one.png?v=1" alt="Invitto One" className="h-10 md:h-12 w-auto object-contain" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -487,8 +486,7 @@ export default function OneHomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4 space-y-4">
               <Link to="/one" className="inline-flex items-center gap-2 hover:opacity-90 transition-opacity">
-                <img src="/logo.png?v=3" alt="Invitto One" className="h-8 w-auto object-contain brightness-0 invert" />
-                <span className="px-2 py-0.5 bg-[#2563EB]/20 text-[#60A5FA] rounded text-[10px] font-mono font-bold">ONE</span>
+                <img src="/logo-one.png?v=1" alt="Invitto One" className="h-9 w-auto object-contain" />
               </Link>
               <p className="text-xs text-slate-400 font-normal leading-relaxed">
                 Vertical B2B de Invitto para la gestión tecnológica, acreditación QR y control de asistentes en congresos, cumbres y eventos institucionales.

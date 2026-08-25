@@ -12,13 +12,15 @@ interface SeoProps {
     path: string;
     /** Optional absolute URL of the social preview image. Falls back to the site logo. */
     image?: string;
+    /** Optional absolute or relative URL of the favicon. */
+    favicon?: string;
     /** Optional JSON-LD object(s) to inject as <script type="application/ld+json">. */
     jsonLd?: object | object[];
     /** Mark page as noindex (e.g. dashboards, drafts). */
     noindex?: boolean;
 }
 
-export default function Seo({ title, description, path, image, jsonLd, noindex }: SeoProps) {
+export default function Seo({ title, description, path, image, favicon, jsonLd, noindex }: SeoProps) {
     const fullTitle = title.includes('Invitto') ? title : `${title} | Invitto`;
     const canonical = `${SITE_URL}${path}`;
     const ogImage = image || DEFAULT_OG_IMAGE;
@@ -29,6 +31,7 @@ export default function Seo({ title, description, path, image, jsonLd, noindex }
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             <link rel="canonical" href={canonical} />
+            {favicon && <link rel="icon" type="image/png" href={favicon} />}
             {noindex && <meta name="robots" content="noindex, nofollow" />}
 
             {/* Open Graph */}
