@@ -7,18 +7,47 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Primary palette - Black tones
-                primary: "#000000", // Pure black
-                secondary: "#1a1a1a", // Dark charcoal
+                // Official Invitto Brand Color Palette (from Logo)
+                brand: {
+                    DEFAULT: "#DF3B94",
+                    dark: "#C52A7C",
+                    light: "#FDF2F8",
+                    hover: "#C52A7C",
+                    navy: "#222B38",
+                    yellow: "#F5B837",
+                    green: "#4E7B55",
+                },
 
-                // Accent - Dynamic via CSS variables
-                accent: "rgb(var(--color-accent) / <alpha-value>)",
-                'accent-light': "#f0e68c", // Light gold
-                'accent-dark': "#b8941e", // Dark gold
+                // Festive Celebration Accents (Matching official logo tones)
+                festive: {
+                    coral: "#FF6B6B",
+                    lavender: "#9F7AEA",
+                    mint: "#4E7B55",
+                    yellow: "#F5B837",
+                    pink: "#DF3B94",
+                },
 
-                // Neutrals - White to Black gradient
-                cream: "#fafafa", // Off-white
-                sand: "#f5f5f5", // Light gray
+                // Legacy & Primary text
+                primary: "#222B38", // Official Dark Navy Graphite Text
+                secondary: "#334155",
+                accent: "#DF3B94",
+                'accent-light': "#FDF2F8",
+                'accent-dark': "#C52A7C",
+
+                cream: "#FFFFFF", // Pure white
+                sand: "#F8F9FA", // Soft SaaS gray
+                slate: {
+                    50: "#F8F9FA",
+                    100: "#F1F5F9",
+                    200: "#E2E8F0",
+                    300: "#CBD5E1",
+                    400: "#94A3B8",
+                    500: "#64748B",
+                    600: "#475569",
+                    700: "#334155",
+                    800: "#222B38",
+                    900: "#171E28",
+                },
                 stone: {
                     50: "#fafafa",
                     100: "#f5f5f5",
@@ -34,8 +63,9 @@ export default {
                 }
             },
             fontFamily: {
+                display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                sans: ['Inter', '"Plus Jakarta Sans"', 'sans-serif'],
                 serif: 'var(--font-serif)',
-                sans: 'var(--font-sans)',
             },
             animation: {
                 'fade-in-up': 'fadeInUp 0.8s ease-out forwards',

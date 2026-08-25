@@ -171,8 +171,7 @@ export default function LaunchPromoPopup() {
 
                 <div className="text-center space-y-5">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#BD7474]/10 rounded-full text-[10px] uppercase font-black tracking-widest text-[#BD7474]">
-                        <Sparkles className="h-3.5 w-3.5" />
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#DF3B94]/10 rounded-full text-[10px] uppercase font-black tracking-widest text-[#DF3B94]">
                         Lanzamiento
                     </div>
 

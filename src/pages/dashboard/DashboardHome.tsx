@@ -259,8 +259,7 @@ const DashboardHome: React.FC = () => {
                                         }[event.event_type as string] || event.event_type}
                                     </div>
                                     {isPersonalized && (
-                                        <div className="px-3 py-1 bg-[#1B2E1D] text-white rounded-full text-[8px] uppercase font-black tracking-widest shadow-xl flex items-center gap-1.5 animate-pulse">
-                                            <Sparkles className="h-2.5 w-2.5 text-[#BD7474]" />
+                                        <div className="px-3 py-1 bg-[#222B38] text-white rounded-full text-[8px] uppercase font-black tracking-widest shadow-xl flex items-center gap-1.5">
                                             {tier === 'premium' ? 'Premium' : 'Pro'}
                                         </div>
                                     )}

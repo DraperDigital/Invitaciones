@@ -2,7 +2,6 @@ import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
-  /** UI alternativo. Si no se provee se muestra el fallback por defecto. */
   fallback?: ReactNode;
 }
 
@@ -11,23 +10,6 @@ interface State {
   error: Error | null;
 }
 
-/**
- * ErrorBoundary — captura errores de render en cualquier componente hijo.
- *
- * React exige que sea un class component para usar componentDidCatch.
- * Colócalo alrededor de secciones críticas (rutas, widgets pesados) para
- * que un crash aislado no tire toda la app.
- *
- * Uso básico:
- *   <ErrorBoundary>
- *     <ComponenteQuePuedeFallar />
- *   </ErrorBoundary>
- *
- * Con fallback personalizado:
- *   <ErrorBoundary fallback={<p>Algo salió mal</p>}>
- *     ...
- *   </ErrorBoundary>
- */
 export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -39,14 +21,12 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    // Punto de extensión: reemplazar con Sentry.captureException(error, { extra: info })
     console.error('[ErrorBoundary] Uncaught error:', error, info.componentStack);
   }
 
   private handleReload = () => {
     window.location.reload();
   };
-
 
   render() {
     if (!this.state.hasError) {
@@ -58,27 +38,27 @@ export default class ErrorBoundary extends Component<Props, State> {
     }
 
     return (
-      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-        <div className="max-w-md w-full text-center space-y-8">
+      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-6 font-sans">
+        <div className="max-w-md w-full text-center space-y-8 bg-white p-8 md:p-10 rounded-3xl border border-slate-100 shadow-xl">
 
-          {/* Logo / marca */}
-          <div className="space-y-1">
-            <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-stone-400">
-              INVITTO
-            </p>
-            <h1 className="text-3xl font-serif italic text-[#1B2E1D]">
+          {/* Logo & Header */}
+          <div className="space-y-3">
+            <a href="/" className="inline-block hover:opacity-90 transition-opacity">
+              <img src="/logo.png" alt="Invitto" className="h-9 w-auto mx-auto object-contain" />
+            </a>
+            <h1 className="text-2xl md:text-3xl font-display font-extrabold text-[#222B38]">
               Algo salió mal
             </h1>
           </div>
 
-          {/* Ilustración */}
-          <div className="w-20 h-20 mx-auto rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center">
+          {/* Icon */}
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[#DF3B94]">
             <svg
-              className="w-9 h-9 text-rose-400"
+              className="w-8 h-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={1.5}
+              strokeWidth={1.75}
             >
               <path
                 strokeLinecap="round"
@@ -88,35 +68,34 @@ export default class ErrorBoundary extends Component<Props, State> {
             </svg>
           </div>
 
-          {/* Mensaje */}
-          <p className="text-stone-500 text-sm leading-relaxed">
-            Un error inesperado ocurrió en esta página. Puedes intentar
-            recargar o regresar al inicio.
+          {/* Message */}
+          <p className="text-slate-600 text-sm leading-relaxed font-normal">
+            Un error inesperado ocurrió en esta página. Puedes intentar recargar o regresar al inicio.
           </p>
 
-          {/* Acciones */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <button
               onClick={this.handleReload}
-              className="px-6 py-3 bg-[#1B2E1D] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-[#2a4a2d] transition-colors"
+              className="px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-[#DF3B94]/20 active:scale-95"
             >
               Recargar página
             </button>
             <a
               href="/"
-              className="px-6 py-3 border border-stone-200 text-stone-600 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:border-stone-400 transition-colors"
+              className="px-6 py-3.5 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider hover:border-slate-400 transition-colors inline-block"
             >
               Ir al inicio
             </a>
           </div>
 
-          {/* Error técnico (solo en development) */}
+          {/* Technical detail (in dev mode) */}
           {import.meta.env.DEV && this.state.error && (
-            <details className="text-left bg-stone-100 rounded-xl p-4 text-[11px] text-stone-500 font-mono">
-              <summary className="cursor-pointer font-sans font-bold text-stone-400 uppercase tracking-widest text-[10px] mb-2">
+            <details className="text-left bg-slate-50 rounded-2xl p-4 text-xs text-slate-600 font-mono border border-slate-100">
+              <summary className="cursor-pointer font-sans font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2">
                 Detalle técnico
               </summary>
-              <pre className="whitespace-pre-wrap break-all">
+              <pre className="whitespace-pre-wrap break-all text-[11px]">
                 {this.state.error.message}
               </pre>
             </details>

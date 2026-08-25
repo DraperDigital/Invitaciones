@@ -63,10 +63,10 @@ export default function DashboardLayout() {
     return (
         <div className="min-h-screen bg-[#FDFBF7] flex">
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:flex flex-col w-72 bg-[#1B2E1D] text-white fixed h-full z-50 transition-all duration-300">
+            <aside className="hidden lg:flex flex-col w-72 bg-[#222B38] text-white fixed h-full z-50 transition-all duration-300">
                 <div className="p-8">
-                    <Link to="/" className="text-2xl font-serif italic tracking-tighter hover:text-stone-300 transition-colors">
-                        Invitto
+                    <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
+                        <img src="/logo.png" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
                     </Link>
                 </div>
 
@@ -83,7 +83,7 @@ export default function DashboardLayout() {
                                         : 'text-white/50 hover:text-white hover:bg-white/5'
                                 }`}
                             >
-                                <Icon className={`h-5 w-5 ${isActive(item.href) ? 'text-[#BD7474]' : ''}`} />
+                                <Icon className={`h-5 w-5 ${isActive(item.href) ? 'text-[#DF3B94]' : ''}`} />
                                 {item.name}
                             </Link>
                         );
@@ -92,7 +92,7 @@ export default function DashboardLayout() {
 
                 <div className="p-8 mt-auto border-t border-white/5">
                     <div className="flex items-center gap-4 mb-8 p-4 bg-white/5 rounded-2xl border border-white/5">
-                        <div className="h-10 w-10 rounded-full bg-stone-700 flex items-center justify-center text-xs font-bold ring-2 ring-white/10">
+                        <div className="h-10 w-10 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold ring-2 ring-white/10">
                             {user?.email?.[0].toUpperCase()}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -112,9 +112,9 @@ export default function DashboardLayout() {
             </aside>
 
             {/* Mobile Header */}
-            <header className="lg:hidden fixed top-0 w-full bg-[#1B2E1D] text-white z-[60] px-6 h-16 flex items-center justify-between border-b border-white/5">
-                <Link to="/" className="text-xl font-serif italic tracking-tighter">
-                    Invitto
+            <header className="lg:hidden fixed top-0 w-full bg-[#222B38] text-white z-[60] px-6 h-16 flex items-center justify-between border-b border-white/5">
+                <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
+                    <img src="/logo.png" alt="Invitto" className="h-7 w-auto object-contain brightness-0 invert" />
                 </Link>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
                     {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

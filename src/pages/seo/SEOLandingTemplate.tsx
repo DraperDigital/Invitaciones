@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Seo from '../../components/Seo';
 import Breadcrumb, { type BreadcrumbItem } from '../../components/Breadcrumb';
-import { ArrowRight, ChevronDown, CheckCircle2, XCircle, Menu, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, CheckCircle2, XCircle, Menu, X, Check } from 'lucide-react';
 import type { LandingPageData } from './data/landingData';
 
 /** Derive breadcrumb trail from the landing slug. Slugs cluster into three groups. */
@@ -42,7 +42,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
   const breadcrumbs = breadcrumbsForSlug(data.slug, data.hero.h1);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] font-sans text-[#1B2E1D]">
+    <div className="min-h-screen bg-[#FFFFFF] font-sans text-[#222B38]">
       <Seo
         title={data.seo.title}
         description={data.seo.description}
@@ -50,35 +50,34 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         jsonLd={data.jsonLd}
       />
 
-      {/* ─── A. Header ─────────────────────────────────────────────── */}
-      <header className="fixed top-0 w-full z-50 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#1B2E1D]/5 px-4 md:px-6">
+      {/* ─── Header ─────────────────────────────────────────────── */}
+      <header className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-100 px-4 md:px-6">
         <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
-          <Link to="/" className="text-xl md:text-2xl font-serif italic tracking-tighter text-[#1B2E1D]">
-            Invitto
+          <Link to="/" className="flex items-center hover:opacity-95 transition-opacity">
+            <img src="/logo.png" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
-            <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors">
+            <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Ejemplos
             </Link>
-            <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors">
+            <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Planes
             </Link>
-            <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors">
+            <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Comparativas
             </Link>
-            <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors">
+            <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Concierge
             </Link>
-            <Link to="/blog" className="text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors">
+            <Link to="/blog" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Blog
             </Link>
           </nav>
 
           <div className="flex items-center gap-3">
-            {/* Mobile hamburger */}
             <button
-              className="lg:hidden p-2 text-[#1B2E1D]"
+              className="lg:hidden p-2 text-[#222B38]"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Menú"
             >
@@ -87,7 +86,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
 
             <Link
               to={user ? '/dashboard' : '/planes'}
-              className="hidden sm:inline-flex px-6 py-2.5 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all"
+              className="hidden sm:inline-flex px-6 py-2.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20"
             >
               {user ? 'Mi Dashboard' : 'Comenzar'}
             </Link>
@@ -96,24 +95,24 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-[#1B2E1D]/5 bg-[#FDFBF7]/95 backdrop-blur-md px-4 py-6 space-y-4 animate-fade-in">
+          <div className="lg:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md px-4 py-6 space-y-4 animate-fade-in">
             <Link
               to="/ejemplos"
-              className="block text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors"
+              className="block text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Ejemplos
             </Link>
             <Link
               to="/planes"
-              className="block text-xs uppercase font-bold tracking-widest text-[#1B2E1D]/60 hover:text-[#BD7474] transition-colors"
+              className="block text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Planes
             </Link>
             <Link
               to={user ? '/dashboard' : '/planes'}
-              className="block w-full text-center px-6 py-2.5 bg-[#1B2E1D] text-white rounded-xl text-[9px] uppercase font-bold tracking-[0.2em] hover:bg-[#2D312E] transition-all"
+              className="block w-full text-center px-6 py-2.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all"
               onClick={() => setMobileMenuOpen(false)}
             >
               {user ? 'Mi Dashboard' : 'Comenzar'}
@@ -122,45 +121,32 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         )}
       </header>
 
-      {/* ─── A2. Breadcrumb ────────────────────────────────────────── */}
+      {/* ─── Breadcrumb ────────────────────────────────────────── */}
       <div className="pt-24 md:pt-28 px-6">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-5xl">
           <Breadcrumb items={breadcrumbs} />
         </div>
       </div>
 
-      {/* ─── B. Hero Section ───────────────────────────────────────── */}
-      <section className="relative pt-4 pb-16 md:pt-8 md:pb-32 overflow-hidden px-6">
-        {/* Decorative blurred circles */}
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-[#BD7474]/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#1B2E1D]/5 rounded-full blur-[100px] pointer-events-none" />
-
-        {/* Noise texture overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
-
+      {/* ─── Hero Section ───────────────────────────────────────── */}
+      <section className="relative pt-4 pb-16 md:pt-8 md:pb-28 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
         <div className="mx-auto max-w-4xl text-center relative z-10">
           {data.hero.badge && (
-            <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#1B2E1D]/5 rounded-full text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-8">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#BD7474]" />
-              {data.hero.badge}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94] mb-8">
+              <span>{data.hero.badge}</span>
             </div>
           )}
 
-          <h1 className="text-4xl xs:text-5xl md:text-7xl font-serif italic leading-tight tracking-tight mb-8">
+          <h1 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold text-[#222B38] leading-tight tracking-tight mb-8">
             {data.hero.h1}
           </h1>
 
-          <p className="text-base md:text-xl text-stone-500 font-light leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-base md:text-xl text-slate-600 font-normal leading-relaxed max-w-2xl mx-auto mb-10">
             {data.hero.subtitle}
           </p>
 
           <Link to={ctaLink}>
-            <button className="w-full xs:w-auto px-10 py-5 bg-[#1B2E1D] text-white rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#2D312E] transition-all transform active:scale-95 shadow-xl shadow-[#1B2E1D]/20 inline-flex items-center justify-center gap-3">
+            <button className="w-full xs:w-auto px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all shadow-xl shadow-[#DF3B94]/25 inline-flex items-center justify-center gap-3 active:scale-95">
               {data.hero.cta}
               <ArrowRight className="h-4 w-4" />
             </button>
@@ -168,14 +154,14 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         </div>
       </section>
 
-      {/* ─── C. Benefits Grid ──────────────────────────────────────── */}
-      <section className="py-20 md:py-32 px-6 bg-white">
+      {/* ─── Benefits Grid ──────────────────────────────────────── */}
+      <section className="py-20 md:py-32 px-6 bg-[#F8F9FA]">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16 md:mb-20 space-y-4">
-            <h2 className="text-3xl md:text-5xl font-serif italic text-[#1B2E1D] tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
               Todo lo que necesitas para tu evento
             </h2>
-            <div className="h-1 w-16 md:w-20 bg-[#BD7474] mx-auto" />
+            <p className="text-slate-600 max-w-xl mx-auto text-base">La plataforma inteligente de invitaciones en México</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -184,15 +170,15 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
               return (
                 <div
                   key={i}
-                  className="bg-white rounded-[2rem] p-8 shadow-sm border border-stone-100 hover:shadow-md transition-all duration-300 group"
+                  className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all duration-300 group"
                 >
-                  <div className="w-12 h-12 bg-[#BD7474]/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="h-6 w-6 text-[#BD7474]" />
+                  <div className="w-12 h-12 bg-[#fdf2f8] text-[#DF3B94] rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="h-6 w-6 text-[#DF3B94]" />
                   </div>
-                  <h3 className="text-lg font-medium text-[#1B2E1D] mb-3">
+                  <h3 className="text-lg font-display font-bold text-[#222B38] mb-3">
                     {benefit.title}
                   </h3>
-                  <p className="text-sm text-stone-400 font-light leading-relaxed">
+                  <p className="text-sm text-slate-600 font-normal leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>
@@ -202,95 +188,73 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         </div>
       </section>
 
-      {/* ─── D. How It Works (Steps) ───────────────────────────────── */}
-      <section className="py-20 md:py-32 px-6 bg-[#FDFBF7]">
+      {/* ─── How It Works (Steps) ───────────────────────────────── */}
+      <section className="py-20 md:py-32 px-6 bg-white border-y border-slate-100">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16 md:mb-20 space-y-4">
-            <h2 className="text-3xl md:text-5xl font-serif italic text-[#1B2E1D] tracking-tight">
-              Así de fácil
+            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
+              Así de fácil funciona
             </h2>
-            <div className="h-1 w-16 md:w-20 bg-[#BD7474] mx-auto" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 relative">
-            {/* Connecting line (desktop) */}
-            <div className="hidden md:block absolute top-[2.75rem] left-0 w-full h-[1px] bg-[#1B2E1D]/10 z-0" />
-
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {data.steps.map((step, i) => (
-              <div key={i} className="text-center space-y-6 relative z-10 group">
-                <div className="h-20 w-20 rounded-full bg-[#1B2E1D] text-white flex items-center justify-center font-bold text-xl mx-auto ring-8 ring-[#1B2E1D]/5 group-hover:bg-[#BD7474] transition-all duration-500">
-                  {step.number}
-                </div>
-                <h3 className="text-lg font-medium text-[#1B2E1D]">
-                  {step.title}
-                </h3>
-                <p className="text-sm text-stone-400 font-light leading-relaxed max-w-xs mx-auto">
-                  {step.description}
-                </p>
+              <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 text-center space-y-4">
+                <span className="text-3xl font-display font-extrabold text-[#DF3B94]">0{step.number}</span>
+                <h3 className="text-base font-bold text-[#222B38]">{step.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">{step.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── E. Comparison Table (conditional) ─────────────────────── */}
+      {/* ─── Comparison Table (conditional) ─────────────────────── */}
       {data.comparison && (
-        <section className="py-20 md:py-32 px-6 bg-white">
+        <section className="py-20 md:py-32 px-6 bg-[#F8F9FA]">
           <div className="mx-auto max-w-4xl">
-            <div className="text-center mb-16 md:mb-20 space-y-4">
-              <h2 className="text-3xl md:text-5xl font-serif italic text-[#1B2E1D] tracking-tight">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
                 {data.comparison.title}
               </h2>
-              <p className="text-base md:text-lg text-stone-400 font-light leading-relaxed">
+              <p className="text-base text-slate-600 leading-relaxed">
                 {data.comparison.subtitle}
               </p>
-              <div className="h-1 w-16 md:w-20 bg-[#BD7474] mx-auto" />
             </div>
 
-            <div className="overflow-x-auto rounded-[2rem] border border-stone-100 shadow-sm">
-              <table className="w-full min-w-[500px]">
+            <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-100 overflow-x-auto">
+              <table className="w-full min-w-[500px] text-left">
                 <thead>
-                  <tr className="bg-[#1B2E1D] text-white">
-                    <th className="text-left py-5 px-6 text-[10px] md:text-xs uppercase font-bold tracking-widest">
-                      Característica
-                    </th>
-                    <th className="text-center py-5 px-6 text-[10px] md:text-xs uppercase font-bold tracking-widest bg-[#BD7474]/20">
-                      {data.comparison.invittoLabel}
-                    </th>
-                    <th className="text-center py-5 px-6 text-[10px] md:text-xs uppercase font-bold tracking-widest">
-                      {data.comparison.competitorLabel}
-                    </th>
+                  <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 pb-4">
+                    <th className="pb-4">Característica</th>
+                    <th className="pb-4 text-center text-[#DF3B94]">{data.comparison.invittoLabel}</th>
+                    <th className="pb-4 text-center">{data.comparison.competitorLabel}</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100 text-sm">
                   {data.comparison.rows.map((row, i) => (
-                    <tr
-                      key={i}
-                      className={`border-t border-stone-100 ${i % 2 === 0 ? 'bg-[#FDFBF7]' : 'bg-white'} transition-colors hover:bg-[#BD7474]/5`}
-                    >
-                      <td className="py-4 px-6 text-sm font-medium text-[#1B2E1D]">
-                        {row.feature}
-                      </td>
-                      <td className="py-4 px-6 text-center bg-[#BD7474]/[0.03]">
+                    <tr key={i} className="hover:bg-slate-50 transition-colors">
+                      <td className="py-4 font-semibold text-[#222B38]">{row.feature}</td>
+                      <td className="py-4 text-center font-bold text-[#DF3B94]">
                         {typeof row.invitto === 'boolean' ? (
                           row.invitto ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500 mx-auto" />
+                            <CheckCircle2 className="h-5 w-5 text-[#4E7B55] mx-auto" />
                           ) : (
                             <XCircle className="h-5 w-5 text-red-400 mx-auto" />
                           )
                         ) : (
-                          <span className="text-sm font-medium text-[#1B2E1D]">{row.invitto}</span>
+                          <span>{row.invitto}</span>
                         )}
                       </td>
-                      <td className="py-4 px-6 text-center">
+                      <td className="py-4 text-center text-slate-400">
                         {typeof row.competitor === 'boolean' ? (
                           row.competitor ? (
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500 mx-auto" />
+                            <CheckCircle2 className="h-4 w-4 text-slate-400 mx-auto" />
                           ) : (
-                            <XCircle className="h-5 w-5 text-red-400 mx-auto" />
+                            <XCircle className="h-4 w-4 text-red-400 mx-auto" />
                           )
                         ) : (
-                          <span className="text-sm text-stone-500">{row.competitor}</span>
+                          <span>{row.competitor}</span>
                         )}
                       </td>
                     </tr>
@@ -302,158 +266,85 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         </section>
       )}
 
-
-
-      {/* ─── G. FAQ Accordion ──────────────────────────────────────── */}
-      <section className="py-20 md:py-32 px-6 bg-white">
+      {/* ─── FAQ Accordion ──────────────────────────────────────── */}
+      <section className="py-20 md:py-32 px-6 bg-white border-t border-slate-100">
         <div className="mx-auto max-w-3xl">
-          <div className="text-center mb-16 md:mb-20 space-y-4">
-            <h2 className="text-3xl md:text-5xl font-serif italic text-[#1B2E1D] tracking-tight">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">
               Preguntas frecuentes
             </h2>
-            <div className="h-1 w-16 md:w-20 bg-[#BD7474] mx-auto" />
           </div>
 
-          <div className="space-y-4 md:space-y-6">
+          <div className="space-y-4">
             {data.faq.map((item, i) => (
-              <div
-                key={i}
-                className="border-b border-stone-100 pb-5 md:pb-6 cursor-pointer group"
-                onClick={() => toggleFaq(i)}
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <h4 className="text-base md:text-lg font-medium text-[#1B2E1D]">
-                    {item.question}
-                  </h4>
-                  <ChevronDown
-                    className={`h-4 w-4 md:h-5 md:w-5 text-stone-300 flex-shrink-0 transition-transform duration-300 ${
-                      openFaq === i ? 'rotate-180 text-[#BD7474]' : ''
-                    }`}
-                  />
-                </div>
-                <div
-                  className={`grid transition-all duration-300 ${
-                    openFaq === i ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0'
-                  }`}
+              <div key={i} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
+                <button
+                  onClick={() => toggleFaq(i)}
+                  className="w-full p-6 text-left font-bold text-slate-800 flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
                 >
-                  <div className="overflow-hidden">
-                    <p className="text-sm text-stone-400 font-light leading-relaxed">
-                      {item.answer}
-                    </p>
+                  <span>{item.question}</span>
+                  <ChevronDown className={`h-5 w-5 text-[#DF3B94] transition-transform duration-300 ${openFaq === i ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === i && (
+                  <div className="px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 bg-slate-50/50">
+                    {item.answer}
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── H. Final CTA ──────────────────────────────────────────── */}
-      <section className="py-24 md:py-40 bg-[#1B2E1D] text-white text-center relative overflow-hidden px-6">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-[#BD7474]/10 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl mx-auto space-y-8 md:space-y-10">
-          <h2 className="text-3xl md:text-6xl font-serif italic leading-tight">
+      {/* ─── Final CTA ──────────────────────────────────────────── */}
+      <section className="relative py-28 md:py-36 bg-[#222B38] text-white text-center px-6 overflow-hidden">
+        <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+          <h2 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold text-white leading-tight">
             {data.ctaFinal.title}
           </h2>
-          <p className="text-base md:text-xl text-stone-300 font-light italic max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-xl text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
             {data.ctaFinal.subtitle}
           </p>
-          <Link to={ctaLink} className="inline-block w-full xs:w-auto">
-            <button className="w-full px-12 md:px-16 py-5 md:py-6 bg-[#BD7474] text-white rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] shadow-2xl hover:bg-[#B06060] transition-all transform active:scale-95">
-              {data.ctaFinal.cta}
-            </button>
-          </Link>
+          <div className="pt-4">
+            <Link to={ctaLink} className="inline-block w-full xs:w-auto">
+              <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-2xl active:scale-95">
+                {data.ctaFinal.cta}
+              </button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ─── I. Footer ─────────────────────────────────────────────── */}
-      <footer className="bg-[#0A0C0A] text-white py-16 md:py-24 px-6">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16 mb-16">
-            {/* Column 1: Brand */}
-            <div className="col-span-2 md:col-span-1">
-              <Link to="/" className="text-2xl font-serif italic tracking-tighter">
-                Invitto
+      {/* ─── Footer ─────────────────────────────────────────────── */}
+      <footer className="bg-[#222B38] text-white pt-16 pb-12 px-6 border-t border-white/10">
+        <div className="mx-auto max-w-7xl space-y-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div className="lg:col-span-4 space-y-4">
+              <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
+                <img src="/logo.png" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
               </Link>
-              <p className="mt-4 text-xs text-white/40 font-light leading-relaxed">
-                La plataforma mexicana de invitaciones digitales para bodas, XV años y todo tipo de celebraciones.
+              <p className="text-xs text-slate-400 font-normal leading-relaxed">
+                Invitaciones digitales de alta gama con control de pases y confirmación inteligente para México y Latinoamérica.
               </p>
             </div>
-
-            {/* Column 2: Producto */}
-            <div>
-              <h5 className="text-[9px] uppercase font-bold tracking-[0.2em] text-white/60 mb-4">
-                Producto
-              </h5>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/planes" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Planes y precios
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/ejemplos" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Ejemplos
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/blog" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Blog
-                  </Link>
-                </li>
+            <div className="lg:col-span-4 space-y-3">
+              <p className="text-xs font-bold uppercase tracking-widest text-white">Navegación</p>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
+                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
+                <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
+                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               </ul>
             </div>
-
-            {/* Column 3: Comparativas */}
-            <div>
-              <h5 className="text-[9px] uppercase font-bold tracking-[0.2em] text-white/60 mb-4">
-                Comparativas
-              </h5>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/invitaciones-digitales-vs-papel" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Digital vs Papel
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/invitto-vs-paperless-post" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    vs Paperless Post
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/invitto-vs-greenvelope" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    vs Greenvelope
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4: Legal */}
-            <div>
-              <h5 className="text-[9px] uppercase font-bold tracking-[0.2em] text-white/60 mb-4">
-                Legal
-              </h5>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/aviso-de-privacidad" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Aviso de privacidad
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/terminos" className="text-sm text-white/40 hover:text-[#BD7474] transition-colors font-light">
-                    Términos y condiciones
-                  </Link>
-                </li>
-              </ul>
+            <div className="lg:col-span-4 space-y-3">
+              <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
+              <p className="text-xs text-slate-400">Soporte directo por WhatsApp y correo en México.</p>
+              <a href="mailto:soporte@invitto.com.mx" className="text-xs text-[#DF3B94] font-bold hover:underline">soporte@invitto.com.mx</a>
             </div>
           </div>
-
-          <div className="border-t border-white/10 pt-8 text-center">
-            <p className="text-xs text-white/30 font-light">
-              © {new Date().getFullYear()} Invitto. Todos los derechos reservados. Hecho con ❤️ en México.
-            </p>
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
+            <p>© 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
+            <p>HECHO CON CARIÑO EN MÉXICO</p>
           </div>
         </div>
       </footer>

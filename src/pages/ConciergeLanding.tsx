@@ -7,10 +7,12 @@ import {
     CheckCircle2,
     Clock,
     Gem,
-    ArrowLeft,
-    PhoneCall
+    Check,
+    PhoneCall,
+    Users
 } from 'lucide-react';
 import Seo from '../components/Seo';
+import { useAuth } from '../context/AuthContext';
 
 const SERVICE_JSONLD = {
     '@context': 'https://schema.org',
@@ -28,155 +30,228 @@ const SERVICE_JSONLD = {
 };
 
 const ConciergeLanding: React.FC = () => {
+    const { user } = useAuth();
+
     return (
-        <div className="min-h-screen bg-[#0A0C0A] text-white font-sans selection:bg-[#BD7474]/30 overflow-x-hidden">
+        <div className="min-h-screen bg-[#171E28] text-white font-sans selection:bg-[#DF3B94]/30 overflow-x-hidden">
             <Seo
-                title="Servicio Concierge — Tu evento sin estrés"
+                title="Servicio Concierge — Tu evento sin estrés | Invitto"
                 description="Nosotros cargamos tus invitados, enviamos invitaciones por WhatsApp y hacemos seguimiento. Tú disfrutas tu evento. Servicio Concierge $4,499 MXN."
                 path="/concierge-service"
                 jsonLd={SERVICE_JSONLD}
             />
-            {/* Elegant Header */}
-            <header className="fixed top-0 w-full z-50 bg-black/20 backdrop-blur-md border-b border-white/5 px-6 md:px-8 py-4 md:py-6">
-                <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <Link to="/planes" className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/40 hover:text-white transition-all">
-                        <ArrowLeft className="h-4 w-4" /> <span className="hidden xs:inline">Volver</span>
+
+            {/* Header */}
+            <header className="fixed top-0 w-full z-50 bg-[#171E28]/85 backdrop-blur-md border-b border-white/10 px-4 md:px-6">
+                <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
+                    <Link to="/" className="flex items-center hover:opacity-95 transition-opacity">
+                        <img src="/logo.png" alt="Invitto" className="h-8 md:h-10 w-auto object-contain brightness-0 invert" />
                     </Link>
-                    <div className="text-xl md:text-2xl font-serif italic tracking-tighter">Invitto <span className="text-[#BD7474]">Concierge</span></div>
-                    <div className="hidden md:block h-px w-20 bg-white/10" />
+
+                    <nav className="hidden lg:flex items-center gap-8">
+                        <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
+                            Ejemplos
+                        </Link>
+                        <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
+                            Planes
+                        </Link>
+                        <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
+                            Comparativas
+                        </Link>
+                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">
+                            Concierge
+                        </Link>
+                        <Link to="/blog" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
+                            Blog
+                        </Link>
+                    </nav>
+
+                    <div className="flex items-center gap-3">
+                        <Link to="/checkout?plan=concierge">
+                            <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
+                                Contratar Concierge
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </header>
 
             {/* Hero Section */}
-            <section className="relative pt-32 md:pt-40 pb-16 md:pb-20 px-6 md:px-8">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-[#BD7474]/10 rounded-full blur-[80px] md:blur-[120px] -z-0 opacity-30" />
+            <section className="relative pt-32 md:pt-44 pb-20 md:pb-32 px-6 overflow-hidden bg-gradient-to-b from-[#222B38] via-[#171E28] to-[#171E28]">
+                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[#DF3B94]/15 rounded-full blur-[140px] pointer-events-none" />
                 
-                <div className="max-w-4xl mx-auto text-center space-y-8 md:space-y-10 relative z-10">
-                    <div className="inline-flex items-center gap-3 px-5 md:px-6 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
-                        <Gem className="h-3.5 w-3.5 text-[#BD7474]" />
-                        <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em]">Servicio de Guante Blanco</span>
+                <div className="max-w-4xl mx-auto text-center space-y-6 md:space-y-8 relative z-10">
+                    <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+                        <Gem className="h-4 w-4 text-[#DF3B94]" />
+                        <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">Servicio Luxury de Guante Blanco</span>
                     </div>
                     
-                    <h1 className="text-4xl xs:text-5xl md:text-8xl font-serif leading-[1.1] tracking-tight">
+                    <h1 className="text-4xl xs:text-5xl md:text-7xl font-display font-extrabold text-white leading-tight tracking-tight">
                         Tú disfruta tu evento, <br />
-                        <span className="italic text-[#BD7474]">nosotros hacemos todo.</span>
+                        <span className="italic font-light text-[#DF3B94]">nosotros hacemos todo.</span>
                     </h1>
                     
-                    <p className="text-lg md:text-xl text-white/50 font-light italic max-w-2xl mx-auto leading-relaxed">
-                        El primer servicio de gestión humana para invitaciones digitales. No solo enviamos mensajes; cuidamos a tus invitados como tú lo harías.
+                    <p className="text-base md:text-xl text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed">
+                        El primer servicio de gestión humana para invitaciones digitales en México. Cargamos tu lista, enviamos las invitaciones por WhatsApp y hacemos 4 rondas de seguimiento hasta el día de tu fiesta.
                     </p>
 
-                    <div className="pt-4 md:pt-6 flex flex-col items-center justify-center gap-5 md:gap-6">
-                        <Link to="/checkout?plan=concierge" className="group w-full xs:w-auto px-10 md:px-12 py-5 md:py-6 bg-white text-black rounded-full font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-[#BD7474] hover:text-white transition-all flex items-center justify-center gap-3 shadow-2xl shadow-white/5">
-                            Contratar Concierge <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <div className="pt-4 flex flex-col items-center justify-center gap-4">
+                        <Link to="/checkout?plan=concierge" className="w-full xs:w-auto px-10 md:px-12 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full font-bold text-xs md:text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-2xl shadow-[#DF3B94]/30 active:scale-95">
+                            CONTRATAR CONCIERGE <ArrowRight className="h-5 w-5" />
                         </Link>
-                        <p className="text-[9px] md:text-[10px] text-white/30 font-bold uppercase tracking-[0.2em]">Inversión única: $4,499 MXN</p>
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 rounded-full border border-white/10 text-xs text-slate-400 font-semibold">
+                            <span>Inversión única:</span>
+                            <span className="text-[#F5B837] font-bold">$4,499 MXN</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* Core Values / Features Grid */}
-            <section className="py-20 md:py-32 px-6 md:px-8 border-t border-white/5 bg-gradient-to-b from-transparent to-black/40">
+            <section className="py-20 md:py-32 px-6 border-t border-white/5 bg-[#171E28]">
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                        <div className="space-y-5 md:space-y-6 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-[#BD7474]/20 transition-all group">
-                            <div className="h-12 w-12 md:h-14 md:w-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] group-hover:scale-110 transition-transform">
-                                <MessageCircle className="h-6 w-6 md:h-7 md:w-7" />
+                    <div className="text-center mb-16 space-y-3">
+                        <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">Atención Personalizada</span>
+                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white">¿Qué incluye el plan Concierge?</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="space-y-5 p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#DF3B94]/40 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="h-14 w-14 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <MessageCircle className="h-7 w-7" />
+                                </div>
+                                <h3 className="text-2xl font-display font-bold text-white mb-3">Envío Personalizado</h3>
+                                <p className="text-sm text-slate-300 font-normal leading-relaxed">
+                                    Olvida copiar y pegar enlaces. Nuestro equipo envía cada invitación vía WhatsApp de forma individual, asegurando una atención cercana y elegante.
+                                </p>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-serif">Envío Personalizado</h3>
-                            <p className="text-xs md:text-sm text-white/40 font-light leading-relaxed italic">
-                                Olvida copiar y pegar. Nuestro equipo envía cada invitación vía WhatsApp de forma individual, asegurando que llegue con calidez humana.
-                            </p>
+                            <div className="pt-6 border-t border-white/10 text-xs font-bold text-[#DF3B94]">
+                                Vía WhatsApp Directo →
+                            </div>
                         </div>
 
-                        <div className="space-y-5 md:space-y-6 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-[#BD7474]/20 transition-all group">
-                            <div className="h-12 w-12 md:h-14 md:w-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] group-hover:scale-110 transition-transform">
-                                <Clock className="h-6 w-6 md:h-7 md:w-7" />
+                        <div className="space-y-5 p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#DF3B94]/40 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="h-14 w-14 rounded-2xl bg-[#F5B837]/15 text-[#F5B837] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <Clock className="h-7 w-7" />
+                                </div>
+                                <h3 className="text-2xl font-display font-bold text-white mb-3">4 Rondas de Seguimiento</h3>
+                                <p className="text-sm text-slate-300 font-normal leading-relaxed">
+                                    Realizamos seguimiento estratégico a los invitados pendientes para entregarte tu lista final de pases confirmados con semanas de anticipación.
+                                </p>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-serif">4 Rondas de Seguimiento</h3>
-                            <p className="text-xs md:text-sm text-white/40 font-light leading-relaxed italic">
-                                Realizamos seguimiento estratégico a los invitados pendientes para que tengas tu lista confirmada mucho antes de la fecha límite.
-                            </p>
+                            <div className="pt-6 border-t border-white/10 text-xs font-bold text-[#F5B837]">
+                                Seguimiento Programado →
+                            </div>
                         </div>
 
-                        <div className="space-y-5 md:space-y-6 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-[#BD7474]/20 transition-all group">
-                            <div className="h-12 w-12 md:h-14 md:w-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] group-hover:scale-110 transition-transform">
-                                <PhoneCall className="h-6 w-6 md:h-7 md:w-7" />
+                        <div className="space-y-5 p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#DF3B94]/40 transition-all group flex flex-col justify-between">
+                            <div>
+                                <div className="h-14 w-14 rounded-2xl bg-emerald-500/15 text-[#4E7B55] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <PhoneCall className="h-7 w-7" />
+                                </div>
+                                <h3 className="text-2xl font-display font-bold text-white mb-3">Atención a Dudas</h3>
+                                <p className="text-sm text-slate-300 font-normal leading-relaxed">
+                                    ¿Tienen dudas sobre el hotel o el dress code? Tu concierge dedicado resuelve todas las preguntas de tus invitados por ti.
+                                </p>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-serif">Atención a Dudas</h3>
-                            <p className="text-xs md:text-sm text-white/40 font-light leading-relaxed italic">
-                                ¿Tienen dudas sobre el hotel o el código de vestimenta? Tu concierge dedicado resuelve todo por ti, 24/7.
-                            </p>
+                            <div className="pt-6 border-t border-white/10 text-xs font-bold text-[#4E7B55]">
+                                Soporte Humano Directo →
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* The Experience Section */}
-            <section className="py-24 md:py-40 px-6 md:px-8 relative overflow-hidden">
-                <div className="absolute right-0 top-1/4 w-[250px] md:w-[500px] h-[250px] md:h-[500px] bg-white/5 rounded-full blur-[80px] md:blur-[150px] -z-0" />
-                
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-24 items-center relative z-10">
-                    <div className="space-y-10 md:space-y-12 text-center lg:text-left">
+            <section className="py-24 md:py-36 px-6 bg-[#222B38] border-t border-white/10">
+                <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                    <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
                         <div className="space-y-4">
-                            <h2 className="text-3xl xs:text-4xl md:text-5xl font-serif leading-tight">Por qué elegir <br className="hidden md:block" /> el servicio <span className="text-[#BD7474]">Concierge</span></h2>
-                            <p className="text-white/40 font-light italic text-xs md:text-base">Diseñado para anfitriones que valoran su tiempo y la excelencia.</p>
+                            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white leading-tight">
+                                Por qué elegir el servicio <span className="text-[#DF3B94]">Concierge</span>
+                            </h2>
+                            <p className="text-slate-300 text-base font-normal">Diseñado para anfitriones que valoran su tiempo y exigen excelencia.</p>
                         </div>
 
-                        <ul className="space-y-6 md:space-y-8 max-w-lg mx-auto lg:mx-0">
+                        <div className="grid sm:grid-cols-2 gap-6 text-left">
                             {[
-                                { t: "Cero fricción operativa", d: "Nosotros cargamos tu lista de Excel, la depuramos y la gestionamos." },
-                                { t: "Diseño 100% Personalizado", d: "Nuestros expertos ajustan cada detalle visual de tu invitación." },
-                                { t: "Reporte Final de Asistencia", d: "Recibe un PDF ejecutivo con cada detalle de tus invitados confirmados." },
-                                { t: "Gestión de Cambios de Último Minuto", d: "¿Alguien canceló? Nosotros actualizamos tus métricas al instante." }
+                                { t: "Cero fricción operativa", d: "Nosotros cargamos tu lista de Excel, la depuramos y gestionamos los pases." },
+                                { t: "Diseño 100% Personalizado", d: "Nuestros expertos ajustan cada detalle gráfico de tu invitación." },
+                                { t: "Reporte Final de Asistencia", d: "Recibe un reporte ejecutivo completo en Excel / PDF con tus confirmados." },
+                                { t: "Gestión de Cambios", d: "¿Alguien canceló a última hora? Actualizamos tus métricas en tiempo real." }
                             ].map((item, i) => (
-                                <li key={i} className="flex gap-4 md:gap-6 items-start text-left group">
-                                    <div className="mt-1 h-6 w-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-colors">
-                                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                                <div key={i} className="bg-white/5 p-6 rounded-2xl border border-white/10 space-y-2">
+                                    <div className="flex items-center gap-2 text-[#DF3B94]">
+                                        <Check className="h-4 w-4" />
+                                        <h4 className="font-bold text-sm text-white">{item.t}</h4>
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-[10px] md:text-sm uppercase tracking-widest mb-1 md:mb-2">{item.t}</h4>
-                                        <p className="text-[11px] md:text-sm text-white/40 font-light italic leading-relaxed">{item.d}</p>
-                                    </div>
-                                </li>
+                                    <p className="text-xs text-slate-300 leading-relaxed font-normal">{item.d}</p>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </div>
 
-                    <div className="relative group w-full max-w-md mx-auto">
-                        <div className="absolute inset-0 bg-[#BD7474]/20 blur-[50px] md:blur-[80px] group-hover:blur-[100px] transition-all" />
-                        <div className="relative p-7 md:p-12 bg-white/5 border border-white/10 rounded-[2rem] md:rounded-[3rem] backdrop-blur-xl">
-                            <div className="space-y-6 md:space-y-8">
-                                <div className="flex items-center gap-4 border-b border-white/5 pb-6 md:pb-8">
-                                    <div className="h-12 w-12 md:h-16 md:w-16 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-black shadow-xl">
-                                        <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] text-[#BD7474]">Próximo Paso</p>
-                                        <h3 className="text-xl md:text-3xl font-serif">Eleva tu evento</h3>
-                                    </div>
+                    <div className="lg:col-span-5">
+                        <div className="p-8 md:p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl space-y-8 shadow-2xl">
+                            <div className="flex items-center gap-4 border-b border-white/10 pb-6">
+                                <div className="h-14 w-14 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center flex-shrink-0">
+                                    <Sparkles className="h-7 w-7" />
                                 </div>
-                                
-                                <p className="text-base md:text-xl font-light italic leading-relaxed text-white/70 text-center">
-                                    "La diferencia entre un evento bueno y uno inolvidable está en los detalles. Permítenos cuidar de tus invitados."
-                                </p>
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">PRÓXIMO PASO</p>
+                                    <h3 className="text-2xl font-display font-bold text-white">Eleva tu evento</h3>
+                                </div>
+                            </div>
+                            
+                            <p className="text-sm md:text-base font-normal italic leading-relaxed text-slate-300 text-center">
+                                "La diferencia entre un evento improvisado y uno memorable está en la atención a tus invitados."
+                            </p>
 
-                                <div className="space-y-4">
-                                    <Link to="/checkout?plan=concierge" className="w-full py-5 md:py-6 bg-[#BD7474] text-white rounded-full font-bold text-xs md:text-sm uppercase tracking-widest hover:bg-[#A65B5B] transition-all flex items-center justify-center gap-3 shadow-xl shadow-rose-900/20">
-                                        Contratar ahora <ArrowRight className="h-5 w-5" />
-                                    </Link>
-                                    <p className="text-center text-[8px] md:text-[9px] text-white/20 font-bold uppercase tracking-widest px-4 leading-loose">Atención VIP Inmediata tras la compra</p>
-                                </div>
+                            <div className="space-y-3">
+                                <Link to="/checkout?plan=concierge" className="w-full py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl shadow-[#DF3B94]/20 active:scale-95">
+                                    Contratar Concierge <ArrowRight className="h-4 w-4" />
+                                </Link>
+                                <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">Atención VIP Inmediata tras la compra</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Minimal Footer */}
-            <footer className="py-12 md:py-20 px-6 md:px-8 border-t border-white/5 text-center">
-                <div className="text-white/10 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.4em] md:tracking-[0.5em] mb-4">Invitto Luxury Experiences</div>
-                <div className="h-px w-12 md:w-20 bg-white/5 mx-auto" />
+            {/* Footer */}
+            <footer className="bg-[#171E28] text-white pt-16 pb-12 px-6 border-t border-white/10">
+                <div className="mx-auto max-w-7xl space-y-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                        <div className="lg:col-span-4 space-y-4">
+                            <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
+                                <img src="/logo.png" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
+                            </Link>
+                            <p className="text-xs text-slate-400 font-normal leading-relaxed">
+                                Invitaciones digitales de alta gama con control de pases y confirmación inteligente para México y Latinoamérica.
+                            </p>
+                        </div>
+                        <div className="lg:col-span-4 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Navegación</p>
+                            <ul className="space-y-2 text-xs text-slate-400">
+                                <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
+                                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
+                                <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
+                                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                            </ul>
+                        </div>
+                        <div className="lg:col-span-4 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
+                            <p className="text-xs text-slate-400">Soporte directo por WhatsApp y correo en México.</p>
+                            <a href="mailto:soporte@invitto.com.mx" className="text-xs text-[#DF3B94] font-bold hover:underline">soporte@invitto.com.mx</a>
+                        </div>
+                    </div>
+                    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
+                        <p>© 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
+                        <p>HECHO CON CARIÑO EN MÉXICO</p>
+                    </div>
+                </div>
             </footer>
         </div>
     );

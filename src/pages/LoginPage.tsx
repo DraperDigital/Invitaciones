@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, Eye, EyeOff, X, Gem } from 'lucide-react';
 import Seo from '../components/Seo';
 
@@ -195,28 +195,30 @@ export default function LoginPage() {
                 noindex
             />
             {/* Left Side: Illustration & Branding */}
-            <div className="hidden lg:flex w-1/2 bg-[#1B2E1D] relative items-center justify-center p-20 overflow-hidden">
+            <div className="hidden lg:flex w-1/2 bg-[#222B38] relative items-center justify-center p-20 overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
                         src="https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e?auto=format&fit=crop&q=80"
                         alt="Event Branding Background"
-                        className="w-full h-full object-cover opacity-20 grayscale"
+                        className="w-full h-full object-cover opacity-15 grayscale"
                     />
-                    <div className="absolute inset-0 bg-[#1B2E1D]/80" />
+                    <div className="absolute inset-0 bg-[#222B38]/85" />
                 </div>
                 
-                <div className="relative z-10 text-white max-w-lg">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase font-bold tracking-widest mb-10 border border-white/10">
-                        <Gem className="h-4 w-4 text-[#BD7474]" />
-                        <span>Plataforma de Invitaciones Premium</span>
+                <div className="relative z-10 text-white max-w-lg space-y-6">
+                    <img src="/logo.png" alt="Invitto" className="h-12 w-auto object-contain brightness-0 invert mb-8" />
+                    <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-wider border border-white/10">
+                        <span>Plataforma #1 de Invitaciones Digitales</span>
                     </div>
-                    <h1 className="text-6xl font-serif mb-8 leading-tight">Tu evento, <span className="italic text-[#BD7474]">sin estrés.</span></h1>
-                    <p className="text-xl text-stone-400 font-light leading-relaxed">
-                        Confirma a tus invitados, manda recordatorios y ve quién va — todo desde un solo lugar. Sin perseguir a nadie por WhatsApp.
+                    <h1 className="text-5xl md:text-6xl font-display font-extrabold leading-tight">
+                        Tu evento, <span className="text-[#DF3B94]">sin estrés.</span>
+                    </h1>
+                    <p className="text-lg text-slate-300 font-normal leading-relaxed">
+                        Confirma a tus invitados, manda recordatorios por WhatsApp y ve quién va — todo desde un solo lugar. Sin perseguir a nadie.
                     </p>
                 </div>
 
-                <div className="absolute bottom-20 left-20 text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold">
+                <div className="absolute bottom-12 left-20 text-xs uppercase tracking-widest text-white/40 font-bold">
                     © 2026 INVITTO.MX
                 </div>
             </div>
@@ -343,7 +345,10 @@ export default function LoginPage() {
                         /* ── VISTA: Login / Registro (existente) ── */
                         <>
                             <div className="mb-8 md:mb-12">
-                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">
+                                <Link to="/" className="inline-block mb-6 hover:opacity-90 transition-opacity">
+                                    <img src="/logo.png" alt="Invitto" className="h-9 md:h-10 w-auto object-contain" />
+                                </Link>
+                                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-3 md:mb-4">
                                     {isLogin
                                         ? 'Bienvenido de nuevo'
                                         : isFromCheckout ? 'Crea tu cuenta para continuar' : 'Crea tu cuenta'}
