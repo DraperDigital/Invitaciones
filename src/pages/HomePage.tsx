@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import {
     UserCheck, BarChart3, PartyPopper,
     Check, MessageSquare, Star, ChevronDown, ArrowRight,
-    X, Music, Users, Gem
+    X, Music, Users, Gem, Menu
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -30,8 +30,9 @@ const HOMEPAGE_JSONLD = [
 ];
 
 export default function HomePage() {
-    const [openFaq, setOpenFaq] = useState<number | null>(null);
     const { user } = useAuth();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
@@ -73,15 +74,23 @@ export default function HomePage() {
                     </nav>
 
                     <div className="flex items-center gap-3 md:gap-6">
+                        <button
+                            className="lg:hidden p-2 text-[#222B38] focus:outline-none"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label="Menú principal"
+                        >
+                            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        </button>
+
                         {user ? (
                             <Link to="/dashboard">
-                                <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
+                                <button className="px-4 py-2 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
                                     Dashboard
                                 </button>
                             </Link>
                         ) : (
                             <>
-                                <Link to="/login" className="hidden xs:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
+                                <Link to="/login" className="hidden sm:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                                     Ingresar
                                 </Link>
                                 <Link to="/planes" className="hidden sm:block">
@@ -93,6 +102,65 @@ export default function HomePage() {
                         )}
                     </div>
                 </div>
+
+                {/* Mobile Menu Dropdown */}
+                {mobileMenuOpen && (
+                    <div className="lg:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md px-6 py-6 space-y-4 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+                        <Link
+                            to="/ejemplos"
+                            className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Ejemplos
+                        </Link>
+                        <Link
+                            to="/planes"
+                            className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Planes y Precios
+                        </Link>
+                        <Link
+                            to="/comparativas"
+                            className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Comparativas
+                        </Link>
+                        <Link
+                            to="/concierge-service"
+                            className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Servicio Concierge
+                        </Link>
+                        <Link
+                            to="/blog"
+                            className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Blog
+                        </Link>
+                        <div className="pt-3 flex flex-col gap-3">
+                            <Link
+                                to={user ? '/dashboard' : '/planes'}
+                                className="block w-full text-center px-6 py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 active:scale-95"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                {user ? 'Mi Dashboard' : 'Comenzar'}
+                            </Link>
+                            {!user && (
+                                <Link
+                                    to="/login"
+                                    className="block w-full text-center px-6 py-2.5 border border-slate-200 text-slate-700 rounded-xl text-xs uppercase font-bold tracking-widest transition-all hover:bg-slate-50"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    Ingresar
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                )}
             </header>
 
             {/* --- 2. HERO SECTION --- */}
