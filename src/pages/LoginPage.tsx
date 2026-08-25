@@ -8,10 +8,8 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const redirectUrl = searchParams.get('redirect') || '/dashboard';
-    // User came from a "buy plan" click on landing/pricing → wants to create + buy
     const isFromCheckout = redirectUrl.includes('/checkout') || redirectUrl.includes('/dashboard/new');
 
-    // If user lands here from a "buy plan" click, default to signup, not login
     const [isLogin, setIsLogin] = useState(!isFromCheckout);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [isPasswordRecovery, setIsPasswordRecovery] = useState(false);
@@ -24,110 +22,60 @@ export default function LoginPage() {
     const [message, setMessage] = useState<{ text: string, type: 'error' | 'success' } | null>(null);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Redirect if already logged in
     useEffect(() => {
-        // MOCK MODE: already logged in via AuthContext, go straight to redirectUrl
-        if (!import.meta.env.VITE_SUPABASE_URL) {
-            navigate(redirectUrl);
-            return;
+        // Detect password recovery token in URL hash (#type=recovery)
+        const hash = window.location.hash;
+        if (hash && hash.includes('type=recovery')) {
+            setIsPasswordRecovery(true);
         }
 
+        // Check if session exists
         supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session) {
-                navigate(redirectUrl);
+            if (session && !hash.includes('type=recovery')) {
+                navigate(redirectUrl, { replace: true });
             }
         });
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'PASSWORD_RECOVERY') {
-                setIsPasswordRecovery(true);
-                return;
-            }
-            if (session) {
-                navigate(redirectUrl);
-            }
-        });
-
-        // Parse error from hash if any (e.g., Magic Link expired)
-        if (window.location.hash) {
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            const errorDesc = hashParams.get('error_description');
-            if (errorDesc) {
-                setMessage({
-                    text: errorDesc.includes('expired') || errorDesc.includes('invalid')
-                        ? 'El enlace ha expirado o es inválido. Por favor, solicita uno nuevo.' 
-                        : errorDesc.replace(/\+/g, ' '),
-                    type: 'error'
-                });
-                // Clean URL
-                window.history.replaceState(null, '', window.location.pathname + window.location.search);
-            }
-        }
-
-        return () => subscription.unsubscribe();
     }, [navigate, redirectUrl]);
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
-        setMessage(null);
-
-        if (!email.trim() || !password.trim()) {
-            setMessage({ text: 'Por favor completa todos los campos.', type: 'error' });
-            return;
-        }
-
         setLoading(true);
+        setMessage(null);
 
         try {
             if (isLogin) {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
-                navigate(redirectUrl);
+                navigate(redirectUrl, { replace: true });
             } else {
                 const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
-                        data: {
-                            full_name: fullName,
-                        },
-                        emailRedirectTo: `${window.location.origin}${redirectUrl}`
-                    },
+                        data: { full_name: fullName }
+                    }
                 });
                 if (error) throw error;
-                
-                if (data.user && !data.session) {
-                    // Email confirmation required
-                    setShowSuccessModal(true);
+
+                if (data.session) {
+                    navigate(redirectUrl, { replace: true });
                 } else {
-                    // Redirect to the intended URL, or to the wizard if none specified
-                    if (redirectUrl === '/dashboard') {
-                        navigate('/dashboard/new?welcome=true');
-                    } else {
-                        navigate(redirectUrl);
-                    }
+                    setShowSuccessModal(true);
                 }
             }
         } catch (err: any) {
-            const isNetworkError = err.message === 'Failed to fetch';
-            const isEmailNotConfirmed = err.message === 'Email not confirmed';
-            const msg = isNetworkError
-                ? 'No se pudo conectar al servidor. Verifica tu conexión e intenta de nuevo.'
-                : isEmailNotConfirmed
-                ? 'Por favor verifica tu correo electrónico para activar tu cuenta. Revisa también tu carpeta de Spam.'
-                : err.message === 'Invalid login credentials'
-                ? 'Correo o contraseña incorrectos. Verifica tus datos.'
-                : err.message || 'Ocurrió un error inesperado.';
-            setMessage({ text: msg, type: 'error' });
+            setMessage({
+                text: err.message === 'Invalid login credentials' 
+                    ? 'Correo o contraseña incorrectos.' 
+                    : err.message || 'Ocurrió un error. Intenta de nuevo.',
+                type: 'error'
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    const handleOAuthLogin = async (provider: 'google' | 'facebook') => {
+    const handleOAuthLogin = async (provider: 'google') => {
         setLoading(true);
         setMessage(null);
         try {
@@ -139,41 +87,42 @@ export default function LoginPage() {
             });
             if (error) throw error;
         } catch (err: any) {
-            setMessage({ text: err.message || `Error al iniciar sesión con ${provider}`, type: 'error' });
+            setMessage({ text: err.message || 'Error con inicio de sesión social.', type: 'error' });
             setLoading(false);
         }
     };
 
-    // Envía el correo de recuperación
     const handleForgotPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setMessage(null);
+
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/login`,
+                redirectTo: `${window.location.origin}/login#type=recovery`
             });
             if (error) throw error;
             setMessage({
-                text: 'Te enviamos un enlace de recuperación. Revisa tu correo (incluyendo la carpeta de spam).',
-                type: 'success',
+                text: 'Te enviamos un correo con las instrucciones para restablecer tu contraseña.',
+                type: 'success'
             });
         } catch (err: any) {
-            setMessage({ text: err.message || 'Error al enviar el correo. Intenta de nuevo.', type: 'error' });
+            setMessage({ text: err.message || 'Error al enviar correo de recuperación.', type: 'error' });
         } finally {
             setLoading(false);
         }
     };
 
-    // Actualiza la contraseña tras el flujo de recuperación
     const handleUpdatePassword = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (newPassword.length < 8) {
-            setMessage({ text: 'La contraseña debe tener al menos 8 caracteres.', type: 'error' });
+        if (newPassword.length < 6) {
+            setMessage({ text: 'La contraseña debe tener al menos 6 caracteres.', type: 'error' });
             return;
         }
+
         setLoading(true);
         setMessage(null);
+
         try {
             const { error } = await supabase.auth.updateUser({ password: newPassword });
             if (error) throw error;
@@ -187,10 +136,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] flex relative">
+        <div className="min-h-screen bg-[#F8F9FA] flex relative font-sans text-[#222B38]">
             <Seo
-                title={isLogin ? 'Iniciar sesión' : 'Crear cuenta'}
-                description="Accede a tu panel de Invitto para gestionar tus invitaciones y confirmaciones."
+                title={isLogin ? 'Iniciar sesión | Invitto' : 'Crear cuenta | Invitto'}
+                description="Accede a tu panel de Invitto para gestionar tus invitaciones y confirmaciones en tiempo real."
                 path="/login"
                 noindex
             />
@@ -206,56 +155,61 @@ export default function LoginPage() {
                 </div>
                 
                 <div className="relative z-10 text-white max-w-lg space-y-6">
-                    <img src="/logo.png" alt="Invitto" className="h-12 w-auto object-contain brightness-0 invert mb-8" />
-                    <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-wider border border-white/10">
+                    <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
+                        <img src="/logo.png?v=3" alt="Invitto" className="h-10 w-auto object-contain brightness-0 invert mb-6" />
+                    </Link>
+                    <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-wider border border-white/10 text-slate-200">
                         <span>Plataforma #1 de Invitaciones Digitales</span>
                     </div>
                     <h1 className="text-5xl md:text-6xl font-display font-extrabold leading-tight">
                         Tu evento, <span className="text-[#DF3B94]">sin estrés.</span>
                     </h1>
-                    <p className="text-lg text-slate-300 font-normal leading-relaxed">
-                        Confirma a tus invitados, manda recordatorios por WhatsApp y ve quién va — todo desde un solo lugar. Sin perseguir a nadie.
+                    <p className="text-base md:text-lg text-slate-300 font-normal leading-relaxed">
+                        Confirma a tus invitados, manda recordatorios por WhatsApp y ve quién va — todo desde un solo lugar.
                     </p>
                 </div>
 
-                <div className="absolute bottom-12 left-20 text-xs uppercase tracking-widest text-white/40 font-bold">
-                    © 2026 INVITTO.MX
+                <div className="absolute bottom-12 left-20 text-xs uppercase tracking-widest text-slate-500 font-bold">
+                    © 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS
                 </div>
             </div>
 
             {/* Right Side: Auth Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 md:p-16">
-                <div className="max-w-md w-full">
+                <div className="max-w-md w-full bg-white md:bg-transparent rounded-3xl p-6 sm:p-8 md:p-0 border md:border-none border-slate-100 shadow-xl md:shadow-none">
 
-                    {/* ── VISTA: Nueva contraseña (tras clic en el link del correo) ── */}
+                    {/* VISTA: Nueva contraseña */}
                     {isPasswordRecovery ? (
                         <>
-                            <div className="mb-8 md:mb-12">
-                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">Nueva contraseña</h2>
-                                <p className="text-stone-500 font-light italic text-sm md:text-base">
-                                    Elige una contraseña segura de al menos 8 caracteres.
+                            <div className="mb-8 md:mb-10">
+                                <Link to="/" className="inline-block mb-6 hover:opacity-90 transition-opacity">
+                                    <img src="/logo.png?v=3" alt="Invitto" className="h-9 md:h-10 w-auto object-contain" />
+                                </Link>
+                                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-2">
+                                    Nueva contraseña
+                                </h2>
+                                <p className="text-slate-600 font-normal text-sm md:text-base">
+                                    Elige una contraseña segura de al menos 6 caracteres.
                                 </p>
                             </div>
 
-                            <form onSubmit={handleUpdatePassword} className="space-y-5 md:space-y-6">
+                            <form onSubmit={handleUpdatePassword} className="space-y-5">
                                 <div>
-                                    <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
-                                        NUEVA CONTRASEÑA
-                                    </label>
+                                    <label className="block text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">NUEVA CONTRASEÑA</label>
                                     <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                                         <input
                                             required
                                             type={showPassword ? "text" : "password"}
-                                            placeholder="Mínimo 8 caracteres"
+                                            placeholder="••••••••"
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
+                                            className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] outline-none transition-all placeholder:text-slate-400 text-sm md:text-base"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#222B38] transition-colors"
                                         >
                                             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                         </button>
@@ -263,67 +217,10 @@ export default function LoginPage() {
                                 </div>
 
                                 {message && (
-                                    <div className={`flex items-center gap-3 p-4 rounded-xl text-sm ${
+                                    <div className={`flex items-start gap-3 p-4 rounded-xl text-sm font-medium ${
                                         message.type === 'error'
-                                            ? 'bg-red-50 text-red-600 border border-red-100'
-                                            : 'bg-green-50 text-green-600 border border-green-100'
-                                    }`}>
-                                        {message.type === 'success' && <CheckCircle2 className="h-5 w-5 shrink-0" />}
-                                        {message.text}
-                                    </div>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
-                                >
-                                    {loading ? 'GUARDANDO...' : 'GUARDAR CONTRASEÑA'}
-                                    {!loading && <ArrowRight className="h-4 w-4" />}
-                                </button>
-                            </form>
-                        </>
-
-                    ) : isForgotPassword ? (
-                        /* ── VISTA: Recuperar contraseña ── */
-                        <>
-                            <button
-                                onClick={() => { setIsForgotPassword(false); setMessage(null); }}
-                                className="flex items-center gap-2 text-stone-400 hover:text-[#1B2E1D] transition-colors text-[10px] uppercase tracking-widest font-bold mb-8 md:mb-10"
-                            >
-                                <ArrowLeft className="h-4 w-4" /> Volver al inicio de sesión
-                            </button>
-
-                            <div className="mb-8 md:mb-12">
-                                <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-3 md:mb-4">Recuperar acceso</h2>
-                                <p className="text-stone-500 font-light italic text-sm md:text-base">
-                                    Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
-                                </p>
-                            </div>
-
-                            <form onSubmit={handleForgotPassword} className="space-y-5 md:space-y-6">
-                                <div>
-                                    <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
-                                        CORREO ELECTRÓNICO
-                                    </label>
-                                    <div className="relative">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
-                                        <input
-                                            required
-                                            type="email"
-                                            placeholder="tu@correo.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
-                                        />
-                                    </div>
-                                </div>
-
-                                {message && (
-                                    <div className={`flex items-start gap-3 p-4 rounded-xl text-sm ${
-                                        message.type === 'error'
-                                            ? 'bg-red-50 text-red-600 border border-red-100'
-                                            : 'bg-green-50 text-green-600 border border-green-100'
+                                            ? 'bg-rose-50 text-rose-600 border border-rose-100'
+                                            : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                                     }`}>
                                         {message.type === 'success' && <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />}
                                         <span>{message.text}</span>
@@ -333,7 +230,64 @@ export default function LoginPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-3 disabled:bg-stone-400"
+                                    className="w-full bg-[#DF3B94] hover:bg-[#C52A7C] text-white py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all active:scale-[0.98] shadow-lg shadow-[#DF3B94]/20 flex items-center justify-center gap-3 disabled:opacity-50"
+                                >
+                                    {loading ? 'GUARDANDO...' : 'GUARDAR CONTRASEÑA'}
+                                    {!loading && <ArrowRight className="h-4 w-4" />}
+                                </button>
+                            </form>
+                        </>
+
+                    ) : isForgotPassword ? (
+                        /* VISTA: Recuperar contraseña */
+                        <>
+                            <button
+                                onClick={() => { setIsForgotPassword(false); setMessage(null); }}
+                                className="flex items-center gap-2 text-slate-500 hover:text-[#222B38] transition-colors text-xs uppercase tracking-widest font-bold mb-8"
+                            >
+                                <ArrowLeft className="h-4 w-4" /> Volver al inicio de sesión
+                            </button>
+
+                            <div className="mb-8">
+                                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-2">Recuperar acceso</h2>
+                                <p className="text-slate-600 font-normal text-sm md:text-base">
+                                    Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.
+                                </p>
+                            </div>
+
+                            <form onSubmit={handleForgotPassword} className="space-y-5">
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">
+                                        CORREO ELECTRÓNICO
+                                    </label>
+                                    <div className="relative">
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                        <input
+                                            required
+                                            type="email"
+                                            placeholder="tu@correo.com"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] outline-none transition-all placeholder:text-slate-400 text-sm md:text-base"
+                                        />
+                                    </div>
+                                </div>
+
+                                {message && (
+                                    <div className={`flex items-start gap-3 p-4 rounded-xl text-sm font-medium ${
+                                        message.type === 'error'
+                                            ? 'bg-rose-50 text-rose-600 border border-rose-100'
+                                            : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                    }`}>
+                                        {message.type === 'success' && <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />}
+                                        <span>{message.text}</span>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full bg-[#DF3B94] hover:bg-[#C52A7C] text-white py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all active:scale-[0.98] shadow-lg shadow-[#DF3B94]/20 flex items-center justify-center gap-3 disabled:opacity-50"
                                 >
                                     {loading ? 'ENVIANDO...' : 'ENVIAR ENLACE'}
                                     {!loading && <ArrowRight className="h-4 w-4" />}
@@ -342,18 +296,18 @@ export default function LoginPage() {
                         </>
 
                     ) : (
-                        /* ── VISTA: Login / Registro (existente) ── */
+                        /* VISTA: Login / Registro */
                         <>
-                            <div className="mb-8 md:mb-12">
+                            <div className="mb-8">
                                 <Link to="/" className="inline-block mb-6 hover:opacity-90 transition-opacity">
                                     <img src="/logo.png?v=3" alt="Invitto" className="h-9 md:h-10 w-auto object-contain" />
                                 </Link>
-                                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-3 md:mb-4">
+                                <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-2 leading-tight">
                                     {isLogin
                                         ? 'Bienvenido de nuevo'
                                         : isFromCheckout ? 'Crea tu cuenta para continuar' : 'Crea tu cuenta'}
                                 </h2>
-                                <p className="text-stone-500 font-light italic text-sm md:text-base">
+                                <p className="text-slate-600 font-normal text-sm md:text-base leading-relaxed">
                                     {isLogin
                                         ? 'Ingresa para administrar tu evento.'
                                         : isFromCheckout
@@ -362,12 +316,12 @@ export default function LoginPage() {
                                 </p>
                             </div>
 
-                            <div className="mb-8">
+                            <div className="mb-6">
                                 <button
                                     type="button"
                                     onClick={() => handleOAuthLogin('google')}
                                     disabled={loading}
-                                    className="w-full flex items-center justify-center gap-3 bg-white border border-stone-200 text-stone-700 py-3.5 rounded-xl text-[10px] md:text-[11px] uppercase font-bold tracking-widest hover:bg-stone-50 transition-all shadow-sm disabled:opacity-50"
+                                    className="w-full flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 py-3.5 rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-slate-50 transition-all shadow-sm disabled:opacity-50"
                                 >
                                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -380,88 +334,88 @@ export default function LoginPage() {
                                 </button>
                             </div>
 
-                            <div className="relative mb-8">
+                            <div className="relative mb-6">
                                 <div className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-stone-200"></div>
+                                    <div className="w-full border-t border-slate-200"></div>
                                 </div>
-                                <div className="relative flex justify-center text-[9px] md:text-[10px] uppercase font-bold tracking-widest">
-                                    <span className="bg-[#FDFBF7] px-4 text-stone-400">O {isLogin ? 'ingresa' : 'regístrate'} con tu correo</span>
+                                <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
+                                    <span className="bg-[#F8F9FA] md:bg-white px-3 text-slate-400">O {isLogin ? 'ingresa' : 'regístrate'} con tu correo</span>
                                 </div>
                             </div>
 
-                            <form onSubmit={handleAuth} className="space-y-5 md:space-y-6">
+                            <form onSubmit={handleAuth} className="space-y-4 md:space-y-5">
                                 {!isLogin && (
                                     <div>
-                                        <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">
-                                            NOMBRE <span className="text-stone-300 normal-case tracking-normal font-normal">(opcional)</span>
+                                        <label className="block text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">
+                                            NOMBRE <span className="text-slate-400 normal-case tracking-normal font-normal">(opcional)</span>
                                         </label>
                                         <div className="relative">
-                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
+                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                                             <input
                                                 type="text"
                                                 placeholder="Tu nombre"
                                                 value={fullName}
                                                 onChange={(e) => setFullName(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
+                                                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] outline-none transition-all placeholder:text-slate-400 text-sm md:text-base font-normal text-[#222B38]"
                                             />
                                         </div>
                                     </div>
                                 )}
 
                                 <div>
-                                    <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">CORREO ELECTRÓNICO</label>
+                                    <label className="block text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">CORREO ELECTRÓNICO</label>
                                     <div className="relative">
-                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
+                                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                                         <input
                                             required
                                             type="email"
                                             placeholder="tu@correo.com"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full pl-12 pr-4 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
+                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] outline-none transition-all placeholder:text-slate-400 text-sm md:text-base font-normal text-[#222B38]"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
                                     <div className="flex items-center justify-between mb-2">
-                                        <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400">CONTRASEÑA</label>
+                                        <label className="block text-xs uppercase tracking-wider font-bold text-slate-500">CONTRASEÑA</label>
                                         {isLogin && (
                                             <button
                                                 type="button"
                                                 onClick={() => { setIsForgotPassword(true); setMessage(null); }}
-                                                className="text-[9px] md:text-[10px] text-[#BD7474] hover:text-[#1B2E1D] font-bold transition-colors"
+                                                className="text-xs text-[#DF3B94] hover:underline font-bold transition-colors"
                                             >
                                                 ¿Olvidaste tu contraseña?
                                             </button>
                                         )}
                                     </div>
                                     <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-300" />
+                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                                         <input
                                             required
                                             type={showPassword ? "text" : "password"}
                                             placeholder="••••••••"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full pl-12 pr-12 py-4 bg-white border border-stone-200 rounded-xl focus:border-[#1B2E1D] focus:ring-1 focus:ring-[#1B2E1D] outline-none transition-all placeholder:text-stone-300 text-sm md:text-base"
+                                            className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] outline-none transition-all placeholder:text-slate-400 text-sm md:text-base font-normal text-[#222B38]"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#222B38] transition-colors"
                                         >
                                             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                         </button>
                                     </div>
                                     {!isLogin && (
-                                        <p className="text-[10px] text-stone-400 font-light mt-2 italic">Mínimo 6 caracteres.</p>
+                                        <p className="text-xs text-slate-400 font-normal mt-2">Mínimo 6 caracteres.</p>
                                     )}
                                 </div>
 
                                 {message && (
-                                    <div className={`flex flex-col gap-3 p-4 rounded-xl text-sm ${
-                                        message.type === 'error' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'
+                                    <div className={`flex flex-col gap-3 p-4 rounded-xl text-sm font-medium ${
+                                        message.type === 'error' ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                                     }`}>
                                         <div className="flex items-start gap-3">
                                             {message.type === 'success' && <CheckCircle2 className="h-5 w-5 shrink-0 mt-0.5" />}
@@ -471,7 +425,7 @@ export default function LoginPage() {
                                             <button 
                                                 type="button" 
                                                 onClick={() => { setIsForgotPassword(true); setMessage(null); }} 
-                                                className="self-start text-[10px] uppercase font-bold tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors bg-white/50 px-3 py-1.5 rounded-lg border border-red-200 hover:border-[#1B2E1D]"
+                                                className="self-start text-xs font-bold text-[#DF3B94] hover:underline"
                                             >
                                                 Solicitar nuevo enlace
                                             </button>
@@ -482,7 +436,7 @@ export default function LoginPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-[#1B2E1D] text-white py-4 md:py-5 rounded-xl text-[10px] uppercase tracking-[0.3em] font-bold hover:bg-[#2D312E] transition-all transform active:scale-[0.98] shadow-lg shadow-[#1B2E1D]/10 flex items-center justify-center gap-3 disabled:bg-stone-400"
+                                    className="w-full bg-[#DF3B94] hover:bg-[#C52A7C] text-white py-4 rounded-xl text-xs uppercase tracking-widest font-bold transition-all active:scale-[0.98] shadow-lg shadow-[#DF3B94]/20 flex items-center justify-center gap-3 disabled:opacity-50 mt-2"
                                 >
                                     {loading
                                         ? 'PROCESANDO...'
@@ -493,13 +447,13 @@ export default function LoginPage() {
                                 </button>
                             </form>
 
-                            <div className="mt-8 md:mt-12 text-center">
+                            <div className="mt-8 text-center">
                                 <button
                                     onClick={() => { setIsLogin(!isLogin); setMessage(null); }}
-                                    className="text-stone-400 font-light text-sm"
+                                    className="text-slate-500 font-normal text-sm"
                                 >
                                     {isLogin ? '¿No tienes cuenta? ' : '¿Ya eres miembro? '}
-                                    <span className="text-[#1B2E1D] font-bold underline underline-offset-4 decoration-[#BD7474]/40 hover:decoration-[#BD7474] transition-all">
+                                    <span className="text-[#DF3B94] font-bold hover:underline">
                                         {isLogin ? 'Regístrate' : 'Inicia sesión'}
                                     </span>
                                 </button>
@@ -512,31 +466,32 @@ export default function LoginPage() {
             {/* Success Modal for Signup */}
             {showSuccessModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
-                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowSuccessModal(false)} />
-                    <div className="relative w-full max-w-md bg-white rounded-[2.5rem] p-10 md:p-12 shadow-2xl animate-in zoom-in duration-500 text-center">
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowSuccessModal(false)} />
+                    <div className="relative w-full max-w-md bg-white rounded-3xl p-8 md:p-10 shadow-2xl animate-in zoom-in duration-300 text-center">
                         <button 
                             onClick={() => setShowSuccessModal(false)}
-                            className="absolute top-6 right-6 p-2 text-stone-400 hover:text-stone-900 transition-colors"
+                            className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-900 transition-colors"
                         >
-                            <X className="h-6 w-6" />
+                            <X className="h-5 w-5" />
                         </button>
-                        
-                        <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <Mail className="h-10 w-10 text-emerald-600" />
+
+                        <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 className="h-8 w-8 text-emerald-600" />
                         </div>
-                        
-                        <h3 className="text-3xl font-serif text-[#1B2E1D] mb-4">¡Casi listo!</h3>
-                        <p className="text-stone-500 font-light leading-relaxed mb-8">
-                            Hemos enviado un enlace de activación a <span className="font-bold text-[#1B2E1D]">{email}</span>. 
-                            <br/><br/>
-                            Por favor revisa tu bandeja de entrada (y la carpeta de spam) para confirmar tu cuenta y empezar a crear tus invitaciones.
+
+                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mb-3">
+                            ¡Cuenta creada exitosamente!
+                        </h3>
+
+                        <p className="text-slate-600 font-normal text-sm leading-relaxed mb-6">
+                            Hemos enviado un enlace de confirmación a tu correo electrónico (<strong className="text-slate-900">{email}</strong>). Por favor revisa tu bandeja de entrada o carpeta de spam.
                         </p>
-                        
-                        <button 
+
+                        <button
                             onClick={() => setShowSuccessModal(false)}
-                            className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-black tracking-widest shadow-lg hover:bg-[#2D312E] transition-all"
+                            className="w-full py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20"
                         >
-                            ENTENDIDO
+                            Entendido
                         </button>
                     </div>
                 </div>
