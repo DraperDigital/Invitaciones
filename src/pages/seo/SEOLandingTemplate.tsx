@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Seo from '../../components/Seo';
 import Breadcrumb, { type BreadcrumbItem } from '../../components/Breadcrumb';
-import { ArrowRight, ChevronDown, CheckCircle2, XCircle, Menu, X, Check } from 'lucide-react';
+import { ArrowRight, ChevronDown, CheckCircle2, XCircle, Menu, X } from 'lucide-react';
 import type { LandingPageData } from './data/landingData';
 
 /** Derive breadcrumb trail from the landing slug. Slugs cluster into three groups. */

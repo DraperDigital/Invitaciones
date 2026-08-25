@@ -4,15 +4,12 @@ import {
     MessageCircle,
     Sparkles,
     ArrowRight,
-    CheckCircle2,
     Clock,
     Gem,
     Check,
-    PhoneCall,
-    Users
+    PhoneCall
 } from 'lucide-react';
 import Seo from '../components/Seo';
-import { useAuth } from '../context/AuthContext';
 
 const SERVICE_JSONLD = {
     '@context': 'https://schema.org',
@@ -30,7 +27,6 @@ const SERVICE_JSONLD = {
 };
 
 const ConciergeLanding: React.FC = () => {
-    const { user } = useAuth();
 
     return (
         <div className="min-h-screen bg-[#171E28] text-white font-sans selection:bg-[#DF3B94]/30 overflow-x-hidden">

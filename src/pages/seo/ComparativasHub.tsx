@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, FileText, Sparkles, Check } from 'lucide-react';
+import { ArrowRight, FileText } from 'lucide-react';
 import Seo from '../../components/Seo';
 import Breadcrumb from '../../components/Breadcrumb';
 import { useAuth } from '../../context/AuthContext';

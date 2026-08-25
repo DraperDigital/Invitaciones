@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import {
-    UserCheck, BarChart3, Sparkles, PartyPopper,
+    UserCheck, BarChart3, PartyPopper,
     Check, MessageSquare, Star, ChevronDown, ArrowRight,
-    X, Music, Clock, Users, Gem
+    X, Music, Users, Gem
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
