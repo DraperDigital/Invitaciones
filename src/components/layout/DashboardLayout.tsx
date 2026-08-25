@@ -66,7 +66,7 @@ export default function DashboardLayout() {
             <aside className="hidden lg:flex flex-col w-72 bg-[#222B38] text-white fixed h-full z-50 transition-all duration-300">
                 <div className="p-8">
                     <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
-                        <img src="/logo.png" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
+                        <img src="/logo.png?v=3" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
                     </Link>
                 </div>
 
@@ -114,7 +114,7 @@ export default function DashboardLayout() {
             {/* Mobile Header */}
             <header className="lg:hidden fixed top-0 w-full bg-[#222B38] text-white z-[60] px-6 h-16 flex items-center justify-between border-b border-white/5">
                 <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
-                    <img src="/logo.png" alt="Invitto" className="h-7 w-auto object-contain brightness-0 invert" />
+                    <img src="/logo.png?v=3" alt="Invitto" className="h-7 w-auto object-contain brightness-0 invert" />
                 </Link>
                 <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
                     {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

@@ -125,7 +125,7 @@ export default function PlanesPage() {
 
                     {/* Center Logo */}
                     <Link to="/" className="absolute left-1/2 -translate-x-1/2 hover:opacity-95 transition-opacity">
-                        <img src="/logo.png" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
+                        <img src="/logo.png?v=3" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
                     </Link>
 
                     {/* Right CTA */}

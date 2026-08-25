@@ -346,7 +346,7 @@ export default function LoginPage() {
                         <>
                             <div className="mb-8 md:mb-12">
                                 <Link to="/" className="inline-block mb-6 hover:opacity-90 transition-opacity">
-                                    <img src="/logo.png" alt="Invitto" className="h-9 md:h-10 w-auto object-contain" />
+                                    <img src="/logo.png?v=3" alt="Invitto" className="h-9 md:h-10 w-auto object-contain" />
                                 </Link>
                                 <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] mb-3 md:mb-4">
                                     {isLogin

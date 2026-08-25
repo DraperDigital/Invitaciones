@@ -66,7 +66,7 @@ export default function ExamplesPage() {
             <header className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-100 px-4 md:px-6">
                 <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
                     <Link to="/" className="flex items-center hover:opacity-95 transition-opacity">
-                        <img src="/logo.png" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
+                        <img src="/logo.png?v=3" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
                     </Link>
                     <nav className="hidden md:flex items-center gap-8">
                         <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">
@@ -207,7 +207,7 @@ export default function ExamplesPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                         <div className="lg:col-span-4 space-y-4">
                             <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
-                                <img src="/logo.png" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
+                                <img src="/logo.png?v=3" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
                             </Link>
                             <p className="text-xs text-slate-400 font-normal leading-relaxed">
                                 Invitaciones digitales de alta gama con control de pases y confirmación inteligente para México y Latinoamérica.

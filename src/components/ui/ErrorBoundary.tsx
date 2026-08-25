@@ -44,7 +44,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           {/* Logo & Header */}
           <div className="space-y-3">
             <a href="/" className="inline-block hover:opacity-90 transition-opacity">
-              <img src="/logo.png" alt="Invitto" className="h-9 w-auto mx-auto object-contain" />
+              <img src="/logo.png?v=3" alt="Invitto" className="h-9 w-auto mx-auto object-contain" />
             </a>
             <h1 className="text-2xl md:text-3xl font-display font-extrabold text-[#222B38]">
               Algo salió mal
