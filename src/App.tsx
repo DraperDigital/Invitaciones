@@ -29,6 +29,9 @@ const Concierge           = React.lazy(() => import('./pages/Concierge'));
 const ConciergeLanding    = React.lazy(() => import('./pages/ConciergeLanding'));
 const DesignEditor        = React.lazy(() => import('./pages/DesignEditor'));
 
+// Corporate B2B Branch (Invitto One)
+const OneHomePage         = React.lazy(() => import('./pages/corporate/OneHomePage'));
+
 // Plan landing pages
 const PlanClasica          = React.lazy(() => import('./pages/planes/PlanClasicaPage'));
 const PlanPro              = React.lazy(() => import('./pages/planes/PlanProPage'));
@@ -88,6 +91,8 @@ function AppRoutes() {
         <Route path="/terminos"      element={<Terms />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
+        <Route path="/one"           element={<OneHomePage />} />
+        <Route path="/corporativo"   element={<OneHomePage />} />
 
         {/* SEO Programmatic Landing Pages */}
         <Route path="/invitaciones-digitales-boda"         element={<InvitacionesBoda />} />
