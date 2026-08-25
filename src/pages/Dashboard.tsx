@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
-import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, Lock, X, AlertTriangle } from 'lucide-react';
+import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import type { Event } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MOCK_EVENTS } from '../lib/mockData';
+import { getPlatformContext } from '../utils/context';
 
 export default function Dashboard() {
     const { user } = useAuth();
+    const { isCorporate } = getPlatformContext();
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    // --- Delete Modal State ---
+    // Delete Modal State
     const [deleteModal, setDeleteModal] = useState<{ eventId: string; eventTitle: string } | null>(null);
     const [deletePassword, setDeletePassword] = useState('');
     const [deleteError, setDeleteError] = useState('');
@@ -38,7 +39,6 @@ export default function Dashboard() {
         setDeleteLoading(true);
         setDeleteError('');
 
-        // 1. Verify password
         const { error: authError } = await supabase.auth.signInWithPassword({
             email: user.email,
             password: deletePassword,
@@ -50,14 +50,11 @@ export default function Dashboard() {
             return;
         }
 
-        // 2. Delete related records first (RSVPs and Guests)
         try {
-            // 1. Limpiar dependencias (RSVPs, Guests, Tables)
             await supabase.from('rsvps').delete().eq('event_id', deleteModal.eventId);
             await supabase.from('guests').delete().eq('event_id', deleteModal.eventId);
             await supabase.from('event_tables').delete().eq('event_id', deleteModal.eventId);
 
-            // 2. Borrar el evento asegurando el user_id
             const { data, error } = await supabase
                 .from('events')
                 .delete()
@@ -111,208 +108,177 @@ export default function Dashboard() {
     if (loading) {
         return (
             <div className="flex h-64 items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-stone-400" />
+                <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
             </div>
         );
     }
 
     return (
-        <>
-        <div className="animate-fade-in-up relative min-h-[60vh]">
-            {/* Subtle Background Effects */}
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent/5 rounded-full blur-3xl -z-10 pointer-events-none" />
-            <div className="absolute top-1/2 -left-24 w-72 h-72 bg-stone-200/40 rounded-full blur-3xl -z-10 pointer-events-none" />
-
-            <div className="mb-8 md:mb-10 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-                <div>
-                    <h1 className="text-3xl md:text-4xl font-serif font-light text-stone-900 leading-tight">
-                        Hola, <span className="font-semibold italic">{user?.email?.split('@')[0]}</span>
+        <div className="space-y-10 font-sans text-[#222B38]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="space-y-1">
+                    <h1 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">
+                        {isCorporate ? 'Eventos Corporativos' : 'Mis Invitaciones'}
                     </h1>
-                    <p className="mt-2 text-stone-500 font-light text-sm md:text-base">Gestiona tus eventos exclusivos.</p>
+                    <p className="text-sm text-slate-500 font-normal">
+                        {isCorporate ? 'Administra tus cumbres y eventos B2B.' : 'Administra y edita todos tus eventos desde un solo lugar.'}
+                    </p>
                 </div>
-                <Link to="/dashboard/new" className="w-full md:w-auto">
-                    <Button className="w-full md:w-auto bg-[#1B2E1D] text-white hover:bg-stone-800 shadow-xl shadow-[#1B2E1D]/10 transition-all hover:-translate-y-1 py-6 md:py-3">
-                        <Plus className="mr-2 h-5 w-5 md:h-4 md:w-4" />
-                        Crear Nuevo Evento
-                    </Button>
+                <Link to="/dashboard/new">
+                    <button className={`px-6 py-3.5 ${
+                        isCorporate ? 'bg-[#2563EB] hover:bg-[#1D4ED8]' : 'bg-[#DF3B94] hover:bg-[#C52A7C]'
+                    } text-white rounded-2xl text-xs uppercase font-bold tracking-wider transition-all shadow-lg active:scale-95 flex items-center gap-2`}>
+                        <Plus className="h-4 w-4" />
+                        <span>{isCorporate ? 'Crear Evento B2B' : 'Crear Nuevo Evento'}</span>
+                    </button>
                 </Link>
             </div>
 
             {events.length === 0 ? (
-                <div className="mt-8 md:mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-200 bg-white/40 p-10 md:py-20 text-center shadow-sm backdrop-blur-sm">
-                    <div className="mb-6 rounded-full bg-stone-100 p-5 md:p-4">
-                        <Calendar className="h-10 w-10 md:h-8 md:w-8 text-stone-300" />
+                <div className="bg-white border border-slate-100 rounded-3xl p-10 md:p-16 text-center shadow-sm space-y-6">
+                    <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto">
+                        <Calendar className="h-8 w-8 text-slate-400" />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-serif font-medium text-stone-900">No tienes eventos aún</h3>
-                    <p className="mt-3 text-stone-500 max-w-sm font-light text-sm md:text-base">Aquí es donde comienza la magia. Crea tu primera invitación digital hoy mismo.</p>
-                    <div className="mt-10">
+                    <h3 className="text-2xl font-display font-extrabold text-[#222B38]">No tienes eventos aún</h3>
+                    <p className="text-slate-500 font-normal text-sm max-w-sm mx-auto">
+                        Comienza creando tu primer evento digital para gestionar invitaciones y asistencias.
+                    </p>
+                    <div>
                         <Link to="/dashboard/new">
-                            <Button variant="outline" className="border-stone-200 hover:bg-white hover:border-stone-400 text-stone-600 transition-all px-8">
-                                <Plus className="mr-2 h-4 w-4" />
-                                Crear Evento
-                            </Button>
+                            <button className="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs uppercase font-bold tracking-wider transition-all">
+                                <Plus className="inline h-4 w-4 mr-2" /> Crear Evento
+                            </button>
                         </Link>
                     </div>
                 </div>
             ) : (
-                <div id="events-grid" className="grid gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div id="events-grid" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {events.map((event) => (
-                        <div key={event.id} className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 border border-stone-100">
-                            {/* Card Image */}
-                            <div className="h-44 md:h-40 w-full bg-stone-50 relative overflow-hidden">
+                        <div key={event.id} className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 justify-between">
+                            <div className="h-44 w-full bg-slate-100 relative overflow-hidden">
                                 {(event.theme_config as any)?.hero_image_url ? (
                                     <img 
                                         src={(event.theme_config as any).hero_image_url} 
                                         alt={event.title} 
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
                                 ) : (
-                                    <>
-                                        <div className={`absolute inset-0 bg-gradient-to-br ${event.event_type === 'wedding' ? 'from-rose-50 to-teal-50/30' : 'from-indigo-50/50 to-pink-50/50'}`}></div>
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-5">
-                                            <Calendar className="h-20 w-20" />
-                                        </div>
-                                    </>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                        <Calendar className="h-12 w-12 text-slate-300" />
+                                    </div>
                                 )}
-                                <div className="absolute top-4 right-4">
-                                    <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-bold tracking-widest uppercase backdrop-blur-md border ${event.is_published ? 'bg-green-50/80 text-green-700 border-green-100' : 'bg-stone-50/80 text-stone-500 border-stone-100'}`}>
+                                <div className="absolute top-4 right-4 flex items-center gap-2">
+                                    <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-mono font-bold tracking-wider uppercase backdrop-blur-md border ${
+                                        event.is_published ? 'bg-emerald-50/90 text-emerald-700 border-emerald-200' : 'bg-slate-100/90 text-slate-600 border-slate-200'
+                                    }`}>
                                         {event.is_published ? 'Publicado' : 'Borrador'}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="flex-1 p-5 md:p-6">
-                                <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.2em] text-[#BD7474]">
-                                    {event.event_type === 'wedding' ? 'Boda' : event.event_type === 'xv' ? 'XV Años' : 'Evento'}
+                            <div className="flex-1 p-6 space-y-4">
+                                <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
+                                    isCorporate ? 'text-[#2563EB]' : 'text-[#DF3B94]'
+                                }`}>
+                                    {event.event_type}
                                 </span>
-                                <h3 className="mb-4 text-xl md:text-2xl font-serif font-medium text-stone-900 group-hover:text-accent transition-colors leading-snug">
-                                    <Link to={`/dashboard/event/${event.id}`} className="focus:outline-none">
-                                        <span className="absolute inset-0" aria-hidden="true" />
+                                <h3 className="text-xl font-display font-extrabold text-[#222B38] leading-tight">
+                                    <Link to={`/dashboard/events/${event.id}`} className="hover:underline">
                                         {event.title}
                                     </Link>
                                 </h3>
 
-                                <div className="space-y-3 mt-4 text-[13px] md:text-sm text-stone-500 font-light">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-stone-50 flex items-center justify-center shrink-0">
-                                            <Calendar className="h-4 w-4 text-stone-400" />
-                                        </div>
-                                        {format(new Date(event.date_time), 'PPP', { locale: es })}
+                                <div className="space-y-2 text-xs text-slate-500 pt-2 border-t border-slate-100">
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
+                                        <span>{format(new Date(event.date_time), 'PPP', { locale: es })}</span>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-stone-50 flex items-center justify-center shrink-0">
-                                            <Clock className="h-4 w-4 text-stone-400" />
-                                        </div>
-                                        {format(new Date(event.date_time), 'p', { locale: es })} hrs
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                                        <span>{format(new Date(event.date_time), 'p', { locale: es })} hrs</span>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-lg bg-stone-50 flex items-center justify-center shrink-0">
-                                            <MapPin className="h-4 w-4 text-stone-400" />
-                                        </div>
+                                    <div className="flex items-center gap-2">
+                                        <MapPin className="h-4 w-4 text-slate-400 shrink-0" />
                                         <span className="truncate">{event.venue_name || 'Ubicación pendiente'}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="relative z-10 flex border-t border-stone-50 divide-x divide-stone-50 bg-stone-50/30">
-                                <Link to={`/dashboard/edit/${event.id}`} className="flex-1 p-4 hover:bg-white transition-colors focus:outline-none group/btn">
-                                    <p className="text-[9px] text-center font-bold text-stone-400 group-hover/btn:text-stone-600 uppercase tracking-widest transition-colors">
-                                        Editar
-                                    </p>
-                                </Link>
-                                <Link to={`/dashboard/event/${event.id}`} className="flex-1 p-4 hover:bg-white transition-colors focus:outline-none group/btn">
-                                    <p className="text-[9px] text-center font-bold text-[#BD7474] group-hover/btn:text-[#a66363] uppercase tracking-widest transition-colors">
-                                        Gestionar
-                                    </p>
+                            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
+                                <Link 
+                                    to={`/dashboard/events/${event.id}`} 
+                                    className="flex-1 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl text-center text-xs font-bold uppercase tracking-wider hover:bg-slate-100 transition-all"
+                                >
+                                    Gestionar
                                 </Link>
                                 <button
                                     onClick={() => openDeleteModal(event.id, event.title)}
-                                    disabled={deletingId === event.id}
-                                    className="px-5 py-4 hover:bg-red-50 transition-colors focus:outline-none group/del disabled:opacity-50"
+                                    className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
                                     title="Eliminar evento"
                                 >
-                                    {deletingId === event.id
-                                        ? <Loader2 className="h-4 w-4 animate-spin text-red-400" />
-                                        : <Trash2 className="h-4 w-4 text-stone-300 group-hover/del:text-red-500 transition-colors" />}
+                                    <Trash2 className="h-4 w-4" />
                                 </button>
                             </div>
                         </div>
                     ))}
                 </div>
             )}
-        </div>
 
-            {/* ── Delete Confirmation Modal ── */}
+            {/* Delete Modal */}
             {deleteModal && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center p-4" onClick={closeDeleteModal}>
-                    {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-
-                    {/* Modal */}
-                    <div
-                        className="relative z-10 bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-8 border border-stone-100"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        {/* Close */}
-                        <button onClick={closeDeleteModal} className="absolute top-5 right-5 p-2 rounded-xl text-stone-300 hover:text-stone-600 hover:bg-stone-50 transition-all">
-                            <X className="h-5 w-5" />
-                        </button>
-
-                        {/* Warning icon */}
-                        <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-red-50 mb-6">
-                            <AlertTriangle className="h-7 w-7 text-red-500" />
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+                    <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-slate-100 space-y-6">
+                        <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center">
+                                    <AlertTriangle className="h-5 w-5" />
+                                </div>
+                                <h3 className="text-xl font-display font-extrabold text-[#222B38]">Confirmar Eliminación</h3>
+                            </div>
+                            <button onClick={closeDeleteModal} className="p-1 text-slate-400 hover:text-slate-900">
+                                <X className="h-5 w-5" />
+                            </button>
                         </div>
 
-                        <h2 className="text-2xl font-serif text-[#1B2E1D] mb-2">Eliminar evento</h2>
-                        <p className="text-stone-500 font-light text-sm mb-1">
-                            Estás a punto de eliminar permanentemente:
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                            Esta acción eliminará permanentemente el evento <strong>"{deleteModal.eventTitle}"</strong> y toda su lista de invitados y datos de asistencia.
                         </p>
-                        <p className="font-bold text-[#1B2E1D] mb-6 italic">&ldquo;{deleteModal.eventTitle}&rdquo;</p>
 
-                        <div className="bg-red-50 border border-red-100 rounded-xl p-4 mb-6 text-xs text-red-700 font-medium">
-                            ⚠️ Se eliminarán también todos los invitados y confirmaciones. Esta acción no se puede deshacer.
-                        </div>
-
-                        {/* Password field */}
-                        <label className="block text-[10px] uppercase tracking-widest font-bold text-stone-400 mb-2">Confirma tu contraseña</label>
-                        <div className="relative mb-4">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
+                        <div className="space-y-2">
+                            <label className="block text-xs uppercase font-bold tracking-wider text-slate-500">
+                                Ingresa tu contraseña de cuenta para confirmar:
+                            </label>
                             <input
                                 type="password"
-                                placeholder="Tu contraseña"
+                                placeholder="••••••••"
                                 value={deletePassword}
-                                onChange={e => { setDeletePassword(e.target.value); setDeleteError(''); }}
-                                onKeyDown={e => e.key === 'Enter' && handleDelete()}
-                                className="w-full pl-11 pr-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl focus:border-red-400 focus:ring-1 focus:ring-red-400 outline-none transition-all placeholder:text-stone-300 text-sm"
-                                autoFocus
+                                onChange={(e) => setDeletePassword(e.target.value)}
+                                className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-500"
                             />
                         </div>
 
                         {deleteError && (
-                            <p className="text-xs text-red-500 font-medium mb-4 flex items-center gap-2">
-                                <X className="h-3 w-3" /> {deleteError}
-                            </p>
+                            <p className="text-xs text-rose-600 font-bold">{deleteError}</p>
                         )}
 
-                        <div className="flex gap-3 mt-2">
+                        <div className="flex gap-3">
                             <button
                                 onClick={closeDeleteModal}
-                                className="flex-1 py-3.5 border border-stone-200 rounded-xl text-[10px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all"
+                                className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleDelete}
                                 disabled={deleteLoading || !deletePassword}
-                                className="flex-1 py-3.5 bg-red-500 text-white rounded-xl text-[10px] uppercase font-bold tracking-widest hover:bg-red-600 transition-all disabled:opacity-40 flex items-center justify-center gap-2 shadow-lg shadow-red-500/20"
+                                className="flex-1 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50"
                             >
-                                {deleteLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                                 {deleteLoading ? 'Eliminando...' : 'Eliminar'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

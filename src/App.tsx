@@ -135,13 +135,15 @@ function AppRoutes() {
         }>
           <Route index                        element={<DashboardHome />} />
           <Route path="events"                element={<Dashboard />} />
+          <Route path="events/:id"            element={<EventRSVPs />} />
+          <Route path="event/:id"             element={<EventRSVPs />} />
           <Route path="rsvps"                 element={<EventRSVPs />} />
+          <Route path="checkin"               element={<CheckIn />} />
           <Route path="checkin/:eventId"      element={<CheckIn />} />
           <Route path="new"                   element={<EventWizard />} />
           <Route path="edit/:id"              element={<EventWizard />} />
           <Route path="design/:id"            element={<DesignEditor />} />
           <Route path="settings"              element={<SettingsPage />} />
-          <Route path="event/:id"             element={<EventRSVPs />} />
         </Route>
 
         {/* Catch-all 404 Route */}
