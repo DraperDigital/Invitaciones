@@ -36,10 +36,10 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({
         <section id="registry" className="py-24 bg-white">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16 space-y-4">
-                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#BD7474]/10 text-[#BD7474] mb-4">
+                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] mb-4">
                         <Gift className="h-6 w-6" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-serif text-[#1B2E1D]">{title}</h2>
+                    <h2 className="text-4xl md:text-5xl font-display font-extrabold text-[#222B38]">{title}</h2>
                     <p className="text-stone-400 font-light italic max-w-xl mx-auto">{subtitle}</p>
                 </div>
 
@@ -47,15 +47,15 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({
                     {items.map((item, index) => (
                         <div 
                             key={index}
-                            className="bg-[#FDFBF7] rounded-[2rem] p-10 border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                            className="bg-[#F8F9FA] rounded-[2rem] p-10 border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-300 group"
                         >
                             {item.type === 'bank' ? (
                                 <div className="space-y-6">
                                     <div className="flex items-center gap-4 mb-8">
-                                        <div className="h-10 w-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#1B2E1D]">
+                                        <div className="h-10 w-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#222B38]">
                                             <Landmark className="h-5 w-5" />
                                         </div>
-                                        <h3 className="text-xl font-serif">{item.title}</h3>
+                                        <h3 className="text-xl font-display font-extrabold">{item.title}</h3>
                                     </div>
                                     
                                     <div className="space-y-4">
@@ -73,7 +73,7 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({
                                                 <span className="font-mono text-xs tracking-wider text-stone-500">{item.clabe}</span>
                                                 <button 
                                                     onClick={() => handleCopy(item.clabe || '', `clabe-${index}`)}
-                                                    className="p-1.5 hover:bg-stone-50 rounded-lg transition-colors text-[#BD7474]"
+                                                    className="p-1.5 hover:bg-stone-50 rounded-lg transition-colors text-[#DF3B94]"
                                                 >
                                                     {copied === `clabe-${index}` ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                                                 </button>
@@ -84,17 +84,17 @@ const GiftRegistry: React.FC<GiftRegistryProps> = ({
                             ) : (
                                 <div className="h-full flex flex-col justify-between space-y-8">
                                     <div className="space-y-6">
-                                        <div className="h-10 w-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#BD7474]">
+                                        <div className="h-10 w-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-[#DF3B94]">
                                             <ExternalLink className="h-5 w-5" />
                                         </div>
-                                        <h3 className="text-xl font-serif">{item.title}</h3>
+                                        <h3 className="text-xl font-display font-extrabold">{item.title}</h3>
                                         <p className="text-stone-400 text-sm italic font-light">Puedes encontrar nuestra mesa de regalos haciendo clic en el botón inferior.</p>
                                     </div>
                                     <a 
                                         href={item.url} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center justify-center gap-3 w-full bg-[#1B2E1D] text-white py-4 rounded-xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#2D312E] transition-all transform active:scale-[0.98]"
+                                        className="inline-flex items-center justify-center gap-3 w-full bg-[#DF3B94] text-white py-4 rounded-xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#C52A7C] transition-all transform active:scale-[0.98]"
                                     >
                                         VISITAR TIENDA <ExternalLink className="h-3 w-3" />
                                     </a>

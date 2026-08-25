@@ -155,7 +155,7 @@ export default function LaunchPromoPopup() {
         >
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-[#1B2E1D]/70 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#DF3B94]/70 backdrop-blur-sm"
                 onClick={handleDismiss}
             />
 
@@ -176,19 +176,19 @@ export default function LaunchPromoPopup() {
                     </div>
 
                     {/* Title */}
-                    <h2 id="promo-title" className="text-3xl md:text-4xl font-serif text-[#1B2E1D] leading-tight">
-                        ¿De las primeras 10 en probar <span className="italic text-[#BD7474]">Invitto Pro</span>?
+                    <h2 id="promo-title" className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] leading-tight">
+                        ¿De las primeras 10 en probar <span className="italic text-[#DF3B94]">Invitto Pro</span>?
                     </h2>
 
                     {/* Body */}
                     <p className="text-stone-500 font-light leading-relaxed text-sm md:text-base">
-                        Plan Pro <strong className="text-[#1B2E1D]">gratis</strong> (valor $1,699 MXN) a cambio de un testimonio honesto cuando termine tu evento.
+                        Plan Pro <strong className="text-[#222B38]">gratis</strong> (valor $1,699 MXN) a cambio de un testimonio honesto cuando termine tu evento.
                     </p>
 
                     {/* Counter */}
                     <div className="py-4 border-y border-stone-100">
                         <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-1">Disponibles</p>
-                        <p className="text-3xl font-serif text-[#1B2E1D]">
+                        <p className="text-3xl font-display font-extrabold text-[#222B38]">
                             {status.remaining}<span className="text-stone-300 text-xl"> / {status.max}</span>
                         </p>
                     </div>
@@ -196,14 +196,14 @@ export default function LaunchPromoPopup() {
                     {/* CTAs */}
                     <button
                         onClick={handleApply}
-                        className="w-full px-8 py-4 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#2D312E] transition-all shadow-xl flex items-center justify-center gap-3"
+                        className="w-full px-8 py-4 bg-[#DF3B94] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#C52A7C] transition-all shadow-xl flex items-center justify-center gap-3"
                     >
                         Aplicar cupón <ArrowRight className="h-4 w-4" />
                     </button>
 
                     <button
                         onClick={handleDismiss}
-                        className="block w-full text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                        className="block w-full text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#222B38] transition-colors"
                     >
                         No, gracias
                     </button>

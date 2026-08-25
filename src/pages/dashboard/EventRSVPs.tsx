@@ -369,8 +369,8 @@ const EventRSVPs: React.FC = () => {
                 startY: 35,
                 head: [['Invitado', 'Grupo', 'Estado', 'PAX', 'Check-in']],
                 body: tableData,
-                headStyles: { fillColor: [27, 46, 29] },
-                alternateRowStyles: { fillColor: [253, 251, 247] },
+                headStyles: { fillColor: [223, 59, 148] },
+                alternateRowStyles: { fillColor: [248, 249, 250] },
                 margin: { top: 35 }
             });
 
@@ -721,7 +721,7 @@ const EventRSVPs: React.FC = () => {
 
     if (!event) return (
         <div className="text-center py-20">
-            <h2 className="text-2xl font-serif mb-4">Selecciona un evento para gestionar</h2>
+            <h2 className="text-2xl font-display font-extrabold mb-4">Selecciona un evento para gestionar</h2>
             <select value={eventId || ''} onChange={(e) => handleEventChange(e.target.value)} className="p-3 border border-stone-200 rounded-xl outline-none">
                 <option value="">Seleccionar...</option>
                 {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
@@ -733,7 +733,7 @@ const EventRSVPs: React.FC = () => {
     const percentConfirmed = metrics.totalInvitados > 0 ? Math.round((metrics.confirmados / metrics.totalInvitados) * 100) : 0;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-12 space-y-12 bg-[#FDFBF7]">
+        <div className="max-w-7xl mx-auto px-4 py-12 space-y-12 bg-[#F8F9FA]">
             {/* Hidden CSV Input */}
             <input 
                 type="file" 
@@ -754,7 +754,7 @@ const EventRSVPs: React.FC = () => {
                                     <AlertTriangle className="h-6 w-6" />
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-serif text-[#1B2E1D]">Reporte de Importación</h3>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38]">Reporte de Importación</h3>
                                     <p className="text-stone-400 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
                                 </div>
                             </div>
@@ -775,7 +775,7 @@ const EventRSVPs: React.FC = () => {
                         <div className="mt-10 flex-shrink-0">
                             <button 
                                 onClick={() => setImportErrors(null)}
-                                className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-black transition-all"
+                                className="w-full py-5 bg-[#DF3B94] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-black transition-all"
                             >
                                 Entendido
                             </button>
@@ -787,11 +787,11 @@ const EventRSVPs: React.FC = () => {
             {/* Add Guest Modal */}
             {isAddGuestOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10 animate-in fade-in duration-300">
-                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setIsAddGuestOpen(false)} />
+                    <div className="absolute inset-0 bg-[#DF3B94]/40 backdrop-blur-sm" onClick={() => setIsAddGuestOpen(false)} />
                     <div className="relative w-full max-w-2xl bg-white rounded-[3rem] p-10 sm:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-stone-100">
                         <div className="flex justify-between items-start mb-12">
                             <div className="space-y-2">
-                                <h3 className="text-4xl font-serif text-[#1B2E1D]">Nuevo Invitado</h3>
+                                <h3 className="text-4xl font-display font-extrabold text-[#222B38]">Nuevo Invitado</h3>
                                 <p className="text-stone-400 text-sm italic">Genera un enlace único de confirmación.</p>
                             </div>
                             <button onClick={() => setIsAddGuestOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-50 text-stone-300 hover:text-rose-500 flex items-center justify-center transition-all">
@@ -807,7 +807,7 @@ const EventRSVPs: React.FC = () => {
                                         type="text" 
                                         required 
                                         autoFocus
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] text-lg font-serif" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38] text-lg font-display font-extrabold" 
                                         placeholder="Ej. Sofía Velázquez"
                                         value={newGuest.name} 
                                         onChange={(e) => setNewGuest({...newGuest, name: e.target.value})} 
@@ -817,7 +817,7 @@ const EventRSVPs: React.FC = () => {
                                     <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Grupo / Familia</label>
                                     <input 
                                         type="text" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
                                         placeholder="Ej. Familia Velázquez"
                                         value={newGuest.group_name} 
                                         onChange={(e) => setNewGuest({...newGuest, group_name: e.target.value})} 
@@ -829,7 +829,7 @@ const EventRSVPs: React.FC = () => {
                                     <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">WhatsApp <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
                                     <input 
                                         type="tel" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
                                         placeholder="Ej. +525512345678"
                                         value={newGuest.phone} 
                                         onChange={(e) => setNewGuest({...newGuest, phone: e.target.value})} 
@@ -839,7 +839,7 @@ const EventRSVPs: React.FC = () => {
                                     <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Email <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
                                     <input 
                                         type="email" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
                                         placeholder="Ej. juan@correo.com"
                                         value={newGuest.email} 
                                         onChange={(e) => setNewGuest({...newGuest, email: e.target.value})} 
@@ -848,7 +848,7 @@ const EventRSVPs: React.FC = () => {
                             </div>
                             <div className="space-y-3">
                                 <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Acompañantes Adicionales</label>
-                                <div className="flex items-center gap-6 bg-[#FDFBF7] p-4 rounded-2xl w-full sm:w-1/2">
+                                <div className="flex items-center gap-6 bg-[#F8F9FA] p-4 rounded-2xl w-full sm:w-1/2">
                                     <button 
                                         type="button"
                                         onClick={() => setNewGuest({...newGuest, max_plus_ones: Math.max(0, newGuest.max_plus_ones - 1)})}
@@ -857,7 +857,7 @@ const EventRSVPs: React.FC = () => {
                                         -
                                     </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-2xl font-serif font-bold text-[#1B2E1D]">{newGuest.max_plus_ones}</span>
+                                        <span className="text-2xl font-display font-extrabold font-bold text-[#222B38]">{newGuest.max_plus_ones}</span>
                                         <p className="text-[9px] uppercase tracking-tighter text-stone-300 font-bold">Adicionales</p>
                                     </div>
                                     <button 
@@ -872,7 +872,7 @@ const EventRSVPs: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={isSavingGuest}
-                                className="w-full py-6 bg-[#1B2E1D] text-white rounded-2xl text-[11px] uppercase font-bold tracking-[0.3em] shadow-2xl hover:bg-[#2C482F] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                                className="w-full py-6 bg-[#DF3B94] text-white rounded-2xl text-[11px] uppercase font-bold tracking-[0.3em] shadow-2xl hover:bg-[#C52A7C] transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                             >
                                 {isSavingGuest ? (
                                     <>
@@ -888,15 +888,15 @@ const EventRSVPs: React.FC = () => {
             {/* Top Navigation & Fast Actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
                 <div className="flex flex-col gap-2">
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-[#BD7474]">Dashboard</p>
-                    <select value={eventId || ''} onChange={(e) => handleEventChange(e.target.value)} className="text-3xl font-serif bg-transparent outline-none border-b border-transparent focus:border-stone-200 transition-all">
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-[#DF3B94]">Dashboard</p>
+                    <select value={eventId || ''} onChange={(e) => handleEventChange(e.target.value)} className="text-3xl font-display font-extrabold bg-transparent outline-none border-b border-transparent focus:border-stone-200 transition-all">
                         {userEvents.map(ev => <option key={ev.id} value={ev.id} className="text-base font-sans">{ev.title}</option>)}
                     </select>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                     <div className="flex bg-white p-1.5 rounded-[1.5rem] border border-stone-100 shadow-sm w-full sm:w-auto justify-between sm:justify-start gap-2">
-                        <Link to="/dashboard" className="h-10 w-10 bg-stone-50 border border-stone-100 rounded-xl flex items-center justify-center text-stone-400 hover:text-[#1B2E1D] transition-all group">
+                        <Link to="/dashboard" className="h-10 w-10 bg-stone-50 border border-stone-100 rounded-xl flex items-center justify-center text-stone-400 hover:text-[#222B38] transition-all group">
                             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" />
                         </Link>
                         
@@ -907,10 +907,10 @@ const EventRSVPs: React.FC = () => {
                                     <Link to={`/dashboard/edit/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-emerald-600 hover:border-emerald-600 rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                         <Edit2 className="h-3.5 w-3.5" /> <span className="xs:inline">Editar Info</span>
                                     </Link>
-                                    <Link to={`/dashboard/design/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#BD7474] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                    <Link to={`/dashboard/design/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#DF3B94] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                         <LayoutDashboard className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño</span>
                                     </Link>
-                                    <Link to={`/i/${event.slug || event.id}?t=admin`} target="_blank" className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#1B2E1D] hover:border-[#1B2E1D] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
+                                    <Link to={`/i/${event.slug || event.id}?t=admin`} target="_blank" className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#222B38] hover:border-[#DF3B94] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                         <Eye className="h-3.5 w-3.5" /> <span className="xs:inline">Ver</span>
                                     </Link>
                                 </div>
@@ -930,9 +930,9 @@ const EventRSVPs: React.FC = () => {
                                 {hasFeature('access_control') && (
                                     <Link 
                                         to={`/dashboard/checkin/${event.id}`}
-                                        className="flex-1 sm:flex-none px-8 h-10 bg-[#1B2E1D] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
+                                        className="flex-1 sm:flex-none px-8 h-10 bg-[#DF3B94] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
                                     >
-                                        <QrCode className="h-4 w-4 text-[#BD7474]" /> <span>Check-in</span>
+                                        <QrCode className="h-4 w-4 text-[#DF3B94]" /> <span>Check-in</span>
                                     </Link>
                                 )}
                             </>
@@ -945,12 +945,12 @@ const EventRSVPs: React.FC = () => {
             {/* Event Hero Profile - Condicional */}
             {isEventDashboard && (
                 <div className="bg-white rounded-[2rem] md:rounded-[4rem] border border-stone-100 p-6 md:p-20 shadow-sm relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-[30rem] md:w-[50rem] h-[30rem] md:h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#BD7474]/5 transition-colors duration-1000" />
+                    <div className="absolute top-0 right-0 w-[30rem] md:w-[50rem] h-[30rem] md:h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#DF3B94]/5 transition-colors duration-1000" />
                     
                     <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-10 md:gap-16">
                         <div className="space-y-6 md:space-y-12 flex-1">
                             <div className="flex flex-wrap items-center gap-2 md:gap-4">
-                                <span className="px-3 md:px-6 py-1 md:py-2 bg-[#BD7474]/10 text-[#BD7474] text-[7px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
+                                <span className="px-3 md:px-6 py-1 md:py-2 bg-[#DF3B94]/10 text-[#DF3B94] text-[7px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
                                     {event.event_type}
                                 </span>
                                 <span className={`flex items-center gap-2 px-3 md:px-5 py-1 md:py-2 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-stone-50 text-stone-300'} rounded-full text-[7px] md:text-[9px] uppercase font-black tracking-widest`}>
@@ -960,9 +960,9 @@ const EventRSVPs: React.FC = () => {
                             </div>
 
                             <div className="space-y-2 md:space-y-4">
-                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-serif text-[#1B2E1D] tracking-tighter leading-tight md:leading-[0.8] mb-2 break-words">{event.title}</h1>
+                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-display font-extrabold text-[#222B38] tracking-tighter leading-tight md:leading-[0.8] mb-2 break-words">{event.title}</h1>
                                 <p className="text-sm md:text-2xl text-stone-400 font-light italic flex items-center gap-2 md:gap-4 ml-0.5 md:ml-2">
-                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#BD7474]" /> <span className="truncate">{event.venue_name || 'Ubicación Premium'}</span>
+                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#DF3B94]" /> <span className="truncate">{event.venue_name || 'Ubicación Premium'}</span>
                                 </p>
                             </div>
 
@@ -976,12 +976,12 @@ const EventRSVPs: React.FC = () => {
                                     <div className="grid grid-cols-2 lg:flex lg:items-center gap-4 md:gap-8 pt-6 md:pt-10 border-t border-stone-50">
                                         <div className="space-y-0.5">
                                             <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha</p>
-                                            <p className="text-xs md:text-base font-bold text-[#1B2E1D] truncate">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
+                                            <p className="text-xs md:text-base font-bold text-[#222B38] truncate">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
                                         </div>
                                         <div className="h-10 w-px bg-stone-100 hidden lg:block" />
                                         <div className="space-y-0.5">
                                             <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre</p>
-                                            <p className="text-xs md:text-base font-bold text-[#BD7474] truncate">
+                                            <p className="text-xs md:text-base font-bold text-[#DF3B94] truncate">
                                                 {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
                                             </p>
                                         </div>
@@ -1013,12 +1013,12 @@ const EventRSVPs: React.FC = () => {
 
                         <div className="lg:w-96 space-y-6 md:space-y-8">
                             {/* Visual Progress Bar Card */}
-                            <div className="p-6 md:p-8 bg-[#FDFBF7] rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 shadow-sm space-y-4 md:space-y-6">
+                            <div className="p-6 md:p-8 bg-[#F8F9FA] rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 shadow-sm space-y-4 md:space-y-6">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#1B2E1D]">Asistencia</span>
+                                    <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#222B38]">Asistencia</span>
                                     <div className="text-right">
-                                        <span className="text-2xl md:text-4xl font-serif text-[#1B2E1D]">{metrics.confirmados}</span>
-                                        <span className="text-sm md:text-lg font-serif text-stone-300 ml-1">/{metrics.totalInvitados}</span>
+                                        <span className="text-2xl md:text-4xl font-display font-extrabold text-[#222B38]">{metrics.confirmados}</span>
+                                        <span className="text-sm md:text-lg font-display font-extrabold text-stone-300 ml-1">/{metrics.totalInvitados}</span>
                                     </div>
                                 </div>
                                 <div className="h-2 md:h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
@@ -1033,7 +1033,7 @@ const EventRSVPs: React.FC = () => {
                                 </div>
                             </div>
 
-                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-16 bg-[#1B2E1D] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-3 md:gap-4 text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl hover:translate-y-[-4px]">
+                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-16 bg-[#DF3B94] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-3 md:gap-4 text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#C52A7C] transition-all shadow-xl hover:translate-y-[-4px]">
                                 <Copy className="h-4 w-4 group-hover:scale-110 transition-transform" /> <span>Copiar Link</span>
                             </button>
                         </div>
@@ -1052,7 +1052,7 @@ const EventRSVPs: React.FC = () => {
                 ].map(m => (
                     <div key={m.label} className="bg-white p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-stone-100 shadow-sm">
                         <p className="text-[7px] md:text-[8px] uppercase font-bold text-stone-400 mb-1 md:mb-2">{m.label}</p>
-                        <p className={`text-xl md:text-2xl font-serif ${m.color}`}>{m.value}</p>
+                        <p className={`text-xl md:text-2xl font-display font-extrabold ${m.color}`}>{m.value}</p>
                     </div>
                 ))}
             </div>
@@ -1073,12 +1073,12 @@ const EventRSVPs: React.FC = () => {
                             key={t.id} 
                             onClick={() => !isLocked && setActiveTab(t.id as any)} 
                             className={`pb-4 text-[10px] uppercase font-bold tracking-widest relative flex items-center gap-2 ${
-                                activeTab === t.id ? 'text-[#1B2E1D]' : 'text-stone-300'
+                                activeTab === t.id ? 'text-[#222B38]' : 'text-stone-300'
                             } ${isLocked ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             {t.label}
                             {isLocked && <span className="text-[8px] bg-stone-100 text-stone-400 px-1.5 py-0.5 rounded-full">PRO</span>}
-                            {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1B2E1D]" />}
+                            {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#DF3B94]" />}
                         </button>
                     );
                 })}
@@ -1090,7 +1090,7 @@ const EventRSVPs: React.FC = () => {
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                         <button 
                             onClick={() => setIsAddGuestOpen(!isAddGuestOpen)} 
-                            className="w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 bg-[#BD7474] text-white rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-lg shadow-rose-100/50 hover:bg-[#A65B5B] transition-all flex items-center justify-center gap-3"
+                            className="w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 bg-[#DF3B94] text-white rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-lg shadow-rose-100/50 hover:bg-[#C52A7C] transition-all flex items-center justify-center gap-3"
                         >
                             <UserPlus className="h-4 w-4 md:h-5 md:w-5" /> <span>Nueva Invitación</span>
                         </button>
@@ -1104,13 +1104,13 @@ const EventRSVPs: React.FC = () => {
                             }}
                             className={`w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 border-2 border-dashed rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-3 transition-all ${
                                 hasFeature('guest_import_excel') 
-                                    ? 'bg-white text-[#1B2E1D] border-stone-200 hover:border-[#1B2E1D] hover:bg-stone-50' 
+                                    ? 'bg-white text-[#222B38] border-stone-200 hover:border-[#DF3B94] hover:bg-stone-50' 
                                     : 'bg-stone-50 text-stone-300 border-stone-100 cursor-not-allowed opacity-60'
                             }`}
                         >
                             <Upload className="h-4 w-4 md:h-5 md:w-5" /> 
                             <span>Importar CSV</span>
-                            {!hasFeature('guest_import_excel') && <span className="text-[8px] bg-[#BD7474] text-white px-1.5 py-0.5 rounded-full ml-1">PRO</span>}
+                            {!hasFeature('guest_import_excel') && <span className="text-[8px] bg-[#DF3B94] text-white px-1.5 py-0.5 rounded-full ml-1">PRO</span>}
                         </button>
                     </div>
 
@@ -1118,7 +1118,7 @@ const EventRSVPs: React.FC = () => {
                     <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white p-4 md:p-6 rounded-[2rem] border border-stone-100 shadow-sm">
                         <div className="relative w-full lg:max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
-                            <input type="text" placeholder="Buscar por nombre o grupo..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-11 pr-4 py-3 bg-stone-50 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all" />
+                            <input type="text" placeholder="Buscar por nombre o grupo..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-11 pr-4 py-3 bg-stone-50 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all" />
                         </div>
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                             <div className="flex overflow-x-auto pb-1 sm:pb-0 gap-2 no-scrollbar flex-1 lg:flex-none">
@@ -1133,7 +1133,7 @@ const EventRSVPs: React.FC = () => {
                                         onClick={() => setStatusFilter(f.id as any)} 
                                         className={`flex-none px-4 py-2.5 rounded-xl text-[7px] sm:text-[8px] uppercase font-bold tracking-widest transition-all ${
                                             statusFilter === f.id 
-                                            ? (f.id === 'all' ? 'bg-[#1B2E1D] text-white shadow-md' : f.color.replace('bg-', 'bg-').split(' ')[0] + ' ' + f.color.split(' ')[1] + ' ring-2 ring-offset-1 ring-[#1B2E1D]/10 shadow-md')
+                                            ? (f.id === 'all' ? 'bg-[#DF3B94] text-white shadow-md' : f.color.replace('bg-', 'bg-').split(' ')[0] + ' ' + f.color.split(' ')[1] + ' ring-2 ring-offset-1 ring-[#1B2E1D]/10 shadow-md')
                                             : 'bg-stone-50 text-stone-400 opacity-60 hover:opacity-100'
                                         }`}
                                     >
@@ -1142,7 +1142,7 @@ const EventRSVPs: React.FC = () => {
                                 ))}
                             </div>
                             <div className="flex gap-2 ml-auto">
-                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 hover:text-[#1B2E1D] flex items-center justify-center transition-colors" title="Exportar PDF">
+                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 hover:text-[#222B38] flex items-center justify-center transition-colors" title="Exportar PDF">
                                     <Download className="h-4 w-4" />
                                 </button>
                                 <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 flex items-center justify-center transition-colors">
@@ -1222,7 +1222,7 @@ const EventRSVPs: React.FC = () => {
                                                     onClick={() => toggleSelectGuest(g.id)}
                                                     className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                                         selectedIds.has(g.id)
-                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                            ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
                                                             : 'bg-white border-stone-200 text-transparent group-hover/card:border-stone-300'
                                                     }`}
                                                 >
@@ -1232,7 +1232,7 @@ const EventRSVPs: React.FC = () => {
                                             
                                             <div className="flex justify-between items-start pt-2">
                                                 <div className="pl-8">
-                                                    <h4 className="font-serif text-base sm:text-lg text-[#1B2E1D] leading-tight mb-1">{g.name}</h4>
+                                                    <h4 className="font-display font-extrabold text-base sm:text-lg text-[#222B38] leading-tight mb-1">{g.name}</h4>
                                                     <p className="text-[7px] sm:text-[8px] uppercase font-bold text-stone-300 tracking-widest">{g.group_name || 'Individual'}</p>
                                                 </div>
                                                 <div className="relative inline-flex items-center group">
@@ -1252,15 +1252,15 @@ const EventRSVPs: React.FC = () => {
                                             
                                             <div className="grid grid-cols-3 gap-2 py-3 text-center text-stone-500 border-y border-stone-100/30">
                                                 <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Pax</span>
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Pax</span>
                                                     <span className="text-sm font-bold text-stone-700">{getGuestPax(g)}</span>
                                                 </div>
                                                 <div className="flex flex-col opacity-80 border-x border-stone-100/50">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Ingreso</span>
-                                                    <span className="text-[10px] font-serif font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Ingreso</span>
+                                                    <span className="text-[10px] font-display font-extrabold font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
                                                 </div>
                                                 <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#1B2E1D] mb-0.5">Mesa</span>
+                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Mesa</span>
                                                     <span className="text-[10px] font-bold text-stone-700 truncate px-1">
                                                         {g.table_id ? (tables.find(t => t.id === g.table_id)?.name || '-') : '-'}
                                                     </span>
@@ -1273,8 +1273,8 @@ const EventRSVPs: React.FC = () => {
                                                         onClick={() => handleToggleSent(g)}
                                                         className={`h-6 w-6 rounded-lg border flex items-center justify-center transition-all ${
                                                             g.invitation_sent_at 
-                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white shadow-md' 
-                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#1B2E1D]'
+                                                                ? 'bg-[#DF3B94] border-[#DF3B94] text-white shadow-md' 
+                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#DF3B94]'
                                                         }`}
                                                         title="Marcar enviado"
                                                     >
@@ -1290,7 +1290,7 @@ const EventRSVPs: React.FC = () => {
                                                 </div>
                                                 
                                                 <div className="flex items-center gap-2">
-                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D] transition-colors">
+                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#222B38] transition-colors">
                                                         <QrCode className="h-4 w-4" />
                                                     </button>
                                                     <button 
@@ -1321,16 +1321,16 @@ const EventRSVPs: React.FC = () => {
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-[#FDFBF7] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
+                                    <thead className="bg-[#F8F9FA] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
                                         <tr>
                                             <th className="px-4 py-6 w-12">
                                                 <button 
                                                     onClick={toggleSelectAll}
                                                     className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                                         selectedIds.size > 0 && selectedIds.size === filteredGuests.length
-                                                            ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                            ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
                                                             : selectedIds.size > 0 
-                                                                ? 'bg-[#1B2E1D]/30 border-[#1B2E1D] text-white'
+                                                                ? 'bg-[#DF3B94]/30 border-[#DF3B94] text-white'
                                                                 : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
                                                     }`}
                                                 >
@@ -1356,14 +1356,14 @@ const EventRSVPs: React.FC = () => {
                                                         onClick={() => toggleSelectGuest(g.id)}
                                                         className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                                             selectedIds.has(g.id)
-                                                                ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white'
+                                                                ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
                                                                 : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
                                                         }`}
                                                     >
                                                         <Check className="h-3 w-3" />
                                                     </button>
                                                 </td>
-                                                <td className="px-8 py-6 font-medium text-[#1B2E1D]">
+                                                <td className="px-8 py-6 font-medium text-[#222B38]">
                                                     {editingGuestId === g.id ? <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-200 px-3 py-1.5 rounded-lg w-full" /> : g.name}
                                                 </td>
                                                 <td className="px-8 py-6 text-stone-400 italic">
@@ -1375,8 +1375,8 @@ const EventRSVPs: React.FC = () => {
                                                             onClick={() => handleToggleSent(g)}
                                                             className={`h-6 w-6 rounded-lg border-2 flex items-center justify-center transition-all ${
                                                                 g.invitation_sent_at 
-                                                                    ? 'bg-[#1B2E1D] border-[#1B2E1D] text-white' 
-                                                                    : 'bg-white border-stone-200 text-transparent hover:border-[#1B2E1D]/30'
+                                                                    ? 'bg-[#DF3B94] border-[#DF3B94] text-white' 
+                                                                    : 'bg-white border-stone-200 text-transparent hover:border-[#DF3B94]/30'
                                                             }`}
                                                             title={g.invitation_sent_at ? "Marcar como no enviado" : "Marcar como enviado"}
                                                         >
@@ -1422,7 +1422,7 @@ const EventRSVPs: React.FC = () => {
                                                                      const total = parseInt(e.target.value) || 1;
                                                                      setEditData({...editData, max_plus_ones: Math.max(0, total - 1)});
                                                                  }}
-                                                                 className="w-14 text-center border border-stone-200 rounded py-1 text-sm bg-white focus:ring-1 focus:ring-[#1B2E1D] outline-none"
+                                                                 className="w-14 text-center border border-stone-200 rounded py-1 text-sm bg-white focus:ring-1 focus:ring-[#DF3B94] outline-none"
                                                              />
                                                              <span className="text-[7px] text-stone-300 uppercase tracking-tighter">Personas</span>
                                                          </div>
@@ -1489,7 +1489,7 @@ const EventRSVPs: React.FC = () => {
                                                                         toast.error('Error al asignar mesa');
                                                                     }
                                                                 }}
-                                                                className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#1B2E1D] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
+                                                                className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#222B38] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
                                                             >
                                                                 <option value="">-</option>
                                                                 {tables.map(t => {
@@ -1503,7 +1503,7 @@ const EventRSVPs: React.FC = () => {
                                                 )}
                                                 {hasFeature('access_control') && (
                                                     <td className="px-8 py-6 text-center">
-                                                        <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]"><QrCode className="h-4 w-4" /></button>
+                                                        <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#222B38]"><QrCode className="h-4 w-4" /></button>
                                                     </td>
                                                 )}
                                                 {isManageMode && (
@@ -1515,7 +1515,7 @@ const EventRSVPs: React.FC = () => {
                                                             </div>
                                                         ) : (
                                                             <div className="flex gap-2 justify-center">
-                                                                <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
+                                                                <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#222B38]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-300 hover:text-emerald-500" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
                                                                  <button onClick={() => { 
                                                                      setEditingGuestId(g.id); 
@@ -1527,7 +1527,7 @@ const EventRSVPs: React.FC = () => {
                                                                          max_plus_ones: g.max_plus_ones || 0,
                                                                          table_id: g.table_id || '' 
                                                                      }); 
-                                                                 }} className="p-2 text-stone-300 hover:text-[#1B2E1D]" title="Editar"><Edit2 className="h-4 w-4" /></button>
+                                                                 }} className="p-2 text-stone-300 hover:text-[#222B38]" title="Editar"><Edit2 className="h-4 w-4" /></button>
                                                                 <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                                                             </div>
                                                         )}
@@ -1546,7 +1546,7 @@ const EventRSVPs: React.FC = () => {
             {activeTab === 'statistics' && (
                 <div className="grid md:grid-cols-2 gap-8">
                     <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm h-80">
-                        <h3 className="font-serif mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Estado RSVP</h3>
+                        <h3 className="font-display font-extrabold mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Estado RSVP</h3>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={statusData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
@@ -1557,7 +1557,7 @@ const EventRSVPs: React.FC = () => {
                         </ResponsiveContainer>
                     </div>
                     <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm h-80">
-                        <h3 className="font-serif mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Check-in</h3>
+                        <h3 className="font-display font-extrabold mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Check-in</h3>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={attendanceData}>
                                 <XAxis dataKey="name" hide />
@@ -1575,7 +1575,7 @@ const EventRSVPs: React.FC = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {guests.filter(g => g.rsvps?.[0]?.message).map(g => (
                         <div key={g.id} className="bg-white p-6 rounded-[2rem] border border-stone-100 shadow-sm space-y-4">
-                            <h4 className="font-serif text-lg">{g.name}</h4>
+                            <h4 className="font-display font-extrabold text-lg">{g.name}</h4>
                             <p className="text-stone-500 italic text-sm">"{g.rsvps[0].message}"</p>
                         </div>
                     ))}
@@ -1585,17 +1585,17 @@ const EventRSVPs: React.FC = () => {
             {activeTab === 'tables' && (
                 <div className="space-y-8">
                     <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <h3 className="font-serif text-xl">Distribución de Mesas</h3>
+                        <h3 className="font-display font-extrabold text-xl">Distribución de Mesas</h3>
                         <div className="flex gap-3 w-full sm:w-auto">
                             <button 
                                 onClick={handleExportTablesPDF}
-                                className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-200 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#1B2E1D] transition-all"
+                                className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-200 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#DF3B94] transition-all"
                             >
                                 <Download className="h-4 w-4" /> Exportar PDF
                             </button>
                             <button 
                                 onClick={() => setIsAddingTable(!isAddingTable)} 
-                                className="flex-1 sm:flex-none px-6 py-3 bg-[#BD7474] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#A65B5B] transition-all"
+                                className="flex-1 sm:flex-none px-6 py-3 bg-[#DF3B94] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#C52A7C] transition-all"
                             >
                                 {isAddingTable ? 'Cancelar' : 'Nueva Mesa'}
                             </button>
@@ -1605,7 +1605,7 @@ const EventRSVPs: React.FC = () => {
                         <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid md:grid-cols-3 gap-6 items-end">
                             <input value={newTable.name} onChange={e => setNewTable({...newTable, name: e.target.value})} placeholder="Nombre Mesa" className="bg-stone-50 p-4 rounded-xl outline-none" />
                             <input type="number" value={newTable.capacity} onChange={e => setNewTable({...newTable, capacity: parseInt(e.target.value)})} className="bg-stone-50 p-4 rounded-xl outline-none" />
-                            <button onClick={handleAddTable} className="py-4 bg-[#1B2E1D] text-white rounded-xl font-bold text-[10px] uppercase">Guardar</button>
+                            <button onClick={handleAddTable} className="py-4 bg-[#DF3B94] text-white rounded-xl font-bold text-[10px] uppercase">Guardar</button>
                         </div>
                     )}
                     <div className="grid md:grid-cols-3 gap-6">
@@ -1617,7 +1617,7 @@ const EventRSVPs: React.FC = () => {
                             return (
                                 <div key={t.id} className={`bg-white p-6 rounded-[2rem] border shadow-sm space-y-4 ${availablePax <= 0 ? 'border-emerald-200 bg-emerald-50/30' : 'border-stone-100'}`}>
                                     <div className="flex justify-between items-start">
-                                        <h4 className="font-serif text-lg">{t.name}</h4>
+                                        <h4 className="font-display font-extrabold text-lg">{t.name}</h4>
                                         <button onClick={() => handleDeleteTable(t.id)} className="text-stone-300 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
                                     </div>
                                     <div className="space-y-2">
@@ -1628,7 +1628,7 @@ const EventRSVPs: React.FC = () => {
                                             </p>
                                         </div>
                                         <div className="w-full bg-stone-100 rounded-full h-1.5">
-                                            <div className={`h-1.5 rounded-full transition-all ${fillPercent >= 100 ? 'bg-emerald-500' : fillPercent >= 80 ? 'bg-amber-400' : 'bg-[#1B2E1D]'}`} style={{ width: `${fillPercent}%` }} />
+                                            <div className={`h-1.5 rounded-full transition-all ${fillPercent >= 100 ? 'bg-emerald-500' : fillPercent >= 80 ? 'bg-amber-400' : 'bg-[#DF3B94]'}`} style={{ width: `${fillPercent}%` }} />
                                         </div>
                                     </div>
                                     <div className="space-y-1">
@@ -1651,7 +1651,7 @@ const EventRSVPs: React.FC = () => {
                     {guests.filter(g => getGuestStatus(g) === 'pending').map(g => (
                         <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-stone-100 shadow-sm flex justify-between items-center">
                             <div>
-                                <h4 className="font-serif text-lg">{g.name}</h4>
+                                <h4 className="font-display font-extrabold text-lg">{g.name}</h4>
                                 <p className="text-[8px] text-stone-300 uppercase font-bold">{g.last_reminder_at ? `Avisado: ${new Date(g.last_reminder_at).toLocaleDateString()}` : 'Sin avisos'}</p>
                             </div>
                             <button onClick={() => handleSendReminder(g)} className="h-10 w-10 bg-[#25D366] text-white rounded-xl flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-[#25D366]/20">
@@ -1667,7 +1667,7 @@ const EventRSVPs: React.FC = () => {
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-stone-900/60 backdrop-blur-sm">
                     <div className="bg-white rounded-[2.5rem] p-10 max-w-sm w-full space-y-8 text-center relative">
                         <button onClick={() => setSelectedGuestForQR(null)} className="absolute top-6 right-6 text-stone-300"><X /></button>
-                        <h3 className="text-2xl font-serif">{selectedGuestForQR.name}</h3>
+                        <h3 className="text-2xl font-display font-extrabold">{selectedGuestForQR.name}</h3>
                         <div className="flex justify-center p-4 bg-stone-50 rounded-2xl">
                             <QRCodeSVG value={`${window.location.origin}/i/${selectedGuestForQR.event?.slug || 'invite'}?t=${selectedGuestForQR.id}`} size={180} />
                         </div>

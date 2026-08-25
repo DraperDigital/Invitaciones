@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
-import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2, ArrowRight } from 'lucide-react';
+import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2 } from 'lucide-react';
+import { getPlatformContext } from '../../utils/context';
 
 export default function SettingsPage() {
     const { user } = useAuth();
+    const { isCorporate } = getPlatformContext();
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
@@ -25,7 +27,6 @@ export default function SettingsPage() {
                 
                 let highestPlan = data?.plan_tier || 'free';
 
-                // FALLBACK: Calculate the highest plan from user's events in case profiles.plan_tier is missing/stale
                 const { data: eventsData } = await supabase.from('events').select('theme_config').eq('user_id', user.id);
                 if (eventsData && eventsData.length > 0) {
                     const ranks: Record<string, number> = { 'free': 0, 'clasico': 1, 'classic': 1, 'pro': 2, 'personalized': 2, 'premium': 3, 'concierge': 4 };
@@ -98,54 +99,54 @@ export default function SettingsPage() {
             'personalized': 'DISEÑO PRO',
             'concierge':    'PLAN CONCIERGE',
         };
-        return labels[tier] || 'CUENTA GRATUITA';
+        return labels[tier?.toLowerCase()] || 'PLAN PRO';
     };
 
     return (
-        <div id="settings-card" className="max-w-6xl mx-auto space-y-12 animate-fade-in pb-20">
+        <div id="settings-card" className="max-w-6xl mx-auto space-y-10 animate-fade-in pb-20 font-sans text-[#222B38]">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <div className="space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-serif text-[#1B2E1D]">Configuración</h1>
-                    <p className="text-stone-400 font-light italic text-lg">Administra tu perfil.</p>
-                    
-                    <div className="inline-flex items-center gap-3 px-6 py-3 bg-stone-50 border border-stone-200 rounded-2xl">
-                        <Sparkles className="h-4 w-4 text-stone-500" />
-                        <span className="text-[10px] uppercase font-black tracking-widest text-stone-600">{getPlanLabel(profile.plan_tier)}</span>
-                    </div>
+                <div className="space-y-2">
+                    <h1 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">Configuración</h1>
+                    <p className="text-slate-500 font-normal text-base md:text-lg">Administra tu perfil y preferencia de cuenta.</p>
+                </div>
+
+                <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
+                    <Sparkles className={`h-4 w-4 ${isCorporate ? 'text-[#2563EB]' : 'text-[#DF3B94]'}`} />
+                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-700">{getPlanLabel(profile.plan_tier)}</span>
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-12">
+            <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     {/* Perfil */}
-                    <form onSubmit={handleSave} className="bg-white rounded-[3rem] border border-stone-100 p-10 shadow-sm space-y-8 relative overflow-hidden h-full">
+                    <form onSubmit={handleSave} className="bg-white rounded-3xl border border-slate-100 p-8 md:p-10 shadow-sm space-y-8 h-full flex flex-col justify-between">
                         <div className="space-y-6">
-                            <h3 className="text-[10px] uppercase font-bold tracking-[0.3em] text-stone-400">Información del Perfil</h3>
+                            <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400">Información del Perfil</h3>
                             
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-sm font-medium text-stone-700">
-                                        <User className="h-4 w-4 text-[#BD7474]" /> Nombre Completo
+                                    <label className="flex items-center gap-2 text-xs uppercase font-bold tracking-wider text-slate-500">
+                                        <User className={`h-4 w-4 ${isCorporate ? 'text-[#2563EB]' : 'text-[#DF3B94]'}`} /> Nombre Completo
                                     </label>
                                     <input 
                                         type="text" 
-                                        className="w-full p-4 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 transition-all font-serif text-lg"
-                                        placeholder="Ej. Carlos Lopez"
+                                        className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] transition-all text-sm font-normal text-[#222B38]"
+                                        placeholder="Ej. Carlos López"
                                         value={profile.full_name}
                                         onChange={(e) => setProfile({...profile, full_name: e.target.value})}
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-sm font-medium text-stone-700">
-                                        <MessageCircle className="h-4 w-4 text-emerald-500" /> WhatsApp Concierge
+                                    <label className="flex items-center gap-2 text-xs uppercase font-bold tracking-wider text-slate-500">
+                                        <MessageCircle className="h-4 w-4 text-emerald-600" /> WhatsApp
                                     </label>
                                     <div className="relative">
-                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 font-bold">+</span>
+                                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">+</span>
                                         <input 
                                             type="tel" 
-                                            className="w-full p-4 pl-8 bg-stone-50 border border-stone-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#1B2E1D]/10 transition-all font-serif text-lg"
-                                            placeholder="521234567890"
+                                            className="w-full p-3.5 pl-8 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-[#DF3B94] focus:ring-1 focus:ring-[#DF3B94] transition-all text-sm font-normal text-[#222B38]"
+                                            placeholder="525512345678"
                                             value={profile.whatsapp_number}
                                             onChange={(e) => setProfile({...profile, whatsapp_number: e.target.value})}
                                         />
@@ -155,94 +156,72 @@ export default function SettingsPage() {
                         </div>
 
                         {message && (
-                            <div className={`p-4 rounded-xl text-xs font-bold uppercase tracking-widest animate-in slide-in-from-top-2 duration-300 ${
-                                message.type === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                            <div className={`p-4 rounded-xl text-xs font-bold uppercase tracking-wider ${
+                                message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-rose-50 text-rose-700 border border-rose-100'
                             }`}>
                                 {message.text}
                             </div>
                         )}
 
-                        <div className="pt-8 border-t border-stone-50 flex justify-end mt-auto">
-                            <Button 
+                        <div className="pt-6 border-t border-slate-100 flex justify-end">
+                            <button 
                                 type="submit" 
                                 disabled={saving}
-                                className="px-12 py-4 bg-[#1B2E1D] hover:bg-[#2D312E] text-white rounded-2xl shadow-xl shadow-stone-200"
+                                className={`px-8 py-3.5 ${
+                                    isCorporate ? 'bg-[#2563EB] hover:bg-[#1D4ED8] shadow-[#2563EB]/20' : 'bg-[#DF3B94] hover:bg-[#C52A7C] shadow-[#DF3B94]/20'
+                                } text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg active:scale-95 flex items-center gap-2`}
                             >
-                                {saving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="mr-2 h-5 w-5" />}
+                                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                                 {saving ? 'Guardando...' : 'Guardar Cambios'}
-                            </Button>
+                            </button>
                         </div>
                     </form>
                 </div>
 
-                <div className="space-y-8">
-                    <div className="bg-[#1B2E1D] text-white rounded-[2.5rem] p-8 space-y-6 shadow-xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-[5rem] group-hover:scale-110 transition-transform" />
-                        <div className="flex justify-between items-start relative z-10">
-                            <h3 className="text-[10px] uppercase font-bold tracking-[0.3em] text-white/40">Cuenta Activa</h3>
-                            <div className="flex flex-col items-end gap-1">
-                                <span className={`text-[8px] font-bold px-3 py-1 rounded-full ${
-                                    ['premium', 'concierge'].includes(profile.plan_tier) ? 'bg-[#BD7474] shadow-[0_0_15px_-5px_#BD7474]' : 'bg-white/10'
-                                } tracking-widest uppercase`}>
+                <div className="space-y-6">
+                    <div className={`${isCorporate ? 'bg-[#0F172A]' : 'bg-[#222B38]'} text-white rounded-3xl p-8 space-y-6 shadow-xl relative overflow-hidden flex flex-col justify-between border border-slate-800`}>
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h3 className="text-xs uppercase font-bold tracking-wider text-slate-400">Cuenta Activa</h3>
+                                <span className={`text-[10px] font-bold px-3 py-1 rounded-full ${
+                                    isCorporate ? 'bg-[#2563EB] text-white' : 'bg-[#DF3B94] text-white'
+                                } uppercase tracking-wider`}>
                                     {getPlanLabel(profile.plan_tier)}
                                 </span>
                             </div>
-                        </div>
-                        <div className="space-y-4 relative z-10">
-                            <div className="flex items-center gap-3">
-                                <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center">
-                                    <Mail className="h-3 w-3 text-[#BD7474]" />
+
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-9 w-9 rounded-xl bg-white/10 flex items-center justify-center">
+                                        <Mail className="h-4 w-4 text-slate-300" />
+                                    </div>
+                                    <span className="text-xs font-mono truncate text-slate-300">{user?.email}</span>
                                 </div>
-                                <span className="text-xs font-medium truncate opacity-70">{user?.email}</span>
-                            </div>
-                            <div className="flex items-center gap-3 text-[#25D366]">
-                                <div className="h-8 w-8 rounded-full bg-[#25D366]/10 flex items-center justify-center">
-                                    <ShieldCheck className="h-4 w-4" />
+                                <div className="flex items-center gap-3 text-emerald-400">
+                                    <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                                        <ShieldCheck className="h-4.5 w-4.5 text-emerald-400" />
+                                    </div>
+                                    <span className="text-xs uppercase font-bold tracking-wider">Verificado</span>
                                 </div>
-                                <span className="text-[10px] uppercase font-bold tracking-widest">Verificado</span>
                             </div>
                         </div>
-                        
+
                         {profile.plan_tier?.toLowerCase() !== 'concierge' && (
-                            <div className="pt-4 relative z-10">
+                            <div className="pt-6 border-t border-slate-800 space-y-3">
                                 <Link 
                                     to="/planes" 
-                                    className="group block text-center p-4 rounded-2xl bg-white text-[#1B2E1D] hover:bg-[#BD7474] hover:text-white transition-all text-[9px] font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-[#BD7474]/40 hover:-translate-y-1"
+                                    className={`block text-center p-3.5 rounded-xl ${
+                                        isCorporate ? 'bg-[#2563EB] hover:bg-[#1D4ED8]' : 'bg-[#DF3B94] hover:bg-[#C52A7C]'
+                                    } text-white transition-all text-xs font-bold uppercase tracking-widest shadow-lg active:scale-95`}
                                 >
                                     <span className="flex items-center justify-center gap-2">
-                                        <Sparkles className="h-3 w-3 animate-pulse" />
-                                        Mejorar mi Experiencia
+                                        <Sparkles className="h-4 w-4" />
+                                        Mejorar mi Plan
                                     </span>
                                 </Link>
-                                <p className="text-[8px] text-center mt-4 text-white/30 font-bold uppercase tracking-widest">
-                                    Desbloquea todas las funciones
-                                </p>
                             </div>
                         )}
                     </div>
-
-                    <Link 
-                        to={profile.plan_tier === 'concierge' ? "https://wa.me/521234567890" : "/concierge-service"}
-                        target={profile.plan_tier === 'concierge' ? "_blank" : "_self"}
-                        className="block group"
-                    >
-                        <div className="bg-[#FDFBF7] rounded-[2.5rem] p-10 border border-stone-100 text-stone-900 shadow-sm space-y-4 hover:border-[#BD7474]/30 hover:shadow-xl transition-all relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <ArrowRight className="h-4 w-4 text-[#BD7474]" />
-                            </div>
-                            <div className="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <MessageCircle className="h-6 w-6 text-emerald-600" />
-                            </div>
-                            <h4 className="text-sm font-bold uppercase tracking-widest italic text-emerald-900">
-                                {profile.plan_tier === 'concierge' ? 'Tu Concierge Dedicado' : 'Invitto Concierge'}
-                            </h4>
-                            <p className="text-sm leading-relaxed text-stone-500 font-light">
-                                {profile.plan_tier === 'concierge' 
-                                    ? 'Estamos listos para asistirte en todo momento. Haz clic para hablar con tu equipo de soporte VIP.' 
-                                    : '¿Necesitas ayuda o quieres que gestionemos todo tu evento por ti? Descubre el nivel Concierge.'}
-                            </p>
-                        </div>
-                    </Link>
                 </div>
             </div>
         </div>

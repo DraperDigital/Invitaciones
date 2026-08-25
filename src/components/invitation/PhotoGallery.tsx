@@ -34,13 +34,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     if (!images || images.length === 0) return null;
 
     return (
-        <section id="gallery" className="py-24 bg-[#FDFBF7]">
+        <section id="gallery" className="py-24 bg-[#F8F9FA]">
             <div className="max-w-7xl mx-auto px-6">
                 <div className="text-center mb-16 space-y-4">
-                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#BD7474]/10 text-[#BD7474] mb-4">
+                    <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] mb-4">
                         <ImageIcon className="h-6 w-6" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-serif text-[#1B2E1D]">{title}</h2>
+                    <h2 className="text-4xl md:text-5xl font-display font-extrabold text-[#222B38]">{title}</h2>
                     <p className="text-stone-400 font-light italic max-w-xl mx-auto">{subtitle}</p>
                 </div>
 
@@ -56,15 +56,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                 alt={img.caption || `Gallery image ${index}`} 
                                 className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
                             />
-                            <div className="absolute inset-0 bg-[#1B2E1D]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-[#DF3B94]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                                 <div className="h-14 w-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-500">
                                     <Maximize2 className="h-6 w-6" />
                                 </div>
                             </div>
                             {img.caption && (
                                 <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/90 backdrop-blur-md rounded-2xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#BD7474] mb-1">CAPTION</p>
-                                    <p className="font-serif text-[#1B2E1D]">{img.caption}</p>
+                                    <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#DF3B94] mb-1">CAPTION</p>
+                                    <p className="font-display font-extrabold text-[#222B38]">{img.caption}</p>
                                 </div>
                             )}
                         </div>
@@ -74,7 +74,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
             {/* Lightbox Modal */}
             {selectedImage !== null && (
-                <div className="fixed inset-0 z-[100] bg-[#1B2E1D]/95 backdrop-blur-xl flex items-center justify-center p-4 transition-all duration-500 animate-in fade-in">
+                <div className="fixed inset-0 z-[100] bg-[#DF3B94]/95 backdrop-blur-xl flex items-center justify-center p-4 transition-all duration-500 animate-in fade-in">
                     <button 
                         onClick={() => setSelectedImage(null)}
                         className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors p-4"
@@ -104,8 +104,8 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         />
                         {images[selectedImage].caption && (
                             <div className="text-center space-y-1">
-                                <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#BD7474]">MOMENTO COMPARTIDO</p>
-                                <p className="text-3xl font-serif text-white">{images[selectedImage].caption}</p>
+                                <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#DF3B94]">MOMENTO COMPARTIDO</p>
+                                <p className="text-3xl font-display font-extrabold text-white">{images[selectedImage].caption}</p>
                             </div>
                         )}
                         <p className="text-white/30 text-xs tracking-widest uppercase">

@@ -31,7 +31,7 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
-            <div className="absolute inset-0 bg-[#1B2E1D]/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-[#DF3B94]/60 backdrop-blur-sm" onClick={onClose} />
 
             {/* Confetti — pure CSS, 30 pieces */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -59,12 +59,12 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
 
                 <div className="text-center space-y-6">
                     <div className="mx-auto w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-2 relative">
-                        <PartyPopper className="h-10 w-10 text-[#BD7474]" />
+                        <PartyPopper className="h-10 w-10 text-[#DF3B94]" />
                         <Sparkles className="absolute -top-1 -right-1 h-5 w-5 text-amber-400 animate-pulse" />
                     </div>
 
                     <div className="space-y-3">
-                        <h3 className="text-3xl md:text-4xl font-serif text-[#1B2E1D]">¡Tu invitación está lista!</h3>
+                        <h3 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">¡Tu invitación está lista!</h3>
                         <p className="text-stone-500 font-light leading-relaxed px-2">
                             Compártela con tus invitados y empieza a recibir confirmaciones al instante.
                         </p>
@@ -81,7 +81,7 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
                         />
                         <button
                             onClick={handleCopy}
-                            className="flex items-center gap-1.5 px-3 py-2 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all"
+                            className="flex items-center gap-1.5 px-3 py-2 bg-[#DF3B94] text-white rounded-xl text-[10px] uppercase font-bold tracking-widest hover:bg-[#C52A7C] transition-all"
                         >
                             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                             {copied ? 'Copiado' : 'Copiar'}
@@ -105,7 +105,7 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
                             to={invitationUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 py-4 bg-white border border-stone-200 text-stone-700 rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:border-[#1B2E1D] hover:text-[#1B2E1D] transition-all"
+                            className="flex items-center justify-center gap-2 py-4 bg-white border border-stone-200 text-stone-700 rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:border-[#1B2E1D] hover:text-[#222B38] transition-all"
                         >
                             <ExternalLink className="h-4 w-4" />
                             Ver invitación
@@ -114,7 +114,7 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
 
                     <button
                         onClick={onClose}
-                        className="block w-full text-center text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors pt-2"
+                        className="block w-full text-center text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#222B38] transition-colors pt-2"
                     >
                         Personalizar diseño primero
                     </button>

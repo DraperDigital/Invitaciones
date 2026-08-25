@@ -107,7 +107,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
             <div className="relative w-full max-w-lg bg-white shadow-2xl rounded-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden">
                 <div className="flex items-center justify-between p-6 border-b border-stone-100 bg-white">
                     <div>
-                        <h3 className="text-lg font-serif text-[#1B2E1D]">Editar Sección</h3>
+                        <h3 className="text-lg font-display font-extrabold text-[#222B38]">Editar Sección</h3>
                         <p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">
                             {sectionTitles[sectionId as string] || sectionId}
                         </p>
@@ -179,7 +179,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     <div className="space-y-8">
                         {/* Ceremonia */}
                         <div className="space-y-4">
-                            <h4 className="text-sm font-serif font-bold text-[#1B2E1D] border-b border-stone-100 pb-2">Datos de la Ceremonia (Misa)</h4>
+                            <h4 className="text-sm font-display font-extrabold font-bold text-[#222B38] border-b border-stone-100 pb-2">Datos de la Ceremonia (Misa)</h4>
                             
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Lugar</label>
@@ -223,7 +223,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
                         {/* Recepción */}
                         <div className="space-y-4">
-                            <h4 className="text-sm font-serif font-bold text-[#1B2E1D] border-b border-stone-100 pb-2">Datos de la Recepción</h4>
+                            <h4 className="text-sm font-display font-extrabold font-bold text-[#222B38] border-b border-stone-100 pb-2">Datos de la Recepción</h4>
                             
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Lugar</label>
@@ -286,7 +286,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                         </p>
                         <a 
                             href={`/dashboard/design/${event.id}?section=${getDesignSection(sectionId)}`}
-                            className="inline-block px-6 py-3 bg-[#1B2E1D] text-white text-xs font-bold rounded-xl shadow hover:scale-105 transition-all"
+                            className="inline-block px-6 py-3 bg-[#DF3B94] text-white text-xs font-bold rounded-xl shadow hover:scale-105 transition-all"
                         >
                             Ir a Herramienta Avanzada
                         </a>
@@ -298,7 +298,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 <button 
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="w-full py-4 bg-[#1B2E1D] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-[#DF3B94] text-white rounded-xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                 >
                     {isSaving ? (
                         'Guardando...'

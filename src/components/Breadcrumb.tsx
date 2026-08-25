@@ -44,9 +44,9 @@ export default function Breadcrumb({ items, variant = 'light' }: BreadcrumbProps
     };
 
     const textColor = variant === 'dark' ? 'text-white/60' : 'text-stone-400';
-    const linkHover = variant === 'dark' ? 'hover:text-white' : 'hover:text-[#1B2E1D]';
+    const linkHover = variant === 'dark' ? 'hover:text-white' : 'hover:text-[#222B38]';
     const sepColor = variant === 'dark' ? 'text-white/30' : 'text-stone-300';
-    const currentColor = variant === 'dark' ? 'text-white' : 'text-[#1B2E1D]';
+    const currentColor = variant === 'dark' ? 'text-white' : 'text-[#222B38]';
 
     return (
         <>
