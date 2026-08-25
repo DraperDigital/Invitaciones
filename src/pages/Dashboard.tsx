@@ -72,7 +72,6 @@ export default function Dashboard() {
         } catch (err: any) {
             setDeleteError('Error inesperado: ' + err.message);
         } finally {
-            setDeletingId(null);
             setDeleteLoading(false);
         }
     };
