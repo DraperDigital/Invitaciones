@@ -10,14 +10,11 @@ import {
   ShieldCheck,
   ArrowRight,
   CheckCircle2,
-  Clock,
   MapPin,
   ExternalLink,
   Menu,
   X,
   Lock,
-  ChevronRight,
-  Download,
   Briefcase
 } from 'lucide-react';
 import {
