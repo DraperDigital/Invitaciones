@@ -843,7 +843,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1545239351-ef35f43d514b?auto=format&fit=crop&w=1600&q=80',
+            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=1600&q=80',
             message: 'Con la ilusión de una princesa que cumple un sueño, te invito a celebrar conmigo el día que tanto he esperado.',
             ceremony: {
                 name: 'Ceremonia Religiosa',
@@ -998,7 +998,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'neon-glow', hero_image_url: 'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?auto=format&fit=crop&w=1600&q=80',
+            theme: 'neon-glow', hero_image_url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=80',
             message: '¡Celebra conmigo mi primera década de vida! Será una fiesta mágica llena de diversión y magia.',
             schedule: [
                 { time: '15:00', event: 'Llegada de Invitados', location: 'Jardín Principal' },
@@ -1015,7 +1015,7 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true, 
                 uploadEnabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1530103862676-de8892bf30b5?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1513271239644-245c61eb6e60?auto=format&fit=crop&w=800&q=80'
                 ]

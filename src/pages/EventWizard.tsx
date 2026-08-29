@@ -334,7 +334,18 @@ export default function EventWizard() {
                                 <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Tipo de Evento</label>
                                 <select
                                     value={data.event_type}
-                                    onChange={(e) => updateData({ event_type: e.target.value })}
+                                    onChange={(e) => {
+                                        const newType = e.target.value;
+                                        const defaultTheme = {
+                                            wedding: 'classic',
+                                            xv: 'romantic-botanical',
+                                            birthday: 'neon-glow',
+                                            bautizo: 'whimsical-kids',
+                                            graduacion: 'polaroid-vintage',
+                                            corporate: 'split-screen'
+                                        }[newType] || 'classic';
+                                        updateData({ event_type: newType, theme: defaultTheme });
+                                    }}
                                     className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none"
                                 >
                                     <option value="wedding">Boda</option>
@@ -354,6 +365,62 @@ export default function EventWizard() {
                                     value={data.date_time}
                                     onChange={(e) => updateData({ date_time: e.target.value })}
                                 />
+                            </div>
+
+                            {/* Selección de Plantilla / Diseño */}
+                            <div className="pt-4 space-y-3 border-t border-stone-100">
+                                <div className="flex items-center justify-between">
+                                    <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-700 tracking-widest ml-1">
+                                        Plantilla / Diseño Visual
+                                    </label>
+                                    <a 
+                                        href="/ejemplos" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-[10px] uppercase font-bold tracking-wider text-[#BD7474] hover:underline flex items-center gap-1"
+                                    >
+                                        <span>Explorar Galería en Vivo</span> ↗
+                                    </a>
+                                </div>
+                                <p className="text-xs text-stone-400 font-light">Selecciona la plantilla inicial para tu invitación (puedes cambiarla después).</p>
+
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                                    {[
+                                        { id: 'classic', name: 'Clásica Atemporal', category: 'Boda / Elegante', image: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'XV / Primavera', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'neon-glow', name: 'Fiesta Neón', category: 'Cumpleaños / Party', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'magazine', name: 'Estilo Editorial', category: 'XV / Gala', image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'split-screen', name: 'Vanguardia Dividida', category: 'B2B / Boda', image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'luxury-gold', name: 'Lujo Metálico', category: 'Aniversario', image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=300&auto=format&fit=crop' },
+                                        { id: 'passport', name: 'Pase de Abordaje', category: 'Boda Destino', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=300&auto=format&fit=crop' }
+                                    ].map(tpl => {
+                                        const isSelected = data.theme === tpl.id;
+                                        return (
+                                            <button
+                                                type="button"
+                                                key={tpl.id}
+                                                onClick={() => updateData({ theme: tpl.id })}
+                                                className={`relative flex flex-col overflow-hidden rounded-xl border text-left transition-all ${
+                                                    isSelected ? 'border-[#BD7474] ring-2 ring-[#BD7474]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
+                                                }`}
+                                            >
+                                                <div className="h-20 w-full relative">
+                                                    <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
+                                                    {isSelected && (
+                                                        <div className="absolute top-1.5 right-1.5 bg-[#BD7474] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
+                                                            ✓
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="p-2 bg-white flex-1">
+                                                    <p className="text-[11px] font-bold text-stone-900 leading-tight">{tpl.name}</p>
+                                                    <p className="text-[9px] text-stone-400 mt-0.5">{tpl.category}</p>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
