@@ -115,6 +115,9 @@ function AppRoutes() {
         <Route path="/invitto-vs-otras-plataformas"        element={<InvittoVsOtras />} />
         <Route path="/ejemplos"                            element={<ExamplesPage />} />
         <Route path="/carlos-y-frida"                      element={<CarlosYFrida />} />
+        <Route path="/carlosyfrida"                        element={<CarlosYFrida />} />
+        <Route path="/i/carlos-y-frida"                    element={<CarlosYFrida />} />
+        <Route path="/i/carlosyfrida"                      element={<CarlosYFrida />} />
 
         {/* SEO programmatic landing pages */}
         <Route path="/planes/clasica"                      element={<PlanClasica />} />
