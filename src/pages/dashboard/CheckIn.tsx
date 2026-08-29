@@ -56,6 +56,21 @@ const CheckIn: React.FC = () => {
         }
     }, [eventId, user]);
 
+    const stopAndClearScanner = async (instance: Html5Qrcode) => {
+        try {
+            if (instance.isScanning) {
+                await instance.stop().catch(() => {});
+            }
+        } catch (_) {
+            // Safe fallback if instance is not in scanning state
+        }
+        try {
+            instance.clear();
+        } catch (_) {
+            // Safe fallback for clear DOM error
+        }
+    };
+
     useEffect(() => {
         if (scannedId || !eventId) return;
 
@@ -74,7 +89,7 @@ const CheckIn: React.FC = () => {
                 );
 
                 if (cancelled) {
-                    html5QrCode.stop().catch(() => {});
+                    stopAndClearScanner(html5QrCode);
                 } else {
                     setIsScannerReady(true);
                 }
@@ -89,10 +104,10 @@ const CheckIn: React.FC = () => {
 
         return () => {
             cancelled = true;
-            if (scannerRef.current) {
-                scannerRef.current.stop().catch(() => {}).then(() => {
-                    scannerRef.current?.clear();
-                });
+            const instance = scannerRef.current;
+            scannerRef.current = null;
+            if (instance) {
+                stopAndClearScanner(instance);
             }
         };
     }, [scannedId, eventId]);
