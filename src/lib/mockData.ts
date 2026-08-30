@@ -19,7 +19,42 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: '2026-04-25T23:59:59Z',
         is_published: true,
         plan: 'clasico',
-        theme_config: { theme: 'cecilia-70' },
+        theme_config: {
+            isPremium: true,
+            theme: 'classic-elegance',
+            heroBgColor: '#FBF6EC',
+            primary_color: '#8A6A45',
+            accent_color: '#C9A15A',
+            hero_text_color: '#ffffff',
+            hero_image_url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80',
+            subtitle: 'Celebrando 70 Años de Vida',
+            welcome_message: 'Con el corazón lleno de gratitud, te invitamos a celebrar siete décadas de vida, amor y bendiciones junto a nuestra querida Cecilia. Tu presencia hará este día inolvidable.',
+            misa_name: 'Parroquia de Nuestra Señora del Refugio',
+            misa_time: '12:30',
+            misa_address: 'Valle de Santiago, Guanajuato',
+            misa_maps_link: 'https://www.google.com/maps/place/Hacienda+La+Escondida,+Valle+de+Santiago/@20.4009104,-101.1763565,1066m/data=!3m2!1e3!4b1!4m6!3m5!1s0x842c8d9d3f3ac5d1:0xcc7ef7c37c9f1e90!8m2!3d20.4009054!4d-101.1737816!16s%2Fg%2F11dybbw__l?entry=ttu&g_ep=EgoyMDI2MDMyNC4wIKXMDSoASAFQAw%3D%3D',
+            schedule: [
+                { time: '12:30', event: 'Misa de Acción de Gracias', location: 'Parroquia de Nuestra Señora del Refugio' },
+                { time: '14:00', event: 'Recepción de Invitados', location: 'Hacienda La Escondida' },
+                { time: '14:30', event: 'Comida', location: 'Jardín Principal' },
+                { time: '16:30', event: 'Brindis y Palabras', location: 'Terraza' },
+                { time: '17:30', event: 'Corte de Pastel', location: 'Jardín Principal' },
+                { time: '19:00', event: 'Música y Baile', location: 'Salón de Fiestas' }
+            ],
+            photoGallery: {
+                enabled: true,
+                images: [
+                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1518049362265-e5b450092420?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            registry_items: [
+                { store: 'Liverpool', link: 'https://mesaderegalos.liverpool.com.mx/eventodebusqueda/SearchEventRegistration', description: 'Mesa de regalos' },
+                { store: 'Sobre', description: 'Lo recibiremos con mucho cariño' }
+            ],
+            showCountdown: true
+        },
         slug: 'cecilia-70',
         created_at: new Date().toISOString(),
     },
