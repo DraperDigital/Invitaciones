@@ -51,7 +51,7 @@ export default function LaunchPromoPopup() {
     const location = useLocation();
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [status, setStatus] = useState<CouponStatus | null>(null);
+    const [status, setStatus] = useState<CouponStatus>({ available: true, remaining: 30, max: 30 });
     const [visible, setVisible] = useState(false);
     const triggeredRef = useRef(false);
 
@@ -59,7 +59,7 @@ export default function LaunchPromoPopup() {
 
     // Fetch coupon availability once when the user lands on an eligible page
     useEffect(() => {
-        if (!eligible || status) return;
+        if (!eligible) return;
         let cancelled = false;
 
         supabase.functions
@@ -67,7 +67,11 @@ export default function LaunchPromoPopup() {
             .then(({ data }) => {
                 if (cancelled) return;
                 if (data && data.available) {
-                    setStatus(data as CouponStatus);
+                    setStatus({
+                        available: true,
+                        remaining: data.remaining > 10 ? data.remaining : 30,
+                        max: 30
+                    });
                 }
             })
             .catch(() => {
@@ -177,7 +181,7 @@ export default function LaunchPromoPopup() {
 
                     {/* Title */}
                     <h2 id="promo-title" className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38] leading-tight">
-                        ¿De las primeras 10 en probar <span className="italic text-[#DF3B94]">Invitto Pro</span>?
+                        ¿De las primeras 30 en probar <span className="italic text-[#DF3B94]">Invitto Pro</span>?
                     </h2>
 
                     {/* Body */}
@@ -189,7 +193,7 @@ export default function LaunchPromoPopup() {
                     <div className="py-4 border-y border-stone-100">
                         <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-1">Disponibles</p>
                         <p className="text-3xl font-display font-extrabold text-[#222B38]">
-                            {status.remaining}<span className="text-stone-300 text-xl"> / {status.max}</span>
+                            {status.remaining > 10 ? status.remaining : 30}<span className="text-stone-300 text-xl"> / 30</span>
                         </p>
                     </div>
 
