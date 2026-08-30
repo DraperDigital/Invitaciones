@@ -32,16 +32,16 @@ serve(async (req) => {
     let priceId = '';
     switch (planId) {
       case 'clasico':
-        priceId = 'price_1TXR9YJc7aoXgF4jSsKlisRW';
+        priceId = 'price_1U9xICK2PT24BEhhOBxEkVi4';
         break;
       case 'pro':
-        priceId = 'price_1TXR9uJc7aoXgF4jkIcKEqao';
+        priceId = 'price_1U9xIoK2PT24BEhhjs4oiIqv';
         break;
       case 'premium': // Diseño Pro
-        priceId = 'price_1TXRAIJc7aoXgF4jlm3qeee1';
+        priceId = 'price_1U9xJYK2PT24BEhhIXcFYNIx';
         break;
       case 'concierge':
-        priceId = 'price_1TXRAmJc7aoXgF4j9gf7hndQ';
+        priceId = 'price_1U9xM8K2PT24BEhhAzia2B4d';
         break;
       default:
         throw new Error('Invalid plan ID');
