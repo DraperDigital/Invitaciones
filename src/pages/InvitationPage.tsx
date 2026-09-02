@@ -124,6 +124,9 @@ export default function InvitationPage() {
         const cfg = event?.theme_config || {};
         const preset = cfg.typography_preset || cfg.typographyPreset || 'romantica';
         document.documentElement.setAttribute('data-theme-font', preset);
+        return () => {
+            document.documentElement.removeAttribute('data-theme-font');
+        };
     }, [event?.theme_config]);
 
     // Custom CSS Injected from theme_config (Plan Pro/Concierge)

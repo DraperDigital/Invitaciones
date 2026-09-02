@@ -296,30 +296,26 @@ export default function DesignEditor() {
         fetchEvent();
     }, [id]);
 
-    // Live Preview Effect for Typography and Colors
+    // Clean up any invitation font theme or root variables from documentElement on mount & unmount
+    useEffect(() => {
+        document.documentElement.removeAttribute('data-theme-font');
+        document.documentElement.style.removeProperty('--color-accent');
+        return () => {
+            document.documentElement.removeAttribute('data-theme-font');
+            document.documentElement.style.removeProperty('--color-accent');
+        };
+    }, []);
+
+    // Live Preview Effect for Custom CSS
     const [liveStyles, setLiveStyles] = useState('');
 
     useEffect(() => {
-        // Safe color parsing
-        const hex = (config.accentColor || '#BD7474').replace('#', '');
-        const r = parseInt(hex.substring(0, 2), 16) || 189;
-        const g = parseInt(hex.substring(2, 4), 16) || 116;
-        const b = parseInt(hex.substring(4, 6), 16) || 116;
-        
-        const styles = `
-            :root, html {
-                --color-accent: ${r} ${g} ${b} !important;
-            }
-            ${config.customCss}
-        `;
-        setLiveStyles(styles);
-        
-        // Update data attribute for font theme
-        document.documentElement.setAttribute('data-theme-font', config.typographyPreset);
-        
-        // Also update document root for accent color
-        document.documentElement.style.setProperty('--color-accent', `${r} ${g} ${b}`);
-    }, [config.typographyPreset, config.accentColor, config.customCss]);
+        if (config.customCss) {
+            setLiveStyles(config.customCss);
+        } else {
+            setLiveStyles('');
+        }
+    }, [config.customCss]);
 
     const handleSave = async () => {
         if (!id || !event) return;
