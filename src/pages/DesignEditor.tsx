@@ -236,7 +236,7 @@ export default function DesignEditor() {
 
     const { user } = useAuth();
     const toast = useToast();
-    const [loading, setLoading] = useState(true);
+    const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
     const sectionParam = searchParams.get('section');
 
     // Auto expand & scroll to target section card when navigated via ?section=
