@@ -11,7 +11,7 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, getSectionDef } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
@@ -1590,7 +1590,31 @@ END:VCALENDAR`;
                     <div className="invitation-content">
                         {sectionQueue.map((section) => {
                             const renderer = SECTION_COMPONENTS[section.id];
-                            return renderer ? renderer() : null;
+                            const content = renderer ? renderer() : null;
+                            if (!content) return null;
+                            const secDef = getSectionDef(section.id);
+                            const label = secDef?.label || section.id;
+
+                            if (!isAdminMode) return <div key={section.id}>{content}</div>;
+
+                            return (
+                                <div key={section.id} className="relative group transition-all">
+                                    <div className="absolute top-4 right-4 z-[40] flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg border border-stone-200/80 opacity-90 group-hover:opacity-100 transition-all hover:scale-105">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#1B2E1D] ml-1">{label}</span>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setEditingSection(section.id);
+                                            }}
+                                            className="p-1.5 bg-[#DF3B94] text-white rounded-full hover:bg-[#C52A7C] transition-colors shadow-sm flex items-center justify-center"
+                                            title={`Editar ${label}`}
+                                        >
+                                            <Edit2 className="h-3.5 w-3.5" />
+                                        </button>
+                                    </div>
+                                    {content}
+                                </div>
+                            );
                         })}
                     </div>
 
