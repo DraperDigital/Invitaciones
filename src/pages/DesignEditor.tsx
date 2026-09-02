@@ -7,6 +7,7 @@ import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus,
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
+import AiDesignModal from '../components/AiDesignModal';
 import { trackEvent } from '../lib/analytics';
 
 type DesignConfig = {
@@ -242,6 +243,7 @@ export default function DesignEditor() {
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
     const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
+    const [showAiModal, setShowAiModal] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const logoInputRef = useRef<HTMLInputElement>(null);
 
@@ -615,7 +617,14 @@ export default function DesignEditor() {
                     <h1 className="text-3xl md:text-5xl font-serif text-[#1B2E1D] tracking-tight">Diseño y Estilo</h1>
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
-                <div className="flex items-center gap-2 md:gap-3">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                    <button
+                        onClick={() => setShowAiModal(true)}
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-gradient-to-r from-[#DF3B94] via-pink-600 to-purple-600 text-white rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                    >
+                        <Sparkles className="h-4 w-4 md:h-5 md:w-5" />
+                        <span>Diseña con IA</span>
+                    </button>
                     {event?.slug && (
                         <a
                             href={`/i/${event.slug}?t=admin`}
@@ -637,6 +646,22 @@ export default function DesignEditor() {
                         {saving ? 'Guardando...' : 'Guardar'}
                     </button>
                 </div>
+
+            <AiDesignModal
+                isOpen={showAiModal}
+                onClose={() => setShowAiModal(false)}
+                onApplyAiTheme={(aiTheme) => {
+                    setConfig(prev => ({
+                        ...prev,
+                        primaryColor: aiTheme.primaryColor,
+                        accentColor: aiTheme.accentColor,
+                        cardBgColor: aiTheme.cardBgColor,
+                        typographyPreset: aiTheme.typographyPreset,
+                        welcomeMessage: aiTheme.welcomeMessage,
+                        welcomeSubtitle: aiTheme.welcomeSubtitle,
+                    }));
+                }}
+            />
             </div>
 
             <div className="flex flex-col gap-6">
