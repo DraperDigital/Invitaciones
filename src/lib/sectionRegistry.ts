@@ -58,6 +58,10 @@ export type EventType =
   | 'wedding'
   | 'birthday'
   | 'bautizo'
+  | 'primera_comunion'
+  | 'confirmacion'
+  | 'baby_shower'
+  | 'gender_reveal'
   | 'graduacion'
   | 'corporate'
   | 'other';
@@ -68,62 +72,45 @@ export type SectionDef = {
   icon: string;
   planRequired: PlanTier;
   /** Flag boolean en theme_config que puede desactivar esta sección */
-    configKey?: keyof {
-    showWhatsAppRSVP: boolean;
-    showMap: boolean;
-    showDetails: boolean;
-    showItinerary: boolean;
-    showGifts: boolean;
-    showGallery: boolean;
-    showCountdown: boolean;
-    showMessage: boolean;
-    showChambelanes: boolean;
-    showHotels: boolean;
-  };
-  /** Si true, no aparece en el editor de orden (no reordenable) */
-  fixed?: boolean;
-  /** Posición en el layout genérico cuando no hay preset de evento */
+  configKey?: keyof Record<string, any>;
+  /** Posición ordinal por defecto (1..N) */
   defaultOrder: number;
+  /** Indica si la sección está en posición fija y no puede moverse */
+  fixed?: boolean;
 };
 
-// ── Registro completo de secciones ────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// REGISTRO DE SECCIONES (catálogo maestro de bloques disponibles)
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const SECTION_REGISTRY: SectionDef[] = [
   {
     id: 'hero',
-    label: 'Portada',
+    label: 'Portada Principal',
     icon: '🖼️',
     planRequired: 'clasico',
+    defaultOrder: 1,
     fixed: true,
-    defaultOrder: 0,
   },
   {
     id: 'guest_welcome',
-    label: 'Bienvenida al Invitado',
-    icon: '👋',
+    label: 'Pase del Invitado',
+    icon: '🎟️',
     planRequired: 'clasico',
+    defaultOrder: 2,
     fixed: true,
-    defaultOrder: 1,
   },
   {
     id: 'message',
     label: 'Mensaje de Bienvenida',
-    icon: '💌',
+    icon: '✍️',
     planRequired: 'clasico',
     configKey: 'showMessage',
-    defaultOrder: 2,
-  },
-  {
-    id: 'itinerary',
-    label: 'Itinerario del Evento',
-    icon: '🗓️',
-    planRequired: 'pro',
-    configKey: 'showItinerary',
     defaultOrder: 3,
   },
   {
     id: 'location',
-    label: 'Mapa y Ubicación',
+    label: 'Ubicación y Mapa',
     icon: '📍',
     planRequired: 'clasico',
     configKey: 'showMap',
@@ -132,42 +119,34 @@ export const SECTION_REGISTRY: SectionDef[] = [
   {
     id: 'dress_code',
     label: 'Código de Vestimenta',
-    icon: '✨',
-    planRequired: 'pro',
+    icon: '👔',
+    planRequired: 'clasico',
     configKey: 'showDetails',
     defaultOrder: 5,
   },
   {
-    id: 'gallery',
-    label: 'Galería de Fotos',
-    icon: '📸',
-    planRequired: 'premium',
-    configKey: 'showGallery',
+    id: 'itinerary',
+    label: 'Itinerario del Evento',
+    icon: '⏱️',
+    planRequired: 'pro',
+    configKey: 'showItinerary',
     defaultOrder: 6,
   },
   {
-    id: 'chambelanes',
-    label: 'Corte de Honor',
-    icon: '👑',
-    planRequired: 'pro',
-    configKey: 'showChambelanes',
+    id: 'rsvp',
+    label: 'Confirmación RSVP',
+    icon: '💌',
+    planRequired: 'clasico',
+    configKey: 'showWhatsAppRSVP',
     defaultOrder: 7,
   },
   {
     id: 'gifts',
     label: 'Mesa de Regalos',
     icon: '🎁',
-    planRequired: 'pro',
+    planRequired: 'clasico',
     configKey: 'showGifts',
     defaultOrder: 8,
-  },
-  {
-    id: 'rsvp',
-    label: 'Confirmación (WhatsApp)',
-    icon: '💬',
-    planRequired: 'clasico',
-    configKey: 'showWhatsAppRSVP',
-    defaultOrder: 9,
   },
   {
     id: 'countdown',
@@ -175,23 +154,39 @@ export const SECTION_REGISTRY: SectionDef[] = [
     icon: '⏳',
     planRequired: 'clasico',
     configKey: 'showCountdown',
+    defaultOrder: 9,
+  },
+  {
+    id: 'gallery',
+    label: 'Galería de Fotos',
+    icon: '📸',
+    planRequired: 'premium',
+    configKey: 'showGallery',
     defaultOrder: 10,
   },
   {
-    id: 'hotels',
-    label: 'Hospedaje',
-    icon: '🏨',
-    planRequired: 'premium',
-    configKey: 'showHotels',
+    id: 'chambelanes',
+    label: 'Corte de Honor',
+    icon: '👑',
+    planRequired: 'pro',
+    configKey: 'showChambelanes',
     defaultOrder: 11,
   },
   {
-    id: 'footer',
-    label: 'Pie de página',
-    icon: '🌿',
-    planRequired: 'clasico',
-    fixed: true,
+    id: 'hotels',
+    label: 'Hospedaje Recomendado',
+    icon: '🏨',
+    planRequired: 'premium',
+    configKey: 'showHotels',
     defaultOrder: 12,
+  },
+  {
+    id: 'footer',
+    label: 'Pie de Página',
+    icon: '🌟',
+    planRequired: 'clasico',
+    defaultOrder: 99,
+    fixed: true,
   },
 ];
 
@@ -259,6 +254,47 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
     'dress_code',
     'gifts',
     'gallery',
+    'footer',
+  ],
+  primera_comunion: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'dress_code',
+    'gifts',
+    'gallery',
+    'footer',
+  ],
+  confirmacion: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'dress_code',
+    'footer',
+  ],
+  baby_shower: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'gifts',
+    'gallery',
+    'countdown',
+    'footer',
+  ],
+  gender_reveal: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'gallery',
+    'countdown',
     'footer',
   ],
   graduacion: [

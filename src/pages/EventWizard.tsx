@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 
 type WizardData = {
@@ -40,34 +40,46 @@ const INITIAL_DATA: WizardData = {
     venue_time: '',
 };
 
+export const EVENT_TYPE_OPTIONS = [
+    { id: 'wedding', label: 'Boda', icon: Heart, color: 'text-rose-500 bg-rose-50 border-rose-100', defaultTheme: 'classic' },
+    { id: 'xv', label: 'XV Años', icon: Crown, color: 'text-purple-500 bg-purple-50 border-purple-100', defaultTheme: 'romantic-botanical' },
+    { id: 'bautizo', label: 'Bautizo', icon: Droplet, color: 'text-sky-500 bg-sky-50 border-sky-100', defaultTheme: 'whimsical-kids' },
+    { id: 'primera_comunion', label: 'Primera Comunión', icon: Wine, color: 'text-emerald-500 bg-emerald-50 border-emerald-100', defaultTheme: 'classic' },
+    { id: 'confirmacion', label: 'Confirmación', icon: Church, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'classic' },
+    { id: 'baby_shower', label: 'Baby Shower', icon: Baby, color: 'text-pink-500 bg-pink-50 border-pink-100', defaultTheme: 'whimsical-kids' },
+    { id: 'gender_reveal', label: 'Gender Reveal', icon: PartyPopper, color: 'text-indigo-500 bg-indigo-50 border-indigo-100', defaultTheme: 'neon-glow' },
+    { id: 'birthday', label: 'Cumpleaños', icon: Cake, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'neon-glow' },
+    { id: 'graduacion', label: 'Graduación', icon: GraduationCap, color: 'text-blue-500 bg-blue-50 border-blue-100', defaultTheme: 'polaroid-vintage' },
+    { id: 'corporate', label: 'Corporativo', icon: Building2, color: 'text-slate-600 bg-slate-100 border-slate-200', defaultTheme: 'split-screen' },
+    { id: 'other', label: 'Otro', icon: Sparkles, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
+];
+
 // ── Presets por tipo de evento ────────────────────────────────────────────
-// Solo se aplican al CREAR (no al editar). Definen qué módulos van activos
-// por defecto según el tipo de evento seleccionado.
 const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
     xv: {
-        showDetails:      true,   // Dress Code
-        showItinerary:    true,   // Itinerario
-        showGallery:      true,   // Galería
-        showMap:          true,   // Mapa
-        showWhatsAppRSVP: true,   // RSVP
-        showCountdown:    true,   // Cuenta regresiva
-        showGifts:        false,  // Mesa de regalos (opcional)
+        showDetails:      true,
+        showItinerary:    true,
+        showGallery:      true,
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showGifts:        false,
     },
     wedding: {
-        showDetails:      true,   // Dress Code
-        showItinerary:    true,   // Itinerario
-        showMap:          true,   // Mapa
-        showWhatsAppRSVP: true,   // RSVP
-        showCountdown:    true,   // Cuenta regresiva
-        showGifts:        true,   // Mesa de regalos
-        showGallery:      false,  // Galería (opcional por plan)
+        showDetails:      true,
+        showItinerary:    true,
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showGifts:        true,
+        showGallery:      false,
     },
     birthday: {
-        showMap:          true,   // Mapa
-        showWhatsAppRSVP: true,   // RSVP
-        showCountdown:    true,   // Cuenta regresiva
-        showDetails:      false,  // Sin dress code por defecto
-        showItinerary:    false,  // Sin itinerario
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      false,
+        showItinerary:    false,
         showGallery:      false,
         showGifts:        false,
     },
@@ -79,6 +91,42 @@ const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
         showItinerary:    false,
         showGallery:      false,
         showGifts:        true,
+    },
+    primera_comunion: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      true,
+        showItinerary:    false,
+        showGallery:      false,
+        showGifts:        true,
+    },
+    confirmacion: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      true,
+        showItinerary:    false,
+        showGallery:      false,
+        showGifts:        false,
+    },
+    baby_shower: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      false,
+        showItinerary:    false,
+        showGallery:      true,
+        showGifts:        true,
+    },
+    gender_reveal: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      false,
+        showItinerary:    false,
+        showGallery:      true,
+        showGifts:        false,
     },
     graduacion: {
         showMap:          true,
@@ -331,31 +379,34 @@ export default function EventWizard() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Tipo de Evento</label>
-                                <select
-                                    value={data.event_type}
-                                    onChange={(e) => {
-                                        const newType = e.target.value;
-                                        const defaultTheme = {
-                                            wedding: 'classic',
-                                            xv: 'romantic-botanical',
-                                            birthday: 'neon-glow',
-                                            bautizo: 'whimsical-kids',
-                                            graduacion: 'polaroid-vintage',
-                                            corporate: 'split-screen'
-                                        }[newType] || 'classic';
-                                        updateData({ event_type: newType, theme: defaultTheme });
-                                    }}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none"
-                                >
-                                    <option value="wedding">Boda</option>
-                                    <option value="xv">XV Años</option>
-                                    <option value="birthday">Cumpleaños</option>
-                                    <option value="bautizo">Bautizo</option>
-                                    <option value="graduacion">Graduación</option>
-                                    <option value="corporate">Corporativo</option>
-                                    <option value="other">Otro</option>
-                                </select>
+                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-3 tracking-widest ml-1">¿Qué estás celebrando?</label>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                    {EVENT_TYPE_OPTIONS.map((item) => {
+                                        const isSelected = data.event_type === item.id;
+                                        const IconComponent = item.icon;
+                                        return (
+                                            <button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    updateData({ event_type: item.id, theme: item.defaultTheme });
+                                                }}
+                                                className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center gap-2 text-center transition-all duration-200 ${
+                                                    isSelected
+                                                        ? 'border-[#DF3B94] bg-[#DF3B94]/5 shadow-md scale-[1.02]'
+                                                        : 'border-stone-100 bg-stone-50/50 hover:border-stone-200 hover:bg-white'
+                                                }`}
+                                            >
+                                                <div className={`p-3 rounded-xl ${item.color} ${isSelected ? 'scale-110' : ''} transition-transform`}>
+                                                    <IconComponent className="h-5 w-5" />
+                                                </div>
+                                                <span className={`text-xs font-bold ${isSelected ? 'text-[#DF3B94]' : 'text-stone-700'}`}>
+                                                    {item.label}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha y Hora</label>
