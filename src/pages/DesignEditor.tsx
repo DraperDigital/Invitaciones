@@ -1367,28 +1367,68 @@ export default function DesignEditor() {
                 </CollapsibleCard>
 
                 {/* ── 8. Itinerario ── */}
-                {(currentPlan?.code === 'pro' || currentPlan?.code === 'premium') && (
-                    <CollapsibleCard
-                        id="itinerary"
-                        title="Itinerario"
-                        subtitle="Programa detallado del día"
-                        icon="🗓️"
-                        activeSection={activeSection}
-                        setActiveSection={setActiveSection}
-                    >
-                        <div className="space-y-8">
-                            <div className="flex items-center justify-between px-1">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-400">Eventos del Día</label>
-                                <button
-                                    onClick={() => {
-                                        const newItem = { id: Date.now().toString(), time: '16:00', title: 'Nuevo Evento', icon: 'heart' };
-                                        setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
-                                    }}
-                                    className="flex items-center gap-2 px-4 py-2 bg-[#1B2E1D] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-emerald-900/10"
-                                >
-                                    <Plus className="h-3 w-3" /> Añadir
-                                </button>
+                {/* ── 8. Itinerario ── */}
+                <CollapsibleCard
+                    id="itinerary"
+                    title="Itinerario"
+                    subtitle="Programa detallado del día"
+                    icon="🗓️"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="space-y-8">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1B2E1D]">Seleccionar Evento Predefinido</label>
+                                <p className="text-[10px] text-stone-400">Elige un tipo de evento de la lista desplegable para agregarlo rápidamente</p>
                             </div>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    if (!e.target.value) return;
+                                    const presets: Record<string, { title: string; time: string; icon: string }> = {
+                                        ceremonia: { title: 'Ceremonia Religiosa / Civil', time: '16:00', icon: 'heart' },
+                                        recepcion: { title: 'Recepción & Cóctel de Bienvenida', time: '17:30', icon: 'wine' },
+                                        banquete:  { title: 'Cena / Banquete Principal', time: '19:00', icon: 'utensils' },
+                                        baile:     { title: 'Vals / Baile Inaugural', time: '20:30', icon: 'music' },
+                                        pastel:    { title: 'Corte de Pastel & Brindis', time: '21:30', icon: 'party' },
+                                        mariachi:  { title: 'Mariachi / Banda Sorpresa', time: '22:30', icon: 'party' },
+                                        torneado:  { title: 'Torneado / Trasnocho', time: '23:30', icon: 'utensils' },
+                                        fin:       { title: 'Fin de Fiesta', time: '02:00', icon: 'moon' }
+                                    };
+                                    const preset = presets[e.target.value];
+                                    if (preset) {
+                                        const newItem = { id: Date.now().toString(), ...preset };
+                                        setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
+                                    }
+                                    e.target.value = '';
+                                }}
+                                className="w-full sm:w-auto px-4 py-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:border-[#DF3B94]"
+                            >
+                                <option value="" disabled>-- Selecciona de la lista --</option>
+                                <option value="ceremonia">💍 Ceremonia Religiosa / Civil (16:00)</option>
+                                <option value="recepcion">🍸 Recepción & Cóctel (17:30)</option>
+                                <option value="banquete">🍽️ Banquete / Cena (19:00)</option>
+                                <option value="baile">💃 Vals / Baile Inaugural (20:30)</option>
+                                <option value="pastel">🎂 Corte de Pastel & Brindis (21:30)</option>
+                                <option value="mariachi">🎺 Mariachi / Banda (22:30)</option>
+                                <option value="torneado">🌮 Torneado / Trasnocho (23:30)</option>
+                                <option value="fin">🎆 Fin de Fiesta (02:00)</option>
+                            </select>
+                        </div>
+
+                        <div className="flex items-center justify-between px-1">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-400">Eventos en la Línea de Tiempo</label>
+                            <button
+                                onClick={() => {
+                                    const newItem = { id: Date.now().toString(), time: '16:00', title: 'Nuevo Evento', icon: 'heart' };
+                                    setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
+                                }}
+                                className="flex items-center gap-2 px-4 py-2 bg-[#1B2E1D] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-emerald-900/10"
+                            >
+                                <Plus className="h-3 w-3" /> Personalizado
+                            </button>
+                        </div>
                             
                             <div className="space-y-4">
                                 {config.itinerary.map((item, idx) => (
@@ -1456,12 +1496,10 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
 
                 {/* ── 9. Corte de Honor (Damas/Chambelanes) ── */}
-                {(currentPlan?.code === 'pro' || currentPlan?.code === 'premium') && (
-                    <CollapsibleCard
-                        id="honor"
+                <CollapsibleCard
+                    id="honor"
                         title="Corte de Honor"
                         subtitle="Pajes, Damas y Chambelanes"
                         icon="👑"
@@ -1552,12 +1590,10 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
 
                 {/* ── 10. Mesa de Regalos ── */}
-                {(currentPlan?.code === 'pro' || currentPlan?.code === 'premium') && (
-                    <CollapsibleCard
-                        id="gifts"
+                <CollapsibleCard
+                    id="gifts"
                         title="Mesa de Regalos"
                         subtitle="Links y datos bancarios"
                         icon="🎁"
@@ -1646,12 +1682,10 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
 
                 {/* ── 11. Galería de Fotos ── */}
-                {currentPlan?.code === 'premium' && (
-                    <CollapsibleCard
-                        id="gallery"
+                <CollapsibleCard
+                    id="gallery"
                         title="Galería de Fotos"
                         subtitle="Álbum multimedia"
                         icon="📸"
@@ -1779,12 +1813,10 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
 
                 {/* ── 12. Hoteles y Hospedaje ── */}
-                {currentPlan?.code === 'premium' && (
-                    <CollapsibleCard
-                        id="hotels"
+                <CollapsibleCard
+                    id="hotels"
                         title="Hoteles y Hospedaje"
                         subtitle="Alojamiento recomendado"
                         icon="🏨"
@@ -1912,7 +1944,6 @@ export default function DesignEditor() {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
 
                 {/* ── 13. Estilos Expertos (CSS) ── */}
                 {config.plan === 'concierge' && (
