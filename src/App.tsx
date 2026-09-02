@@ -92,7 +92,9 @@ function AppRoutes() {
         <Route path="/faq"           element={<FaqPage />} />
         <Route path="/checkout"      element={<CheckoutPage />} />
         <Route path="/login"         element={<LoginPage />} />
-        <Route path="/i/:slug"       element={<InvitationPage />} />
+        <Route path="/i/:slug"          element={<InvitationPage />} />
+        <Route path="/preview/:slug"    element={<InvitationPage />} />
+        <Route path="/invitacion/:slug" element={<InvitationPage />} />
         <Route path="/aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
         <Route path="/terminos"      element={<Terms />} />
         <Route path="/concierge"     element={<Concierge />} />

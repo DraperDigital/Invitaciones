@@ -1782,7 +1782,7 @@ export default function DesignEditor() {
 
             {/* Live Preview Button */}
             <div className="flex justify-center pt-8 border-t border-stone-200">
-                <Link to={`/preview/${id}`} target="_blank" className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/30 pb-1">
+                <Link to={`/preview/${event?.slug || id}?t=admin`} target="_blank" className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#DF3B94] hover:text-[#222B38] transition-colors border-b border-[#DF3B94]/30 pb-1">
                     Ver Plantilla de Ejemplo Completa →
                 </Link>
             </div>
