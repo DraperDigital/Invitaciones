@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Sparkles, Shield, ChevronDown, Upload, X, Flower2 } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Sparkles, Shield, ChevronDown, Upload, X, MapPin } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -16,6 +16,7 @@ type DesignConfig = {
     cardBgColor: string;
     heroImage: string;
     decorativeImage: string;
+    musicUrl: string;
     buttonColor: string;
     welcomeMessage: string;
     welcomeSubtitle: string;
@@ -99,6 +100,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     cardBgColor: '#C17B6A',
     heroImage: '',
     decorativeImage: '',
+    musicUrl: '',
     buttonColor: '#1B2E1D',
     welcomeMessage: 'Te invitamos a ser parte de una tarde inolvidable de gratitud, risas y la calidez de nuestra familia.',
     welcomeSubtitle: '70 años',
