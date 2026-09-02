@@ -938,23 +938,41 @@ export default function DesignEditor() {
                             </div>
                         </SubAccordionItem>
 
-                        {/* 5. Imágenes de Eventos / Recintos */}
+                        {/* 5. Logo, Firma o Imágenes de Recintos */}
                         <SubAccordionItem
-                            title="Imágenes de Eventos y Recintos"
-                            icon="📍"
-                            subtitle="Fotografía de la misa o del salón de la fiesta"
+                            title="Logo, Monograma o Recinto"
+                            icon="🖋️"
+                            subtitle="Logo del evento o fotografía del lugar"
                             isOpen={activeMediaTab === 'eventos'}
                             onToggle={() => setActiveMediaTab(activeMediaTab === 'eventos' ? null : 'eventos')}
                         >
-                            <div className="space-y-3">
-                                <p className="text-xs text-stone-500 font-light">Agrega fotografías del lugar de la misa o recepción para ayudar a tus invitados a ubicar el recinto.</p>
+                            <div className="space-y-4">
+                                <p className="text-xs text-stone-500 font-light">Subes el monograma, iniciales o foto del recinto de tu evento.</p>
+                                <input
+                                    ref={logoInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={e => {
+                                        const f = e.target.files?.[0];
+                                        if (f) handleLogoUpload(f);
+                                    }}
+                                />
+                                <button
+                                    onClick={() => logoInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className="px-5 py-2.5 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
+                                >
+                                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                    {uploading ? 'Subiendo...' : 'Subir Logo / Monograma'}
+                                </button>
                                 <div className={`w-full h-40 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.decorativeImage ? 'bg-white' : 'bg-stone-50/20'}`}>
                                     {config.decorativeImage ? (
                                         <img src={config.decorativeImage} className="w-full h-full object-contain p-4" alt="Recinto" />
                                     ) : (
                                         <div className="flex flex-col items-center gap-2 opacity-30 text-stone-400">
                                             <MapPin className="h-6 w-6" />
-                                            <p className="text-[10px] font-mono">Sin imagen de recinto</p>
+                                            <p className="text-[10px] font-mono">Sin imagen de recinto o logo</p>
                                         </div>
                                     )}
                                 </div>
