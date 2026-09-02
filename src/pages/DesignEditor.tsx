@@ -1213,13 +1213,30 @@ export default function DesignEditor() {
                             </div>
                             <div className="space-y-3">
                                 <label className="text-[10px] uppercase font-black tracking-widest text-stone-400 pl-1">Código de Vestimenta</label>
-                                <input
-                                    type="text"
-                                    value={config.dress_code}
-                                    onChange={(e) => setConfig({ ...config, dress_code: e.target.value })}
-                                    className="w-full bg-stone-50/50 px-6 py-4 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-sm focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
-                                    placeholder="Ej. Formal, Blanco..."
-                                />
+                                <div className="space-y-2">
+                                    <select
+                                        value={['Formal', 'Semi-Formal', 'Guayabera', 'Casual Elegante', 'Etiqueta Rigurosa', 'Riguroso Negro (Black Tie)', 'Blanco y Tonos Pastel', 'Libre'].includes(config.dress_code) ? config.dress_code : ''}
+                                        onChange={(e) => setConfig({ ...config, dress_code: e.target.value })}
+                                        className="w-full bg-stone-50/50 px-4 py-3 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
+                                    >
+                                        <option value="">-- Selecciona de la Lista --</option>
+                                        <option value="Formal">👔 Formal / Traje Oscuro & Vestido Largo</option>
+                                        <option value="Semi-Formal">🍸 Semi-Formal / Cóctel</option>
+                                        <option value="Etiqueta Rigurosa">🎩 Etiqueta Rigurosa / Esmoquin & Vestido de Gala</option>
+                                        <option value="Guayabera">🏝️ Guayabera / Playa / Clima Cálido</option>
+                                        <option value="Casual Elegante">✨ Casual Elegante</option>
+                                        <option value="Riguroso Negro (Black Tie)">💃 Riguroso Negro (Black Tie)</option>
+                                        <option value="Blanco y Tonos Pastel">🌸 Blanco & Tonos Pastel</option>
+                                        <option value="Libre">🎨 Libre / Según la Ocasión</option>
+                                    </select>
+                                    <input
+                                        type="text"
+                                        value={config.dress_code}
+                                        onChange={(e) => setConfig({ ...config, dress_code: e.target.value })}
+                                        className="w-full bg-stone-50/50 px-6 py-3 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-xs focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
+                                        placeholder="o escribe un código personalizado..."
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

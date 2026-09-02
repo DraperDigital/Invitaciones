@@ -271,12 +271,28 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 )}
 
                 {sectionId === 'dress_code' && (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Código de Vestimenta</label>
+                        <select
+                            value={['Formal', 'Semi-Formal', 'Guayabera', 'Casual Elegante', 'Etiqueta Rigurosa', 'Riguroso Negro (Black Tie)', 'Blanco y Tonos Pastel', 'Libre'].includes(dressCode) ? dressCode : ''}
+                            onChange={e => setDressCode(e.target.value)}
+                            className="w-full bg-stone-50 px-4 py-3 rounded-xl text-xs font-bold text-[#1B2E1D] border border-stone-200 outline-none cursor-pointer focus:ring-2 focus:ring-[#1B2E1D]/10"
+                        >
+                            <option value="">-- Selecciona de la Lista --</option>
+                            <option value="Formal">👔 Formal / Traje Oscuro & Vestido Largo</option>
+                            <option value="Semi-Formal">🍸 Semi-Formal / Cóctel</option>
+                            <option value="Etiqueta Rigurosa">🎩 Etiqueta Rigurosa / Esmoquin & Vestido de Gala</option>
+                            <option value="Guayabera">🏝️ Guayabera / Playa / Clima Cálido</option>
+                            <option value="Casual Elegante">✨ Casual Elegante</option>
+                            <option value="Riguroso Negro (Black Tie)">💃 Riguroso Negro (Black Tie)</option>
+                            <option value="Blanco y Tonos Pastel">🌸 Blanco & Tonos Pastel</option>
+                            <option value="Libre">🎨 Libre / Según la Ocasión</option>
+                        </select>
                         <input 
                             type="text" 
                             value={dressCode} 
                             onChange={e => setDressCode(e.target.value)}
+                            placeholder="o escribe un código personalizado..."
                             className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                         />
                     </div>
