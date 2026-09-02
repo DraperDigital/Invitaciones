@@ -588,13 +588,42 @@ export default function EventWizard() {
                         <div className="space-y-6">
                             <div>
                                 <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Código de Vestimenta</label>
-                                <input
-                                    type="text"
-                                    value={data.dress_code}
-                                    onChange={(e) => updateData({ dress_code: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
-                                    placeholder="Ej. Formal, Etiqueta Rigurosa..."
-                                />
+                                <select
+                                    value={
+                                        ['Formal', 'Etiqueta Rigurosa (Black Tie)', 'Semiformal / Cóctel', 'Formal de Playa / Guayabera', 'Casual Elegante', 'Riguroso Blanco', 'Sin Código de Vestimenta'].includes(data.dress_code)
+                                            ? data.dress_code
+                                            : data.dress_code ? 'custom' : ''
+                                    }
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === 'custom') {
+                                            updateData({ dress_code: '' });
+                                        } else {
+                                            updateData({ dress_code: val });
+                                        }
+                                    }}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none cursor-pointer"
+                                >
+                                    <option value="">Selecciona un Código de Vestimenta...</option>
+                                    <option value="Formal">Formal</option>
+                                    <option value="Etiqueta Rigurosa (Black Tie)">Etiqueta Rigurosa (Black Tie)</option>
+                                    <option value="Semiformal / Cóctel">Semiformal / Cóctel</option>
+                                    <option value="Formal de Playa / Guayabera">Formal de Playa / Guayabera</option>
+                                    <option value="Casual Elegante">Casual Elegante</option>
+                                    <option value="Riguroso Blanco">Riguroso Blanco (White Party)</option>
+                                    <option value="Sin Código de Vestimenta">Sin Código de Vestimenta (Libre)</option>
+                                    <option value="custom">✍️ Escribir código personalizado...</option>
+                                </select>
+
+                                {(!['Formal', 'Etiqueta Rigurosa (Black Tie)', 'Semiformal / Cóctel', 'Formal de Playa / Guayabera', 'Casual Elegante', 'Riguroso Blanco', 'Sin Código de Vestimenta'].includes(data.dress_code)) && (
+                                    <input
+                                        type="text"
+                                        value={data.dress_code}
+                                        onChange={(e) => updateData({ dress_code: e.target.value })}
+                                        className="mt-3 block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                        placeholder="Ej. Traje de noche, Vestido largo, Vestido de cóctel..."
+                                    />
+                                )}
                             </div>
                             <div>
                                 <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha Límite para Confirmar</label>
@@ -604,21 +633,6 @@ export default function EventWizard() {
                                     onChange={(e) => updateData({ rsvp_deadline: e.target.value })}
                                     className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Estilo Visual</label>
-                                <select
-                                    value={data.theme}
-                                    onChange={(e) => updateData({ theme: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none"
-                                >
-                                    <option value="classic">Clásico (Blanco y Negro)</option>
-                                    <option value="gold">Gold (Tonos Dorados)</option>
-                                    <option value="botanical">Botánico (Verdes)</option>
-                                    <option value="cecilia-70">Atemporal (Floral)</option>
-                                    <option value="collage">Collage Elegante</option>
-                                    <option value="floral-symmetry">Simetría Floral</option>
-                                </select>
                             </div>
                         </div>
                     </div>
