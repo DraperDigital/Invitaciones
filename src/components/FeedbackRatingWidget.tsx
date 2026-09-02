@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Heart, Frown, Meh, Smile, Sparkles } from 'lucide-react';
+import { X, Heart, Sparkles } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { trackEvent } from '../lib/analytics';
 
@@ -8,7 +8,6 @@ type Rating = 'dislike' | 'neutral' | 'like' | 'love';
 export default function FeedbackRatingWidget() {
     const [visible, setVisible] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [selectedRating, setSelectedRating] = useState<Rating | null>(null);
     const toast = useToast();
 
     useEffect(() => {
@@ -22,7 +21,6 @@ export default function FeedbackRatingWidget() {
     }, []);
 
     const handleSelectRating = (rating: Rating, label: string) => {
-        setSelectedRating(rating);
         setSubmitted(true);
         localStorage.setItem('invitto_user_feedback_timestamp', Date.now().toString());
         localStorage.setItem('invitto_user_feedback_val', rating);
