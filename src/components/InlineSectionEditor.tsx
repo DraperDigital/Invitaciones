@@ -92,11 +92,15 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const getDesignSection = (id: string) => {
         switch(id) {
             case 'itinerary': return 'itinerary';
-            case 'gallery': return 'gallery';
+            case 'gallery': return 'multimedia';
             case 'gifts': return 'gifts';
-            case 'rsvp': return 'logistics';
-            case 'hero': return 'imagery';
-            case 'guest_welcome': return 'message';
+            case 'hotels': return 'hotels';
+            case 'chambelanes': return 'chambelanes';
+            case 'dress_code': return 'dress_code';
+            case 'location': return 'events';
+            case 'hero': return 'multimedia';
+            case 'guest_welcome': return 'content';
+            case 'message': return 'content';
             default: return 'matrix';
         }
     };

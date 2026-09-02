@@ -180,7 +180,7 @@ const TYPOGRAPHY_PRESETS = {
 const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSection, children }: any) => {
     const isOpen = activeSection === id;
     return (
-        <div className={`bg-white rounded-[2rem] md:rounded-[2.5rem] border transition-all duration-500 overflow-hidden ${isOpen ? 'border-stone-200 shadow-xl' : 'border-stone-100 shadow-sm hover:shadow-md'}`}>
+        <div id={id} className={`bg-white rounded-[2rem] md:rounded-[2.5rem] border transition-all duration-500 overflow-hidden ${isOpen ? 'border-[#DF3B94]/40 shadow-2xl ring-2 ring-[#DF3B94]/20' : 'border-stone-100 shadow-sm hover:shadow-md'}`}>
             <div onClick={() => setActiveSection(isOpen ? null : id)} className="p-6 md:p-10 flex items-center justify-between cursor-pointer hover:bg-stone-50/30 transition-colors">
                 <div className="flex items-center gap-4 md:gap-5">
                     <div className={`h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl flex items-center justify-center text-xl md:text-2xl transition-all ${isOpen ? 'bg-[#1B2E1D] text-white scale-105 md:scale-110' : 'bg-stone-50 text-stone-400'}`}>{icon}</div>
@@ -237,7 +237,21 @@ export default function DesignEditor() {
     const { user } = useAuth();
     const toast = useToast();
     const [loading, setLoading] = useState(true);
-    const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
+    const sectionParam = searchParams.get('section');
+
+    // Auto expand & scroll to target section card when navigated via ?section=
+    useEffect(() => {
+        if (sectionParam) {
+            setActiveSection(sectionParam);
+            const timer = setTimeout(() => {
+                const el = document.getElementById(sectionParam);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [sectionParam, loading, loadingAccess]);
     const [activeMediaTab, setActiveMediaTab] = useState<string | null>('portada');
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
