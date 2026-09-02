@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -11,6 +12,7 @@ import { getPlatformContext } from '../utils/context';
 
 export default function Dashboard() {
     const { user } = useAuth();
+    const toast = useToast();
     const { isCorporate } = getPlatformContext();
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
