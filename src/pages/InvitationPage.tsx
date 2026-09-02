@@ -11,7 +11,7 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, getSectionDef } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
@@ -141,7 +141,6 @@ export default function InvitationPage() {
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    const [drawerTab, setDrawerTab] = useState<'grid' | 'list'>('grid');
 
     // PLUS ONES States
     const [isAccompanied, setIsAccompanied] = useState(false);
