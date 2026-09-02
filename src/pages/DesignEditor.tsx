@@ -235,7 +235,7 @@ export default function DesignEditor() {
     const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
 
     const { user } = useAuth();
-    const toast = useToast();
+    const [loading, setLoading] = useState(true);
     const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
     const sectionParam = searchParams.get('section');
 
