@@ -305,12 +305,17 @@ export default function EventWizard() {
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;
-                toast.success('¡Evento creado! Último paso: elige tu plan para publicarlo.');
-                // If user preselected a plan from the landing, skip /planes and go straight to checkout
-                if (preselectedPlan) {
+                const { data: profile } = await supabase.from('profiles').select('plan_tier').eq('id', user.id).maybeSingle();
+                const userPlan = profile?.plan_tier?.toLowerCase();
+
+                if (userPlan && ['pro', 'premium', 'concierge', 'clasico'].includes(userPlan)) {
+                    toast.success('¡Invitación creada exitosamente!');
+                    navigate(`/dashboard/design/${insertPayload.id}`);
+                } else if (preselectedPlan) {
                     const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
                     navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}${couponQs}`);
                 } else {
+                    toast.success('¡Evento creado! Elige un plan para activar todas sus funciones.');
                     navigate(`/planes?id=${insertPayload.id}`);
                 }
             }

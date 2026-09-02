@@ -269,70 +269,72 @@ export default function CheckoutPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] selection:bg-[#BD7474]/10">
-            {/* Elegant Header */}
-            <header className="pt-10 pb-8 border-b border-stone-50 bg-white/50 backdrop-blur-xl sticky top-0 z-50">
-                <div className="mx-auto max-w-7xl px-8 flex justify-between items-center">
-                    <Link to={eventId ? `/planes?id=${eventId}` : "/planes"} className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-stone-400 hover:text-[#1B2E1D] transition-all">
+        <div className="min-h-screen bg-[#FDFBF7] font-sans selection:bg-[#DF3B94]/10">
+            {/* Header */}
+            <header className="py-6 border-b border-slate-100 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
+                <div className="mx-auto max-w-7xl px-6 md:px-8 flex justify-between items-center">
+                    <Link to={eventId ? `/planes?id=${eventId}` : "/planes"} className="group flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#222B38] transition-all">
                         <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" /> Volver a Planes
                     </Link>
-                    <span className="text-3xl font-serif italic text-[#1B2E1D]">Finalizar Orden</span>
-                    <div className="flex items-center gap-3">
-                        <ShieldCheck className="h-5 w-5 text-emerald-500" />
-                        <span className="text-[9px] uppercase font-bold tracking-widest text-stone-400">SSL Secure</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-xl md:text-2xl font-display font-extrabold text-[#222B38]">Finalizar Orden</span>
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] uppercase font-bold tracking-wider">
+                        <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                        <span className="hidden sm:inline">Pago Seguro SSL</span>
                     </div>
                 </div>
             </header>
 
-            <div className="py-20 px-8">
+            <div className="py-12 md:py-16 px-6 md:px-8">
                 <div className="mx-auto max-w-7xl">
                     {/* Draft selector — shown only when user landed without ?id= (e.g. browser back) */}
                     {!eventId && draftLookupDone && (
-                        <div className="mb-12 p-8 md:p-10 bg-amber-50 border border-amber-200 rounded-[2rem] max-w-3xl mx-auto">
+                        <div className="mb-12 p-8 md:p-10 bg-amber-50 border border-amber-200 rounded-3xl max-w-3xl mx-auto space-y-6">
                             {draftEvents.length > 0 ? (
                                 <>
-                                    <div className="flex items-start gap-4 mb-6">
-                                        <div className="h-10 w-10 bg-amber-100 rounded-xl flex items-center justify-center text-amber-700 flex-shrink-0">
-                                            <Sparkles className="h-5 w-5" />
+                                    <div className="flex items-start gap-4">
+                                        <div className="h-12 w-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-700 flex-shrink-0">
+                                            <Sparkles className="h-6 w-6" />
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-serif text-[#1B2E1D] mb-1">¿Para qué invitación es este pago?</h3>
-                                            <p className="text-sm text-stone-500 font-light">Selecciona tu evento o crea uno nuevo.</p>
+                                            <h3 className="text-xl font-display font-extrabold text-[#222B38] mb-1">¿Para qué invitación es este pago?</h3>
+                                            <p className="text-sm text-slate-600">Selecciona tu evento o crea uno nuevo.</p>
                                         </div>
                                     </div>
-                                    <div className="space-y-2 mb-6">
+                                    <div className="space-y-3">
                                         {draftEvents.map((d) => (
                                             <button
                                                 key={d.id}
                                                 onClick={() => selectDraftEvent(d.id)}
-                                                className="w-full flex items-center justify-between gap-4 p-4 bg-white border border-stone-100 rounded-2xl hover:border-[#1B2E1D] hover:shadow-md transition-all text-left"
+                                                className="w-full flex items-center justify-between gap-4 p-5 bg-white border border-slate-100 rounded-2xl hover:border-[#DF3B94] hover:shadow-md transition-all text-left group"
                                             >
                                                 <div>
-                                                    <p className="font-serif text-base text-[#1B2E1D]">{d.title || 'Evento sin título'}</p>
+                                                    <p className="font-display font-bold text-base text-[#222B38] group-hover:text-[#DF3B94] transition-colors">{d.title || 'Evento sin título'}</p>
                                                     {d.date_time && (
-                                                        <p className="text-[10px] uppercase tracking-widest font-bold text-stone-400 mt-1">
+                                                        <p className="text-xs text-slate-400 mt-0.5">
                                                             {new Date(d.date_time).toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' })}
                                                         </p>
                                                     )}
                                                 </div>
-                                                <span className="text-[9px] uppercase font-bold tracking-widest text-[#BD7474]">Borrador →</span>
+                                                <span className="text-xs uppercase font-bold tracking-wider text-[#DF3B94] flex items-center gap-1">Seleccionar →</span>
                                             </button>
                                         ))}
                                     </div>
                                     <Link
                                         to={`/dashboard/new?plan=${planId}`}
-                                        className="inline-flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors"
+                                        className="inline-flex items-center gap-2 text-xs uppercase font-bold tracking-wider text-[#DF3B94] hover:underline"
                                     >
                                         + Crear una nueva invitación
                                     </Link>
                                 </>
                             ) : (
-                                <div className="text-center">
-                                    <h3 className="text-xl font-serif text-[#1B2E1D] mb-3">Necesitas crear una invitación primero</h3>
-                                    <p className="text-sm text-stone-500 font-light mb-6">El pago se asocia a un evento específico. Crea tu invitación y luego vuelves a pagar.</p>
+                                <div className="text-center space-y-4">
+                                    <h3 className="text-xl font-display font-extrabold text-[#222B38]">Necesitas crear una invitación primero</h3>
+                                    <p className="text-sm text-slate-600">El pago se asocia a un evento específico. Crea tu invitación y luego completas la orden.</p>
                                     <Link
                                         to={`/dashboard/new?plan=${planId}`}
-                                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:bg-[#2D312E] transition-all"
+                                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-lg"
                                     >
                                         Crear mi invitación
                                     </Link>
@@ -341,48 +343,51 @@ export default function CheckoutPage() {
                         </div>
                     )}
 
-                    <div className={`grid lg:grid-cols-12 gap-16 items-start ${!eventId ? 'opacity-40 pointer-events-none' : ''}`}>
+                    <div className={`grid lg:grid-cols-12 gap-12 lg:gap-16 items-start ${!eventId ? 'opacity-40 pointer-events-none' : ''}`}>
                         {/* Form Section */}
-                        <div className="lg:col-span-7 space-y-12">
-                            <form onSubmit={handleSubmit} className="space-y-10">
+                        <div className="lg:col-span-7 space-y-8">
+                            <form onSubmit={handleSubmit} className="space-y-8">
                                 {/* Informacion de Contacto */}
-                                <div className="p-10 bg-white rounded-[2.5rem] border border-stone-100 shadow-sm space-y-8">
-                                    <div className="flex items-center gap-4 border-b border-stone-50 pb-6">
-                                        <div className="h-12 w-12 bg-[#FDFBF7] rounded-2xl flex items-center justify-center text-[#1B2E1D]">
+                                <div className="p-8 md:p-10 bg-white rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                                    <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
+                                        <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#DF3B94]">
                                             <Zap className="h-6 w-6" />
                                         </div>
-                                        <h3 className="text-2xl font-serif text-[#1B2E1D]">Información del Cliente</h3>
+                                        <div>
+                                            <h3 className="text-xl md:text-2xl font-display font-extrabold text-[#222B38]">Información del Cliente</h3>
+                                            <p className="text-xs text-slate-500">Datos para la recepción de tu comprobante y activación.</p>
+                                        </div>
                                     </div>
                                     
-                                    <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="grid md:grid-cols-2 gap-6">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Nombre Completo</label>
+                                            <label className="text-xs uppercase font-bold tracking-wider text-slate-400 ml-1">Nombre Completo</label>
                                             <input 
                                                 type="text" 
                                                 required
-                                                className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                                className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all text-[#222B38] text-sm" 
                                                 placeholder="Ej. Ana García"
                                                 value={formData.name}
                                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Teléfono WhatsApp</label>
+                                            <label className="text-xs uppercase font-bold tracking-wider text-slate-400 ml-1">Teléfono WhatsApp</label>
                                             <input 
                                                 type="tel" 
                                                 required
-                                                className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                                className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all text-[#222B38] text-sm" 
                                                 placeholder="+52 55 ..."
                                                 value={formData.phone}
                                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                             />
                                         </div>
                                         <div className="md:col-span-2 space-y-2">
-                                            <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Correo para comprobante</label>
+                                            <label className="text-xs uppercase font-bold tracking-wider text-slate-400 ml-1">Correo Electrónico</label>
                                             <input 
                                                 type="email" 
                                                 disabled
-                                                className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none text-stone-400 opacity-60" 
+                                                className="w-full p-4 bg-slate-100 rounded-2xl border border-slate-200 text-slate-500 text-sm font-medium" 
                                                 value={formData.email}
                                             />
                                         </div>
@@ -390,21 +395,24 @@ export default function CheckoutPage() {
                                 </div>
 
                                 {/* Sección de Código de Descuento */}
-                                <div className="p-10 bg-white rounded-[2.5rem] border border-stone-100 shadow-sm space-y-8">
-                                    <div className="flex items-center gap-4 border-b border-stone-50 pb-6">
-                                        <div className="h-12 w-12 bg-[#FDFBF7] rounded-2xl flex items-center justify-center text-[#1B2E1D]">
+                                <div className="p-8 md:p-10 bg-white rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                                    <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
+                                        <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#DF3B94]">
                                             <Crown className="h-6 w-6" />
                                         </div>
-                                        <h3 className="text-2xl font-serif text-[#1B2E1D]">¿Tienes un código?</h3>
+                                        <div>
+                                            <h3 className="text-xl md:text-2xl font-display font-extrabold text-[#222B38]">¿Tienes un Código Promocional?</h3>
+                                            <p className="text-xs text-slate-500">Ingresa tu cupón de descuento o prueba gratuita.</p>
+                                        </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Código de promoción</label>
-                                        <div className="flex gap-4">
+                                    <div className="space-y-3">
+                                        <label className="text-xs uppercase font-bold tracking-wider text-slate-400 ml-1">Código de Promoción</label>
+                                        <div className="flex gap-3">
                                             <input 
                                                 type="text" 
-                                                className="w-full p-4 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] font-mono tracking-widest uppercase" 
-                                                placeholder="Ej. INVITTO26"
+                                                className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all text-[#222B38] font-mono tracking-wider uppercase text-sm" 
+                                                placeholder="Ej. INVITTO26PRO"
                                                 value={couponCode}
                                                 onChange={(e) => {
                                                     setCouponCode(e.target.value.toUpperCase());
@@ -415,18 +423,18 @@ export default function CheckoutPage() {
                                                 type="button"
                                                 onClick={handleApplyCoupon}
                                                 disabled={!couponCode || isApplyingCoupon || isCouponSuccess}
-                                                className="px-8 bg-stone-100 text-stone-600 rounded-2xl text-[10px] uppercase font-bold tracking-widest hover:bg-stone-200 transition-all disabled:opacity-50"
+                                                className="px-8 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-md disabled:opacity-50 shrink-0"
                                             >
                                                 {isApplyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Aplicar'}
                                             </button>
                                         </div>
                                         {couponError && <p className="text-xs text-rose-500 ml-1">{couponError}</p>}
-                                        {isCouponSuccess && <p className="text-xs text-emerald-500 ml-1 font-bold">¡Cupón aplicado exitosamente! El plan {selectedPlan.name} ha sido cubierto.</p>}
+                                        {isCouponSuccess && <p className="text-xs text-emerald-600 ml-1 font-bold">¡Cupón aplicado exitosamente! El plan {selectedPlan.name} ha sido cubierto al 100%.</p>}
                                     </div>
                                 </div>
 
                                 {error && (
-                                    <div className="p-5 bg-rose-50 text-rose-500 rounded-2xl text-[10px] uppercase font-bold tracking-widest text-center border border-rose-100 animate-shake">
+                                    <div className="p-5 bg-rose-50 text-rose-600 rounded-2xl text-xs uppercase font-bold tracking-wider text-center border border-rose-200">
                                         {error}
                                     </div>
                                 )}
@@ -434,86 +442,87 @@ export default function CheckoutPage() {
                                 <button 
                                     type="submit" 
                                     disabled={isProcessing}
-                                    className="group relative w-full py-8 bg-[#1B2E1D] text-white rounded-[2rem] text-[11px] uppercase font-bold tracking-[0.4em] shadow-2xl hover:bg-[#2C482F] transition-all disabled:opacity-50 overflow-hidden"
+                                    className="group relative w-full py-5 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-[#C52A7C] transition-all disabled:opacity-50 overflow-hidden active:scale-[0.99]"
                                 >
                                     {isProcessing ? (
-                                        <div className="flex items-center justify-center gap-4">
+                                        <div className="flex items-center justify-center gap-3">
                                             <Loader2 className="h-5 w-5 animate-spin" />
-                                            Procesando...
+                                            Procesando Orden...
                                         </div>
                                     ) : (
                                         <span>
                                             {isCouponSuccess 
                                                 ? "Continuar al Dashboard" 
-                                                : `Confirmar y Pagar - $${selectedPlan.price} MXN`}
+                                                : `Confirmar y Pagar — $${selectedPlan.price} MXN`}
                                         </span>
                                     )}
-                                    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
                                 
-                                <p className="text-[9px] text-center text-stone-400 font-light italic">
-                                    Al completar tu compra, aceptas nuestros <span className="underline cursor-pointer">Términos de Servicio</span> y <span className="underline cursor-pointer">Privacidad</span>.
+                                <p className="text-xs text-center text-slate-400 font-normal">
+                                    Al completar tu compra, aceptas nuestros <Link to="/terminos" className="underline hover:text-slate-700">Términos de Servicio</Link> y <Link to="/aviso-de-privacidad" className="underline hover:text-slate-700">Privacidad</Link>.
                                 </p>
                             </form>
                         </div>
 
                         {/* Order Summary Section */}
                         <div className="lg:col-span-5">
-                            <div className="p-12 bg-[#1B2E1D] text-white rounded-[3rem] sticky top-36 shadow-2xl overflow-hidden">
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-[#BD7474]/10 rounded-full blur-[80px] -z-0" />
+                            <div className="p-8 md:p-10 bg-[#222B38] text-white rounded-3xl sticky top-28 shadow-2xl border border-slate-800 relative overflow-hidden space-y-8">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-[#DF3B94]/20 rounded-full blur-[80px] -z-0 pointer-events-none" />
                                 
-                                <div className="relative z-10 space-y-12">
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#BD7474]">Resumen de la Orden</p>
-                                        <h2 className="text-4xl font-serif tracking-tight">Detalle Final</h2>
+                                <div className="relative z-10 space-y-8">
+                                    <div className="space-y-2">
+                                        <span className="px-3 py-1 bg-[#DF3B94]/20 text-[#DF3B94] border border-[#DF3B94]/30 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider">
+                                            Resumen de Orden
+                                        </span>
+                                        <h2 className="text-3xl font-display font-extrabold tracking-tight">Detalle Final</h2>
                                     </div>
 
                                     {/* Plan Highlight */}
-                                    <div className="p-8 bg-white/5 rounded-[2rem] border border-white/5 flex items-center gap-6">
-                                        <div className={`h-16 w-16 rounded-2xl flex items-center justify-center ${selectedPlan.bg}`}>
-                                            <selectedPlan.icon className={`h-8 w-8 ${selectedPlan.color}`} />
+                                    <div className="p-6 bg-white/5 rounded-2xl border border-white/10 flex items-center gap-5 backdrop-blur-sm">
+                                        <div className={`h-14 w-14 rounded-2xl flex items-center justify-center ${selectedPlan.bg} shrink-0`}>
+                                            <selectedPlan.icon className={`h-7 w-7 ${selectedPlan.color}`} />
                                         </div>
                                         <div>
-                                            <h4 className="text-2xl font-serif">Plan {selectedPlan.name}</h4>
-                                            <p className="text-xs text-white/40 italic uppercase tracking-widest mt-1">Acceso Vitalicio</p>
+                                            <h4 className="text-xl font-display font-extrabold">Plan {selectedPlan.name}</h4>
+                                            <p className="text-xs text-slate-300 font-mono uppercase tracking-wider mt-0.5">Acceso Completo</p>
                                         </div>
                                     </div>
 
                                     {/* Features Checklist */}
-                                    <div className="space-y-6">
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Beneficios incluidos:</p>
+                                    <div className="space-y-4">
+                                        <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Beneficios incluidos:</p>
                                         {selectedPlan.features.map((f, i) => (
-                                            <div key={i} className="flex items-center gap-4">
-                                                <div className="h-5 w-5 rounded-full bg-[#BD7474]/20 flex items-center justify-center">
-                                                    <Check className="h-3 w-3 text-[#BD7474]" />
+                                            <div key={i} className="flex items-center gap-3">
+                                                <div className="h-5 w-5 rounded-full bg-[#DF3B94]/20 flex items-center justify-center shrink-0">
+                                                    <Check className="h-3 w-3 text-[#DF3B94]" />
                                                 </div>
-                                                <span className="text-sm font-light text-white/70 italic">{f}</span>
+                                                <span className="text-sm font-medium text-slate-300">{f}</span>
                                             </div>
                                         ))}
                                     </div>
 
                                     {/* Total */}
-                                    <div className="pt-10 border-t border-white/10 space-y-2">
+                                    <div className="pt-8 border-t border-white/10 space-y-2">
                                         <div className="flex justify-between items-end">
-                                            <span className="text-stone-400 font-light italic">Inversión Total</span>
-                                            <span className="text-5xl font-serif tracking-tighter">${selectedPlan.price}</span>
+                                            <span className="text-slate-400 text-sm">Inversión Total</span>
+                                            <span className="text-4xl font-display font-extrabold tracking-tight">${selectedPlan.price} <span className="text-base font-normal text-slate-400">MXN</span></span>
                                         </div>
-                                        <div className="flex justify-end gap-2 text-[9px] font-bold uppercase tracking-widest text-emerald-400">
-                                            <Check className="h-3 w-3" /> Incluye todos los impuestos
+                                        <div className="flex justify-end gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                                            <Check className="h-4 w-4" /> Incluye impuestos
                                         </div>
                                     </div>
 
                                     {/* Trust */}
-                                    <div className="flex items-center gap-4 pt-4">
+                                    <div className="flex items-center gap-4 pt-2 border-t border-white/5">
                                         <div className="flex -space-x-2">
                                             {[1,2,3].map(i => (
-                                                <div key={i} className="h-8 w-8 rounded-full border-2 border-[#1B2E1D] bg-stone-100 flex items-center justify-center overflow-hidden">
+                                                <div key={i} className="h-8 w-8 rounded-full border-2 border-[#222B38] bg-slate-200 flex items-center justify-center overflow-hidden">
                                                     <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="user" />
                                                 </div>
                                             ))}
                                         </div>
-                                        <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest leading-relaxed">
-                                            Únete a más de <span className="text-white">1,200</span> <br /> anfitriones satisfechos.
+                                        <p className="text-xs text-slate-400 font-medium">
+                                            Únete a más de <span className="text-white font-bold">1,200+</span> anfitriones satisfechos.
                                         </p>
                                     </div>
                                 </div>
