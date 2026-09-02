@@ -139,8 +139,8 @@ export default function InvitationPage() {
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const qrCardRef = useRef<HTMLDivElement>(null);
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
-    const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
+    const [drawerTab, setDrawerTab] = useState<'grid' | 'list'>('grid');
 
     // PLUS ONES States
     const [isAccompanied, setIsAccompanied] = useState(false);
@@ -1630,7 +1630,7 @@ END:VCALENDAR`;
                             </button>
                             {isAdminOpen && (
                                 <div className="fixed inset-0 z-[70] flex justify-end">
-                                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)} />
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)} />
                                     <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
                                         <div className="flex items-center justify-between mb-12">
                                             <div className="flex items-center gap-3">
@@ -1639,82 +1639,154 @@ END:VCALENDAR`;
                                             </div>
                                             <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
-                                        <div className="space-y-4">
-                                            <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-6">Secciones del Layout</h4>
-                                            {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
-                                                const indexA = savedOrder.indexOf(a.id);
-                                                const indexB = savedOrder.indexOf(b.id);
-                                                if (indexA === -1 && indexB === -1) return 0;
-                                                if (indexA === -1) return 1;
-                                                if (indexB === -1) return -1;
-                                                return indexA - indexB;
-                                            }).map((sec, idx, arr) => {
-                                                const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
-                                                return (
-                                                    <div 
-                                                        key={sec.id} 
-                                                        onClick={() => scrollToSection(sec.id)}
-                                                        className="group flex items-center justify-between p-4 bg-white rounded-xl border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-all cursor-pointer shadow-sm"
-                                                    >
-                                                        <span className="text-sm font-bold text-[#1B2E1D]">{sec.label}</span>
-                                                        {!sec.fixed && (
-                                                            <div className="flex items-center gap-1">
-                                                                <button 
-                                                                    onClick={async (e) => {
-                                                                        e.stopPropagation();
-                                                                        if (idx === 0) return;
-                                                                        const newOrder = [...savedOrder];
-                                                                        const secIndex = newOrder.indexOf(sec.id);
-                                                                        if (secIndex > 0) {
-                                                                            [newOrder[secIndex - 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex - 1]];
-                                                                            await handleUpdateFeature('sectionOrder', newOrder);
-                                                                        }
-                                                                    }}
-                                                                    disabled={idx === 0}
-                                                                    className={`p-1.5 rounded-lg transition-colors ${idx === 0 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
-                                                                >
-                                                                    <ChevronUp className="h-4 w-4" />
-                                                                </button>
-                                                                <button 
-                                                                    onClick={async (e) => {
-                                                                        e.stopPropagation();
-                                                                        if (idx === arr.length - 1) return;
-                                                                        const newOrder = [...savedOrder];
-                                                                        const secIndex = newOrder.indexOf(sec.id);
-                                                                        if (secIndex !== -1 && secIndex < newOrder.length - 1) {
-                                                                            [newOrder[secIndex + 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex + 1]];
-                                                                            await handleUpdateFeature('sectionOrder', newOrder);
-                                                                        }
-                                                                    }}
-                                                                    disabled={idx === arr.length - 1}
-                                                                    className={`p-1.5 rounded-lg transition-colors ${idx === arr.length - 1 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
-                                                                >
-                                                                    <ChevronDown className="h-4 w-4" />
-                                                                </button>
-                                                                <button 
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        setEditingSection(sec.id);
-                                                                    }}
-                                                                    className="ml-2 p-2 rounded-lg transition-colors text-stone-400 hover:bg-stone-100 hover:text-stone-700"
-                                                                >
-                                                                    <Edit2 className="h-4 w-4" />
-                                                                </button>
-                                                                <button 
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
-                                                                    }}
-                                                                    className={`ml-1 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
-                                                                >
-                                                                    {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
+
+                                        <div className="flex bg-stone-100 p-1 rounded-2xl mb-6">
+                                            <button
+                                                onClick={() => setDrawerTab('grid')}
+                                                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                                                    drawerTab === 'grid' ? 'bg-white text-[#1B2E1D] shadow-sm' : 'text-stone-400 hover:text-stone-600'
+                                                }`}
+                                            >
+                                                Módulos
+                                            </button>
+                                            <button
+                                                onClick={() => setDrawerTab('list')}
+                                                className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                                                    drawerTab === 'list' ? 'bg-white text-[#1B2E1D] shadow-sm' : 'text-stone-400 hover:text-stone-600'
+                                                }`}
+                                            >
+                                                Reordenar
+                                            </button>
                                         </div>
+
+                                        {drawerTab === 'grid' ? (
+                                            <div className="space-y-4">
+                                                <p className="text-[11px] text-stone-500 font-light mb-2">Haz clic en cualquier tarjeta para activar/desactivar o ir a esa sección.</p>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).map(sec => {
+                                                        const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
+                                                        const iconMap: Record<string, string> = {
+                                                            hero: '🗂️',
+                                                            guest_welcome: '✉️',
+                                                            message: '💌',
+                                                            location: '📅',
+                                                            dress_code: '👔',
+                                                            itinerary: '📋',
+                                                            gifts: '🎁',
+                                                            hotels: '🏨',
+                                                            gallery: '📸',
+                                                            chambelanes: '👥',
+                                                            countdown: '🕒'
+                                                        };
+
+                                                        return (
+                                                            <div
+                                                                key={sec.id}
+                                                                onClick={() => {
+                                                                    scrollToSection(sec.id);
+                                                                }}
+                                                                className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-2 relative ${
+                                                                    isActive ? 'bg-emerald-50/40 border-emerald-200 text-stone-800 shadow-sm' : 'bg-stone-50 border-stone-100 text-stone-400 opacity-60'
+                                                                }`}
+                                                            >
+                                                                <span className="text-2xl">{iconMap[sec.id] || '✨'}</span>
+                                                                <span className="text-xs font-bold">{sec.label}</span>
+                                                                <div className="flex items-center gap-1.5 mt-1">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
+                                                                        }}
+                                                                        className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
+                                                                            isActive ? 'bg-emerald-500 text-white' : 'bg-stone-200 text-stone-500'
+                                                                        }`}
+                                                                    >
+                                                                        {isActive ? 'Activo' : 'Oculto'}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-4">
+                                                <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-6">Secciones del Layout</h4>
+                                                {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
+                                                    const indexA = savedOrder.indexOf(a.id);
+                                                    const indexB = savedOrder.indexOf(b.id);
+                                                    if (indexA === -1 && indexB === -1) return 0;
+                                                    if (indexA === -1) return 1;
+                                                    if (indexB === -1) return -1;
+                                                    return indexA - indexB;
+                                                }).map((sec, idx, arr) => {
+                                                    const isActive = sec.configKey ? cfg[sec.configKey] !== false : true;
+                                                    return (
+                                                        <div 
+                                                            key={sec.id} 
+                                                            onClick={() => scrollToSection(sec.id)}
+                                                            className="group flex items-center justify-between p-4 bg-white rounded-xl border border-stone-200 hover:bg-stone-50 hover:border-stone-300 transition-all cursor-pointer shadow-sm"
+                                                        >
+                                                            <span className="text-sm font-bold text-[#1B2E1D]">{sec.label}</span>
+                                                            {!sec.fixed && (
+                                                                <div className="flex items-center gap-1">
+                                                                    <button 
+                                                                        onClick={async (e) => {
+                                                                            e.stopPropagation();
+                                                                            if (idx === 0) return;
+                                                                            const newOrder = [...savedOrder];
+                                                                            const secIndex = newOrder.indexOf(sec.id);
+                                                                            if (secIndex > 0) {
+                                                                                [newOrder[secIndex - 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex - 1]];
+                                                                                await handleUpdateFeature('sectionOrder', newOrder);
+                                                                            }
+                                                                        }}
+                                                                        disabled={idx === 0}
+                                                                        className={`p-1.5 rounded-lg transition-colors ${idx === 0 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
+                                                                    >
+                                                                        <ChevronUp className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button 
+                                                                        onClick={async (e) => {
+                                                                            e.stopPropagation();
+                                                                            if (idx === arr.length - 1) return;
+                                                                            const newOrder = [...savedOrder];
+                                                                            const secIndex = newOrder.indexOf(sec.id);
+                                                                            if (secIndex !== -1 && secIndex < newOrder.length - 1) {
+                                                                                [newOrder[secIndex + 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex + 1]];
+                                                                                await handleUpdateFeature('sectionOrder', newOrder);
+                                                                            }
+                                                                        }}
+                                                                        disabled={idx === arr.length - 1}
+                                                                        className={`p-1.5 rounded-lg transition-colors ${idx === arr.length - 1 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
+                                                                    >
+                                                                        <ChevronDown className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button 
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            setEditingSection(sec.id);
+                                                                        }}
+                                                                        className="ml-2 p-2 rounded-lg transition-colors text-stone-400 hover:bg-stone-100 hover:text-[#1B2E1D]"
+                                                                    >
+                                                                        <Edit2 className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button 
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            if (sec.configKey) handleUpdateFeature(sec.configKey, !isActive);
+                                                                        }}
+                                                                        className={`ml-1 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
+                                                                    >
+                                                                        {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
                                     </div>
 
                                     {editingSection && event && (
