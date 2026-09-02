@@ -305,17 +305,11 @@ export default function EventWizard() {
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;
-                const { data: profile } = await supabase.from('profiles').select('plan_tier').eq('id', user.id).maybeSingle();
-                const userPlan = profile?.plan_tier?.toLowerCase();
-
-                if (userPlan && ['pro', 'premium', 'concierge', 'clasico'].includes(userPlan)) {
-                    toast.success('¡Invitación creada exitosamente!');
-                    navigate(`/dashboard/design/${insertPayload.id}`);
-                } else if (preselectedPlan) {
+                if (preselectedPlan) {
                     const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
                     navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}${couponQs}`);
                 } else {
-                    toast.success('¡Evento creado! Elige un plan para activar todas sus funciones.');
+                    toast.success('¡Evento creado! Elige un plan para activar y publicar tu invitación.');
                     navigate(`/planes?id=${insertPayload.id}`);
                 }
             }
