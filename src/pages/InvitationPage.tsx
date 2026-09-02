@@ -139,6 +139,7 @@ export default function InvitationPage() {
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const qrCardRef = useRef<HTMLDivElement>(null);
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
+    const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
     const [drawerTab, setDrawerTab] = useState<'grid' | 'list'>('grid');
 
