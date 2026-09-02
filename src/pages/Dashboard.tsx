@@ -17,56 +17,40 @@ export default function Dashboard() {
 
     // Delete Modal State
     const [deleteModal, setDeleteModal] = useState<{ eventId: string; eventTitle: string } | null>(null);
-    const [deletePassword, setDeletePassword] = useState('');
     const [deleteError, setDeleteError] = useState('');
     const [deleteLoading, setDeleteLoading] = useState(false);
 
     const openDeleteModal = (eventId: string, eventTitle: string) => {
         setDeleteModal({ eventId, eventTitle });
-        setDeletePassword('');
         setDeleteError('');
     };
 
     const closeDeleteModal = () => {
         setDeleteModal(null);
-        setDeletePassword('');
         setDeleteError('');
     };
 
     const handleDelete = async () => {
-        if (!deleteModal || !user?.email) return;
+        if (!deleteModal || !user?.id) return;
         setDeleteLoading(true);
         setDeleteError('');
-
-        const { error: authError } = await supabase.auth.signInWithPassword({
-            email: user.email,
-            password: deletePassword,
-        });
-
-        if (authError) {
-            setDeleteError('Contraseña incorrecta. Inténtalo de nuevo.');
-            setDeleteLoading(false);
-            return;
-        }
 
         try {
             await supabase.from('rsvps').delete().eq('event_id', deleteModal.eventId);
             await supabase.from('guests').delete().eq('event_id', deleteModal.eventId);
             await supabase.from('event_tables').delete().eq('event_id', deleteModal.eventId);
 
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from('events')
                 .delete()
                 .eq('id', deleteModal.eventId)
-                .eq('user_id', user.id)
-                .select();
+                .eq('user_id', user.id);
             
             if (error) {
                 setDeleteError('Error en la base de datos: ' + error.message);
-            } else if (!data || data.length === 0) {
-                setDeleteError('No se pudo borrar el evento. Verifica tus permisos.');
             } else {
                 setEvents(prev => prev.filter(e => e.id !== deleteModal.eventId));
+                toast.success('Invitación eliminada correctamente');
                 closeDeleteModal();
             }
         } catch (err: any) {
@@ -246,40 +230,27 @@ export default function Dashboard() {
                             </button>
                         </div>
 
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                            Esta acción eliminará permanentemente el evento <strong>"{deleteModal.eventTitle}"</strong> y toda su lista de invitados y datos de asistencia.
+                        <p className="text-sm text-slate-600 leading-relaxed">
+                            Esta acción eliminará permanentemente la invitación <strong className="text-[#222B38]">"{deleteModal.eventTitle}"</strong>, sus pases, itinerarios y datos de confirmación RSVP.
                         </p>
 
-                        <div className="space-y-2">
-                            <label className="block text-xs uppercase font-bold tracking-wider text-slate-500">
-                                Ingresa tu contraseña de cuenta para confirmar:
-                            </label>
-                            <input
-                                type="password"
-                                placeholder="••••••••"
-                                value={deletePassword}
-                                onChange={(e) => setDeletePassword(e.target.value)}
-                                className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-500"
-                            />
-                        </div>
-
                         {deleteError && (
-                            <p className="text-xs text-rose-600 font-bold">{deleteError}</p>
+                            <p className="text-xs text-rose-600 font-bold bg-rose-50 p-3 rounded-xl border border-rose-100">{deleteError}</p>
                         )}
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 pt-2">
                             <button
                                 onClick={closeDeleteModal}
-                                className="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider"
+                                className="flex-1 py-3.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleDelete}
-                                disabled={deleteLoading || !deletePassword}
-                                className="flex-1 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-50"
+                                disabled={deleteLoading}
+                                className="flex-1 py-3.5 bg-rose-600 text-white hover:bg-rose-700 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all disabled:opacity-50 shadow-md"
                             >
-                                {deleteLoading ? 'Eliminando...' : 'Eliminar'}
+                                {deleteLoading ? 'Eliminando...' : 'Sí, Eliminar'}
                             </button>
                         </div>
                     </div>
