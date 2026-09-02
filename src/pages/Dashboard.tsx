@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, Sparkles, LayoutDashboard } from 'lucide-react';
+import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import type { Event } from '../types/database.types';
