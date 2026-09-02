@@ -40,7 +40,49 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
         setGenerating(true);
         setGeneratedTheme(null);
 
-        // Smart AI Theme Synthesizer
+        // 1. INTENTAR LLAMADA EN VIVO A OPENAI SI EXISTE VITE_OPENAI_API_KEY
+        const openAiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
+        if (openAiKey) {
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${openAiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o-mini',
+                        response_format: { type: 'json_object' },
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'Eres un diseñador experto de invitaciones festivas. Genera un tema en formato JSON con exactamente estas propiedades: primaryColor (color hexadecimal como #1B2E1D), accentColor (color hexadecimal como #BD7474), cardBgColor (color hexadecimal claro como #F9F6F0), typographyPreset (uno de los valores: "elegante", "moderna", "romantica"), welcomeMessage (un texto de bienvenida emotivo de 20-35 palabras), welcomeSubtitle (un título corto del evento).'
+                            },
+                            {
+                                role: 'user',
+                                content: `Genera una combinación perfecta para esta invitación: "${textToUse}"`
+                            }
+                        ]
+                    })
+                });
+
+                if (response.ok) {
+                    const resData = await response.json();
+                    const aiResult = JSON.parse(resData.choices[0].message.content);
+                    if (aiResult.primaryColor && aiResult.accentColor) {
+                        setGeneratedTheme(aiResult);
+                        setGenerating(false);
+                        toast.success('¡Tema generado en vivo con OpenAI! ✨');
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn('OpenAI API call failed, falling back to local engine:', e);
+            }
+        }
+
+        // 2. MOTOR INTELIGENTE INTERNO (FALLBACK GARANTIZADO SINO HAY API KEY)
         setTimeout(() => {
             const lower = textToUse.toLowerCase();
             let primary = '#1B2E1D';
@@ -90,7 +132,7 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
             });
 
             setGenerating(false);
-            toast.success('¡Estilo IA generado con éxito! ✨');
+            toast.success('¡Estilo generado con éxito! ✨');
         }, 1200);
     };
 
