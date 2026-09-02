@@ -195,6 +195,35 @@ const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSe
     );
 };
 
+const SubAccordionItem = ({ title, icon, subtitle, isOpen, onToggle, children }: any) => {
+    return (
+        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+            isOpen ? 'border-[#DF3B94]/40 bg-white shadow-md' : 'border-stone-100 bg-stone-50/50 hover:bg-white hover:border-stone-200'
+        }`}>
+            <div 
+                onClick={onToggle} 
+                className="p-4 md:p-5 flex items-center justify-between cursor-pointer select-none"
+            >
+                <div className="flex items-center gap-3">
+                    <span className="text-lg md:text-xl">{icon}</span>
+                    <div>
+                        <h4 className="text-xs md:text-sm font-bold text-[#222B38]">{title}</h4>
+                        {subtitle && <p className="text-[10px] md:text-xs text-stone-400 font-normal">{subtitle}</p>}
+                    </div>
+                </div>
+                <div className={`p-1.5 rounded-full border border-stone-200/60 text-stone-400 transition-transform ${isOpen ? 'rotate-180 bg-[#DF3B94]/10 text-[#DF3B94]' : ''}`}>
+                    <ChevronDown className="h-4 w-4" />
+                </div>
+            </div>
+            {isOpen && (
+                <div className="p-4 md:p-6 pt-2 border-t border-stone-100 space-y-4 animate-in fade-in duration-200">
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+};
+
 export default function DesignEditor() {
     const { id } = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -206,6 +235,7 @@ export default function DesignEditor() {
     const toast = useToast();
     const [loading, setLoading] = useState(true);
     const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
+    const [activeMediaTab, setActiveMediaTab] = useState<string | null>('portada');
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
@@ -713,24 +743,55 @@ export default function DesignEditor() {
                     </div>
                 </CollapsibleCard>
 
-                {/* ── 2. Imagen Sensorial (Portada y Logo) ── */}
+                {/* ── 2. Multimedia (Canción, Portada, Galería, Vestimenta y Eventos) ── */}
                 <CollapsibleCard
                     id="imagery"
-                    title="Imagen Sensorial"
-                    subtitle="Multimedia y entorno visual"
-                    icon="🖼️"
+                    title="Multimedia"
+                    subtitle="Gestor de imágenes, música de fondo y galería"
+                    icon="🎬"
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
                 >
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-                        {/* Column 1: Hero Image */}
-                        <div className="space-y-6 md:space-y-8">
-                            <div className="space-y-4 md:space-y-5">
-                                <div className="flex items-center justify-between pl-1">
-                                    <label className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.2em] text-stone-800">Imagen de Portada</label>
-                                    <span className="text-[8px] md:text-[9px] text-[#BD7474] font-bold tracking-wider">1920x1080</span>
-                                </div>
+                    <div className="space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-4">
+                            <p className="text-xs text-stone-500 font-light">
+                                Administra las imágenes y la música de tu invitación en sub-secciones organizadas.
+                            </p>
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#DF3B94]/10 text-[#DF3B94] px-3 py-1 rounded-full w-fit">
+                                {((config.heroImage ? 1 : 0) + (config.galleryImages?.length || 0))} imágenes agregadas
+                            </span>
+                        </div>
 
+                        {/* 1. Canción / Música de Fondo */}
+                        <SubAccordionItem
+                            title="Canción (Música de Fondo)"
+                            icon="🎵"
+                            subtitle={config.musicUrl ? "Pista de audio activa" : "Sin música de fondo configurada"}
+                            isOpen={activeMediaTab === 'cancion'}
+                            onToggle={() => setActiveMediaTab(activeMediaTab === 'cancion' ? null : 'cancion')}
+                        >
+                            <div className="space-y-4">
+                                <label className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-500">Enlace a canción o archivo MP3</label>
+                                <input
+                                    type="url"
+                                    placeholder="https://... enlace directo a archivo MP3 o audio"
+                                    value={config.musicUrl || ''}
+                                    onChange={(e) => setConfig({ ...config, musicUrl: e.target.value })}
+                                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
+                                />
+                                <p className="text-[10px] text-stone-400">Inserta un enlace MP3 para reproducir la canción automáticamente al abrir la invitación.</p>
+                            </div>
+                        </SubAccordionItem>
+
+                        {/* 2. Imagen de Portada */}
+                        <SubAccordionItem
+                            title="Imagen de Portada (Máximo 1)"
+                            icon="🖼️"
+                            subtitle={config.heroImage ? "1 / 1 Imagen de portada cargada" : "0 / 1 Imagen de portada"}
+                            isOpen={activeMediaTab === 'portada'}
+                            onToggle={() => setActiveMediaTab(activeMediaTab === 'portada' ? null : 'portada')}
+                        >
+                            <div className="space-y-4">
                                 <input
                                     ref={fileInputRef}
                                     type="file"
@@ -741,99 +802,162 @@ export default function DesignEditor() {
                                         if (f) handleImageUpload(f);
                                     }}
                                 />
-                                
-                                <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={uploading}
-                                    className="group w-full flex flex-col items-center justify-center gap-4 py-6 md:py-10 rounded-[1.5rem] md:rounded-[2.5rem] border-2 border-dashed border-stone-100 bg-stone-50/30 hover:bg-white hover:border-[#BD7474]/30 transition-all disabled:opacity-50"
-                                >
-                                    <div className="h-10 w-10 md:h-12 md:w-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] shadow-sm group-hover:scale-110 transition-transform">
-                                        {uploading ? <Loader2 className="h-5 w-5 md:h-6 md:w-6 animate-spin" /> : <Upload className="h-5 w-5 md:h-6 md:w-6" />}
-                                    </div>
-                                    <div className="text-center">
-                                        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-stone-800 mb-1">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
-                                        <p className="text-[8px] md:text-[9px] text-stone-400 font-medium">PNG, JPG hasta 5MB</p>
-                                    </div>
-                                </button>
 
-                                <div className={`w-full h-40 md:h-56 rounded-[1.5rem] md:rounded-[2.5rem] border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.heroImage ? 'bg-stone-900' : 'bg-stone-50/20'}`}>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => fileInputRef.current?.click()}
+                                        disabled={uploading}
+                                        className="px-6 py-3.5 bg-[#DF3B94] text-white rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-md"
+                                    >
+                                        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                        {uploading ? 'Subiendo...' : 'Agregar Imagen de Portada'}
+                                    </button>
+                                </div>
+
+                                <div className={`w-full h-48 md:h-56 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.heroImage ? 'bg-stone-900' : 'bg-stone-50/50'}`}>
                                     {config.heroImage ? (
                                         <>
-                                            <img src={config.heroImage} className="w-full h-full object-cover opacity-80" alt="Preview Background" />
+                                            <img src={config.heroImage} className="w-full h-full object-cover opacity-80" alt="Portada" />
                                             <button
                                                 onClick={() => setConfig(prev => ({ ...prev, heroImage: '' }))}
-                                                className="absolute top-3 right-3 md:top-4 md:right-4 bg-white/10 hover:bg-rose-500 backdrop-blur-md text-white rounded-full p-2 transition-all"
+                                                className="absolute top-3 right-3 bg-black/60 hover:bg-rose-600 text-white rounded-full p-2 transition-all shadow-md"
                                             >
                                                 <X className="h-4 w-4" />
                                             </button>
                                         </>
                                     ) : (
-                                        <div className="flex flex-col items-center gap-3 opacity-20">
-                                            <ImageIcon className="h-8 w-8 md:h-10 md:w-10 text-stone-400" />
-                                            <p className="text-[10px] font-serif italic text-stone-500">Sin imagen seleccionada</p>
+                                        <div className="flex flex-col items-center gap-2 text-stone-300">
+                                            <ImageIcon className="h-8 w-8 text-stone-300" />
+                                            <p className="text-xs text-stone-400">Sin imagen de portada</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </SubAccordionItem>
 
-                        {/* Column 2: Logo/Deco */}
-                        <div className="space-y-6 md:space-y-8">
-                             <div className="space-y-4 md:space-y-6">
-                                <label className="text-[10px] md:text-[11px] uppercase font-black tracking-[0.2em] text-stone-800">Logo o Firma Digital</label>
-                                
-                                <input
-                                    ref={logoInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={e => {
-                                        const f = e.target.files?.[0];
-                                        if (f) handleLogoUpload(f);
-                                    }}
-                                />
-                                
-                                <button
-                                    onClick={() => logoInputRef.current?.click()}
-                                    disabled={uploading}
-                                    className="group w-full flex flex-col items-center justify-center gap-4 py-6 md:py-10 rounded-[1.5rem] md:rounded-[2.5rem] border-2 border-dashed border-stone-100 bg-stone-50/30 hover:bg-white hover:border-[#BD7474]/30 transition-all disabled:opacity-50"
-                                >
-                                    <div className="h-10 w-10 md:h-12 md:w-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-[#BD7474] shadow-sm group-hover:scale-110 transition-transform">
-                                        {uploading ? <Loader2 className="h-5 w-5 md:h-6 md:w-6 animate-spin" /> : <Upload className="h-5 w-5 md:h-6 md:w-6" />}
-                                    </div>
-                                    <div className="text-center">
-                                        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-stone-800 mb-1">{uploading ? 'Subiendo...' : 'Subir Imagen'}</p>
-                                        <p className="text-[8px] md:text-[9px] text-stone-400 font-medium">PNG, JPG hasta 5MB</p>
-                                    </div>
-                                </button>
+                        {/* 3. Galería de Fotos */}
+                        <SubAccordionItem
+                            title="Galería de Fotos"
+                            icon="📸"
+                            subtitle={`${config.galleryImages?.length || 0} fotos en el álbum`}
+                            isOpen={activeMediaTab === 'galeria'}
+                            onToggle={() => setActiveMediaTab(activeMediaTab === 'galeria' ? null : 'galeria')}
+                        >
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <p className="text-xs text-stone-500 font-light">Carga fotografías para el carrusel y álbum visual de tu invitación.</p>
+                                    <button
+                                        onClick={() => setConfig({ ...config, galleryImages: [...(config.galleryImages || []), { url: '', caption: '' }] })}
+                                        className="px-4 py-2 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-sm flex items-center gap-1.5"
+                                    >
+                                        <Plus className="h-3.5 w-3.5" /> Agregar
+                                    </button>
+                                </div>
 
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                                    {config.galleryImages.map((img, idx) => (
+                                        <div key={idx} className="p-4 bg-stone-50/50 rounded-2xl border border-stone-100 space-y-3">
+                                            <div className="w-full h-36 bg-white rounded-xl border border-stone-100 overflow-hidden relative flex items-center justify-center">
+                                                {img.url ? (
+                                                    <>
+                                                        <img src={img.url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const newImages = [...config.galleryImages];
+                                                                newImages.splice(idx, 1);
+                                                                setConfig({ ...config, galleryImages: newImages });
+                                                            }}
+                                                            className="absolute top-2 right-2 bg-black/60 hover:bg-rose-600 text-white rounded-full p-1.5 transition-all shadow-md"
+                                                        >
+                                                            <X className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <div className="flex flex-col items-center gap-1 text-stone-400">
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            id={`gallery-upload-media-${idx}`}
+                                                            className="hidden"
+                                                            onChange={async (e) => {
+                                                                const f = e.target.files?.[0];
+                                                                if (!f) return;
+                                                                setUploading(true);
+                                                                try {
+                                                                    const ext = f.name.split('.').pop();
+                                                                    const path = `events/${id}/gallery_${idx}_${Date.now()}.${ext}`;
+                                                                    const { error: uploadError } = await supabase.storage
+                                                                        .from('event-images')
+                                                                        .upload(path, f, { upsert: true, contentType: f.type });
+                                                                    if (uploadError) throw uploadError;
+                                                                    const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+                                                                    const newImages = [...config.galleryImages];
+                                                                    newImages[idx].url = urlData.publicUrl;
+                                                                    setConfig({ ...config, galleryImages: newImages });
+                                                                    toast.success('¡Imagen subida exitosamente!');
+                                                                } catch (err: any) {
+                                                                    toast.error('Error al subir imagen.');
+                                                                } finally {
+                                                                    setUploading(false);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label htmlFor={`gallery-upload-media-${idx}`} className="cursor-pointer flex flex-col items-center gap-1 hover:text-[#DF3B94] text-center">
+                                                            <Upload className="h-5 w-5" />
+                                                            <span className="text-[10px] uppercase font-bold tracking-wider">Subir Foto</span>
+                                                        </label>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </SubAccordionItem>
+
+                        {/* 4. Imágenes de Código de Vestimenta */}
+                        <SubAccordionItem
+                            title="Imágenes de Código de Vestimenta"
+                            icon="👔"
+                            subtitle="Inspiración visual y sugerencias de atuendo"
+                            isOpen={activeMediaTab === 'vestimenta'}
+                            onToggle={() => setActiveMediaTab(activeMediaTab === 'vestimenta' ? null : 'vestimenta')}
+                        >
+                            <div className="space-y-3">
+                                <p className="text-xs text-stone-500 font-light">Pega un enlace de foto de inspiración para sugerir ideas de código de vestir a tus invitados.</p>
                                 <input
                                     type="url"
-                                    placeholder="https://... o pega el enlace aquí"
-                                    value={config.decorativeImage}
+                                    placeholder="https://... o pega el enlace de imagen de vestimenta"
+                                    value={config.decorativeImage || ''}
                                     onChange={(e) => setConfig({ ...config, decorativeImage: e.target.value })}
-                                    className="w-full bg-stone-50/50 px-5 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl border-none shadow-inner text-[10px] md:text-xs font-mono outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
+                                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
                                 />
+                            </div>
+                        </SubAccordionItem>
 
-                                <div className={`w-full h-40 md:h-56 rounded-[1.5rem] md:rounded-[2.5rem] border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.decorativeImage ? 'bg-white' : 'bg-stone-50/10'}`}>
+                        {/* 5. Imágenes de Eventos / Recintos */}
+                        <SubAccordionItem
+                            title="Imágenes de Eventos y Recintos"
+                            icon="📍"
+                            subtitle="Fotografía de la misa o del salón de la fiesta"
+                            isOpen={activeMediaTab === 'eventos'}
+                            onToggle={() => setActiveMediaTab(activeMediaTab === 'eventos' ? null : 'eventos')}
+                        >
+                            <div className="space-y-3">
+                                <p className="text-xs text-stone-500 font-light">Agrega fotografías del lugar de la misa o recepción para ayudar a tus invitados a ubicar el recinto.</p>
+                                <div className={`w-full h-40 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.decorativeImage ? 'bg-white' : 'bg-stone-50/20'}`}>
                                     {config.decorativeImage ? (
-                                        <>
-                                            <img src={config.decorativeImage} className="w-full h-full object-contain p-6 md:p-10" alt="Preview Decorative" />
-                                            <button
-                                                onClick={() => setConfig(prev => ({ ...prev, decorativeImage: '' }))}
-                                                className="absolute top-3 right-3 md:top-4 md:right-4 bg-stone-100 hover:bg-rose-500 text-stone-400 hover:text-white rounded-full p-2 transition-all"
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </button>
-                                        </>
+                                        <img src={config.decorativeImage} className="w-full h-full object-contain p-4" alt="Recinto" />
                                     ) : (
-                                        <div className="flex flex-col items-center gap-2 opacity-10">
-                                            <Flower2 className="h-8 w-8 md:h-10 md:w-10 text-stone-400" />
+                                        <div className="flex flex-col items-center gap-2 opacity-30 text-stone-400">
+                                            <MapPin className="h-6 w-6" />
+                                            <p className="text-[10px] font-mono">Sin imagen de recinto</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </SubAccordionItem>
                     </div>
                 </CollapsibleCard>
 
