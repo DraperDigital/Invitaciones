@@ -1620,6 +1620,43 @@ END:VCALENDAR`;
                                             <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
 
+                                        {/* Sobre Digital Toggle Switch Card */}
+                                        <div className="p-4 bg-gradient-to-r from-pink-50/70 via-purple-50/40 to-white rounded-2xl border border-pink-200/80 mb-6 flex items-center justify-between shadow-sm">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2.5 bg-[#DF3B94] text-white rounded-xl shadow-md shadow-pink-500/20">
+                                                    <Mail className="h-4 w-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-bold text-[#1B2E1D]">Sobre Digital</h4>
+                                                    <p className="text-[10px] text-stone-400">Pantalla con botón "Abrir Invitación"</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    const isCurrentlyActive = (cfg.show_envelope !== false && cfg.showEnvelope !== false);
+                                                    handleUpdateFeature('showEnvelope', !isCurrentlyActive);
+                                                }}
+                                                className={`p-2 px-3 rounded-xl transition-all flex items-center gap-1.5 font-bold text-xs ${
+                                                    (cfg.show_envelope !== false && cfg.showEnvelope !== false)
+                                                        ? 'bg-emerald-500 text-white shadow-sm'
+                                                        : 'bg-stone-200 text-stone-600'
+                                                }`}
+                                                title={(cfg.show_envelope !== false && cfg.showEnvelope !== false) ? "Ocultar Sobre Digital" : "Mostrar Sobre Digital"}
+                                            >
+                                                {(cfg.show_envelope !== false && cfg.showEnvelope !== false) ? (
+                                                    <>
+                                                        <Eye className="h-3.5 w-3.5" />
+                                                        <span className="text-[10px]">Activo</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <EyeOff className="h-3.5 w-3.5" />
+                                                        <span className="text-[10px]">Oculto</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+
                                         <div className="space-y-4">
                                             <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-4">Secciones del Layout</h4>
                                             {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
