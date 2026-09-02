@@ -128,7 +128,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     isPro: false,
     isPremium: false,
 
-    showEnvelope: false,
+    showEnvelope: true,
 
     misa_name: '',
     misa_address: '',
@@ -296,6 +296,7 @@ export default function DesignEditor() {
                     showMessage:      c.show_message      ?? c.showMessage      ?? DEFAULT_CONFIG.showMessage,
                     showChambelanes:  c.show_chambelanes  ?? c.showChambelanes  ?? DEFAULT_CONFIG.showChambelanes,
                     showHotels:       c.show_hotels       ?? c.showHotels       ?? DEFAULT_CONFIG.showHotels,
+                    showEnvelope:     c.show_envelope     ?? c.showEnvelope     ?? DEFAULT_CONFIG.showEnvelope,
                     enableGuestList:  c.enableGuestList  ?? DEFAULT_CONFIG.enableGuestList,
                     enableReminders:  c.enableReminders  ?? DEFAULT_CONFIG.enableReminders,
                     enableExcel:      c.enableExcel      ?? DEFAULT_CONFIG.enableExcel,
@@ -398,6 +399,8 @@ export default function DesignEditor() {
                 show_chambelanes: config.showChambelanes,
                 showHotels:       config.showHotels,
                 show_hotels:      config.showHotels,
+                showEnvelope:     config.showEnvelope,
+                show_envelope:    config.showEnvelope,
                 
                 chambelanes:      config.chambelanes,
                 damas:            config.damas,

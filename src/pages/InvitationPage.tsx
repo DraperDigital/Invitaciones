@@ -159,7 +159,8 @@ export default function InvitationPage() {
         showItinerary:    'show_itinerary',
         showMessage:      'show_message',
         showChambelanes:  'show_chambelanes',
-        showHotels:       'show_hotels'
+        showHotels:       'show_hotels',
+        showEnvelope:     'show_envelope'
     };
 
     const handleUpdateFeature = async (key: string, value: any) => {
@@ -1542,8 +1543,8 @@ END:VCALENDAR`;
                 </div>
             )}
 
-            {/* PRE-RENDER Intro (Premium Envelope) */}
-            {isPremium && !envelopeOpened ? (
+            {/* PRE-RENDER Intro (Sobre Digital / Pantalla de Entrada) */}
+            {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
                 <div className="invitation-content min-h-screen bg-[var(--section-bg-alt)] flex items-center justify-center p-6 relative overflow-hidden">
                     <div className="relative z-10 max-w-3xl w-full">
                         <div className="relative bg-[var(--section-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
