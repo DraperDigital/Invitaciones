@@ -620,8 +620,8 @@ END:VCALENDAR`;
     const accentColor   = cfg.accent_color   || cfg.accentColor   || themeProfile.accentColor;
     const cardBgColor   = cfg.card_bg_color   || cfg.cardBgColor   || themeProfile.cardBgColor;
     const sectionBgColor = cfg.section_bg_color || cfg.sectionBgColor || themeProfile.sectionBgColor;
-    const textPrimary   = cfg.text_primary   || themeProfile.textPrimary;
-    const textSecondary = cfg.text_secondary || themeProfile.textSecondary;
+    const themeTextPrimary   = cfg.text_primary   || themeProfile.textPrimary;
+    const themeTextSecondary = cfg.text_secondary || themeProfile.textSecondary;
 
     const hex = accentColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16) || 212;
@@ -652,8 +652,8 @@ END:VCALENDAR`;
             --section-bg-alt: ${cardBgColor} !important;
             --card-bg: ${cardBgColor} !important;
             --card-border: ${accentColor}33 !important;
-            --text-primary: ${textPrimary} !important;
-            --text-secondary: ${textSecondary} !important;
+            --text-primary: ${themeTextPrimary} !important;
+            --text-secondary: ${themeTextSecondary} !important;
         }
         .invitation-content h1, 
         .invitation-content h2, 
