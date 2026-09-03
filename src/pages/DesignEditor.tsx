@@ -9,6 +9,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import AiDesignModal from '../components/AiDesignModal';
 import { trackEvent } from '../lib/analytics';
+import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
 type DesignConfig = {
     primaryColor: string;
@@ -1055,7 +1056,19 @@ export default function DesignEditor() {
                         ].map((item) => (
                             <button
                                 key={item.id}
-                                onClick={() => setConfig({ ...config, theme: item.id })}
+                                onClick={() => {
+                                    const profile = THEME_PRESET_PROFILES[item.id] || THEME_PRESET_PROFILES.classic;
+                                    setConfig({
+                                        ...config,
+                                        theme: item.id,
+                                        primaryColor: profile.primaryColor,
+                                        accentColor: profile.accentColor,
+                                        cardBgColor: profile.cardBgColor,
+                                        heroTextColor: profile.heroTextColor,
+                                        heroBgColor: profile.heroBgColor,
+                                        typographyPreset: profile.typographyPreset
+                                    });
+                                }}
                                 className={`group relative p-5 md:p-6 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden flex flex-col justify-between ${
                                     (config.theme || 'classic') === item.id
                                         ? 'border-[#DF3B94] bg-[#DF3B94]/5 shadow-lg ring-2 ring-[#DF3B94]/20'
