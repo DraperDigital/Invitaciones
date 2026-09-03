@@ -99,11 +99,11 @@ export default function InvitationPage() {
             fontPreset: 'moderna', heroRadius: '0px', cardRadius: '0px',
         },
         'romantic-botanical': {
-            sectionBg: '#F4F7F1', sectionBgAlt: '#FDFBF7', cardBg: '#FDFBF7',
-            textPrimary: '#2D3A2D', textSecondary: '#6B7A6B',
-            borderColor: '#D4DDD0', cardBorder: '#9E6B6B33',
-            accentOverride: '#9E6B6B', fontPreset: 'romantica',
-            heroRadius: '8px', cardRadius: '16px',
+            sectionBg: '#FDFBF7', sectionBgAlt: '#F4F7F1', cardBg: '#FFFFFF',
+            textPrimary: '#2C2C2C', textSecondary: '#6B7280',
+            borderColor: '#E5E7EB', cardBorder: '#FAC34533',
+            accentOverride: '#FAC345', fontPreset: 'romantica-playfair',
+            heroRadius: '0px', cardRadius: '4px',
         },
         'floral-symmetry': {
             sectionBg: '#FAEDCD', sectionBgAlt: '#FFF9F0', cardBg: '#FFFDF9',
@@ -700,9 +700,10 @@ END:VCALENDAR`;
     // ── Typography — prefer theme font, fall back to user preset ──
     const typographyPreset = activeVars.fontPreset || cfg.typography_preset || cfg.typographyPreset || 'romantica';
     const fontMapping = {
-        elegante: { serif: 'Playfair Display', sans: 'Manrope' },
-        moderna:  { serif: 'Outfit', sans: 'Inter' },
-        romantica: { serif: 'Libre Baskerville', sans: 'Lato' },
+        elegante:           { serif: 'Playfair Display', sans: 'Manrope' },
+        moderna:            { serif: 'Outfit', sans: 'Inter' },
+        romantica:          { serif: 'Libre Baskerville', sans: 'Lato' },
+        'romantica-playfair': { serif: 'Playfair Display', sans: 'Lato' },
     };
     const selectedFonts = fontMapping[typographyPreset as keyof typeof fontMapping] || fontMapping.romantica;
 
@@ -719,9 +720,10 @@ END:VCALENDAR`;
 
     // ── Theme-specific style overrides ──
     // These inject on top of CSS variables for structural decoration per theme
-    const isClassicTheme = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
-    const isDarkTheme    = ['luxury-gold', 'neon-glow'].includes(themeName);
-    const isModernTheme  = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
+    const isClassicTheme    = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
+    const isDarkTheme       = ['luxury-gold', 'neon-glow'].includes(themeName);
+    const isModernTheme     = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
+    const isBotanicalTheme  = themeName === 'romantic-botanical';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -752,6 +754,131 @@ END:VCALENDAR`;
             height: 1px;
             background: #C5A059;
             margin: 12px auto 0;
+        }
+    ` : isBotanicalTheme ? `
+        /* ── Romántico Botánico (Invitto Pro) overrides ── */
+
+        /* ── Global: botones sin border-radius, uppercase, gold ── */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            background: #FAC345 !important;
+            color: #1a1a1a !important;
+            border-radius: 0 !important;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+            box-shadow: none !important;
+        }
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-full"] {
+            border-radius: 4px !important;
+        }
+
+        /* ── Headings: verde #527853 ── */
+        .invitation-content h2,
+        .invitation-content h3 {
+            color: #527853 !important;
+            font-weight: 400;
+        }
+        .invitation-content h4 {
+            color: #527853;
+        }
+
+        /* ── Ornamento ❦ en mensajes/welcome ── */
+        .invitation-content #message .text-accent,
+        .invitation-content #guest_welcome .text-accent {
+            color: #FAC345 !important;
+        }
+
+        /* ── Cards: borde suave, sombra ligera ── */
+        .invitation-content [class*="shadow-xl"] {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+        }
+        .invitation-content [class*="border-\\[var(--card-border)\\]"] {
+            border-color: #E5E7EB !important;
+        }
+
+        /* ── Botones outline: border dorado → fill dorado en hover ── */
+        .invitation-content button:not([style*="background"]) {
+            border-color: #FAC345;
+            color: #527853;
+            border-radius: 0 !important;
+            letter-spacing: 0.1em;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        /* ── RSVP: fondo verde oscuro, texto blanco ── */
+        .invitation-content #rsvp {
+            background-color: #527853 !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3,
+        .invitation-content #rsvp p,
+        .invitation-content #rsvp label {
+            color: rgba(255,255,255,0.9) !important;
+        }
+        .invitation-content #rsvp h2 {
+            color: #FAC345 !important;
+        }
+        .invitation-content #rsvp input {
+            border-color: rgba(255,255,255,0.35) !important;
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+        .invitation-content #rsvp input::placeholder {
+            color: rgba(255,255,255,0.45) !important;
+        }
+        .invitation-content #rsvp button[style*="background"] {
+            background: #FAC345 !important;
+            color: #1a1a1a !important;
+        }
+        .invitation-content #rsvp [class*="rounded"] {
+            border-radius: 0 !important;
+        }
+        /* Radio buttons accent */
+        .invitation-content #rsvp input[type="radio"] {
+            accent-color: #FAC345;
+        }
+
+        /* ── Itinerary timeline: línea dorada ── */
+        .invitation-content #itinerary .bg-stone-300 {
+            background-color: #FAC345 !important;
+        }
+        /* Dots del itinerario: dorados */
+        .invitation-content #itinerary [class*="border-\\[var(--border-color)\\]"] {
+            border-color: #FAC345 !important;
+        }
+        .invitation-content #itinerary .bg-\\[var\\(--section-bg\\)\\] {
+            background-color: #FDFBF7 !important;
+        }
+
+        /* ── Dress code: label en rosa ── */
+        .invitation-content #dress_code [class*="text-accent"] {
+            color: #E0409A !important;
+        }
+
+        /* ── Honor court: foto bordada en dorado ── */
+        .invitation-content #chambelanes [class*="rounded-full"],
+        .invitation-content [class*="rounded-full"][class*="border"] {
+            border-color: #FAC345 !important;
+            border-radius: 50% !important;
+        }
+
+        /* ── Footer: hashtag en script dorado ── */
+        .invitation-content #footer {
+            background: #FFFFFF !important;
+            border-top: 1px solid #E5E7EB;
+        }
+        .invitation-content #footer h2,
+        .invitation-content #footer h3 {
+            color: #FAC345 !important;
+        }
+
+        /* ── QR pase: borde doble dorado ── */
+        .invitation-content #qr_pass [class*="border"] {
+            border-color: #FAC345 !important;
         }
     ` : isDarkTheme ? `
         /* ── Dark theme overrides ── */
