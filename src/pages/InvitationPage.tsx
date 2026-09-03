@@ -1580,6 +1580,7 @@ END:VCALENDAR`;
                                             : (event.event_type as string) === 'comunion' ? 'Primera Comunión' 
                                             : 'Celebración'}
                                     </p>
+                                </div>
                                 <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-[var(--accent-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
@@ -1710,9 +1711,6 @@ END:VCALENDAR`;
                                                 <option value="neon-glow">🪩 Fiesta & Neón</option>
                                                 <option value="whimsical-kids">🎈 Infantil Fantasía</option>
                                             </select>
-                                        </div>         <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Admin Panel</p></div>
-                                            </div>
-                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
 
                                         {/* Sobre Digital Toggle Switch Card */}
