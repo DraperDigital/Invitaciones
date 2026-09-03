@@ -870,7 +870,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'modern-minimalist') {
             return <ModernMinimalistHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
-        if (cfg.theme === 'classic-elegance') {
+        if (cfg.theme === 'classic-elegance' || cfg.theme === 'classic' || !cfg.theme) {
             return <ClassicEleganceHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
         if (cfg.theme === 'romantic-botanical') {
