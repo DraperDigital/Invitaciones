@@ -65,58 +65,137 @@ export default function InvitationPage() {
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-    // Dynamic Theming Variables
+    // ── Theme name — derived from event config ──
     const themeName = event?.theme_config?.theme || 'classic';
-    
-    // Default Light Palette
-    let sectionBg = '#ffffff';
-    let sectionBgAlt = '#FDFBF7';
-    let cardBg = '#ffffff';
-    let textPrimary = '#1c1917';
-    let textSecondary = '#57534e';
-    let borderColor = '#f5f5f4';
-    let cardBorder = '#e7e5e4';
 
-    // Theme Overrides
-    if (themeName === 'modern-minimalist' || themeName === 'neon-glow' || themeName === 'luxury-gold' || themeName === 'magazine') {
-        sectionBg = '#1a1a1a';
-        sectionBgAlt = '#151515';
-        cardBg = '#242424';
-        textPrimary = '#ffffff';
-        textSecondary = '#a3a3a3';
-        borderColor = '#333333';
-        cardBorder = '#404040';
-    } else if (themeName === 'polaroid-vintage') {
-        sectionBg = '#Eae6df';
-        sectionBgAlt = '#Dcd7cf';
-        cardBg = '#ffffff';
-    } else if (themeName === 'whimsical-kids') {
-        sectionBg = '#FDFBF7';
-        sectionBgAlt = '#FFF5F3';
-        cardBg = '#ffffff';
-        cardBorder = '#FFB5A7';
-    } else if (themeName === 'passport') {
-        sectionBg = '#F0F4F8';
-        sectionBgAlt = '#E1E8ED';
-        cardBg = '#ffffff';
-        cardBorder = '#006B7D33';
-    }
+    // ── CSS Variable Theme Profiles ──────────────────────────────────
+    // Each theme defines the full set of CSS variables consumed by
+    // ALL existing components. Components never change — only variables do.
+    const THEME_VARS: Record<string, {
+        sectionBg: string; sectionBgAlt: string; cardBg: string;
+        textPrimary: string; textSecondary: string;
+        borderColor: string; cardBorder: string;
+        accentOverride?: string; fontPreset: string;
+        heroBg?: string; heroRadius?: string; cardRadius?: string;
+    }> = {
+        'classic': {
+            sectionBg: '#FAF8F5', sectionBgAlt: '#F5F2EC', cardBg: '#FFFFFF',
+            textPrimary: '#2B2625', textSecondary: '#7A6E65',
+            borderColor: '#E8E0D5', cardBorder: '#D4AF3744',
+            accentOverride: '#C5A059', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '4px',
+        },
+        'classic-elegance': {
+            sectionBg: '#FAF8F5', sectionBgAlt: '#F5F2EC', cardBg: '#FFFFFF',
+            textPrimary: '#2B2625', textSecondary: '#7A6E65',
+            borderColor: '#E8E0D5', cardBorder: '#C5A05944',
+            accentOverride: '#C5A059', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '4px',
+        },
+        'modern-minimalist': {
+            sectionBg: '#FFFFFF', sectionBgAlt: '#F5F5F7', cardBg: '#F5F5F7',
+            textPrimary: '#111111', textSecondary: '#555555',
+            borderColor: '#E5E5E5', cardBorder: '#DDDDDD',
+            fontPreset: 'moderna', heroRadius: '0px', cardRadius: '0px',
+        },
+        'romantic-botanical': {
+            sectionBg: '#F4F7F1', sectionBgAlt: '#FDFBF7', cardBg: '#FDFBF7',
+            textPrimary: '#2D3A2D', textSecondary: '#6B7A6B',
+            borderColor: '#D4DDD0', cardBorder: '#9E6B6B33',
+            accentOverride: '#9E6B6B', fontPreset: 'romantica',
+            heroRadius: '8px', cardRadius: '16px',
+        },
+        'floral-symmetry': {
+            sectionBg: '#FAEDCD', sectionBgAlt: '#FFF9F0', cardBg: '#FFFDF9',
+            textPrimary: '#2C362B', textSecondary: '#6C756D',
+            borderColor: '#E3C99F', cardBorder: '#C88A5844',
+            accentOverride: '#C88A58', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '8px',
+        },
+        'magazine': {
+            sectionBg: '#FFFFFF', sectionBgAlt: '#F8F9FA', cardBg: '#FFFFFF',
+            textPrimary: '#111111', textSecondary: '#4A4A4A',
+            borderColor: '#222222', cardBorder: '#111111',
+            accentOverride: '#E63946', fontPreset: 'moderna',
+            heroRadius: '0px', cardRadius: '0px',
+        },
+        'luxury-gold': {
+            sectionBg: '#0B0B0B', sectionBgAlt: '#141414', cardBg: '#1F1F1F',
+            textPrimary: '#F5D76E', textSecondary: '#A39060',
+            borderColor: '#D4AF3733', cardBorder: '#D4AF3744',
+            accentOverride: '#D4AF37', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '4px',
+        },
+        'split-screen': {
+            sectionBg: '#F8FAFC', sectionBgAlt: '#EFF6FF', cardBg: '#FFFFFF',
+            textPrimary: '#0F172A', textSecondary: '#64748B',
+            borderColor: '#CBD5E1', cardBorder: '#38BDF833',
+            accentOverride: '#38BDF8', fontPreset: 'moderna',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'collage': {
+            sectionBg: '#F7F4EF', sectionBgAlt: '#EDE8E1', cardBg: '#FFFDF9',
+            textPrimary: '#332C27', textSecondary: '#786C65',
+            borderColor: '#D4C4B0', cardBorder: '#B07D6244',
+            accentOverride: '#B07D62', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '8px',
+        },
+        'passport': {
+            sectionBg: '#EEF4F8', sectionBgAlt: '#E1E8ED', cardBg: '#FFFFFF',
+            textPrimary: '#0B2545', textSecondary: '#5C748D',
+            borderColor: '#BFD1DF', cardBorder: '#13407433',
+            accentOverride: '#134074', fontPreset: 'moderna',
+            heroRadius: '4px', cardRadius: '8px',
+        },
+        'polaroid-vintage': {
+            sectionBg: '#EAE3D9', sectionBgAlt: '#DDD6CC', cardBg: '#FFFDF9',
+            textPrimary: '#3D312A', textSecondary: '#7A6B61',
+            borderColor: '#C4B8AC', cardBorder: '#C87D5544',
+            accentOverride: '#C87D55', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '2px',
+        },
+        'neon-glow': {
+            sectionBg: '#0A0014', sectionBgAlt: '#0F051D', cardBg: '#1A0933',
+            textPrimary: '#00F0FF', textSecondary: '#B57EDC',
+            borderColor: '#FF007F44', cardBorder: '#FF007F66',
+            accentOverride: '#FF007F', fontPreset: 'moderna',
+            heroRadius: '0px', cardRadius: '16px',
+        },
+        'whimsical-kids': {
+            sectionBg: '#FFF9EC', sectionBgAlt: '#FFF0F3', cardBg: '#FFFFFF',
+            textPrimary: '#2C3E50', textSecondary: '#7F8C8D',
+            borderColor: '#FFD3DC', cardBorder: '#FF6B6B44',
+            accentOverride: '#FF6B6B', fontPreset: 'romantica',
+            heroRadius: '16px', cardRadius: '24px',
+        },
+    };
 
-    const _accentColor = event?.theme_config?.accent_color || event?.theme_config?.primary_color || '#BD7474';
-    const _buttonColor = event?.theme_config?.button_color || event?.theme_config?.primary_color || '#1B2E1D';
+    const activeVars = THEME_VARS[themeName] || THEME_VARS['classic'];
+    const sectionBg    = activeVars.sectionBg;
+    const sectionBgAlt = activeVars.sectionBgAlt;
+    const cardBg       = activeVars.cardBg;
+    const textPrimary  = activeVars.textPrimary;
+    const textSecondary = activeVars.textSecondary;
+    const borderColor  = activeVars.borderColor;
+    const cardBorder   = activeVars.cardBorder;
+
+    const _accentColor = activeVars.accentOverride || event?.theme_config?.accent_color || event?.theme_config?.primary_color || '#BD7474';
+    const _buttonColor = activeVars.accentOverride || event?.theme_config?.button_color || event?.theme_config?.primary_color || '#1B2E1D';
     const accentContrast = getContrastColor(_accentColor);
     const buttonContrast = getContrastColor(_buttonColor);
 
     const globalStyles = {
-        '--section-bg': sectionBg,
-        '--section-bg-alt': sectionBgAlt,
-        '--card-bg': cardBg,
-        '--text-primary': textPrimary,
-        '--text-secondary': textSecondary,
-        '--border-color': borderColor,
-        '--card-border': cardBorder,
+        '--section-bg':      sectionBg,
+        '--section-bg-alt':  sectionBgAlt,
+        '--card-bg':         cardBg,
+        '--text-primary':    textPrimary,
+        '--text-secondary':  textSecondary,
+        '--border-color':    borderColor,
+        '--card-border':     cardBorder,
         '--accent-contrast': accentContrast,
         '--button-contrast': buttonContrast,
+        '--theme-card-radius': activeVars.cardRadius || '24px',
+        '--theme-hero-radius': activeVars.heroRadius || '0px',
     } as React.CSSProperties;
 
     // Apply font theme attribute and custom CSS - MUST be before any conditional returns
@@ -611,31 +690,87 @@ END:VCALENDAR`;
 
     // ── Dynamic config from Visual Editor ──
     const cfg = event.theme_config || {};
-    const primaryColor = cfg.primary_color || '#1B2E1D';
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#ffffff';
-    const accentColor   = cfg.accent_color   || cfg.primary_color || '#BD7474';
-    
-    const hex = accentColor.replace('#', '');
-    const r = parseInt(hex.substring(0, 2), 16) || 212;
-    const g = parseInt(hex.substring(2, 4), 16) || 175;
-    const b = parseInt(hex.substring(4, 6), 16) || 55;
-    const accentRgb = `${r} ${g} ${b}`;
     const heroImageUrl = cfg.hero_image_url || null;
     const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
-    const buttonColor   = cfg.button_color   || primaryColor;
     const subtitle = cfg.subtitle || '';
     const welcomeMessage = cfg.welcome_message || null;
     const venueTime = cfg.venue_time || null;
 
-    // ── Typography ──
-    const typographyPreset = cfg.typography_preset || cfg.typographyPreset || 'romantica';
+    // ── Typography — prefer theme font, fall back to user preset ──
+    const typographyPreset = activeVars.fontPreset || cfg.typography_preset || cfg.typographyPreset || 'romantica';
     const fontMapping = {
         elegante: { serif: 'Playfair Display', sans: 'Manrope' },
-        moderna: { serif: 'Outfit', sans: 'Inter' },
+        moderna:  { serif: 'Outfit', sans: 'Inter' },
         romantica: { serif: 'Libre Baskerville', sans: 'Lato' },
     };
     const selectedFonts = fontMapping[typographyPreset as keyof typeof fontMapping] || fontMapping.romantica;
-    
+
+    // ── Compute accent hex RGB for color-accent variable ──
+    const themeAccentHex = _accentColor.replace('#', '');
+    const tR = parseInt(themeAccentHex.substring(0, 2), 16) || 197;
+    const tG = parseInt(themeAccentHex.substring(2, 4), 16) || 160;
+    const tB = parseInt(themeAccentHex.substring(4, 6), 16) || 89;
+    const accentRgb = `${tR} ${tG} ${tB}`;
+    // Legacy aliases used by older sections
+    const accentColor = _accentColor;
+    const buttonColor = _buttonColor;
+    const primaryColor = _buttonColor;
+
+    // ── Theme-specific style overrides ──
+    // These inject on top of CSS variables for structural decoration per theme
+    const isClassicTheme = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
+    const isDarkTheme    = ['luxury-gold', 'neon-glow'].includes(themeName);
+    const isModernTheme  = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
+
+    const themeSpecificCSS = isClassicTheme ? `
+        /* ── Elegancia Clásica overrides ── */
+        .invitation-content h2,
+        .invitation-content h3 {
+            color: #C5A059 !important;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+        .invitation-content section {
+            border-radius: 0 !important;
+        }
+        /* Gold accent buttons */
+        .invitation-content button[class*="rounded-full"][style*="background"] {
+            background: linear-gradient(135deg, #B8860B, #C5A059, #9A7B38) !important;
+            color: #ffffff !important;
+        }
+        /* Card gold borders */
+        .invitation-content [class*="border-\\[var(--card-border)\\]"] {
+            border-color: #C5A05944 !important;
+        }
+        /* Section headings ornamental line */
+        .invitation-content .text-4xl::after,
+        .invitation-content .text-5xl::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: #C5A059;
+            margin: 12px auto 0;
+        }
+    ` : isDarkTheme ? `
+        /* ── Dark theme overrides ── */
+        .invitation-content button[class*="rounded-full"] {
+            border: 1px solid ${_accentColor}44;
+        }
+    ` : isModernTheme ? `
+        /* ── Modern theme overrides ── */
+        .invitation-content h2,
+        .invitation-content h3 {
+            letter-spacing: -0.02em;
+            font-weight: 700;
+        }
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"] {
+            border-radius: 0 !important;
+        }
+    ` : '';
+
     // Inject styles directly into tags for dynamic updates - Scoped to .invitation-content
     const commonStyles = `
         :root, html { 
@@ -652,6 +787,7 @@ END:VCALENDAR`;
         .invitation-content .font-sans { 
             font-family: "${selectedFonts.sans}", sans-serif !important; 
         }
+        ${themeSpecificCSS}
         ${customStyles}
     `;
 
