@@ -16,6 +16,7 @@ import type { SectionId } from '../lib/sectionRegistry';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
+import ClassicEleganceProHero from '../components/themes/ClassicEleganceProHero';
 import RomanticBotanicalHero from '../components/themes/RomanticBotanicalHero';
 import SplitScreenHero from '../components/themes/SplitScreenHero';
 import MagazineHero from '../components/themes/MagazineHero';
@@ -90,6 +91,13 @@ export default function InvitationPage() {
             textPrimary: '#2B2625', textSecondary: '#7A6E65',
             borderColor: '#E8E0D5', cardBorder: '#C5A05944',
             accentOverride: '#C5A059', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '4px',
+        },
+        'classic-elegance-pro': {
+            sectionBg: '#111111', sectionBgAlt: '#0A0A0A', cardBg: '#1A1A1A',
+            textPrimary: '#F5E9C9', textSecondary: '#A39060',
+            borderColor: '#D4AF3722', cardBorder: '#D4AF3740',
+            accentOverride: '#D4AF37', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '4px',
         },
         'modern-minimalist': {
@@ -721,6 +729,7 @@ END:VCALENDAR`;
     // ── Theme-specific style overrides ──
     // These inject on top of CSS variables for structural decoration per theme
     const isClassicTheme    = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
+    const isClassicProTheme = themeName === 'classic-elegance-pro';
     const isDarkTheme       = ['luxury-gold', 'neon-glow'].includes(themeName);
     const isModernTheme     = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
     const isBotanicalTheme  = themeName === 'romantic-botanical';
@@ -755,8 +764,83 @@ END:VCALENDAR`;
             background: #C5A059;
             margin: 12px auto 0;
         }
+    ` : isClassicProTheme ? `
+        /* ── Elegancia Clásica Pro — dark editorial ── */
+
+        /* Dark section backgrounds */
+        .invitation-content {
+            background-color: #111111 !important;
+        }
+
+        /* Headings: warm gold */
+        .invitation-content h2,
+        .invitation-content h3 {
+            color: #D4AF37 !important;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* Gold gradient for main buttons */
+        .invitation-content button[style*="background"] {
+            background: linear-gradient(135deg, #9A7B38, #D4AF37, #F5D76E) !important;
+            color: #0A0A0A !important;
+            border-radius: 0 !important;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-full"] {
+            border-radius: 4px !important;
+        }
+
+        /* Cards: dark with gold border */
+        .invitation-content [class*="shadow-xl"],
+        .invitation-content [class*="shadow-2xl"] {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
+        }
+        .invitation-content [class*="border-\\[var(--card-border)\\]"] {
+            border-color: #D4AF3740 !important;
+        }
+
+        /* Gold thin line under section headings */
+        .invitation-content .text-4xl::after,
+        .invitation-content .text-5xl::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #D4AF37, transparent);
+            margin: 10px auto 0;
+        }
+
+        /* Itinerary timeline: gold */
+        .invitation-content #itinerary .bg-stone-300 {
+            background: linear-gradient(to bottom, #D4AF37, #9A7B38) !important;
+        }
+        .invitation-content #itinerary [class*="border-\\[var(--border-color)\\]"] {
+            border-color: #D4AF3760 !important;
+        }
+
+        /* Outline buttons: gold border */
+        .invitation-content button:not([style*="background"]) {
+            border-color: #D4AF3760 !important;
+            color: #D4AF37 !important;
+        }
+
+        /* Footer: dark */
+        .invitation-content #footer {
+            background: #0A0A0A !important;
+            border-top: 1px solid #D4AF3720;
+        }
+        .invitation-content #footer h2,
+        .invitation-content #footer h3 {
+            color: #D4AF37 !important;
+        }
     ` : isBotanicalTheme ? `
         /* ── Romántico Botánico (Invitto Pro) overrides ── */
+
 
         /* ── Global: botones sin border-radius, uppercase, gold ── */
         .invitation-content button[style*="background"],
@@ -984,6 +1068,9 @@ END:VCALENDAR`;
     // ── Section Renderers ───────────────────────────────────────────
     const renderHero = () => {
         // FULL-PAGE THEMES (Highest priority - override default hero)
+        if (cfg.theme === 'classic-elegance-pro') {
+            return <ClassicEleganceProHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
         if (cfg.theme === 'classic-elegance' || cfg.theme === 'classic' || !cfg.theme) {
             return <ClassicEleganceHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }

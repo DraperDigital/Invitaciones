@@ -1040,10 +1040,10 @@ export default function DesignEditor() {
                 >
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                         {[
-                            { id: 'classic', label: 'Elegancia Clásica', desc: 'Diseño sobrio, atemporal con detalles dorados', icon: '✨' },
-                            { id: 'classic-elegance', label: 'Elegancia Clásica Pro', desc: 'Tipografía refinada, marco tradicional fino', icon: '👑' },
+                            { id: 'classic', label: 'Elegancia Clásica', desc: 'Fondo marfil, ornamentos dorados, foto enmarcada', icon: '✨' },
+                            { id: 'classic-elegance-pro', label: 'Elegancia Clásica Pro', desc: 'Editorial oscuro — negro, dorado intenso, foto full-screen', icon: '👑' },
                             { id: 'modern-minimalist', label: 'Minimalista Moderno', desc: 'Líneas limpias, tipografía contemporánea', icon: '🖤' },
-                            { id: 'romantic-botanical', label: 'Botánica Romántica', desc: 'Ilustraciones florales delicadas y tonos suave', icon: '🌿' },
+                            { id: 'romantic-botanical', label: 'Botánica Romántica', desc: 'Verde bosque, dorado cálido, fotografía full-height', icon: '🌿' },
                             { id: 'floral-symmetry', label: 'Simetría Floral', desc: 'Marcos simétricos con ornamentos botánicos', icon: '🌸' },
                             { id: 'magazine', label: 'Editorial / Revista', desc: 'Estilo portada de revista de moda y lujo', icon: '📖' },
                             { id: 'luxury-gold', label: 'Oro Lujoso', desc: 'Destellos metálicos dorados sobre fondo oscuro', icon: '🌟' },
