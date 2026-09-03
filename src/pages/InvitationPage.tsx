@@ -612,31 +612,24 @@ END:VCALENDAR`;
 
     // ── Dynamic config from Visual Editor ──
     const cfg = event.theme_config || {};
-    const activeThemeKey = (cfg.theme || 'classic') as string;
-    const themeProfile = THEME_PRESET_PROFILES[activeThemeKey] || THEME_PRESET_PROFILES.classic;
-
-    const primaryColor = cfg.primary_color || cfg.primaryColor || themeProfile.primaryColor;
-    const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || themeProfile.heroTextColor;
-    const accentColor   = cfg.accent_color   || cfg.accentColor   || themeProfile.accentColor;
-    const cardBgColor   = cfg.card_bg_color   || cfg.cardBgColor   || themeProfile.cardBgColor;
-    const sectionBgColor = cfg.section_bg_color || cfg.sectionBgColor || themeProfile.sectionBgColor;
-    const themeTextPrimary   = cfg.text_primary   || themeProfile.textPrimary;
-    const themeTextSecondary = cfg.text_secondary || themeProfile.textSecondary;
-
+    const primaryColor = cfg.primary_color || '#1B2E1D';
+    const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#ffffff';
+    const accentColor   = cfg.accent_color   || cfg.primary_color || '#BD7474';
+    
     const hex = accentColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16) || 212;
     const g = parseInt(hex.substring(2, 4), 16) || 175;
     const b = parseInt(hex.substring(4, 6), 16) || 55;
     const accentRgb = `${r} ${g} ${b}`;
     const heroImageUrl = cfg.hero_image_url || null;
-    const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || themeProfile.heroBgColor;
+    const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
     const buttonColor   = cfg.button_color   || primaryColor;
     const subtitle = cfg.subtitle || '';
     const welcomeMessage = cfg.welcome_message || null;
     const venueTime = cfg.venue_time || null;
 
     // ── Typography ──
-    const typographyPreset = cfg.typography_preset || cfg.typographyPreset || themeProfile.typographyPreset;
+    const typographyPreset = cfg.typography_preset || cfg.typographyPreset || 'romantica';
     const fontMapping = {
         elegante: { serif: 'Playfair Display', sans: 'Manrope' },
         moderna: { serif: 'Outfit', sans: 'Inter' },
@@ -646,14 +639,8 @@ END:VCALENDAR`;
     
     // Inject styles directly into tags for dynamic updates - Scoped to .invitation-content
     const commonStyles = `
-        :root, html, .invitation-content { 
+        :root, html { 
             --color-accent: ${accentRgb} !important; 
-            --section-bg: ${sectionBgColor} !important;
-            --section-bg-alt: ${cardBgColor} !important;
-            --card-bg: ${cardBgColor} !important;
-            --card-border: ${accentColor}33 !important;
-            --text-primary: ${themeTextPrimary} !important;
-            --text-secondary: ${themeTextSecondary} !important;
         }
         .invitation-content h1, 
         .invitation-content h2, 
