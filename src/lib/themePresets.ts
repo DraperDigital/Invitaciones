@@ -29,17 +29,31 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'elegante'
     },
     'classic-elegance': {
-        label: 'Elegancia Clásica Pro',
-        desc: 'Tipografía refinada, marco tradicional fino',
-        icon: '👑',
+        label: 'Elegancia Clásica',
+        desc: 'Fondo marfil, ornamentos dorados, foto enmarcada',
+        icon: '✨',
         primaryColor: '#2B2625',
         accentColor: '#C5A059',
         cardBgColor: '#FFFFFF',
-        sectionBgColor: '#F9F8F6',
+        sectionBgColor: '#FAF8F5',
         textPrimary: '#2B2625',
-        textSecondary: '#8C827A',
+        textSecondary: '#7A6E65',
         heroTextColor: '#FFFFFF',
         heroBgColor: '#2B2625',
+        typographyPreset: 'elegante'
+    },
+    'classic-elegance-pro': {
+        label: 'Elegancia Clásica Pro',
+        desc: 'Editorial oscuro — negro, dorado intenso, foto full-screen',
+        icon: '👑',
+        primaryColor: '#0A0A0A',
+        accentColor: '#D4AF37',
+        cardBgColor: '#1A1A1A',
+        sectionBgColor: '#111111',
+        textPrimary: '#F5E9C9',
+        textSecondary: '#A39060',
+        heroTextColor: '#F5D76E',
+        heroBgColor: '#0A0A0A',
         typographyPreset: 'elegante'
     },
     'modern-minimalist': {

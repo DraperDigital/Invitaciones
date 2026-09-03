@@ -1978,7 +1978,7 @@ END:VCALENDAR`;
                                     className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1"
                                 >
                                     <option value="classic">✨ Elegancia Clásica</option>
-                                    <option value="classic-elegance">👑 Elegancia Clásica Pro</option>
+                                    <option value="classic-elegance-pro">👑 Elegancia Clásica Pro</option>
                                     <option value="modern-minimalist">🖤 Minimalista Moderno</option>
                                     <option value="romantic-botanical">🌿 Botánica Romántica</option>
                                     <option value="floral-symmetry">🌸 Simetría Floral</option>
@@ -1996,7 +1996,7 @@ END:VCALENDAR`;
                     )}
 
                     {/* MODULAR LAYOUT RENDERER */}
-                    <div className={isAdminMode && deviceView === 'mobile' ? "max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-white transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
+                    <div className={isAdminMode && deviceView === 'mobile' ? "max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
                         <div className="invitation-content">
                             {sectionQueue.map((section) => {
                                 const renderer = SECTION_COMPONENTS[section.id];
@@ -2048,7 +2048,7 @@ END:VCALENDAR`;
                                                 className="w-full bg-white px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
                                             >
                                                 <option value="classic">✨ Elegancia Clásica</option>
-                                                <option value="classic-elegance">👑 Elegancia Clásica Pro</option>
+                                                <option value="classic-elegance-pro">👑 Elegancia Clásica Pro</option>
                                                 <option value="modern-minimalist">🖤 Minimalista Moderno</option>
                                                 <option value="romantic-botanical">🌿 Botánica Romántica</option>
                                                 <option value="floral-symmetry">🌸 Simetría Floral</option>
