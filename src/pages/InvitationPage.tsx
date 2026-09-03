@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -1580,7 +1580,6 @@ END:VCALENDAR`;
                                             : (event.event_type as string) === 'comunion' ? 'Primera Comunión' 
                                             : 'Celebración'}
                                     </p>
-                                </div>
                                 <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-[var(--accent-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
@@ -1588,33 +1587,60 @@ END:VCALENDAR`;
                 </div>
             ) : (
                 <>
-                    {/* Floating Device Viewport Selector Bar (Admin / Preview Mode) */}
+                    {/* Floating Device Viewport & Template Selector Bar (Admin / Preview Mode) */}
                     {isAdminMode && (
-                        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-1.5 animate-in fade-in slide-in-from-top duration-300">
-                            <button
-                                type="button"
-                                onClick={() => setDeviceView('mobile')}
-                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                                    deviceView === 'mobile'
-                                        ? 'bg-[#1B2E1D] text-white shadow-md'
-                                        : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
-                                }`}
-                            >
-                                <Smartphone className="h-3.5 w-3.5" />
-                                <span>Móvil</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setDeviceView('desktop')}
-                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                                    deviceView === 'desktop'
-                                        ? 'bg-[#1B2E1D] text-white shadow-md'
-                                        : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
-                                }`}
-                            >
-                                <Monitor className="h-3.5 w-3.5" />
-                                <span>Desktop</span>
-                            </button>
+                        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-300 max-w-[92vw] overflow-x-auto">
+                            <div className="flex items-center gap-1">
+                                <button
+                                    type="button"
+                                    onClick={() => setDeviceView('mobile')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                                        deviceView === 'mobile'
+                                            ? 'bg-[#1B2E1D] text-white shadow-md'
+                                            : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
+                                    }`}
+                                >
+                                    <Smartphone className="h-3.5 w-3.5" />
+                                    <span className="hidden sm:inline">Móvil</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setDeviceView('desktop')}
+                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                                        deviceView === 'desktop'
+                                            ? 'bg-[#1B2E1D] text-white shadow-md'
+                                            : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
+                                    }`}
+                                >
+                                    <Monitor className="h-3.5 w-3.5" />
+                                    <span className="hidden sm:inline">Desktop</span>
+                                </button>
+                            </div>
+
+                            <div className="h-4 w-[1px] bg-stone-200" />
+
+                            <div className="flex items-center gap-1.5 pl-0.5">
+                                <Palette className="h-3.5 w-3.5 text-[#DF3B94] flex-shrink-0" />
+                                <select
+                                    value={cfg.theme || 'classic'}
+                                    onChange={(e) => handleUpdateFeature('theme', e.target.value)}
+                                    className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1"
+                                >
+                                    <option value="classic">✨ Elegancia Clásica</option>
+                                    <option value="classic-elegance">👑 Elegancia Clásica Pro</option>
+                                    <option value="modern-minimalist">🖤 Minimalista Moderno</option>
+                                    <option value="romantic-botanical">🌿 Botánica Romántica</option>
+                                    <option value="floral-symmetry">🌸 Simetría Floral</option>
+                                    <option value="magazine">📖 Editorial / Revista</option>
+                                    <option value="luxury-gold">🌟 Oro Lujoso</option>
+                                    <option value="split-screen">🌓 Pantalla Dividida</option>
+                                    <option value="collage">🖼️ Collage Fotográfico</option>
+                                    <option value="passport">✈️ Pasaporte Viajero</option>
+                                    <option value="polaroid-vintage">📸 Polaroid Vintage</option>
+                                    <option value="neon-glow">🪩 Fiesta & Neón</option>
+                                    <option value="whimsical-kids">🎈 Infantil Fantasía</option>
+                                </select>
+                            </div>
                         </div>
                     )}
 
@@ -1648,6 +1674,43 @@ END:VCALENDAR`;
                                             <div className="flex items-center gap-3">
                                                 <div className="p-3 bg-[#1B2E1D] rounded-xl text-white"><Activity className="h-5 w-5" /></div>
                                                 <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Admin Panel</p></div>
+                                            </div>
+                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
+                                        </div>
+
+                                        {/* Cambiador de Plantilla Card */}
+                                        <div className="p-4 bg-gradient-to-r from-emerald-50/80 via-stone-50 to-white rounded-2xl border border-emerald-200/80 mb-4 flex flex-col gap-3 shadow-sm">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2.5">
+                                                    <div className="p-2.5 bg-[#1B2E1D] text-white rounded-xl shadow-sm">
+                                                        <Palette className="h-4 w-4" />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-xs font-bold text-[#1B2E1D]">Estilo de Plantilla</h4>
+                                                        <p className="text-[10px] text-stone-400">Cambia el diseño en vivo</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <select
+                                                value={cfg.theme || 'classic'}
+                                                onChange={(e) => handleUpdateFeature('theme', e.target.value)}
+                                                className="w-full bg-white px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
+                                            >
+                                                <option value="classic">✨ Elegancia Clásica</option>
+                                                <option value="classic-elegance">👑 Elegancia Clásica Pro</option>
+                                                <option value="modern-minimalist">🖤 Minimalista Moderno</option>
+                                                <option value="romantic-botanical">🌿 Botánica Romántica</option>
+                                                <option value="floral-symmetry">🌸 Simetría Floral</option>
+                                                <option value="magazine">📖 Editorial / Revista</option>
+                                                <option value="luxury-gold">🌟 Oro Lujoso</option>
+                                                <option value="split-screen">🌓 Pantalla Dividida</option>
+                                                <option value="collage">🖼️ Collage Fotográfico</option>
+                                                <option value="passport">✈️ Pasaporte Viajero</option>
+                                                <option value="polaroid-vintage">📸 Polaroid Vintage</option>
+                                                <option value="neon-glow">🪩 Fiesta & Neón</option>
+                                                <option value="whimsical-kids">🎈 Infantil Fantasía</option>
+                                            </select>
+                                        </div>         <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Admin Panel</p></div>
                                             </div>
                                             <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
