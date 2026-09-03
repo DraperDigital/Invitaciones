@@ -48,6 +48,7 @@ type DesignConfig = {
 
     // Premium Features
     showEnvelope: boolean;
+    theme: string;
 
     // Ubicación Detallada (Misa / Ceremonia)
     misa_name: string;
@@ -129,6 +130,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     isPremium: false,
 
     showEnvelope: true,
+    theme: 'classic',
 
     misa_name: '',
     misa_address: '',
@@ -312,6 +314,7 @@ export default function DesignEditor() {
                     showChambelanes:  c.show_chambelanes  ?? c.showChambelanes  ?? DEFAULT_CONFIG.showChambelanes,
                     showHotels:       c.show_hotels       ?? c.showHotels       ?? DEFAULT_CONFIG.showHotels,
                     showEnvelope:     c.show_envelope     ?? c.showEnvelope     ?? DEFAULT_CONFIG.showEnvelope,
+                    theme:            c.theme            ?? DEFAULT_CONFIG.theme,
                     enableGuestList:  c.enableGuestList  ?? DEFAULT_CONFIG.enableGuestList,
                     enableReminders:  c.enableReminders  ?? DEFAULT_CONFIG.enableReminders,
                     enableExcel:      c.enableExcel      ?? DEFAULT_CONFIG.enableExcel,
@@ -416,6 +419,7 @@ export default function DesignEditor() {
                 show_hotels:      config.showHotels,
                 showEnvelope:     config.showEnvelope,
                 show_envelope:    config.showEnvelope,
+                theme:            config.theme,
                 
                 chambelanes:      config.chambelanes,
                 damas:            config.damas,
@@ -1021,6 +1025,59 @@ export default function DesignEditor() {
                                 </div>
                             </div>
                         </SubAccordionItem>
+                    </div>
+                </CollapsibleCard>
+
+                {/* ── 2.5 Plantilla de Diseño (Estilo Visual) ── */}
+                <CollapsibleCard
+                    id="template"
+                    title="Plantilla de Diseño"
+                    subtitle="Selecciona el estilo visual de tu invitación"
+                    icon="✨"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                        {[
+                            { id: 'classic', label: 'Elegancia Clásica', desc: 'Diseño sobrio, atemporal con detalles dorados', icon: '✨' },
+                            { id: 'classic-elegance', label: 'Elegancia Clásica Pro', desc: 'Tipografía refinada, marco tradicional fino', icon: '👑' },
+                            { id: 'modern-minimalist', label: 'Minimalista Moderno', desc: 'Líneas limpias, tipografía contemporánea', icon: '🖤' },
+                            { id: 'romantic-botanical', label: 'Botánica Romántica', desc: 'Ilustraciones florales delicadas y tonos suave', icon: '🌿' },
+                            { id: 'floral-symmetry', label: 'Simetría Floral', desc: 'Marcos simétricos con ornamentos botánicos', icon: '🌸' },
+                            { id: 'magazine', label: 'Editorial / Revista', desc: 'Estilo portada de revista de moda y lujo', icon: '📖' },
+                            { id: 'luxury-gold', label: 'Oro Lujoso', desc: 'Destellos metálicos dorados sobre fondo oscuro', icon: '🌟' },
+                            { id: 'split-screen', label: 'Pantalla Dividida', desc: 'Contraste moderno de imagen a pantalla dividida', icon: '🌓' },
+                            { id: 'collage', label: 'Collage Fotográfico', desc: 'Composición dinámica de fotos inolvidables', icon: '🖼️' },
+                            { id: 'passport', label: 'Pasaporte Viajero', desc: 'Temática de viaje para bodas destino y aventuras', icon: '✈️' },
+                            { id: 'polaroid-vintage', label: 'Polaroid Vintage', desc: 'Fotografías de estilo nostálgico e instantáneo', icon: '📸' },
+                            { id: 'neon-glow', label: 'Fiesta & Neón', desc: 'Luces de neón vibrantes e ideales para fiesta', icon: '🪩' },
+                            { id: 'whimsical-kids', label: 'Infantil Fantasía', desc: 'Colores alegres e ilustraciones para peques', icon: '🎈' }
+                        ].map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => setConfig({ ...config, theme: item.id })}
+                                className={`group relative p-5 md:p-6 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden flex flex-col justify-between ${
+                                    (config.theme || 'classic') === item.id
+                                        ? 'border-[#DF3B94] bg-[#DF3B94]/5 shadow-lg ring-2 ring-[#DF3B94]/20'
+                                        : 'border-stone-100 hover:border-stone-300 bg-white hover:shadow-md'
+                                }`}
+                            >
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-2xl">{item.icon}</span>
+                                        <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                                            (config.theme || 'classic') === item.id ? 'border-[#DF3B94] bg-[#DF3B94]' : 'border-stone-200'
+                                        }`}>
+                                            {(config.theme || 'classic') === item.id && <div className="h-2 w-2 rounded-full bg-white" />}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-[#1B2E1D]">{item.label}</h4>
+                                        <p className="text-[11px] text-stone-500 font-light mt-1 leading-relaxed">{item.desc}</p>
+                                    </div>
+                                </div>
+                            </button>
+                        ))}
                     </div>
                 </CollapsibleCard>
 
