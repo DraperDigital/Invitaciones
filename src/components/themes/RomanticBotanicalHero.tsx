@@ -13,7 +13,6 @@ interface Props {
 // Design tokens — matches the invitto-pro HTML exactly
 const GOLD   = '#FAC345';
 const GREEN  = '#527853';
-const PAPER  = '#FDFBF7';
 
 export default function RomanticBotanicalHero({ event, cfg, countdown, labels, heroImageUrl }: Props) {
     const eventDate  = new Date(event.date_time);
