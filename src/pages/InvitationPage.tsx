@@ -13,7 +13,6 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
-import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
