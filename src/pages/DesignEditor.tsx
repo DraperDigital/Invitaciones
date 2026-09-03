@@ -185,7 +185,7 @@ const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSe
                 <div className="flex items-center gap-4 md:gap-5">
                     <div className={`h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl flex items-center justify-center text-xl md:text-2xl transition-all ${isOpen ? 'bg-[#1B2E1D] text-white scale-105 md:scale-110' : 'bg-stone-50 text-stone-400'}`}>{icon}</div>
                     <div>
-                        <h2 className={`text-xl md:text-2xl font-serif ${isOpen ? 'text-[#1B2E1D]' : 'text-stone-700'}`}>{title}</h2>
+                        <h2 className={`text-xl md:text-2xl font-sans font-bold ${isOpen ? 'text-[#1B2E1D]' : 'text-stone-700'}`}>{title}</h2>
                         <p className="text-[8px] md:text-[10px] text-stone-400 uppercase tracking-widest font-black mt-0.5 md:mt-1">{subtitle}</p>
                     </div>
                 </div>
@@ -632,7 +632,7 @@ export default function DesignEditor() {
                     <Link to={`/dashboard/event/${id}`} className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-600 mb-4 md:mb-6 transition-colors font-bold uppercase tracking-widest text-[9px] md:text-[10px]">
                         <ArrowLeft className="h-3 w-3 md:h-4 md:w-4" /> Volver al panel
                     </Link>
-                    <h1 className="text-3xl md:text-5xl font-serif text-[#1B2E1D] tracking-tight">Diseño y Estilo</h1>
+                    <h1 className="text-3xl md:text-5xl font-sans font-extrabold text-[#1B2E1D] tracking-tight">Diseño y Estilo</h1>
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 md:gap-3">
