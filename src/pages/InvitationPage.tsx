@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2 } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -141,6 +141,7 @@ export default function InvitationPage() {
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
+    const [deviceView, setDeviceView] = useState<'mobile' | 'desktop'>('desktop');
 
     // PLUS ONES States
     const [isAccompanied, setIsAccompanied] = useState(false);
@@ -1587,15 +1588,46 @@ END:VCALENDAR`;
                 </div>
             ) : (
                 <>
+                    {/* Floating Device Viewport Selector Bar (Admin / Preview Mode) */}
+                    {isAdminMode && (
+                        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-2 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-1.5 animate-in fade-in slide-in-from-top duration-300">
+                            <button
+                                type="button"
+                                onClick={() => setDeviceView('mobile')}
+                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                                    deviceView === 'mobile'
+                                        ? 'bg-[#1B2E1D] text-white shadow-md'
+                                        : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
+                                }`}
+                            >
+                                <Smartphone className="h-3.5 w-3.5" />
+                                <span>Móvil</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setDeviceView('desktop')}
+                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+                                    deviceView === 'desktop'
+                                        ? 'bg-[#1B2E1D] text-white shadow-md'
+                                        : 'text-stone-500 hover:text-stone-800 hover:bg-stone-100'
+                                }`}
+                            >
+                                <Monitor className="h-3.5 w-3.5" />
+                                <span>Desktop</span>
+                            </button>
+                        </div>
+                    )}
+
                     {/* MODULAR LAYOUT RENDERER */}
-                    {/* MODULAR LAYOUT RENDERER */}
-                    <div className="invitation-content">
-                        {sectionQueue.map((section) => {
-                            const renderer = SECTION_COMPONENTS[section.id];
-                            const content = renderer ? renderer() : null;
-                            if (!content) return null;
-                            return <div key={section.id}>{content}</div>;
-                        })}
+                    <div className={isAdminMode && deviceView === 'mobile' ? "max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-white transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
+                        <div className="invitation-content">
+                            {sectionQueue.map((section) => {
+                                const renderer = SECTION_COMPONENTS[section.id];
+                                const content = renderer ? renderer() : null;
+                                if (!content) return null;
+                                return <div key={section.id}>{content}</div>;
+                            })}
+                        </div>
                     </div>
 
                     {/* Admin Controls */}
