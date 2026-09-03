@@ -30,9 +30,11 @@ export default {
                 // Legacy & Primary text
                 primary: "#222B38", // Official Dark Navy Graphite Text
                 secondary: "#334155",
-                accent: "#DF3B94",
-                'accent-light': "#FDF2F8",
-                'accent-dark': "#C52A7C",
+                // Dynamic accent — driven by --color-accent CSS variable (set per theme in InvitationPage)
+                // Use rgb() wrapper so Tailwind opacity modifiers work: text-accent/60
+                accent: 'rgb(var(--color-accent) / <alpha-value>)',
+                'accent-light': "rgba(var(--color-accent) / 0.12)",
+                'accent-dark': "rgba(var(--color-accent) / 0.85)",
 
                 cream: "#FFFFFF", // Pure white
                 sand: "#F8F9FA", // Soft SaaS gray
