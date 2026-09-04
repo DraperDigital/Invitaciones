@@ -1205,6 +1205,11 @@ END:VCALENDAR`;
             font-size: 2.25rem !important;
             line-height: 1.2 !important;
         }
+        .is-mobile-preview .theme-collage-details,
+        .invitation-content.is-mobile-preview .theme-collage-details {
+            flex-direction: column !important;
+            gap: 1.25rem !important;
+        }
         ${themeSpecificCSS}
         ${customStyles}
     `;

@@ -43,9 +43,9 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
     const subtitleColor = hasDarkBg ? 'rgba(255,255,255,0.85)' : heroTextColor;
 
     return (
-        <section id="hero" className="relative flex flex-col w-full min-h-screen">
+        <section id="hero" className="relative flex flex-col w-full min-h-[85vh] md:min-h-screen">
             {/* Top Collage Section */}
-            <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden py-12 sm:py-20 px-4 sm:px-8" style={{ background: heroBgColor }}>
+            <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden py-8 sm:py-16 px-4 sm:px-8" style={{ background: heroBgColor }}>
                 
                 {/* Optional faint background texture or overlay */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cream-paper.png")' }}></div>
@@ -77,30 +77,35 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
                     </div>
 
                     {/* Center Content */}
-                    <div className="w-full lg:w-1/3 text-center space-y-4 sm:space-y-6 animate-in zoom-in duration-1000 delay-300 relative z-40 theme-collage-center">
-                        <p className="text-xs sm:text-base font-serif italic tracking-wide" style={{ color: subtitleColor }}>
+                    <div className="w-full lg:w-1/3 text-center space-y-3 sm:space-y-5 animate-in zoom-in duration-1000 delay-300 relative z-40 theme-collage-center py-2">
+                        <p className="text-xs sm:text-sm font-serif italic tracking-wide" style={{ color: subtitleColor }}>
                             {cfg.welcome_message || "Estás invitado a celebrar el gran día de"}
                         </p>
                         
                         <h1 
-                            className="text-3xl sm:text-5xl md:text-6xl lg:text-[5rem] font-serif font-light leading-[1.15] drop-shadow-sm break-normal hyphens-none px-2" 
+                            className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-serif font-light leading-[1.15] drop-shadow-sm break-normal hyphens-none px-2" 
                             style={{ color: titleColor, fontFamily: "'Great Vibes', cursive" }}
                         >
                             {event.title}
                         </h1>
 
                         {/* Mobile Collage Cards (shown on mobile & simulator) */}
-                        <div className="flex lg:hidden justify-center items-center gap-2 sm:gap-3 py-4 px-2 w-full max-w-xs mx-auto theme-collage-mobile-fan">
+                        <div className="flex lg:hidden justify-center items-center gap-2 sm:gap-3 py-3 px-2 w-full max-w-xs mx-auto theme-collage-mobile-fan">
                             <img src={images[1]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md -rotate-6 border-2 border-white" />
                             <img src={images[0]} alt="" className="w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl shadow-xl z-10 border-2 border-white scale-105" />
                             <img src={images[2]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md rotate-6 border-2 border-white" />
                         </div>
 
-                        <div className="pt-4 sm:pt-8">
+                        <div className="pt-2 sm:pt-4">
                             <button 
                                 onClick={() => document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="inline-flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-[0.2em] font-bold transition-all hover:opacity-70 px-6 py-2.5 rounded-full border border-current"
-                                style={{ color: titleColor }}
+                                className="inline-flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-[0.2em] font-bold transition-all hover:opacity-90 px-8 py-3 rounded-full shadow-lg hover:scale-105"
+                                style={{ 
+                                    backgroundColor: hasDarkBg ? 'rgba(255,255,255,0.18)' : primaryColor, 
+                                    color: '#FFFFFF',
+                                    border: hasDarkBg ? '1px solid rgba(255,255,255,0.35)' : 'none',
+                                    backdropFilter: 'blur(8px)'
+                                }}
                             >
                                 RSVP
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
@@ -128,42 +133,48 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
             </div>
 
             {/* Bottom Details Bar */}
-            <div className="w-full py-12 px-6 sm:px-12 z-50 shadow-2xl" style={{ backgroundColor: primaryColor }}>
-                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 text-center text-white/90">
+            <div className="w-full py-8 sm:py-10 px-4 sm:px-12 z-30 shadow-2xl border-t border-white/10" style={{ backgroundColor: primaryColor }}>
+                <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 text-center text-white/95 theme-collage-details">
                     
                     {/* Date */}
-                    <div className="space-y-2 animate-in fade-in slide-in-from-bottom duration-700 delay-500">
-                        <h3 className="font-serif italic text-2xl sm:text-3xl mb-4 text-white/80" style={{ fontFamily: "'Great Vibes', cursive" }}>Fecha</h3>
-                        <p className="text-sm font-sans font-medium tracking-wide">
-                            {format(eventDate, "MMMM do", { locale: es })}
+                    <div className="space-y-1 sm:space-y-2 flex-1 w-full animate-in fade-in slide-in-from-bottom duration-700 delay-500">
+                        <p className="text-[11px] sm:text-xs font-sans font-bold uppercase tracking-[0.25em] text-white/70">Fecha</p>
+                        <p className="text-base sm:text-lg font-serif font-medium">
+                            {format(eventDate, "d 'de' MMMM, yyyy", { locale: es })}
                         </p>
-                        <p className="text-xs font-sans font-light tracking-wider opacity-80">
+                        <p className="text-xs font-sans font-light tracking-wider text-white/80 capitalize">
                             {format(eventDate, "EEEE", { locale: es })}
                         </p>
                     </div>
 
+                    <div className="hidden md:block w-px h-12 bg-white/20" />
+
                     {/* Time */}
-                    <div className="space-y-2 animate-in fade-in slide-in-from-bottom duration-700 delay-600">
-                        <h3 className="font-serif italic text-2xl sm:text-3xl mb-4 text-white/80" style={{ fontFamily: "'Great Vibes', cursive" }}>Hora</h3>
-                        <p className="text-sm font-sans font-medium tracking-wide">
-                            A partir de las {format(eventDate, 'HH:mm', { locale: es })}
+                    <div className="space-y-1 sm:space-y-2 flex-1 w-full animate-in fade-in slide-in-from-bottom duration-700 delay-600">
+                        <p className="text-[11px] sm:text-xs font-sans font-bold uppercase tracking-[0.25em] text-white/70">Hora</p>
+                        <p className="text-base sm:text-lg font-serif font-medium">
+                            A partir de las {format(eventDate, 'HH:mm', { locale: es })} hrs
                         </p>
                         {cfg.misa_time && (
-                            <p className="text-xs font-sans font-light tracking-wider opacity-80">
+                            <p className="text-xs font-sans font-light tracking-wider text-white/80">
                                 Ceremonia a las {cfg.misa_time}
                             </p>
                         )}
                     </div>
 
-                    {/* Location */}
-                    <div className="space-y-2 animate-in fade-in slide-in-from-bottom duration-700 delay-700">
-                        <h3 className="font-serif italic text-2xl sm:text-3xl mb-4 text-white/80" style={{ fontFamily: "'Great Vibes', cursive" }}>Ubicación</h3>
-                        <p className="text-sm font-sans font-medium tracking-wide truncate">
+                    <div className="hidden md:block w-px h-12 bg-white/20" />
+
+                    {/* Location (Full venue & address, never cut off) */}
+                    <div className="space-y-1 sm:space-y-2 flex-1 w-full animate-in fade-in slide-in-from-bottom duration-700 delay-700 px-2">
+                        <p className="text-[11px] sm:text-xs font-sans font-bold uppercase tracking-[0.25em] text-white/70">Ubicación</p>
+                        <p className="text-base sm:text-lg font-serif font-medium break-words leading-snug">
                             {event.venue_name}
                         </p>
-                        <p className="text-xs font-sans font-light tracking-wider opacity-80 truncate">
-                            {event.venue_address}
-                        </p>
+                        {event.venue_address && (
+                            <p className="text-xs font-sans font-light tracking-wide text-white/80 break-words mt-0.5">
+                                {event.venue_address}
+                            </p>
+                        )}
                     </div>
 
                 </div>
