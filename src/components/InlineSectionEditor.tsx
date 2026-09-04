@@ -88,7 +88,11 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         'countdown': 'Cuenta Regresiva',
         'location': 'Mapa y Ubicación',
         'dress_code': 'Código de Vestimenta',
+        'gallery': 'Galería de Fotos',
+        'itinerary': 'Itinerario',
         'hotels': 'Hoteles y Hospedaje',
+        'gifts': 'Mesa de Regalos',
+        'chambelanes': 'Corte de Honor',
     };
 
     const getDesignSection = (id: string) => {

@@ -77,6 +77,7 @@ type DesignConfig = {
     showChambelanes: boolean;
     showHotels: boolean;
     showGifts: boolean;
+    showGuestWelcome: boolean;
 
     // Corte de Honor
     chambelanes: string[];
@@ -115,6 +116,7 @@ const DEFAULT_CONFIG: DesignConfig = {
     showWhatsAppRSVP: true,
     showHotels: true,
     showGifts: true,
+    showGuestWelcome: true,
 
     enableGuestList: false,
     enableReminders: false,
@@ -321,6 +323,7 @@ export default function DesignEditor() {
                     showMessage:      c.show_message      ?? c.showMessage      ?? DEFAULT_CONFIG.showMessage,
                     showChambelanes:  c.show_chambelanes  ?? c.showChambelanes  ?? DEFAULT_CONFIG.showChambelanes,
                     showHotels:       c.show_hotels       ?? c.showHotels       ?? DEFAULT_CONFIG.showHotels,
+                    showGuestWelcome: c.show_guest_welcome ?? c.showGuestWelcome ?? DEFAULT_CONFIG.showGuestWelcome,
                     showEnvelope:     c.show_envelope     ?? c.showEnvelope     ?? DEFAULT_CONFIG.showEnvelope,
                     theme:            c.theme            ?? DEFAULT_CONFIG.theme,
                     enableGuestList:  c.enableGuestList  ?? DEFAULT_CONFIG.enableGuestList,
@@ -425,6 +428,8 @@ export default function DesignEditor() {
                 show_chambelanes: config.showChambelanes,
                 showHotels:       config.showHotels,
                 show_hotels:      config.showHotels,
+                showGuestWelcome: config.showGuestWelcome,
+                show_guest_welcome: config.showGuestWelcome,
                 showEnvelope:     config.showEnvelope,
                 show_envelope:    config.showEnvelope,
                 theme:            config.theme,
@@ -1356,9 +1361,10 @@ export default function DesignEditor() {
                                 icon: '🖼️',
                                 color: 'text-indigo-600 bg-indigo-50',
                                 features: [
-                                    { id: 'showGallery',   label: 'Galería de Fotos', desc: 'Carrusel de imágenes',   icon: '📸', plans: ['pro', 'premium'] },
-                                    { id: 'showEnvelope',  label: 'Sobre Digital', desc: 'Animación de entrada',          icon: '💌', plans: ['pro', 'premium'] },
-                                    { id: 'showMessage',   label: 'Mensaje Texto', desc: 'Cuerpo de bienvenida',             icon: '✉️', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showGallery',      label: 'Galería de Fotos', desc: 'Carrusel de imágenes',     icon: '📸', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showGuestWelcome', label: 'Pase Invitado',    desc: 'Saludo personalizado',     icon: '🎟️', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showEnvelope',     label: 'Sobre Digital',    desc: 'Animación de entrada',     icon: '💌', plans: ['pro', 'premium'] },
+                                    { id: 'showMessage',      label: 'Mensaje Texto',    desc: 'Cuerpo de bienvenida',     icon: '✉️', plans: ['clasico', 'pro', 'premium'] },
                                 ],
                             },
                             {
@@ -1367,9 +1373,10 @@ export default function DesignEditor() {
                                 color: 'text-rose-500 bg-rose-50',
                                 features: [
                                     { id: 'showMap',         label: 'Ubicación / Maps', desc: 'Mapa interactivo',          icon: '📍', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showItinerary',   label: 'Itinerario', desc: 'Cronograma del día',               icon: '🗓️', plans: ['pro', 'premium'] },
-                                    { id: 'showDetails',     label: 'Vestimenta', desc: 'Dress Code visual',          icon: '✨', plans: ['pro', 'premium'] },
-                                    { id: 'showChambelanes', label: 'Corte Honor', desc: 'Acompañantes',           icon: '👑', plans: ['pro', 'premium'] },
+                                    { id: 'showItinerary',   label: 'Itinerario',       desc: 'Cronograma del día',        icon: '🗓️', plans: ['pro', 'premium'] },
+                                    { id: 'showHotels',      label: 'Hospedaje',        desc: 'Hoteles recomendados',      icon: '🏨', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showDetails',     label: 'Vestimenta',       desc: 'Dress Code visual',         icon: '✨', plans: ['pro', 'premium'] },
+                                    { id: 'showChambelanes', label: 'Corte Honor',      desc: 'Acompañantes',              icon: '👑', plans: ['pro', 'premium'] },
                                 ],
                             },
                             {
