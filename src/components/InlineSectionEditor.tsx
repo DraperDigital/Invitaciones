@@ -83,10 +83,12 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
     const sectionTitles: Record<string, string> = {
         'hero': 'Portada Principal',
+        'guest_welcome': 'Pase del Invitado',
         'message': 'Mensaje de Bienvenida',
         'countdown': 'Cuenta Regresiva',
         'location': 'Mapa y Ubicación',
         'dress_code': 'Código de Vestimenta',
+        'hotels': 'Hoteles y Hospedaje',
     };
 
     const getDesignSection = (id: string) => {

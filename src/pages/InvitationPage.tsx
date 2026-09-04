@@ -247,6 +247,7 @@ export default function InvitationPage() {
         showMessage:      'show_message',
         showChambelanes:  'show_chambelanes',
         showHotels:       'show_hotels',
+        showGuestWelcome: 'show_guest_welcome',
         showEnvelope:     'show_envelope'
     };
 
@@ -1343,7 +1344,11 @@ END:VCALENDAR`;
                    || (isDemo && currentVersion === 'premium');
     const planTier = isPremium ? 'premium' : isPro ? 'pro' : ('clasico' as const);
 
-    const savedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
+    const rawSavedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
+    const savedOrder = [
+        ...rawSavedOrder,
+        ...DEFAULT_SECTION_ORDER.filter(id => !rawSavedOrder.includes(id))
+    ];
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder);
 
     // ── Helpers ─────────────────────────────────────────────────────
@@ -2148,24 +2153,56 @@ END:VCALENDAR`;
         );
     };
 
-    const renderAccommodation = () => (
-        <section id="hotels" key="hotels" className="py-24 bg-[var(--section-bg-alt)]">
-            <div className="max-w-6xl mx-auto px-6">
-                <div className="text-center mb-16">
-                    <Hotel className="h-12 w-12 mx-auto mb-6 text-accent" />
-                    <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">¿Dónde Hospedarse?</h3>
+    const renderAccommodation = () => {
+        const hotelList = cfg.hotels || cfg.accommodations?.hotels || [];
+        if (hotelList.length === 0) return null;
+
+        return (
+            <section id="hotels" key="hotels" className="py-24 bg-[var(--section-bg-alt)] border-b border-[var(--border-color)]">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <Hotel className="h-12 w-12 mx-auto mb-6 text-accent" />
+                        <h3 className="text-3xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Hoteles y Hospedaje</h3>
+                        <p className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--text-secondary)]">Alojamiento recomendado para invitados</p>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {hotelList.map((hotel: any, idx: number) => (
+                            <div key={idx} className="bg-[var(--card-bg)] rounded-2xl overflow-hidden border border-[var(--card-border)] p-6 sm:p-8 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all relative">
+                                {hotel.isRecommended && (
+                                    <div className="absolute top-4 right-4 bg-amber-500/10 text-amber-600 border border-amber-500/30 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                                        Recomendado
+                                    </div>
+                                )}
+                                <div>
+                                    <h4 className="text-xl font-serif font-semibold text-[var(--text-primary)] mb-2">{hotel.name}</h4>
+                                    {hotel.distance && (
+                                        <p className="text-xs text-accent font-medium mb-3 flex items-center gap-1.5">
+                                            <span>📍</span> {hotel.distance}
+                                        </p>
+                                    )}
+                                    {hotel.description && (
+                                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4 whitespace-pre-line">{hotel.description}</p>
+                                    )}
+                                    {hotel.price && (
+                                        <p className="text-xs font-bold text-[var(--text-primary)] mb-4">
+                                            Tarifa aprox: <span className="text-accent">{hotel.price}</span>
+                                        </p>
+                                    )}
+                                </div>
+                                {hotel.link && (
+                                    <a href={hotel.link.startsWith('http') ? hotel.link : `https://${hotel.link}`} target="_blank" rel="noopener noreferrer" className="mt-4">
+                                        <button className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-accent text-[var(--accent-contrast)] hover:opacity-90 transition-opacity">
+                                            Ver Hotel / Reservar
+                                        </button>
+                                    </a>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {(cfg.hotels || []).map((hotel: any, idx: number) => (
-                        <div key={idx} className="bg-[var(--section-bg)] rounded-2xl overflow-hidden border border-[var(--card-border)] p-8">
-                            <h4 className="text-xl font-serif font-semibold text-[var(--text-primary)] mb-2">{hotel.name}</h4>
-                            <p className="text-sm text-[var(--text-secondary)]">{hotel.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+            </section>
+        );
+    };
 
     const renderFooter = () => (
         <footer id="footer" key="footer" className="bg-[var(--section-bg-alt)] text-[var(--text-primary)] py-10 text-center space-y-4">
