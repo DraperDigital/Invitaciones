@@ -22,12 +22,30 @@ const TornEdge = ({ className = '', flip = false }: { className?: string, flip?:
 export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToSection }: Props) {
     const eventDate = new Date(event.date_time);
     
-    // Theme colors: botanical eucalyptus green & romantic blush rose
-    const bgColor = cfg.heroBgColor || cfg.hero_bg_color || '#FAF6F3';
+    // Helper to test if a color is too dark or blue for botanical floral symmetry
+    const isUnsuitableBg = (c?: string) => {
+        if (!c) return true;
+        const hex = c.replace('#', '');
+        if (hex.length !== 6) return false;
+        const r = parseInt(hex.substring(0, 2), 16) || 0;
+        const g = parseInt(hex.substring(2, 4), 16) || 0;
+        const b = parseInt(hex.substring(4, 6), 16) || 0;
+        // If it's heavily dark (YIQ < 150) or dominantly blue (like #203497), fallback to warm ivory
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        if (yiq < 170) return true;
+        if (b > r + 30 && b > g + 20) return true; // unwanted blue/cool cast
+        return false;
+    };
+
+    // Theme colors: botanical eucalyptus green & romantic dusty rose
+    const rawBg = cfg.heroBgColor || cfg.hero_bg_color;
+    const bgColor = (!rawBg || isUnsuitableBg(rawBg)) ? '#FAF7F5' : rawBg;
     const rawAccent = cfg.accent_color || cfg.accentColor;
-    const accentColor = (!rawAccent || rawAccent === '#F47C62' || rawAccent === '#C88A58') ? '#C76D7E' : rawAccent;
+    const accentColor = (!rawAccent || rawAccent === '#F47C62' || rawAccent === '#C88A58') ? '#B85568' : rawAccent;
     const rawBanner = cfg.primary_color || cfg.primaryColor;
-    const bannerColor = (!rawBanner || rawBanner === '#456A5B' || rawBanner === '#3A4D39') ? '#435D49' : rawBanner;
+    const bannerColor = (!rawBanner || rawBanner === '#456A5B' || rawBanner === '#3A4D39' || rawBanner === '#1B2E1D') ? '#3A5240' : rawBanner;
+    // Primary title color in botanical dark tone for crisp contrast and floral luxury
+    const titleColor = '#3A5240';
 
     // Using the custom generated floral branch
     const floralImage = "/floral_ornament.png"; 
@@ -61,7 +79,7 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
                         {format(eventDate, "dd.MM.yyyy")} | {format(eventDate, "h:mm a")}
                     </p>
                     
-                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif font-light tracking-normal sm:tracking-wide uppercase mt-4 sm:mt-6 mb-4 break-normal hyphens-none" style={{ color: accentColor }}>
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif font-light tracking-normal sm:tracking-wide uppercase mt-4 sm:mt-6 mb-4 break-normal hyphens-none" style={{ color: titleColor }}>
                         {event.title}
                     </h1>
                     
@@ -124,7 +142,7 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
 
                     {/* Titles */}
                     <div className="space-y-4">
-                        <h2 className="text-3xl sm:text-5xl font-serif uppercase tracking-widest" style={{ color: accentColor }}>
+                        <h2 className="text-3xl sm:text-5xl font-serif uppercase tracking-widest" style={{ color: titleColor }}>
                             {cfg.story_title || "Nos encantaría que nos acompañes"}
                         </h2>
                         <p className="text-xs sm:text-sm font-sans uppercase tracking-[0.2em]" style={{ color: accentColor }}>

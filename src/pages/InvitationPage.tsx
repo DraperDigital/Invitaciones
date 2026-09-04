@@ -27,6 +27,7 @@ import PolaroidVintageHero from '../components/themes/PolaroidVintageHero';
 import WhimsicalKidsHero from '../components/themes/WhimsicalKidsHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
+import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
 function getContrastColor(hexColor: string) {
     if (!hexColor) return '#ffffff';
@@ -114,10 +115,10 @@ export default function InvitationPage() {
             heroRadius: '0px', cardRadius: '4px',
         },
         'floral-symmetry': {
-            sectionBg: '#FAF6F3', sectionBgAlt: '#F5EFEB', cardBg: '#FFFFFF',
-            textPrimary: '#2D2325', textSecondary: '#6E6264',
-            borderColor: '#EADCDD', cardBorder: '#C76D7E33',
-            accentOverride: '#C76D7E', fontPreset: 'romantica',
+            sectionBg: '#FAF7F5', sectionBgAlt: '#F3EFEA', cardBg: '#FFFFFF',
+            textPrimary: '#262223', textSecondary: '#6B6062',
+            borderColor: '#E8DFD8', cardBorder: '#B8556826',
+            accentOverride: '#B85568', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '8px',
         },
         'magazine': {
@@ -259,6 +260,23 @@ export default function InvitationPage() {
             ...(event.theme_config || {}), 
             [key]: value 
         };
+
+        // Si cambiamos de tema, sincronizamos automáticamente los colores y tipografía del preset
+        if (key === 'theme' && THEME_PRESET_PROFILES[value]) {
+            const profile = THEME_PRESET_PROFILES[value];
+            updatedConfig.primaryColor = profile.primaryColor;
+            updatedConfig.primary_color = profile.primaryColor;
+            updatedConfig.accentColor = profile.accentColor;
+            updatedConfig.accent_color = profile.accentColor;
+            updatedConfig.cardBgColor = profile.cardBgColor;
+            updatedConfig.card_bg_color = profile.cardBgColor;
+            updatedConfig.heroTextColor = profile.heroTextColor;
+            updatedConfig.hero_text_color = profile.heroTextColor;
+            updatedConfig.heroBgColor = profile.heroBgColor;
+            updatedConfig.hero_bg_color = profile.heroBgColor;
+            updatedConfig.typographyPreset = profile.typographyPreset;
+            updatedConfig.typography_preset = profile.typographyPreset;
+        }
         
         // Sincronizamos con el formato legacy (snake_case)
         const legacyKey = KEY_MAPPINGS[key];
@@ -1032,21 +1050,21 @@ END:VCALENDAR`;
         /* ── Simetría Floral overrides ── */
         .invitation-content h2,
         .invitation-content h3 {
-            color: #C76D7E !important;
-            letter-spacing: 0.06em;
+            color: #3A5240 !important;
+            letter-spacing: 0.05em;
         }
         .invitation-content button[style*="background"],
         .invitation-content a > button[style*="background"] {
-            background: #C76D7E !important;
+            background: #B85568 !important;
             color: #ffffff !important;
             border-radius: 9999px !important;
-            box-shadow: 0 4px 14px rgba(199, 109, 126, 0.3) !important;
+            box-shadow: 0 4px 14px rgba(184, 85, 104, 0.3) !important;
         }
         .invitation-content [class*="border-\\[var(--card-border)\\]"] {
-            border-color: #EADCDD !important;
+            border-color: #E8DFD8 !important;
         }
         .invitation-content #rsvp {
-            background-color: #435D49 !important;
+            background-color: #3A5240 !important;
         }
         .invitation-content #rsvp h2,
         .invitation-content #rsvp h3,
@@ -1058,7 +1076,7 @@ END:VCALENDAR`;
             color: #F8E2E6 !important;
         }
         .invitation-content #rsvp button[style*="background"] {
-            background: #C76D7E !important;
+            background: #B85568 !important;
             color: #ffffff !important;
         }
     ` : '';
