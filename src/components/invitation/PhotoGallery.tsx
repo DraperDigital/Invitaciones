@@ -44,7 +44,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     <p className="text-stone-400 font-light italic max-w-xl mx-auto">{subtitle}</p>
                 </div>
 
-                <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+                <div className="columns-1 md:columns-2 lg:columns-3 gap-6 md:gap-8 space-y-6 md:space-y-8">
                     {images.map((img, index) => (
                         <div 
                             key={index}

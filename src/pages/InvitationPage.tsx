@@ -1090,6 +1090,17 @@ END:VCALENDAR`;
                 width: 100% !important;
                 max-width: 100% !important;
             }
+            .invitation-content .invitation-hotels-grid,
+            .invitation-content .invitation-chambelanes-grid {
+                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .invitation-content .invitation-hotels-grid > *,
+            .invitation-content .invitation-chambelanes-grid > * {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
             .invitation-content h1 {
                 font-size: clamp(1.85rem, 7.5vw, 3rem) !important;
                 line-height: 1.15 !important;
@@ -1173,6 +1184,21 @@ END:VCALENDAR`;
         .is-mobile-preview .invitation-rsvp-grid .lg\\:flex,
         .invitation-content.is-mobile-preview .invitation-rsvp-grid .lg\\:flex {
             display: none !important;
+        }
+        .is-mobile-preview .invitation-hotels-grid,
+        .invitation-content.is-mobile-preview .invitation-hotels-grid,
+        .is-mobile-preview .invitation-chambelanes-grid,
+        .invitation-content.is-mobile-preview .invitation-chambelanes-grid {
+            grid-template-columns: 1fr !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        .is-mobile-preview .invitation-hotels-grid > *,
+        .invitation-content.is-mobile-preview .invitation-hotels-grid > *,
+        .is-mobile-preview .invitation-chambelanes-grid > *,
+        .invitation-content.is-mobile-preview .invitation-chambelanes-grid > * {
+            width: 100% !important;
+            max-width: 100% !important;
         }
         .is-mobile-preview .invitation-content h1,
         .invitation-content.is-mobile-preview h1 {
@@ -2084,7 +2110,7 @@ END:VCALENDAR`;
                         <div className="mb-16">
                             <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Nuestros Padres</h4>
                             {cfg.parents.bride || cfg.parents.groom ? (
-                                <div className="grid md:grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {cfg.parents.bride && (
                                         <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
                                             <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4 font-bold" style={{color: accentColor}}>Padres de la Novia</p>
@@ -2109,7 +2135,7 @@ END:VCALENDAR`;
                         </div>
                     )}
 
-                    <div className={`grid gap-12 ${hasChambelanes && hasDamas ? 'md:grid-cols-2' : hasPadrinos ? 'grid-cols-1' : 'max-w-2xl mx-auto'}`}>
+                    <div className={`grid gap-12 ${hasChambelanes && hasDamas ? 'grid-cols-1 md:grid-cols-2' : hasPadrinos ? 'grid-cols-1' : 'max-w-2xl mx-auto'}`}>
                         {hasChambelanes && (
                             <div>
                                 <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Chambelanes</h4>
@@ -2137,7 +2163,7 @@ END:VCALENDAR`;
                         {hasPadrinos && (
                             <div className={hasChambelanes || hasDamas ? 'md:col-span-2' : ''}>
                                 <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Padrinos</h4>
-                                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                                <div className="invitation-chambelanes-grid grid grid-cols-1 md:grid-cols-3 gap-6">
                                     {cfg.padrinos.map((padrino: {role: string, names: string}, idx: number) => (
                                         <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
                                             <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-2 font-bold" style={{color: accentColor}}>{padrino.role}</p>
@@ -2165,7 +2191,7 @@ END:VCALENDAR`;
                         <h3 className="text-3xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Hoteles y Hospedaje</h3>
                         <p className="text-sm font-sans uppercase tracking-[0.2em] text-[var(--text-secondary)]">Alojamiento recomendado para invitados</p>
                     </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="invitation-hotels-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                         {hotelList.map((hotel: any, idx: number) => (
                             <div key={idx} className="bg-[var(--card-bg)] rounded-2xl overflow-hidden border border-[var(--card-border)] p-6 sm:p-8 flex flex-col justify-between shadow-lg hover:shadow-xl transition-all relative">
                                 {hotel.isRecommended && (
