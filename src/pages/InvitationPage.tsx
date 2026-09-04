@@ -998,6 +998,105 @@ END:VCALENDAR`;
         .invitation-content .font-sans { 
             font-family: "${selectedFonts.sans}", sans-serif !important; 
         }
+
+        /* Responsive Móvil Estricto: 1 Columna Universal (Móvil físico y Simulador Admin) */
+        @media (max-width: 767px) {
+            .invitation-content .invitation-locations-wrapper {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .invitation-content .invitation-locations-wrapper > * {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 1 1 100% !important;
+            }
+            .invitation-content .invitation-itinerary-wrapper .timeline-line {
+                left: 27px !important;
+                transform: none !important;
+            }
+            .invitation-content .invitation-itinerary-wrapper .timeline-dot {
+                left: 0 !important;
+                transform: none !important;
+            }
+            .invitation-content .invitation-itinerary-wrapper .timeline-item {
+                left: 0 !important;
+                width: 100% !important;
+                margin-left: 0 !important;
+                padding-left: 64px !important;
+                padding-right: 0 !important;
+                text-align: left !important;
+            }
+            .invitation-content .invitation-rsvp-grid {
+                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .invitation-content .invitation-rsvp-grid > * {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .invitation-content h1,
+            .invitation-content h2,
+            .invitation-content h3 {
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+        }
+
+        .is-mobile-preview .invitation-locations-wrapper,
+        .invitation-content.is-mobile-preview .invitation-locations-wrapper {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        .is-mobile-preview .invitation-locations-wrapper > *,
+        .invitation-content.is-mobile-preview .invitation-locations-wrapper > * {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+        .is-mobile-preview .invitation-itinerary-wrapper .timeline-line,
+        .invitation-content.is-mobile-preview .invitation-itinerary-wrapper .timeline-line {
+            left: 27px !important;
+            transform: none !important;
+        }
+        .is-mobile-preview .invitation-itinerary-wrapper .timeline-dot,
+        .invitation-content.is-mobile-preview .invitation-itinerary-wrapper .timeline-dot {
+            left: 0 !important;
+            transform: none !important;
+        }
+        .is-mobile-preview .invitation-itinerary-wrapper .timeline-item,
+        .invitation-content.is-mobile-preview .invitation-itinerary-wrapper .timeline-item {
+            left: 0 !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+            padding-left: 64px !important;
+            padding-right: 0 !important;
+            text-align: left !important;
+        }
+        .is-mobile-preview .invitation-rsvp-grid,
+        .invitation-content.is-mobile-preview .invitation-rsvp-grid {
+            grid-template-columns: 1fr !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+        .is-mobile-preview .invitation-rsvp-grid > *,
+        .invitation-content.is-mobile-preview .invitation-rsvp-grid > * {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        .is-mobile-preview .invitation-rsvp-grid .lg\\:flex,
+        .invitation-content.is-mobile-preview .invitation-rsvp-grid .lg\\:flex {
+            display: none !important;
+        }
+        .is-mobile-preview .invitation-content h1,
+        .is-mobile-preview .invitation-content h2,
+        .is-mobile-preview .invitation-content h3,
+        .invitation-content.is-mobile-preview h1,
+        .invitation-content.is-mobile-preview h2,
+        .invitation-content.is-mobile-preview h3 {
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
         ${themeSpecificCSS}
         ${customStyles}
     `;
@@ -1375,7 +1474,7 @@ END:VCALENDAR`;
                     <p className="text-[var(--text-secondary)]">Gracias por estar con nosotros, aquí las ubicaciones del evento</p>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
+                <div className="invitation-locations-wrapper flex flex-col md:flex-row justify-center items-stretch gap-8 max-w-5xl mx-auto">
                     {cfg.misa_name && (
                         <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                             <div className="inline-flex justify-center">
@@ -1480,8 +1579,8 @@ END:VCALENDAR`;
                         <p className="text-[var(--text-secondary)]">Programa del día</p>
                     </div>
                     
-                    <div className="relative max-w-2xl mx-auto py-8">
-                        <div className="absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 bg-stone-300 md:-translate-x-1/2" />
+                    <div className="invitation-itinerary-wrapper relative max-w-2xl mx-auto py-8">
+                        <div className="timeline-line absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 bg-stone-300 md:-translate-x-1/2" />
                         
                         <div className="space-y-12">
                             {items.map((item: any, idx: number) => {
@@ -1499,10 +1598,10 @@ END:VCALENDAR`;
 
                                 return (
                                     <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                        <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
+                                        <div className="timeline-dot absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
                                             <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
                                         </div>
-                                        <div className={`w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
+                                        <div className={`timeline-item w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
                                             <div className="bg-[var(--section-bg)]/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-md transition-shadow">
                                                 <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
                                                     {item.time}
@@ -1524,7 +1623,7 @@ END:VCALENDAR`;
     const renderRSVP = () => (
         <section id="rsvp" key="rsvp" className="py-16 bg-[var(--section-bg)]">
             <div className="max-w-5xl mx-auto px-6">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center">
                     <div>
                         {guest && (
                             <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
@@ -1996,8 +2095,8 @@ END:VCALENDAR`;
                     )}
 
                     {/* MODULAR LAYOUT RENDERER */}
-                    <div className={isAdminMode && deviceView === 'mobile' ? "max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
-                        <div className="invitation-content">
+                    <div className={isAdminMode && deviceView === 'mobile' ? "is-mobile-preview max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
+                        <div className={`invitation-content ${isAdminMode && deviceView === 'mobile' ? 'is-mobile-preview' : ''}`}>
                             {sectionQueue.map((section) => {
                                 const renderer = SECTION_COMPONENTS[section.id];
                                 const content = renderer ? renderer() : null;
