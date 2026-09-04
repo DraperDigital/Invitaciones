@@ -29,6 +29,11 @@
     --font-sans: "Lato", sans-serif;
   }
 
+  [data-theme-font="divertida"] {
+    --font-serif: "Fredoka", cursive, sans-serif;
+    --font-sans: "Quicksand", sans-serif;
+  }
+
   .invitation-content h1,
   .invitation-content h2,
   .invitation-content h3 {

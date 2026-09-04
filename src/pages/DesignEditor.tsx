@@ -87,7 +87,7 @@ type DesignConfig = {
     hero_bg_color?: string;
 
     // Typography
-    typographyPreset: 'elegante' | 'moderna' | 'romantica';
+    typographyPreset: 'elegante' | 'moderna' | 'romantica' | 'divertida';
 
     // Plan
     plan: 'clasico' | 'pro' | 'premium' | 'concierge';
@@ -177,6 +177,13 @@ const TYPOGRAPHY_PRESETS = {
         label: 'Romántica',
         desc: 'Dulce, clásica y artística',
         preview: 'Mis XV Años'
+    },
+    divertida: {
+        serif: 'Fredoka',
+        sans: 'Quicksand',
+        label: 'Divertida',
+        desc: 'Alegre, infantil y juguetona',
+        preview: 'Mi Fiesta'
     },
 };
 
@@ -1103,7 +1110,7 @@ export default function DesignEditor() {
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
                 >
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                         {(Object.entries(TYPOGRAPHY_PRESETS) as [keyof typeof TYPOGRAPHY_PRESETS, any][]).map(([key, preset]) => (
                             <button
                                 key={key}

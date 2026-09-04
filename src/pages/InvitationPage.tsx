@@ -173,7 +173,7 @@ export default function InvitationPage() {
             sectionBg: '#FFF9EC', sectionBgAlt: '#FFF0F3', cardBg: '#FFFFFF',
             textPrimary: '#2C3E50', textSecondary: '#7F8C8D',
             borderColor: '#FFD3DC', cardBorder: '#FF6B6B44',
-            accentOverride: '#FF6B6B', fontPreset: 'romantica',
+            accentOverride: '#FF6B6B', fontPreset: 'divertida',
             heroRadius: '16px', cardRadius: '24px',
         },
     };
@@ -209,12 +209,12 @@ export default function InvitationPage() {
     // Apply font theme attribute and custom CSS - MUST be before any conditional returns
     useEffect(() => {
         const cfg = event?.theme_config || {};
-        const preset = cfg.typography_preset || cfg.typographyPreset || 'romantica';
+        const preset = activeVars.fontPreset || cfg.typography_preset || cfg.typographyPreset || 'romantica';
         document.documentElement.setAttribute('data-theme-font', preset);
         return () => {
             document.documentElement.removeAttribute('data-theme-font');
         };
-    }, [event?.theme_config]);
+    }, [event?.theme_config, activeVars.fontPreset]);
 
     // Custom CSS Injected from theme_config (Plan Pro/Concierge)
     const customStyles = event?.theme_config?.custom_css || '';
@@ -712,6 +712,7 @@ END:VCALENDAR`;
         moderna:            { serif: 'Outfit', sans: 'Inter' },
         romantica:          { serif: 'Libre Baskerville', sans: 'Lato' },
         'romantica-playfair': { serif: 'Playfair Display', sans: 'Lato' },
+        divertida:          { serif: 'Fredoka', sans: 'Quicksand' },
     };
     const selectedFonts = fontMapping[typographyPreset as keyof typeof fontMapping] || fontMapping.romantica;
 
@@ -728,11 +729,12 @@ END:VCALENDAR`;
 
     // ── Theme-specific style overrides ──
     // These inject on top of CSS variables for structural decoration per theme
-    const isClassicTheme    = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
-    const isClassicProTheme = themeName === 'classic-elegance-pro';
-    const isDarkTheme       = ['luxury-gold', 'neon-glow'].includes(themeName);
-    const isModernTheme     = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
-    const isBotanicalTheme  = themeName === 'romantic-botanical';
+    const isClassicTheme       = themeName === 'classic' || themeName === 'classic-elegance' || !themeName;
+    const isClassicProTheme    = themeName === 'classic-elegance-pro';
+    const isDarkTheme          = ['luxury-gold', 'neon-glow'].includes(themeName);
+    const isModernTheme        = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
+    const isBotanicalTheme     = themeName === 'romantic-botanical';
+    const isWhimsicalKidsTheme = themeName === 'whimsical-kids';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -979,6 +981,38 @@ END:VCALENDAR`;
         .invitation-content [class*="rounded-3xl"],
         .invitation-content [class*="rounded-2xl"] {
             border-radius: 0 !important;
+        }
+    ` : isWhimsicalKidsTheme ? `
+        /* ── Infantil Fantasía overrides ── */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3,
+        .invitation-content h4,
+        .invitation-content .font-serif {
+            font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
+            letter-spacing: normal !important;
+            font-weight: 600 !important;
+        }
+        .invitation-content,
+        .invitation-content body,
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content .font-sans {
+            font-family: 'Quicksand', sans-serif !important;
+        }
+        .invitation-content p.font-serif,
+        .invitation-content blockquote {
+            font-family: 'Quicksand', sans-serif !important;
+            font-weight: 600 !important;
+            font-style: normal !important;
+        }
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"] {
+            border-radius: 1.75rem !important;
+        }
+        .invitation-content button[class*="rounded-full"][style*="background"] {
+            font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
+            letter-spacing: 0.05em;
         }
     ` : '';
 

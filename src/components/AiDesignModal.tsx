@@ -9,7 +9,7 @@ type Props = {
         primaryColor: string;
         accentColor: string;
         cardBgColor: string;
-        typographyPreset: 'elegante' | 'moderna' | 'romantica';
+        typographyPreset: 'elegante' | 'moderna' | 'romantica' | 'divertida';
         welcomeMessage: string;
         welcomeSubtitle: string;
     }) => void;

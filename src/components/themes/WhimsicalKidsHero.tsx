@@ -45,7 +45,7 @@ export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroI
                         {labels.welcome}
                     </p>
                     
-                    <h1 className="text-5xl sm:text-7xl font-black text-stone-800 leading-tight mb-6" style={{ fontFamily: '"Comic Sans MS", "Chalkboard SE", sans-serif' }}>
+                    <h1 className="text-5xl sm:text-7xl font-black text-stone-800 leading-tight mb-6" style={{ fontFamily: '"Fredoka", "Quicksand", sans-serif' }}>
                         {event.title}
                     </h1>
 

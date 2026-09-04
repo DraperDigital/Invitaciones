@@ -10,7 +10,7 @@ export interface ThemeProfile {
     textSecondary: string;
     heroTextColor: string;
     heroBgColor: string;
-    typographyPreset: 'elegante' | 'moderna' | 'romantica';
+    typographyPreset: 'elegante' | 'moderna' | 'romantica' | 'divertida';
 }
 
 export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
@@ -208,6 +208,6 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         textSecondary: '#7F8C8D',
         heroTextColor: '#2C3E50',
         heroBgColor: '#FFEAA7',
-        typographyPreset: 'romantica'
+        typographyPreset: 'divertida'
     }
 };
