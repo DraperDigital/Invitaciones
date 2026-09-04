@@ -22,10 +22,12 @@ const TornEdge = ({ className = '', flip = false }: { className?: string, flip?:
 export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToSection }: Props) {
     const eventDate = new Date(event.date_time);
     
-    // Theme colors matching the screenshot
-    const bgColor = cfg.heroBgColor || '#FAF9F2'; // Cream background
-    const accentColor = cfg.accent_color || '#F47C62'; // Coral/Orange
-    const bannerColor = cfg.primary_color || '#456A5B'; // Dark green
+    // Theme colors: botanical eucalyptus green & romantic blush rose
+    const bgColor = cfg.heroBgColor || cfg.hero_bg_color || '#FAF6F3';
+    const rawAccent = cfg.accent_color || cfg.accentColor;
+    const accentColor = (!rawAccent || rawAccent === '#F47C62' || rawAccent === '#C88A58') ? '#C76D7E' : rawAccent;
+    const rawBanner = cfg.primary_color || cfg.primaryColor;
+    const bannerColor = (!rawBanner || rawBanner === '#456A5B' || rawBanner === '#3A4D39') ? '#435D49' : rawBanner;
 
     // Using the custom generated floral branch
     const floralImage = "/floral_ornament.png"; 

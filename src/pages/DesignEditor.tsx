@@ -341,7 +341,9 @@ export default function DesignEditor() {
                     misa_time:      c.misa_time      ?? c.misaTime          ?? '',
                     dress_code:     data.dress_code || '',
                     rsvp_deadline:  data.rsvp_deadline ? new Date(data.rsvp_deadline).toISOString().slice(0, 10) : '',
-                    galleryImages:  c.gallery_images ?? [],
+                    galleryImages:  (c.gallery_images ?? c.galleryImages ?? c.gallery ?? []).map((img: any) => 
+                        typeof img === 'string' ? { url: img, caption: '' } : img
+                    ),
                     registryItems:  c.registry_items ?? [],
                     itinerary:      c.itinerary ?? [],
                     showItinerary:  c.showItinerary ?? true,
@@ -407,7 +409,11 @@ export default function DesignEditor() {
                 welcome_message:  config.welcomeMessage,
                 subtitle:         config.welcomeSubtitle,
                 gallery_images:   config.galleryImages,
+                galleryImages:    config.galleryImages,
+                gallery:          config.galleryImages,
                 registry_items:   config.registryItems,
+                registryItems:    config.registryItems,
+                registry:         config.registryItems,
                 itinerary:        config.itinerary,
                 
                 // Explicitly keep feature flags from current state to be double safe
@@ -957,6 +963,25 @@ export default function DesignEditor() {
                                                                     const newImages = [...config.galleryImages];
                                                                     newImages[idx].url = urlData.publicUrl;
                                                                     setConfig({ ...config, galleryImages: newImages });
+
+                                                                    // Auto-guardar en base de datos para que la vista previa y el layout en vivo reflejen la imagen inmediatamente
+                                                                    if (id) {
+                                                                        try {
+                                                                            const { data: cur } = await supabase.from('events').select('theme_config').eq('id', id).single();
+                                                                            const curCfg = cur?.theme_config || {};
+                                                                            await supabase.from('events').update({
+                                                                                theme_config: {
+                                                                                    ...curCfg,
+                                                                                    gallery_images: newImages,
+                                                                                    galleryImages: newImages,
+                                                                                    gallery: newImages,
+                                                                                }
+                                                                            }).eq('id', id);
+                                                                        } catch (persistErr) {
+                                                                            console.warn('[AUTO_SAVE_GALLERY_FAILED]', persistErr);
+                                                                        }
+                                                                    }
+
                                                                     toast.success('¡Imagen subida exitosamente!');
                                                                 } catch (err: any) {
                                                                     toast.error('Error al subir imagen.');
@@ -1846,6 +1871,25 @@ export default function DesignEditor() {
                                                                     const newImages = [...config.galleryImages];
                                                                     newImages[idx].url = urlData.publicUrl;
                                                                     setConfig({ ...config, galleryImages: newImages });
+
+                                                                    // Auto-guardar en base de datos para que la vista previa y el layout en vivo reflejen la imagen inmediatamente
+                                                                    if (id) {
+                                                                        try {
+                                                                            const { data: cur } = await supabase.from('events').select('theme_config').eq('id', id).single();
+                                                                            const curCfg = cur?.theme_config || {};
+                                                                            await supabase.from('events').update({
+                                                                                theme_config: {
+                                                                                    ...curCfg,
+                                                                                    gallery_images: newImages,
+                                                                                    galleryImages: newImages,
+                                                                                    gallery: newImages,
+                                                                                }
+                                                                            }).eq('id', id);
+                                                                        } catch (persistErr) {
+                                                                            console.warn('[AUTO_SAVE_GALLERY_FAILED]', persistErr);
+                                                                        }
+                                                                    }
+
                                                                     toast.success('¡Imagen de galería subida exitosamente!');
                                                                 } catch (err: any) {
                                                                     toast.error('Error al subir imagen de galería.');

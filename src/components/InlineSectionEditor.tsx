@@ -98,7 +98,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const getDesignSection = (id: string) => {
         switch(id) {
             case 'itinerary': return 'itinerary';
-            case 'gallery': return 'multimedia';
+            case 'gallery': return 'gallery';
             case 'gifts': return 'gifts';
             case 'hotels': return 'hotels';
             case 'chambelanes': return 'chambelanes';

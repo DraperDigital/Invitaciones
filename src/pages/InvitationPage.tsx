@@ -114,10 +114,10 @@ export default function InvitationPage() {
             heroRadius: '0px', cardRadius: '4px',
         },
         'floral-symmetry': {
-            sectionBg: '#FAEDCD', sectionBgAlt: '#FFF9F0', cardBg: '#FFFDF9',
-            textPrimary: '#2C362B', textSecondary: '#6C756D',
-            borderColor: '#E3C99F', cardBorder: '#C88A5844',
-            accentOverride: '#C88A58', fontPreset: 'romantica',
+            sectionBg: '#FAF6F3', sectionBgAlt: '#F5EFEB', cardBg: '#FFFFFF',
+            textPrimary: '#2D2325', textSecondary: '#6E6264',
+            borderColor: '#EADCDD', cardBorder: '#C76D7E33',
+            accentOverride: '#C76D7E', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '8px',
         },
         'magazine': {
@@ -735,6 +735,7 @@ END:VCALENDAR`;
     const isDarkTheme          = ['luxury-gold', 'neon-glow'].includes(themeName);
     const isModernTheme        = ['modern-minimalist', 'magazine', 'split-screen'].includes(themeName);
     const isBotanicalTheme     = themeName === 'romantic-botanical';
+    const isFloralSymmetryTheme = themeName === 'floral-symmetry';
     const isWhimsicalKidsTheme = themeName === 'whimsical-kids';
 
     const themeSpecificCSS = isClassicTheme ? `
@@ -1026,6 +1027,39 @@ END:VCALENDAR`;
         .invitation-content button[class*="rounded-full"][style*="background"] {
             font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
             letter-spacing: 0.05em;
+        }
+    ` : isFloralSymmetryTheme ? `
+        /* ── Simetría Floral overrides ── */
+        .invitation-content h2,
+        .invitation-content h3 {
+            color: #C76D7E !important;
+            letter-spacing: 0.06em;
+        }
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            background: #C76D7E !important;
+            color: #ffffff !important;
+            border-radius: 9999px !important;
+            box-shadow: 0 4px 14px rgba(199, 109, 126, 0.3) !important;
+        }
+        .invitation-content [class*="border-\\[var(--card-border)\\]"] {
+            border-color: #EADCDD !important;
+        }
+        .invitation-content #rsvp {
+            background-color: #435D49 !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3,
+        .invitation-content #rsvp p,
+        .invitation-content #rsvp label {
+            color: rgba(255,255,255,0.92) !important;
+        }
+        .invitation-content #rsvp h2 {
+            color: #F8E2E6 !important;
+        }
+        .invitation-content #rsvp button[style*="background"] {
+            background: #C76D7E !important;
+            color: #ffffff !important;
         }
     ` : '';
 
@@ -2065,16 +2099,24 @@ END:VCALENDAR`;
     );
 
     const renderGallery = () => {
-        const rawImages = cfg?.gallery_images || cfg?.photoGallery?.images || [];
-        // Map string arrays to the {url, caption} format expected by PhotoGallery
-        const galleryImages = rawImages.map((img: any) => 
-            typeof img === 'string' ? { url: img } : img
-        );
+        const rawImages = cfg?.gallery_images 
+            || cfg?.galleryImages 
+            || cfg?.gallery 
+            || cfg?.photoGallery?.images 
+            || [];
+        // Map string arrays to the {url, caption} format expected by PhotoGallery and filter valid URLs
+        const galleryImages = (Array.isArray(rawImages) ? rawImages : [])
+            .map((img: any) => typeof img === 'string' ? { url: img, caption: '' } : img)
+            .filter((img: any) => typeof img?.url === 'string' && img.url.trim().length > 0);
 
         return (
             <div id="gallery" key="gallery">
                 {galleryImages.length > 0 ? (
-                    <PhotoGallery images={galleryImages} />
+                    <PhotoGallery 
+                        images={galleryImages} 
+                        title={cfg?.gallery_title || cfg?.galleryTitle || "Galería de Fotos"}
+                        subtitle={cfg?.gallery_subtitle || cfg?.gallerySubtitle || "Momentos inolvidables compartidos con amor."}
+                    />
                 ) : (
                     <section className="py-20 bg-[var(--section-bg)]">
                         <div className="max-w-3xl mx-auto px-6 text-center">

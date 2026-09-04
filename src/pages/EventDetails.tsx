@@ -94,8 +94,11 @@ export default function EventDetails() {
             setEvent(eventData);
 
             const config = eventData.theme_config || {};
-            setRegistryItems(config.registry || []);
-            setGalleryImages(config.gallery || []);
+            setRegistryItems(config.registry || config.registry_items || config.registryItems || []);
+            const rawGallery = config.gallery_images ?? config.galleryImages ?? config.gallery ?? [];
+            setGalleryImages((Array.isArray(rawGallery) ? rawGallery : []).map((img: any) =>
+                typeof img === 'string' ? { url: img, caption: '' } : img
+            ));
 
             // Ordenar por nombre en cliente (el nested select no soporta .order())
             const sorted = [...(rawGuests || [])].sort((a: any, b: any) =>
@@ -116,7 +119,11 @@ export default function EventDetails() {
             const newConfig = {
                 ...event.theme_config,
                 registry: registryItems,
-                gallery: galleryImages
+                registry_items: registryItems,
+                registryItems: registryItems,
+                gallery: galleryImages,
+                gallery_images: galleryImages,
+                galleryImages: galleryImages
             };
 
             const { error } = await supabase

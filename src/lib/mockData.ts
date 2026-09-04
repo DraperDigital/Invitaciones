@@ -360,9 +360,9 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'premium',
         theme_config: {
             theme: 'floral-symmetry',
-            heroBgColor: '#FAF9F2',
-            primary_color: '#456A5B',
-            accent_color: '#F47C62',
+            heroBgColor: '#FAF6F3',
+            primary_color: '#435D49',
+            accent_color: '#C76D7E',
             save_the_date_text: 'Reserva la fecha',
             subtitle: 'comienzan su gran aventura juntos',
             banner_subtitle: 'Junto con nuestras familias',
