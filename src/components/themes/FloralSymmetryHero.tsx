@@ -59,7 +59,7 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
                         {format(eventDate, "dd.MM.yyyy")} | {format(eventDate, "h:mm a")}
                     </p>
                     
-                    <h1 className="text-5xl sm:text-7xl font-serif font-light tracking-wide uppercase mt-6 mb-4" style={{ color: accentColor }}>
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif font-light tracking-normal sm:tracking-wide uppercase mt-4 sm:mt-6 mb-4 break-normal hyphens-none" style={{ color: accentColor }}>
                         {event.title}
                     </h1>
                     

@@ -89,9 +89,9 @@ export default function ClassicEleganceProHero({ event, cfg, countdown, heroImag
                     </p>
 
                     {/* Title */}
-                    <h1 className="font-serif font-light leading-tight mb-5"
+                    <h1 className="font-serif font-light leading-tight mb-5 break-normal hyphens-none"
                         style={{
-                            fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+                            fontSize: 'clamp(1.75rem, 6vw, 4.5rem)',
                             background: `linear-gradient(135deg, ${GOLD_DARK}, ${GOLD}, ${GOLD_LIGHT})`,
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',

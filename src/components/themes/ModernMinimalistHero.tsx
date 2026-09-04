@@ -43,7 +43,7 @@ export default function ModernMinimalistHero({ event, cfg, countdown, labels, he
                         <p className="text-[10px] sm:text-xs uppercase tracking-[0.6em] sm:tracking-[1em] font-sans text-accent font-black">
                             {cfg.subtitle || labels.tagline}
                         </p>
-                        <h1 className="text-6xl xs:text-7xl sm:text-8xl md:text-9xl lg:text-[10rem] font-serif font-light leading-[1.1] sm:leading-[0.9] tracking-tight text-white drop-shadow-lg">
+                        <h1 className="text-3xl sm:text-7xl md:text-8xl lg:text-9xl font-serif font-light leading-[1.1] sm:leading-[0.9] tracking-tight text-white drop-shadow-lg break-normal hyphens-none">
                             {event.title}
                         </h1>
                     </div>

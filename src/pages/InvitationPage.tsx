@@ -1072,8 +1072,13 @@ END:VCALENDAR`;
             .invitation-content h1,
             .invitation-content h2,
             .invitation-content h3 {
-                word-break: break-word !important;
-                overflow-wrap: break-word !important;
+                word-break: normal !important;
+                overflow-wrap: normal !important;
+                hyphens: none !important;
+            }
+            .invitation-content h1 {
+                font-size: clamp(2rem, 8vw, 3.5rem) !important;
+                line-height: 1.15 !important;
             }
         }
 
@@ -1128,8 +1133,77 @@ END:VCALENDAR`;
         .invitation-content.is-mobile-preview h1,
         .invitation-content.is-mobile-preview h2,
         .invitation-content.is-mobile-preview h3 {
-            word-break: break-word !important;
-            overflow-wrap: break-word !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            hyphens: none !important;
+        }
+        .is-mobile-preview .invitation-content h1,
+        .invitation-content.is-mobile-preview h1 {
+            font-size: clamp(1.85rem, 7.5vw, 3.25rem) !important;
+            line-height: 1.15 !important;
+        }
+
+        /* ── Strict Mobile Preview Hero & Theme Overrides (Simulator) ── */
+        .is-mobile-preview .theme-splitscreen-wrapper,
+        .invitation-content.is-mobile-preview .theme-splitscreen-wrapper {
+            flex-direction: column !important;
+        }
+        .is-mobile-preview .theme-splitscreen-img,
+        .invitation-content.is-mobile-preview .theme-splitscreen-img {
+            width: 100% !important;
+            height: 42vh !important;
+        }
+        .is-mobile-preview .theme-splitscreen-content,
+        .invitation-content.is-mobile-preview .theme-splitscreen-content {
+            width: 100% !important;
+            min-height: 58vh !important;
+            padding: 1.5rem !important;
+        }
+        .is-mobile-preview .theme-splitscreen-content h1,
+        .invitation-content.is-mobile-preview .theme-splitscreen-content h1 {
+            font-size: 2rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .is-mobile-preview .theme-passport-card,
+        .invitation-content.is-mobile-preview .theme-passport-card {
+            flex-direction: column !important;
+            max-width: 100% !important;
+        }
+        .is-mobile-preview .theme-passport-image,
+        .invitation-content.is-mobile-preview .theme-passport-image {
+            width: 100% !important;
+            height: 12rem !important;
+        }
+        .is-mobile-preview .theme-passport-info,
+        .invitation-content.is-mobile-preview .theme-passport-info {
+            width: 100% !important;
+            padding: 1.25rem !important;
+        }
+
+        .is-mobile-preview .theme-collage-container,
+        .invitation-content.is-mobile-preview .theme-collage-container {
+            flex-direction: column !important;
+        }
+        .is-mobile-preview .theme-collage-desktop-left,
+        .invitation-content.is-mobile-preview .theme-collage-desktop-left,
+        .is-mobile-preview .theme-collage-desktop-right,
+        .invitation-content.is-mobile-preview .theme-collage-desktop-right {
+            display: none !important;
+        }
+        .is-mobile-preview .theme-collage-mobile-fan,
+        .invitation-content.is-mobile-preview .theme-collage-mobile-fan {
+            display: flex !important;
+        }
+        .is-mobile-preview .theme-collage-center,
+        .invitation-content.is-mobile-preview .theme-collage-center {
+            width: 100% !important;
+            padding: 0.5rem !important;
+        }
+        .is-mobile-preview .theme-collage-center h1,
+        .invitation-content.is-mobile-preview .theme-collage-center h1 {
+            font-size: 2.25rem !important;
+            line-height: 1.2 !important;
         }
         ${themeSpecificCSS}
         ${customStyles}
@@ -1260,7 +1334,7 @@ END:VCALENDAR`;
                         <p className="text-sm uppercase tracking-[0.4em] mb-6 font-sans" style={{color: heroTextColor, opacity: 0.85}}>
                             {subtitle || labels.tagline}
                         </p>
-                        <h1 className="text-5xl xs:text-6xl sm:text-7xl md:text-8xl font-serif font-light mb-6 leading-[1.1] md:leading-none drop-shadow-sm" style={{color: heroTextColor}}>
+                        <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif font-light mb-6 leading-[1.15] md:leading-none drop-shadow-sm break-normal hyphens-none" style={{color: heroTextColor}}>
                             {event.title}
                         </h1>
                         {welcomeMessage && (
@@ -1317,17 +1391,16 @@ END:VCALENDAR`;
                     )}
 
                     <div className="relative z-10 text-center px-6 max-w-4xl">
-                        <div className="mb-12 animate-in fade-in slide-in-from-top-10 duration-1000">
-                            <div className="h-px w-24 bg-gradient-to-r from-transparent via-accent/50 to-transparent mx-auto mb-8" />
-                            <p className="text-xs sm:text-sm uppercase tracking-[0.6em] mb-8 font-sans text-accent font-black">
+                        <div className="mb-8 sm:mb-12 animate-in fade-in slide-in-from-top-10 duration-1000">
+                            <div className="h-px w-24 bg-gradient-to-r from-transparent via-accent/50 to-transparent mx-auto mb-6 sm:mb-8" />
+                            <p className="text-xs sm:text-sm uppercase tracking-[0.4em] sm:tracking-[0.6em] mb-6 sm:mb-8 font-sans text-accent font-black">
                                 {subtitle || labels.tagline}
                             </p>
-                            <h1 className="text-5xl xs:text-6xl sm:text-8xl md:text-9xl font-serif font-light mb-10 leading-[1.1] md:leading-tight tracking-tight text-white drop-shadow-2xl">
+                            <h1 className="text-3xl sm:text-7xl md:text-8xl lg:text-9xl font-serif font-light mb-6 sm:mb-10 leading-[1.15] md:leading-tight tracking-tight text-white drop-shadow-2xl break-normal hyphens-none">
                                 {event.title}
                             </h1>
                             <div className="h-px w-24 bg-gradient-to-r from-transparent via-accent/50 to-transparent mx-auto mt-2" />
                         </div>
-
                         {(cfg.showCountdown !== false) && (
                             <div className="grid grid-cols-4 gap-4 sm:gap-10 max-w-2xl mx-auto mb-16 animate-in fade-in zoom-in duration-1000 delay-300">
                                 {[
@@ -1338,25 +1411,22 @@ END:VCALENDAR`;
                                 ].map((item) => (
                                     <div key={item.label} className="group cursor-default">
                                         <div className="relative">
-                                            <p className="text-4xl sm:text-6xl font-serif text-white mb-2 transition-transform group-hover:scale-110 duration-300">
-                                                {item.value.toString().padStart(2, '0')}
-                                            </p>
-                                            <div className="absolute -inset-2 bg-[var(--section-bg)]/5 rounded-2xl scale-0 group-hover:scale-100 transition-transform duration-300 -z-10" />
+                                            <div className="text-3xl sm:text-6xl font-serif font-light text-white mb-2">{item.value.toString().padStart(2, '0')}</div>
+                                            <p className="text-[10px] sm:text-xs uppercase tracking-widest text-accent font-bold">{item.label}</p>
                                         </div>
-                                        <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-accent/80 font-bold">{item.label}</p>
                                     </div>
                                 ))}
                             </div>
                         )}
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-white/90 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500">
+                        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-12 text-white">
                             <div className="flex items-center gap-4 group">
                                 <div className="h-12 w-12 rounded-2xl bg-[var(--section-bg)]/5 border border-white/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
                                     <Calendar className="h-5 w-5 text-accent" />
                                 </div>
                                 <div className="text-left">
                                     <p className="text-[10px] uppercase tracking-widest text-accent font-bold">Fecha</p>
-                                    <p className="text-lg font-serif">{format(eventDate, "EEEE d 'de' MMMM", { locale: es })}</p>
+                                    <p className="text-lg font-serif">{format(eventDate, "d 'de' MMMM", { locale: es })}</p>
                                 </div>
                             </div>
                             <div className="h-12 w-px bg-[var(--section-bg)]/10 hidden sm:block" />
@@ -1400,7 +1470,7 @@ END:VCALENDAR`;
                             <p className="text-[10px] sm:text-sm uppercase tracking-[0.4em] sm:tracking-[0.8em] font-sans text-accent font-black mb-6 sm:mb-8">
                                 {subtitle || labels.tagline}
                             </p>
-                            <h1 className="text-6xl xs:text-7xl sm:text-9xl md:text-[11rem] font-serif font-light leading-[1.1] sm:leading-[0.85] tracking-tighter text-white drop-shadow-2xl">
+                            <h1 className="text-3xl sm:text-7xl md:text-9xl font-serif font-light leading-[1.1] sm:leading-[0.85] tracking-tighter text-white drop-shadow-2xl break-normal hyphens-none">
                                 {event.title}
                             </h1>
                         </div>

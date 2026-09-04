@@ -45,7 +45,7 @@ export default function PolaroidVintageHero({ event, countdown, heroImageUrl, sc
 
                 {/* Hand-written style text */}
                 <div className="mt-12 text-center text-stone-800 space-y-6">
-                    <h1 className="text-6xl sm:text-7xl font-serif italic tracking-tight">
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif italic tracking-tight break-normal hyphens-none">
                         {event.title}
                     </h1>
                     

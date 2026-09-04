@@ -41,7 +41,7 @@ export default function MagazineHero({ event, countdown, heroImageUrl, scrollToS
                     {/* Oversized Typography */}
                     <div className="relative z-10 pointer-events-none text-white w-full drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]">
                         <p className="text-[12px] sm:text-sm tracking-[0.5em] font-bold uppercase mb-4 sm:mb-8 text-stone-300 drop-shadow-md">Edición Especial</p>
-                        <h1 className="text-[clamp(4rem,15vw,15rem)] leading-[0.85] font-serif tracking-tighter uppercase whitespace-pre-line w-full break-words px-4">
+                        <h1 className="text-[clamp(2.5rem,10vw,14rem)] leading-[0.9] font-serif tracking-tighter uppercase whitespace-pre-line w-full break-normal hyphens-none px-4">
                             {event.title.replace(' y ', '\n&\n')}
                         </h1>
                     </div>

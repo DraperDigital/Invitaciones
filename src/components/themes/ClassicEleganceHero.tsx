@@ -71,7 +71,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
             {/* ── 2. Hero Title & Framed Couple Photo ── */}
             <div className="py-12 sm:py-20 px-4 text-center relative z-10 max-w-4xl mx-auto">
                 <div className="space-y-3 mb-8">
-                    <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#9A7B38] uppercase font-light leading-tight">
+                    <h1 className="text-2xl sm:text-5xl md:text-7xl font-serif tracking-normal sm:tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#9A7B38] uppercase font-light leading-tight break-normal hyphens-none">
                         {event?.title || 'ELEANOR & WILLIAM'}
                     </h1>
                     <p className="text-xs sm:text-sm uppercase tracking-[0.5em] text-[#5A5047] font-sans font-medium">

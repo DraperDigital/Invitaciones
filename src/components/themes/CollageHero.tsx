@@ -28,18 +28,32 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
         gallery[4]?.url || 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80',
     ];
 
+    // Smart contrast calculation
+    const isDarkBg = (colorStr: string) => {
+        if (!colorStr || !colorStr.startsWith('#')) return false;
+        const c = colorStr.replace('#', '');
+        if (c.length !== 6) return false;
+        const r = parseInt(c.substring(0, 2), 16);
+        const g = parseInt(c.substring(2, 4), 16);
+        const b = parseInt(c.substring(4, 6), 16);
+        return (r * 0.299 + g * 0.587 + b * 0.114) < 150;
+    };
+    const hasDarkBg = isDarkBg(heroBgColor);
+    const titleColor = hasDarkBg ? (cfg.hero_text_color || cfg.heroTextColor || '#FFFFFF') : primaryColor;
+    const subtitleColor = hasDarkBg ? 'rgba(255,255,255,0.85)' : heroTextColor;
+
     return (
         <section id="hero" className="relative flex flex-col w-full min-h-screen">
             {/* Top Collage Section */}
-            <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden py-20 px-4 sm:px-8" style={{ background: heroBgColor }}>
+            <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden py-12 sm:py-20 px-4 sm:px-8" style={{ background: heroBgColor }}>
                 
                 {/* Optional faint background texture or overlay */}
                 <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/cream-paper.png")' }}></div>
 
-                <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+                <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-12 theme-collage-container">
                     
-                    {/* Left Collage */}
-                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-left duration-1000">
+                    {/* Left Collage (Desktop only) */}
+                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-left duration-1000 theme-collage-desktop-left">
                         <img 
                             src={images[1]} 
                             alt="" 
@@ -63,20 +77,30 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
                     </div>
 
                     {/* Center Content */}
-                    <div className="w-full lg:w-1/3 text-center space-y-6 animate-in zoom-in duration-1000 delay-300 relative z-40">
-                        <p className="text-sm sm:text-base font-serif italic text-stone-500 tracking-wide" style={{ color: heroTextColor }}>
+                    <div className="w-full lg:w-1/3 text-center space-y-4 sm:space-y-6 animate-in zoom-in duration-1000 delay-300 relative z-40 theme-collage-center">
+                        <p className="text-xs sm:text-base font-serif italic tracking-wide" style={{ color: subtitleColor }}>
                             {cfg.welcome_message || "Estás invitado a celebrar el gran día de"}
                         </p>
                         
-                        <h1 className="text-6xl sm:text-7xl md:text-[5.5rem] font-serif font-light leading-[1.1] text-stone-800 drop-shadow-sm" style={{ color: primaryColor, fontFamily: "'Great Vibes', cursive" }}>
+                        <h1 
+                            className="text-3xl sm:text-5xl md:text-6xl lg:text-[5rem] font-serif font-light leading-[1.15] drop-shadow-sm break-normal hyphens-none px-2" 
+                            style={{ color: titleColor, fontFamily: "'Great Vibes', cursive" }}
+                        >
                             {event.title}
                         </h1>
 
-                        <div className="pt-8">
+                        {/* Mobile Collage Cards (shown on mobile & simulator) */}
+                        <div className="flex lg:hidden justify-center items-center gap-2 sm:gap-3 py-4 px-2 w-full max-w-xs mx-auto theme-collage-mobile-fan">
+                            <img src={images[1]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md -rotate-6 border-2 border-white" />
+                            <img src={images[0]} alt="" className="w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl shadow-xl z-10 border-2 border-white scale-105" />
+                            <img src={images[2]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md rotate-6 border-2 border-white" />
+                        </div>
+
+                        <div className="pt-4 sm:pt-8">
                             <button 
                                 onClick={() => document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' })}
-                                className="inline-flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-[0.2em] font-bold transition-all hover:opacity-70"
-                                style={{ color: primaryColor }}
+                                className="inline-flex items-center gap-2 text-xs sm:text-sm font-sans uppercase tracking-[0.2em] font-bold transition-all hover:opacity-70 px-6 py-2.5 rounded-full border border-current"
+                                style={{ color: titleColor }}
                             >
                                 RSVP
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
@@ -84,8 +108,8 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
                         </div>
                     </div>
 
-                    {/* Right Collage */}
-                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-right duration-1000">
+                    {/* Right Collage (Desktop only) */}
+                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-right duration-1000 theme-collage-desktop-right">
                         <img 
                             src={images[3]} 
                             alt="" 
