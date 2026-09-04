@@ -364,7 +364,7 @@ export function buildSectionQueue(
 
   const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
-  return order
+  const filtered = order
     .map((id) => getSectionDef(id))
     .filter((def): def is SectionDef => {
       if (!def) return false;
@@ -386,6 +386,20 @@ export function buildSectionQueue(
 
       return true;
     });
+
+  // REGLA ESTRICTA DE LAYOUT:
+  // - 'hero' SIEMPRE es el primer elemento.
+  // - 'footer' SIEMPRE va hasta el final absoluto, nunca entre secciones intermedias.
+  const heroDef = filtered.find((s) => s.id === 'hero');
+  const footerDef = filtered.find((s) => s.id === 'footer');
+  const contentSections = filtered.filter((s) => s.id !== 'hero' && s.id !== 'footer');
+
+  const result: SectionDef[] = [];
+  if (heroDef) result.push(heroDef);
+  result.push(...contentSections);
+  if (footerDef) result.push(footerDef);
+
+  return result;
 }
 
 /**

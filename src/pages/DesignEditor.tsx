@@ -347,7 +347,11 @@ export default function DesignEditor() {
                     registryItems:  c.registry_items ?? [],
                     itinerary:      c.itinerary ?? [],
                     showItinerary:  c.showItinerary ?? true,
-                    sectionOrder:   c.sectionOrder ?? DEFAULT_SECTION_ORDER,
+                    sectionOrder:   [
+                        'hero',
+                        ...((c.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[]).filter((id: SectionId) => id !== 'hero' && id !== 'footer'),
+                        'footer'
+                    ],
                     chambelanes:     c.chambelanes ?? [],
                     damas:           c.damas       ?? [],
                     heroBgColor:     c.heroBgColor ?? c.hero_bg_color ?? '#1B2E1D',
@@ -460,8 +464,12 @@ export default function DesignEditor() {
                 isPro:     config.plan === 'pro',
                 isPremium: config.plan === 'premium',
 
-                // Layout order
-                sectionOrder: config.sectionOrder,
+                // Layout order (Hero siempre primero, Footer siempre último)
+                sectionOrder: [
+                    'hero',
+                    ...((config.sectionOrder || DEFAULT_SECTION_ORDER) as SectionId[]).filter(id => id !== 'hero' && id !== 'footer'),
+                    'footer'
+                ],
 
                 // Typography
                 typography_preset:    config.typographyPreset,

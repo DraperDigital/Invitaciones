@@ -1405,10 +1405,14 @@ END:VCALENDAR`;
     const planTier = isPremium ? 'premium' : isPro ? 'pro' : ('clasico' as const);
 
     const rawSavedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
-    const savedOrder = [
-        ...rawSavedOrder,
-        ...DEFAULT_SECTION_ORDER.filter(id => !rawSavedOrder.includes(id))
+    const cleanSavedOrder = rawSavedOrder.filter(id => id !== 'hero' && id !== 'footer');
+    const cleanDefaultOrder = DEFAULT_SECTION_ORDER.filter(id => id !== 'hero' && id !== 'footer');
+    const reorderableSavedOrder = [
+        ...cleanSavedOrder,
+        ...cleanDefaultOrder.filter(id => !cleanSavedOrder.includes(id))
     ];
+    // Orden garantizado: 'hero' siempre al inicio y 'footer' siempre al final absoluto
+    const savedOrder: SectionId[] = ['hero', ...reorderableSavedOrder, 'footer'];
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder);
 
     // ── Helpers ─────────────────────────────────────────────────────
@@ -2295,7 +2299,7 @@ END:VCALENDAR`;
         gallery:       renderGallery,
         chambelanes:   renderChambelanes,
         hotels:        renderAccommodation,
-        footer:        renderFooter,
+        footer:        () => null, // El footer se renderiza explícita e incondicionalmente al final absoluto
         countdown:     () => null, // Integrated into Hero
     };
 
@@ -2422,12 +2426,14 @@ END:VCALENDAR`;
                     {/* MODULAR LAYOUT RENDERER */}
                     <div className={isAdminMode && deviceView === 'mobile' ? "w-full md:max-w-[430px] md:mx-auto md:my-16 md:rounded-[3rem] md:shadow-2xl md:border-[12px] md:border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all md:ring-1 md:ring-stone-900/10" : "w-full transition-all"}>
                         <div className={`invitation-content ${isAdminMode && deviceView === 'mobile' ? 'is-mobile-preview' : ''}`}>
-                            {sectionQueue.map((section) => {
+                            {sectionQueue.filter(s => s.id !== 'footer').map((section) => {
                                 const renderer = SECTION_COMPONENTS[section.id];
                                 const content = renderer ? renderer() : null;
                                 if (!content) return null;
                                 return <div key={section.id}>{content}</div>;
                             })}
+                            {/* El footer SIEMPRE y sin excepción va al final absoluto de la página */}
+                            {renderFooter()}
                         </div>
                     </div>
 
@@ -2548,12 +2554,10 @@ END:VCALENDAR`;
                                                                     onClick={async (e) => {
                                                                         e.stopPropagation();
                                                                         if (idx === 0) return;
-                                                                        const newOrder = [...savedOrder];
-                                                                        const secIndex = newOrder.indexOf(sec.id);
-                                                                        if (secIndex > 0) {
-                                                                            [newOrder[secIndex - 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex - 1]];
-                                                                            await handleUpdateFeature('sectionOrder', newOrder);
-                                                                        }
+                                                                        const reorderableIds = arr.map((item) => item.id);
+                                                                        [reorderableIds[idx - 1], reorderableIds[idx]] = [reorderableIds[idx], reorderableIds[idx - 1]];
+                                                                        const newOrder: SectionId[] = ['hero', ...reorderableIds, 'footer'];
+                                                                        await handleUpdateFeature('sectionOrder', newOrder);
                                                                     }}
                                                                     disabled={idx === 0}
                                                                     className={`p-1.5 rounded-lg transition-colors ${idx === 0 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
@@ -2565,12 +2569,10 @@ END:VCALENDAR`;
                                                                     onClick={async (e) => {
                                                                         e.stopPropagation();
                                                                         if (idx === arr.length - 1) return;
-                                                                        const newOrder = [...savedOrder];
-                                                                        const secIndex = newOrder.indexOf(sec.id);
-                                                                        if (secIndex !== -1 && secIndex < newOrder.length - 1) {
-                                                                            [newOrder[secIndex + 1], newOrder[secIndex]] = [newOrder[secIndex], newOrder[secIndex + 1]];
-                                                                            await handleUpdateFeature('sectionOrder', newOrder);
-                                                                        }
+                                                                        const reorderableIds = arr.map((item) => item.id);
+                                                                        [reorderableIds[idx + 1], reorderableIds[idx]] = [reorderableIds[idx], reorderableIds[idx + 1]];
+                                                                        const newOrder: SectionId[] = ['hero', ...reorderableIds, 'footer'];
+                                                                        await handleUpdateFeature('sectionOrder', newOrder);
                                                                     }}
                                                                     disabled={idx === arr.length - 1}
                                                                     className={`p-1.5 rounded-lg transition-colors ${idx === arr.length - 1 ? 'text-stone-200 cursor-not-allowed' : 'text-stone-400 hover:bg-stone-200 hover:text-stone-700'}`}
