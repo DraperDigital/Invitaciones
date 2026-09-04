@@ -2322,7 +2322,8 @@ END:VCALENDAR`;
                     {/* Floating Device Viewport & Template Selector Bar (Admin / Preview Mode) */}
                     {isAdminMode && (
                         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-300 max-w-[92vw] overflow-x-auto">
-                            <div className="flex items-center gap-1">
+                            {/* Device Viewport Selector (Desktop only) */}
+                            <div className="hidden md:flex items-center gap-1">
                                 <button
                                     type="button"
                                     onClick={() => setDeviceView('mobile')}
@@ -2333,7 +2334,7 @@ END:VCALENDAR`;
                                     }`}
                                 >
                                     <Smartphone className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">Móvil</span>
+                                    <span>Móvil</span>
                                 </button>
                                 <button
                                     type="button"
@@ -2345,11 +2346,11 @@ END:VCALENDAR`;
                                     }`}
                                 >
                                     <Monitor className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">Desktop</span>
+                                    <span>Desktop</span>
                                 </button>
                             </div>
 
-                            <div className="h-4 w-[1px] bg-stone-200" />
+                            <div className="hidden md:block h-4 w-[1px] bg-stone-200" />
 
                             <div className="flex items-center gap-1.5 pl-0.5">
                                 <Palette className="h-3.5 w-3.5 text-[#DF3B94] flex-shrink-0" />
@@ -2377,7 +2378,7 @@ END:VCALENDAR`;
                     )}
 
                     {/* MODULAR LAYOUT RENDERER */}
-                    <div className={isAdminMode && deviceView === 'mobile' ? "is-mobile-preview max-w-[430px] mx-auto my-8 sm:my-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border-[8px] sm:border-[12px] border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all ring-1 ring-stone-900/10" : "w-full transition-all"}>
+                    <div className={isAdminMode && deviceView === 'mobile' ? "w-full md:max-w-[430px] md:mx-auto md:my-16 md:rounded-[3rem] md:shadow-2xl md:border-[12px] md:border-stone-900 overflow-hidden relative bg-[var(--section-bg)] transition-all md:ring-1 md:ring-stone-900/10" : "w-full transition-all"}>
                         <div className={`invitation-content ${isAdminMode && deviceView === 'mobile' ? 'is-mobile-preview' : ''}`}>
                             {sectionQueue.map((section) => {
                                 const renderer = SECTION_COMPONENTS[section.id];
