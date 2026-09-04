@@ -49,7 +49,7 @@ export default function ModernMinimalistHero({ event, cfg, countdown, labels, he
                     </div>
 
                     {(cfg.showCountdown !== false) && (
-                        <div className="flex justify-center items-center gap-4 sm:gap-12 animate-in fade-in zoom-in duration-1000 delay-300 mb-16">
+                        <div className="theme-modern-countdown flex justify-center items-center gap-2 sm:gap-6 md:gap-10 animate-in fade-in zoom-in duration-1000 delay-300 mb-10 sm:mb-16 w-full px-2 max-w-full">
                             {[
                                 { label: 'Días', value: countdown.days },
                                 { label: 'Hrs', value: countdown.hours },
@@ -57,32 +57,32 @@ export default function ModernMinimalistHero({ event, cfg, countdown, labels, he
                                 { label: 'Seg', value: countdown.seconds },
                             ].map((item) => (
                                 <div key={item.label} className="flex flex-col items-center">
-                                    <div className="backdrop-blur-md bg-black/10 border border-white/20 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xl hover:bg-black/20 transition-colors w-20 h-20 sm:w-28 sm:h-28 flex flex-col items-center justify-center">
-                                        <p className="text-4xl sm:text-6xl font-serif font-light text-white mb-2">{item.value.toString().padStart(2, '0')}</p>
-                                        <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-accent font-bold">{item.label}</p>
+                                    <div className="theme-modern-countdown-box backdrop-blur-md bg-black/20 border border-white/20 p-2 sm:p-5 rounded-2xl sm:rounded-3xl shadow-xl hover:bg-black/30 transition-colors w-[4.2rem] h-[4.8rem] sm:w-24 sm:h-28 md:w-28 md:h-28 flex flex-col items-center justify-center">
+                                        <p className="text-2xl sm:text-5xl md:text-6xl font-serif font-light text-white mb-0.5 sm:mb-2">{item.value.toString().padStart(2, '0')}</p>
+                                        <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.3em] text-accent font-bold">{item.label}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
 
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-24 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
+                    <div className="theme-modern-details flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-8 md:gap-20 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500 w-full px-4">
                         <div className="text-center">
-                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-2">Cuándo</p>
-                            <p className="text-lg sm:text-xl font-serif text-white">{format(eventDate, "d 'de' MMMM", { locale: es })}</p>
+                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-1 sm:mb-2">Cuándo</p>
+                            <p className="text-base sm:text-xl font-serif text-white">{format(eventDate, "d 'de' MMMM", { locale: es })}</p>
                             <p className="text-xs sm:text-sm text-white/50">{format(eventDate, "yyyy", { locale: es })}</p>
                         </div>
-                        <div className="hidden md:block w-px h-16 bg-white/20" />
+                        <div className="hidden md:block w-px h-16 bg-white/20 theme-modern-divider" />
                         <div className="text-center">
-                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-2">Hora</p>
-                            <p className="text-lg sm:text-xl font-serif text-white">{format(eventDate, 'HH:mm', { locale: es })} hrs</p>
+                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-1 sm:mb-2">Hora</p>
+                            <p className="text-base sm:text-xl font-serif text-white">{format(eventDate, 'HH:mm', { locale: es })} hrs</p>
                             <p className="text-xs sm:text-sm text-white/50 uppercase tracking-widest">Puntual</p>
                         </div>
-                        <div className="hidden md:block w-px h-16 bg-white/20" />
-                        <div className="text-center">
-                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-2">Dónde</p>
-                            <p className="text-lg sm:text-xl font-serif text-white">{event.venue_name}</p>
-                            <p className="text-xs sm:text-sm text-white/50 truncate max-w-[200px]">{event.venue_address}</p>
+                        <div className="hidden md:block w-px h-16 bg-white/20 theme-modern-divider" />
+                        <div className="text-center max-w-xs">
+                            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-accent mb-1 sm:mb-2">Dónde</p>
+                            <p className="text-base sm:text-xl font-serif text-white">{event.venue_name}</p>
+                            <p className="text-xs sm:text-sm text-white/60 break-words">{event.venue_address}</p>
                         </div>
                     </div>
                 </div>

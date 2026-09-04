@@ -59,7 +59,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                     {getInitials()}
                 </h2>
                 {/* Links */}
-                <nav className="flex flex-wrap justify-center gap-4 sm:gap-8 text-[9px] sm:text-[11px] uppercase tracking-[0.3em] text-[#554D47] font-sans font-semibold">
+                <nav className="flex flex-wrap justify-center gap-2.5 sm:gap-6 px-2 text-[9px] sm:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-[#554D47] font-sans font-semibold">
                     <button onClick={() => scrollToSection('guest_welcome')} className="hover:text-[#C5A059] transition-colors">SOBRE NOSOTROS</button>
                     <button onClick={() => scrollToSection('location')} className="hover:text-[#C5A059] transition-colors">EVENTOS</button>
                     <button onClick={() => scrollToSection('itinerary')} className="hover:text-[#C5A059] transition-colors">ITINERARIO</button>
@@ -105,7 +105,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                             CUENTA REGRESIVA PARA NUESTRO DÍA ESPECIAL
                         </h3>
 
-                        <div className="grid grid-cols-4 gap-2 sm:gap-6 max-w-xl mx-auto divide-x divide-[#C5A059]/30">
+                        <div className="theme-classic-countdown grid grid-cols-4 gap-2 sm:gap-6 max-w-xl mx-auto divide-x divide-[#C5A059]/30">
                             {[
                                 { label: 'DÍAS', value: countdown.days },
                                 { label: 'HORAS', value: countdown.hours },

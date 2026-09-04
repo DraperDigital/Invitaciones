@@ -741,8 +741,14 @@ END:VCALENDAR`;
         .invitation-content h2,
         .invitation-content h3 {
             color: #C5A059 !important;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
+        }
+        @media (max-width: 767px) {
+            .invitation-content h2,
+            .invitation-content h3 {
+                letter-spacing: 0.04em !important;
+            }
         }
         .invitation-content section {
             border-radius: 0 !important;
@@ -780,6 +786,12 @@ END:VCALENDAR`;
             color: #D4AF37 !important;
             letter-spacing: 0.12em;
             text-transform: uppercase;
+        }
+        @media (max-width: 767px) {
+            .invitation-content h2,
+            .invitation-content h3 {
+                letter-spacing: 0.04em !important;
+            }
         }
 
         /* Gold gradient for main buttons */
@@ -1035,6 +1047,14 @@ END:VCALENDAR`;
 
         /* Responsive Móvil Estricto: 1 Columna Universal (Móvil físico y Simulador Admin) */
         @media (max-width: 767px) {
+            .invitation-content {
+                overflow-x: hidden !important;
+                max-width: 100vw !important;
+            }
+            .invitation-content section {
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
             .invitation-content .invitation-locations-wrapper {
                 flex-direction: column !important;
                 align-items: stretch !important;
@@ -1069,19 +1089,45 @@ END:VCALENDAR`;
                 width: 100% !important;
                 max-width: 100% !important;
             }
-            .invitation-content h1,
-            .invitation-content h2,
-            .invitation-content h3 {
+            .invitation-content h1 {
+                font-size: clamp(1.85rem, 7.5vw, 3rem) !important;
+                line-height: 1.15 !important;
                 word-break: normal !important;
                 overflow-wrap: normal !important;
                 hyphens: none !important;
             }
-            .invitation-content h1 {
-                font-size: clamp(2rem, 8vw, 3.5rem) !important;
-                line-height: 1.15 !important;
+            .invitation-content h2 {
+                font-size: clamp(1.4rem, 5vw, 2.25rem) !important;
+                line-height: 1.2 !important;
+                letter-spacing: 0.04em !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+                max-width: 100% !important;
+            }
+            .invitation-content h3 {
+                font-size: clamp(1.2rem, 4.2vw, 1.75rem) !important;
+                line-height: 1.25 !important;
+                letter-spacing: 0.04em !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+                max-width: 100% !important;
             }
         }
 
+        .is-mobile-preview .invitation-content,
+        .invitation-content.is-mobile-preview {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+        .is-mobile-preview .invitation-content section,
+        .invitation-content.is-mobile-preview section {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+        .is-mobile-preview header.fixed,
+        .invitation-content.is-mobile-preview header.fixed {
+            display: none !important;
+        }
         .is-mobile-preview .invitation-locations-wrapper,
         .invitation-content.is-mobile-preview .invitation-locations-wrapper {
             flex-direction: column !important;
@@ -1128,19 +1174,30 @@ END:VCALENDAR`;
             display: none !important;
         }
         .is-mobile-preview .invitation-content h1,
-        .is-mobile-preview .invitation-content h2,
-        .is-mobile-preview .invitation-content h3,
-        .invitation-content.is-mobile-preview h1,
-        .invitation-content.is-mobile-preview h2,
-        .invitation-content.is-mobile-preview h3 {
+        .invitation-content.is-mobile-preview h1 {
+            font-size: clamp(1.85rem, 7.5vw, 3rem) !important;
+            line-height: 1.15 !important;
             word-break: normal !important;
             overflow-wrap: normal !important;
             hyphens: none !important;
         }
-        .is-mobile-preview .invitation-content h1,
-        .invitation-content.is-mobile-preview h1 {
-            font-size: clamp(1.85rem, 7.5vw, 3.25rem) !important;
-            line-height: 1.15 !important;
+        .is-mobile-preview .invitation-content h2,
+        .invitation-content.is-mobile-preview h2 {
+            font-size: clamp(1.4rem, 5vw, 2.25rem) !important;
+            line-height: 1.2 !important;
+            letter-spacing: 0.04em !important;
+            overflow-wrap: break-word !important;
+            word-break: break-word !important;
+            max-width: 100% !important;
+        }
+        .is-mobile-preview .invitation-content h3,
+        .invitation-content.is-mobile-preview h3 {
+            font-size: clamp(1.2rem, 4.2vw, 1.75rem) !important;
+            line-height: 1.25 !important;
+            letter-spacing: 0.04em !important;
+            overflow-wrap: break-word !important;
+            word-break: break-word !important;
+            max-width: 100% !important;
         }
 
         /* ── Strict Mobile Preview Hero & Theme Overrides (Simulator) ── */
@@ -1209,6 +1266,59 @@ END:VCALENDAR`;
         .invitation-content.is-mobile-preview .theme-collage-details {
             flex-direction: column !important;
             gap: 1.25rem !important;
+        }
+
+        /* ── Modern Minimalist Hero in Mobile Simulator ── */
+        .is-mobile-preview .theme-modern-countdown,
+        .invitation-content.is-mobile-preview .theme-modern-countdown {
+            gap: 0.5rem !important;
+            margin-bottom: 2rem !important;
+            flex-wrap: nowrap !important;
+        }
+        .is-mobile-preview .theme-modern-countdown-box,
+        .invitation-content.is-mobile-preview .theme-modern-countdown-box {
+            width: 4.25rem !important;
+            height: 4.85rem !important;
+            padding: 0.35rem !important;
+            border-radius: 1rem !important;
+        }
+        .is-mobile-preview .theme-modern-countdown-box p:first-child,
+        .invitation-content.is-mobile-preview .theme-modern-countdown-box p:first-child {
+            font-size: 1.65rem !important;
+            line-height: 1.1 !important;
+            margin-bottom: 0.2rem !important;
+        }
+        .is-mobile-preview .theme-modern-countdown-box p:last-child,
+        .invitation-content.is-mobile-preview .theme-modern-countdown-box p:last-child {
+            font-size: 0.55rem !important;
+            letter-spacing: 0.15em !important;
+        }
+        .is-mobile-preview .theme-modern-details,
+        .invitation-content.is-mobile-preview .theme-modern-details {
+            flex-direction: column !important;
+            gap: 1.25rem !important;
+        }
+        .is-mobile-preview .theme-modern-divider,
+        .invitation-content.is-mobile-preview .theme-modern-divider {
+            display: none !important;
+        }
+
+        /* ── Classic Elegance Heroes in Mobile Simulator ── */
+        .is-mobile-preview .theme-classic-countdown,
+        .invitation-content.is-mobile-preview .theme-classic-countdown {
+            gap: 0.25rem !important;
+        }
+        .is-mobile-preview .theme-classic-countdown span:first-child,
+        .invitation-content.is-mobile-preview .theme-classic-countdown span:first-child {
+            font-size: 1.85rem !important;
+        }
+        .is-mobile-preview .theme-classicpro-countdown,
+        .invitation-content.is-mobile-preview .theme-classicpro-countdown {
+            gap: 1.25rem !important;
+        }
+        .is-mobile-preview .theme-classicpro-countdown span:first-child,
+        .invitation-content.is-mobile-preview .theme-classicpro-countdown span:first-child {
+            font-size: 1.85rem !important;
         }
         ${themeSpecificCSS}
         ${customStyles}
@@ -1531,7 +1641,7 @@ END:VCALENDAR`;
                     <div className="h-px w-12 bg-accent/30" />
                 </div>
                 
-                <h2 className="text-4xl sm:text-6xl font-serif font-light text-[var(--text-primary)] mb-8 leading-tight whitespace-pre-line">
+                <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-light text-[var(--text-primary)] mb-6 sm:mb-8 leading-tight whitespace-pre-line break-words max-w-full">
                     {guest ? (
                         <>
                             ¡Hola, <span className="text-accent">{guest.name.split(' ')[0]}</span>!

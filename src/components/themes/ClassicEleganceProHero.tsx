@@ -111,7 +111,7 @@ export default function ClassicEleganceProHero({ event, cfg, countdown, heroImag
                     {/* ── Countdown ── */}
                     {cfg.showCountdown !== false && (
                         <div className="border-t border-b py-5" style={{ borderColor: `${GOLD}35` }}>
-                            <div className="flex justify-center gap-8 sm:gap-12 font-serif">
+                            <div className="theme-classicpro-countdown flex justify-center gap-4 sm:gap-12 font-serif">
                                 {[
                                     { label: 'Días',  value: countdown.days },
                                     { label: 'Hrs',   value: countdown.hours },
