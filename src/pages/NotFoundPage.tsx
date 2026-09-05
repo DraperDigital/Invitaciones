@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home, Sparkles } from 'lucide-react';
+import { ArrowLeft, Home, Heart } from 'lucide-react';
 import Seo from '../components/Seo';
 
 const NotFoundPage: React.FC = () => {
@@ -19,7 +19,7 @@ const NotFoundPage: React.FC = () => {
             <header className="w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between z-10">
                 <Link to="/" className="flex items-center gap-2.5 group">
                     <div className="w-9 h-9 rounded-xl bg-[#1B2E1D] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
-                        <Sparkles className="h-4 w-4 text-amber-300" />
+                        <Heart className="h-4 w-4 text-rose-300 fill-rose-300" />
                     </div>
                     <span className="font-serif text-xl font-bold tracking-tight text-[#1B2E1D]">Invitto</span>
                 </Link>

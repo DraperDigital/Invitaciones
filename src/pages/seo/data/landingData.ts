@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Heart, Sparkles, PartyPopper, MapPin, Send, Clock, Shield, Palette,
+  Heart, Crown, PartyPopper, MapPin, Send, Clock, Shield, Palette,
   BarChart3, QrCode, Users, Globe, Leaf, DollarSign, Smartphone, Zap,
   Star, Music, MessageCircle, Calendar
 } from 'lucide-react';
@@ -220,7 +220,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       cta: 'Diseñar mi invitación de XV',
     },
     benefits: [
-      { icon: Sparkles, title: 'Diseños de XV años', description: 'Plantillas vibrantes y modernas pensadas para quinceañeras, con estilos que van de lo clásico a lo contemporáneo.' },
+      { icon: Crown, title: 'Diseños de XV años', description: 'Plantillas vibrantes y modernas pensadas para quinceañeras, con estilos que van de lo clásico a lo contemporáneo.' },
       { icon: Send, title: 'Envía por WhatsApp', description: 'Comparte un link único por WhatsApp. Tus invitados la abren en su celular sin descargar nada.' },
       { icon: BarChart3, title: 'Confirmaciones en vivo', description: 'Recibe las respuestas de asistencia en tiempo real. Organiza mesas y controla el número de invitados fácilmente.' },
       { icon: Music, title: 'Tu vals de fondo', description: 'La canción especial de la quinceañera suena al abrir la invitación. Un toque mágico que sorprende.' },
@@ -661,7 +661,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       path: '/invitaciones-digitales-revelacion-de-genero',
     },
     hero: {
-      badge: '✨ Revelación de Género & Baby Shower',
+      badge: '🎈 Revelación de Género & Baby Shower',
       h1: 'Invitaciones Digitales Interactivas para Revelación de Género',
       subtitle: 'Emociona a tus invitados con quiniela familiar en tiempo real, cuenta regresiva, video sorpresa de revelación y confirmación por WhatsApp.',
       cta: 'Crear mi invitación de revelación',

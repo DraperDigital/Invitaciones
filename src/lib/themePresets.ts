@@ -17,7 +17,7 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
     'classic': {
         label: 'Clásica Atemporal',
         desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal',
-        icon: '✨',
+        icon: '🏛️',
         primaryColor: '#2B2625',
         accentColor: '#C5A059',
         cardBgColor: '#FFFFFF',
@@ -31,7 +31,7 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
     'classic-elegance': {
         label: 'Clásica Atemporal',
         desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal',
-        icon: '✨',
+        icon: '🏛️',
         primaryColor: '#2B2625',
         accentColor: '#C5A059',
         cardBgColor: '#FFFFFF',
@@ -226,13 +226,13 @@ export interface CanonicalTemplate {
 export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', categoryLabel: 'Boda / Vanguardia', slug: 'boda-gabriela-arturo-premium', icon: '🖤', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop' },
     { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', categoryLabel: 'Boda / Vanguardia', slug: 'boda-sofia-mateo-premium', icon: '🌓', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop' },
-    { id: 'classic', name: 'Clásica Atemporal', category: 'boda', categoryLabel: 'Boda / Elegante', slug: 'boda-isabel-rodrigo-premium', icon: '✨', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=800&auto=format&fit=crop' },
+    { id: 'classic', name: 'Clásica Atemporal', category: 'boda', categoryLabel: 'Boda / Elegante', slug: 'boda-isabel-rodrigo-premium', icon: '🏛️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=800&auto=format&fit=crop' },
     { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'boda', categoryLabel: 'Boda / Lujo', slug: 'boda-ana-y-carlos-premium', icon: '👑', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=800&auto=format&fit=crop' },
     { id: 'magazine', name: 'Estilo Editorial', category: 'xv', categoryLabel: 'XV / Gala', slug: 'xv-valeria-premium', icon: '📖', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop' },
     { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'xv', categoryLabel: 'XV / Primavera', slug: 'xv-regina-2026-premium', icon: '🌿', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop' },
     { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', categoryLabel: 'Boda / Jardín', slug: 'boda-simetria-floral', icon: '🌸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800&auto=format&fit=crop' },
     { id: 'neon-glow', name: 'Fiesta Neón', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Party', slug: 'cumple-emilia-premium', icon: '🪩', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800&auto=format&fit=crop' },
-    { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '🌟', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519671482749-fd09871171dd?q=80&w=800&auto=format&fit=crop' },
+    { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519671482749-fd09871171dd?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'bautizo', categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },

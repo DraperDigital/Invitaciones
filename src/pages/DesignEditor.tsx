@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Sparkles, Shield, ChevronDown, Upload, X, MapPin } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Wand2, Award, Shield, ChevronDown, Upload, X, MapPin } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -789,7 +789,7 @@ export default function DesignEditor() {
                         onClick={() => setShowAiModal(true)}
                         className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-gradient-to-r from-[#DF3B94] via-pink-600 to-purple-600 text-white rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
                     >
-                        <Sparkles className="h-4 w-4 md:h-5 md:w-5" />
+                        <Wand2 className="h-4 w-4 md:h-5 md:w-5" />
                         <span>Diseña con IA</span>
                     </button>
                     {event?.slug && (
@@ -862,13 +862,13 @@ export default function DesignEditor() {
                     id="template"
                     title="Plantilla de Diseño"
                     subtitle="Selecciona el estilo visual de tu invitación"
-                    icon="✨"
+                    icon="🎨"
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
                 >
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                         {[
-                            { id: 'classic', label: 'Clásica Atemporal', desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal', icon: '✨' },
+                            { id: 'classic', label: 'Clásica Atemporal', desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal', icon: '🏛️' },
                             { id: 'classic-elegance-pro', label: 'Clásica Atemporal Pro', desc: 'Editorial oscuro — negro profundo, oro intenso y portada inmersiva', icon: '👑' },
                             { id: 'modern-minimalist', label: 'Moderna Minimalista', desc: 'Líneas limpias, tipografía contemporánea y sobriedad monocromática', icon: '🖤' },
                             { id: 'split-screen', label: 'Vanguardia Dividida', desc: 'Contraste moderno a pantalla dividida y tonos azules', icon: '🌓' },
@@ -876,7 +876,7 @@ export default function DesignEditor() {
                             { id: 'romantic-botanical', label: 'Elegancia Floral', desc: 'Ilustraciones botánicas, verde bosque y rosas empolvados', icon: '🌿' },
                             { id: 'floral-symmetry', label: 'Simetría Floral', desc: 'Marcos simétricos con ornamentos botánicos y eucalipto', icon: '🌸' },
                             { id: 'neon-glow', label: 'Fiesta Neón', desc: 'Luces de neón vibrantes sobre fondo nocturno ultramoderno', icon: '🪩' },
-                            { id: 'luxury-gold', label: 'Lujo Metálico', desc: 'Destellos metálicos dorados sobre fondo oscuro para galas', icon: '🌟' },
+                            { id: 'luxury-gold', label: 'Lujo Metálico', desc: 'Destellos metálicos dorados sobre fondo oscuro para galas', icon: '💎' },
                             { id: 'passport', label: 'Pase de Abordaje', desc: 'Temática de pasaporte y viaje para bodas destino y escapadas', icon: '✈️' },
                             { id: 'polaroid-vintage', label: 'Retro Fotográfico', desc: 'Fotografías de estilo instantáneo y nostálgico con marcos sepia', icon: '📸' },
                             { id: 'whimsical-kids', label: 'Fantasía Infantil', desc: 'Colores alegres, pasteles brillantes e ilustraciones para peques', icon: '🎈' },
@@ -1248,7 +1248,7 @@ export default function DesignEditor() {
                                     <option value="Semi-Formal">🍸 Semi-Formal / Cóctel</option>
                                     <option value="Etiqueta Rigurosa">🎩 Etiqueta Rigurosa / Esmoquin & Vestido de Gala</option>
                                     <option value="Guayabera">🏝️ Guayabera / Playa / Clima Cálido</option>
-                                    <option value="Casual Elegante">✨ Casual Elegante</option>
+                                    <option value="Casual Elegante">👔 Casual Elegante</option>
                                     <option value="Riguroso Negro (Black Tie)">💃 Riguroso Negro (Black Tie)</option>
                                     <option value="Blanco y Tonos Pastel">🌸 Blanco & Tonos Pastel</option>
                                     <option value="Libre">🎨 Libre / Según la Ocasión</option>
@@ -1773,7 +1773,7 @@ export default function DesignEditor() {
                                                             className={`p-4 rounded-2xl border transition-all ${hotel.isRecommended ? 'bg-amber-400 border-amber-400 text-white shadow-lg shadow-amber-400/20' : 'bg-white border-stone-100 text-stone-200'}`}
                                                             title="Destacar como recomendado"
                                                         >
-                                                            <Sparkles className="h-5 w-5" />
+                                                            <Award className="h-5 w-5" />
                                                         </button>
                                                         <button 
                                                             onClick={() => {
@@ -1905,7 +1905,7 @@ export default function DesignEditor() {
                                 color: 'text-indigo-600 bg-indigo-50',
                                 features: [
                                     { id: 'showGallery',      label: 'Galería de Fotos', desc: 'Carrusel de imágenes',     icon: '📸', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showGuestWelcome', label: 'Mensaje de Bienvenida', desc: 'Saludo personalizado', icon: '✨', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showGuestWelcome', label: 'Mensaje de Bienvenida', desc: 'Saludo personalizado', icon: '💌', plans: ['clasico', 'pro', 'premium'] },
                                     { id: 'showEnvelope',     label: 'Sobre Digital',    desc: 'Animación de entrada',     icon: '💌', plans: ['pro', 'premium'] },
                                     { id: 'showMessage',      label: 'Dedicatoria y Mensaje', desc: 'Texto de anfitriones', icon: '✍️', plans: ['clasico', 'pro', 'premium'] },
                                 ],
@@ -1918,7 +1918,7 @@ export default function DesignEditor() {
                                     { id: 'showMap',         label: 'Ubicación / Maps', desc: 'Mapa interactivo',          icon: '📍', plans: ['clasico', 'pro', 'premium'] },
                                     { id: 'showItinerary',   label: 'Itinerario',       desc: 'Cronograma del día',        icon: '🗓️', plans: ['pro', 'premium'] },
                                     { id: 'showHotels',      label: 'Hospedaje',        desc: 'Hoteles recomendados',      icon: '🏨', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showDetails',     label: 'Vestimenta',       desc: 'Dress Code visual',         icon: '✨', plans: ['pro', 'premium'] },
+                                    { id: 'showDetails',     label: 'Vestimenta',       desc: 'Dress Code visual',         icon: '👔', plans: ['pro', 'premium'] },
                                     { id: 'showChambelanes', label: 'Corte Honor',      desc: 'Acompañantes',              icon: '👑', plans: ['pro', 'premium'] },
                                 ],
                             },

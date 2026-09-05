@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Layout, Users, Zap, ArrowUpRight, Plus, Sparkles, ArrowRight } from 'lucide-react';
+import { Layout, Users, Zap, ArrowUpRight, Plus, Palette, Crown, PartyPopper, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getPlatformContext } from '../../utils/context';
 
@@ -164,7 +164,7 @@ const DashboardHome: React.FC = () => {
                         </h1>
                         {isPersonalized && (
                             <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 shadow-sm">
-                                <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
+                                <Crown className="h-3.5 w-3.5 text-emerald-500" />
                                 Plan {tier.toUpperCase()}
                             </span>
                         )}
@@ -225,7 +225,7 @@ const DashboardHome: React.FC = () => {
                             } rounded-3xl p-8 md:p-14 text-white relative overflow-hidden shadow-xl`}>
                                 <div className="relative z-10 max-w-2xl mx-auto text-center space-y-6">
                                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full text-xs font-mono font-bold tracking-wider border border-white/10">
-                                        <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                                        <PartyPopper className="h-3.5 w-3.5 text-amber-400" />
                                         <span>Bienvenido a {isCorporate ? 'Invitto One' : 'Invitto'}</span>
                                     </div>
 
@@ -291,7 +291,7 @@ const DashboardHome: React.FC = () => {
                                         <span>Confirmados: <strong className="text-[#222B38]">{event.metrics?.confirmed || 0}</strong></span>
                                         <div className="flex items-center gap-3">
                                             <Link to={`/dashboard/design/${event.id}`} className="text-slate-500 font-bold hover:text-[#DF3B94] flex items-center gap-1 text-[10px] uppercase tracking-wider">
-                                                <Sparkles className="h-3.5 w-3.5 text-[#DF3B94]" /> Diseño
+                                                <Palette className="h-3.5 w-3.5 text-[#DF3B94]" /> Diseño
                                             </Link>
                                             <Link to={`/dashboard/events/${event.id}`} className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
                                                 Gestionar <ArrowRight className="h-3.5 w-3.5" />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Copy, Check, PartyPopper, X, ExternalLink, Sparkles } from 'lucide-react';
+import { Copy, Check, PartyPopper, X, ExternalLink, Heart } from 'lucide-react';
 
 interface CelebrationModalProps {
     open: boolean;
@@ -60,7 +60,7 @@ export default function CelebrationModal({ open, onClose, invitationUrl, eventTi
                 <div className="text-center space-y-6">
                     <div className="mx-auto w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-2 relative">
                         <PartyPopper className="h-10 w-10 text-[#DF3B94]" />
-                        <Sparkles className="absolute -top-1 -right-1 h-5 w-5 text-amber-400 animate-pulse" />
+                        <Heart className="absolute -top-1 -right-1 h-5 w-5 text-rose-400 fill-rose-400 animate-pulse" />
                     </div>
 
                     <div className="space-y-3">

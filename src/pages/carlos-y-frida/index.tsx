@@ -291,7 +291,7 @@ export default function CarlosYFridaLanding() {
                     {!hasWatchedVideo ? (
                         <div className="z-10 max-w-2xl flex flex-col items-center animate-in fade-in duration-700">
                             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold tracking-widest uppercase mb-8 shadow-sm">
-                                ✨ La Gran Revelación
+                                🎈 La Gran Revelación
                             </span>
                             
                             <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-6 tracking-tight leading-tight">

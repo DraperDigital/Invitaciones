@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Sparkles, Wand2, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
+import { X, Palette, Wand2, Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 
 type Props = {
@@ -73,7 +73,7 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
                     if (aiResult.primaryColor && aiResult.accentColor) {
                         setGeneratedTheme(aiResult);
                         setGenerating(false);
-                        toast.success('¡Tema generado en vivo con OpenAI! ✨');
+                        toast.success('¡Tema generado con éxito!');
                         return;
                     }
                 }
@@ -132,14 +132,14 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
             });
 
             setGenerating(false);
-            toast.success('¡Estilo generado con éxito! ✨');
+            toast.success('¡Estilo generado con éxito!');
         }, 1200);
     };
 
     const handleApply = () => {
         if (generatedTheme) {
             onApplyAiTheme(generatedTheme);
-            toast.success('¡Tema IA aplicado a tu invitación!');
+            toast.success('¡Tema aplicado a tu invitación!');
             onClose();
         }
     };
@@ -153,7 +153,7 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
                 <div className="p-6 sm:p-8 border-b border-stone-100 bg-gradient-to-br from-pink-50/50 via-purple-50/30 to-white flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-2xl bg-[#DF3B94] text-white flex items-center justify-center shadow-lg shadow-[#DF3B94]/20">
-                            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+                            <Palette className="h-5 w-5 sm:h-6 sm:w-6" />
                         </div>
                         <div>
                             <h3 className="text-lg sm:text-xl font-serif text-[#1B2E1D]">Diseña con Inteligencia Artificial</h3>

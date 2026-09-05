@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
     MessageCircle,
-    Sparkles,
+    Crown,
     ArrowRight,
     Clock,
     Gem,
@@ -193,7 +193,7 @@ const ConciergeLanding: React.FC = () => {
                         <div className="p-8 md:p-10 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-xl space-y-8 shadow-2xl">
                             <div className="flex items-center gap-4 border-b border-white/10 pb-6">
                                 <div className="h-14 w-14 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center flex-shrink-0">
-                                    <Sparkles className="h-7 w-7" />
+                                    <Crown className="h-7 w-7" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">PRÓXIMO PASO</p>

@@ -153,7 +153,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 {sectionId === 'guest_welcome' && (
                     <div className="space-y-4 bg-stone-50 p-5 rounded-2xl border border-stone-200">
                         <div className="flex items-center gap-2 text-stone-800 font-bold text-sm">
-                            <span className="text-base">✨</span>
+                            <span className="text-base">💌</span>
                             <span>Mensaje y Saludo de Bienvenida</span>
                         </div>
                         <p className="text-xs text-stone-600 leading-relaxed">
@@ -306,7 +306,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             <option value="Semi-Formal">🍸 Semi-Formal / Cóctel</option>
                             <option value="Etiqueta Rigurosa">🎩 Etiqueta Rigurosa / Esmoquin & Vestido de Gala</option>
                             <option value="Guayabera">🏝️ Guayabera / Playa / Clima Cálido</option>
-                            <option value="Casual Elegante">✨ Casual Elegante</option>
+                            <option value="Casual Elegante">👔 Casual Elegante</option>
                             <option value="Riguroso Negro (Black Tie)">💃 Riguroso Negro (Black Tie)</option>
                             <option value="Blanco y Tonos Pastel">🌸 Blanco & Tonos Pastel</option>
                             <option value="Libre">🎨 Libre / Según la Ocasión</option>

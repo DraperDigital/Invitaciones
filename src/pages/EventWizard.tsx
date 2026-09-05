@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
@@ -52,7 +52,7 @@ export const EVENT_TYPE_OPTIONS = [
     { id: 'birthday', label: 'Cumpleaños', icon: Cake, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'neon-glow' },
     { id: 'graduacion', label: 'Graduación', icon: GraduationCap, color: 'text-blue-500 bg-blue-50 border-blue-100', defaultTheme: 'polaroid-vintage' },
     { id: 'corporate', label: 'Corporativo', icon: Building2, color: 'text-slate-600 bg-slate-100 border-slate-200', defaultTheme: 'split-screen' },
-    { id: 'other', label: 'Otro', icon: Sparkles, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
+    { id: 'other', label: 'Otro', icon: Calendar, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
 ];
 
 // ── Presets por tipo de evento ────────────────────────────────────────────
@@ -341,7 +341,7 @@ export default function EventWizard() {
                     </div>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <Sparkles className="h-3 w-3 text-[#BD7474]" />
+                            <Heart className="h-3 w-3 text-[#BD7474] fill-[#BD7474]" />
                             <span className="text-[9px] uppercase font-bold tracking-widest text-[#BD7474]">Bienvenido a Invitto</span>
                         </div>
                         <p className="font-serif text-xl leading-tight">¡Tu cuenta está lista! Crea tu primera invitación ahora.</p>

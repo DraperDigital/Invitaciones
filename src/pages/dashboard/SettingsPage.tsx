@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
-import { Save, User, MessageCircle, Mail, ShieldCheck, Sparkles, Loader2 } from 'lucide-react';
+import { Save, User, MessageCircle, Mail, ShieldCheck, Crown, Loader2 } from 'lucide-react';
 import { getPlatformContext } from '../../utils/context';
 
 export default function SettingsPage() {
@@ -110,7 +110,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
-                    <Sparkles className={`h-4 w-4 ${isCorporate ? 'text-[#2563EB]' : 'text-[#DF3B94]'}`} />
+                    <Crown className={`h-4 w-4 ${isCorporate ? 'text-[#2563EB]' : 'text-[#DF3B94]'}`} />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-700">{getPlanLabel(profile.plan_tier)}</span>
                 </div>
             </div>
@@ -214,7 +214,7 @@ export default function SettingsPage() {
                                     } text-white transition-all text-xs font-bold uppercase tracking-widest shadow-lg active:scale-95`}
                                 >
                                     <span className="flex items-center justify-center gap-2">
-                                        <Sparkles className="h-4 w-4" />
+                                        <Crown className="h-4 w-4" />
                                         Mejorar mi Plan
                                     </span>
                                 </Link>

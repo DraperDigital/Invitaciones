@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, Sparkles, ArrowRight } from 'lucide-react';
+import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight } from 'lucide-react';
 import Seo from '../components/Seo';
 import { CANONICAL_TEMPLATES } from '../lib/themePresets';
 
 const categories = [
-    { id: 'todas', name: 'Todas', icon: Sparkles },
+    { id: 'todas', name: 'Todas', icon: LayoutGrid },
     { id: 'boda', name: 'Bodas', icon: HeartHandshake },
     { id: 'xv', name: 'XV Años', icon: PartyPopper },
     { id: 'cumpleanos', name: 'Cumpleaños', icon: Cake },

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, Sparkles } from 'lucide-react';
+import { Plus, Calendar, MapPin, Loader2, Clock, Trash2, X, AlertTriangle, Palette } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -200,7 +200,7 @@ export default function Dashboard() {
                                     className="py-2.5 px-3 bg-[#DF3B94]/10 border border-[#DF3B94]/20 text-[#DF3B94] rounded-xl text-center text-xs font-bold uppercase tracking-wider hover:bg-[#DF3B94] hover:text-white transition-all flex items-center gap-1.5"
                                     title="Personalizar diseño de la invitación"
                                 >
-                                    <Sparkles className="h-4 w-4" />
+                                    <Palette className="h-4 w-4" />
                                     <span>Diseño</span>
                                 </Link>
                                 <button

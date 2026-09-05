@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Heart, Sparkles } from 'lucide-react';
+import { X, Heart } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { trackEvent } from '../lib/analytics';
 
@@ -52,7 +52,7 @@ export default function FeedbackRatingWidget() {
                     <div className="space-y-4">
                         <div className="pr-6">
                             <h4 className="text-xs font-bold text-[#1B2E1D] flex items-center gap-1.5">
-                                <Sparkles className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                <Heart className="h-3.5 w-3.5 text-[#DF3B94] fill-[#DF3B94]" />
                                 ¿Cómo te está quedando tu invitación?
                             </h4>
                         </div>

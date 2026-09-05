@@ -2683,7 +2683,7 @@ END:VCALENDAR`;
                                     onChange={(e) => handleUpdateFeature('theme', e.target.value)}
                                     className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1"
                                 >
-                                    <option value="classic">✨ Clásica Atemporal</option>
+                                    <option value="classic">🏛️ Clásica Atemporal</option>
                                     <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
                                     <option value="modern-minimalist">🖤 Moderna Minimalista</option>
                                     <option value="split-screen">🌓 Vanguardia Dividida</option>
@@ -2691,7 +2691,7 @@ END:VCALENDAR`;
                                     <option value="romantic-botanical">🌿 Elegancia Floral</option>
                                     <option value="floral-symmetry">🌸 Simetría Floral</option>
                                     <option value="neon-glow">🪩 Fiesta Neón</option>
-                                    <option value="luxury-gold">🌟 Lujo Metálico</option>
+                                    <option value="luxury-gold">💎 Lujo Metálico</option>
                                     <option value="passport">✈️ Pase de Abordaje</option>
                                     <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                     <option value="whimsical-kids">🎈 Fantasía Infantil</option>
@@ -2755,7 +2755,7 @@ END:VCALENDAR`;
                                                 onChange={(e) => handleUpdateFeature('theme', e.target.value)}
                                                 className="w-full bg-white px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
                                             >
-                                                <option value="classic">✨ Clásica Atemporal</option>
+                                                <option value="classic">🏛️ Clásica Atemporal</option>
                                                 <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
                                                 <option value="modern-minimalist">🖤 Moderna Minimalista</option>
                                                 <option value="split-screen">🌓 Vanguardia Dividida</option>
@@ -2763,7 +2763,7 @@ END:VCALENDAR`;
                                                 <option value="romantic-botanical">🌿 Elegancia Floral</option>
                                                 <option value="floral-symmetry">🌸 Simetría Floral</option>
                                                 <option value="neon-glow">🪩 Fiesta Neón</option>
-                                                <option value="luxury-gold">🌟 Lujo Metálico</option>
+                                                <option value="luxury-gold">💎 Lujo Metálico</option>
                                                 <option value="passport">✈️ Pase de Abordaje</option>
                                                 <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                                 <option value="whimsical-kids">🎈 Fantasía Infantil</option>

@@ -95,7 +95,7 @@ export const SECTION_REGISTRY: SectionDef[] = [
   {
     id: 'guest_welcome',
     label: 'Mensaje de Bienvenida',
-    icon: '✨',
+    icon: '💌',
     planRequired: 'clasico',
     configKey: 'showGuestWelcome',
     defaultOrder: 2,

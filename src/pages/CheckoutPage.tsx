@@ -1,5 +1,5 @@
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, ArrowLeft, Heart, Sparkles, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { Check, ArrowLeft, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -94,7 +94,7 @@ export default function CheckoutPage() {
         pro: {
             name: 'Pro',
             price: 1699,
-            icon: Sparkles,
+            icon: Zap,
             color: 'text-rose-500',
             bg: 'bg-rose-50',
             features: [
@@ -308,7 +308,7 @@ export default function CheckoutPage() {
                                 <>
                                     <div className="flex items-start gap-4">
                                         <div className="h-12 w-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-700 flex-shrink-0">
-                                            <Sparkles className="h-6 w-6" />
+                                            <CheckCircle2 className="h-6 w-6" />
                                         </div>
                                         <div>
                                             <h3 className="text-xl font-display font-extrabold text-[#222B38] mb-1">¿Para qué invitación es este pago?</h3>
