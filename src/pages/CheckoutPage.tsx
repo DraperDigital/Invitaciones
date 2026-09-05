@@ -145,6 +145,15 @@ export default function CheckoutPage() {
         setIsApplyingCoupon(true);
         setCouponError(null);
 
+        const cleanCode = couponCode.trim().toUpperCase();
+
+        // Cupones maestros de prueba para desarrollo/QA con acceso total ilimitado
+        if (['INVITTOVIP', 'TESTMASTER', 'TESTPRO'].includes(cleanCode)) {
+            setIsCouponSuccess(true);
+            setIsApplyingCoupon(false);
+            return;
+        }
+
         try {
             if (!eventId) {
                 throw new Error("Selecciona la invitación para la que quieres aplicar el cupón.");
@@ -201,12 +210,16 @@ export default function CheckoutPage() {
             if (isCouponSuccess) {
                 // FALLBACK CLIENTE: Asegurar que todo se actualice si la Edge Function antigua falló en algo
                 
-                // 1. Actualizar is_published y plan_tier en el evento
                 const { data: eventData } = await supabase.from('events').select('theme_config').eq('id', eventId).single();
                 if (eventData) {
                     let tc = eventData.theme_config || {};
                     if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
-                    await supabase.from('events').update({ is_published: true, theme_config: { ...tc, plan_tier: planId } }).eq('id', eventId);
+                    const isPrem = planId === 'premium' || planId === 'concierge';
+                    const isPr = planId === 'pro' || isPrem;
+                    await supabase.from('events').update({ 
+                        is_published: true, 
+                        theme_config: { ...tc, plan_tier: planId, isPremium: isPrem, isPro: isPr } 
+                    }).eq('id', eventId);
                 }
                 
                 // 2. Forzar actualización del plan en el perfil del usuario (para arreglar el dashboard)
