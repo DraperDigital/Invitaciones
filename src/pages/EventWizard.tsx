@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Sparkles, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
+import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
 type WizardData = {
     title: string;
@@ -291,6 +292,12 @@ export default function EventWizard() {
                     is_published: false,
                     theme_config: {
                         theme: data.theme,
+                        primary_color: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).primaryColor,
+                        accent_color: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).accentColor,
+                        card_bg_color: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).cardBgColor,
+                        hero_text_color: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).heroTextColor,
+                        hero_bg_color: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).heroBgColor,
+                        typography_preset: (THEME_PRESET_PROFILES[data.theme] || THEME_PRESET_PROFILES.classic).typographyPreset,
                         misa_name: data.misa_name,
                         misa_address: data.misa_address,
                         misa_maps_link: data.misa_maps_link,
@@ -434,16 +441,21 @@ export default function EventWizard() {
                                 </div>
                                 <p className="text-xs text-stone-400 font-light">Selecciona la plantilla inicial para tu invitación (puedes cambiarla después).</p>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-2">
                                     {[
-                                        { id: 'classic', name: 'Clásica Atemporal', category: 'Boda / Elegante', image: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'XV / Primavera', image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'neon-glow', name: 'Fiesta Neón', category: 'Cumpleaños / Party', image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'magazine', name: 'Estilo Editorial', category: 'XV / Gala', image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'split-screen', name: 'Vanguardia Dividida', category: 'B2B / Boda', image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'luxury-gold', name: 'Lujo Metálico', category: 'Aniversario', image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=300&auto=format&fit=crop' },
-                                        { id: 'passport', name: 'Pase de Abordaje', category: 'Boda Destino', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=300&auto=format&fit=crop' }
+                                        { id: 'classic', name: 'Clásica Atemporal', category: 'Boda / Elegante', image: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'Boda / Lujo', image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'split-screen', name: 'Vanguardia Dividida', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'magazine', name: 'Estilo Editorial', category: 'XV / Gala', image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'XV / Primavera', image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'floral-symmetry', name: 'Simetría Floral', category: 'Boda / Jardín', image: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'neon-glow', name: 'Fiesta Neón', category: 'Cumpleaños / Party', image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'luxury-gold', name: 'Lujo Metálico', category: 'Gala / Aniversario', image: 'https://images.unsplash.com/photo-1519671482749-fd09871171dd?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'passport', name: 'Pase de Abordaje', category: 'Boda Destino', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'Graduación / Retro', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'Infantil / Bautizo', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' }
                                     ].map(tpl => {
                                         const isSelected = data.theme === tpl.id;
                                         return (

@@ -15,22 +15,22 @@ export interface ThemeProfile {
 
 export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
     'classic': {
-        label: 'Elegancia Clásica',
-        desc: 'Diseño sobrio, atemporal con detalles dorados',
+        label: 'Clásica Atemporal',
+        desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal',
         icon: '✨',
-        primaryColor: '#1B2E1D',
-        accentColor: '#D4AF37',
+        primaryColor: '#2B2625',
+        accentColor: '#C5A059',
         cardBgColor: '#FFFFFF',
-        sectionBgColor: '#FAF9F6',
-        textPrimary: '#1B2E1D',
-        textSecondary: '#6A7B6C',
+        sectionBgColor: '#FAF8F5',
+        textPrimary: '#2B2625',
+        textSecondary: '#7A6E65',
         heroTextColor: '#FFFFFF',
-        heroBgColor: '#1B2E1D',
+        heroBgColor: '#2B2625',
         typographyPreset: 'elegante'
     },
     'classic-elegance': {
-        label: 'Elegancia Clásica',
-        desc: 'Fondo marfil, ornamentos dorados, foto enmarcada',
+        label: 'Clásica Atemporal',
+        desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal',
         icon: '✨',
         primaryColor: '#2B2625',
         accentColor: '#C5A059',
@@ -43,8 +43,8 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'elegante'
     },
     'classic-elegance-pro': {
-        label: 'Elegancia Clásica Pro',
-        desc: 'Editorial oscuro — negro, dorado intenso, foto full-screen',
+        label: 'Clásica Atemporal Pro',
+        desc: 'Editorial oscuro — negro profundo, acentos en oro intenso y portada full-screen',
         icon: '👑',
         primaryColor: '#0A0A0A',
         accentColor: '#D4AF37',
@@ -57,11 +57,11 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'elegante'
     },
     'modern-minimalist': {
-        label: 'Minimalista Moderno',
+        label: 'Moderna Minimalista',
         desc: 'Líneas limpias, tipografía contemporánea y sobriedad monocromática',
         icon: '🖤',
         primaryColor: '#111111',
-        accentColor: '#333333',
+        accentColor: '#222222',
         cardBgColor: '#F5F5F7',
         sectionBgColor: '#FFFFFF',
         textPrimary: '#111111',
@@ -70,9 +70,37 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#FFFFFF',
         typographyPreset: 'moderna'
     },
+    'split-screen': {
+        label: 'Vanguardia Dividida',
+        desc: 'Contraste moderno de imagen a pantalla dividida y tonos azules',
+        icon: '🌓',
+        primaryColor: '#0F172A',
+        accentColor: '#38BDF8',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8FAFC',
+        textPrimary: '#0F172A',
+        textSecondary: '#64748B',
+        heroTextColor: '#FFFFFF',
+        heroBgColor: '#0F172A',
+        typographyPreset: 'moderna'
+    },
+    'magazine': {
+        label: 'Estilo Editorial',
+        desc: 'Estilo portada de revista de moda, tipografía audaz y alto contraste',
+        icon: '📖',
+        primaryColor: '#000000',
+        accentColor: '#E63946',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F9FA',
+        textPrimary: '#111111',
+        textSecondary: '#4A4A4A',
+        heroTextColor: '#000000',
+        heroBgColor: '#FFFFFF',
+        typographyPreset: 'moderna'
+    },
     'romantic-botanical': {
-        label: 'Botánica Romántica',
-        desc: 'Ilustraciones florales delicadas, verdes olivo y rosas suave',
+        label: 'Elegancia Floral',
+        desc: 'Ilustraciones botánicas delicadas, verdes bosque y rosas empolvados',
         icon: '🌿',
         primaryColor: '#2D3A2D',
         accentColor: '#9E6B6B',
@@ -98,23 +126,23 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#FAF7F5',
         typographyPreset: 'romantica'
     },
-    'magazine': {
-        label: 'Editorial / Revista',
-        desc: 'Estilo portada de revista de moda, tipografía audaz y alto contraste',
-        icon: '📖',
-        primaryColor: '#000000',
-        accentColor: '#E63946',
-        cardBgColor: '#FFFFFF',
-        sectionBgColor: '#F8F9FA',
-        textPrimary: '#111111',
-        textSecondary: '#4A4A4A',
-        heroTextColor: '#000000',
-        heroBgColor: '#FFFFFF',
+    'neon-glow': {
+        label: 'Fiesta Neón',
+        desc: 'Luces de neón vibrantes sobre fondo nocturno ultramoderno para fiesta',
+        icon: '🪩',
+        primaryColor: '#0F051D',
+        accentColor: '#FF007F',
+        cardBgColor: '#1A0933',
+        sectionBgColor: '#0A0014',
+        textPrimary: '#00F0FF',
+        textSecondary: '#B57EDC',
+        heroTextColor: '#00F0FF',
+        heroBgColor: '#0F051D',
         typographyPreset: 'moderna'
     },
     'luxury-gold': {
-        label: 'Oro Lujoso',
-        desc: 'Destellos metálicos dorados sobre fondo oscuro de noche',
+        label: 'Lujo Metálico',
+        desc: 'Destellos metálicos dorados sobre fondo oscuro de noche para galas',
         icon: '🌟',
         primaryColor: '#141414',
         accentColor: '#D4AF37',
@@ -126,37 +154,9 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#0B0B0B',
         typographyPreset: 'elegante'
     },
-    'split-screen': {
-        label: 'Pantalla Dividida',
-        desc: 'Contraste moderno de imagen a pantalla dividida y tonos azules',
-        icon: '🌓',
-        primaryColor: '#0F172A',
-        accentColor: '#38BDF8',
-        cardBgColor: '#FFFFFF',
-        sectionBgColor: '#F8FAFC',
-        textPrimary: '#0F172A',
-        textSecondary: '#64748B',
-        heroTextColor: '#FFFFFF',
-        heroBgColor: '#0F172A',
-        typographyPreset: 'moderna'
-    },
-    'collage': {
-        label: 'Collage Fotográfico',
-        desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos',
-        icon: '🖼️',
-        primaryColor: '#332C27',
-        accentColor: '#B07D62',
-        cardBgColor: '#FFFDF9',
-        sectionBgColor: '#F7F4EF',
-        textPrimary: '#332C27',
-        textSecondary: '#786C65',
-        heroTextColor: '#FFFFFF',
-        heroBgColor: '#332C27',
-        typographyPreset: 'romantica'
-    },
     'passport': {
-        label: 'Pasaporte Viajero',
-        desc: 'Temática de viaje para bodas destino y aventuras náuticas',
+        label: 'Pase de Abordaje',
+        desc: 'Temática de pasaporte y viaje para bodas destino y escapadas',
         icon: '✈️',
         primaryColor: '#0B2545',
         accentColor: '#134074',
@@ -169,8 +169,8 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'moderna'
     },
     'polaroid-vintage': {
-        label: 'Polaroid Vintage',
-        desc: 'Fotografías de estilo nostálgico e instantáneo con marcos sepia',
+        label: 'Retro Fotográfico',
+        desc: 'Fotografías de estilo instantáneo y nostálgico con marcos cálidos sepia',
         icon: '📸',
         primaryColor: '#3D312A',
         accentColor: '#C87D55',
@@ -182,23 +182,9 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#EAE3D9',
         typographyPreset: 'romantica'
     },
-    'neon-glow': {
-        label: 'Fiesta & Neón',
-        desc: 'Luces de neón fucsia y cian sobre fondo nocturno ultramoderno',
-        icon: '🪩',
-        primaryColor: '#0F051D',
-        accentColor: '#FF007F',
-        cardBgColor: '#1A0933',
-        sectionBgColor: '#0A0014',
-        textPrimary: '#00F0FF',
-        textSecondary: '#B57EDC',
-        heroTextColor: '#00F0FF',
-        heroBgColor: '#0F051D',
-        typographyPreset: 'moderna'
-    },
     'whimsical-kids': {
-        label: 'Infantil Fantasía',
-        desc: 'Colores alegres, pasteles brillantes e ilustraciones para peques',
+        label: 'Fantasía Infantil',
+        desc: 'Colores alegres, pasteles brillantes e ilustraciones mágicas para peques',
         icon: '🎈',
         primaryColor: '#2C3E50',
         accentColor: '#FF6B6B',
@@ -209,5 +195,19 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroTextColor: '#2C3E50',
         heroBgColor: '#FFEAA7',
         typographyPreset: 'divertida'
+    },
+    'collage': {
+        label: 'Collage Elegante',
+        desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos',
+        icon: '🖼️',
+        primaryColor: '#332C27',
+        accentColor: '#B07D62',
+        cardBgColor: '#FFFDF9',
+        sectionBgColor: '#F7F4EF',
+        textPrimary: '#332C27',
+        textSecondary: '#786C65',
+        heroTextColor: '#FFFFFF',
+        heroBgColor: '#332C27',
+        typographyPreset: 'romantica'
     }
 };

@@ -1085,19 +1085,19 @@ export default function DesignEditor() {
                 >
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                         {[
-                            { id: 'classic', label: 'Elegancia Clásica', desc: 'Fondo marfil, ornamentos dorados, foto enmarcada', icon: '✨' },
-                            { id: 'classic-elegance-pro', label: 'Elegancia Clásica Pro', desc: 'Editorial oscuro — negro, dorado intenso, foto full-screen', icon: '👑' },
-                            { id: 'modern-minimalist', label: 'Minimalista Moderno', desc: 'Líneas limpias, tipografía contemporánea', icon: '🖤' },
-                            { id: 'romantic-botanical', label: 'Botánica Romántica', desc: 'Verde bosque, dorado cálido, fotografía full-height', icon: '🌿' },
-                            { id: 'floral-symmetry', label: 'Simetría Floral', desc: 'Marcos simétricos con ornamentos botánicos', icon: '🌸' },
-                            { id: 'magazine', label: 'Editorial / Revista', desc: 'Estilo portada de revista de moda y lujo', icon: '📖' },
-                            { id: 'luxury-gold', label: 'Oro Lujoso', desc: 'Destellos metálicos dorados sobre fondo oscuro', icon: '🌟' },
-                            { id: 'split-screen', label: 'Pantalla Dividida', desc: 'Contraste moderno de imagen a pantalla dividida', icon: '🌓' },
-                            { id: 'collage', label: 'Collage Fotográfico', desc: 'Composición dinámica de fotos inolvidables', icon: '🖼️' },
-                            { id: 'passport', label: 'Pasaporte Viajero', desc: 'Temática de viaje para bodas destino y aventuras', icon: '✈️' },
-                            { id: 'polaroid-vintage', label: 'Polaroid Vintage', desc: 'Fotografías de estilo nostálgico e instantáneo', icon: '📸' },
-                            { id: 'neon-glow', label: 'Fiesta & Neón', desc: 'Luces de neón vibrantes e ideales para fiesta', icon: '🪩' },
-                            { id: 'whimsical-kids', label: 'Infantil Fantasía', desc: 'Colores alegres e ilustraciones para peques', icon: '🎈' }
+                            { id: 'classic', label: 'Clásica Atemporal', desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal', icon: '✨' },
+                            { id: 'classic-elegance-pro', label: 'Clásica Atemporal Pro', desc: 'Editorial oscuro — negro profundo, oro intenso y portada inmersiva', icon: '👑' },
+                            { id: 'modern-minimalist', label: 'Moderna Minimalista', desc: 'Líneas limpias, tipografía contemporánea y sobriedad monocromática', icon: '🖤' },
+                            { id: 'split-screen', label: 'Vanguardia Dividida', desc: 'Contraste moderno a pantalla dividida y tonos azules', icon: '🌓' },
+                            { id: 'magazine', label: 'Estilo Editorial', desc: 'Estilo portada de revista de moda, tipografía audaz y alto impacto', icon: '📖' },
+                            { id: 'romantic-botanical', label: 'Elegancia Floral', desc: 'Ilustraciones botánicas, verde bosque y rosas empolvados', icon: '🌿' },
+                            { id: 'floral-symmetry', label: 'Simetría Floral', desc: 'Marcos simétricos con ornamentos botánicos y eucalipto', icon: '🌸' },
+                            { id: 'neon-glow', label: 'Fiesta Neón', desc: 'Luces de neón vibrantes sobre fondo nocturno ultramoderno', icon: '🪩' },
+                            { id: 'luxury-gold', label: 'Lujo Metálico', desc: 'Destellos metálicos dorados sobre fondo oscuro para galas', icon: '🌟' },
+                            { id: 'passport', label: 'Pase de Abordaje', desc: 'Temática de pasaporte y viaje para bodas destino y escapadas', icon: '✈️' },
+                            { id: 'polaroid-vintage', label: 'Retro Fotográfico', desc: 'Fotografías de estilo instantáneo y nostálgico con marcos sepia', icon: '📸' },
+                            { id: 'whimsical-kids', label: 'Fantasía Infantil', desc: 'Colores alegres, pasteles brillantes e ilustraciones para peques', icon: '🎈' },
+                            { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
                         ].map((item) => (
                             <button
                                 key={item.id}

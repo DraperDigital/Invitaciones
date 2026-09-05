@@ -1660,7 +1660,10 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'gold-luxury',
+            theme: 'classic-elegance-pro',
+            primary_color: '#0A0A0A',
+            accent_color: '#D4AF37',
+            typography_preset: 'editorial',
             schedule: [
                 { time: '17:00', event: 'Ceremonia Religiosa', location: 'Capilla de la Hacienda' },
                 { time: '18:30', event: 'Cóctel de Bienvenida', location: 'Jardín Principal' },
@@ -1704,8 +1707,8 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             theme: 'split-screen', hero_image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80',
             typography_preset: 'moderna',
-            primary_color: '#2d3748',
-            accent_color: '#e2e8f0',
+            primary_color: '#0F172A',
+            accent_color: '#38BDF8',
             isPremium: true
         }
     },
@@ -1728,7 +1731,7 @@ export const MOCK_EVENTS: Event[] = [
             theme: 'magazine', hero_image_url: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80',
             typography_preset: 'editorial',
             primary_color: '#000000',
-            accent_color: '#ffffff',
+            accent_color: '#E63946',
             isPremium: true
         }
     },
@@ -1773,8 +1776,8 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             theme: 'passport', hero_image_url: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80',
             typography_preset: 'moderna',
-            primary_color: '#006B7D',
-            accent_color: '#FFB5A7',
+            primary_color: '#0B2545',
+            accent_color: '#134074',
             isPremium: true
         }
     }

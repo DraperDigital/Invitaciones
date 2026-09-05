@@ -110,8 +110,8 @@ export default function InvitationPage() {
         'romantic-botanical': {
             sectionBg: '#FDFBF7', sectionBgAlt: '#F4F7F1', cardBg: '#FFFFFF',
             textPrimary: '#2C2C2C', textSecondary: '#6B7280',
-            borderColor: '#E5E7EB', cardBorder: '#FAC34533',
-            accentOverride: '#FAC345', fontPreset: 'romantica-playfair',
+            borderColor: '#E5E7EB', cardBorder: '#9E6B6B33',
+            accentOverride: '#9E6B6B', fontPreset: 'romantica-playfair',
             heroRadius: '0px', cardRadius: '4px',
         },
         'floral-symmetry': {
@@ -2429,19 +2429,19 @@ END:VCALENDAR`;
                                     onChange={(e) => handleUpdateFeature('theme', e.target.value)}
                                     className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1"
                                 >
-                                    <option value="classic">✨ Elegancia Clásica</option>
-                                    <option value="classic-elegance-pro">👑 Elegancia Clásica Pro</option>
-                                    <option value="modern-minimalist">🖤 Minimalista Moderno</option>
-                                    <option value="romantic-botanical">🌿 Botánica Romántica</option>
+                                    <option value="classic">✨ Clásica Atemporal</option>
+                                    <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
+                                    <option value="modern-minimalist">🖤 Moderna Minimalista</option>
+                                    <option value="split-screen">🌓 Vanguardia Dividida</option>
+                                    <option value="magazine">📖 Estilo Editorial</option>
+                                    <option value="romantic-botanical">🌿 Elegancia Floral</option>
                                     <option value="floral-symmetry">🌸 Simetría Floral</option>
-                                    <option value="magazine">📖 Editorial / Revista</option>
-                                    <option value="luxury-gold">🌟 Oro Lujoso</option>
-                                    <option value="split-screen">🌓 Pantalla Dividida</option>
-                                    <option value="collage">🖼️ Collage Fotográfico</option>
-                                    <option value="passport">✈️ Pasaporte Viajero</option>
-                                    <option value="polaroid-vintage">📸 Polaroid Vintage</option>
-                                    <option value="neon-glow">🪩 Fiesta & Neón</option>
-                                    <option value="whimsical-kids">🎈 Infantil Fantasía</option>
+                                    <option value="neon-glow">🪩 Fiesta Neón</option>
+                                    <option value="luxury-gold">🌟 Lujo Metálico</option>
+                                    <option value="passport">✈️ Pase de Abordaje</option>
+                                    <option value="polaroid-vintage">📸 Retro Fotográfico</option>
+                                    <option value="whimsical-kids">🎈 Fantasía Infantil</option>
+                                    <option value="collage">🖼️ Collage Elegante</option>
                                 </select>
                             </div>
                         </div>
@@ -2501,19 +2501,19 @@ END:VCALENDAR`;
                                                 onChange={(e) => handleUpdateFeature('theme', e.target.value)}
                                                 className="w-full bg-white px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
                                             >
-                                                <option value="classic">✨ Elegancia Clásica</option>
-                                                <option value="classic-elegance-pro">👑 Elegancia Clásica Pro</option>
-                                                <option value="modern-minimalist">🖤 Minimalista Moderno</option>
-                                                <option value="romantic-botanical">🌿 Botánica Romántica</option>
+                                                <option value="classic">✨ Clásica Atemporal</option>
+                                                <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
+                                                <option value="modern-minimalist">🖤 Moderna Minimalista</option>
+                                                <option value="split-screen">🌓 Vanguardia Dividida</option>
+                                                <option value="magazine">📖 Estilo Editorial</option>
+                                                <option value="romantic-botanical">🌿 Elegancia Floral</option>
                                                 <option value="floral-symmetry">🌸 Simetría Floral</option>
-                                                <option value="magazine">📖 Editorial / Revista</option>
-                                                <option value="luxury-gold">🌟 Oro Lujoso</option>
-                                                <option value="split-screen">🌓 Pantalla Dividida</option>
-                                                <option value="collage">🖼️ Collage Fotográfico</option>
-                                                <option value="passport">✈️ Pasaporte Viajero</option>
-                                                <option value="polaroid-vintage">📸 Polaroid Vintage</option>
-                                                <option value="neon-glow">🪩 Fiesta & Neón</option>
-                                                <option value="whimsical-kids">🎈 Infantil Fantasía</option>
+                                                <option value="neon-glow">🪩 Fiesta Neón</option>
+                                                <option value="luxury-gold">🌟 Lujo Metálico</option>
+                                                <option value="passport">✈️ Pase de Abordaje</option>
+                                                <option value="polaroid-vintage">📸 Retro Fotográfico</option>
+                                                <option value="whimsical-kids">🎈 Fantasía Infantil</option>
+                                                <option value="collage">🖼️ Collage Elegante</option>
                                             </select>
                                         </div>
 
