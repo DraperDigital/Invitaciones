@@ -47,19 +47,31 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
 
             {/* ── 1. Top Header & Navigation Bar ── */}
             <header className="w-full pt-8 pb-4 text-center border-b relative z-20 backdrop-blur-sm" style={{ borderColor: `${primaryGold}33`, backgroundColor: `${heroBg}E6` }}>
-                {/* Gold Crest / Tiara Ornament */}
-                <div className="flex justify-center mb-1">
-                    <svg width="36" height="18" viewBox="0 0 40 20" fill="none" stroke={primaryGold} strokeWidth="1.2">
-                        <path d="M20 2 L25 10 L35 4 L30 18 L10 18 L5 4 L15 10 Z" />
-                        <circle cx="20" cy="2" r="1.5" fill={primaryGold} />
-                        <circle cx="5" cy="4" r="1" fill={primaryGold} />
-                        <circle cx="35" cy="4" r="1" fill={primaryGold} />
-                    </svg>
-                </div>
-                {/* Monogram */}
-                <h2 className="text-xl sm:text-2xl font-serif tracking-[0.25em] font-normal mb-3" style={{ color: primaryGold }}>
-                    {getInitials()}
-                </h2>
+                {/* Monogram or Logo */}
+                {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                    <div className="flex justify-center mb-3">
+                        <img
+                            src={cfg.decorative_image_url || cfg.decorativeImage}
+                            alt="Logo o Monograma"
+                            className="h-12 sm:h-14 w-auto max-w-[150px] object-contain"
+                        />
+                    </div>
+                ) : (
+                    <>
+                        {/* Gold Crest / Tiara Ornament */}
+                        <div className="flex justify-center mb-1">
+                            <svg width="36" height="18" viewBox="0 0 40 20" fill="none" stroke={primaryGold} strokeWidth="1.2">
+                                <path d="M20 2 L25 10 L35 4 L30 18 L10 18 L5 4 L15 10 Z" />
+                                <circle cx="20" cy="2" r="1.5" fill={primaryGold} />
+                                <circle cx="5" cy="4" r="1" fill={primaryGold} />
+                                <circle cx="35" cy="4" r="1" fill={primaryGold} />
+                            </svg>
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-serif tracking-[0.25em] font-normal mb-3" style={{ color: primaryGold }}>
+                            {getInitials()}
+                        </h2>
+                    </>
+                )}
                 {/* Links */}
                 <nav className="flex flex-wrap justify-center gap-2.5 sm:gap-6 px-2 text-[9px] sm:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-[#554D47] font-sans font-semibold">
                     <button onClick={() => scrollToSection('guest_welcome')} className="hover:text-[#C5A059] transition-colors">SOBRE NOSOTROS</button>

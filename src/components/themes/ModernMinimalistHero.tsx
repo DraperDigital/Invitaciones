@@ -43,6 +43,15 @@ export default function ModernMinimalistHero({ event, cfg, countdown, labels, he
                 
                 <div className="relative z-10 text-center px-6 w-full max-w-5xl mt-16 md:mt-0">
                     <div className="space-y-6 animate-in fade-in slide-in-from-top-12 duration-1000 mb-16">
+                        {(cfg.decorative_image_url || cfg.decorativeImage) && (
+                            <div className="flex justify-center mb-2">
+                                <img
+                                    src={cfg.decorative_image_url || cfg.decorativeImage}
+                                    alt="Logo o Monograma"
+                                    className="h-12 sm:h-16 w-auto max-w-[180px] object-contain drop-shadow-md"
+                                />
+                            </div>
+                        )}
                         <p className="text-[10px] sm:text-xs uppercase tracking-[0.6em] sm:tracking-[1em] font-sans text-accent font-black">
                             {cfg.subtitle || labels.tagline}
                         </p>

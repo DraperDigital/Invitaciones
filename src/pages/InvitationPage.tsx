@@ -1580,7 +1580,15 @@ END:VCALENDAR`;
 
                     <div className="relative z-10 text-center px-6 py-20 max-w-2xl">
                         <div className="mb-8">
-                            <Flower2 className="h-12 w-12 mx-auto mb-6 animate-pulse" strokeWidth={1.5} style={{color: heroTextColor, opacity: 0.8}} />
+                            {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                                <img
+                                    src={cfg.decorative_image_url || cfg.decorativeImage}
+                                    alt="Logo o Monograma"
+                                    className="h-16 sm:h-20 w-auto max-w-[200px] mx-auto object-contain mb-6 drop-shadow-sm"
+                                />
+                            ) : (
+                                <Flower2 className="h-12 w-12 mx-auto mb-6 animate-pulse" strokeWidth={1.5} style={{color: heroTextColor, opacity: 0.8}} />
+                            )}
                         </div>
                         <p className="text-sm uppercase tracking-[0.4em] mb-6 font-sans" style={{color: heroTextColor, opacity: 0.85}}>
                             {subtitle || labels.tagline}
@@ -2595,8 +2603,16 @@ END:VCALENDAR`;
                                         <div className="absolute inset-4 border-2 border-stone-300/50 rounded-xl" style={{ clipPath: 'polygon(5% 20%, 50% 50%, 95% 20%, 95% 95%, 5% 95%)' }} />
                                         <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-[var(--card-border)] shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
                                         <div className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 z-20">
-                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30">
-                                                {getSealIcon()}
+                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30 overflow-hidden p-2">
+                                                {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                                                    <img
+                                                        src={cfg.decorative_image_url || cfg.decorativeImage}
+                                                        alt="Sello"
+                                                        className="h-full w-full object-contain filter drop-shadow brightness-110"
+                                                    />
+                                                ) : (
+                                                    getSealIcon()
+                                                )}
                                             </div>
                                         </div>
                                     </div>

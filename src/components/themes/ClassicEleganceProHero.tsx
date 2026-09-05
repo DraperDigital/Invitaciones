@@ -54,16 +54,26 @@ export default function ClassicEleganceProHero({ event, cfg, countdown, heroImag
                         <button onClick={() => scrollToSection('itinerary')} className="hover:text-white transition-colors">Itinerario</button>
                     </nav>
 
-                    {/* Center monogram */}
+                    {/* Center monogram / logo */}
                     <div className="flex flex-col items-center">
-                        <svg width="28" height="14" viewBox="0 0 40 20" fill="none" stroke={gold} strokeWidth="1.2">
-                            <path d="M20 2 L25 10 L35 4 L30 18 L10 18 L5 4 L15 10 Z" />
-                            <circle cx="20" cy="2" r="1.5" fill={gold} />
-                        </svg>
-                        <span className="text-base sm:text-lg font-serif tracking-[0.3em] font-light mt-1"
-                            style={{ color: gold }}>
-                            {getInitials()}
-                        </span>
+                        {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                            <img
+                                src={cfg.decorative_image_url || cfg.decorativeImage}
+                                alt="Logo o Monograma"
+                                className="h-9 sm:h-12 w-auto max-w-[140px] object-contain"
+                            />
+                        ) : (
+                            <>
+                                <svg width="28" height="14" viewBox="0 0 40 20" fill="none" stroke={gold} strokeWidth="1.2">
+                                    <path d="M20 2 L25 10 L35 4 L30 18 L10 18 L5 4 L15 10 Z" />
+                                    <circle cx="20" cy="2" r="1.5" fill={gold} />
+                                </svg>
+                                <span className="text-base sm:text-lg font-serif tracking-[0.3em] font-light mt-1"
+                                    style={{ color: gold }}>
+                                    {getInitials()}
+                                </span>
+                            </>
+                        )}
                     </div>
 
                     {/* Right nav */}
