@@ -5,7 +5,6 @@ import { ToastProvider } from './context/ToastContext';
 import DashboardLayout from './components/layout/DashboardLayout';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import Toaster from './components/ui/Toaster';
-import FeedbackRatingWidget from './components/FeedbackRatingWidget';
 import { getPlatformContext } from './utils/context';
 
 // Lazy-loaded pages — each page gets its own chunk (split at route level)
@@ -181,7 +180,6 @@ function App() {
             <Suspense fallback={null}>
               <LaunchPromoPopup />
             </Suspense>
-            <FeedbackRatingWidget />
           </BrowserRouter>
         </AuthProvider>
         {/* Toaster fuera del router para que sobreviva navegaciones */}

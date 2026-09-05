@@ -8,6 +8,7 @@ import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import AiDesignModal from '../components/AiDesignModal';
+import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
@@ -2306,6 +2307,11 @@ export default function DesignEditor() {
                     Ver Plantilla de Ejemplo Completa →
                 </Link>
             </div>
+
+            {/* Widget de retroalimentación: solo visible en el editor de invitaciones cuando ya se tiene plan seleccionado */}
+            {Boolean(config.plan || (currentPlan?.code && currentPlan.code !== 'free')) && (
+                <FeedbackRatingWidget />
+            )}
         </div>
     );
 }
