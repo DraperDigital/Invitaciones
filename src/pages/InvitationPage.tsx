@@ -180,30 +180,36 @@ export default function InvitationPage() {
         },
     };
 
+    const userCfg = event?.theme_config || {};
     const activeVars = THEME_VARS[themeName] || THEME_VARS['classic'];
-    const sectionBg    = activeVars.sectionBg;
-    const sectionBgAlt = activeVars.sectionBgAlt;
-    const cardBg       = activeVars.cardBg;
-    const textPrimary  = activeVars.textPrimary;
-    const textSecondary = activeVars.textSecondary;
-    const borderColor  = activeVars.borderColor;
-    const cardBorder   = activeVars.cardBorder;
 
-    const _accentColor = activeVars.accentOverride || event?.theme_config?.accent_color || event?.theme_config?.primary_color || '#BD7474';
-    const _buttonColor = activeVars.accentOverride || event?.theme_config?.button_color || event?.theme_config?.primary_color || '#1B2E1D';
+    // Prioridad: 1. Elección explícita del usuario -> 2. Variable del perfil del tema
+    const sectionBg     = userCfg.section_bg_color || userCfg.sectionBgColor || activeVars.sectionBg;
+    const sectionBgAlt  = activeVars.sectionBgAlt;
+    const cardBg        = userCfg.card_bg_color || userCfg.cardBgColor || activeVars.cardBg;
+    const textPrimary   = userCfg.text_primary || userCfg.textPrimary || activeVars.textPrimary;
+    const textSecondary = userCfg.text_secondary || userCfg.textSecondary || activeVars.textSecondary;
+    const borderColor   = activeVars.borderColor;
+    const cardBorder    = activeVars.cardBorder;
+
+    // ACENTOS y BOTONES: el usuario tiene prioridad sobre activeVars.accentOverride
+    const _accentColor = userCfg.accent_color || userCfg.accentColor || activeVars.accentOverride || userCfg.primary_color || '#BD7474';
+    const _buttonColor = userCfg.button_color || userCfg.buttonColor || userCfg.primary_color || userCfg.primaryColor || activeVars.accentOverride || '#1B2E1D';
     const accentContrast = getContrastColor(_accentColor);
     const buttonContrast = getContrastColor(_buttonColor);
 
     const globalStyles = {
-        '--section-bg':      sectionBg,
-        '--section-bg-alt':  sectionBgAlt,
-        '--card-bg':         cardBg,
-        '--text-primary':    textPrimary,
-        '--text-secondary':  textSecondary,
-        '--border-color':    borderColor,
-        '--card-border':     cardBorder,
-        '--accent-contrast': accentContrast,
-        '--button-contrast': buttonContrast,
+        '--section-bg':        sectionBg,
+        '--section-bg-alt':    sectionBgAlt,
+        '--card-bg':           cardBg,
+        '--text-primary':      textPrimary,
+        '--text-secondary':    textSecondary,
+        '--border-color':      borderColor,
+        '--card-border':       cardBorder,
+        '--accent-contrast':   accentContrast,
+        '--button-contrast':   buttonContrast,
+        '--color-accent-raw':  _accentColor,
+        '--color-button-raw':  _buttonColor,
         '--theme-card-radius': activeVars.cardRadius || '24px',
         '--theme-hero-radius': activeVars.heroRadius || '0px',
     } as React.CSSProperties;
@@ -271,6 +277,8 @@ export default function InvitationPage() {
             updatedConfig.accent_color = profile.accentColor;
             updatedConfig.cardBgColor = profile.cardBgColor;
             updatedConfig.card_bg_color = profile.cardBgColor;
+            updatedConfig.buttonColor = profile.primaryColor;
+            updatedConfig.button_color = profile.primaryColor;
             updatedConfig.heroTextColor = profile.heroTextColor;
             updatedConfig.hero_text_color = profile.heroTextColor;
             updatedConfig.heroBgColor = profile.heroBgColor;
@@ -767,7 +775,7 @@ END:VCALENDAR`;
         /* ── Elegancia Clásica overrides ── */
         .invitation-content h2,
         .invitation-content h3 {
-            color: #C5A059 !important;
+            color: ${_accentColor} !important;
             letter-spacing: 0.12em;
             text-transform: uppercase;
         }
@@ -780,14 +788,14 @@ END:VCALENDAR`;
         .invitation-content section {
             border-radius: 0 !important;
         }
-        /* Gold accent buttons */
+        /* Buttons */
         .invitation-content button[class*="rounded-full"][style*="background"] {
-            background: linear-gradient(135deg, #B8860B, #C5A059, #9A7B38) !important;
-            color: #ffffff !important;
+            background: ${_buttonColor} !important;
+            color: var(--button-contrast) !important;
         }
-        /* Card gold borders */
+        /* Card borders */
         .invitation-content [class*="border-\\[var(--card-border)\\]"] {
-            border-color: #C5A05944 !important;
+            border-color: ${_accentColor}44 !important;
         }
         /* Section headings ornamental line */
         .invitation-content .text-4xl::after,
@@ -796,7 +804,7 @@ END:VCALENDAR`;
             display: block;
             width: 60px;
             height: 1px;
-            background: #C5A059;
+            background: ${_accentColor};
             margin: 12px auto 0;
         }
     ` : isClassicProTheme ? `
@@ -804,13 +812,13 @@ END:VCALENDAR`;
 
         /* Dark section backgrounds */
         .invitation-content {
-            background-color: #111111 !important;
+            background-color: ${sectionBg} !important;
         }
 
-        /* Headings: warm gold */
+        /* Headings */
         .invitation-content h2,
         .invitation-content h3 {
-            color: #D4AF37 !important;
+            color: ${_accentColor} !important;
             letter-spacing: 0.12em;
             text-transform: uppercase;
         }
@@ -821,10 +829,10 @@ END:VCALENDAR`;
             }
         }
 
-        /* Gold gradient for main buttons */
+        /* Main buttons */
         .invitation-content button[style*="background"] {
-            background: linear-gradient(135deg, #9A7B38, #D4AF37, #F5D76E) !important;
-            color: #0A0A0A !important;
+            background: ${_buttonColor} !important;
+            color: var(--button-contrast) !important;
             border-radius: 0 !important;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -836,58 +844,57 @@ END:VCALENDAR`;
             border-radius: 4px !important;
         }
 
-        /* Cards: dark with gold border */
+        /* Cards */
         .invitation-content [class*="shadow-xl"],
         .invitation-content [class*="shadow-2xl"] {
             box-shadow: 0 4px 24px rgba(0,0,0,0.5) !important;
         }
         .invitation-content [class*="border-\\[var(--card-border)\\]"] {
-            border-color: #D4AF3740 !important;
+            border-color: ${_accentColor}40 !important;
         }
 
-        /* Gold thin line under section headings */
+        /* Line under section headings */
         .invitation-content .text-4xl::after,
         .invitation-content .text-5xl::after {
             content: '';
             display: block;
             width: 40px;
             height: 1px;
-            background: linear-gradient(to right, transparent, #D4AF37, transparent);
+            background: linear-gradient(to right, transparent, ${_accentColor}, transparent);
             margin: 10px auto 0;
         }
 
-        /* Itinerary timeline: gold */
+        /* Itinerary timeline */
         .invitation-content #itinerary .bg-stone-300 {
-            background: linear-gradient(to bottom, #D4AF37, #9A7B38) !important;
+            background: ${_accentColor} !important;
         }
         .invitation-content #itinerary [class*="border-\\[var(--border-color)\\]"] {
-            border-color: #D4AF3760 !important;
+            border-color: ${_accentColor}60 !important;
         }
 
-        /* Outline buttons: gold border */
+        /* Outline buttons */
         .invitation-content button:not([style*="background"]) {
-            border-color: #D4AF3760 !important;
-            color: #D4AF37 !important;
+            border-color: ${_accentColor}60 !important;
+            color: ${_accentColor} !important;
         }
 
-        /* Footer: dark */
+        /* Footer */
         .invitation-content #footer {
-            background: #0A0A0A !important;
-            border-top: 1px solid #D4AF3720;
+            background: ${sectionBg} !important;
+            border-top: 1px solid ${_accentColor}20;
         }
         .invitation-content #footer h2,
         .invitation-content #footer h3 {
-            color: #D4AF37 !important;
+            color: ${_accentColor} !important;
         }
     ` : isBotanicalTheme ? `
         /* ── Romántico Botánico (Invitto Pro) overrides ── */
 
-
-        /* ── Global: botones sin border-radius, uppercase, gold ── */
+        /* ── Global: botones ── */
         .invitation-content button[style*="background"],
         .invitation-content a > button[style*="background"] {
-            background: #FAC345 !important;
-            color: #1a1a1a !important;
+            background: ${_buttonColor} !important;
+            color: var(--button-contrast) !important;
             border-radius: 0 !important;
             letter-spacing: 0.15em;
             text-transform: uppercase;
@@ -900,20 +907,20 @@ END:VCALENDAR`;
             border-radius: 4px !important;
         }
 
-        /* ── Headings: verde #527853 ── */
+        /* ── Headings ── */
         .invitation-content h2,
         .invitation-content h3 {
-            color: #527853 !important;
+            color: ${_accentColor} !important;
             font-weight: 400;
         }
         .invitation-content h4 {
-            color: #527853;
+            color: ${_accentColor};
         }
 
-        /* ── Ornamento ❦ en mensajes/welcome ── */
+        /* ── Ornamento en mensajes/welcome ── */
         .invitation-content #message .text-accent,
         .invitation-content #guest_welcome .text-accent {
-            color: #FAC345 !important;
+            color: ${_accentColor} !important;
         }
 
         /* ── Cards: borde suave, sombra ligera ── */
@@ -924,19 +931,19 @@ END:VCALENDAR`;
             border-color: #E5E7EB !important;
         }
 
-        /* ── Botones outline: border dorado → fill dorado en hover ── */
+        /* ── Botones outline ── */
         .invitation-content button:not([style*="background"]) {
-            border-color: #FAC345;
-            color: #527853;
+            border-color: ${_accentColor};
+            color: ${_buttonColor};
             border-radius: 0 !important;
             letter-spacing: 0.1em;
             font-size: 11px;
             text-transform: uppercase;
         }
 
-        /* ── RSVP: fondo verde oscuro, texto blanco ── */
+        /* ── RSVP ── */
         .invitation-content #rsvp {
-            background-color: #527853 !important;
+            background-color: ${_buttonColor} !important;
         }
         .invitation-content #rsvp h2,
         .invitation-content #rsvp h3,
@@ -945,7 +952,7 @@ END:VCALENDAR`;
             color: rgba(255,255,255,0.9) !important;
         }
         .invitation-content #rsvp h2 {
-            color: #FAC345 !important;
+            color: ${_accentColor} !important;
         }
         .invitation-content #rsvp input {
             border-color: rgba(255,255,255,0.35) !important;
@@ -956,54 +963,53 @@ END:VCALENDAR`;
             color: rgba(255,255,255,0.45) !important;
         }
         .invitation-content #rsvp button[style*="background"] {
-            background: #FAC345 !important;
-            color: #1a1a1a !important;
+            background: ${_accentColor} !important;
+            color: var(--accent-contrast) !important;
         }
         .invitation-content #rsvp [class*="rounded"] {
             border-radius: 0 !important;
         }
         /* Radio buttons accent */
         .invitation-content #rsvp input[type="radio"] {
-            accent-color: #FAC345;
+            accent-color: ${_accentColor};
         }
 
-        /* ── Itinerary timeline: línea dorada ── */
+        /* ── Itinerary timeline ── */
         .invitation-content #itinerary .bg-stone-300 {
-            background-color: #FAC345 !important;
+            background-color: ${_accentColor} !important;
         }
-        /* Dots del itinerario: dorados */
         .invitation-content #itinerary [class*="border-\\[var(--border-color)\\]"] {
-            border-color: #FAC345 !important;
+            border-color: ${_accentColor} !important;
         }
         .invitation-content #itinerary .bg-\\[var\\(--section-bg\\)\\] {
-            background-color: #FDFBF7 !important;
+            background-color: ${sectionBg} !important;
         }
 
-        /* ── Dress code: label en rosa ── */
+        /* ── Dress code: label en accent ── */
         .invitation-content #dress_code [class*="text-accent"] {
-            color: #E0409A !important;
+            color: ${_accentColor} !important;
         }
 
-        /* ── Honor court: foto bordada en dorado ── */
+        /* ── Honor court ── */
         .invitation-content #chambelanes [class*="rounded-full"],
         .invitation-content [class*="rounded-full"][class*="border"] {
-            border-color: #FAC345 !important;
+            border-color: ${_accentColor} !important;
             border-radius: 50% !important;
         }
 
-        /* ── Footer: hashtag en script dorado ── */
+        /* ── Footer ── */
         .invitation-content #footer {
-            background: #FFFFFF !important;
+            background: ${cardBg} !important;
             border-top: 1px solid #E5E7EB;
         }
         .invitation-content #footer h2,
         .invitation-content #footer h3 {
-            color: #FAC345 !important;
+            color: ${_accentColor} !important;
         }
 
-        /* ── QR pase: borde doble dorado ── */
+        /* ── QR pase ── */
         .invitation-content #qr_pass [class*="border"] {
-            border-color: #FAC345 !important;
+            border-color: ${_accentColor} !important;
         }
     ` : isDarkTheme ? `
         /* ── Dark theme overrides ── */
@@ -1057,21 +1063,21 @@ END:VCALENDAR`;
         /* ── Simetría Floral overrides ── */
         .invitation-content h2,
         .invitation-content h3 {
-            color: #3A5240 !important;
+            color: ${_buttonColor} !important;
             letter-spacing: 0.05em;
         }
         .invitation-content button[style*="background"],
         .invitation-content a > button[style*="background"] {
-            background: #B85568 !important;
-            color: #ffffff !important;
+            background: ${_accentColor} !important;
+            color: var(--accent-contrast) !important;
             border-radius: 9999px !important;
-            box-shadow: 0 4px 14px rgba(184, 85, 104, 0.3) !important;
+            box-shadow: 0 4px 14px ${_accentColor}4D !important;
         }
         .invitation-content [class*="border-\\[var(--card-border)\\]"] {
             border-color: #E8DFD8 !important;
         }
         .invitation-content #rsvp {
-            background-color: #3A5240 !important;
+            background-color: ${_buttonColor} !important;
         }
         .invitation-content #rsvp h2,
         .invitation-content #rsvp h3,
@@ -1080,18 +1086,29 @@ END:VCALENDAR`;
             color: rgba(255,255,255,0.92) !important;
         }
         .invitation-content #rsvp h2 {
-            color: #F8E2E6 !important;
+            color: ${_accentColor} !important;
         }
         .invitation-content #rsvp button[style*="background"] {
-            background: #B85568 !important;
-            color: #ffffff !important;
+            background: ${_accentColor} !important;
+            color: var(--accent-contrast) !important;
         }
     ` : '';
 
     // Inject styles directly into tags for dynamic updates - Scoped to .invitation-content
     const commonStyles = `
-        :root, html { 
+        :root, html, .invitation-content { 
             --color-accent: ${accentRgb} !important; 
+            --color-button: ${_buttonColor} !important;
+        }
+        .invitation-content button.bg-accent,
+        .invitation-content a.bg-accent {
+            background-color: rgb(var(--color-accent)) !important;
+            color: var(--accent-contrast) !important;
+        }
+        .invitation-content button.border-accent,
+        .invitation-content a.border-accent {
+            border-color: rgb(var(--color-accent)) !important;
+            color: rgb(var(--color-accent)) !important;
         }
         .invitation-content h1, 
         .invitation-content h2, 

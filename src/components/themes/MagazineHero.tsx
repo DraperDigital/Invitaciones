@@ -10,11 +10,13 @@ interface Props {
     scrollToSection: (id: string) => void;
 }
 
-export default function MagazineHero({ event, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function MagazineHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
     const eventDate = new Date(event.date_time);
+    const heroBg = cfg?.heroBgColor || cfg?.hero_bg_color || '#111111';
+    const heroText = cfg?.hero_text_color || cfg?.heroTextColor || '#FFFFFF';
 
     return (
-        <div className="relative min-h-screen bg-[#111111] text-white overflow-hidden flex flex-col justify-between p-8 sm:p-12 transition-colors duration-500">
+        <div className="relative min-h-screen overflow-hidden flex flex-col justify-between p-8 sm:p-12 transition-colors duration-500" style={{ backgroundColor: heroBg, color: heroText }}>
             {/* Magazine Header */}
             <header className="flex justify-between items-start z-20">
                 <div>
@@ -39,9 +41,9 @@ export default function MagazineHero({ event, countdown, heroImageUrl, scrollToS
                     )}
                     
                     {/* Oversized Typography */}
-                    <div className="relative z-10 pointer-events-none text-white w-full drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+                    <div className="relative z-10 pointer-events-none w-full drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]" style={{ color: heroText }}>
                         <p className="text-[12px] sm:text-sm tracking-[0.5em] font-bold uppercase mb-4 sm:mb-8 text-stone-300 drop-shadow-md">Edición Especial</p>
-                        <h1 className="text-[clamp(2.5rem,10vw,14rem)] leading-[0.9] font-serif tracking-tighter uppercase whitespace-pre-line w-full break-normal hyphens-none px-4">
+                        <h1 className="text-[clamp(2.5rem,10vw,14rem)] leading-[0.9] font-serif tracking-tighter uppercase whitespace-pre-line w-full break-normal hyphens-none px-4" style={{ color: heroText }}>
                             {event.title.replace(' y ', '\n&\n')}
                         </h1>
                     </div>

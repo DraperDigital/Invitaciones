@@ -15,8 +15,8 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
     
     // Default colors inspired by the Renderforest template
     const heroBgColor = cfg.heroBgColor || cfg.hero_bg_color || '#F8F5F0';
-    const primaryColor = cfg.primary_color || '#767A6B'; // Dark olive green for the details bar
-    const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#4A4A4A';
+    const primaryColor = cfg.button_color || cfg.buttonColor || cfg.primary_color || cfg.primaryColor || '#767A6B';
+    const heroTextColor = cfg.hero_text_color || cfg.heroTextColor;
     
     // Images for collage
     const gallery = cfg.gallery_images || cfg.galleryImages || [];
@@ -39,8 +39,8 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
         return (r * 0.299 + g * 0.587 + b * 0.114) < 150;
     };
     const hasDarkBg = isDarkBg(heroBgColor);
-    const titleColor = hasDarkBg ? (cfg.hero_text_color || cfg.heroTextColor || '#FFFFFF') : primaryColor;
-    const subtitleColor = hasDarkBg ? 'rgba(255,255,255,0.85)' : heroTextColor;
+    const titleColor = heroTextColor || (hasDarkBg ? '#FFFFFF' : primaryColor);
+    const subtitleColor = heroTextColor || (hasDarkBg ? 'rgba(255,255,255,0.85)' : '#4A4A4A');
 
     return (
         <section id="hero" className="relative flex flex-col w-full min-h-[85vh] md:min-h-screen">

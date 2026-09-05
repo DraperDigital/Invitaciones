@@ -11,7 +11,8 @@ interface Props {
 }
 
 export default function SplitScreenHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
-    const primaryColor = cfg.primaryColor || cfg.primary_color || '#1B2E1D';
+    const primaryColor = cfg.button_color || cfg.buttonColor || cfg.primaryColor || cfg.primary_color || '#1B2E1D';
+    const heroText = cfg.hero_text_color || cfg.heroTextColor || '#FFFFFF';
     
     const eventDate = new Date(event.date_time);
     const dateStr = format(eventDate, "d 'de' MMMM, yyyy", { locale: es });
@@ -36,7 +37,7 @@ export default function SplitScreenHero({ event, cfg, countdown, labels, heroIma
 
                 <div className="max-w-lg w-full mx-auto text-left animate-in fade-in slide-in-from-right-8 duration-1000 mt-6 sm:mt-0">
                     <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.35em] font-bold text-white/60 mb-3 sm:mb-6">{event.event_type === 'wedding' ? 'Nos Casamos' : labels.welcome}</p>
-                    <h1 className="text-2xl sm:text-4xl lg:text-6xl font-serif text-white leading-tight mb-4 sm:mb-8 break-normal">
+                    <h1 className="text-2xl sm:text-4xl lg:text-6xl font-serif leading-tight mb-4 sm:mb-8 break-normal" style={{ color: heroText }}>
                         {event.title}
                     </h1>
                     

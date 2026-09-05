@@ -10,11 +10,13 @@ interface Props {
     scrollToSection: (id: string) => void;
 }
 
-export default function PolaroidVintageHero({ event, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
     const eventDate = new Date(event.date_time);
+    const heroBg = cfg?.heroBgColor || cfg?.hero_bg_color || '#Eae6df';
+    const heroText = cfg?.hero_text_color || cfg?.heroTextColor || '#292524';
 
     return (
-        <div className="relative min-h-screen bg-[#Eae6df] flex flex-col items-center justify-center p-6 overflow-hidden">
+        <div className="relative min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden" style={{ backgroundColor: heroBg }}>
             {/* Vintage Noise Overlay */}
             <div className="absolute inset-0 opacity-40 mix-blend-multiply pointer-events-none" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/dust.png")' }} />
 
@@ -45,7 +47,7 @@ export default function PolaroidVintageHero({ event, countdown, heroImageUrl, sc
 
                 {/* Hand-written style text */}
                 <div className="mt-12 text-center text-stone-800 space-y-6">
-                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif italic tracking-tight break-normal hyphens-none">
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif italic tracking-tight break-normal hyphens-none" style={{ color: heroText }}>
                         {event.title}
                     </h1>
                     

@@ -496,14 +496,21 @@ export default function DesignEditor() {
 
             const newThemeConfig = {
                 ...existingConfig,
-                // Save with snake_case keys that InvitationPage reads
+                // Save with both snake_case and camelCase keys for 100% interoperability
                 primary_color:    config.primaryColor,
+                primaryColor:     config.primaryColor,
                 hero_text_color:  config.heroTextColor,
+                heroTextColor:    config.heroTextColor,
                 accent_color:     config.accentColor,
+                accentColor:      config.accentColor,
                 card_bg_color:    config.cardBgColor,
+                cardBgColor:      config.cardBgColor,
                 hero_image_url:   config.heroImage,
+                heroImage:        config.heroImage,
                 decorative_image_url: config.decorativeImage,
+                decorativeImage:  config.decorativeImage,
                 button_color:     config.buttonColor,
+                buttonColor:      config.buttonColor,
                 welcome_message:  config.welcomeMessage,
                 subtitle:         config.welcomeSubtitle,
                 gallery_images:   config.galleryImages,
@@ -887,6 +894,7 @@ export default function DesignEditor() {
                                         cardBgColor: profile.cardBgColor,
                                         heroTextColor: profile.heroTextColor,
                                         heroBgColor: profile.heroBgColor,
+                                        buttonColor: profile.primaryColor,
                                         typographyPreset: profile.typographyPreset
                                     });
                                 }}
@@ -974,7 +982,7 @@ export default function DesignEditor() {
                                     <input
                                         type="color"
                                         value={config.buttonColor}
-                                        onChange={(e) => setConfig({ ...config, buttonColor: e.target.value })}
+                                        onChange={(e) => setConfig({ ...config, buttonColor: e.target.value, primaryColor: e.target.value })}
                                         className="h-10 w-12 md:h-12 md:w-16 rounded-lg md:rounded-xl cursor-pointer bg-transparent border-0 p-0 flex-shrink-0"
                                     />
                                     <span className="font-mono text-[10px] text-stone-500 uppercase">{config.buttonColor}</span>

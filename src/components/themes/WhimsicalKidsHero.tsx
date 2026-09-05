@@ -12,11 +12,13 @@ interface Props {
 }
 
 export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
-    const primaryColor = cfg.primaryColor || cfg.primary_color || '#FFB5A7'; // Pastel pink
+    const primaryColor = cfg.button_color || cfg.buttonColor || cfg.primaryColor || cfg.primary_color || '#FFB5A7';
+    const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#FDFBF7';
+    const heroText = cfg.hero_text_color || cfg.heroTextColor || '#292524';
     const eventDate = new Date(event.date_time);
 
     return (
-        <div className="relative min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-center p-6 overflow-hidden">
+        <div className="relative min-h-screen flex flex-col items-center justify-center p-6 overflow-hidden" style={{ backgroundColor: heroBg }}>
             {/* Playful background shapes */}
             <div className="absolute top-[-10%] left-[-10%] w-64 h-64 rounded-full opacity-20 mix-blend-multiply blur-3xl animate-pulse" style={{ backgroundColor: primaryColor }} />
             <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 rounded-full opacity-20 mix-blend-multiply blur-3xl animate-pulse" style={{ backgroundColor: '#A0C4FF' }} />
@@ -45,7 +47,7 @@ export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroI
                         {labels.welcome}
                     </p>
                     
-                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-black text-stone-800 leading-tight mb-6 break-normal hyphens-none" style={{ fontFamily: '"Fredoka", "Quicksand", sans-serif' }}>
+                    <h1 className="text-3xl sm:text-6xl md:text-7xl font-black leading-tight mb-6 break-normal hyphens-none" style={{ fontFamily: '"Fredoka", "Quicksand", sans-serif', color: heroText }}>
                         {event.title}
                     </h1>
 

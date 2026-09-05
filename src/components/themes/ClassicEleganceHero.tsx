@@ -12,7 +12,9 @@ interface Props {
 
 export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
     const eventDate = new Date(event.date_time || Date.now());
-    const primaryGold = '#C5A059';
+    const primaryGold = cfg.accent_color || cfg.accentColor || '#C5A059';
+    const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#FAF8F5';
+    const heroText = cfg.hero_text_color || cfg.heroTextColor || '#2B2625';
 
     // Couples Initials Monogram
     const getInitials = () => {
@@ -25,7 +27,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
     };
 
     return (
-        <section id="hero" className="w-full bg-[#FAF8F5] text-[#2B2625] font-serif relative overflow-hidden select-none">
+        <section id="hero" className="w-full font-serif relative overflow-hidden select-none" style={{ backgroundColor: heroBg, color: heroText }}>
             {/* ── Background Botanical & Filigree SVGs ── */}
             <div className="absolute top-0 left-0 w-48 sm:w-80 h-48 sm:h-80 pointer-events-none opacity-25">
                 <svg viewBox="0 0 200 200" fill="none" stroke={primaryGold} strokeWidth="1">
@@ -44,7 +46,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
             </div>
 
             {/* ── 1. Top Header & Navigation Bar ── */}
-            <header className="w-full pt-8 pb-4 text-center border-b border-[#C5A059]/20 relative z-20 bg-[#FAF8F5]/90 backdrop-blur-sm">
+            <header className="w-full pt-8 pb-4 text-center border-b relative z-20 backdrop-blur-sm" style={{ borderColor: `${primaryGold}33`, backgroundColor: `${heroBg}E6` }}>
                 {/* Gold Crest / Tiara Ornament */}
                 <div className="flex justify-center mb-1">
                     <svg width="36" height="18" viewBox="0 0 40 20" fill="none" stroke={primaryGold} strokeWidth="1.2">
@@ -55,7 +57,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                     </svg>
                 </div>
                 {/* Monogram */}
-                <h2 className="text-xl sm:text-2xl font-serif tracking-[0.25em] text-[#C5A059] font-normal mb-3">
+                <h2 className="text-xl sm:text-2xl font-serif tracking-[0.25em] font-normal mb-3" style={{ color: primaryGold }}>
                     {getInitials()}
                 </h2>
                 {/* Links */}
@@ -71,7 +73,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
             {/* ── 2. Hero Title & Framed Couple Photo ── */}
             <div className="py-12 sm:py-20 px-4 text-center relative z-10 max-w-4xl mx-auto">
                 <div className="space-y-3 mb-8">
-                    <h1 className="text-2xl sm:text-5xl md:text-7xl font-serif tracking-normal sm:tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-[#B8860B] via-[#D4AF37] to-[#9A7B38] uppercase font-light leading-tight break-normal hyphens-none">
+                    <h1 className="text-2xl sm:text-5xl md:text-7xl font-serif tracking-normal sm:tracking-[0.15em] uppercase font-light leading-tight break-normal hyphens-none" style={{ color: heroText }}>
                         {event?.title || 'ELEANOR & WILLIAM'}
                     </h1>
                     <p className="text-xs sm:text-sm uppercase tracking-[0.5em] text-[#5A5047] font-sans font-medium">
