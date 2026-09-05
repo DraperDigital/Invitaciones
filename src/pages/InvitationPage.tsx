@@ -1414,18 +1414,28 @@ END:VCALENDAR`;
     const baseSlug = slug?.replace(/-pro$|-premium$/, '');
     const currentVersion = slug?.endsWith('-premium') ? 'premium' : slug?.endsWith('-pro') ? 'pro' : 'classic';
 
-    // Index en CANONICAL_TEMPLATES para navegación secuencial entre ejemplos
-    const demoIndex = CANONICAL_TEMPLATES.findIndex(
-        t => t.slug === slug || (baseSlug && t.slug.replace(/-pro$|-premium$/, '') === baseSlug) || t.id === cfg.theme
-    );
-    const isDemo = demoIndex !== -1 || Boolean(baseSlug && [
+    const DEMO_BASE_SLUGS = [
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
         'cumple-emilia', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
-    ].includes(baseSlug)) || rawToken === 'token-preview';
+    ];
+
+    // Index en CANONICAL_TEMPLATES para navegación secuencial entre ejemplos (únicamente por slug)
+    const demoIndex = CANONICAL_TEMPLATES.findIndex(
+        t => t.slug === slug || (baseSlug && t.slug.replace(/-pro$|-premium$/, '') === baseSlug)
+    );
+
+    const isCanonicalDemoSlug = Boolean(
+        (demoIndex !== -1) ||
+        (baseSlug && DEMO_BASE_SLUGS.includes(baseSlug))
+    );
+
+    // ÚNICAMENTE es demo si corresponde a un slug oficial del catálogo de ejemplos
+    // y NUNCA si es un evento real de usuario o modo admin / creador
+    const isDemo = !isAdminMode && rawToken !== 'admin' && (rawToken === 'token-preview' || isCanonicalDemoSlug);
 
     const activeDemoIndex = demoIndex >= 0 ? demoIndex : 0;
     const prevDemo = CANONICAL_TEMPLATES[(activeDemoIndex - 1 + CANONICAL_TEMPLATES.length) % CANONICAL_TEMPLATES.length];
