@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Wand2, Award, Shield, ChevronDown, Upload, X, MapPin } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Wand2, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -1297,144 +1297,274 @@ export default function DesignEditor() {
                     isEnabled={config.showGallery}
                     onToggleEnabled={() => setConfig({ ...config, showGallery: !config.showGallery })}
                 >
-                        <div className="space-y-8">
-                            <div className="flex items-center justify-between px-1">
-                                <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Álbum Visual</h3>
-                                <button
-                                    onClick={() => setConfig({ ...config, galleryImages: [...(config.galleryImages || []), { url: '', caption: '' }] })}
-                                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/10"
-                                >
-                                    <Plus className="h-3 w-3" /> Añadir Foto
-                                </button>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {config.galleryImages.map((img, idx) => (
-                                    <div key={idx} className="group p-5 bg-stone-50/50 rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
-                                        <div className="flex flex-col gap-5">
-                                            <div className="w-full aspect-video bg-white rounded-xl md:rounded-2xl shadow-inner border border-stone-100 overflow-hidden relative group-hover:scale-[1.02] transition-transform flex items-center justify-center">
-                                                {img.url ? (
-                                                    <>
-                                                        <img src={img.url} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                const newImages = [...config.galleryImages];
-                                                                newImages[idx].url = '';
-                                                                setConfig({ ...config, galleryImages: newImages });
-                                                            }}
-                                                            className="absolute top-2 right-2 bg-stone-950/60 hover:bg-rose-600 text-white rounded-full p-1.5 transition-all shadow-md"
-                                                        >
-                                                            <X className="h-3.5 w-3.5" />
-                                                        </button>
-                                                    </>
-                                                ) : (
-                                                    <div className="flex flex-col items-center gap-2 text-stone-300 w-full p-4">
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            id={`gallery-upload-${idx}`}
-                                                            className="hidden"
-                                                            onChange={async (e) => {
-                                                                const f = e.target.files?.[0];
-                                                                if (!f) return;
-                                                                setUploading(true);
-                                                                try {
-                                                                    const ext = f.name.split('.').pop();
-                                                                    const path = `events/${id}/gallery_${idx}_${Date.now()}.${ext}`;
-                                                                    const { error: uploadError } = await supabase.storage
-                                                                        .from('event-images')
-                                                                        .upload(path, f, { upsert: true, contentType: f.type });
-                                                                    if (uploadError) throw uploadError;
-                                                                    const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
-                                                                    const newImages = [...config.galleryImages];
-                                                                    newImages[idx].url = urlData.publicUrl;
-                                                                    setConfig({ ...config, galleryImages: newImages });
+                        <div className="space-y-6">
+                            {/* Header de la galería y contadores de límites */}
+                            {(() => {
+                                const isServerStorageUrl = (url: string) => {
+                                    if (!url) return false;
+                                    return url.includes('supabase.drapersystems.online') || 
+                                           url.includes('supabase.co') || 
+                                           url.includes('/storage/v1/object/public/');
+                                };
+                                const serverCount = config.galleryImages.filter(img => img.url && isServerStorageUrl(img.url)).length;
+                                const totalCount = config.galleryImages.length;
+                                const canAddServer = serverCount < 10;
+                                const canAddTotal = totalCount < 20;
 
-                                                                    // Auto-guardar en base de datos para que la vista previa y el layout en vivo reflejen la imagen inmediatamente
-                                                                    if (id) {
-                                                                        try {
-                                                                            const { data: cur } = await supabase.from('events').select('theme_config').eq('id', id).single();
-                                                                            const curCfg = cur?.theme_config || {};
-                                                                            await supabase.from('events').update({
-                                                                                theme_config: {
-                                                                                    ...curCfg,
-                                                                                    gallery_images: newImages,
-                                                                                    galleryImages: newImages,
-                                                                                    gallery: newImages,
-                                                                                }
-                                                                            }).eq('id', id);
-                                                                        } catch (persistErr) {
-                                                                            console.warn('[AUTO_SAVE_GALLERY_FAILED]', persistErr);
-                                                                        }
-                                                                    }
-
-                                                                    toast.success('¡Imagen de galería subida exitosamente!');
-                                                                } catch (err: any) {
-                                                                    toast.error('Error al subir imagen de galería.');
-                                                                } finally {
-                                                                    setUploading(false);
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label
-                                                            htmlFor={`gallery-upload-${idx}`}
-                                                            className="flex flex-col items-center gap-1.5 cursor-pointer hover:text-stone-600 transition-colors text-center"
-                                                        >
-                                                            <div className="h-9 w-9 bg-stone-50 rounded-xl flex items-center justify-center text-stone-400 group-hover:scale-105 transition-transform shadow-sm">
-                                                                {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                                                            </div>
-                                                            <span className="text-[8px] uppercase font-black tracking-widest">{uploading ? 'Subiendo...' : 'Subir Foto'}</span>
-                                                            <span className="text-[7px] text-stone-400 font-medium">PNG, JPG hasta 5MB</span>
-                                                        </label>
-                                                    </div>
-                                                )}
+                                return (
+                                    <>
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
+                                            <div>
+                                                <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Álbum Visual</h3>
+                                                <p className="text-[10px] text-stone-500 mt-0.5">
+                                                    Hasta 10 fotos en nuestro servidor y hasta 20 fotos mediante enlace externo.
+                                                </p>
                                             </div>
-                                            <div className="space-y-3">
-                                                <div className="space-y-1">
-                                                    <label className="text-[8px] uppercase font-black tracking-widest text-stone-300 pl-1">URL Directa</label>
-                                                    <input
-                                                        type="url"
-                                                        placeholder="https://images.unsplash.com/..."
-                                                        value={img.url}
-                                                        onChange={(e) => {
-                                                            const newImages = [...config.galleryImages];
-                                                            newImages[idx].url = e.target.value;
-                                                            setConfig({ ...config, galleryImages: newImages });
-                                                        }}
-                                                        className="w-full bg-white px-4 py-2.5 rounded-xl border border-stone-50 text-[10px] font-mono text-stone-400"
-                                                    />
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!canAddTotal) {
+                                                            toast.error('Límite total alcanzado: máximo 20 fotos por galería.');
+                                                            return;
+                                                        }
+                                                        const url = prompt('Ingresa el enlace externo de la foto (Google Drive, Unsplash, Imgur, etc.):');
+                                                        if (!url || !url.trim()) return;
+                                                        const cleanUrl = url.trim();
+                                                        const newImages = [...(config.galleryImages || []), { url: cleanUrl, caption: '' }];
+                                                        setConfig({ ...config, galleryImages: newImages });
+                                                        toast.success('Foto añadida por enlace externo.');
+                                                    }}
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all"
+                                                >
+                                                    <Link2 className="h-3 w-3 text-stone-500" /> + Enlace Externo
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!canAddTotal) {
+                                                            toast.error('Límite total alcanzado: máximo 20 fotos.');
+                                                            return;
+                                                        }
+                                                        if (!canAddServer) {
+                                                            toast.error('Límite en servidor alcanzado (máx. 10 fotos). Agrega fotos mediante "Enlace Externo" (hasta 20).');
+                                                            return;
+                                                        }
+                                                        setConfig({ ...config, galleryImages: [...(config.galleryImages || []), { url: '', caption: '' }] });
+                                                    }}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/10"
+                                                >
+                                                    <Plus className="h-3 w-3" /> Añadir Foto
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Badges indicadores de uso de storage */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                            <div className="flex items-center justify-between p-3 rounded-xl bg-stone-50 border border-stone-100 text-stone-600">
+                                                <div className="flex items-center gap-2">
+                                                    <HardDrive className={`h-4 w-4 ${serverCount >= 10 ? 'text-amber-500' : 'text-indigo-600'}`} />
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider">Subidas a Servidor</span>
                                                 </div>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="flex-1 space-y-1">
-                                                        <label className="text-[8px] uppercase font-black tracking-widest text-stone-300 pl-1">Título / Pie</label>
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Ej. Sesión de fotos..."
-                                                            value={img.caption || ''}
-                                                            onChange={(e) => {
-                                                                const newImages = [...config.galleryImages];
-                                                                newImages[idx].caption = e.target.value;
-                                                                setConfig({ ...config, galleryImages: newImages });
-                                                            }}
-                                                            className="w-full bg-white px-4 py-2.5 rounded-xl border border-stone-50 text-[11px] font-medium text-stone-700"
-                                                        />
-                                                    </div>
-                                                    <button 
-                                                        onClick={() => {
-                                                            const newImages = config.galleryImages.filter((_, i) => i !== idx);
-                                                            setConfig({ ...config, galleryImages: newImages });
-                                                        }}
-                                                        className="mt-4 p-3 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </button>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`text-[11px] font-black font-mono ${serverCount >= 10 ? 'text-amber-600' : 'text-stone-800'}`}>
+                                                        {serverCount} / 10
+                                                    </span>
+                                                    {serverCount >= 10 && (
+                                                        <span className="text-[8px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded-md">Lleno</span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between p-3 rounded-xl bg-stone-50 border border-stone-100 text-stone-600">
+                                                <div className="flex items-center gap-2">
+                                                    <Link2 className="h-4 w-4 text-emerald-600" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider">Total en Galería</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className={`text-[11px] font-black font-mono ${totalCount >= 20 ? 'text-rose-600' : 'text-stone-800'}`}>
+                                                        {totalCount} / 20
+                                                    </span>
+                                                    {totalCount >= 20 && (
+                                                        <span className="text-[8px] bg-rose-100 text-rose-700 font-bold px-1.5 py-0.5 rounded-md">Máximo</span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
+
+                                        {config.galleryImages.length === 0 ? (
+                                            <div className="p-8 text-center border-2 border-dashed border-stone-200 rounded-2xl bg-stone-50/50">
+                                                <ImageIcon className="h-8 w-8 text-stone-300 mx-auto mb-2" />
+                                                <p className="text-stone-500 text-xs font-bold">No hay fotos en la galería aún</p>
+                                                <p className="text-stone-400 text-[10px] mt-1">Haz clic en &quot;Añadir Foto&quot; para subir directo o &quot;+ Enlace Externo&quot; para fotos de Drive u otros servidores.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {config.galleryImages.map((img, idx) => {
+                                                    const isServer = isServerStorageUrl(img.url);
+                                                    return (
+                                                        <div key={idx} className="group p-4 sm:p-5 bg-stone-50/50 rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
+                                                            <div className="flex flex-col gap-4">
+                                                                <div className="w-full aspect-video bg-white rounded-xl md:rounded-2xl shadow-inner border border-stone-100 overflow-hidden relative group-hover:scale-[1.01] transition-transform flex items-center justify-center">
+                                                                    {img.url ? (
+                                                                        <>
+                                                                            <img src={img.url} alt={`Preview ${idx}`} className="w-full h-full object-cover" />
+                                                                            {/* Badge indicando si es del servidor o externa */}
+                                                                            <div className="absolute top-2 left-2">
+                                                                                {isServer ? (
+                                                                                    <span className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                                                                                        <HardDrive className="h-2.5 w-2.5 text-indigo-400" /> Servidor
+                                                                                    </span>
+                                                                                ) : (
+                                                                                    <span className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md text-white text-[8px] font-bold px-2 py-0.5 rounded-full">
+                                                                                        <Link2 className="h-2.5 w-2.5 text-emerald-400" /> Enlace externo
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => {
+                                                                                    const newImages = [...config.galleryImages];
+                                                                                    newImages[idx].url = '';
+                                                                                    setConfig({ ...config, galleryImages: newImages });
+                                                                                }}
+                                                                                className="absolute top-2 right-2 bg-stone-950/60 hover:bg-rose-600 text-white rounded-full p-1.5 transition-all shadow-md"
+                                                                                title="Eliminar imagen"
+                                                                            >
+                                                                                <X className="h-3.5 w-3.5" />
+                                                                            </button>
+                                                                        </>
+                                                                    ) : (
+                                                                        <div className="flex flex-col items-center gap-2 text-stone-300 w-full p-4">
+                                                                            <input
+                                                                                type="file"
+                                                                                accept="image/*"
+                                                                                id={`gallery-upload-${idx}`}
+                                                                                className="hidden"
+                                                                                onChange={async (e) => {
+                                                                                    const f = e.target.files?.[0];
+                                                                                    if (!f) return;
+
+                                                                                    if (serverCount >= 10) {
+                                                                                        toast.error('Límite alcanzado: Máximo 10 fotos directas en nuestro servidor. Puedes agregar hasta 20 fotos mediante enlaces externos (Google Drive, etc.).');
+                                                                                        return;
+                                                                                    }
+
+                                                                                    setUploading(true);
+                                                                                    try {
+                                                                                        const ext = f.name.split('.').pop();
+                                                                                        const path = `events/${id}/gallery_${idx}_${Date.now()}.${ext}`;
+                                                                                        const { error: uploadError } = await supabase.storage
+                                                                                            .from('event-images')
+                                                                                            .upload(path, f, { upsert: true, contentType: f.type });
+                                                                                        if (uploadError) throw uploadError;
+                                                                                        const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+                                                                                        const newImages = [...config.galleryImages];
+                                                                                        newImages[idx].url = urlData.publicUrl;
+                                                                                        setConfig({ ...config, galleryImages: newImages });
+
+                                                                                        // Auto-guardar en base de datos para que la vista previa y el layout en vivo reflejen la imagen inmediatamente
+                                                                                        if (id) {
+                                                                                            try {
+                                                                                                const { data: cur } = await supabase.from('events').select('theme_config').eq('id', id).single();
+                                                                                                const curCfg = cur?.theme_config || {};
+                                                                                                await supabase.from('events').update({
+                                                                                                    theme_config: {
+                                                                                                        ...curCfg,
+                                                                                                        gallery_images: newImages,
+                                                                                                        galleryImages: newImages,
+                                                                                                        gallery: newImages,
+                                                                                                    }
+                                                                                                }).eq('id', id);
+                                                                                            } catch (persistErr) {
+                                                                                                console.warn('[AUTO_SAVE_GALLERY_FAILED]', persistErr);
+                                                                                            }
+                                                                                        }
+
+                                                                                        toast.success('¡Imagen de galería subida exitosamente!');
+                                                                                    } catch (err: any) {
+                                                                                        toast.error('Error al subir imagen de galería.');
+                                                                                    } finally {
+                                                                                        setUploading(false);
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                            <label
+                                                                                htmlFor={`gallery-upload-${idx}`}
+                                                                                className="flex flex-col items-center gap-1.5 cursor-pointer hover:text-stone-600 transition-colors text-center"
+                                                                            >
+                                                                                <div className="h-9 w-9 bg-stone-50 rounded-xl flex items-center justify-center text-stone-400 group-hover:scale-105 transition-transform shadow-sm">
+                                                                                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                                                                </div>
+                                                                                <span className="text-[8px] uppercase font-black tracking-widest">{uploading ? 'Subiendo...' : 'Subir Foto al Servidor'}</span>
+                                                                                <span className="text-[7px] text-stone-400 font-medium">PNG, JPG hasta 5MB (máx. 10 fotos)</span>
+                                                                            </label>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                <div className="space-y-3">
+                                                                    {/* Si es enlace externo o está vacía y se quiere colocar enlace, se permite editar el link */}
+                                                                    {(!img.url || !isServer) && (
+                                                                        <div className="space-y-1">
+                                                                            <div className="flex items-center justify-between pl-1">
+                                                                                <label className="text-[8px] uppercase font-black tracking-widest text-stone-400">Enlace Externo</label>
+                                                                                <span className="text-[8px] text-stone-400">Drive, Unsplash, etc.</span>
+                                                                            </div>
+                                                                            <div className="relative">
+                                                                                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-stone-400" />
+                                                                                <input
+                                                                                    type="url"
+                                                                                    placeholder="https://drive.google.com/... o https://..."
+                                                                                    value={img.url}
+                                                                                    onChange={(e) => {
+                                                                                        const newImages = [...config.galleryImages];
+                                                                                        newImages[idx].url = e.target.value;
+                                                                                        setConfig({ ...config, galleryImages: newImages });
+                                                                                    }}
+                                                                                    className="w-full bg-white pl-8 pr-4 py-2 rounded-xl border border-stone-200 text-[10px] font-mono text-stone-600 placeholder:text-stone-300 focus:border-[#DF3B94] outline-none"
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="flex-1 space-y-1">
+                                                                            <label className="text-[8px] uppercase font-black tracking-widest text-stone-400 pl-1">Título / Pie de Foto</label>
+                                                                            <input
+                                                                                type="text"
+                                                                                placeholder="Ej. Sesión de fotos..."
+                                                                                value={img.caption || ''}
+                                                                                onChange={(e) => {
+                                                                                    const newImages = [...config.galleryImages];
+                                                                                    newImages[idx].caption = e.target.value;
+                                                                                    setConfig({ ...config, galleryImages: newImages });
+                                                                                }}
+                                                                                className="w-full bg-white px-3.5 py-2 rounded-xl border border-stone-200 text-[11px] font-medium text-stone-700 placeholder:text-stone-300 focus:border-[#DF3B94] outline-none"
+                                                                            />
+                                                                        </div>
+                                                                        <button 
+                                                                            type="button"
+                                                                            onClick={() => {
+                                                                                const newImages = config.galleryImages.filter((_, i) => i !== idx);
+                                                                                setConfig({ ...config, galleryImages: newImages });
+                                                                            }}
+                                                                            className="mt-4 p-2.5 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                                                            title="Eliminar de la galería"
+                                                                        >
+                                                                            <Trash2 className="h-4 w-4" />
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </>
+                                );
+                            })()}
                         </div>
                     </CollapsibleCard>
 
