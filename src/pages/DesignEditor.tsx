@@ -189,55 +189,104 @@ const TYPOGRAPHY_PRESETS = {
     },
 };
 
-const CollapsibleCard = ({ id, title, subtitle, icon, activeSection, setActiveSection, children }: any) => {
+type EditorTab = 'estilo' | 'esenciales' | 'modulos' | 'plan';
+
+const TABS: { id: EditorTab; label: string; icon: string; shortLabel: string }[] = [
+    { id: 'estilo', label: 'Estilo Visual', icon: '🎨', shortLabel: 'Estilo' },
+    { id: 'esenciales', label: 'Info Esencial', icon: '📍', shortLabel: 'Esenciales' },
+    { id: 'modulos', label: 'Módulos', icon: '🧩', shortLabel: 'Módulos' },
+    { id: 'plan', label: 'Plan & Código', icon: '⚙️', shortLabel: 'Plan' },
+];
+
+const CollapsibleCard = ({ 
+    id, 
+    title, 
+    subtitle, 
+    icon, 
+    activeSection, 
+    setActiveSection, 
+    children,
+    isEnabled,
+    onToggleEnabled
+}: any) => {
     const isOpen = activeSection === id;
+    const hasToggle = typeof isEnabled === 'boolean';
+
     return (
-        <div id={id} className={`bg-white rounded-[2rem] md:rounded-[2.5rem] border transition-all duration-500 overflow-hidden ${isOpen ? 'border-[#DF3B94]/40 shadow-2xl ring-2 ring-[#DF3B94]/20' : 'border-stone-100 shadow-sm hover:shadow-md'}`}>
-            <div onClick={() => setActiveSection(isOpen ? null : id)} className="p-6 md:p-10 flex items-center justify-between cursor-pointer hover:bg-stone-50/30 transition-colors">
-                <div className="flex items-center gap-4 md:gap-5">
-                    <div className={`h-12 w-12 md:h-14 md:w-14 rounded-xl md:rounded-2xl flex items-center justify-center text-xl md:text-2xl transition-all ${isOpen ? 'bg-[#1B2E1D] text-white scale-105 md:scale-110' : 'bg-stone-50 text-stone-400'}`}>{icon}</div>
-                    <div>
-                        <h2 className={`text-xl md:text-2xl font-sans font-bold ${isOpen ? 'text-[#1B2E1D]' : 'text-stone-700'}`}>{title}</h2>
-                        <p className="text-[8px] md:text-[10px] text-stone-400 uppercase tracking-widest font-black mt-0.5 md:mt-1">{subtitle}</p>
+        <div 
+            id={id} 
+            className={`bg-white rounded-2xl md:rounded-[2rem] border transition-all duration-300 overflow-hidden ${
+                isOpen 
+                    ? 'border-[#DF3B94]/40 shadow-xl ring-2 ring-[#DF3B94]/15' 
+                    : 'border-stone-100 shadow-sm hover:shadow-md hover:border-stone-200'
+            } ${hasToggle && !isEnabled ? 'bg-stone-50/40 opacity-90' : ''}`}
+        >
+            <div 
+                onClick={() => setActiveSection(isOpen ? null : id)} 
+                className="p-4 sm:p-6 md:p-7 flex items-center justify-between cursor-pointer hover:bg-stone-50/50 transition-colors select-none gap-3"
+            >
+                <div className="flex items-center gap-3 sm:gap-4 md:gap-5 min-w-0">
+                    <div className={`h-11 w-11 sm:h-12 sm:w-12 md:h-13 md:w-13 rounded-xl md:rounded-2xl flex items-center justify-center text-lg sm:text-xl md:text-2xl transition-all flex-shrink-0 ${
+                        isOpen ? 'bg-[#1B2E1D] text-white shadow-md' : 'bg-stone-50 text-stone-500'
+                    }`}>
+                        {icon}
+                    </div>
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className={`text-base sm:text-lg md:text-xl font-sans font-bold truncate ${isOpen ? 'text-[#1B2E1D]' : 'text-stone-800'}`}>
+                                {title}
+                            </h2>
+                            {hasToggle && (
+                                <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                                    isEnabled 
+                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/60' 
+                                        : 'bg-stone-100 text-stone-400 border border-stone-200/60'
+                                }`}>
+                                    {isEnabled ? 'Activa' : 'Inactiva'}
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-[9px] sm:text-[10px] text-stone-400 uppercase tracking-widest font-bold mt-0.5 truncate">
+                            {subtitle}
+                        </p>
                     </div>
                 </div>
-                <div className={`h-8 w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center border border-stone-100 text-stone-300 transition-all ${isOpen ? 'rotate-180 bg-[#1B2E1D]/5 text-[#1B2E1D]' : ''}`}><ChevronDown className="h-4 w-4 md:h-5 md:w-5" /></div>
+
+                <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    {hasToggle && (
+                        <div 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (onToggleEnabled) onToggleEnabled();
+                            }}
+                            title={isEnabled ? 'Desactivar de la invitación' : 'Activar en la invitación'}
+                            className={`h-6 w-11 sm:h-7 sm:w-12 rounded-full relative transition-colors cursor-pointer flex-shrink-0 p-0.5 ${
+                                isEnabled ? 'bg-[#1B2E1D]' : 'bg-stone-200 hover:bg-stone-300'
+                            }`}
+                        >
+                            <div className={`h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-white shadow-md transition-transform duration-200 ${
+                                isEnabled ? 'translate-x-5 sm:translate-x-5' : 'translate-x-0'
+                            }`} />
+                        </div>
+                    )}
+                    <div className={`h-8 w-8 sm:h-9 sm:w-9 rounded-full flex items-center justify-center border border-stone-100 text-stone-400 transition-all ${
+                        isOpen ? 'rotate-180 bg-[#1B2E1D]/5 text-[#1B2E1D]' : ''
+                    }`}>
+                        <ChevronDown className="h-4 w-4" />
+                    </div>
+                </div>
             </div>
-            <div className={`transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
-                <div className="p-6 md:p-12 pt-2 md:pt-4 border-t border-stone-50">{children}</div>
+
+            <div className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[6000px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
+                <div className="p-4 sm:p-6 md:p-8 pt-2 sm:pt-3 border-t border-stone-100/80">
+                    {children}
+                </div>
             </div>
         </div>
     );
 };
 
-const SubAccordionItem = ({ title, icon, subtitle, isOpen, onToggle, children }: any) => {
-    return (
-        <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-            isOpen ? 'border-[#DF3B94]/40 bg-white shadow-md' : 'border-stone-100 bg-stone-50/50 hover:bg-white hover:border-stone-200'
-        }`}>
-            <div 
-                onClick={onToggle} 
-                className="p-4 md:p-5 flex items-center justify-between cursor-pointer select-none"
-            >
-                <div className="flex items-center gap-3">
-                    <span className="text-lg md:text-xl">{icon}</span>
-                    <div>
-                        <h4 className="text-xs md:text-sm font-bold text-[#222B38]">{title}</h4>
-                        {subtitle && <p className="text-[10px] md:text-xs text-stone-400 font-normal">{subtitle}</p>}
-                    </div>
-                </div>
-                <div className={`p-1.5 rounded-full border border-stone-200/60 text-stone-400 transition-transform ${isOpen ? 'rotate-180 bg-[#DF3B94]/10 text-[#DF3B94]' : ''}`}>
-                    <ChevronDown className="h-4 w-4" />
-                </div>
-            </div>
-            {isOpen && (
-                <div className="p-4 md:p-6 pt-2 border-t border-stone-100 space-y-4 animate-in fade-in duration-200">
-                    {children}
-                </div>
-            )}
-        </div>
-    );
-};
+
 
 export default function DesignEditor() {
     const { id } = useParams<{ id: string }>();
@@ -249,15 +298,59 @@ export default function DesignEditor() {
     const { user } = useAuth();
     const toast = useToast();
     const [loading, setLoading] = useState(true);
-    const [activeSection, setActiveSection] = useState<string | null>(searchParams.get('section') || 'matrix');
+    const getInitialTab = (): EditorTab => {
+        const s = searchParams.get('section');
+        if (!s) return 'estilo';
+        if (['template', 'palette', 'typography', 'music', 'logo'].includes(s)) return 'estilo';
+        if (['hero_welcome', 'message', 'hero', 'logistics'].includes(s)) return 'esenciales';
+        if (['gallery', 'itinerary', 'gifts', 'hotels', 'honor', 'modules', 'modules_overview'].includes(s)) return 'modulos';
+        if (['matrix', 'expert', 'plan'].includes(s)) return 'plan';
+        return 'estilo';
+    };
+
+    const [activeTab, setActiveTab] = useState<EditorTab>(getInitialTab());
+    const [activeSection, setActiveSection] = useState<string | null>(() => {
+        const s = searchParams.get('section');
+        if (s) {
+            if (s === 'message' || s === 'hero') return 'hero_welcome';
+            if (s === 'modules') return 'modules_overview';
+            return s;
+        }
+        return 'template';
+    });
     const sectionParam = searchParams.get('section');
+
+    const handleTabChange = (tabId: EditorTab) => {
+        setActiveTab(tabId);
+        const tabSections: Record<EditorTab, string[]> = {
+            estilo: ['template', 'palette', 'typography', 'music', 'logo'],
+            esenciales: ['hero_welcome', 'logistics'],
+            modulos: ['gallery', 'itinerary', 'gifts', 'hotels', 'honor', 'modules_overview'],
+            plan: ['matrix', 'expert']
+        };
+        if (!activeSection || !tabSections[tabId].includes(activeSection)) {
+            setActiveSection(tabSections[tabId][0]);
+        }
+    };
 
     // Auto expand & scroll to target section card when navigated via ?section=
     useEffect(() => {
         if (sectionParam) {
-            setActiveSection(sectionParam);
+            let mapped = sectionParam;
+            if (sectionParam === 'message' || sectionParam === 'hero') mapped = 'hero_welcome';
+            if (sectionParam === 'modules') mapped = 'modules_overview';
+            if (['template', 'palette', 'typography', 'music', 'logo'].includes(mapped)) {
+                setActiveTab('estilo');
+            } else if (['hero_welcome', 'logistics'].includes(mapped)) {
+                setActiveTab('esenciales');
+            } else if (['gallery', 'itinerary', 'gifts', 'hotels', 'honor', 'modules_overview'].includes(mapped)) {
+                setActiveTab('modulos');
+            } else if (['matrix', 'expert'].includes(mapped)) {
+                setActiveTab('plan');
+            }
+            setActiveSection(mapped);
             const timer = setTimeout(() => {
-                const el = document.getElementById(sectionParam);
+                const el = document.getElementById(mapped);
                 if (el) {
                     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
@@ -265,7 +358,6 @@ export default function DesignEditor() {
             return () => clearTimeout(timer);
         }
     }, [sectionParam, loading, loadingAccess]);
-    const [activeMediaTab, setActiveMediaTab] = useState<string | null>('portada');
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
@@ -323,9 +415,11 @@ export default function DesignEditor() {
                     showMessage:      c.show_message      ?? c.showMessage      ?? DEFAULT_CONFIG.showMessage,
                     showChambelanes:  c.show_chambelanes  ?? c.showChambelanes  ?? DEFAULT_CONFIG.showChambelanes,
                     showHotels:       c.show_hotels       ?? c.showHotels       ?? DEFAULT_CONFIG.showHotels,
+                    showGifts:        c.show_gifts        ?? c.showGifts        ?? DEFAULT_CONFIG.showGifts,
                     showGuestWelcome: c.show_guest_welcome ?? c.showGuestWelcome ?? DEFAULT_CONFIG.showGuestWelcome,
                     showEnvelope:     c.show_envelope     ?? c.showEnvelope     ?? DEFAULT_CONFIG.showEnvelope,
                     theme:            c.theme            ?? DEFAULT_CONFIG.theme,
+                    musicUrl:         c.music_url         ?? c.musicUrl         ?? DEFAULT_CONFIG.musicUrl,
                     enableGuestList:  c.enableGuestList  ?? DEFAULT_CONFIG.enableGuestList,
                     enableReminders:  c.enableReminders  ?? DEFAULT_CONFIG.enableReminders,
                     enableExcel:      c.enableExcel      ?? DEFAULT_CONFIG.enableExcel,
@@ -438,6 +532,12 @@ export default function DesignEditor() {
                 show_chambelanes: config.showChambelanes,
                 showHotels:       config.showHotels,
                 show_hotels:      config.showHotels,
+                showGifts:        config.showGifts,
+                show_gifts:       config.showGifts,
+                showItinerary:    config.showItinerary,
+                show_itinerary:   config.showItinerary,
+                music_url:        config.musicUrl,
+                musicUrl:         config.musicUrl,
                 showGuestWelcome: config.showGuestWelcome,
                 show_guest_welcome: config.showGuestWelcome,
                 showEnvelope:     config.showEnvelope,
@@ -663,7 +763,18 @@ export default function DesignEditor() {
                     <Link to={`/dashboard/event/${id}`} className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-600 mb-4 md:mb-6 transition-colors font-bold uppercase tracking-widest text-[9px] md:text-[10px]">
                         <ArrowLeft className="h-3 w-3 md:h-4 md:w-4" /> Volver al panel
                     </Link>
-                    <h1 className="text-3xl md:text-5xl font-sans font-extrabold text-[#1B2E1D] tracking-tight">Diseño y Estilo</h1>
+                    <div className="flex items-center gap-3 flex-wrap">
+                        <h1 className="text-3xl md:text-5xl font-sans font-extrabold text-[#1B2E1D] tracking-tight">Diseño y Estilo</h1>
+                        <button
+                            type="button"
+                            onClick={() => handleTabChange('plan')}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors"
+                        >
+                            <span>Plan:</span>
+                            <span className="font-extrabold text-[#1B2E1D] capitalize">{config.plan || 'Clásica'}</span>
+                            <span className="text-[9px] text-[#DF3B94]">· Cambiar</span>
+                        </button>
+                    </div>
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 md:gap-3">
@@ -713,369 +824,34 @@ export default function DesignEditor() {
             />
             </div>
 
-            <div className="flex flex-col gap-6">
-                {/* ── 1. Plan de la Invitación ── */}
-                <CollapsibleCard
-                    id="matrix"
-                    title="Plan de la Invitación"
-                    subtitle="Selecciona el nivel de tu evento"
-                    icon="⭐"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="space-y-8 md:space-y-12">
-                        {/* Plan Buttons */}
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                            {([
-                                { id: 'clasico' as const, label: 'Clásica', icon: '💌', color: 'border-stone-300 bg-stone-50 hover:border-stone-400', active: 'border-[#1B2E1D] bg-[#1B2E1D]' },
-                                { id: 'pro' as const, label: 'Pro', icon: '✦', color: 'border-blue-200 bg-blue-50 hover:border-blue-400', active: 'border-blue-600 bg-blue-600' },
-                                { id: 'premium' as const, label: 'Premium', icon: '♛', color: 'border-amber-200 bg-amber-50 hover:border-amber-400', active: 'border-amber-500 bg-amber-500' },
-                                { id: 'concierge' as const, label: 'Concierge', icon: '💎', color: 'border-stone-800 bg-stone-900 hover:border-black', active: 'border-black bg-black' },
-                            ]).map(tier => {
-                                const isActive = config.plan === tier.id;
-                                const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, concierge: 3, personalizado: 1 };
-                                const paidPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
-                                const isLocked = (ranks[tier.id] ?? 0) > (ranks[paidPlanCode] ?? 0);
-
-                                return (
-                                    <button
-                                        key={tier.id}
-                                        onClick={() => applyPlan(tier.id)}
-                                        className={`relative flex flex-col items-center text-center gap-2 py-4 md:py-6 px-3 md:px-4 rounded-2xl border-2 transition-all duration-300 ${
-                                            isActive ? `${tier.active} text-white shadow-lg scale-[1.02]` : 
-                                            isLocked ? 'border-dashed border-stone-100 bg-stone-50/30 opacity-40 grayscale' :
-                                            `${tier.color} text-stone-700`
-                                        }`}
-                                    >
-                                        <span className="text-xl md:text-3xl">{tier.icon}</span>
-                                        <span className="font-black text-[9px] md:text-xs uppercase tracking-widest">{tier.label}</span>
-                                        {isActive && (
-                                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white text-[#1B2E1D] px-2 py-0.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1">
-                                                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-                                                <span className="text-[7px] font-black uppercase tracking-widest">Activo</span>
-                                            </div>
-                                        )}
-                                        {isLocked && !isActive && (
-                                            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[7px] font-bold uppercase tracking-widest bg-stone-100 text-stone-400 px-2 py-0.5 rounded-full border border-stone-200 whitespace-nowrap">
-                                                Upgrade
-                                            </span>
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        {/* Feature Matrix - Responsive Scrollable Container */}
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between px-1">
-                                <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Comparativa de Funciones</h3>
-                                <div className="flex md:hidden items-center gap-1.5 text-stone-300">
-                                    <span className="text-[8px] uppercase font-bold">Desliza</span>
-                                    <ArrowRight className="h-3 w-3 animate-bounce-x" />
-                                </div>
-                            </div>
-                            <div className="rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 overflow-hidden bg-white shadow-sm overflow-x-auto no-scrollbar">
-                                <div className="min-w-[600px]">
-                                    <div className="grid grid-cols-5 text-[7px] md:text-[9px] font-black uppercase tracking-widest bg-stone-50/50">
-                                        <div className="p-2 md:p-4 text-stone-400 border-r border-stone-100/50">Funciones</div>
-                                        <div className="p-2 md:p-4 text-stone-700 text-center border-r border-stone-100/50">💌</div>
-                                        <div className="p-2 md:p-4 text-blue-700 text-center border-r border-stone-100/50">✦</div>
-                                        <div className="p-2 md:p-4 text-amber-700 text-center border-r border-stone-100/50">♛</div>
-                                        <div className="p-2 md:p-4 bg-[#1B2E1D] text-white text-center">💎</div>
-                                    </div>
-                                    {([
-                                        { label: 'Información del evento', clasico: true, pro: true, premium: true, concierge: true },
-                                        { label: 'Cuenta regresiva', clasico: true, pro: true, premium: true, concierge: true },
-                                        { label: 'Mapa / Ubicación', clasico: true, pro: true, premium: true, concierge: true },
-                                        { label: 'RSVP por WhatsApp', clasico: true, pro: true, premium: true, concierge: true },
-                                        { label: 'Código de vestimenta', clasico: false, pro: true, premium: true, concierge: true },
-                                        { label: 'QR de acceso digital', clasico: false, pro: true, premium: true, concierge: true },
-                                        { label: 'Itinerario del evento', clasico: false, pro: true, premium: true, concierge: true },
-                                        { label: 'Mesa de regalos', clasico: false, pro: true, premium: true, concierge: true },
-                                        { label: 'Galería de fotos', clasico: false, pro: false, premium: true, concierge: true },
-                                        { label: 'Diseño Personalizado', clasico: false, pro: false, premium: true, concierge: true },
-                                        { label: 'Envío Profesional WA', clasico: false, pro: false, premium: false, concierge: true },
-                                        { label: 'Seguimiento Humano', clasico: false, pro: false, premium: false, concierge: true },
-                                    ]).map((row, i) => {
-                                        const activePlan = config.plan;
-                                        const rowEnabled = (row as any)[activePlan as string];
-                                        return (
-                                            <div key={i} className={`grid grid-cols-5 text-[10px] md:text-[11px] border-t border-stone-100/50 transition-colors ${
-                                                rowEnabled ? 'bg-white' : 'bg-stone-50/30'
-                                            }`}>
-                                                <div className={`p-3 md:p-4 border-r border-stone-100/50 font-medium ${
-                                                    rowEnabled ? 'text-stone-700' : 'text-stone-400'
-                                                }`}>{row.label}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.clasico ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.pro ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.premium ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center bg-stone-900/5">{row.concierge ? '✓' : '—'}</div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </CollapsibleCard>
-
-                {/* ── 2. Multimedia (Canción, Portada, Galería, Vestimenta y Eventos) ── */}
-                <CollapsibleCard
-                    id="imagery"
-                    title="Multimedia"
-                    subtitle="Gestor de imágenes, música de fondo y galería"
-                    icon="🎬"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="space-y-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-4">
-                            <p className="text-xs text-stone-500 font-light">
-                                Administra las imágenes y la música de tu invitación en sub-secciones organizadas.
-                            </p>
-                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#DF3B94]/10 text-[#DF3B94] px-3 py-1 rounded-full w-fit">
-                                {((config.heroImage ? 1 : 0) + (config.galleryImages?.length || 0))} imágenes agregadas
-                            </span>
-                        </div>
-
-                        {/* 1. Canción / Música de Fondo */}
-                        <SubAccordionItem
-                            title="Canción (Música de Fondo)"
-                            icon="🎵"
-                            subtitle={config.musicUrl ? "Pista de audio activa" : "Sin música de fondo configurada"}
-                            isOpen={activeMediaTab === 'cancion'}
-                            onToggle={() => setActiveMediaTab(activeMediaTab === 'cancion' ? null : 'cancion')}
+            {/* Sticky Tabs Bar - Mobile First */}
+            <div className="sticky top-2 z-30 bg-white/95 backdrop-blur-md p-1.5 md:p-2 rounded-2xl md:rounded-[1.8rem] border border-stone-200/80 shadow-lg shadow-stone-200/40 flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar">
+                {TABS.map(tab => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                        <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() => handleTabChange(tab.id)}
+                            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl md:rounded-2xl font-bold text-xs sm:text-sm whitespace-nowrap transition-all duration-200 flex-1 justify-center cursor-pointer ${
+                                isActive
+                                    ? 'bg-[#1B2E1D] text-white shadow-md shadow-[#1B2E1D]/20 scale-[1.02]'
+                                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100/80'
+                            }`}
                         >
-                            <div className="space-y-4">
-                                <label className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-500">Enlace a canción o archivo MP3</label>
-                                <input
-                                    type="url"
-                                    placeholder="https://... enlace directo a archivo MP3 o audio"
-                                    value={config.musicUrl || ''}
-                                    onChange={(e) => setConfig({ ...config, musicUrl: e.target.value })}
-                                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
-                                />
-                                <p className="text-[10px] text-stone-400">Inserta un enlace MP3 para reproducir la canción automáticamente al abrir la invitación.</p>
-                            </div>
-                        </SubAccordionItem>
+                            <span className="text-base sm:text-lg">{tab.icon}</span>
+                            <span className="hidden sm:inline">{tab.label}</span>
+                            <span className="sm:hidden">{tab.shortLabel}</span>
+                        </button>
+                    );
+                })}
+            </div>
 
-                        {/* 2. Imagen de Portada */}
-                        <SubAccordionItem
-                            title="Imagen de Portada (Máximo 1)"
-                            icon="🖼️"
-                            subtitle={config.heroImage ? "1 / 1 Imagen de portada cargada" : "0 / 1 Imagen de portada"}
-                            isOpen={activeMediaTab === 'portada'}
-                            onToggle={() => setActiveMediaTab(activeMediaTab === 'portada' ? null : 'portada')}
-                        >
-                            <div className="space-y-4">
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={e => {
-                                        const f = e.target.files?.[0];
-                                        if (f) handleImageUpload(f);
-                                    }}
-                                />
-
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => fileInputRef.current?.click()}
-                                        disabled={uploading}
-                                        className="px-6 py-3.5 bg-[#DF3B94] text-white rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-md"
-                                    >
-                                        {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                                        {uploading ? 'Subiendo...' : 'Agregar Imagen de Portada'}
-                                    </button>
-                                </div>
-
-                                <div className={`w-full h-48 md:h-56 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.heroImage ? 'bg-stone-900' : 'bg-stone-50/50'}`}>
-                                    {config.heroImage ? (
-                                        <>
-                                            <img src={config.heroImage} className="w-full h-full object-cover opacity-80" alt="Portada" />
-                                            <button
-                                                onClick={() => setConfig(prev => ({ ...prev, heroImage: '' }))}
-                                                className="absolute top-3 right-3 bg-black/60 hover:bg-rose-600 text-white rounded-full p-2 transition-all shadow-md"
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <div className="flex flex-col items-center gap-2 text-stone-300">
-                                            <ImageIcon className="h-8 w-8 text-stone-300" />
-                                            <p className="text-xs text-stone-400">Sin imagen de portada</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </SubAccordionItem>
-
-                        {/* 3. Galería de Fotos */}
-                        <SubAccordionItem
-                            title="Galería de Fotos"
-                            icon="📸"
-                            subtitle={`${config.galleryImages?.length || 0} fotos en el álbum`}
-                            isOpen={activeMediaTab === 'galeria'}
-                            onToggle={() => setActiveMediaTab(activeMediaTab === 'galeria' ? null : 'galeria')}
-                        >
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-xs text-stone-500 font-light">Carga fotografías para el carrusel y álbum visual de tu invitación.</p>
-                                    <button
-                                        onClick={() => setConfig({ ...config, galleryImages: [...(config.galleryImages || []), { url: '', caption: '' }] })}
-                                        className="px-4 py-2 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-sm flex items-center gap-1.5"
-                                    >
-                                        <Plus className="h-3.5 w-3.5" /> Agregar
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                                    {config.galleryImages.map((img, idx) => (
-                                        <div key={idx} className="p-4 bg-stone-50/50 rounded-2xl border border-stone-100 space-y-3">
-                                            <div className="w-full h-36 bg-white rounded-xl border border-stone-100 overflow-hidden relative flex items-center justify-center">
-                                                {img.url ? (
-                                                    <>
-                                                        <img src={img.url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                const newImages = [...config.galleryImages];
-                                                                newImages.splice(idx, 1);
-                                                                setConfig({ ...config, galleryImages: newImages });
-                                                            }}
-                                                            className="absolute top-2 right-2 bg-black/60 hover:bg-rose-600 text-white rounded-full p-1.5 transition-all shadow-md"
-                                                        >
-                                                            <X className="h-3.5 w-3.5" />
-                                                        </button>
-                                                    </>
-                                                ) : (
-                                                    <div className="flex flex-col items-center gap-1 text-stone-400">
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            id={`gallery-upload-media-${idx}`}
-                                                            className="hidden"
-                                                            onChange={async (e) => {
-                                                                const f = e.target.files?.[0];
-                                                                if (!f) return;
-                                                                setUploading(true);
-                                                                try {
-                                                                    const ext = f.name.split('.').pop();
-                                                                    const path = `events/${id}/gallery_${idx}_${Date.now()}.${ext}`;
-                                                                    const { error: uploadError } = await supabase.storage
-                                                                        .from('event-images')
-                                                                        .upload(path, f, { upsert: true, contentType: f.type });
-                                                                    if (uploadError) throw uploadError;
-                                                                    const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
-                                                                    const newImages = [...config.galleryImages];
-                                                                    newImages[idx].url = urlData.publicUrl;
-                                                                    setConfig({ ...config, galleryImages: newImages });
-
-                                                                    // Auto-guardar en base de datos para que la vista previa y el layout en vivo reflejen la imagen inmediatamente
-                                                                    if (id) {
-                                                                        try {
-                                                                            const { data: cur } = await supabase.from('events').select('theme_config').eq('id', id).single();
-                                                                            const curCfg = cur?.theme_config || {};
-                                                                            await supabase.from('events').update({
-                                                                                theme_config: {
-                                                                                    ...curCfg,
-                                                                                    gallery_images: newImages,
-                                                                                    galleryImages: newImages,
-                                                                                    gallery: newImages,
-                                                                                }
-                                                                            }).eq('id', id);
-                                                                        } catch (persistErr) {
-                                                                            console.warn('[AUTO_SAVE_GALLERY_FAILED]', persistErr);
-                                                                        }
-                                                                    }
-
-                                                                    toast.success('¡Imagen subida exitosamente!');
-                                                                } catch (err: any) {
-                                                                    toast.error('Error al subir imagen.');
-                                                                } finally {
-                                                                    setUploading(false);
-                                                                }
-                                                            }}
-                                                        />
-                                                        <label htmlFor={`gallery-upload-media-${idx}`} className="cursor-pointer flex flex-col items-center gap-1 hover:text-[#DF3B94] text-center">
-                                                            <Upload className="h-5 w-5" />
-                                                            <span className="text-[10px] uppercase font-bold tracking-wider">Subir Foto</span>
-                                                        </label>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </SubAccordionItem>
-
-                        {/* 4. Imágenes de Código de Vestimenta */}
-                        <SubAccordionItem
-                            title="Imágenes de Código de Vestimenta"
-                            icon="👔"
-                            subtitle="Inspiración visual y sugerencias de atuendo"
-                            isOpen={activeMediaTab === 'vestimenta'}
-                            onToggle={() => setActiveMediaTab(activeMediaTab === 'vestimenta' ? null : 'vestimenta')}
-                        >
-                            <div className="space-y-3">
-                                <p className="text-xs text-stone-500 font-light">Pega un enlace de foto de inspiración para sugerir ideas de código de vestir a tus invitados.</p>
-                                <input
-                                    type="url"
-                                    placeholder="https://... o pega el enlace de imagen de vestimenta"
-                                    value={config.decorativeImage || ''}
-                                    onChange={(e) => setConfig({ ...config, decorativeImage: e.target.value })}
-                                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
-                                />
-                            </div>
-                        </SubAccordionItem>
-
-                        {/* 5. Logo, Firma o Imágenes de Recintos */}
-                        <SubAccordionItem
-                            title="Logo, Monograma o Recinto"
-                            icon="🖋️"
-                            subtitle="Logo del evento o fotografía del lugar"
-                            isOpen={activeMediaTab === 'eventos'}
-                            onToggle={() => setActiveMediaTab(activeMediaTab === 'eventos' ? null : 'eventos')}
-                        >
-                            <div className="space-y-4">
-                                <p className="text-xs text-stone-500 font-light">Subes el monograma, iniciales o foto del recinto de tu evento.</p>
-                                <input
-                                    ref={logoInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={e => {
-                                        const f = e.target.files?.[0];
-                                        if (f) handleLogoUpload(f);
-                                    }}
-                                />
-                                <button
-                                    onClick={() => logoInputRef.current?.click()}
-                                    disabled={uploading}
-                                    className="px-5 py-2.5 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
-                                >
-                                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                                    {uploading ? 'Subiendo...' : 'Subir Logo / Monograma'}
-                                </button>
-                                <div className={`w-full h-40 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner ${config.decorativeImage ? 'bg-white' : 'bg-stone-50/20'}`}>
-                                    {config.decorativeImage ? (
-                                        <img src={config.decorativeImage} className="w-full h-full object-contain p-4" alt="Recinto" />
-                                    ) : (
-                                        <div className="flex flex-col items-center gap-2 opacity-30 text-stone-400">
-                                            <MapPin className="h-6 w-6" />
-                                            <p className="text-[10px] font-mono">Sin imagen de recinto o logo</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </SubAccordionItem>
-                    </div>
-                </CollapsibleCard>
-
-                {/* ── 2.5 Plantilla de Diseño (Estilo Visual) ── */}
-                <CollapsibleCard
+                        <div className="flex flex-col gap-6">
+                {/* ── TAB 1: ESTILO VISUAL ── */}
+                {activeTab === 'estilo' && (
+                    <>
+<CollapsibleCard
                     id="template"
                     title="Plantilla de Diseño"
                     subtitle="Selecciona el estilo visual de tu invitación"
@@ -1139,49 +915,7 @@ export default function DesignEditor() {
                     </div>
                 </CollapsibleCard>
 
-                {/* ── 3. Tipografía ── */}
-                <CollapsibleCard
-                    id="typography"
-                    title="Tipografía"
-                    subtitle="El carácter de tu evento"
-                    icon="🖋️"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        {(Object.entries(TYPOGRAPHY_PRESETS) as [keyof typeof TYPOGRAPHY_PRESETS, any][]).map(([key, preset]) => (
-                            <button
-                                key={key}
-                                onClick={() => setConfig({ ...config, typographyPreset: key })}
-                                className={`group relative p-5 md:p-8 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden ${
-                                    config.typographyPreset === key
-                                        ? 'border-[#1B2E1D] bg-[#1B2E1D]/5'
-                                        : 'border-stone-50 hover:border-stone-200 bg-stone-50/20'
-                                }`}
-                            >
-                                <div className="relative z-10">
-                                    <p className={`text-[8px] md:text-[9px] uppercase font-black tracking-[0.2em] mb-4 md:mb-6 ${config.typographyPreset === key ? 'text-[#1B2E1D]' : 'text-stone-300'}`}>{preset.label}</p>
-                                    <div className="space-y-1 md:space-y-2 mb-6 md:mb-8">
-                                        <p style={{ fontFamily: preset.serif }} className="text-2xl md:text-4xl leading-none text-[#1B2E1D]">{preset.preview}</p>
-                                        <p style={{ fontFamily: preset.sans }} className="text-[10px] md:text-xs text-stone-400 font-light leading-relaxed">{preset.desc}</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <div className={`h-4 w-4 md:h-5 md:w-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                                            config.typographyPreset === key ? 'border-[#1B2E1D] bg-[#1B2E1D] scale-110' : 'border-stone-200'
-                                        }`}>
-                                            {config.typographyPreset === key && <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-white" />}
-                                        </div>
-                                        <span className={`text-[8px] md:text-[9px] font-black uppercase tracking-widest ${config.typographyPreset === key ? 'text-[#1B2E1D]' : 'text-stone-300'}`}>Seleccionar</span>
-                                    </div>
-                                </div>
-                                <span className="absolute -right-4 -bottom-4 text-6xl md:text-8xl font-serif opacity-[0.03] select-none group-hover:scale-110 group-hover:rotate-6 transition-all duration-700" style={{ fontFamily: preset.serif }}>Aa</span>
-                            </button>
-                        ))}
-                    </div>
-                </CollapsibleCard>
-
-                {/* ── 4. Identidad Visual ── */}
-                <CollapsibleCard
+<CollapsibleCard
                     id="palette"
                     title="Identidad Visual"
                     subtitle="Colores maestros y atmósfera"
@@ -1271,42 +1005,210 @@ export default function DesignEditor() {
                     </div>
                 </CollapsibleCard>
 
-                {/* ── 5. Mensaje del Evento ── */}
+<CollapsibleCard
+                    id="typography"
+                    title="Tipografía"
+                    subtitle="El carácter de tu evento"
+                    icon="🖋️"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                        {(Object.entries(TYPOGRAPHY_PRESETS) as [keyof typeof TYPOGRAPHY_PRESETS, any][]).map(([key, preset]) => (
+                            <button
+                                key={key}
+                                onClick={() => setConfig({ ...config, typographyPreset: key })}
+                                className={`group relative p-5 md:p-8 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden ${
+                                    config.typographyPreset === key
+                                        ? 'border-[#1B2E1D] bg-[#1B2E1D]/5'
+                                        : 'border-stone-50 hover:border-stone-200 bg-stone-50/20'
+                                }`}
+                            >
+                                <div className="relative z-10">
+                                    <p className={`text-[8px] md:text-[9px] uppercase font-black tracking-[0.2em] mb-4 md:mb-6 ${config.typographyPreset === key ? 'text-[#1B2E1D]' : 'text-stone-300'}`}>{preset.label}</p>
+                                    <div className="space-y-1 md:space-y-2 mb-6 md:mb-8">
+                                        <p style={{ fontFamily: preset.serif }} className="text-2xl md:text-4xl leading-none text-[#1B2E1D]">{preset.preview}</p>
+                                        <p style={{ fontFamily: preset.sans }} className="text-[10px] md:text-xs text-stone-400 font-light leading-relaxed">{preset.desc}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <div className={`h-4 w-4 md:h-5 md:w-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                                            config.typographyPreset === key ? 'border-[#1B2E1D] bg-[#1B2E1D] scale-110' : 'border-stone-200'
+                                        }`}>
+                                            {config.typographyPreset === key && <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-white" />}
+                                        </div>
+                                        <span className={`text-[8px] md:text-[9px] font-black uppercase tracking-widest ${config.typographyPreset === key ? 'text-[#1B2E1D]' : 'text-stone-300'}`}>Seleccionar</span>
+                                    </div>
+                                </div>
+                                <span className="absolute -right-4 -bottom-4 text-6xl md:text-8xl font-serif opacity-[0.03] select-none group-hover:scale-110 group-hover:rotate-6 transition-all duration-700" style={{ fontFamily: preset.serif }}>Aa</span>
+                            </button>
+                        ))}
+                    </div>
+                </CollapsibleCard>
+
                 <CollapsibleCard
-                    id="message"
-                    title="Mensaje del Evento"
-                    subtitle="Personaliza tus textos de bienvenida"
-                    icon="✉️"
+                    id="music"
+                    title="Música de Fondo"
+                    subtitle={config.musicUrl ? "Pista de audio configurada" : "Sin música de fondo"}
+                    icon="🎵"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="space-y-4">
+                        <label className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-500">Enlace a canción o archivo MP3</label>
+                        <input
+                            type="url"
+                            placeholder="https://... enlace directo a archivo MP3 o audio"
+                            value={config.musicUrl || ''}
+                            onChange={(e) => setConfig({ ...config, musicUrl: e.target.value })}
+                            className="w-full p-4 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
+                        />
+                        {config.musicUrl && (
+                            <div className="p-3 bg-stone-50 rounded-xl border border-stone-100 flex items-center gap-3">
+                                <audio controls src={config.musicUrl} className="w-full h-8" />
+                            </div>
+                        )}
+                        <p className="text-[10px] text-stone-400">Inserta un enlace MP3 para reproducir la canción automáticamente al abrir la invitación.</p>
+                    </div>
+                </CollapsibleCard>
+
+                <CollapsibleCard
+                    id="logo"
+                    title="Logo, Monograma o Recinto"
+                    subtitle="Identificador visual o fotografía del lugar"
+                    icon="🏛️"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="space-y-4">
+                        <p className="text-xs text-stone-500 font-light">Sube el monograma, iniciales o foto representativa de tu evento.</p>
+                        <input
+                            ref={logoInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={e => {
+                                const f = e.target.files?.[0];
+                                if (f) handleLogoUpload(f);
+                            }}
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                type="button"
+                                onClick={() => logoInputRef.current?.click()}
+                                disabled={uploading}
+                                className="px-5 py-2.5 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm cursor-pointer"
+                            >
+                                {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                {uploading ? 'Subiendo...' : 'Subir Logo / Monograma'}
+                            </button>
+                            {config.decorativeImage && (
+                                <button
+                                    type="button"
+                                    onClick={() => setConfig(prev => ({ ...prev, decorativeImage: '' }))}
+                                    className="px-4 py-2.5 bg-stone-100 hover:bg-rose-50 hover:text-rose-600 text-stone-500 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                                >
+                                    Quitar
+                                </button>
+                            )}
+                        </div>
+                        <div className={"w-full h-44 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner " + (config.decorativeImage ? 'bg-white' : 'bg-stone-50/20')}>
+                            {config.decorativeImage ? (
+                                <img src={config.decorativeImage} className="w-full h-full object-contain p-4" alt="Monograma o Recinto" />
+                            ) : (
+                                <div className="flex flex-col items-center gap-2 opacity-30 text-stone-400">
+                                    <MapPin className="h-6 w-6" />
+                                    <p className="text-[10px] font-mono">Sin imagen de recinto o logo</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </CollapsibleCard>
+                    </>
+                )}
+
+                {/* ── TAB 2: INFORMACIÓN ESENCIAL ── */}
+                {activeTab === 'esenciales' && (
+                    <>
+                <CollapsibleCard
+                    id="hero_welcome"
+                    title="Portada y Bienvenida"
+                    subtitle="Foto principal y dedicatoria"
+                    icon="🖼️"
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
                 >
                     <div className="space-y-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-800 pl-1">Subtítulo (Ej. 70 Años)</label>
+                            <label className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-800 pl-1">Foto Principal de Portada</label>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={e => {
+                                    const f = e.target.files?.[0];
+                                    if (f) handleImageUpload(f);
+                                }}
+                            />
+
+                            <div className="flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={uploading}
+                                    className="px-6 py-3 bg-[#DF3B94] text-white rounded-2xl text-xs font-bold uppercase tracking-wider hover:bg-[#C52A7C] transition-all disabled:opacity-50 flex items-center gap-2 shadow-md cursor-pointer"
+                                >
+                                    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                    {uploading ? 'Subiendo...' : 'Cambiar Foto de Portada'}
+                                </button>
+                            </div>
+
+                            <div className={"w-full h-52 md:h-64 rounded-2xl border border-stone-100 flex items-center justify-center overflow-hidden relative shadow-inner " + (config.heroImage ? 'bg-stone-900' : 'bg-stone-50/50')}>
+                                {config.heroImage ? (
+                                    <>
+                                        <img src={config.heroImage} className="w-full h-full object-cover opacity-90" alt="Portada" />
+                                        <button
+                                            type="button"
+                                            onClick={() => setConfig(prev => ({ ...prev, heroImage: '' }))}
+                                            className="absolute top-3 right-3 bg-black/60 hover:bg-rose-600 text-white rounded-full p-2 transition-all shadow-md cursor-pointer"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col items-center gap-2 text-stone-300">
+                                        <ImageIcon className="h-8 w-8 text-stone-300" />
+                                        <p className="text-xs text-stone-400">Sin foto de portada cargada</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 pt-6 border-t border-stone-100">
+                            <label className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-800 pl-1">Subtítulo (Ej. 70 Años / Nuestra Boda)</label>
                             <input
                                 type="text"
                                 placeholder="Escribe algo elegante..."
                                 value={config.welcomeSubtitle}
                                 onChange={(e) => setConfig({ ...config, welcomeSubtitle: e.target.value })}
-                                className="w-full bg-stone-50/50 px-6 md:px-8 py-5 md:py-6 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-lg md:text-xl font-serif focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
+                                className="w-full bg-stone-50/50 px-6 md:px-8 py-4 md:py-5 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-base md:text-lg font-serif focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
                             />
                         </div>
                         
                         <div className="space-y-4">
-                            <label className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-800 pl-1">Cuerpo del Mensaje</label>
+                            <label className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-800 pl-1">Cuerpo del Mensaje / Dedicatoria</label>
                             <textarea
                                 placeholder="Te invitamos a ser parte de este momento..."
                                 value={config.welcomeMessage}
                                 onChange={(e) => setConfig({ ...config, welcomeMessage: e.target.value })}
-                                rows={6}
-                                className="w-full bg-stone-50/50 px-6 md:px-8 py-6 md:py-7 rounded-[1.5rem] md:rounded-[2rem] border-none shadow-inner resize-none text-stone-600 font-serif italic text-base md:text-lg leading-relaxed focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
+                                rows={5}
+                                className="w-full bg-stone-50/50 px-6 md:px-8 py-5 md:py-6 rounded-[1.5rem] border-none shadow-inner resize-none text-stone-600 font-serif italic text-sm md:text-base leading-relaxed focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
                             />
                         </div>
                     </div>
                 </CollapsibleCard>
 
-                {/* ── 6. Ceremonia y Logística ── */}
-                <CollapsibleCard
+<CollapsibleCard
                     id="logistics"
                     title="Ceremonia y Logística"
                     subtitle="Ubicación y detalles clave"
@@ -1371,455 +1273,22 @@ export default function DesignEditor() {
                         </div>
                     </div>
                 </CollapsibleCard>
+                    </>
+                )}
 
-                {/* ── 7. Activador de Módulos ── */}
-                <CollapsibleCard
-                    id="modules"
-                    title="Activador de Módulos"
-                    subtitle="Controla las secciones visibles"
-                    icon="🧩"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="space-y-10 md:space-y-12">
-                        {([
-                            {
-                                group: 'INVITACIÓN',
-                                icon: '🖼️',
-                                color: 'text-indigo-600 bg-indigo-50',
-                                features: [
-                                    { id: 'showGallery',      label: 'Galería de Fotos', desc: 'Carrusel de imágenes',     icon: '📸', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showGuestWelcome', label: 'Mensaje de Bienvenida', desc: 'Saludo personalizado', icon: '✨', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showEnvelope',     label: 'Sobre Digital',    desc: 'Animación de entrada',     icon: '💌', plans: ['pro', 'premium'] },
-                                    { id: 'showMessage',      label: 'Dedicatoria y Mensaje', desc: 'Texto de anfitriones', icon: '✍️', plans: ['clasico', 'pro', 'premium'] },
-                                ],
-                            },
-                            {
-                                group: 'EVENTO',
-                                icon: '📅',
-                                color: 'text-rose-500 bg-rose-50',
-                                features: [
-                                    { id: 'showMap',         label: 'Ubicación / Maps', desc: 'Mapa interactivo',          icon: '📍', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showItinerary',   label: 'Itinerario',       desc: 'Cronograma del día',        icon: '🗓️', plans: ['pro', 'premium'] },
-                                    { id: 'showHotels',      label: 'Hospedaje',        desc: 'Hoteles recomendados',      icon: '🏨', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showDetails',     label: 'Vestimenta',       desc: 'Dress Code visual',         icon: '✨', plans: ['pro', 'premium'] },
-                                    { id: 'showChambelanes', label: 'Corte Honor',      desc: 'Acompañantes',              icon: '👑', plans: ['pro', 'premium'] },
-                                ],
-                            },
-                            {
-                                group: 'INVITADOS',
-                                icon: '👥',
-                                color: 'text-emerald-600 bg-emerald-50',
-                                features: [
-                                    { id: 'showWhatsAppRSVP',      label: 'RSVP WhatsApp', desc: 'Confirmación directa', icon: '💬', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'enableGuestList',       label: 'Listado', desc: 'Gestión administrativa',     icon: '📋', plans: ['pro', 'premium'] },
-                                    { id: 'enableQr',              label: 'Pases QR',           desc: 'Escaneo inteligente',       icon: '📱', plans: ['pro', 'premium'] },
-                                    { id: 'enableAccessControl',   label: 'Check-in',  desc: 'Control de entrada',     icon: '🛡️', plans: ['pro', 'premium'] },
-                                    { id: 'enableTableManagement', label: 'Mesas',   desc: 'Asignación de lugares',  icon: '🍽️', plans: ['pro', 'premium'] },
-                                ],
-                            },
-                            {
-                                group: 'EXTRAS',
-                                icon: '⭐',
-                                color: 'text-amber-600 bg-amber-50',
-                                features: [
-                                    { id: 'showGifts',         label: 'Mesa Regalos', desc: 'Datos bancarios/links',    icon: '🎁', plans: ['pro', 'premium'] },
-                                    { id: 'showCountdown',     label: 'Countdown',desc: 'Contador de tiempo',      icon: '⏳', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'enableMetrics',     label: 'Métricas',        desc: 'Vistas y clics', icon: '📊', plans: ['pro', 'premium'] },
-                                    { id: 'enableCustomDomain',label: 'Dominio',  desc: 'URL propia',             icon: '🌐', plans: ['pro', 'premium'] },
-                                    { id: 'enableAi',          label: 'Asistente IA',    desc: 'Textos inteligentes',   icon: '🤖', plans: ['pro', 'premium'] },
-                                ],
-                            },
-                        ] as const).map((module) => (
-                            <div key={module.group} className="space-y-4 md:space-y-5">
-                                <div className="flex items-center gap-3">
-                                    <div className={`h-8 w-8 rounded-xl flex items-center justify-center text-sm ${module.color} shadow-sm`}>
-                                        {module.icon}
-                                    </div>
-                                    <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-stone-500">{module.group}</span>
-                                    <div className="flex-1 h-px bg-stone-100" />
-                                </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                                    {(module.features as readonly { id: string; label: string; desc: string; icon: string; plans: readonly string[] }[]).map((feat) => {
-                                        const planCode = currentPlan?.code?.toLowerCase() || 'clasico';
-                                        const isLocked = !feat.plans.includes(planCode);
-                                        const isEnabled = !isLocked && !!config[feat.id as keyof DesignConfig];
-                                        const minPlan = feat.plans[0];
-                                        const planLabel: Record<string, string> = { pro: 'Pro', premium: 'Premium' };
-
-                                        return (
-                                            <button
-                                                key={feat.id}
-                                                onClick={() => {
-                                                    if (isLocked) {
-                                                        toast.error(`Esta función requiere plan ${planLabel[minPlan] || minPlan}`);
-                                                        return;
-                                                    }
-                                                    setConfig({ ...config, [feat.id]: !isEnabled });
-                                                }}
-                                                className={`relative p-4 md:p-5 rounded-xl md:rounded-2xl border-2 transition-all flex items-center gap-4 ${
-                                                    isLocked
-                                                        ? 'border-stone-50 bg-stone-50/30 opacity-50 cursor-not-allowed'
-                                                        : isEnabled
-                                                            ? 'border-[#1B2E1D] bg-[#1B2E1D]/5 cursor-pointer shadow-md shadow-emerald-900/5'
-                                                            : 'border-stone-100 bg-white cursor-pointer hover:border-stone-200 shadow-sm'
-                                                }`}
-                                            >
-                                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-xl transition-colors ${isEnabled ? 'bg-[#1B2E1D] text-white' : 'bg-stone-50 text-stone-400'}`}>
-                                                    {feat.icon}
-                                                </div>
-                                                <div className="flex-1 min-w-0 text-left">
-                                                    <p className={`text-[10px] md:text-[11px] font-black uppercase tracking-wide truncate ${
-                                                        isLocked ? 'text-stone-300' : 'text-stone-800'
-                                                    }`}>{feat.label}</p>
-                                                    <p className="text-[9px] text-stone-400 truncate font-medium">{feat.desc}</p>
-                                                </div>
-                                                {isLocked ? (
-                                                    <Shield className="h-3 w-3 text-stone-300" />
-                                                ) : (
-                                                    <div className={`h-5 w-9 rounded-full relative transition-colors flex-shrink-0 ${
-                                                        isEnabled ? 'bg-[#1B2E1D]' : 'bg-stone-200'
-                                                    }`}>
-                                                        <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-all ${
-                                                            isEnabled ? 'left-[18px]' : 'left-0.5'
-                                                        }`} />
-                                                    </div>
-                                                )}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </CollapsibleCard>
-
-                {/* ── 8. Itinerario ── */}
-                {/* ── 8. Itinerario ── */}
-                <CollapsibleCard
-                    id="itinerary"
-                    title="Itinerario"
-                    subtitle="Programa detallado del día"
-                    icon="🗓️"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="space-y-8">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-stone-50 rounded-2xl border border-stone-100">
-                            <div className="space-y-1">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1B2E1D]">Seleccionar Evento Predefinido</label>
-                                <p className="text-[10px] text-stone-400">Elige un tipo de evento de la lista desplegable para agregarlo rápidamente</p>
-                            </div>
-                            <select
-                                defaultValue=""
-                                onChange={(e) => {
-                                    if (!e.target.value) return;
-                                    const presets: Record<string, { title: string; time: string; icon: string }> = {
-                                        ceremonia: { title: 'Ceremonia Religiosa / Civil', time: '16:00', icon: 'heart' },
-                                        recepcion: { title: 'Recepción & Cóctel de Bienvenida', time: '17:30', icon: 'wine' },
-                                        banquete:  { title: 'Cena / Banquete Principal', time: '19:00', icon: 'utensils' },
-                                        baile:     { title: 'Vals / Baile Inaugural', time: '20:30', icon: 'music' },
-                                        pastel:    { title: 'Corte de Pastel & Brindis', time: '21:30', icon: 'party' },
-                                        mariachi:  { title: 'Mariachi / Banda Sorpresa', time: '22:30', icon: 'party' },
-                                        torneado:  { title: 'Torneado / Trasnocho', time: '23:30', icon: 'utensils' },
-                                        fin:       { title: 'Fin de Fiesta', time: '02:00', icon: 'moon' }
-                                    };
-                                    const preset = presets[e.target.value];
-                                    if (preset) {
-                                        const newItem = { id: Date.now().toString(), ...preset };
-                                        setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
-                                    }
-                                    e.target.value = '';
-                                }}
-                                className="w-full sm:w-auto px-4 py-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:border-[#DF3B94]"
-                            >
-                                <option value="" disabled>-- Selecciona de la lista --</option>
-                                <option value="ceremonia">💍 Ceremonia Religiosa / Civil (16:00)</option>
-                                <option value="recepcion">🍸 Recepción & Cóctel (17:30)</option>
-                                <option value="banquete">🍽️ Banquete / Cena (19:00)</option>
-                                <option value="baile">💃 Vals / Baile Inaugural (20:30)</option>
-                                <option value="pastel">🎂 Corte de Pastel & Brindis (21:30)</option>
-                                <option value="mariachi">🎺 Mariachi / Banda (22:30)</option>
-                                <option value="torneado">🌮 Torneado / Trasnocho (23:30)</option>
-                                <option value="fin">🎆 Fin de Fiesta (02:00)</option>
-                            </select>
-                        </div>
-
-                        <div className="flex items-center justify-between px-1">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-400">Eventos en la Línea de Tiempo</label>
-                            <button
-                                onClick={() => {
-                                    const newItem = { id: Date.now().toString(), time: '16:00', title: 'Nuevo Evento', icon: 'heart' };
-                                    setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
-                                }}
-                                className="flex items-center gap-2 px-4 py-2 bg-[#1B2E1D] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-emerald-900/10"
-                            >
-                                <Plus className="h-3 w-3" /> Personalizado
-                            </button>
-                        </div>
-                            
-                            <div className="space-y-4">
-                                {config.itinerary.map((item, idx) => (
-                                    <div key={item.id || idx} className="flex flex-col sm:flex-row gap-4 p-5 bg-stone-50/50 rounded-2xl md:rounded-[2rem] items-start sm:items-center relative border border-stone-100/50 group hover:bg-white hover:shadow-xl transition-all">
-                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl shadow-sm flex items-center justify-center text-[#1B2E1D] flex-shrink-0 relative border border-stone-100 group-hover:scale-105 transition-transform">
-                                            <select 
-                                                value={item.icon}
-                                                onChange={(e) => {
-                                                    const newItin = [...config.itinerary];
-                                                    newItin[idx].icon = e.target.value;
-                                                    setConfig({ ...config, itinerary: newItin });
-                                                }}
-                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                            >
-                                                <option value="heart">Ceremonia</option>
-                                                <option value="wine">Brindis</option>
-                                                <option value="utensils">Cena</option>
-                                                <option value="music">Baile</option>
-                                                <option value="party">Fiesta</option>
-                                                <option value="moon">Final</option>
-                                                <option value="clock">Reloj</option>
-                                            </select>
-                                            {item.icon === 'heart' && <Heart className="h-6 w-6" />}
-                                            {item.icon === 'wine' && <Wine className="h-6 w-6" />}
-                                            {item.icon === 'utensils' && <Utensils className="h-6 w-6" />}
-                                            {item.icon === 'music' && <Music className="h-6 w-6" />}
-                                            {item.icon === 'party' && <PartyPopper className="h-6 w-6" />}
-                                            {item.icon === 'moon' && <Moon className="h-6 w-6" />}
-                                            {item.icon === 'clock' && <Clock className="h-6 w-6" />}
-                                        </div>
-                                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3 w-full">
-                                            <input
-                                                type="time"
-                                                value={item.time}
-                                                onChange={(e) => {
-                                                    const newItin = [...config.itinerary];
-                                                    newItin[idx].time = e.target.value;
-                                                    setConfig({ ...config, itinerary: newItin });
-                                                }}
-                                                className="w-full sm:col-span-1 bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-mono font-bold text-[#1B2E1D] focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none"
-                                            />
-                                            <input
-                                                type="text"
-                                                placeholder="Ej. Recepción de Invitados"
-                                                value={item.title}
-                                                onChange={(e) => {
-                                                    const newItin = [...config.itinerary];
-                                                    newItin[idx].title = e.target.value;
-                                                    setConfig({ ...config, itinerary: newItin });
-                                                }}
-                                                className="w-full sm:col-span-3 bg-white px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium text-stone-700 focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none"
-                                            />
-                                        </div>
-                                        <button 
-                                            onClick={() => {
-                                                const newItin = config.itinerary.filter((_, i) => i !== idx);
-                                                setConfig({ ...config, itinerary: newItin });
-                                            }}
-                                            className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 p-3 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </CollapsibleCard>
-
-                {/* ── 9. Corte de Honor (Damas/Chambelanes) ── */}
-                <CollapsibleCard
-                    id="honor"
-                        title="Corte de Honor"
-                        subtitle="Pajes, Damas y Chambelanes"
-                        icon="👑"
-                        activeSection={activeSection}
-                        setActiveSection={setActiveSection}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            {/* Chambelanes */}
-                            <div className="space-y-6">
-                                <div className="flex items-center justify-between px-1">
-                                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Chambelanes / Pajes</h3>
-                                    <button
-                                        onClick={() => setConfig({ ...config, chambelanes: [...(config.chambelanes || []), ''] })}
-                                        className="h-8 w-8 flex items-center justify-center bg-stone-50 text-stone-400 rounded-full hover:bg-[#1B2E1D] hover:text-white transition-all shadow-sm"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                    </button>
-                                </div>
-                                <div className="space-y-3">
-                                    {config.chambelanes.map((name, idx) => (
-                                        <div key={idx} className="flex gap-2 animate-in slide-in-from-left duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
-                                            <input
-                                                type="text"
-                                                value={name}
-                                                onChange={(e) => {
-                                                    const newArr = [...config.chambelanes];
-                                                    newArr[idx] = e.target.value;
-                                                    setConfig({ ...config, chambelanes: newArr });
-                                                }}
-                                                placeholder="Nombre del Chambelán"
-                                                className="w-full bg-stone-50/50 px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all outline-none"
-                                            />
-                                            <button 
-                                                onClick={() => setConfig({ ...config, chambelanes: config.chambelanes.filter((_, i) => i !== idx) })}
-                                                className="p-3 text-stone-300 hover:text-rose-500 transition-colors"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                    {config.chambelanes.length === 0 && (
-                                        <div className="py-10 text-center border-2 border-dashed border-stone-50 rounded-[2rem] opacity-30">
-                                            <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin registros</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Damas */}
-                            <div className="space-y-6">
-                                <div className="flex items-center justify-between px-1">
-                                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Damas de Honor</h3>
-                                    <button
-                                        onClick={() => setConfig({ ...config, damas: [...(config.damas || []), ''] })}
-                                        className="h-8 w-8 flex items-center justify-center bg-stone-50 text-stone-400 rounded-full hover:bg-[#1B2E1D] hover:text-white transition-all shadow-sm"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                    </button>
-                                </div>
-                                <div className="space-y-3">
-                                    {config.damas.map((name, idx) => (
-                                        <div key={idx} className="flex gap-2 animate-in slide-in-from-right duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
-                                            <input
-                                                type="text"
-                                                value={name}
-                                                onChange={(e) => {
-                                                    const newArr = [...config.damas];
-                                                    newArr[idx] = e.target.value;
-                                                    setConfig({ ...config, damas: newArr });
-                                                }}
-                                                placeholder="Nombre de la Dama"
-                                                className="w-full bg-stone-50/50 px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all outline-none"
-                                            />
-                                            <button 
-                                                onClick={() => setConfig({ ...config, damas: config.damas.filter((_, i) => i !== idx) })}
-                                                className="p-3 text-stone-300 hover:text-rose-500 transition-colors"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </button>
-                                        </div>
-                                    ))}
-                                    {config.damas.length === 0 && (
-                                        <div className="py-10 text-center border-2 border-dashed border-stone-50 rounded-[2rem] opacity-30">
-                                            <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin registros</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </CollapsibleCard>
-
-                {/* ── 10. Mesa de Regalos ── */}
-                <CollapsibleCard
-                    id="gifts"
-                        title="Mesa de Regalos"
-                        subtitle="Links y datos bancarios"
-                        icon="🎁"
-                        activeSection={activeSection}
-                        setActiveSection={setActiveSection}
-                    >
-                        <div className="space-y-8">
-                            <div className="flex items-center justify-between px-1">
-                                <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Opciones de Regalo</h3>
-                                <button
-                                    onClick={() => setConfig({ ...config, registryItems: [...(config.registryItems || []), { store: '', link: '', description: '' }] })}
-                                    className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/10"
-                                >
-                                    <Plus className="h-3 w-3" /> Nueva Opción
-                                </button>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 gap-4 md:gap-5">
-                                {config.registryItems.map((item, idx) => (
-                                    <div key={idx} className="group flex flex-col md:flex-row gap-4 md:gap-6 p-6 bg-stone-50/50 rounded-[1.5rem] md:rounded-[2rem] items-start md:items-center relative border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
-                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl shadow-sm flex items-center justify-center text-amber-500 flex-shrink-0 border border-stone-100 group-hover:scale-110 transition-transform">
-                                            <Gift className="h-6 w-6" />
-                                        </div>
-                                        <div className="flex-1 space-y-3 w-full">
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <div className="space-y-1">
-                                                    <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Tienda o Banco</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Ej. Liverpool, BBVA..."
-                                                        value={item.store}
-                                                        onChange={(e) => {
-                                                            const newItems = [...config.registryItems];
-                                                            newItems[idx].store = e.target.value;
-                                                            setConfig({ ...config, registryItems: newItems });
-                                                        }}
-                                                        className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-bold text-stone-700"
-                                                    />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Link o CLABE</label>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Enlace o número"
-                                                        value={item.link}
-                                                        onChange={(e) => {
-                                                            const newItems = [...config.registryItems];
-                                                            newItems[idx].link = e.target.value;
-                                                            setConfig({ ...config, registryItems: newItems });
-                                                        }}
-                                                        className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-[10px] font-mono text-stone-500"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-1">
-                                                <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Indicaciones (Opcional)</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Ej. 'Lluvia de sobres', 'Número de cuenta para transferencia'..."
-                                                    value={item.description || ''}
-                                                    onChange={(e) => {
-                                                        const newItems = [...config.registryItems];
-                                                        newItems[idx].description = e.target.value;
-                                                        setConfig({ ...config, registryItems: newItems });
-                                                    }}
-                                                    className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-medium text-stone-400 italic"
-                                                />
-                                            </div>
-                                        </div>
-                                        <button 
-                                            onClick={() => {
-                                                const newItems = config.registryItems.filter((_, i) => i !== idx);
-                                                setConfig({ ...config, registryItems: newItems });
-                                            }}
-                                            className="absolute top-4 right-4 md:relative md:top-0 md:right-0 p-3 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </button>
-                                    </div>
-                                ))}
-                                {config.registryItems.length === 0 && (
-                                    <div className="py-12 text-center border-2 border-dashed border-stone-50 rounded-[2.5rem] opacity-30">
-                                        <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin mesas configuradas</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </CollapsibleCard>
-
-                {/* ── 11. Galería de Fotos ── */}
-                <CollapsibleCard
+                {/* ── TAB 3: MÓDULOS DEL EVENTO ── */}
+                {activeTab === 'modulos' && (
+                    <>
+<CollapsibleCard
                     id="gallery"
                         title="Galería de Fotos"
                         subtitle="Álbum multimedia"
                         icon="📸"
                         activeSection={activeSection}
                         setActiveSection={setActiveSection}
-                    >
+                    isEnabled={config.showGallery}
+                    onToggleEnabled={() => setConfig({ ...config, showGallery: !config.showGallery })}
+                >
                         <div className="space-y-8">
                             <div className="flex items-center justify-between px-1">
                                 <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Álbum Visual</h3>
@@ -1961,15 +1430,240 @@ export default function DesignEditor() {
                         </div>
                     </CollapsibleCard>
 
-                {/* ── 12. Hoteles y Hospedaje ── */}
-                <CollapsibleCard
+<CollapsibleCard
+                    id="itinerary"
+                    title="Itinerario"
+                    subtitle="Programa detallado del día"
+                    icon="🗓️"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                    isEnabled={config.showItinerary}
+                    onToggleEnabled={() => setConfig({ ...config, showItinerary: !config.showItinerary })}
+                >
+                    <div className="space-y-8">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-stone-50 rounded-2xl border border-stone-100">
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-[#1B2E1D]">Seleccionar Evento Predefinido</label>
+                                <p className="text-[10px] text-stone-400">Elige un tipo de evento de la lista desplegable para agregarlo rápidamente</p>
+                            </div>
+                            <select
+                                defaultValue=""
+                                onChange={(e) => {
+                                    if (!e.target.value) return;
+                                    const presets: Record<string, { title: string; time: string; icon: string }> = {
+                                        ceremonia: { title: 'Ceremonia Religiosa / Civil', time: '16:00', icon: 'heart' },
+                                        recepcion: { title: 'Recepción & Cóctel de Bienvenida', time: '17:30', icon: 'wine' },
+                                        banquete:  { title: 'Cena / Banquete Principal', time: '19:00', icon: 'utensils' },
+                                        baile:     { title: 'Vals / Baile Inaugural', time: '20:30', icon: 'music' },
+                                        pastel:    { title: 'Corte de Pastel & Brindis', time: '21:30', icon: 'party' },
+                                        mariachi:  { title: 'Mariachi / Banda Sorpresa', time: '22:30', icon: 'party' },
+                                        torneado:  { title: 'Torneado / Trasnocho', time: '23:30', icon: 'utensils' },
+                                        fin:       { title: 'Fin de Fiesta', time: '02:00', icon: 'moon' }
+                                    };
+                                    const preset = presets[e.target.value];
+                                    if (preset) {
+                                        const newItem = { id: Date.now().toString(), ...preset };
+                                        setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
+                                    }
+                                    e.target.value = '';
+                                }}
+                                className="w-full sm:w-auto px-4 py-2.5 bg-white border border-stone-200 rounded-xl text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:border-[#DF3B94]"
+                            >
+                                <option value="" disabled>-- Selecciona de la lista --</option>
+                                <option value="ceremonia">💍 Ceremonia Religiosa / Civil (16:00)</option>
+                                <option value="recepcion">🍸 Recepción & Cóctel (17:30)</option>
+                                <option value="banquete">🍽️ Banquete / Cena (19:00)</option>
+                                <option value="baile">💃 Vals / Baile Inaugural (20:30)</option>
+                                <option value="pastel">🎂 Corte de Pastel & Brindis (21:30)</option>
+                                <option value="mariachi">🎺 Mariachi / Banda (22:30)</option>
+                                <option value="torneado">🌮 Torneado / Trasnocho (23:30)</option>
+                                <option value="fin">🎆 Fin de Fiesta (02:00)</option>
+                            </select>
+                        </div>
+
+                        <div className="flex items-center justify-between px-1">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-400">Eventos en la Línea de Tiempo</label>
+                            <button
+                                onClick={() => {
+                                    const newItem = { id: Date.now().toString(), time: '16:00', title: 'Nuevo Evento', icon: 'heart' };
+                                    setConfig({ ...config, itinerary: [...(config.itinerary || []), newItem] });
+                                }}
+                                className="flex items-center gap-2 px-4 py-2 bg-[#1B2E1D] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#2D312E] transition-all shadow-lg shadow-emerald-900/10"
+                            >
+                                <Plus className="h-3 w-3" /> Personalizado
+                            </button>
+                        </div>
+                            
+                            <div className="space-y-4">
+                                {config.itinerary.map((item, idx) => (
+                                    <div key={item.id || idx} className="flex flex-col sm:flex-row gap-4 p-5 bg-stone-50/50 rounded-2xl md:rounded-[2rem] items-start sm:items-center relative border border-stone-100/50 group hover:bg-white hover:shadow-xl transition-all">
+                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl shadow-sm flex items-center justify-center text-[#1B2E1D] flex-shrink-0 relative border border-stone-100 group-hover:scale-105 transition-transform">
+                                            <select 
+                                                value={item.icon}
+                                                onChange={(e) => {
+                                                    const newItin = [...config.itinerary];
+                                                    newItin[idx].icon = e.target.value;
+                                                    setConfig({ ...config, itinerary: newItin });
+                                                }}
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            >
+                                                <option value="heart">Ceremonia</option>
+                                                <option value="wine">Brindis</option>
+                                                <option value="utensils">Cena</option>
+                                                <option value="music">Baile</option>
+                                                <option value="party">Fiesta</option>
+                                                <option value="moon">Final</option>
+                                                <option value="clock">Reloj</option>
+                                            </select>
+                                            {item.icon === 'heart' && <Heart className="h-6 w-6" />}
+                                            {item.icon === 'wine' && <Wine className="h-6 w-6" />}
+                                            {item.icon === 'utensils' && <Utensils className="h-6 w-6" />}
+                                            {item.icon === 'music' && <Music className="h-6 w-6" />}
+                                            {item.icon === 'party' && <PartyPopper className="h-6 w-6" />}
+                                            {item.icon === 'moon' && <Moon className="h-6 w-6" />}
+                                            {item.icon === 'clock' && <Clock className="h-6 w-6" />}
+                                        </div>
+                                        <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3 w-full">
+                                            <input
+                                                type="time"
+                                                value={item.time}
+                                                onChange={(e) => {
+                                                    const newItin = [...config.itinerary];
+                                                    newItin[idx].time = e.target.value;
+                                                    setConfig({ ...config, itinerary: newItin });
+                                                }}
+                                                className="w-full sm:col-span-1 bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-mono font-bold text-[#1B2E1D] focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none"
+                                            />
+                                            <input
+                                                type="text"
+                                                placeholder="Ej. Recepción de Invitados"
+                                                value={item.title}
+                                                onChange={(e) => {
+                                                    const newItin = [...config.itinerary];
+                                                    newItin[idx].title = e.target.value;
+                                                    setConfig({ ...config, itinerary: newItin });
+                                                }}
+                                                className="w-full sm:col-span-3 bg-white px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium text-stone-700 focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none"
+                                            />
+                                        </div>
+                                        <button 
+                                            onClick={() => {
+                                                const newItin = config.itinerary.filter((_, i) => i !== idx);
+                                                setConfig({ ...config, itinerary: newItin });
+                                            }}
+                                            className="absolute top-4 right-4 sm:relative sm:top-0 sm:right-0 p-3 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </CollapsibleCard>
+
+<CollapsibleCard
+                    id="gifts"
+                        title="Mesa de Regalos"
+                        subtitle="Links y datos bancarios"
+                        icon="🎁"
+                        activeSection={activeSection}
+                        setActiveSection={setActiveSection}
+                    isEnabled={config.showGifts}
+                    onToggleEnabled={() => setConfig({ ...config, showGifts: !config.showGifts })}
+                >
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between px-1">
+                                <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Opciones de Regalo</h3>
+                                <button
+                                    onClick={() => setConfig({ ...config, registryItems: [...(config.registryItems || []), { store: '', link: '', description: '' }] })}
+                                    className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/10"
+                                >
+                                    <Plus className="h-3 w-3" /> Nueva Opción
+                                </button>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 gap-4 md:gap-5">
+                                {config.registryItems.map((item, idx) => (
+                                    <div key={idx} className="group flex flex-col md:flex-row gap-4 md:gap-6 p-6 bg-stone-50/50 rounded-[1.5rem] md:rounded-[2rem] items-start md:items-center relative border border-stone-100 hover:bg-white hover:shadow-xl transition-all">
+                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-xl md:rounded-2xl shadow-sm flex items-center justify-center text-amber-500 flex-shrink-0 border border-stone-100 group-hover:scale-110 transition-transform">
+                                            <Gift className="h-6 w-6" />
+                                        </div>
+                                        <div className="flex-1 space-y-3 w-full">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div className="space-y-1">
+                                                    <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Tienda o Banco</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Ej. Liverpool, BBVA..."
+                                                        value={item.store}
+                                                        onChange={(e) => {
+                                                            const newItems = [...config.registryItems];
+                                                            newItems[idx].store = e.target.value;
+                                                            setConfig({ ...config, registryItems: newItems });
+                                                        }}
+                                                        className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-bold text-stone-700"
+                                                    />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Link o CLABE</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enlace o número"
+                                                        value={item.link}
+                                                        onChange={(e) => {
+                                                            const newItems = [...config.registryItems];
+                                                            newItems[idx].link = e.target.value;
+                                                            setConfig({ ...config, registryItems: newItems });
+                                                        }}
+                                                        className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-[10px] font-mono text-stone-500"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[8px] md:text-[9px] uppercase font-black tracking-widest text-stone-400 pl-1">Indicaciones (Opcional)</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Ej. 'Lluvia de sobres', 'Número de cuenta para transferencia'..."
+                                                    value={item.description || ''}
+                                                    onChange={(e) => {
+                                                        const newItems = [...config.registryItems];
+                                                        newItems[idx].description = e.target.value;
+                                                        setConfig({ ...config, registryItems: newItems });
+                                                    }}
+                                                    className="w-full bg-white px-4 py-3 rounded-xl border border-stone-100 text-xs font-medium text-stone-400 italic"
+                                                />
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => {
+                                                const newItems = config.registryItems.filter((_, i) => i !== idx);
+                                                setConfig({ ...config, registryItems: newItems });
+                                            }}
+                                            className="absolute top-4 right-4 md:relative md:top-0 md:right-0 p-3 text-stone-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                                {config.registryItems.length === 0 && (
+                                    <div className="py-12 text-center border-2 border-dashed border-stone-50 rounded-[2.5rem] opacity-30">
+                                        <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin mesas configuradas</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </CollapsibleCard>
+
+<CollapsibleCard
                     id="hotels"
                         title="Hoteles y Hospedaje"
                         subtitle="Alojamiento recomendado"
                         icon="🏨"
                         activeSection={activeSection}
                         setActiveSection={setActiveSection}
-                    >
+                    isEnabled={config.showHotels}
+                    onToggleEnabled={() => setConfig({ ...config, showHotels: !config.showHotels })}
+                >
                         <div className="space-y-8">
                             <div className="flex items-center justify-between px-1">
                                 <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Hospedaje Recomendado</h3>
@@ -2092,9 +1786,333 @@ export default function DesignEditor() {
                         </div>
                     </CollapsibleCard>
 
-                {/* ── 13. Estilos Expertos (CSS) ── */}
+<CollapsibleCard
+                    id="honor"
+                        title="Corte de Honor"
+                        subtitle="Pajes, Damas y Chambelanes"
+                        icon="👑"
+                        activeSection={activeSection}
+                        setActiveSection={setActiveSection}
+                    isEnabled={config.showChambelanes}
+                    onToggleEnabled={() => setConfig({ ...config, showChambelanes: !config.showChambelanes })}
+                >
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                            {/* Chambelanes */}
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between px-1">
+                                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Chambelanes / Pajes</h3>
+                                    <button
+                                        onClick={() => setConfig({ ...config, chambelanes: [...(config.chambelanes || []), ''] })}
+                                        className="h-8 w-8 flex items-center justify-center bg-stone-50 text-stone-400 rounded-full hover:bg-[#1B2E1D] hover:text-white transition-all shadow-sm"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                    </button>
+                                </div>
+                                <div className="space-y-3">
+                                    {config.chambelanes.map((name, idx) => (
+                                        <div key={idx} className="flex gap-2 animate-in slide-in-from-left duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={(e) => {
+                                                    const newArr = [...config.chambelanes];
+                                                    newArr[idx] = e.target.value;
+                                                    setConfig({ ...config, chambelanes: newArr });
+                                                }}
+                                                placeholder="Nombre del Chambelán"
+                                                className="w-full bg-stone-50/50 px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all outline-none"
+                                            />
+                                            <button 
+                                                onClick={() => setConfig({ ...config, chambelanes: config.chambelanes.filter((_, i) => i !== idx) })}
+                                                className="p-3 text-stone-300 hover:text-rose-500 transition-colors"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {config.chambelanes.length === 0 && (
+                                        <div className="py-10 text-center border-2 border-dashed border-stone-50 rounded-[2rem] opacity-30">
+                                            <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin registros</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Damas */}
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between px-1">
+                                    <h3 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#1B2E1D]">Damas de Honor</h3>
+                                    <button
+                                        onClick={() => setConfig({ ...config, damas: [...(config.damas || []), ''] })}
+                                        className="h-8 w-8 flex items-center justify-center bg-stone-50 text-stone-400 rounded-full hover:bg-[#1B2E1D] hover:text-white transition-all shadow-sm"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                    </button>
+                                </div>
+                                <div className="space-y-3">
+                                    {config.damas.map((name, idx) => (
+                                        <div key={idx} className="flex gap-2 animate-in slide-in-from-right duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={(e) => {
+                                                    const newArr = [...config.damas];
+                                                    newArr[idx] = e.target.value;
+                                                    setConfig({ ...config, damas: newArr });
+                                                }}
+                                                placeholder="Nombre de la Dama"
+                                                className="w-full bg-stone-50/50 px-5 py-3 rounded-xl border border-stone-100 text-xs font-medium focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all outline-none"
+                                            />
+                                            <button 
+                                                onClick={() => setConfig({ ...config, damas: config.damas.filter((_, i) => i !== idx) })}
+                                                className="p-3 text-stone-300 hover:text-rose-500 transition-colors"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {config.damas.length === 0 && (
+                                        <div className="py-10 text-center border-2 border-dashed border-stone-50 rounded-[2rem] opacity-30">
+                                            <p className="text-[10px] uppercase font-black tracking-widest text-stone-400">Sin registros</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </CollapsibleCard>
+
+<CollapsibleCard
+                    id="modules_overview"
+                    title="Funciones de la Plataforma"
+                    subtitle="Control general de módulos interactivos"
+                    icon="🧩"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="space-y-10 md:space-y-12">
+                        {([
+                            {
+                                group: 'INVITACIÓN',
+                                icon: '🖼️',
+                                color: 'text-indigo-600 bg-indigo-50',
+                                features: [
+                                    { id: 'showGallery',      label: 'Galería de Fotos', desc: 'Carrusel de imágenes',     icon: '📸', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showGuestWelcome', label: 'Mensaje de Bienvenida', desc: 'Saludo personalizado', icon: '✨', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showEnvelope',     label: 'Sobre Digital',    desc: 'Animación de entrada',     icon: '💌', plans: ['pro', 'premium'] },
+                                    { id: 'showMessage',      label: 'Dedicatoria y Mensaje', desc: 'Texto de anfitriones', icon: '✍️', plans: ['clasico', 'pro', 'premium'] },
+                                ],
+                            },
+                            {
+                                group: 'EVENTO',
+                                icon: '📅',
+                                color: 'text-rose-500 bg-rose-50',
+                                features: [
+                                    { id: 'showMap',         label: 'Ubicación / Maps', desc: 'Mapa interactivo',          icon: '📍', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showItinerary',   label: 'Itinerario',       desc: 'Cronograma del día',        icon: '🗓️', plans: ['pro', 'premium'] },
+                                    { id: 'showHotels',      label: 'Hospedaje',        desc: 'Hoteles recomendados',      icon: '🏨', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showDetails',     label: 'Vestimenta',       desc: 'Dress Code visual',         icon: '✨', plans: ['pro', 'premium'] },
+                                    { id: 'showChambelanes', label: 'Corte Honor',      desc: 'Acompañantes',              icon: '👑', plans: ['pro', 'premium'] },
+                                ],
+                            },
+                            {
+                                group: 'INVITADOS',
+                                icon: '👥',
+                                color: 'text-emerald-600 bg-emerald-50',
+                                features: [
+                                    { id: 'showWhatsAppRSVP',      label: 'RSVP WhatsApp', desc: 'Confirmación directa', icon: '💬', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'enableGuestList',       label: 'Listado', desc: 'Gestión administrativa',     icon: '📋', plans: ['pro', 'premium'] },
+                                    { id: 'enableQr',              label: 'Pases QR',           desc: 'Escaneo inteligente',       icon: '📱', plans: ['pro', 'premium'] },
+                                    { id: 'enableAccessControl',   label: 'Check-in',  desc: 'Control de entrada',     icon: '🛡️', plans: ['pro', 'premium'] },
+                                    { id: 'enableTableManagement', label: 'Mesas',   desc: 'Asignación de lugares',  icon: '🍽️', plans: ['pro', 'premium'] },
+                                ],
+                            },
+                            {
+                                group: 'EXTRAS',
+                                icon: '⭐',
+                                color: 'text-amber-600 bg-amber-50',
+                                features: [
+                                    { id: 'showGifts',         label: 'Mesa Regalos', desc: 'Datos bancarios/links',    icon: '🎁', plans: ['pro', 'premium'] },
+                                    { id: 'showCountdown',     label: 'Countdown',desc: 'Contador de tiempo',      icon: '⏳', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'enableMetrics',     label: 'Métricas',        desc: 'Vistas y clics', icon: '📊', plans: ['pro', 'premium'] },
+                                    { id: 'enableCustomDomain',label: 'Dominio',  desc: 'URL propia',             icon: '🌐', plans: ['pro', 'premium'] },
+                                    { id: 'enableAi',          label: 'Asistente IA',    desc: 'Textos inteligentes',   icon: '🤖', plans: ['pro', 'premium'] },
+                                ],
+                            },
+                        ] as const).map((module) => (
+                            <div key={module.group} className="space-y-4 md:space-y-5">
+                                <div className="flex items-center gap-3">
+                                    <div className={`h-8 w-8 rounded-xl flex items-center justify-center text-sm ${module.color} shadow-sm`}>
+                                        {module.icon}
+                                    </div>
+                                    <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-stone-500">{module.group}</span>
+                                    <div className="flex-1 h-px bg-stone-100" />
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                                    {(module.features as readonly { id: string; label: string; desc: string; icon: string; plans: readonly string[] }[]).map((feat) => {
+                                        const planCode = currentPlan?.code?.toLowerCase() || 'clasico';
+                                        const isLocked = !feat.plans.includes(planCode);
+                                        const isEnabled = !isLocked && !!config[feat.id as keyof DesignConfig];
+                                        const minPlan = feat.plans[0];
+                                        const planLabel: Record<string, string> = { pro: 'Pro', premium: 'Premium' };
+
+                                        return (
+                                            <button
+                                                key={feat.id}
+                                                onClick={() => {
+                                                    if (isLocked) {
+                                                        toast.error(`Esta función requiere plan ${planLabel[minPlan] || minPlan}`);
+                                                        return;
+                                                    }
+                                                    setConfig({ ...config, [feat.id]: !isEnabled });
+                                                }}
+                                                className={`relative p-4 md:p-5 rounded-xl md:rounded-2xl border-2 transition-all flex items-center gap-4 ${
+                                                    isLocked
+                                                        ? 'border-stone-50 bg-stone-50/30 opacity-50 cursor-not-allowed'
+                                                        : isEnabled
+                                                            ? 'border-[#1B2E1D] bg-[#1B2E1D]/5 cursor-pointer shadow-md shadow-emerald-900/5'
+                                                            : 'border-stone-100 bg-white cursor-pointer hover:border-stone-200 shadow-sm'
+                                                }`}
+                                            >
+                                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-xl transition-colors ${isEnabled ? 'bg-[#1B2E1D] text-white' : 'bg-stone-50 text-stone-400'}`}>
+                                                    {feat.icon}
+                                                </div>
+                                                <div className="flex-1 min-w-0 text-left">
+                                                    <p className={`text-[10px] md:text-[11px] font-black uppercase tracking-wide truncate ${
+                                                        isLocked ? 'text-stone-300' : 'text-stone-800'
+                                                    }`}>{feat.label}</p>
+                                                    <p className="text-[9px] text-stone-400 truncate font-medium">{feat.desc}</p>
+                                                </div>
+                                                {isLocked ? (
+                                                    <Shield className="h-3 w-3 text-stone-300" />
+                                                ) : (
+                                                    <div className={`h-5 w-9 rounded-full relative transition-colors flex-shrink-0 ${
+                                                        isEnabled ? 'bg-[#1B2E1D]' : 'bg-stone-200'
+                                                    }`}>
+                                                        <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-all ${
+                                                            isEnabled ? 'left-[18px]' : 'left-0.5'
+                                                        }`} />
+                                                    </div>
+                                                )}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CollapsibleCard>
+                    </>
+                )}
+
+                {/* ── TAB 4: PLAN & CÓDIGO ── */}
+                {activeTab === 'plan' && (
+                    <>
+<CollapsibleCard
+                    id="matrix"
+                    title="Plan de la Invitación"
+                    subtitle="Selecciona el nivel de tu evento"
+                    icon="⭐"
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                >
+                    <div className="space-y-8 md:space-y-12">
+                        {/* Plan Buttons */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                            {([
+                                { id: 'clasico' as const, label: 'Clásica', icon: '💌', color: 'border-stone-300 bg-stone-50 hover:border-stone-400', active: 'border-[#1B2E1D] bg-[#1B2E1D]' },
+                                { id: 'pro' as const, label: 'Pro', icon: '✦', color: 'border-blue-200 bg-blue-50 hover:border-blue-400', active: 'border-blue-600 bg-blue-600' },
+                                { id: 'premium' as const, label: 'Premium', icon: '♛', color: 'border-amber-200 bg-amber-50 hover:border-amber-400', active: 'border-amber-500 bg-amber-500' },
+                                { id: 'concierge' as const, label: 'Concierge', icon: '💎', color: 'border-stone-800 bg-stone-900 hover:border-black', active: 'border-black bg-black' },
+                            ]).map(tier => {
+                                const isActive = config.plan === tier.id;
+                                const ranks: Record<string, number> = { clasico: 0, pro: 1, premium: 2, concierge: 3, personalizado: 1 };
+                                const paidPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
+                                const isLocked = (ranks[tier.id] ?? 0) > (ranks[paidPlanCode] ?? 0);
+
+                                return (
+                                    <button
+                                        key={tier.id}
+                                        onClick={() => applyPlan(tier.id)}
+                                        className={`relative flex flex-col items-center text-center gap-2 py-4 md:py-6 px-3 md:px-4 rounded-2xl border-2 transition-all duration-300 ${
+                                            isActive ? `${tier.active} text-white shadow-lg scale-[1.02]` : 
+                                            isLocked ? 'border-dashed border-stone-100 bg-stone-50/30 opacity-40 grayscale' :
+                                            `${tier.color} text-stone-700`
+                                        }`}
+                                    >
+                                        <span className="text-xl md:text-3xl">{tier.icon}</span>
+                                        <span className="font-black text-[9px] md:text-xs uppercase tracking-widest">{tier.label}</span>
+                                        {isActive && (
+                                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white text-[#1B2E1D] px-2 py-0.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1">
+                                                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                                                <span className="text-[7px] font-black uppercase tracking-widest">Activo</span>
+                                            </div>
+                                        )}
+                                        {isLocked && !isActive && (
+                                            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[7px] font-bold uppercase tracking-widest bg-stone-100 text-stone-400 px-2 py-0.5 rounded-full border border-stone-200 whitespace-nowrap">
+                                                Upgrade
+                                            </span>
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Feature Matrix - Responsive Scrollable Container */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between px-1">
+                                <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Comparativa de Funciones</h3>
+                                <div className="flex md:hidden items-center gap-1.5 text-stone-300">
+                                    <span className="text-[8px] uppercase font-bold">Desliza</span>
+                                    <ArrowRight className="h-3 w-3 animate-bounce-x" />
+                                </div>
+                            </div>
+                            <div className="rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 overflow-hidden bg-white shadow-sm overflow-x-auto no-scrollbar">
+                                <div className="min-w-[600px]">
+                                    <div className="grid grid-cols-5 text-[7px] md:text-[9px] font-black uppercase tracking-widest bg-stone-50/50">
+                                        <div className="p-2 md:p-4 text-stone-400 border-r border-stone-100/50">Funciones</div>
+                                        <div className="p-2 md:p-4 text-stone-700 text-center border-r border-stone-100/50">💌</div>
+                                        <div className="p-2 md:p-4 text-blue-700 text-center border-r border-stone-100/50">✦</div>
+                                        <div className="p-2 md:p-4 text-amber-700 text-center border-r border-stone-100/50">♛</div>
+                                        <div className="p-2 md:p-4 bg-[#1B2E1D] text-white text-center">💎</div>
+                                    </div>
+                                    {([
+                                        { label: 'Información del evento', clasico: true, pro: true, premium: true, concierge: true },
+                                        { label: 'Cuenta regresiva', clasico: true, pro: true, premium: true, concierge: true },
+                                        { label: 'Mapa / Ubicación', clasico: true, pro: true, premium: true, concierge: true },
+                                        { label: 'RSVP por WhatsApp', clasico: true, pro: true, premium: true, concierge: true },
+                                        { label: 'Código de vestimenta', clasico: false, pro: true, premium: true, concierge: true },
+                                        { label: 'QR de acceso digital', clasico: false, pro: true, premium: true, concierge: true },
+                                        { label: 'Itinerario del evento', clasico: false, pro: true, premium: true, concierge: true },
+                                        { label: 'Mesa de regalos', clasico: false, pro: true, premium: true, concierge: true },
+                                        { label: 'Galería de fotos', clasico: false, pro: false, premium: true, concierge: true },
+                                        { label: 'Diseño Personalizado', clasico: false, pro: false, premium: true, concierge: true },
+                                        { label: 'Envío Profesional WA', clasico: false, pro: false, premium: false, concierge: true },
+                                        { label: 'Seguimiento Humano', clasico: false, pro: false, premium: false, concierge: true },
+                                    ]).map((row, i) => {
+                                        const activePlan = config.plan;
+                                        const rowEnabled = (row as any)[activePlan as string];
+                                        return (
+                                            <div key={i} className={`grid grid-cols-5 text-[10px] md:text-[11px] border-t border-stone-100/50 transition-colors ${
+                                                rowEnabled ? 'bg-white' : 'bg-stone-50/30'
+                                            }`}>
+                                                <div className={`p-3 md:p-4 border-r border-stone-100/50 font-medium ${
+                                                    rowEnabled ? 'text-stone-700' : 'text-stone-400'
+                                                }`}>{row.label}</div>
+                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.clasico ? '✓' : '—'}</div>
+                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.pro ? '✓' : '—'}</div>
+                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.premium ? '✓' : '—'}</div>
+                                                <div className="p-3 md:p-4 text-center bg-stone-900/5">{row.concierge ? '✓' : '—'}</div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </CollapsibleCard>
+
                 {config.plan === 'concierge' && (
-                    <CollapsibleCard
+<CollapsibleCard
                         id="expert"
                         title="Estilos Expertos"
                         subtitle="Inyección de código avanzado"
@@ -2140,6 +2158,9 @@ export default function DesignEditor() {
                         </div>
                     </CollapsibleCard>
                 )}
+                    </>
+                )}
+            </div>
 
             {/* Live Preview Button */}
             <div className="flex justify-center pt-8 border-t border-stone-200">
@@ -2148,6 +2169,5 @@ export default function DesignEditor() {
                 </Link>
             </div>
         </div>
-    </div>
     );
 }
