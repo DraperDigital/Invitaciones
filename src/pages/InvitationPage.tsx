@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -11,7 +11,7 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
@@ -607,12 +607,18 @@ END:VCALENDAR`;
     };
 
     if (loading) {
-        return <div className="flex h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-cream to-amber-50">
-            <div className="text-center space-y-4">
-                <Flower2 className="h-12 w-12 animate-pulse text-accent mx-auto" strokeWidth={1.5} />
-                <p className="text-[var(--text-secondary)] font-serif italic">Preparando tu invitación...</p>
+        return (
+            <div className="flex h-screen items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#FAF6EE] to-[#F7F2E7]">
+                <div className="text-center space-y-4">
+                    <img 
+                        src="/logo.png?v=3" 
+                        alt="Invitto" 
+                        className="h-10 sm:h-12 w-auto mx-auto animate-pulse object-contain drop-shadow-sm" 
+                    />
+                    <p className="text-[#1B2E1D]/70 font-serif italic text-sm sm:text-base">Preparando tu invitación...</p>
+                </div>
             </div>
-        </div>;
+        );
     }
 
     if (notFound || !event) {
@@ -1423,14 +1429,14 @@ END:VCALENDAR`;
     const planTier = isPremium ? 'premium' : isPro ? 'pro' : ('clasico' as const);
 
     const rawSavedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
-    const cleanSavedOrder = rawSavedOrder.filter(id => id !== 'hero' && id !== 'footer');
-    const cleanDefaultOrder = DEFAULT_SECTION_ORDER.filter(id => id !== 'hero' && id !== 'footer');
+    const cleanSavedOrder = rawSavedOrder.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
+    const cleanDefaultOrder = DEFAULT_SECTION_ORDER.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
     const reorderableSavedOrder = [
         ...cleanSavedOrder,
         ...cleanDefaultOrder.filter(id => !cleanSavedOrder.includes(id))
     ];
-    // Orden garantizado: 'hero' siempre al inicio y 'footer' siempre al final absoluto
-    const savedOrder: SectionId[] = ['hero', ...reorderableSavedOrder, 'footer'];
+    // Orden garantizado: 'hero' siempre al inicio, 'guest_welcome' siempre segundo, y 'footer' siempre al final absoluto
+    const savedOrder: SectionId[] = ['hero', 'guest_welcome', ...reorderableSavedOrder, 'footer'];
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder);
 
     // ── Helpers ─────────────────────────────────────────────────────
@@ -1864,7 +1870,7 @@ END:VCALENDAR`;
     const renderDressCode = () => (
         <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6 text-center">
-                <Flower2 className="h-10 w-10 mx-auto mb-8 text-accent/60" strokeWidth={1.5} />
+                <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />
                 <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Dress Code</h3>
                 <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-12 inline-block">
                     <p className="text-3xl font-serif text-[var(--text-primary)]">{event.dress_code}</p>
@@ -2550,6 +2556,49 @@ END:VCALENDAR`;
 
                                         <div className="space-y-4">
                                             <h4 className="text-[10px] uppercase font-black tracking-[0.2em] text-stone-400 mb-4">Secciones del Layout</h4>
+
+                                            {/* Mensaje de Bienvenida (Fijo inmediatamente después de portada) */}
+                                            {(() => {
+                                                const guestWelcomeDef = SECTION_REGISTRY.find(s => s.id === 'guest_welcome');
+                                                if (!guestWelcomeDef) return null;
+                                                const isActive = cfg.show_guest_welcome !== false && cfg.showGuestWelcome !== false;
+                                                return (
+                                                    <div 
+                                                        key="guest_welcome" 
+                                                        onClick={() => scrollToSection('guest_welcome')}
+                                                        className="group flex items-center justify-between p-4 bg-amber-50/40 rounded-xl border border-amber-200/70 hover:bg-amber-50/80 hover:border-amber-300 transition-all cursor-pointer shadow-sm"
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-sm font-bold text-[#1B2E1D]">{guestWelcomeDef.label}</span>
+                                                            <span className="text-[9px] uppercase font-bold tracking-wider text-amber-700 bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-300/40">Fijo</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1">
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setEditingSection('guest_welcome');
+                                                                }}
+                                                                className="p-2 rounded-lg transition-colors text-stone-400 hover:bg-white hover:text-[#1B2E1D]"
+                                                                title={`Editar ${guestWelcomeDef.label}`}
+                                                            >
+                                                                <Edit2 className="h-4 w-4" />
+                                                            </button>
+                                                            <button 
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleUpdateFeature('showGuestWelcome', !isActive);
+                                                                }}
+                                                                className={`ml-1 p-2 rounded-lg transition-colors ${isActive ? 'text-emerald-500 bg-emerald-50' : 'text-stone-400 bg-stone-100'}`}
+                                                                title={isActive ? "Ocultar Sección" : "Mostrar Sección"}
+                                                            >
+                                                                {isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
+
+                                            {/* Demás secciones reordenables */}
                                             {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
                                                 const indexA = savedOrder.indexOf(a.id);
                                                 const indexB = savedOrder.indexOf(b.id);
@@ -2574,7 +2623,7 @@ END:VCALENDAR`;
                                                                         if (idx === 0) return;
                                                                         const reorderableIds = arr.map((item) => item.id);
                                                                         [reorderableIds[idx - 1], reorderableIds[idx]] = [reorderableIds[idx], reorderableIds[idx - 1]];
-                                                                        const newOrder: SectionId[] = ['hero', ...reorderableIds, 'footer'];
+                                                                        const newOrder: SectionId[] = ['hero', 'guest_welcome', ...reorderableIds, 'footer'];
                                                                         await handleUpdateFeature('sectionOrder', newOrder);
                                                                     }}
                                                                     disabled={idx === 0}
@@ -2589,7 +2638,7 @@ END:VCALENDAR`;
                                                                         if (idx === arr.length - 1) return;
                                                                         const reorderableIds = arr.map((item) => item.id);
                                                                         [reorderableIds[idx + 1], reorderableIds[idx]] = [reorderableIds[idx], reorderableIds[idx + 1]];
-                                                                        const newOrder: SectionId[] = ['hero', ...reorderableIds, 'footer'];
+                                                                        const newOrder: SectionId[] = ['hero', 'guest_welcome', ...reorderableIds, 'footer'];
                                                                         await handleUpdateFeature('sectionOrder', newOrder);
                                                                     }}
                                                                     disabled={idx === arr.length - 1}

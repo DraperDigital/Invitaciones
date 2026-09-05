@@ -94,15 +94,16 @@ export const SECTION_REGISTRY: SectionDef[] = [
   },
   {
     id: 'guest_welcome',
-    label: 'Pase del Invitado',
-    icon: '🎟️',
+    label: 'Mensaje de Bienvenida',
+    icon: '✨',
     planRequired: 'clasico',
     configKey: 'showGuestWelcome',
     defaultOrder: 2,
+    fixed: true,
   },
   {
     id: 'message',
-    label: 'Mensaje de Bienvenida',
+    label: 'Dedicatoria y Mensaje',
     icon: '✍️',
     planRequired: 'clasico',
     configKey: 'showMessage',
@@ -389,13 +390,16 @@ export function buildSectionQueue(
 
   // REGLA ESTRICTA DE LAYOUT:
   // - 'hero' SIEMPRE es el primer elemento.
+  // - 'guest_welcome' SIEMPRE es el segundo elemento (fijo después de hero, si está activo).
   // - 'footer' SIEMPRE va hasta el final absoluto, nunca entre secciones intermedias.
   const heroDef = filtered.find((s) => s.id === 'hero');
+  const guestWelcomeDef = filtered.find((s) => s.id === 'guest_welcome');
   const footerDef = filtered.find((s) => s.id === 'footer');
-  const contentSections = filtered.filter((s) => s.id !== 'hero' && s.id !== 'footer');
+  const contentSections = filtered.filter((s) => s.id !== 'hero' && s.id !== 'guest_welcome' && s.id !== 'footer');
 
   const result: SectionDef[] = [];
   if (heroDef) result.push(heroDef);
+  if (guestWelcomeDef) result.push(guestWelcomeDef);
   result.push(...contentSections);
   if (footerDef) result.push(footerDef);
 

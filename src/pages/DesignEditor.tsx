@@ -1395,9 +1395,9 @@ export default function DesignEditor() {
                                 color: 'text-indigo-600 bg-indigo-50',
                                 features: [
                                     { id: 'showGallery',      label: 'Galería de Fotos', desc: 'Carrusel de imágenes',     icon: '📸', plans: ['clasico', 'pro', 'premium'] },
-                                    { id: 'showGuestWelcome', label: 'Pase Invitado',    desc: 'Saludo personalizado',     icon: '🎟️', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showGuestWelcome', label: 'Mensaje de Bienvenida', desc: 'Saludo personalizado', icon: '✨', plans: ['clasico', 'pro', 'premium'] },
                                     { id: 'showEnvelope',     label: 'Sobre Digital',    desc: 'Animación de entrada',     icon: '💌', plans: ['pro', 'premium'] },
-                                    { id: 'showMessage',      label: 'Mensaje Texto',    desc: 'Cuerpo de bienvenida',     icon: '✉️', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showMessage',      label: 'Dedicatoria y Mensaje', desc: 'Texto de anfitriones', icon: '✍️', plans: ['clasico', 'pro', 'premium'] },
                                 ],
                             },
                             {

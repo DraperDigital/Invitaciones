@@ -59,10 +59,12 @@ const InvittoVsGreenvelope   = React.lazy(() => import('./pages/seo/InvittoVsGre
 const InvittoVsOtras         = React.lazy(() => import('./pages/seo/InvittoVsOtrasPage'));
 const ComparativasHub        = React.lazy(() => import('./pages/seo/ComparativasHub'));
 
-// Minimal inline fallback — no external imports, matches app background
+// Minimal inline fallback with Invitto brand logo
 const PageFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-[#FDFBF7]">
-    <div className="h-10 w-10 rounded-full border-2 border-stone-200 border-t-stone-800 animate-spin" />
+    <div className="flex flex-col items-center justify-center space-y-3">
+      <img src="/logo.png?v=3" alt="Invitto" className="h-9 sm:h-10 w-auto animate-pulse object-contain drop-shadow-sm" />
+    </div>
   </div>
 );
 

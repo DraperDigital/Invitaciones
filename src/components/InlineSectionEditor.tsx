@@ -83,8 +83,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
     const sectionTitles: Record<string, string> = {
         'hero': 'Portada Principal',
-        'guest_welcome': 'Pase del Invitado',
-        'message': 'Mensaje de Bienvenida',
+        'guest_welcome': 'Mensaje de Bienvenida',
+        'message': 'Dedicatoria y Mensaje',
         'countdown': 'Cuenta Regresiva',
         'location': 'Mapa y Ubicación',
         'dress_code': 'Código de Vestimenta',
@@ -149,6 +149,20 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             />
                         </div>
                     </>
+                )}
+                {sectionId === 'guest_welcome' && (
+                    <div className="space-y-4 bg-stone-50 p-5 rounded-2xl border border-stone-200">
+                        <div className="flex items-center gap-2 text-stone-800 font-bold text-sm">
+                            <span className="text-base">✨</span>
+                            <span>Mensaje y Saludo de Bienvenida</span>
+                        </div>
+                        <p className="text-xs text-stone-600 leading-relaxed">
+                            Esta sección se sitúa de forma fija justo después de la portada principal. Saluda de forma personalizada a cada invitado (ej. <em>"¡Hola, Juan!"</em>) o de manera general (<em>"¡Bienvenidos!"</em>), junto a la frase representativa de tu evento.
+                        </p>
+                        <p className="text-[11px] text-stone-400 italic">
+                            💡 Puedes activarla u ocultarla usando el botón de visibilidad (ojo) en la lista de secciones.
+                        </p>
+                    </div>
                 )}
                 {sectionId === 'message' && (
                     <>
