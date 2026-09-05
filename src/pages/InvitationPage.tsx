@@ -830,7 +830,9 @@ END:VCALENDAR`;
         }
 
         /* Main buttons */
-        .invitation-content button[style*="background"] {
+        .invitation-content button[style*="background"],
+        .invitation-content button.bg-accent,
+        .invitation-content a.bg-accent {
             background: ${_buttonColor} !important;
             color: var(--button-contrast) !important;
             border-radius: 0 !important;
@@ -873,7 +875,9 @@ END:VCALENDAR`;
         }
 
         /* Outline buttons */
-        .invitation-content button:not([style*="background"]) {
+        .invitation-content button.border-accent,
+        .invitation-content a.border-accent,
+        .invitation-content button:not([style*="background"]):not(.bg-accent):not([class*="bg-"]):not([class*="text-"]) {
             border-color: ${_accentColor}60 !important;
             color: ${_accentColor} !important;
         }
@@ -2325,8 +2329,11 @@ END:VCALENDAR`;
                                     )}
                                 </div>
                                 {hotel.link && (
-                                    <a href={hotel.link.startsWith('http') ? hotel.link : `https://${hotel.link}`} target="_blank" rel="noopener noreferrer" className="mt-4">
-                                        <button className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-accent text-[var(--accent-contrast)] hover:opacity-90 transition-opacity">
+                                    <a href={hotel.link.startsWith('http') ? hotel.link : `https://${hotel.link}`} target="_blank" rel="noopener noreferrer" className="mt-4 block">
+                                        <button
+                                            className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-[var(--button-contrast)] hover:opacity-90 transition-opacity shadow-md"
+                                            style={{ background: buttonColor }}
+                                        >
                                             Ver Hotel / Reservar
                                         </button>
                                     </a>
@@ -2613,7 +2620,7 @@ END:VCALENDAR`;
                                             : 'Celebración'}
                                     </p>
                                 </div>
-                                <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 bg-accent text-[var(--accent-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:bg-accent-dark transition-colors"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
+                                <button onClick={() => setEnvelopeOpened(true)} style={{ background: buttonColor }} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 text-[var(--button-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:opacity-90 transition-opacity shadow-lg"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
                     </div>
