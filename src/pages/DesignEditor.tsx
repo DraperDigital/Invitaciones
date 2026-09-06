@@ -3,11 +3,10 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Wand2, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
-import AiDesignModal from '../components/AiDesignModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES } from '../lib/themePresets';
@@ -363,7 +362,6 @@ export default function DesignEditor() {
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
     const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
-    const [showAiModal, setShowAiModal] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const logoInputRef = useRef<HTMLInputElement>(null);
 
@@ -785,51 +783,27 @@ export default function DesignEditor() {
                     </div>
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 md:gap-3">
-                    <button
-                        onClick={() => setShowAiModal(true)}
-                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-5 py-3 md:py-4 bg-gradient-to-r from-[#DF3B94] via-pink-600 to-purple-600 text-white rounded-xl md:rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
-                    >
-                        <Wand2 className="h-4 w-4 md:h-5 md:w-5" />
-                        <span>Diseña con IA</span>
-                    </button>
+                <div className="flex items-center gap-3">
                     {event?.slug && (
                         <a
                             href={`/i/${event.slug}?t=admin`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 md:px-6 py-3 md:py-4 bg-white border-2 border-[#1B2E1D] text-[#1B2E1D] rounded-xl md:rounded-2xl hover:bg-stone-50 transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-widest"
+                            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white border-2 border-[#1B2E1D] text-[#1B2E1D] rounded-xl sm:rounded-2xl hover:bg-stone-50 transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap shadow-sm"
                         >
-                            <Eye className="h-4 w-4 md:h-5 md:w-5" />
-                            <span className="hidden sm:inline">Vista Previa</span>
-                            <span className="sm:hidden">Ver</span>
+                            <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+                            <span>Vista Previa</span>
                         </a>
                     )}
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 bg-[#1B2E1D] text-white rounded-xl md:rounded-2xl shadow-xl hover:bg-[#2D312E] transition-all text-[10px] md:text-[11px] font-bold uppercase tracking-widest disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3.5 bg-[#1B2E1D] text-white rounded-xl sm:rounded-2xl shadow-lg hover:bg-[#2D312E] transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest disabled:opacity-50 whitespace-nowrap"
                     >
-                        {saving ? <Loader2 className="h-4 w-4 md:h-5 md:w-5 animate-spin" /> : <Save className="h-4 w-4 md:h-5 md:w-5" />}
+                        {saving ? <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : <Save className="h-4 w-4 sm:h-5 sm:w-5" />}
                         {saving ? 'Guardando...' : 'Guardar'}
                     </button>
                 </div>
-
-            <AiDesignModal
-                isOpen={showAiModal}
-                onClose={() => setShowAiModal(false)}
-                onApplyAiTheme={(aiTheme) => {
-                    setConfig(prev => ({
-                        ...prev,
-                        primaryColor: aiTheme.primaryColor,
-                        accentColor: aiTheme.accentColor,
-                        cardBgColor: aiTheme.cardBgColor,
-                        typographyPreset: aiTheme.typographyPreset,
-                        welcomeMessage: aiTheme.welcomeMessage,
-                        welcomeSubtitle: aiTheme.welcomeSubtitle,
-                    }));
-                }}
-            />
             </div>
 
             {/* Sticky Tabs Bar - Mobile First */}
