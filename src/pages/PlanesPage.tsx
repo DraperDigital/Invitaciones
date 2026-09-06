@@ -1,7 +1,8 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Heart, Gem, Crown } from 'lucide-react';
+import { ArrowLeft, Heart, Gem, Crown, ArrowDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
+import PlanComparisonTable from '../components/PlanComparisonTable';
 
 export default function PlanesPage() {
     const { user } = useAuth();
@@ -269,6 +270,22 @@ export default function PlanesPage() {
                         </div>
                     ))}
                 </div>
+
+                {/* Quick Link to Detailed Comparison */}
+                <div className="mt-12 text-center">
+                    <a 
+                        href="#comparativa" 
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-100 hover:bg-[#fdf2f8] border border-stone-200 hover:border-[#fbcfe8] text-stone-600 hover:text-[#e0409a] text-xs font-bold uppercase tracking-wider transition-all shadow-sm group"
+                    >
+                        <span>Ver comparativa detallada de funciones</span>
+                        <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
+                    </a>
+                </div>
+            </section>
+
+            {/* Detailed Comparison Table Section */}
+            <section id="comparativa" className="border-t border-stone-200/80 bg-gradient-to-b from-stone-50/50 via-white to-stone-50/30">
+                <PlanComparisonTable eventId={eventId} theme={theme} />
             </section>
 
             {/* Final Statement */}
