@@ -472,7 +472,7 @@ export default function CheckoutPage() {
                                 </button>
                                 
                                 <p className="text-xs text-center text-slate-400 font-normal">
-                                    Al completar tu compra, aceptas nuestros <Link to="/terminos" className="underline hover:text-slate-700">Términos de Servicio</Link> y <Link to="/aviso-de-privacidad" className="underline hover:text-slate-700">Privacidad</Link>.
+                                    Al completar tu compra, aceptas nuestros <Link to="/terminos-y-condiciones" className="underline hover:text-slate-700">Términos de Servicio</Link> y <Link to="/aviso-de-privacidad" className="underline hover:text-slate-700">Privacidad</Link>.
                                 </p>
                             </form>
                         </div>

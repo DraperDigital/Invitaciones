@@ -98,7 +98,8 @@ function AppRoutes() {
         <Route path="/preview/:slug"    element={<InvitationPage />} />
         <Route path="/invitacion/:slug" element={<InvitationPage />} />
         <Route path="/aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
-        <Route path="/terminos"      element={<Terms />} />
+        <Route path="/terminos-y-condiciones" element={<Terms />} />
+        <Route path="/terminos"      element={<Navigate to="/terminos-y-condiciones" replace />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
         <Route path="/one"           element={<OneHomePage />} />
