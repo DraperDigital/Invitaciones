@@ -7,6 +7,8 @@ import ErrorBoundary from './components/ui/ErrorBoundary';
 import Toaster from './components/ui/Toaster';
 import { getPlatformContext } from './utils/context';
 
+import CookieBanner from './components/CookieBanner';
+
 // Lazy-loaded pages — each page gets its own chunk (split at route level)
 const HomePage            = React.lazy(() => import('./pages/HomePage'));
 const LoginPage           = React.lazy(() => import('./pages/LoginPage'));
@@ -26,6 +28,7 @@ const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn')
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
 const AvisoPrivacidadPage  = React.lazy(() => import('./pages/AvisoPrivacidadPage'));
 const Terms               = React.lazy(() => import('./pages/Terms'));
+const CookiesPolicyPage   = React.lazy(() => import('./pages/CookiesPolicyPage'));
 const Concierge           = React.lazy(() => import('./pages/Concierge'));
 const ConciergeLanding    = React.lazy(() => import('./pages/ConciergeLanding'));
 const DesignEditor        = React.lazy(() => import('./pages/DesignEditor'));
@@ -102,6 +105,8 @@ function AppRoutes() {
         <Route path="/aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
         <Route path="/terminos-y-condiciones" element={<Terms />} />
         <Route path="/terminos"      element={<Navigate to="/terminos-y-condiciones" replace />} />
+        <Route path="/cookies"       element={<CookiesPolicyPage />} />
+        <Route path="/politica-de-cookies" element={<Navigate to="/cookies" replace />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
         <Route path="/one"           element={<OneHomePage />} />
@@ -184,6 +189,8 @@ function App() {
             <Suspense fallback={null}>
               <LaunchPromoPopup />
             </Suspense>
+            {/* Cookie Consent Banner */}
+            <CookieBanner />
           </BrowserRouter>
         </AuthProvider>
         {/* Toaster fuera del router para que sobreviva navegaciones */}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Home, Sparkles } from 'lucide-react';
+import { ArrowLeft, Home } from 'lucide-react';
 import Seo from '../components/Seo';
 
 const NotFoundPage: React.FC = () => {
@@ -45,7 +45,8 @@ const NotFoundPage: React.FC = () => {
 
                     {/* Headline */}
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-100 text-[#DF3B94] text-xs font-bold uppercase tracking-wider mb-4">
-                        <Sparkles className="h-3.5 w-3.5" /> Error 404
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#DF3B94]" />
+                        <span>Error 404</span>
                     </div>
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-[#222B38] tracking-tight mb-3">
                         Esta Página No Existe

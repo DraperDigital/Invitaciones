@@ -272,6 +272,7 @@ const AvisoPrivacidadPage: React.FC = () => {
                                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
                                 <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos y condiciones</Link></li>
+                                <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
                             </ul>
                         </div>
 

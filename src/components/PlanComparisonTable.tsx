@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Minus, Gem, Crown, Heart, Sparkles, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { Check, Minus, Gem, Crown, Heart, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 
 interface PlanComparisonTableProps {
@@ -225,7 +225,7 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
     {
         id: 'servicio',
         title: 'Servicios Exclusivos & Soporte',
-        icon: '✨',
+        icon: '👑',
         features: [
             {
                 name: 'Elaboración y diseño de la invitación',
@@ -386,7 +386,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
             {/* Header Section */}
             <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#fdf2f8] border border-[#fbcfe8] text-[#e0409a] text-xs font-bold uppercase tracking-wider">
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Check className="w-3.5 h-3.5" />
                     <span>Comparativa detallada</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-slate-900 tracking-tight">

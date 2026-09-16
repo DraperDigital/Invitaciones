@@ -102,7 +102,9 @@ export default function FaqPage() {
                                 <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
                                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
-                                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                                <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
+                                <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
+                                <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
                             </ul>
                         </div>
                         <div className="lg:col-span-4 space-y-3">

@@ -289,6 +289,7 @@ const Terms: React.FC = () => {
                                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
                                 <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
+                                <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
                             </ul>
                         </div>
 

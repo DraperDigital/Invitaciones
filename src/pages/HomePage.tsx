@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import {
     UserCheck, BarChart3, PartyPopper,
     Check, MessageSquare, Star, ChevronDown, ArrowRight,
-    X, Music, Users, Gem, Menu, Sparkles
+    X, Music, Users, Gem, Menu
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -191,8 +191,8 @@ export default function HomePage() {
                 <div className="mx-auto max-w-7xl">
                     <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
                         <div className="space-y-6 md:space-y-8 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                                <Sparkles className="h-3.5 w-3.5 text-[#DF3B94]" />
+                            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                                <span className="h-2 w-2 rounded-full bg-[#DF3B94] animate-pulse" />
                                 <span>RSVP inteligente en tiempo real · Sin perseguir invitados</span>
                             </div>
 
@@ -222,7 +222,7 @@ export default function HomePage() {
 
                                 {/* Trust, Pricing & Free Trial Anchor */}
                                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-slate-500 pt-1">
-                                    <span className="font-semibold text-slate-700">✨ Diseña gratis</span>
+                                    <span className="font-semibold text-slate-700">Diseña gratis</span>
                                     <span className="text-slate-300">•</span>
                                     <span>Planes desde <strong className="text-[#222B38] font-bold">$499 MXN</strong> (pago único)</span>
                                     <span className="text-slate-300">•</span>
@@ -827,7 +827,7 @@ export default function HomePage() {
                 <div className="mx-auto max-w-7xl">
                     <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                            <Sparkles className="h-3.5 w-3.5" />
+                            <Check className="h-3.5 w-3.5 text-[#DF3B94]" />
                             <span>Precios Claros · Un Solo Pago</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
@@ -1155,7 +1155,7 @@ export default function HomePage() {
                             </button>
                         </Link>
                         <p className="text-xs text-slate-400 font-medium">
-                            ✨ Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida
+                            Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida
                         </p>
                     </div>
                 </div>
@@ -1228,6 +1228,7 @@ export default function HomePage() {
                                 <ul className="space-y-2 text-xs text-slate-400">
                                     <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
                                     <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
+                                    <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
                                 </ul>
                             </div>
                             <div className="space-y-3">
