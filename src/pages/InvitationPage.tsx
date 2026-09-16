@@ -372,9 +372,11 @@ export default function InvitationPage() {
         setLoading(true);
 
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug || '');
+        const decodedSlug = decodeURIComponent(slug || '');
+        const encodedSlug = encodeURIComponent(decodedSlug);
 
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            const mockEvent = MOCK_EVENTS.find(e => e.slug === slug || e.id === slug);
+            const mockEvent = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
             setEvent(mockEvent || null);
             if (guestToken && mockEvent) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
@@ -387,11 +389,15 @@ export default function InvitationPage() {
         }
 
         const query = supabase.from('events').select('*');
-        const { data: eventData, error: eventError } = await (isUuid ? query.eq('id', slug) : query.eq('slug', slug)).maybeSingle();
+        const { data: eventData, error: eventError } = await (
+            isUuid
+                ? query.eq('id', slug)
+                : query.or(`slug.eq."${slug}",slug.eq."${decodedSlug}",slug.eq."${encodedSlug}"`)
+        ).maybeSingle();
 
         if (eventError || !eventData) {
             // FALLBACK TO MOCK_EVENTS FOR EXAMPLES SHOWCASE
-            const mockEventFallback = MOCK_EVENTS.find(e => e.slug === slug || e.id === slug);
+            const mockEventFallback = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
             if (mockEventFallback) {
                 setEvent(mockEventFallback);
                 if (guestToken) {

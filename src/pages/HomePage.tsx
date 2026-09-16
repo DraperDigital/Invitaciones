@@ -215,7 +215,7 @@ export default function HomePage() {
                                             {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
                                         </button>
                                     </Link>
-                                    <Link to="/i/cecilia-70" className="w-full xs:w-auto px-6 py-4 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
+                                    <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-6 py-4 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
                                         VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
                                     </Link>
                                 </div>
@@ -400,7 +400,7 @@ export default function HomePage() {
                             ))}
                         </ul>
                         <div className="pt-4 flex justify-center lg:justify-start">
-                            <Link to="/i/cecilia-70" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#222B38] hover:text-[#DF3B94] transition-colors group">
+                            <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#222B38] hover:text-[#DF3B94] transition-colors group">
                                 PROBAR DEMO INTERACTIVA <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#DF3B94]" />
                             </Link>
                         </div>

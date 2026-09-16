@@ -55,7 +55,7 @@ export const MOCK_EVENTS: Event[] = [
             ],
             showCountdown: true
         },
-        slug: 'cecilia-70',
+        slug: 'cumpleaños-cecilia-h2657',
         created_at: new Date().toISOString(),
     },
     {

@@ -23,7 +23,7 @@ const Concierge: React.FC = () => {
                 if (isUuid) {
                     query = query.eq('id', eventId);
                 } else {
-                    query = query.eq('slug', eventId === 'evt-cecilia-70' ? 'cecilia-70' : eventId);
+                    query = query.eq('slug', eventId === 'evt-cecilia-70' ? 'cumpleaños-cecilia-h2657' : eventId);
                 }
 
                 const { data: eData, error: eventError } = await query.maybeSingle();
@@ -71,7 +71,7 @@ const Concierge: React.FC = () => {
             />
             <div className="max-w-xl w-full">
                 <Link 
-                    to={eventData?.slug === 'cecilia-70' ? '/cecilia-70' : (eventData?.slug ? `/i/${eventData.slug}` : '/')} 
+                    to={eventData?.slug === 'cecilia-70' || eventData?.slug === 'cumpleaños-cecilia-h2657' ? '/i/cumplea%C3%B1os-cecilia-h2657' : (eventData?.slug ? `/i/${eventData.slug}` : '/')} 
                     className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-stone-400 hover:text-[#1B2E1D] transition-colors mb-12"
                 >
                     <ArrowLeft className="h-4 w-4" /> VOLVER A LA INVITACIÓN
