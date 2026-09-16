@@ -2153,15 +2153,15 @@ export default function DesignEditor() {
                                         }`}
                                     >
                                         <span className="text-xl md:text-3xl">{tier.icon}</span>
-                                        <span className="font-black text-[9px] md:text-xs uppercase tracking-widest">{tier.label}</span>
+                                        <span className="font-black text-[11px] md:text-sm uppercase tracking-widest">{tier.label}</span>
                                         {isActive && (
-                                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white text-[#1B2E1D] px-2 py-0.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1">
-                                                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-                                                <span className="text-[7px] font-black uppercase tracking-widest">Activo</span>
+                                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-white text-[#1B2E1D] px-2.5 py-0.5 rounded-full border border-stone-200 shadow-sm flex items-center gap-1.5">
+                                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">Activo</span>
                                             </div>
                                         )}
                                         {isLocked && !isActive && (
-                                            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[7px] font-bold uppercase tracking-widest bg-stone-100 text-stone-400 px-2 py-0.5 rounded-full border border-stone-200 whitespace-nowrap">
+                                            <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[8px] md:text-[9px] font-bold uppercase tracking-widest bg-stone-100 text-stone-400 px-2 py-0.5 rounded-full border border-stone-200 whitespace-nowrap">
                                                 Upgrade
                                             </span>
                                         )}
@@ -2173,20 +2173,20 @@ export default function DesignEditor() {
                         {/* Feature Matrix - Responsive Scrollable Container */}
                         <div className="space-y-4">
                             <div className="flex items-center justify-between px-1">
-                                <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-stone-400">Comparativa de Funciones</h3>
-                                <div className="flex md:hidden items-center gap-1.5 text-stone-300">
-                                    <span className="text-[8px] uppercase font-bold">Desliza</span>
-                                    <ArrowRight className="h-3 w-3 animate-bounce-x" />
+                                <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-stone-500">Comparativa de Funciones</h3>
+                                <div className="flex md:hidden items-center gap-1.5 text-stone-400">
+                                    <span className="text-[9px] uppercase font-bold">Desliza</span>
+                                    <ArrowRight className="h-3.5 w-3.5 animate-bounce-x" />
                                 </div>
                             </div>
                             <div className="rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 overflow-hidden bg-white shadow-sm overflow-x-auto no-scrollbar">
-                                <div className="min-w-[600px]">
-                                    <div className="grid grid-cols-5 text-[7px] md:text-[9px] font-black uppercase tracking-widest bg-stone-50/50">
-                                        <div className="p-2 md:p-4 text-stone-400 border-r border-stone-100/50">Funciones</div>
-                                        <div className="p-2 md:p-4 text-stone-700 text-center border-r border-stone-100/50">💌</div>
-                                        <div className="p-2 md:p-4 text-blue-700 text-center border-r border-stone-100/50">✦</div>
-                                        <div className="p-2 md:p-4 text-amber-700 text-center border-r border-stone-100/50">♛</div>
-                                        <div className="p-2 md:p-4 bg-[#1B2E1D] text-white text-center">💎</div>
+                                <div className="min-w-[640px]">
+                                    <div className="grid grid-cols-5 text-[9px] md:text-[11px] font-black uppercase tracking-widest bg-stone-50/70 items-center">
+                                        <div className="p-3 md:p-4 text-stone-500 border-r border-stone-100/50">Funciones</div>
+                                        <div className="p-3 md:p-4 text-stone-700 text-center border-r border-stone-100/50 text-base md:text-lg">💌</div>
+                                        <div className="p-3 md:p-4 text-blue-700 text-center border-r border-stone-100/50 text-base md:text-lg">✦</div>
+                                        <div className="p-3 md:p-4 text-amber-700 text-center border-r border-stone-100/50 text-base md:text-lg">♛</div>
+                                        <div className="p-3 md:p-4 bg-[#1B2E1D] text-white text-center text-base md:text-lg">💎</div>
                                     </div>
                                     {([
                                         { label: 'Información del evento', clasico: true, pro: true, premium: true, concierge: true },
@@ -2205,16 +2205,16 @@ export default function DesignEditor() {
                                         const activePlan = config.plan;
                                         const rowEnabled = (row as any)[activePlan as string];
                                         return (
-                                            <div key={i} className={`grid grid-cols-5 text-[10px] md:text-[11px] border-t border-stone-100/50 transition-colors ${
+                                            <div key={i} className={`grid grid-cols-5 text-xs md:text-sm border-t border-stone-100/50 transition-colors items-center ${
                                                 rowEnabled ? 'bg-white' : 'bg-stone-50/30'
                                             }`}>
-                                                <div className={`p-3 md:p-4 border-r border-stone-100/50 font-medium ${
-                                                    rowEnabled ? 'text-stone-700' : 'text-stone-400'
+                                                <div className={`p-3 md:p-4 border-r border-stone-100/50 font-semibold ${
+                                                    rowEnabled ? 'text-stone-800' : 'text-stone-400'
                                                 }`}>{row.label}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.clasico ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.pro ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center border-r border-stone-100/50">{row.premium ? '✓' : '—'}</div>
-                                                <div className="p-3 md:p-4 text-center bg-stone-900/5">{row.concierge ? '✓' : '—'}</div>
+                                                <div className={`p-3 md:p-4 text-center border-r border-stone-100/50 font-bold text-sm md:text-base ${row.clasico ? 'text-emerald-600' : 'text-stone-300'}`}>{row.clasico ? '✓' : '—'}</div>
+                                                <div className={`p-3 md:p-4 text-center border-r border-stone-100/50 font-bold text-sm md:text-base ${row.pro ? 'text-emerald-600' : 'text-stone-300'}`}>{row.pro ? '✓' : '—'}</div>
+                                                <div className={`p-3 md:p-4 text-center border-r border-stone-100/50 font-bold text-sm md:text-base ${row.premium ? 'text-emerald-600' : 'text-stone-300'}`}>{row.premium ? '✓' : '—'}</div>
+                                                <div className={`p-3 md:p-4 text-center bg-stone-900/5 font-bold text-sm md:text-base ${row.concierge ? 'text-emerald-600' : 'text-stone-300'}`}>{row.concierge ? '✓' : '—'}</div>
                                             </div>
                                         );
                                     })}
