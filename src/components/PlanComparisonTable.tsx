@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Minus, Gem, Crown, Heart, Sparkles, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 
 interface PlanComparisonTableProps {
     eventId?: string | null;
@@ -481,20 +482,20 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                                                     {plan.tagline}
                                                 </p>
 
-                                                <div className="py-1">
-                                                    <div className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
+                                                <div className="py-1.5">
+                                                    <div className="text-3xl sm:text-4xl font-serif font-extrabold tracking-tight">
                                                         {plan.price}
                                                         <span
-                                                            className={`text-[10px] ml-1 uppercase font-normal ${
-                                                                isPro ? 'text-stone-400' : 'text-stone-400'
+                                                            className={`text-[11px] ml-1.5 uppercase font-sans font-bold tracking-wider ${
+                                                                isPro ? 'text-[#FAC345]' : 'text-slate-500'
                                                             }`}
                                                         >
                                                             {plan.currency}
                                                         </span>
                                                     </div>
                                                     <span
-                                                        className={`text-[9px] uppercase tracking-wider block ${
-                                                            isPro ? 'text-stone-400' : 'text-stone-400'
+                                                        className={`text-[10px] uppercase font-bold tracking-widest block mt-0.5 ${
+                                                            isPro ? 'text-slate-400' : 'text-slate-400'
                                                         }`}
                                                     >
                                                         Un solo pago
@@ -645,7 +646,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                 <span>
                     ¿Tienes dudas sobre qué plan se ajusta mejor a tu cantidad de invitados?{' '}
                     <a
-                        href="https://wa.me/5215585338302?text=Hola!%20Tengo%20dudas%20sobre%20los%20planes%20de%20Invitto"
+                        href={`${WHATSAPP_SUPPORT_URL}?text=Hola!%20Tengo%20dudas%20sobre%20los%20planes%20de%20Invitto`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-bold text-[#e0409a] hover:underline"

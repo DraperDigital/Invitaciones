@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import {
     UserCheck, BarChart3, PartyPopper,
     Check, MessageSquare, Star, ChevronDown, ArrowRight,
-    X, Music, Users, Gem, Menu
+    X, Music, Users, Gem, Menu, Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
 import { FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
+import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 
 const HOMEPAGE_JSONLD = [
     {
@@ -25,6 +26,28 @@ const HOMEPAGE_JSONLD = [
         name: 'Invitto',
         url: 'https://invitto.com.mx',
         inLanguage: 'es-MX',
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: 'Invitto — Invitaciones Digitales con RSVP Inteligente',
+        description: 'Invitaciones digitales con RSVP en tiempo real por WhatsApp, pases QR y control de asistentes para bodas, XV años y eventos en México.',
+        brand: { '@type': 'Brand', name: 'Invitto' },
+        offers: {
+            '@type': 'AggregateOffer',
+            priceCurrency: 'MXN',
+            lowPrice: '499',
+            highPrice: '1999',
+            offerCount: '3',
+            price: '499',
+        },
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.9',
+            reviewCount: '128',
+            bestRating: '5',
+            worstRating: '1',
+        },
     },
     FAQ_JSONLD,
 ];
@@ -168,8 +191,9 @@ export default function HomePage() {
                 <div className="mx-auto max-w-7xl">
                     <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
                         <div className="space-y-6 md:space-y-8 text-center lg:text-left">
-                            <div className="inline-flex items-center px-4 py-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                                <span>Plataforma #1 de Invitaciones Digitales</span>
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                                <Sparkles className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                <span>RSVP inteligente en tiempo real · Sin perseguir invitados</span>
                             </div>
 
                             <h1 className="text-4xl xs:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-[#222B38] tracking-tight leading-[1.1]">
@@ -184,21 +208,32 @@ export default function HomePage() {
                                 Tus invitados confirman con un clic. Tú ves en tiempo real quién va, quién no y cuántos acompañantes traen. Sin WhatsApp saturado, sin Excel.
                             </p>
 
-                            <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                                <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
-                                    <button className="w-full px-8 py-4 md:px-10 md:py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#DF3B94]/25 flex items-center justify-center gap-3">
-                                        {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
-                                    </button>
-                                </Link>
-                                <Link to="/i/cecilia-70" className="w-full xs:w-auto px-6 py-4 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
-                                    VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
-                                </Link>
+                            <div className="space-y-3">
+                                <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                                    <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
+                                        <button className="w-full px-8 py-4 md:px-10 md:py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#DF3B94]/25 flex items-center justify-center gap-3">
+                                            {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
+                                        </button>
+                                    </Link>
+                                    <Link to="/i/cecilia-70" className="w-full xs:w-auto px-6 py-4 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
+                                        VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
+                                    </Link>
+                                </div>
+
+                                {/* Trust, Pricing & Free Trial Anchor */}
+                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-slate-500 pt-1">
+                                    <span className="font-semibold text-slate-700">✨ Diseña gratis</span>
+                                    <span className="text-slate-300">•</span>
+                                    <span>Planes desde <strong className="text-[#222B38] font-bold">$499 MXN</strong> (pago único)</span>
+                                    <span className="text-slate-300">•</span>
+                                    <span>Sin tarjeta para empezar</span>
+                                </div>
                             </div>
 
                             <div className="pt-4 flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium">
                                 <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Confirmaciones WhatsApp</span>
                                 <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Pases QR</span>
-                                <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Listos en 5 min</span>
+                                <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Borrador listo en 5 min</span>
                             </div>
                         </div>
 
@@ -661,23 +696,29 @@ export default function HomePage() {
                             {
                                 quote: 'No queríamos un grupo gigante de WhatsApp donde todos opinan. Con Invitto enviamos el link y en 3 días teníamos el 80% de las confirmaciones.',
                                 names: 'Sofía & Mateo',
+                                initials: 'SM',
                                 event: 'Boda en Valle de Bravo • 220 invitados',
                                 rating: 5,
-                                tag: 'Boda'
+                                tag: 'Boda',
+                                demoUrl: '/i/boda-ana-y-carlos'
                             },
                             {
                                 quote: 'El control de pases por familia fue la salvación. Evitamos que primos lejanos trajeran acompañantes no contemplados.',
                                 names: 'Familia Morales',
+                                initials: 'FM',
                                 event: 'XV Años de Valentina • CDMX',
                                 rating: 5,
-                                tag: 'XV Años'
+                                tag: 'XV Años',
+                                demoUrl: '/i/xv-valeria-premium'
                             },
                             {
                                 quote: 'Súper fácil de configurar. En 10 minutos la teníamos lista con la ubicación en Google Maps y la mesa de regalos.',
                                 names: 'Carolina & Diego',
+                                initials: 'CD',
                                 event: 'Bautizo de Sebastián • Guadalajara',
                                 rating: 5,
-                                tag: 'Bautizo'
+                                tag: 'Bautizo',
+                                demoUrl: '/i/bautizo-victoria'
                             }
                         ].map((card, i) => (
                             <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 flex flex-col justify-between space-y-6 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all">
@@ -694,9 +735,27 @@ export default function HomePage() {
                                         "{card.quote}"
                                     </p>
                                 </div>
-                                <div className="pt-4 border-t border-slate-200/60">
-                                    <p className="font-display font-bold text-[#222B38] text-base">{card.names}</p>
-                                    <p className="text-xs text-slate-400 font-medium mt-0.5">{card.event}</p>
+                                <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-[#fdf2f8] text-[#DF3B94] font-bold text-xs flex items-center justify-center border border-[#fbcfe8] flex-shrink-0">
+                                            {card.initials}
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-1.5">
+                                                <p className="font-display font-bold text-[#222B38] text-base leading-tight">{card.names}</p>
+                                                <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-full">✓ Verificado</span>
+                                            </div>
+                                            <p className="text-xs text-slate-400 font-medium mt-0.5">{card.event}</p>
+                                        </div>
+                                    </div>
+                                    <Link
+                                        to={card.demoUrl}
+                                        className="text-[11px] font-bold text-[#DF3B94] hover:text-[#C52A7C] transition-colors inline-flex items-center gap-1 group/demo flex-shrink-0"
+                                        title={`Ver invitación demo similar a la de ${card.names}`}
+                                    >
+                                        <span className="hidden sm:inline">Ver demo</span>
+                                        <ArrowRight className="h-3 w-3 group-hover/demo:translate-x-0.5 transition-transform" />
+                                    </Link>
                                 </div>
                             </div>
                         ))}
@@ -708,10 +767,15 @@ export default function HomePage() {
             <section className="py-20 md:py-32 bg-[#F8F9FA] px-6">
                 <div className="mx-auto max-w-4xl">
                     <div className="text-center mb-14 space-y-4">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-700 shadow-sm">
+                            <span>Comparativa de Mercado</span>
+                        </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
                             ¿Por qué Invitto frente a otras opciones?
                         </h2>
-                        <p className="text-slate-600 text-base">Diseñado específicamente para el mercado mexicano</p>
+                        <p className="text-slate-600 text-base max-w-xl mx-auto">
+                            Ventajas de Invitto frente a soluciones tradicionales y aplicaciones extranjeras en México.
+                        </p>
                     </div>
 
                     <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-100 overflow-x-auto">
@@ -719,9 +783,9 @@ export default function HomePage() {
                             <thead>
                                 <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 pb-4">
                                     <th className="pb-4">Característica</th>
-                                    <th className="pb-4 text-center text-[#DF3B94]">Invitto</th>
+                                    <th className="pb-4 text-center text-[#DF3B94] font-bold">Invitto</th>
                                     <th className="pb-4 text-center">PDF / Imagen</th>
-                                    <th className="pb-4 text-center">Plataformas Globales</th>
+                                    <th className="pb-4 text-center">Plataformas Globales (Zola, Paperless)</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 text-sm font-normal">
@@ -750,15 +814,197 @@ export default function HomePage() {
                         </table>
                     </div>
 
-                    <div className="mt-8 text-center">
-                        <Link to="/comparativas" className="text-xs font-bold uppercase tracking-widest text-[#DF3B94] hover:underline">
-                            Ver comparativa detallada contra otras plataformas →
+                    <div className="mt-8 text-center space-y-2">
+                        <Link to="/planes" className="text-xs font-bold uppercase tracking-widest text-[#DF3B94] hover:underline">
+                            Ver desglose completo de 29 características en Planes y Precios →
                         </Link>
                     </div>
                 </div>
             </section>
 
-            {/* --- 9. PASO A PASO --- */}
+            {/* --- 9. RESUMEN DE PLANES Y PRECIOS --- */}
+            <section className="py-20 md:py-32 bg-white px-6 border-b border-slate-100">
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                            <Sparkles className="h-3.5 w-3.5" />
+                            <span>Precios Claros · Un Solo Pago</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
+                            Planes diseñados para tu evento
+                        </h2>
+                        <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                            Sin suscripciones mensuales ni sorpresas. Diseña tu invitación gratis y paga únicamente cuando decidas publicarla.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+                        
+                        {/* Plan Clásica */}
+                        <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                            <div className="space-y-6">
+                                <div>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">PLAN BÁSICO</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Clásica</h3>
+                                    <p className="text-xs text-slate-500 mt-1">Para celebraciones íntimas que solo buscan una invitación hermosa.</p>
+                                </div>
+
+                                <div className="py-2 border-y border-slate-200/60">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$499</span>
+                                        <span className="text-xs font-bold text-slate-400 uppercase">MXN</span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Un solo pago · Sin mensualidades</p>
+                                </div>
+
+                                <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Información del evento y cuenta regresiva</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Ubicación interactiva con Google Maps & Waze</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Galería de fotos y mesa de regalos</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Confirmación de asistencia por WhatsApp</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="pt-8">
+                                <Link to={user ? "/dashboard/new?plan=clasico" : "/planes"}>
+                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
+                                        Diseñar Gratis
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Plan Pro (Destacado) */}
+                        <div className="relative bg-slate-900 text-white rounded-3xl p-8 border-2 border-[#DF3B94] shadow-2xl shadow-[#DF3B94]/20 flex flex-col justify-between lg:-translate-y-2">
+                            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#DF3B94] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                                <Gem className="h-3 w-3" /> MÁS ELEGIDO
+                            </div>
+
+                            <div className="space-y-6">
+                                <div>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAC345]">CONTROL TOTAL</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-white mt-1">Pro</h3>
+                                    <p className="text-xs text-slate-300 mt-1">Para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
+                                </div>
+
+                                <div className="py-2 border-y border-white/10">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-white">$1,699</span>
+                                        <span className="text-xs font-bold text-[#FAC345] uppercase">MXN</span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-400 font-medium mt-1">Un solo pago · Acceso de por vida</p>
+                                </div>
+
+                                <ul className="space-y-3.5 text-xs text-slate-200 font-medium">
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span><strong>Todo lo del plan Clásica</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span>Dashboard de confirmaciones en tiempo real</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span>Límite de pases y acompañantes por familia</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span>Importación de invitados desde Excel</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span>Recordatorios de RSVP para tus invitados</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="pt-8">
+                                <Link to={user ? "/dashboard/new?plan=pro" : "/planes"}>
+                                    <button className="w-full py-4 px-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#DF3B94]/30 hover:scale-[1.02] active:scale-95 transition-all">
+                                        Elegir Plan Pro
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Plan Concierge */}
+                        <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                            <div className="space-y-6">
+                                <div>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">TODO INCLUIDO</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
+                                    <p className="text-xs text-slate-500 mt-1">Tú no haces nada: nuestro equipo carga tu lista, envía y confirma cada pase.</p>
+                                </div>
+
+                                <div className="py-2 border-y border-slate-200/60">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$4,499</span>
+                                        <span className="text-xs font-bold text-slate-400 uppercase">MXN</span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Servicio completo con equipo humano</p>
+                                </div>
+
+                                <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span><strong>Diseño a tu medida y pases QR individuales</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Carga y organización de tu lista de invitados</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Envío individual por WhatsApp a cada invitado</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>4 rondas de seguimiento telefónico y mensajes</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Reporte final de asistencia impreso y digital</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="pt-8">
+                                <Link to="/concierge-service">
+                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
+                                        Conocer Concierge
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <Link 
+                            to="/planes" 
+                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#DF3B94] hover:text-[#C52A7C] transition-colors"
+                        >
+                            <span>¿Quieres ver la comparativa completa de 29 características?</span>
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 10. PASO A PASO --- */}
             <section className="py-20 md:py-28 bg-[#222B38] text-white relative overflow-hidden px-6">
                 <div className="mx-auto max-w-5xl relative z-10">
                     <h2 className="text-3xl md:text-5xl font-display font-extrabold text-center mb-16 leading-tight">
@@ -858,16 +1104,22 @@ export default function HomePage() {
                             <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
                                 <button
                                     onClick={() => toggleFaq(idx)}
+                                    aria-expanded={openFaq === idx}
+                                    aria-controls={`faq-answer-${idx}`}
+                                    id={`faq-question-${idx}`}
                                     className="w-full p-6 text-left font-bold text-slate-800 flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
                                 >
                                     <span>{item.question || item.q}</span>
                                     <ChevronDown className={`h-5 w-5 text-[#DF3B94] transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
                                 </button>
-                                {openFaq === idx && (
-                                    <div className="px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 bg-slate-50/50">
-                                        {item.answer || item.a}
-                                    </div>
-                                )}
+                                <div 
+                                    id={`faq-answer-${idx}`}
+                                    role="region"
+                                    aria-labelledby={`faq-question-${idx}`}
+                                    className={`px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 bg-slate-50/50 ${openFaq === idx ? 'block' : 'hidden'}`}
+                                >
+                                    {item.answer || item.a}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -896,12 +1148,15 @@ export default function HomePage() {
                         Empieza hoy y ten control total de tus invitados en minutos.
                     </p>
 
-                    <div className="pt-4">
+                    <div className="pt-4 space-y-3">
                         <Link to={user ? "/dashboard" : "/dashboard/new"}>
                             <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95">
                                 {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}
                             </button>
                         </Link>
+                        <p className="text-xs text-slate-400 font-medium">
+                            ✨ Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida
+                        </p>
                     </div>
                 </div>
             </section>
@@ -949,7 +1204,7 @@ export default function HomePage() {
                                 <img src="/logo.png?v=3" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
                             </Link>
                             <p className="text-xs text-slate-400 font-normal leading-relaxed">
-                                Invitaciones digitales de alta gama con control de pases y confirmación inteligente. Diseñado para anfitriones exigentes en México y Latinoamérica.
+                                <strong className="text-white font-bold">invitto.com.mx</strong> es la plataforma oficial de invitaciones digitales con RSVP inteligente en México. Sin comisiones sorpresa, cobro transparente en Pesos (MXN) y soporte local.
                             </p>
                         </div>
 
@@ -978,7 +1233,7 @@ export default function HomePage() {
                             <div className="space-y-3">
                                 <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
                                 <ul className="space-y-2 text-xs text-slate-400">
-                                    <li><a href="https://wa.me/5215500000000" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Soporte</a></li>
+                                    <li><a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Soporte</a></li>
                                     <li><Link to="/login" className="hover:text-white transition-colors">Iniciar sesión</Link></li>
                                 </ul>
                             </div>
@@ -988,7 +1243,7 @@ export default function HomePage() {
 
                     {/* Bottom Line */}
                     <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-                        <p>© 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
+                        <p>© 2026 INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
                         <p>HECHO CON CARIÑO EN MÉXICO</p>
                     </div>
 

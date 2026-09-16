@@ -242,16 +242,37 @@ export default function EventWizard() {
     const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
         e.preventDefault();
         if (!user) return;
+
+        // Validar que la fecha sea válida y futura (BUG-08)
+        const testDate = new Date(data.date_time);
+        if (isNaN(testDate.getTime())) {
+            toast.error('La fecha del evento no es válida.');
+            return;
+        }
+        if (testDate < new Date()) {
+            toast.error('La fecha del evento debe ser futura.');
+            return;
+        }
+
         setLoading(true);
 
         try {
-            // Validar fechas de forma segura
-            let dateTimeStr = '';
-            try {
-                dateTimeStr = new Date(data.date_time).toISOString();
-            } catch (e) {
-                dateTimeStr = new Date().toISOString();
+            // Validar límite de borradores para cuentas no publicadas (DATA-01)
+            if (!isEditing) {
+                const { count, error: countError } = await supabase
+                    .from('events')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('user_id', user.id)
+                    .eq('is_published', false);
+
+                if (!countError && (count || 0) >= 3) {
+                    toast.error('Tienes 3 borradores sin publicar. Publica o elimina uno antes de crear otro.');
+                    setLoading(false);
+                    return;
+                }
             }
+
+            const dateTimeStr = testDate.toISOString();
 
             const payload = {
                 title: data.title,
@@ -284,6 +305,19 @@ export default function EventWizard() {
             } else {
                 const eventPreset = EVENT_TYPE_PRESETS[data.event_type] || EVENT_TYPE_PRESETS.other;
                 const layoutOrder = getLayoutForEventType(data.event_type);
+
+                // Normalización robusta de slug (BUG-03)
+                const normalizedTitle = data.title
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')   // quita acentos
+                    .replace(/[^a-z0-9\s-]/g, '')     // quita &, ñ, símbolos
+                    .trim()
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+
+                const generatedSlug = `${normalizedTitle || 'evento'}-${crypto.randomUUID().slice(0, 5)}`;
+
                 const insertPayload = {
                     id: crypto.randomUUID(),
                     ...payload,
@@ -308,7 +342,7 @@ export default function EventWizard() {
                         // Preset de orden de secciones según tipo de evento
                         sectionOrder: layoutOrder,
                     },
-                    slug: `${data.title.toLowerCase().replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 7)}`,
+                    slug: generatedSlug,
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;

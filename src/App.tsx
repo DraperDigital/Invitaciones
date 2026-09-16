@@ -141,6 +141,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }>
           <Route index                        element={<DashboardHome />} />
+          <Route path="invitations"           element={<Navigate to="/dashboard/events" replace />} />
           <Route path="events"                element={<Dashboard />} />
           <Route path="events/:id"            element={<EventRSVPs />} />
           <Route path="event/:id"             element={<EventRSVPs />} />
