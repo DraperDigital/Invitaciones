@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MOCK_EVENTS } from '../lib/mockData';
 import { getPlatformContext } from '../utils/context';
+import { getEventPlanBadge } from '../utils/planBadges';
 
 export default function Dashboard() {
     const { user } = useAuth();
@@ -137,28 +138,36 @@ export default function Dashboard() {
                 </div>
             ) : (
                 <div id="events-grid" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {events.map((event) => (
-                        <div key={event.id} className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 justify-between">
-                            <div className="h-44 w-full bg-slate-100 relative overflow-hidden">
-                                {(event.theme_config as any)?.hero_image_url ? (
-                                    <img 
-                                        src={(event.theme_config as any).hero_image_url} 
-                                        alt={event.title} 
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                                        <Calendar className="h-12 w-12 text-slate-300" />
+                    {events.map((event) => {
+                        const plan = getEventPlanBadge(event.theme_config);
+                        return (
+                            <div key={event.id} className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 justify-between">
+                                <div className="h-44 w-full bg-slate-100 relative overflow-hidden">
+                                    {(event.theme_config as any)?.hero_image_url ? (
+                                        <img 
+                                            src={(event.theme_config as any).hero_image_url} 
+                                            alt={event.title} 
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                            <Calendar className="h-12 w-12 text-slate-300" />
+                                        </div>
+                                    )}
+                                    <div className="absolute top-4 left-4">
+                                        <span className={`px-2.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider backdrop-blur-md shadow-sm flex items-center gap-1.5 ${plan.classes}`}>
+                                            <span>{plan.icon}</span>
+                                            <span>{plan.label}</span>
+                                        </span>
                                     </div>
-                                )}
-                                <div className="absolute top-4 right-4 flex items-center gap-2">
-                                    <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-mono font-bold tracking-wider uppercase backdrop-blur-md border ${
-                                        event.is_published ? 'bg-emerald-50/90 text-emerald-700 border-emerald-200' : 'bg-slate-100/90 text-slate-600 border-slate-200'
-                                    }`}>
-                                        {event.is_published ? 'Publicado' : 'Borrador'}
-                                    </span>
+                                    <div className="absolute top-4 right-4 flex items-center gap-2">
+                                        <span className={`inline-flex rounded-full px-3 py-1 text-[10px] font-mono font-bold tracking-wider uppercase backdrop-blur-md border ${
+                                            event.is_published ? 'bg-emerald-50/90 text-emerald-700 border-emerald-200' : 'bg-slate-100/90 text-slate-600 border-slate-200'
+                                        }`}>
+                                            {event.is_published ? 'Publicado' : 'Borrador'}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
 
                             <div className="flex-1 p-6 space-y-4">
                                 <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${
@@ -212,7 +221,8 @@ export default function Dashboard() {
                                 </button>
                             </div>
                         </div>
-                    ))}
+                    );
+                })}
                 </div>
             )}
 
