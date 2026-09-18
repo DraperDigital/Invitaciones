@@ -1984,6 +1984,75 @@ export const MOCK_EVENTS: Event[] = [
             accent_color: '#FACC15',
             button_color: '#22C55E'
         }
+    },
+    {
+        id: 'mock-rainbow-pop-lucas',
+        slug: 'cumple-lucas-rainbow-pop',
+        user_id: 'mock-user-1',
+        title: "¡El 1er Añito de Lucas!",
+        event_type: 'birthday',
+        date_time: '2026-09-14T15:00:00Z',
+        venue_name: 'Jardín de Eventos "La Casita Feliz"',
+        venue_address: 'Av. Primavera #412, Col. Del Valle, San Pedro Garza García, N.L.',
+        maps_link: 'https://maps.google.com/?q=Salon+La+Casita+Feliz+Monterrey',
+        dress_code: 'Casual / Colores pastel o alegres',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: '2026-09-07T00:00:00Z',
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'rainbow-pop',
+            child_name: 'Lucas',
+            turning_age: 1,
+            age: 1,
+            isPremium: true,
+            hero_image_url: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
+            message: '¡Te espero para celebrar juntos mi primer añito de vida! Habrá juegos, alberca de pelotas, pastel delicioso, muchas risas y grandes sorpresas.',
+            parents: {
+                father: 'Carlos García',
+                mother: 'Mariana Mendoza'
+            },
+            godparents: {
+                godfather: 'Alejandro Morales',
+                godmother: 'Sofía Valdés'
+            },
+            reception: {
+                name: 'Jardín de Eventos "La Casita Feliz"',
+                location: 'Av. Primavera #412, Col. Del Valle, San Pedro Garza García, N.L.',
+                time: '15:00'
+            },
+            schedule: [
+                { time: '15:00', event: 'Bienvenida & Área de Estimulación Temprana 🎈', location: 'Jardín Principal' },
+                { time: '16:30', event: 'Show de Títeres & Burbujas Mágicas 🫧', location: 'Terraza Techada' },
+                { time: '17:30', event: '¡La Piñata de Colores! 🪅', location: 'Patio de Juegos' },
+                { time: '18:15', event: 'Pastel, Velita & Mañanitas 🎂', location: 'Mesa de Dulces' },
+                { time: '19:00', event: 'Mesa de Postres & Recuerditos 🎁', location: 'Salón de Festejo' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'El mejor regalo es que vengas a compartir este día conmigo. Si deseas hacerme un detalle, puedes consultar mis mesas o sugerencias:',
+                liverpool_code: 'LUCAS-1ER-ANITO',
+                amazon_url: 'https://amazon.com.mx',
+                clabe: '072180001234567890',
+                bank: 'Banorte',
+                beneficiary: 'Mariana Mendoza (Mamá de Lucas)'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'divertida',
+            primary_color: '#EC4899',
+            accent_color: '#06B6D4',
+            button_color: '#EC4899'
+        }
     }
 ];
 

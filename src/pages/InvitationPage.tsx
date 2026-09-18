@@ -30,6 +30,7 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
+import RainbowPopHero from '../components/themes/RainbowPopHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
 
 function getContrastColor(hexColor: string) {
@@ -201,6 +202,13 @@ export default function InvitationPage() {
             borderColor: '#85532A', cardBorder: '#22C55E66',
             accentOverride: '#22C55E', fontPreset: 'divertida',
             heroRadius: '0px', cardRadius: '0px',
+        },
+        'rainbow-pop': {
+            sectionBg: '#FAFAF9', sectionBgAlt: '#F0FDF4', cardBg: '#FFFFFF',
+            textPrimary: '#1E293B', textSecondary: '#64748B',
+            borderColor: '#BAE6FD', cardBorder: '#38BDF866',
+            accentOverride: '#EC4899', fontPreset: 'divertida',
+            heroRadius: '28px', cardRadius: '28px',
         },
     };
 
@@ -814,6 +822,7 @@ END:VCALENDAR`;
     const isKidsFarmTheme      = themeName === 'kids-farm';
     const isGamerPartyTheme    = themeName === 'gamer-party';
     const isPixelCraftTheme    = themeName === 'pixel-craft';
+    const isRainbowPopTheme    = themeName === 'rainbow-pop';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -1367,6 +1376,98 @@ END:VCALENDAR`;
                 max-width: 960px !important;
             }
         }
+    ` : isRainbowPopTheme ? `
+        /* ── Rainbow Pop (Infantil / Pastel Pop) overrides ── */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3 {
+            font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
+            letter-spacing: normal !important;
+            font-weight: 800 !important;
+            color: #EC4899 !important;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.03);
+        }
+        .invitation-content h4 {
+            font-family: 'Fredoka', 'Quicksand', sans-serif !important;
+            font-weight: 700 !important;
+            color: #06B6D4 !important;
+        }
+        .invitation-content,
+        .invitation-content body,
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content label {
+            font-family: 'Quicksand', 'Fredoka', sans-serif !important;
+            color: #334155;
+        }
+        /* Pure white cards with cyan/teal border and sweet roundness */
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-xl"],
+        .invitation-content [class*="rounded-lg"] {
+            border-radius: 1.75rem !important;
+            background-color: #FFFFFF !important;
+            border: 2.5px solid #38BDF8 !important;
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+        }
+        /* Inputs & Form controls */
+        .invitation-content input,
+        .invitation-content textarea,
+        .invitation-content select {
+            border-radius: 1rem !important;
+            border: 2px solid #BAE6FD !important;
+            background-color: #F8FAFC !important;
+            font-family: 'Quicksand', sans-serif !important;
+            font-weight: 600 !important;
+        }
+        .invitation-content input:focus,
+        .invitation-content textarea:focus {
+            border-color: #EC4899 !important;
+            outline: none !important;
+        }
+        /* Pastel rainbow dots section divider */
+        .invitation-content section::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 12px;
+            margin-top: 2rem;
+            background: radial-gradient(circle, #EC4899 2px, transparent 3px), radial-gradient(circle, #06B6D4 2px, transparent 3px), radial-gradient(circle, #10B981 2px, transparent 3px), radial-gradient(circle, #F59E0B 2px, transparent 3px);
+            background-size: 24px 12px;
+            background-position: 0 0, 6px 0, 12px 0, 18px 0;
+            opacity: 0.75;
+        }
+        .invitation-content #footer::after {
+            display: none !important;
+        }
+        /* Bubbly Gradient Pill Buttons */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            font-family: 'Fredoka', 'Quicksand', sans-serif !important;
+            font-weight: 700 !important;
+            border-radius: 9999px !important;
+            border: 2px solid #FFFFFF !important;
+            box-shadow: 0 6px 18px rgba(236, 72, 153, 0.3) !important;
+            letter-spacing: 0.04em !important;
+            text-transform: uppercase !important;
+        }
+        /* RSVP Section in sweet pastel duo */
+        .invitation-content #rsvp {
+            background: linear-gradient(135deg, #FDF2F8 0%, #EFF6FF 100%) !important;
+            border-radius: 2rem !important;
+            border: 3px solid #EC4899 !important;
+            box-shadow: 0 12px 30px -10px rgba(236, 72, 153, 0.25) !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3 {
+            color: #EC4899 !important;
+        }
+        /* Desktop centered layout width */
+        @media (min-width: 768px) {
+            .invitation-content section > div {
+                max-width: 960px !important;
+            }
+        }
     ` : isFloralSymmetryTheme ? `
         /* ── Simetría Floral overrides ── */
         .invitation-content h2,
@@ -1743,7 +1844,7 @@ END:VCALENDAR`;
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'bautizo-victoria', 'bautizo-camila',
+        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'cumple-lucas-rainbow-pop', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
     ];
@@ -1877,6 +1978,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'pixel-craft') {
             return <PixelCraftHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'rainbow-pop') {
+            return <RainbowPopHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
 
         if (planTier === 'clasico') {
@@ -3011,6 +3115,7 @@ END:VCALENDAR`;
                                     <option value="kids-farm">🚜 Granja Festiva</option>
                                     <option value="gamer-party">🎮 Gamer Party</option>
                                     <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
+                                    <option value="rainbow-pop">🌈 Rainbow Pop</option>
                                     <option value="collage">🖼️ Collage Elegante</option>
                                 </select>
                             </div>
@@ -3086,6 +3191,7 @@ END:VCALENDAR`;
                                                 <option value="kids-farm">🚜 Granja Festiva</option>
                                                 <option value="gamer-party">🎮 Gamer Party</option>
                                                 <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
+                                                <option value="rainbow-pop">🌈 Rainbow Pop</option>
                                                 <option value="collage">🖼️ Collage Elegante</option>
                                             </select>
                                         </div>

@@ -492,6 +492,7 @@ export default function EventWizard() {
                                         { id: 'kids-farm', name: 'Granja Festiva', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' }
                                     ].map(tpl => {
                                         const isSelected = data.theme === tpl.id;

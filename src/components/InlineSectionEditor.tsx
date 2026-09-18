@@ -18,6 +18,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     // Local state for specific fields based on section
     const [title, setTitle] = useState(event.title || '');
     const [subtitle, setSubtitle] = useState(cfg.subtitle || '');
+    const [childName, setChildName] = useState(cfg.child_name || cfg.childName || '');
+    const [age, setAge] = useState(cfg.age || cfg.turning_age || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [venueName, setVenueName] = useState(event.venue_name || '');
@@ -35,6 +37,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     useEffect(() => {
         setTitle(event.title || '');
         setSubtitle(cfg.subtitle || '');
+        setChildName(cfg.child_name || cfg.childName || '');
+        setAge(cfg.age || cfg.turning_age || '');
         setWelcomeMessage(cfg.welcome_message || '');
         setDateTime(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
         setVenueName(event.venue_name || '');
@@ -54,6 +58,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
             if (sectionId === 'hero') {
                 if (title !== event.title) await onUpdateEventColumn('title', title);
                 if (subtitle !== cfg.subtitle) await onUpdateThemeConfig('subtitle', subtitle);
+                if (childName !== (cfg.child_name || '')) await onUpdateThemeConfig('child_name', childName);
+                if (age !== (cfg.age || '')) await onUpdateThemeConfig('age', Number(age) || age);
             }
             if (sectionId === 'message') {
                 if (title !== event.title) await onUpdateEventColumn('title', title);
@@ -131,20 +137,42 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 {sectionId === 'hero' && (
                     <>
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Subtítulo (ej. 70 Años)</label>
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Festejado(a)</label>
                             <input 
                                 type="text" 
-                                value={subtitle} 
-                                onChange={e => setSubtitle(e.target.value)}
+                                value={childName} 
+                                onChange={e => setChildName(e.target.value)}
+                                placeholder="Ej. ZAIR, Lucas, Mateo, Sofía..."
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800 font-bold"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Edad que cumple (Años)</label>
+                            <input 
+                                type="number" 
+                                value={age} 
+                                onChange={e => setAge(e.target.value)}
+                                placeholder="Ej. 5, 1, 7..."
                                 className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Título Principal</label>
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Título / Frase Superior (ej. CUMPLEAÑOS)</label>
                             <input 
                                 type="text" 
                                 value={title} 
                                 onChange={e => setTitle(e.target.value)}
+                                placeholder="Ej. Cumpleaños de Zair"
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Subtítulo / Mensaje breve</label>
+                            <input 
+                                type="text" 
+                                value={subtitle} 
+                                onChange={e => setSubtitle(e.target.value)}
+                                placeholder="Ej. ¡Festejando mis 5 años!"
                                 className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                             />
                         </div>
