@@ -29,6 +29,7 @@ import KidsFarmHero from '../components/themes/KidsFarmHero';
 import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
+import PixelCraftHero from '../components/themes/PixelCraftHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
 
 function getContrastColor(hexColor: string) {
@@ -193,6 +194,13 @@ export default function InvitationPage() {
             borderColor: '#1E293B', cardBorder: '#10B98144',
             accentOverride: '#10B981', fontPreset: 'moderna',
             heroRadius: '24px', cardRadius: '20px',
+        },
+        'pixel-craft': {
+            sectionBg: '#3D2817', sectionBgAlt: '#2A1A0E', cardBg: '#523A28',
+            textPrimary: '#FFFFFF', textSecondary: '#FEF3C7',
+            borderColor: '#85532A', cardBorder: '#22C55E66',
+            accentOverride: '#22C55E', fontPreset: 'divertida',
+            heroRadius: '0px', cardRadius: '0px',
         },
     };
 
@@ -805,6 +813,7 @@ END:VCALENDAR`;
     const isWhimsicalKidsTheme = themeName === 'whimsical-kids';
     const isKidsFarmTheme      = themeName === 'kids-farm';
     const isGamerPartyTheme    = themeName === 'gamer-party';
+    const isPixelCraftTheme    = themeName === 'pixel-craft';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -1252,6 +1261,112 @@ END:VCALENDAR`;
                 max-width: 960px !important;
             }
         }
+    ` : isPixelCraftTheme ? `
+        /* ── Mundo Píxel (Minecraft) overrides ── */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3 {
+            font-family: 'Press Start 2P', monospace !important;
+            letter-spacing: 0.05em !important;
+            color: #4ADE80 !important;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 0 #0F3810 !important;
+            font-size: 1.05rem !important;
+            line-height: 1.6 !important;
+        }
+        @media (min-width: 640px) {
+            .invitation-content h1,
+            .invitation-content h2,
+            .invitation-content h3 {
+                font-size: 1.3rem !important;
+            }
+        }
+        .invitation-content h4 {
+            font-family: 'VT323', 'Press Start 2P', monospace !important;
+            font-size: 1.25rem !important;
+            color: #FACC15 !important;
+            letter-spacing: 0.05em !important;
+        }
+        .invitation-content,
+        .invitation-content body,
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content label {
+            font-family: 'Outfit', 'Inter', sans-serif !important;
+            color: #FEF3C7;
+        }
+        /* Minecraft Block styling (sharp voxel corners, oak/stone border) */
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-xl"],
+        .invitation-content [class*="rounded-lg"] {
+            border-radius: 0px !important;
+            border: 4px solid #2A1A0E !important;
+            background-color: #523A28 !important;
+            box-shadow: 6px 6px 0px #170F08, inset 2px 2px 0 rgba(255, 255, 255, 0.08) !important;
+        }
+        /* Form inputs styled like Minecraft inventory slots */
+        .invitation-content input,
+        .invitation-content textarea,
+        .invitation-content select {
+            border-radius: 0px !important;
+            background-color: #2A1A0E !important;
+            border: 3px solid #85532A !important;
+            color: #86EFAC !important;
+            font-family: 'VT323', monospace !important;
+            font-size: 1.2rem !important;
+            box-shadow: inset 3px 3px 0 #170F08 !important;
+        }
+        /* Section divider with pixel grass fringe */
+        .invitation-content section::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 12px;
+            margin-top: 2rem;
+            background: repeating-linear-gradient(90deg, #4ADE80 0, #4ADE80 16px, #22C55E 16px, #22C55E 32px);
+            border-bottom: 4px solid #78350F;
+            box-shadow: 0 4px 0 #170F08;
+        }
+        .invitation-content #footer::after {
+            display: none !important;
+        }
+        /* Minecraft 3D Beveled Buttons */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            font-family: 'Press Start 2P', monospace !important;
+            font-size: 0.72rem !important;
+            letter-spacing: 0.04em !important;
+            border-radius: 0px !important;
+            border-top: 4px solid #86EFAC !important;
+            border-left: 4px solid #86EFAC !important;
+            border-right: 4px solid #14532D !important;
+            border-bottom: 4px solid #14532D !important;
+            background-color: #22C55E !important;
+            color: #FFFFFF !important;
+            box-shadow: 4px 4px 0px #000000 !important;
+            text-transform: uppercase !important;
+        }
+        .invitation-content button[style*="background"]:active,
+        .invitation-content a > button[style*="background"]:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000 !important;
+        }
+        /* RSVP Section in Nether Portal / Obsidian aesthetic */
+        .invitation-content #rsvp {
+            background: linear-gradient(135deg, #2A1A0E 0%, #170F08 100%) !important;
+            border: 4px solid #4ADE80 !important;
+            box-shadow: 8px 8px 0px #000 !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3 {
+            color: #FACC15 !important;
+        }
+        /* Desktop centered layout width */
+        @media (min-width: 768px) {
+            .invitation-content section > div {
+                max-width: 960px !important;
+            }
+        }
     ` : isFloralSymmetryTheme ? `
         /* ── Simetría Floral overrides ── */
         .invitation-content h2,
@@ -1628,7 +1743,7 @@ END:VCALENDAR`;
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'bautizo-victoria', 'bautizo-camila',
+        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
     ];
@@ -1759,6 +1874,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'gamer-party') {
             return <GamerPartyHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'pixel-craft') {
+            return <PixelCraftHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
 
         if (planTier === 'clasico') {
@@ -2892,6 +3010,7 @@ END:VCALENDAR`;
                                     <option value="whimsical-kids">🎈 Fantasía Infantil</option>
                                     <option value="kids-farm">🚜 Granja Festiva</option>
                                     <option value="gamer-party">🎮 Gamer Party</option>
+                                    <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
                                     <option value="collage">🖼️ Collage Elegante</option>
                                 </select>
                             </div>
@@ -2966,6 +3085,7 @@ END:VCALENDAR`;
                                                 <option value="whimsical-kids">🎈 Fantasía Infantil</option>
                                                 <option value="kids-farm">🚜 Granja Festiva</option>
                                                 <option value="gamer-party">🎮 Gamer Party</option>
+                                                <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
                                                 <option value="collage">🖼️ Collage Elegante</option>
                                             </select>
                                         </div>

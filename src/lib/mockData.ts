@@ -1926,6 +1926,64 @@ export const MOCK_EVENTS: Event[] = [
             accent_color: '#10B981',
             button_color: '#EF4444'
         }
+    },
+    {
+        id: 'mock-pixel-craft-mateo',
+        slug: 'cumple-mateo-pixel-craft',
+        user_id: 'mock-user-1',
+        title: "MATEO'S Minecraft Party",
+        event_type: 'birthday',
+        date_time: '2026-08-15T16:00:00Z',
+        venue_name: 'Salón "Voxel Aventura"',
+        venue_address: 'Av. Diamante #256, Col. Bloques, Guadalajara, Jal.',
+        maps_link: 'https://maps.google.com/?q=Salon+Voxel+Aventura+Guadalajara',
+        dress_code: 'Minecraft / Ropa cómoda para jugar (¡trae tu camiseta pixel!)',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: '2026-08-08T00:00:00Z',
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'pixel-craft',
+            child_name: 'MATEO',
+            turning_age: 7,
+            age: 7,
+            isPremium: true,
+            hero_image_url: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=800&q=80',
+            message: '¡Prepara tu armadura y tu pico de diamante! 💎 Estás convocado a mi fiesta de cumpleaños en el mundo de bloques. ¡Habrá pastel, búsqueda de minerales y mucha diversión!',
+            reception: {
+                name: 'Salón "Voxel Aventura"',
+                location: 'Av. Diamante #256, Col. Bloques, Guadalajara, Jal.',
+                time: '16:00'
+            },
+            schedule: [
+                { time: '16:00', event: 'Spawn Point: Llegada de Exploradores 🗺️', location: 'Portal de Entrada' },
+                { time: '16:45', event: 'Búsqueda del Tesoro de Diamante 💎', location: 'Bioma de Aventuras' },
+                { time: '17:30', event: '¡Derriba al Creeper! (Piñata Festiva) 🪅', location: 'Zona de Combate' },
+                { time: '18:30', event: 'Pastel de Cumpleaños & Velas 🎂', location: 'Mesa de Crafteo' },
+                { time: '19:15', event: 'Reparto de Pociones & Dulces 🧪', location: 'Cofre de Recompensas' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: '¡Tu presencia es el mejor drop! Si deseas hacerme un detalle, puedes consultar mi cofre de deseos o hacer un depósito al banco de aldeanos:',
+                clabe: '012345678901234567',
+                bank: 'BBVA',
+                beneficiary: 'Mateo Navarro'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'divertida',
+            primary_color: '#22C55E',
+            accent_color: '#FACC15',
+            button_color: '#22C55E'
+        }
     }
 ];
 

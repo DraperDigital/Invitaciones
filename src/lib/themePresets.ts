@@ -224,6 +224,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#0A0D14',
         typographyPreset: 'moderna'
     },
+    'pixel-craft': {
+        label: 'Mundo Píxel',
+        desc: 'Aventura de bloques cúbicos estilo Minecraft con Creeper, pastel con velas, banderines y estética voxel',
+        icon: '🟩',
+        primaryColor: '#22C55E',
+        accentColor: '#FACC15',
+        cardBgColor: '#523A28',
+        sectionBgColor: '#3D2817',
+        textPrimary: '#F9FAFB',
+        textSecondary: '#FEF3C7',
+        heroTextColor: '#86EFAC',
+        heroBgColor: '#3D2817',
+        typographyPreset: 'divertida'
+    },
     'collage': {
         label: 'Collage Elegante',
         desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos',
@@ -267,5 +281,6 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'cumpleanos'], categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
     { id: 'kids-farm', name: 'Granja Festiva', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Granja', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' }
 ];
