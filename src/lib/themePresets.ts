@@ -244,6 +244,7 @@ export interface CanonicalTemplate {
     id: string;
     name: string;
     category: string;
+    categories?: string[];
     categoryLabel: string;
     slug: string;
     icon: string;
@@ -263,8 +264,8 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
-    { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'bautizo', categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
-    { id: 'kids-farm', name: 'Granja Festiva', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Infantil', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
-    { id: 'gamer-party', name: 'Gamer Party', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'cumpleanos'], categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
+    { id: 'kids-farm', name: 'Granja Festiva', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Granja', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
+    { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' }
 ];

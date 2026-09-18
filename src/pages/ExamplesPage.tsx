@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight } from 'lucide-react';
+import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Sparkles } from 'lucide-react';
 import Seo from '../components/Seo';
 import { CANONICAL_TEMPLATES } from '../lib/themePresets';
 
 const categories = [
     { id: 'todas', name: 'Todas', icon: LayoutGrid },
+    { id: 'infantil', name: 'Infantiles', icon: Sparkles },
     { id: 'boda', name: 'Bodas', icon: HeartHandshake },
     { id: 'xv', name: 'XV Años', icon: PartyPopper },
     { id: 'cumpleanos', name: 'Cumpleaños', icon: Cake },
@@ -26,9 +27,11 @@ export default function ExamplesPage() {
             return CANONICAL_TEMPLATES;
         }
         
-        return CANONICAL_TEMPLATES.filter(
-            tpl => tpl.category === activeCategory
-        );
+        return CANONICAL_TEMPLATES.filter(tpl => {
+            if (tpl.category === activeCategory) return true;
+            if (tpl.categories && tpl.categories.includes(activeCategory)) return true;
+            return false;
+        });
     }, [activeCategory]);
 
     const handleCategoryChange = (categoryId: string) => {
@@ -178,7 +181,7 @@ export default function ExamplesPage() {
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <categoryInfo.icon className="h-3.5 w-3.5 text-[#DF3B94]" />
                                                     <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
-                                                        {categoryInfo.name}
+                                                        {tpl.categoryLabel || categoryInfo.name}
                                                     </span>
                                                 </div>
                                                 <h3 className="text-lg font-display font-bold text-[#222B38] group-hover:text-[#DF3B94] transition-colors">
