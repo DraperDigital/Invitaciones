@@ -1836,6 +1836,64 @@ export const MOCK_EVENTS: Event[] = [
             accent_color: '#D97706',
             button_color: '#DC2626'
         }
+    },
+    {
+        id: 'mock-gamer-samuel',
+        slug: 'cumple-samuel-gamer',
+        user_id: 'mock-user-1',
+        title: "SAMUEL'S Gamer Party",
+        event_type: 'birthday',
+        date_time: '2026-07-12T21:00:00Z',
+        venue_name: 'Salón "Game Zone"',
+        venue_address: 'Calle Los Píxeles #78, Col. Arcade, León, Gto.',
+        maps_link: 'https://maps.google.com/?q=Salon+Game+Zone+Leon+Gto',
+        dress_code: 'Gamer / Cómodo para jugar',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: '2026-07-05T00:00:00Z',
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'gamer-party',
+            child_name: 'SAMUEL',
+            turning_age: 10,
+            age: 10,
+            isPremium: true,
+            hero_image_url: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80',
+            message: '¡Jugador conectado! 🎮 Estás invitado a la fiesta gamer del año. Ven a subir de nivel y desbloquear los mejores logros.',
+            reception: {
+                name: 'Salón "Game Zone"',
+                location: 'Calle Los Píxeles #78, Col. Arcade, León, Gto.',
+                time: '21:00'
+            },
+            schedule: [
+                { time: '21:00', event: 'Llegada de Jugadores y Check-in 🕹️', location: 'Lobby Arcade' },
+                { time: '21:30', event: '🟡 Torneo de Videojuegos (Super Smash & Mario Kart)', location: 'Arena Principal' },
+                { time: '22:30', event: '🔴 Búsqueda de Power-Up Perdido', location: 'Zona de Aventuras' },
+                { time: '23:15', event: '🟢 Estación de Juegos Libres & Snacks', location: 'Gaming Lounge' },
+                { time: '00:00', event: '🔵 Premiación de Campeones y Pastel Gamer 🎂', location: 'Podio Central' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: '¿Regalos? Lo más importante es tu presencia. Si deseas hacerme un detalle: Videojuegos, accesorios gamer o transferencia.',
+                clabe: '123456789012345678',
+                bank: 'BBVA / Bancomer',
+                beneficiary: 'Samuel Navarro'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'moderna',
+            primary_color: '#EF4444',
+            accent_color: '#10B981',
+            button_color: '#EF4444'
+        }
     }
 ];
 

@@ -26,6 +26,7 @@ import PassportHero from '../components/themes/PassportHero';
 import PolaroidVintageHero from '../components/themes/PolaroidVintageHero';
 import WhimsicalKidsHero from '../components/themes/WhimsicalKidsHero';
 import KidsFarmHero from '../components/themes/KidsFarmHero';
+import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
@@ -185,6 +186,13 @@ export default function InvitationPage() {
             borderColor: '#BAE6FD', cardBorder: '#F59E0B66',
             accentOverride: '#D97706', fontPreset: 'divertida',
             heroRadius: '24px', cardRadius: '28px',
+        },
+        'gamer-party': {
+            sectionBg: '#0B0F19', sectionBgAlt: '#080C14', cardBg: '#111827',
+            textPrimary: '#F9FAFB', textSecondary: '#9CA3AF',
+            borderColor: '#1E293B', cardBorder: '#10B98144',
+            accentOverride: '#10B981', fontPreset: 'moderna',
+            heroRadius: '24px', cardRadius: '20px',
         },
     };
 
@@ -785,6 +793,7 @@ END:VCALENDAR`;
     const isFloralSymmetryTheme = themeName === 'floral-symmetry';
     const isWhimsicalKidsTheme = themeName === 'whimsical-kids';
     const isKidsFarmTheme      = themeName === 'kids-farm';
+    const isGamerPartyTheme    = themeName === 'gamer-party';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -1144,6 +1153,87 @@ END:VCALENDAR`;
         .invitation-content #rsvp p,
         .invitation-content #rsvp label {
             color: #FFFFFF !important;
+        }
+        /* In Desktop, allow sections to look expansive and well centered */
+        @media (min-width: 768px) {
+            .invitation-content section > div {
+                max-width: 960px !important;
+            }
+        }
+    ` : isGamerPartyTheme ? `
+        /* ── Gamer Party (Videojuegos / Level Up) overrides ── */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3 {
+            font-family: 'Press Start 2P', monospace !important;
+            letter-spacing: 0.05em !important;
+            color: #10B981 !important;
+            text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+            font-size: 1.15rem !important;
+            line-height: 1.6 !important;
+        }
+        @media (min-width: 640px) {
+            .invitation-content h1,
+            .invitation-content h2,
+            .invitation-content h3 {
+                font-size: 1.35rem !important;
+            }
+        }
+        .invitation-content h4 {
+            font-family: 'Outfit', 'Inter', monospace !important;
+            font-weight: 700 !important;
+            color: #38BDF8 !important;
+        }
+        .invitation-content,
+        .invitation-content body,
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content label {
+            font-family: 'Outfit', 'Inter', sans-serif !important;
+            color: #E2E8F0;
+        }
+        /* Neon border and dark glow cards */
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-xl"] {
+            border-radius: 1.25rem !important;
+            border: 1px solid rgba(16, 185, 129, 0.3) !important;
+            background-color: #111827 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+        }
+        /* Accent neon divider between sections */
+        .invitation-content section::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 3px;
+            margin-top: 2rem;
+            background: linear-gradient(90deg, transparent 0%, #10B981 30%, #06B6D4 70%, transparent 100%);
+            opacity: 0.7;
+        }
+        .invitation-content #footer::after {
+            display: none !important;
+        }
+        /* Buttons */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            font-family: 'Outfit', 'Inter', sans-serif !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            border-radius: 9999px !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important;
+        }
+        /* RSVP Section in dark gamer neon */
+        .invitation-content #rsvp {
+            background: linear-gradient(135deg, #111827 0%, #0F172A 100%) !important;
+            border: 2px solid #EF4444 !important;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.2) !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3 {
+            color: #EF4444 !important;
+            text-shadow: 0 0 12px rgba(239, 68, 68, 0.5) !important;
         }
         /* In Desktop, allow sections to look expansive and well centered */
         @media (min-width: 768px) {
@@ -1527,7 +1617,7 @@ END:VCALENDAR`;
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'cumpleanos-granja-zair', 'bautizo-victoria', 'bautizo-camila',
+        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
     ];
@@ -1655,6 +1745,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'kids-farm') {
             return <KidsFarmHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'gamer-party') {
+            return <GamerPartyHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
 
         if (planTier === 'clasico') {
@@ -2787,6 +2880,7 @@ END:VCALENDAR`;
                                     <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                     <option value="whimsical-kids">🎈 Fantasía Infantil</option>
                                     <option value="kids-farm">🚜 Granja Festiva</option>
+                                    <option value="gamer-party">🎮 Gamer Party</option>
                                     <option value="collage">🖼️ Collage Elegante</option>
                                 </select>
                             </div>
@@ -2860,6 +2954,7 @@ END:VCALENDAR`;
                                                 <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                                 <option value="whimsical-kids">🎈 Fantasía Infantil</option>
                                                 <option value="kids-farm">🚜 Granja Festiva</option>
+                                                <option value="gamer-party">🎮 Gamer Party</option>
                                                 <option value="collage">🖼️ Collage Elegante</option>
                                             </select>
                                         </div>

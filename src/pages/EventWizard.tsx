@@ -490,6 +490,7 @@ export default function EventWizard() {
                                         { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'Graduación / Retro', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'Infantil / Bautizo', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'kids-farm', name: 'Granja Festiva', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' }
                                     ].map(tpl => {
                                         const isSelected = data.theme === tpl.id;

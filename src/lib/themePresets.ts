@@ -210,6 +210,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#BAE6FD',
         typographyPreset: 'divertida'
     },
+    'gamer-party': {
+        label: 'Gamer Party',
+        desc: 'Estilo arcade y consola con control neón, tipografía pixel 8-bit y modo oscuro RGB',
+        icon: '🎮',
+        primaryColor: '#10B981',
+        accentColor: '#3B82F6',
+        cardBgColor: '#111827',
+        sectionBgColor: '#0B0F19',
+        textPrimary: '#F9FAFB',
+        textSecondary: '#9CA3AF',
+        heroTextColor: '#FFFFFF',
+        heroBgColor: '#0A0D14',
+        typographyPreset: 'moderna'
+    },
     'collage': {
         label: 'Collage Elegante',
         desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos',
@@ -251,5 +265,6 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'bautizo', categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
     { id: 'kids-farm', name: 'Granja Festiva', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Infantil', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
+    { id: 'gamer-party', name: 'Gamer Party', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' }
 ];

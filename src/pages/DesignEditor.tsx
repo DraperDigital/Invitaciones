@@ -856,6 +856,7 @@ export default function DesignEditor() {
                             { id: 'polaroid-vintage', label: 'Retro Fotográfico', desc: 'Fotografías de estilo instantáneo y nostálgico con marcos sepia', icon: '📸' },
                             { id: 'whimsical-kids', label: 'Fantasía Infantil', desc: 'Colores alegres, pasteles brillantes e ilustraciones para peques', icon: '🎈' },
                             { id: 'kids-farm', label: 'Granja Festiva', desc: 'Aventura campestre con cielo azul, granero, animalitos tiernos y cercas de madera', icon: '🚜' },
+                            { id: 'gamer-party', label: 'Gamer Party', desc: 'Nivel arcade retro con control neón, luces RGB, fuentes 8-bit y atmósfera de videojuego', icon: '🎮' },
                             { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
                         ].map((item) => (
                             <button
