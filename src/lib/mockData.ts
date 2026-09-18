@@ -1780,6 +1780,62 @@ export const MOCK_EVENTS: Event[] = [
             accent_color: '#134074',
             isPremium: true
         }
+    },
+    {
+        id: 'mock-granja-zair',
+        slug: 'cumpleanos-granja-zair',
+        user_id: 'mock-user-1',
+        title: 'Mi Cumpleaños ZAIR',
+        event_type: 'birthday',
+        date_time: '2026-02-10T15:00:00Z',
+        venue_name: 'Salón Infantil Manitas Felices',
+        venue_address: 'A lado de Smart Trampoline, Ciudad de México',
+        maps_link: 'https://maps.google.com/?q=Salon+Infantil+Manitas+Felices',
+        dress_code: 'Casual / Ropa cómoda para jugar',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 20).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'kids-farm',
+            child_name: 'ZAIR',
+            turning_age: 5,
+            age: 5,
+            isPremium: true,
+            hero_image_url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
+            message: '¡Hola! 🌤️🌈 Estoy muy emocionado porque ¡voy a cumplir 5 años! y quiero celebrar este día tan especial contigo, así que ven a jugar y divertirnos.',
+            reception: {
+                name: 'Salón Infantil Manitas Felices',
+                location: 'A lado de Smart Trampoline',
+                time: '15:00'
+            },
+            schedule: [
+                { time: '15:00', event: 'Llegada y Juegos en Trampolines', location: 'Área de Juegos' },
+                { time: '16:30', event: 'Show de Granja y Concursos', location: 'Salón Principal' },
+                { time: '17:30', event: '¡La Gran Piñata! 🪅', location: 'Patio de Festejos' },
+                { time: '18:15', event: 'Pastel y Mañanitas 🎂', location: 'Mesa Principal' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'Si quieres consentir-meeee aquí abajo te dejo mi mesita de regalos',
+                liverpool_code: 'GRANJA-ZAIR-5',
+                amazon_url: 'https://amazon.com.mx'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'divertida',
+            primary_color: '#DC2626',
+            accent_color: '#D97706',
+            button_color: '#DC2626'
+        }
     }
 ];
 

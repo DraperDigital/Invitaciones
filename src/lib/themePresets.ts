@@ -196,6 +196,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#FFEAA7',
         typographyPreset: 'divertida'
     },
+    'kids-farm': {
+        label: 'Granja Festiva',
+        desc: 'Aventura campestre con cielo azul, granero, animalitos tiernos y cercas de madera',
+        icon: '🚜',
+        primaryColor: '#B91C1C',
+        accentColor: '#D97706',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F0F9FF',
+        textPrimary: '#1E293B',
+        textSecondary: '#64748B',
+        heroTextColor: '#0F172A',
+        heroBgColor: '#BAE6FD',
+        typographyPreset: 'divertida'
+    },
     'collage': {
         label: 'Collage Elegante',
         desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos',
@@ -236,5 +250,6 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'bautizo', categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
+    { id: 'kids-farm', name: 'Granja Festiva', category: 'cumpleanos', categoryLabel: 'Cumpleaños / Infantil', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' }
 ];

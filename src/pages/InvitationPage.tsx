@@ -25,6 +25,7 @@ import LuxuryGoldHero from '../components/themes/LuxuryGoldHero';
 import PassportHero from '../components/themes/PassportHero';
 import PolaroidVintageHero from '../components/themes/PolaroidVintageHero';
 import WhimsicalKidsHero from '../components/themes/WhimsicalKidsHero';
+import KidsFarmHero from '../components/themes/KidsFarmHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
@@ -177,6 +178,13 @@ export default function InvitationPage() {
             borderColor: '#FFD3DC', cardBorder: '#FF6B6B44',
             accentOverride: '#FF6B6B', fontPreset: 'divertida',
             heroRadius: '16px', cardRadius: '24px',
+        },
+        'kids-farm': {
+            sectionBg: '#F0F9FF', sectionBgAlt: '#ECFDF5', cardBg: '#FFFFFF',
+            textPrimary: '#1E293B', textSecondary: '#475569',
+            borderColor: '#BAE6FD', cardBorder: '#F59E0B66',
+            accentOverride: '#D97706', fontPreset: 'divertida',
+            heroRadius: '24px', cardRadius: '28px',
         },
     };
 
@@ -776,6 +784,7 @@ END:VCALENDAR`;
     const isBotanicalTheme     = themeName === 'romantic-botanical';
     const isFloralSymmetryTheme = themeName === 'floral-symmetry';
     const isWhimsicalKidsTheme = themeName === 'whimsical-kids';
+    const isKidsFarmTheme      = themeName === 'kids-farm';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -1068,6 +1077,79 @@ END:VCALENDAR`;
         .invitation-content button[class*="rounded-full"][style*="background"] {
             font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
             letter-spacing: 0.05em;
+        }
+    ` : isKidsFarmTheme ? `
+        /* ── Granja Festiva (kids-farm) overrides ── */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3,
+        .invitation-content h4,
+        .invitation-content .font-serif {
+            font-family: 'Fredoka', 'Quicksand', cursive, sans-serif !important;
+            letter-spacing: normal !important;
+            font-weight: 700 !important;
+        }
+        .invitation-content h2,
+        .invitation-content h3 {
+            color: #15803D !important;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+        }
+        .invitation-content,
+        .invitation-content body,
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content .font-sans {
+            font-family: 'Quicksand', 'Fredoka', sans-serif !important;
+        }
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"] {
+            border-radius: 2rem !important;
+            border-width: 3px !important;
+            border-color: #FEF08A !important;
+            box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+        }
+        /* Wooden fence repeating accent divider between sections */
+        .invitation-content section::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 24px;
+            margin-top: 2rem;
+            background-image: repeating-linear-gradient(90deg, #D97706 0, #D97706 14px, #B45309 14px, #B45309 18px);
+            border-radius: 4px;
+            opacity: 0.85;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        .invitation-content #footer::after {
+            display: none !important;
+        }
+        /* Buttons with warm farm styling */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"] {
+            font-family: 'Fredoka', 'Quicksand', sans-serif !important;
+            font-weight: 700 !important;
+            border-radius: 9999px !important;
+            border: 2px solid #FFF !important;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
+        }
+        /* RSVP Section in cheerful barn red */
+        .invitation-content #rsvp {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+            border-radius: 2.5rem !important;
+            color: #FFFFFF !important;
+            border: 4px solid #FEF08A !important;
+        }
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3,
+        .invitation-content #rsvp p,
+        .invitation-content #rsvp label {
+            color: #FFFFFF !important;
+        }
+        /* In Desktop, allow sections to look expansive and well centered */
+        @media (min-width: 768px) {
+            .invitation-content section > div {
+                max-width: 960px !important;
+            }
         }
     ` : isFloralSymmetryTheme ? `
         /* ── Simetría Floral overrides ── */
@@ -1445,7 +1527,7 @@ END:VCALENDAR`;
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'bautizo-victoria', 'bautizo-camila',
+        'cumple-emilia', 'cumpleanos-granja-zair', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
     ];
@@ -1570,6 +1652,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'whimsical-kids') {
             return <WhimsicalKidsHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
+        if (cfg.theme === 'kids-farm') {
+            return <KidsFarmHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
         }
 
         if (planTier === 'clasico') {
@@ -2452,11 +2537,11 @@ END:VCALENDAR`;
                             type="button"
                             onClick={() => setShowTemplateMenu(prev => !prev)}
                             className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95"
-                            title="Explorar las 13 plantillas de diseño"
+                            title={`Explorar las ${CANONICAL_TEMPLATES.length} plantillas de diseño`}
                         >
                             <span className="text-sm">{currentDemo.icon}</span>
                             <span className="max-w-[100px] sm:max-w-[150px] truncate">{currentDemo.name}</span>
-                            <span className="text-[10px] text-stone-400 font-mono hidden md:inline">({activeDemoIndex + 1}/13)</span>
+                            <span className="text-[10px] text-stone-400 font-mono hidden md:inline">({activeDemoIndex + 1}/{CANONICAL_TEMPLATES.length})</span>
                             <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform ${showTemplateMenu ? 'rotate-180' : ''}`} />
                         </button>
 
@@ -2514,7 +2599,7 @@ END:VCALENDAR`;
                                             <Palette className="h-4 w-4 text-[#DF3B94]" />
                                             <h3 className="font-bold text-sm sm:text-base tracking-wide text-white">Modelos Disponibles</h3>
                                         </div>
-                                        <p className="text-[11px] text-stone-400 mt-0.5">13 plantillas interactivas — haz clic para ver en vivo</p>
+                                        <p className="text-[11px] text-stone-400 mt-0.5">{CANONICAL_TEMPLATES.length} plantillas interactivas — haz clic para ver en vivo</p>
                                     </div>
                                     <button
                                         type="button"
@@ -2701,6 +2786,7 @@ END:VCALENDAR`;
                                     <option value="passport">✈️ Pase de Abordaje</option>
                                     <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                     <option value="whimsical-kids">🎈 Fantasía Infantil</option>
+                                    <option value="kids-farm">🚜 Granja Festiva</option>
                                     <option value="collage">🖼️ Collage Elegante</option>
                                 </select>
                             </div>
@@ -2773,6 +2859,7 @@ END:VCALENDAR`;
                                                 <option value="passport">✈️ Pase de Abordaje</option>
                                                 <option value="polaroid-vintage">📸 Retro Fotográfico</option>
                                                 <option value="whimsical-kids">🎈 Fantasía Infantil</option>
+                                                <option value="kids-farm">🚜 Granja Festiva</option>
                                                 <option value="collage">🖼️ Collage Elegante</option>
                                             </select>
                                         </div>
