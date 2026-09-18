@@ -7,6 +7,11 @@ import { initAnalytics } from './lib/analytics'
 
 initAnalytics();
 
+// Automatically reload on stale dynamic import after deployment
+window.addEventListener('vite:preloadError', () => {
+  window.location.reload();
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>

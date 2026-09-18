@@ -391,14 +391,25 @@ export default function InvitationPage() {
         const decodedSlug = decodeURIComponent(slug || '');
         const encodedSlug = encodeURIComponent(decodedSlug);
 
-        if (!import.meta.env.VITE_SUPABASE_URL) {
-            const mockEvent = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
-            setEvent(mockEvent || null);
-            if (guestToken && mockEvent) {
+        // Fast-path: Check for mock demo events directly to load instantly without network latency
+        const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
+        if (mockMatch && (rawToken === 'token-preview' || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
+            setEvent(mockMatch);
+            if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
             }
-            // In mock mode, allow admin if ?t=admin (no real auth available)
+            if (rawToken === 'admin') setIsAdminMode(true);
+            setLoading(false);
+            return;
+        }
+
+        if (!import.meta.env.VITE_SUPABASE_URL) {
+            setEvent(mockMatch || null);
+            if (guestToken && mockMatch) {
+                const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
+                setGuest(mockGuest || null);
+            }
             if (rawToken === 'admin') setIsAdminMode(true);
             setLoading(false);
             return;
@@ -1692,12 +1703,12 @@ END:VCALENDAR`;
         }
     };
 
-    const eventLabels: Record<string, { ceremony: string; reception: string; tagline: string }> = {
-        wedding:    { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos' },
-        birthday:   { ceremony: 'Misa', reception: 'Celebración', tagline: 'Cumpleaños' },
-        xv:         { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años' },
-        baptism:    { ceremony: 'Misa de Bautizo', reception: 'Celebración', tagline: 'Bautizo' },
-        graduation: { ceremony: 'Ceremonia', reception: 'Festejo', tagline: 'Graduación' },
+    const eventLabels: Record<string, { ceremony: string; reception: string; tagline: string; welcome: string }> = {
+        wedding:    { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos', welcome: 'Nuestra Boda' },
+        birthday:   { ceremony: 'Misa', reception: 'Celebración', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
+        xv:         { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
+        baptism:    { ceremony: 'Misa de Bautizo', reception: 'Celebración', tagline: 'Bautizo', welcome: 'Mi Bautizo' },
+        graduation: { ceremony: 'Ceremonia', reception: 'Festejo', tagline: 'Graduación', welcome: 'Mi Graduación' },
     };
     const labels = eventLabels[event.event_type] || eventLabels['birthday'];
 
