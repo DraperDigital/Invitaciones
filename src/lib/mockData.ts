@@ -1742,19 +1742,51 @@ export const MOCK_EVENTS: Event[] = [
         title: 'Gala de Aniversario',
         event_type: 'wedding',
         date_time: '2026-12-31T21:00:00Z',
-        venue_name: 'Gran Hotel',
-        venue_address: 'Centro Histórico',
-        maps_link: 'https://goo.gl/maps/example',
-        dress_code: 'Black Tie',
+        venue_name: 'Gran Hotel & Casino',
+        venue_address: 'Av. Paseo de la Reforma #500, Centro Histórico',
+        maps_link: 'https://maps.google.com/?q=Gran+Hotel+Reforma',
+        dress_code: 'Black Tie / Rigurosa Etiqueta',
         is_published: true,
         plan: 'clasico',
-        rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
+        rsvp_deadline: new Date(Date.now() + 86400000 * 30).toISOString(),
         created_at: new Date().toISOString(),
         theme_config: {
-            theme: 'luxury-gold', hero_image_url: 'https://images.unsplash.com/photo-1519671482749-fd09871171dd?auto=format&fit=crop&w=1600&q=80',
-            typography_preset: 'clasica',
+            theme: 'luxury-gold',
+            hero_image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1600&q=80',
+            subtitle: 'UNA NOCHE DE DISTINCIÓN & CELEBRACIÓN',
+            welcome_message: 'Nos complace invitarles a celebrar una velada inolvidable de elegancia, música y distinción con motivo de nuestro Gran Aniversario. Su grata compañía hará memorable este acontecimiento.',
+            reception: {
+                name: 'Salón Imperial - Gran Hotel',
+                location: 'Av. Paseo de la Reforma #500, Centro Histórico',
+                time: '21:00'
+            },
+            schedule: [
+                { time: '21:00', event: 'Bienvenida & Cóctel Dorado 🍸', location: 'Foyer Principal' },
+                { time: '22:00', event: 'Cena de Gala & Brindis de Honor 🥂', location: 'Salón Imperial' },
+                { time: '23:30', event: 'Apertura de Pista & Orquesta en Vivo 🎷', location: 'Pista Central' },
+                { time: '01:00', event: 'Tornamesa & Celebración de Medianoche ✨', location: 'Salón Imperial' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'Su presencia es nuestro más preciado obsequio. Si desean hacernos un presente, ponemos a su disposición los siguientes datos:',
+                clabe: '012180015678901234',
+                bank: 'BBVA',
+                beneficiary: 'Gala & Celebración'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'elegante',
             primary_color: '#000000',
-            accent_color: '#d4af37',
+            accent_color: '#D4AF37',
+            button_color: '#D4AF37',
             isPremium: true
         }
     },

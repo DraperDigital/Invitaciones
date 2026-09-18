@@ -145,6 +145,13 @@ export default function ExamplesPage() {
                                             <img 
                                                 src={tpl.thumbnail} 
                                                 alt={tpl.name} 
+                                                onError={(e) => {
+                                                    const target = e.currentTarget as HTMLImageElement;
+                                                    if (!target.dataset.fallbackTried) {
+                                                        target.dataset.fallbackTried = 'true';
+                                                        target.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop';
+                                                    }
+                                                }}
                                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
                                             
