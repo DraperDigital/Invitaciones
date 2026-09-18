@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -32,6 +32,16 @@ import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
+
+export const DEMO_CATEGORIES = [
+    { id: 'todas', name: 'Todas', emoji: '✨' },
+    { id: 'boda', name: 'Bodas', emoji: '💍' },
+    { id: 'xv', name: 'XV Años', emoji: '👑' },
+    { id: 'infantil', name: 'Infantiles', emoji: '👶' },
+    { id: 'cumpleanos', name: 'Cumpleaños', emoji: '🎂' },
+    { id: 'bautizo', name: 'Bautizos', emoji: '💧' },
+    { id: 'graduacion', name: 'Graduaciones', emoji: '🎓' },
+];
 
 function getContrastColor(hexColor: string) {
     if (!hexColor) return '#ffffff';
@@ -62,9 +72,12 @@ export default function InvitationPage() {
     const [guest, setGuest] = useState<Guest | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
     const [isAdminMode, setIsAdminMode] = useState(false);
     const [editingSection, setEditingSection] = useState<SectionId | null>(null);
     const [showTemplateMenu, setShowTemplateMenu] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'auto');
+    const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
@@ -1863,10 +1876,53 @@ END:VCALENDAR`;
     // y NUNCA si es un evento real de usuario o modo admin / creador
     const isDemo = !isAdminMode && rawToken !== 'admin' && (rawToken === 'token-preview' || isCanonicalDemoSlug);
 
-    const activeDemoIndex = demoIndex >= 0 ? demoIndex : 0;
-    const prevDemo = CANONICAL_TEMPLATES[(activeDemoIndex - 1 + CANONICAL_TEMPLATES.length) % CANONICAL_TEMPLATES.length];
-    const nextDemo = CANONICAL_TEMPLATES[(activeDemoIndex + 1) % CANONICAL_TEMPLATES.length];
-    const currentDemo = CANONICAL_TEMPLATES[activeDemoIndex];
+    const currentDemo = demoIndex >= 0 ? CANONICAL_TEMPLATES[demoIndex] : CANONICAL_TEMPLATES[0];
+
+    // Determine active category:
+    // If selectedCategory is 'auto', we infer from URL param or currentDemo's primary category
+    const activeCategory = (selectedCategory && selectedCategory !== 'auto')
+        ? selectedCategory
+        : (searchParams.get('category') || currentDemo?.category || 'todas');
+
+    // Filter canonical templates based on activeCategory
+    const filteredDemos = CANONICAL_TEMPLATES.filter(tpl => {
+        if (activeCategory === 'todas') return true;
+        return tpl.category === activeCategory || (tpl.categories && tpl.categories.includes(activeCategory));
+    });
+
+    const effectiveDemos = filteredDemos.length > 0 ? filteredDemos : CANONICAL_TEMPLATES;
+
+    const filteredIndex = effectiveDemos.findIndex(
+        t => t.slug === slug || (baseSlug && t.slug.replace(/-pro$|-premium$/, '') === baseSlug) || t.id === currentDemo?.id
+    );
+    const activeFilteredIndex = filteredIndex >= 0 ? filteredIndex : 0;
+
+    const prevDemo = effectiveDemos[(activeFilteredIndex - 1 + effectiveDemos.length) % effectiveDemos.length];
+    const nextDemo = effectiveDemos[(activeFilteredIndex + 1) % effectiveDemos.length];
+    const currentCategoryObj = DEMO_CATEGORIES.find(c => c.id === activeCategory) || DEMO_CATEGORIES[0];
+
+    const handleSelectCategory = (catId: string) => {
+        setSelectedCategory(catId);
+        setShowCategoryMenu(false);
+
+        const matches = catId === 'todas' || currentDemo.category === catId || (currentDemo.categories && currentDemo.categories.includes(catId));
+        if (!matches) {
+            const firstMatch = CANONICAL_TEMPLATES.find(t => 
+                catId === 'todas' || t.category === catId || (t.categories && t.categories.includes(catId))
+            );
+            if (firstMatch) {
+                navigate(`/i/${firstMatch.slug}?t=token-preview&category=${catId}`);
+            }
+        } else {
+            const newParams = new URLSearchParams(searchParams);
+            if (catId === 'todas') {
+                newParams.delete('category');
+            } else {
+                newParams.set('category', catId);
+            }
+            navigate(`?${newParams.toString()}`, { replace: true });
+        }
+    };
 
     const isPro     = cfg.isPro     === true
                    || normalizePlan(event.plan) === 'pro'
@@ -2807,9 +2863,9 @@ END:VCALENDAR`;
                 <>
                     {/* Flechas Laterales Flotantes (Desktop) */}
                     <Link
-                        to={`/i/${prevDemo.slug}?t=token-preview`}
+                        to={`/i/${prevDemo.slug}?t=token-preview&category=${activeCategory}`}
                         className="fixed left-4 top-1/2 -translate-y-1/2 z-[990] hidden lg:flex items-center group no-underline"
-                        title={`Ejemplo anterior: ${prevDemo.name}`}
+                        title={`Ejemplo anterior de ${currentCategoryObj?.name}: ${prevDemo.name}`}
                     >
                         <div className="w-12 h-12 rounded-full bg-stone-900/80 hover:bg-stone-900 text-white backdrop-blur-md border border-white/20 shadow-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:border-[#DF3B94]">
                             <ChevronLeft className="h-6 w-6 transition-transform group-hover:-translate-x-0.5" />
@@ -2818,7 +2874,7 @@ END:VCALENDAR`;
                         <div className="absolute left-16 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center gap-3 bg-stone-950/95 text-white p-2 rounded-2xl shadow-2xl border border-white/10 backdrop-blur-md whitespace-nowrap pointer-events-none animate-in fade-in slide-in-from-left-2 duration-200">
                             <img src={prevDemo.thumbnail} alt={prevDemo.name} className="w-10 h-10 rounded-xl object-cover border border-white/10" />
                             <div className="pr-3 text-left">
-                                <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">Anterior ({((activeDemoIndex - 1 + CANONICAL_TEMPLATES.length) % CANONICAL_TEMPLATES.length) + 1}/13)</p>
+                                <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">Anterior ({activeFilteredIndex + 1 > 1 ? activeFilteredIndex : effectiveDemos.length}/{effectiveDemos.length} · {currentCategoryObj?.name})</p>
                                 <p className="text-xs font-bold text-white flex items-center gap-1.5">
                                     <span>{prevDemo.icon}</span> {prevDemo.name}
                                 </p>
@@ -2827,14 +2883,14 @@ END:VCALENDAR`;
                     </Link>
 
                     <Link
-                        to={`/i/${nextDemo.slug}?t=token-preview`}
+                        to={`/i/${nextDemo.slug}?t=token-preview&category=${activeCategory}`}
                         className="fixed right-4 top-1/2 -translate-y-1/2 z-[990] hidden lg:flex items-center group no-underline"
-                        title={`Siguiente ejemplo: ${nextDemo.name}`}
+                        title={`Siguiente ejemplo de ${currentCategoryObj?.name}: ${nextDemo.name}`}
                     >
                         {/* Tooltip flotante al hover */}
                         <div className="absolute right-16 top-1/2 -translate-y-1/2 hidden group-hover:flex items-center gap-3 bg-stone-950/95 text-white p-2 rounded-2xl shadow-2xl border border-white/10 backdrop-blur-md whitespace-nowrap pointer-events-none animate-in fade-in slide-in-from-right-2 duration-200">
                             <div className="pl-3 text-right">
-                                <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">Siguiente ({((activeDemoIndex + 1) % CANONICAL_TEMPLATES.length) + 1}/13)</p>
+                                <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">Siguiente ({((activeFilteredIndex + 1) % effectiveDemos.length) + 1}/{effectiveDemos.length} · {currentCategoryObj?.name})</p>
                                 <p className="text-xs font-bold text-white flex items-center gap-1.5 justify-end">
                                     <span>{nextDemo.name}</span> <span>{nextDemo.icon}</span>
                                 </p>
@@ -2847,37 +2903,108 @@ END:VCALENDAR`;
                     </Link>
 
                     {/* Barra Inferior Flotante */}
-                    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-stone-950/90 hover:bg-stone-950 backdrop-blur-xl border border-white/15 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[96vw]">
+                    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 bg-stone-950/90 hover:bg-stone-950 backdrop-blur-xl border border-white/15 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[98vw]">
                         {/* Botón Flecha Anterior */}
                         <Link
-                            to={`/i/${prevDemo.slug}?t=token-preview`}
-                            className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
-                            title={`Ejemplo anterior: ${prevDemo.name}`}
+                            to={`/i/${prevDemo.slug}?t=token-preview&category=${activeCategory}`}
+                            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
+                            title={`Ejemplo anterior de ${currentCategoryObj?.name}: ${prevDemo.name}`}
                         >
                             <ChevronLeft className="h-4 w-4 shrink-0" />
-                            <span className="hidden sm:inline">Anterior</span>
+                            <span className="hidden md:inline">Anterior</span>
                         </Link>
+
+                        {/* SELECTOR DE CATEGORÍA CON POPOVER */}
+                        <div className="relative">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowCategoryMenu(prev => !prev);
+                                    setShowTemplateMenu(false);
+                                }}
+                                className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all border ${
+                                    showCategoryMenu 
+                                        ? 'bg-[#DF3B94] text-white border-[#DF3B94]' 
+                                        : 'bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white border-white/10'
+                                }`}
+                                title="Filtrar por categoría (Bodas, Infantiles, XV, etc.)"
+                            >
+                                <span className="text-xs sm:text-sm">{currentCategoryObj?.emoji}</span>
+                                <span className="hidden sm:inline max-w-[90px] truncate">{currentCategoryObj?.name}</span>
+                                <ChevronDown className={`h-3 w-3 text-stone-400 transition-transform ${showCategoryMenu ? 'rotate-180 text-white' : ''}`} />
+                            </button>
+
+                            {/* Dropdown Popover de Categorías */}
+                            {showCategoryMenu && (
+                                <>
+                                    <div 
+                                        className="fixed inset-0 z-40 bg-transparent" 
+                                        onClick={() => setShowCategoryMenu(false)} 
+                                    />
+                                    <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-56 sm:w-64 bg-stone-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                                        <div className="px-3 py-1.5 border-b border-white/10 mb-1 flex items-center justify-between">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Filtrar por Categoría</span>
+                                            <span className="text-[10px] text-stone-500 font-mono">{CANONICAL_TEMPLATES.length} modelos</span>
+                                        </div>
+                                        <div className="space-y-1">
+                                            {DEMO_CATEGORIES.map(cat => {
+                                                const isSel = activeCategory === cat.id;
+                                                const count = cat.id === 'todas'
+                                                    ? CANONICAL_TEMPLATES.length
+                                                    : CANONICAL_TEMPLATES.filter(t => t.category === cat.id || (t.categories && t.categories.includes(cat.id))).length;
+                                                return (
+                                                    <button
+                                                        key={cat.id}
+                                                        type="button"
+                                                        onClick={() => handleSelectCategory(cat.id)}
+                                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                                            isSel
+                                                                ? 'bg-[#DF3B94] text-white font-bold shadow-md'
+                                                                : 'text-stone-300 hover:text-white hover:bg-white/10'
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-center gap-2">
+                                                            <span>{cat.emoji}</span>
+                                                            <span>{cat.name}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isSel ? 'bg-black/20 text-white' : 'bg-stone-800 text-stone-400'}`}>
+                                                                {count}
+                                                            </span>
+                                                            {isSel && <Check className="w-3.5 h-3.5 text-white" />}
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
 
                         {/* Botón Selector / Catálogo de Modelos (abre Drawer lateral) */}
                         <button
                             type="button"
-                            onClick={() => setShowTemplateMenu(prev => !prev)}
-                            className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95"
-                            title={`Explorar las ${CANONICAL_TEMPLATES.length} plantillas de diseño`}
+                            onClick={() => {
+                                setShowTemplateMenu(prev => !prev);
+                                setShowCategoryMenu(false);
+                            }}
+                            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95"
+                            title={`Explorar las ${effectiveDemos.length} plantillas de ${currentCategoryObj?.name}`}
                         >
                             <span className="text-sm">{currentDemo.icon}</span>
-                            <span className="max-w-[100px] sm:max-w-[150px] truncate">{currentDemo.name}</span>
-                            <span className="text-[10px] text-stone-400 font-mono hidden md:inline">({activeDemoIndex + 1}/{CANONICAL_TEMPLATES.length})</span>
+                            <span className="max-w-[75px] sm:max-w-[130px] truncate">{currentDemo.name}</span>
+                            <span className="text-[10px] text-stone-400 font-mono">({activeFilteredIndex + 1}/{effectiveDemos.length})</span>
                             <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform ${showTemplateMenu ? 'rotate-180' : ''}`} />
                         </button>
 
                         {/* Botón Flecha Siguiente */}
                         <Link
-                            to={`/i/${nextDemo.slug}?t=token-preview`}
-                            className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
-                            title={`Siguiente ejemplo: ${nextDemo.name}`}
+                            to={`/i/${nextDemo.slug}?t=token-preview&category=${activeCategory}`}
+                            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
+                            title={`Siguiente ejemplo de ${currentCategoryObj?.name}: ${nextDemo.name}`}
                         >
-                            <span className="hidden sm:inline">Siguiente</span>
+                            <span className="hidden md:inline">Siguiente</span>
                             <ChevronRight className="h-4 w-4 shrink-0" />
                         </Link>
 
@@ -2885,7 +3012,7 @@ END:VCALENDAR`;
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
                         <Link to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} className="no-underline">
-                            <button className="px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95">
+                            <button className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95">
                                 <Flower2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-200 shrink-0" />
                                 <span className="hidden sm:inline">Quiero esta plantilla</span>
                                 <span className="sm:hidden">Usar</span>
@@ -2893,7 +3020,7 @@ END:VCALENDAR`;
                         </Link>
 
                         {/* Botón Galería de Ejemplos */}
-                        <Link to="/ejemplos" title="Ver galería completa de ejemplos" className="no-underline">
+                        <Link to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} title="Ver galería completa de ejemplos" className="no-underline">
                             <button className="p-1.5 sm:p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all flex items-center">
                                 <LayoutGrid className="h-4 w-4" />
                             </button>
@@ -2925,7 +3052,7 @@ END:VCALENDAR`;
                                             <Palette className="h-4 w-4 text-[#DF3B94]" />
                                             <h3 className="font-bold text-sm sm:text-base tracking-wide text-white">Modelos Disponibles</h3>
                                         </div>
-                                        <p className="text-[11px] text-stone-400 mt-0.5">{CANONICAL_TEMPLATES.length} plantillas interactivas — haz clic para ver en vivo</p>
+                                        <p className="text-[11px] text-stone-400 mt-0.5">{effectiveDemos.length} plantillas en {currentCategoryObj?.name}</p>
                                     </div>
                                     <button
                                         type="button"
@@ -2936,14 +3063,42 @@ END:VCALENDAR`;
                                     </button>
                                 </div>
 
+                                {/* Barra de Tabs de Categorías en el Drawer */}
+                                <div className="px-4 py-3 border-b border-white/10 bg-stone-950/50 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                                    {DEMO_CATEGORIES.map(cat => {
+                                        const isSel = activeCategory === cat.id;
+                                        const count = cat.id === 'todas'
+                                            ? CANONICAL_TEMPLATES.length
+                                            : CANONICAL_TEMPLATES.filter(t => t.category === cat.id || (t.categories && t.categories.includes(cat.id))).length;
+                                        return (
+                                            <button
+                                                key={cat.id}
+                                                type="button"
+                                                onClick={() => handleSelectCategory(cat.id)}
+                                                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 ${
+                                                    isSel
+                                                        ? 'bg-[#DF3B94] text-white shadow-md'
+                                                        : 'bg-stone-800/80 hover:bg-stone-800 text-stone-300 border border-white/5'
+                                                }`}
+                                            >
+                                                <span>{cat.emoji}</span>
+                                                <span>{cat.name}</span>
+                                                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSel ? 'bg-black/20 text-white' : 'bg-stone-700 text-stone-400'}`}>
+                                                    {count}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
                                 {/* Lista de Plantillas con Scroll */}
                                 <div className="flex-1 overflow-y-auto p-4 space-y-2.5">
-                                    {CANONICAL_TEMPLATES.map((tpl, idx) => {
+                                    {effectiveDemos.map((tpl, idx) => {
                                         const isCurrent = tpl.slug === slug || tpl.id === cfg.theme;
                                         return (
                                             <Link
                                                 key={tpl.id}
-                                                to={`/i/${tpl.slug}?t=token-preview`}
+                                                to={`/i/${tpl.slug}?t=token-preview&category=${activeCategory}`}
                                                 onClick={() => setShowTemplateMenu(false)}
                                                 className={`flex items-center gap-3.5 p-3 rounded-2xl border transition-all no-underline ${
                                                     isCurrent 

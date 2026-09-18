@@ -138,7 +138,7 @@ export default function ExamplesPage() {
                             return (
                                 <Link
                                     key={tpl.id}
-                                    to={`/i/${tpl.slug}?t=token-preview`}
+                                    to={`/i/${tpl.slug}?t=token-preview&category=${activeCategory !== 'todas' ? activeCategory : (tpl.category || 'todas')}`}
                                     className="group"
                                 >
                                     <div className="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-[#DF3B94]/10 transition-all duration-300 relative flex flex-col h-full">
