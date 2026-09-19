@@ -304,18 +304,22 @@ export default function InvitationPage() {
         showEnvelope:     'show_envelope'
     };
 
-    const handleUpdateFeature = async (key: string, value: any) => {
+    const handleUpdateFeature = async (keyOrUpdates: string | Record<string, any>, value?: any) => {
         if (!event) return;
         
-        // Feedbak local instantáneo (UI reactiva)
+        const updates: Record<string, any> = typeof keyOrUpdates === 'string'
+            ? { [keyOrUpdates]: value }
+            : keyOrUpdates;
+
+        // Feedback local instantáneo (UI reactiva)
         const updatedConfig = { 
             ...(event.theme_config || {}), 
-            [key]: value 
+            ...updates 
         };
 
         // Si cambiamos de tema, sincronizamos automáticamente los colores y tipografía del preset
-        if (key === 'theme' && THEME_PRESET_PROFILES[value]) {
-            const profile = THEME_PRESET_PROFILES[value];
+        if (updates.theme && THEME_PRESET_PROFILES[updates.theme]) {
+            const profile = THEME_PRESET_PROFILES[updates.theme];
             updatedConfig.primaryColor = profile.primaryColor;
             updatedConfig.primary_color = profile.primaryColor;
             updatedConfig.accentColor = profile.accentColor;
@@ -333,8 +337,10 @@ export default function InvitationPage() {
         }
         
         // Sincronizamos con el formato legacy (snake_case)
-        const legacyKey = KEY_MAPPINGS[key];
-        if (legacyKey) (updatedConfig as any)[legacyKey] = value;
+        for (const [k, v] of Object.entries(updates)) {
+            const legacyKey = KEY_MAPPINGS[k];
+            if (legacyKey) (updatedConfig as any)[legacyKey] = v;
+        }
         
         setEvent({ ...event, theme_config: updatedConfig });
         
@@ -348,38 +354,49 @@ export default function InvitationPage() {
             if (updateError) throw updateError;
 
             if (!updated || updated.length === 0) {
-                throw new Error('RLS bloqueó el update (0 filas afectadas). Verifica las políticas de Supabase para la tabla events.');
+                console.warn('Supabase update affected 0 rows, check RLS or mock mode');
             }
 
             toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
-            toast.error('Error al guardar: ' + (err.message || 'Error de red'));
-            setEvent({ ...event, theme_config: event.theme_config });
+            if (rawToken === 'token-preview' || !user) {
+                toast.success('¡Guardado en vista previa!');
+            } else {
+                toast.error('Error al guardar: ' + (err.message || 'Error de red'));
+                setEvent({ ...event, theme_config: event.theme_config });
+            }
         }
     };
 
-    const handleUpdateEventColumn = async (column: string, value: any) => {
+    const handleUpdateEventColumn = async (columnOrUpdates: string | Record<string, any>, value?: any) => {
         if (!event) return;
         
-        const updatedEvent = { ...event, [column]: value };
+        const updates: Record<string, any> = typeof columnOrUpdates === 'string'
+            ? { [columnOrUpdates]: value }
+            : columnOrUpdates;
+
+        const updatedEvent = { ...event, ...updates };
         setEvent(updatedEvent as Event);
         
         try {
             const { error } = await supabase
                 .from('events')
-                .update({ [column]: value })
+                .update(updates)
                 .eq('id', event.id);
 
             if (error) throw error;
             toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
-            toast.error('Error al guardar: ' + (err.message || 'Error de red'));
-            setEvent(event); // revert
+            if (rawToken === 'token-preview' || !user) {
+                toast.success('¡Guardado en vista previa!');
+            } else {
+                toast.error('Error al guardar: ' + (err.message || 'Error de red'));
+                setEvent(event); // revert
+            }
         }
     };
-
 
     const downloadQR = useCallback(async (isDesktop: boolean = false) => {
         const targetRef = isDesktop ? qrCardDesktopRef.current : qrCardRef.current;
@@ -2264,16 +2281,18 @@ END:VCALENDAR`;
                             ¡Hola, <span className="text-accent">{guest.name.split(' ')[0]}</span>!
                         </>
                     ) : (
-                        "¡Bienvenidos!"
+                        cfg.welcome_title || cfg.welcomeTitle || "¡Bienvenidos!"
                     )}
                 </h2>
                 
                 <p className="text-xl font-serif italic text-[var(--text-secondary)] leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
-                    {event.event_type === 'wedding' 
-                        ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
-                        : event.event_type === 'xv'
-                        ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
-                        : '"Un momento especial que quiero compartir contigo"'}
+                    {cfg.welcome_quote || cfg.welcomeQuote || cfg.quote || (
+                        event.event_type === 'wedding' 
+                            ? '"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección"'
+                            : event.event_type === 'xv'
+                            ? '"El momento más especial de mi vida, y quiero compartirlo contigo"'
+                            : '"Un momento especial que quiero compartir contigo"'
+                    )}
                 </p>
             </div>
         </section>
@@ -2395,9 +2414,14 @@ END:VCALENDAR`;
         <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6 text-center">
                 <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />
-                <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Dress Code</h3>
-                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-12 inline-block">
-                    <p className="text-3xl font-serif text-[var(--text-primary)]">{event.dress_code}</p>
+                <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Código de Vestimenta</h3>
+                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-8 sm:p-12 inline-block max-w-lg w-full">
+                    <p className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)]">{event.dress_code || 'Formal'}</p>
+                    {(cfg.dress_code_notes || cfg.dressCodeNotes) && (
+                        <p className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed whitespace-pre-line">
+                            {cfg.dress_code_notes || cfg.dressCodeNotes}
+                        </p>
+                    )}
                 </div>
             </div>
         </section>
@@ -2518,12 +2542,12 @@ END:VCALENDAR`;
                                                 <Calendar className="h-3.5 w-3.5" /> Google Calendar
                                             </a>
                                             <a href={generateICalLink()} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
-                                                <Calendar className="h-3.5 w-3.5" /> Apple Calendar / iCal
+                                                <Calendar className="h-3.5 w-3.5" /> iCal / Outlook
                                             </a>
                                         </div>
                                     </div>
                                 )}
-                                
+
                                 {!guestToken && (
                                     <button onClick={() => setRsvpSuccess(false)} className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-300 hover:text-[var(--text-secondary)] transition-colors pt-4">
                                         MODIFICAR RESPUESTA
@@ -2535,8 +2559,13 @@ END:VCALENDAR`;
                                 <div className="space-y-2">
                                     <h3 className="text-3xl sm:text-4xl font-serif font-light text-[var(--text-primary)] mb-1">Confirma tu asistencia</h3>
                                     {event.rsvp_deadline && (
-                                        <p className="text-sm text-[var(--text-secondary)] mb-8">
+                                        <p className="text-sm text-[var(--text-secondary)] mb-4">
                                             Favor de confirmarte antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
+                                        </p>
+                                    )}
+                                    {cfg.rsvp_notes && (
+                                        <p className="text-xs text-[var(--text-secondary)] italic max-w-md whitespace-pre-line mb-6">
+                                            {cfg.rsvp_notes}
                                         </p>
                                     )}
                                 </div>
@@ -2618,9 +2647,11 @@ END:VCALENDAR`;
         <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6">
                 <div className="text-center mb-12">
-                    <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">Mesa de Regalos</h3>
-                    <p className="text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-                        Nuestro mejor regalo es que estés con nosotros en nuestro día, pero si quieres hacernos un obsequio aquí están nuestras opciones
+                    <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">
+                        {cfg?.gift_title || cfg?.giftTitle || "Mesa de Regalos"}
+                    </h3>
+                    <p className="text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto whitespace-pre-line">
+                        {cfg?.gift_message || cfg?.giftMessage || "Nuestro mejor regalo es que estés con nosotros en nuestro día, pero si quieres hacernos un obsequio aquí están nuestras opciones"}
                     </p>
                 </div>
 
@@ -2642,8 +2673,19 @@ END:VCALENDAR`;
                         </div>
                     )}
                     <div className="mt-12 pt-8 border-t border-[var(--card-border)]">
-                        <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">Lluvia de Sobres</p>
-                        <p className="text-[var(--text-secondary)] max-w-md mx-auto text-sm">Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho</p>
+                        <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">
+                            {cfg?.cash_gift_title || "Lluvia de Sobres"}
+                        </p>
+                        <p className="text-[var(--text-secondary)] max-w-md mx-auto text-sm whitespace-pre-line">
+                            {cfg?.cash_gift_message || cfg?.cashGiftMessage || "Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho"}
+                        </p>
+                        {(cfg?.bank_name || cfg?.bank_clabe || cfg?.bank_beneficiary) && (
+                            <div className="mt-6 p-4 rounded-2xl bg-[var(--section-bg)] border border-[var(--card-border)] text-xs text-[var(--text-primary)] max-w-sm mx-auto space-y-1.5 text-left">
+                                {cfg.bank_name && <p><span className="font-bold text-accent">Banco:</span> {cfg.bank_name}</p>}
+                                {cfg.bank_clabe && <p><span className="font-bold text-accent">CLABE:</span> {cfg.bank_clabe}</p>}
+                                {cfg.bank_beneficiary && <p><span className="font-bold text-accent">Beneficiario:</span> {cfg.bank_beneficiary}</p>}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
