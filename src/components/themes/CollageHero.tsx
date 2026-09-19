@@ -4,13 +4,14 @@ import { es } from 'date-fns/locale';
 interface Props {
     event: any;
     cfg: any;
-    countdown: any;
-    labels: any;
+    countdown?: any;
+    labels?: any;
     heroImageUrl: string | null;
-    scrollToSection: (id: string) => void;
+    scrollToSection?: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
+export default function CollageHero({ event, cfg, heroImageUrl, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     
     // Default colors inspired by the Renderforest template
@@ -19,13 +20,31 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor;
     
     // Images for collage
+    const getImgUrl = (item: any) => {
+        if (!item) return '';
+        if (typeof item === 'string') return item;
+        return item.url || '';
+    };
+
+    const collage = Array.isArray(cfg.collage_images) 
+        ? cfg.collage_images 
+        : (Array.isArray(cfg.collageImages) ? cfg.collageImages : []);
     const gallery = cfg.gallery_images || cfg.galleryImages || [];
+
+    const defaultImages = [
+        'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80',
+    ];
+
     const images = [
-        gallery[0]?.url || heroImageUrl || 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-        gallery[1]?.url || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-        gallery[2]?.url || 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-        gallery[3]?.url || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80',
-        gallery[4]?.url || 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80',
+        getImgUrl(collage[0]) || heroImageUrl || getImgUrl(gallery[0]) || defaultImages[0],
+        getImgUrl(collage[1]) || getImgUrl(gallery[1]) || defaultImages[1],
+        getImgUrl(collage[2]) || getImgUrl(gallery[2]) || defaultImages[2],
+        getImgUrl(collage[3]) || getImgUrl(gallery[3]) || defaultImages[3],
+        getImgUrl(collage[4]) || getImgUrl(gallery[4]) || defaultImages[4],
     ];
 
     // Smart contrast calculation
@@ -53,21 +72,29 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
                 <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-12 theme-collage-container">
                     
                     {/* Left Collage (Desktop only) */}
-                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-left duration-1000 theme-collage-desktop-left">
+                    <div 
+                        className={`hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-left duration-1000 theme-collage-desktop-left ${onEditHero ? 'group' : ''}`}
+                    >
                         <img 
                             src={images[1]} 
                             alt="" 
-                            className="absolute left-0 top-10 w-48 h-56 object-cover rounded-2xl shadow-xl -rotate-6 z-10 border-4 border-white" 
+                            onClick={onEditHero}
+                            title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
+                            className={`absolute left-0 top-10 w-48 h-56 object-cover rounded-2xl shadow-xl -rotate-6 z-10 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-30' : ''}`} 
                         />
                         <img 
                             src={images[0]} 
                             alt="" 
-                            className="absolute left-24 top-20 w-56 h-64 object-cover rounded-2xl shadow-2xl z-20 border-4 border-white" 
+                            onClick={onEditHero}
+                            title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
+                            className={`absolute left-24 top-20 w-56 h-64 object-cover rounded-2xl shadow-2xl z-20 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-30' : ''}`} 
                         />
                         <img 
                             src={images[2]} 
                             alt="" 
-                            className="absolute left-10 bottom-0 w-40 h-48 object-cover rounded-2xl shadow-lg rotate-6 z-30 border-4 border-white" 
+                            onClick={onEditHero}
+                            title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
+                            className={`absolute left-10 bottom-0 w-40 h-48 object-cover rounded-2xl shadow-lg rotate-6 z-30 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-40' : ''}`} 
                         />
                         {/* Decorative squiggly arrow */}
                         <svg className="absolute -left-4 bottom-20 w-16 h-16 text-stone-400 rotate-12 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
@@ -91,9 +118,27 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
 
                         {/* Mobile Collage Cards (shown on mobile & simulator) */}
                         <div className="flex lg:hidden justify-center items-center gap-2 sm:gap-3 py-3 px-2 w-full max-w-xs mx-auto theme-collage-mobile-fan">
-                            <img src={images[1]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md -rotate-6 border-2 border-white" />
-                            <img src={images[0]} alt="" className="w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl shadow-xl z-10 border-2 border-white scale-105" />
-                            <img src={images[2]} alt="" className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md rotate-6 border-2 border-white" />
+                            <img 
+                                src={images[1]} 
+                                alt="" 
+                                onClick={onEditHero}
+                                title={onEditHero ? "Haz clic para cambiar fotos" : undefined}
+                                className={`w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md -rotate-6 border-2 border-white transition-transform ${onEditHero ? 'cursor-pointer active:scale-95' : ''}`} 
+                            />
+                            <img 
+                                src={images[0]} 
+                                alt="" 
+                                onClick={onEditHero}
+                                title={onEditHero ? "Haz clic para cambiar fotos" : undefined}
+                                className={`w-24 h-32 sm:w-28 sm:h-36 object-cover rounded-xl shadow-xl z-10 border-2 border-white scale-105 transition-transform ${onEditHero ? 'cursor-pointer active:scale-95' : ''}`} 
+                            />
+                            <img 
+                                src={images[2]} 
+                                alt="" 
+                                onClick={onEditHero}
+                                title={onEditHero ? "Haz clic para cambiar fotos" : undefined}
+                                className={`w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-md rotate-6 border-2 border-white transition-transform ${onEditHero ? 'cursor-pointer active:scale-95' : ''}`} 
+                            />
                         </div>
 
                         <div className="pt-2 sm:pt-4">
@@ -114,16 +159,22 @@ export default function CollageHero({ event, cfg, heroImageUrl }: Props) {
                     </div>
 
                     {/* Right Collage (Desktop only) */}
-                    <div className="hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-right duration-1000 theme-collage-desktop-right">
+                    <div 
+                        className={`hidden lg:flex w-1/3 relative h-[400px] items-center justify-center animate-in fade-in slide-in-from-right duration-1000 theme-collage-desktop-right ${onEditHero ? 'group' : ''}`}
+                    >
                         <img 
                             src={images[3]} 
                             alt="" 
-                            className="absolute right-20 top-10 w-56 h-72 object-cover rounded-2xl shadow-2xl -rotate-3 z-20 border-4 border-white" 
+                            onClick={onEditHero}
+                            title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
+                            className={`absolute right-20 top-10 w-56 h-72 object-cover rounded-2xl shadow-2xl -rotate-3 z-20 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-30' : ''}`} 
                         />
                         <img 
                             src={images[4]} 
                             alt="" 
-                            className="absolute right-0 top-32 w-48 h-56 object-cover rounded-2xl shadow-xl rotate-6 z-10 border-4 border-white" 
+                            onClick={onEditHero}
+                            title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
+                            className={`absolute right-0 top-32 w-48 h-56 object-cover rounded-2xl shadow-xl rotate-6 z-10 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-30' : ''}`} 
                         />
                         <p className="absolute bottom-4 right-10 text-xs font-serif italic text-stone-500 tracking-widest z-30 opacity-70">
                             {cfg.subtitle || "Y así comienza la aventura"}

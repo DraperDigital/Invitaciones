@@ -13,10 +13,19 @@ type Props = {
     onUpdateEventColumn: (columnOrUpdates: string | Record<string, any>, value?: any) => Promise<void>;
 };
 
+export const COLLAGE_SLOTS = [
+    { label: 'Foto #1 - Principal', position: 'Centro Izquierda (Móvil Centro)', defaultImg: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Foto #2 - Superior Izq', position: 'Arriba Izquierda (Móvil Izq)', defaultImg: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Foto #3 - Inferior Izq', position: 'Abajo Izquierda (Móvil Der)', defaultImg: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Foto #4 - Superior Der', position: 'Arriba Derecha (Mesa/Detalle)', defaultImg: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80' },
+    { label: 'Foto #5 - Inferior Der', position: 'Abajo Derecha (Anillos/Accesorios)', defaultImg: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80' },
+];
+
 export default function InlineSectionEditor({ sectionId, event, onClose, onUpdateThemeConfig, onUpdateEventColumn }: Props) {
     const toast = useToast();
     const [isSaving, setIsSaving] = useState(false);
     const cfg = event.theme_config || {};
+    const isCollageTheme = cfg.theme === 'collage' || (Array.isArray(cfg.collage_images) && cfg.collage_images.length > 0);
     
     // ── Hero & Common ──
     const [title, setTitle] = useState(event.title || '');
@@ -28,6 +37,24 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || '');
     const [uploadingHero, setUploadingHero] = useState(false);
     const heroFileInputRef = useRef<HTMLInputElement>(null);
+
+    // ── Collage Images (for Collage Elegante theme) ──
+    const rawCollage = cfg.collage_images || cfg.collageImages;
+    const [collageImages, setCollageImages] = useState<string[]>(() => {
+        if (Array.isArray(rawCollage) && rawCollage.length > 0) {
+            return rawCollage.map((img: any) => typeof img === 'string' ? img : img?.url || '').filter(Boolean);
+        }
+        return [
+            cfg.hero_image_url || cfg.heroImage || COLLAGE_SLOTS[0].defaultImg,
+            COLLAGE_SLOTS[1].defaultImg,
+            COLLAGE_SLOTS[2].defaultImg,
+            COLLAGE_SLOTS[3].defaultImg,
+            COLLAGE_SLOTS[4].defaultImg,
+        ];
+    });
+    const [selectedCollageSlot, setSelectedCollageSlot] = useState(0);
+    const [uploadingCollage, setUploadingCollage] = useState(false);
+    const collageSlotFileInputRef = useRef<HTMLInputElement>(null);
 
     // Gallery upload states
     const [uploadingGallery, setUploadingGallery] = useState(false);
@@ -164,6 +191,18 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setRsvpDeadline(event.rsvp_deadline ? new Date(event.rsvp_deadline).toISOString().slice(0, 10) : '');
         setRsvpNotes(cfg.rsvp_notes || '');
         setWhatsappNumber(cfg.whatsapp_number || '');
+        const currentCollage = cfg.collage_images || cfg.collageImages;
+        if (Array.isArray(currentCollage) && currentCollage.length > 0) {
+            setCollageImages(currentCollage.map((img: any) => typeof img === 'string' ? img : img?.url || ''));
+        } else {
+            setCollageImages([
+                cfg.hero_image_url || cfg.heroImage || COLLAGE_SLOTS[0].defaultImg,
+                COLLAGE_SLOTS[1].defaultImg,
+                COLLAGE_SLOTS[2].defaultImg,
+                COLLAGE_SLOTS[3].defaultImg,
+                COLLAGE_SLOTS[4].defaultImg,
+            ]);
+        }
         setBrideFather(cfg.parents?.bride?.father || cfg.parents?.father || '');
         setBrideMother(cfg.parents?.bride?.mother || cfg.parents?.mother || '');
         setGroomFather(cfg.parents?.groom?.father || '');
@@ -194,6 +233,39 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         }
     };
 
+    const handleCollageSlotUpload = async (file: File, slotIndex: number) => {
+        if (!file || !event.id) return;
+        setUploadingCollage(true);
+        try {
+            const ext = file.name.split('.').pop() || 'jpg';
+            const path = `events/${event.id}/collage-slot-${slotIndex}-${Date.now()}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            
+            setCollageImages(prev => {
+                const next = [...prev];
+                while (next.length <= slotIndex) {
+                    next.push(COLLAGE_SLOTS[next.length]?.defaultImg || '');
+                }
+                next[slotIndex] = publicUrl;
+                return next;
+            });
+            if (slotIndex === 0) {
+                setHeroImageUrl(publicUrl);
+            }
+            toast.success(`¡Foto #${slotIndex + 1} del collage actualizada!`);
+        } catch (err: any) {
+            console.error('Error uploading collage slot image:', err);
+            toast.error('Error al subir la imagen.');
+        } finally {
+            setUploadingCollage(false);
+        }
+    };
+
     const handleGalleryUpload = async (file: File) => {
         if (!file || !event.id) return;
         setUploadingGallery(true);
@@ -221,14 +293,17 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         try {
             if (sectionId === 'hero') {
                 if (title !== event.title) await onUpdateEventColumn('title', title);
+                const finalHeroImage = isCollageTheme ? (collageImages[0] || heroImageUrl) : heroImageUrl;
                 await onUpdateThemeConfig({
                     subtitle,
                     child_name: childName,
                     childName: childName,
                     age: Number(age) || age,
                     turning_age: Number(age) || age,
-                    hero_image_url: heroImageUrl,
-                    heroImage: heroImageUrl
+                    hero_image_url: finalHeroImage,
+                    heroImage: finalHeroImage,
+                    collage_images: collageImages,
+                    collageImages: collageImages
                 });
             } else if (sectionId === 'guest_welcome') {
                 await onUpdateThemeConfig({
@@ -353,103 +428,254 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6 bg-white">
                 {sectionId === 'hero' && (
                     <div className="space-y-5">
-                        {/* Hero Photo / Portada */}
-                        <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500 flex items-center justify-between">
-                                <span>Foto de Portada / Imagen Principal</span>
-                                {heroImageUrl && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setHeroImageUrl('')}
-                                        className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal"
-                                    >
-                                        <Trash2 className="h-3 w-3" /> Quitar foto
-                                    </button>
-                                )}
-                            </label>
-
-                            <div className="rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 p-4 transition-all hover:border-stone-300">
-                                {heroImageUrl ? (
-                                    <div className="space-y-3">
-                                        <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-stone-900 shadow-inner group">
-                                            <img 
-                                                src={heroImageUrl} 
-                                                alt="Portada" 
-                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                                            />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={() => heroFileInputRef.current?.click()}
-                                                    disabled={uploadingHero}
-                                                    className="px-3 py-1.5 bg-white text-stone-800 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow hover:bg-stone-50 cursor-pointer"
-                                                >
-                                                    <Upload className="h-3.5 w-3.5" /> Cambiar
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setHeroImageUrl('')}
-                                                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow cursor-pointer"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5" /> Quitar
-                                                </button>
-                                            </div>
-                                        </div>
+                        {/* Hero Photo or Collage Photos depending on theme */}
+                        {isCollageTheme ? (
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <label className="text-[10px] uppercase font-black tracking-widest text-stone-700 block">
+                                            Composición del Collage (5 Fotos)
+                                        </label>
+                                        <p className="text-[11px] text-stone-500">
+                                            Tu plantilla utiliza 5 fotografías. Selecciona cualquiera para cambiarla:
+                                        </p>
                                     </div>
-                                ) : (
-                                    <div className="py-5 text-center">
-                                        <div className="w-12 h-12 mx-auto rounded-full bg-stone-100 flex items-center justify-center text-stone-400 mb-2">
-                                            <ImageIcon className="h-6 w-6" />
-                                        </div>
-                                        <p className="text-xs font-bold text-stone-700">Sin foto de portada</p>
-                                        <p className="text-[10px] text-stone-400 mt-0.5">Sube una foto desde tu celular/computadora o pega un enlace</p>
-                                    </div>
-                                )}
-
-                                <div className="mt-3">
-                                    <input
-                                        type="file"
-                                        ref={heroFileInputRef}
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) handleHeroUpload(file);
-                                            e.target.value = '';
-                                        }}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => heroFileInputRef.current?.click()}
-                                        disabled={uploadingHero}
-                                        className="w-full py-2.5 px-4 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
-                                    >
-                                        {uploadingHero ? (
-                                            <>
-                                                <Loader2 className="h-4 w-4 animate-spin" /> Subiendo foto...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Upload className="h-4 w-4" /> Subir Foto desde tu Dispositivo
-                                            </>
-                                        )}
-                                    </button>
+                                    <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-pink-50 text-[#DF3B94] border border-pink-100 flex items-center gap-1">
+                                        🖼️ Collage
+                                    </span>
                                 </div>
 
-                                <div className="mt-3 pt-3 border-t border-stone-200">
-                                    <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block mb-1">
-                                        O pegar enlace directo de imagen (URL):
-                                    </label>
-                                    <input 
-                                        type="url"
-                                        value={heroImageUrl}
-                                        onChange={e => setHeroImageUrl(e.target.value)}
-                                        placeholder="https://images.unsplash.com/... o enlace web"
-                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/20 text-stone-800"
-                                    />
+                                {/* Visual 5-slot selector */}
+                                <div className="grid grid-cols-5 gap-2 p-2 bg-stone-100/70 rounded-2xl border border-stone-200">
+                                    {COLLAGE_SLOTS.map((slot, idx) => {
+                                        const currentImg = collageImages[idx] || slot.defaultImg;
+                                        const isSelected = selectedCollageSlot === idx;
+                                        return (
+                                            <button
+                                                key={idx}
+                                                type="button"
+                                                onClick={() => setSelectedCollageSlot(idx)}
+                                                className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                                                    isSelected 
+                                                        ? 'border-[#DF3B94] ring-2 ring-[#DF3B94]/30 scale-105 z-10 shadow-md' 
+                                                        : 'border-stone-200 opacity-80 hover:opacity-100 hover:border-stone-300'
+                                                }`}
+                                            >
+                                                <img src={currentImg} alt={slot.label} className="w-full h-full object-cover" />
+                                                <span className={`absolute bottom-0 inset-x-0 text-[9px] font-black py-0.5 text-center truncate px-1 transition-colors ${
+                                                    isSelected ? 'bg-[#DF3B94] text-white' : 'bg-black/60 text-white'
+                                                }`}>
+                                                    #{idx + 1}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Detail card for selected collage slot */}
+                                <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <span className="text-xs font-bold text-stone-800 block">
+                                                {COLLAGE_SLOTS[selectedCollageSlot]?.label}
+                                            </span>
+                                            <span className="text-[10px] text-stone-500">
+                                                Ubicación: {COLLAGE_SLOTS[selectedCollageSlot]?.position}
+                                            </span>
+                                        </div>
+                                        {collageImages[selectedCollageSlot] && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const updated = [...collageImages];
+                                                    updated[selectedCollageSlot] = COLLAGE_SLOTS[selectedCollageSlot].defaultImg;
+                                                    setCollageImages(updated);
+                                                    if (selectedCollageSlot === 0) setHeroImageUrl(updated[0]);
+                                                }}
+                                                className="text-[10px] text-stone-400 hover:text-stone-600 underline font-medium cursor-pointer"
+                                            >
+                                                Restaurar demo
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row gap-3 items-center">
+                                        <div className="w-24 h-28 rounded-xl overflow-hidden bg-stone-900 border-2 border-white shadow-md flex-shrink-0 relative group">
+                                            <img 
+                                                src={collageImages[selectedCollageSlot] || COLLAGE_SLOTS[selectedCollageSlot]?.defaultImg} 
+                                                alt="" 
+                                                className="w-full h-full object-cover" 
+                                            />
+                                        </div>
+                                        <div className="flex-1 w-full space-y-2.5">
+                                            <input
+                                                type="file"
+                                                ref={collageSlotFileInputRef}
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) handleCollageSlotUpload(file, selectedCollageSlot);
+                                                    e.target.value = '';
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => collageSlotFileInputRef.current?.click()}
+                                                disabled={uploadingCollage}
+                                                className="w-full py-2.5 px-4 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                            >
+                                                {uploadingCollage ? (
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin" /> Subiendo imagen...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Upload className="h-4 w-4" /> Subir Foto para #{selectedCollageSlot + 1}
+                                                    </>
+                                                )}
+                                            </button>
+
+                                            <input 
+                                                type="url"
+                                                value={collageImages[selectedCollageSlot] || ''}
+                                                onChange={e => {
+                                                    const updated = [...collageImages];
+                                                    while (updated.length <= selectedCollageSlot) {
+                                                        updated.push(COLLAGE_SLOTS[updated.length]?.defaultImg || '');
+                                                    }
+                                                    updated[selectedCollageSlot] = e.target.value;
+                                                    setCollageImages(updated);
+                                                    if (selectedCollageSlot === 0) setHeroImageUrl(e.target.value);
+                                                }}
+                                                placeholder="O pega URL de la imagen..."
+                                                className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#DF3B94]/20 text-stone-800"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Navigation between the 5 photos */}
+                                    <div className="flex justify-between items-center pt-2 border-t border-stone-200 text-xs">
+                                        <button
+                                            type="button"
+                                            disabled={selectedCollageSlot === 0}
+                                            onClick={() => setSelectedCollageSlot(s => Math.max(0, s - 1))}
+                                            className="text-stone-500 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed font-medium cursor-pointer"
+                                        >
+                                            ← Foto anterior
+                                        </button>
+                                        <span className="text-[11px] text-stone-400 font-bold">
+                                            Foto {selectedCollageSlot + 1} de 5
+                                        </span>
+                                        <button
+                                            type="button"
+                                            disabled={selectedCollageSlot === 4}
+                                            onClick={() => setSelectedCollageSlot(s => Math.min(4, s + 1))}
+                                            className="text-stone-500 hover:text-stone-800 disabled:opacity-30 disabled:cursor-not-allowed font-medium cursor-pointer"
+                                        >
+                                            Siguiente foto →
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500 flex items-center justify-between">
+                                    <span>Foto de Portada / Imagen Principal</span>
+                                    {heroImageUrl && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setHeroImageUrl('')}
+                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal"
+                                        >
+                                            <Trash2 className="h-3 w-3" /> Quitar foto
+                                        </button>
+                                    )}
+                                </label>
+
+                                <div className="rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 p-4 transition-all hover:border-stone-300">
+                                    {heroImageUrl ? (
+                                        <div className="space-y-3">
+                                            <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-stone-900 shadow-inner group">
+                                                <img 
+                                                    src={heroImageUrl} 
+                                                    alt="Portada" 
+                                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => heroFileInputRef.current?.click()}
+                                                        disabled={uploadingHero}
+                                                        className="px-3 py-1.5 bg-white text-stone-800 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow hover:bg-stone-50 cursor-pointer"
+                                                    >
+                                                        <Upload className="h-3.5 w-3.5" /> Cambiar
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setHeroImageUrl('')}
+                                                        className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow cursor-pointer"
+                                                    >
+                                                        <Trash2 className="h-3.5 w-3.5" /> Quitar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="py-5 text-center">
+                                            <div className="w-12 h-12 mx-auto rounded-full bg-stone-100 flex items-center justify-center text-stone-400 mb-2">
+                                                <ImageIcon className="h-6 w-6" />
+                                            </div>
+                                            <p className="text-xs font-bold text-stone-700">Sin foto de portada</p>
+                                            <p className="text-[10px] text-stone-400 mt-0.5">Sube una foto desde tu celular/computadora o pega un enlace</p>
+                                        </div>
+                                    )}
+
+                                    <div className="mt-3">
+                                        <input
+                                            type="file"
+                                            ref={heroFileInputRef}
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) handleHeroUpload(file);
+                                                e.target.value = '';
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => heroFileInputRef.current?.click()}
+                                            disabled={uploadingHero}
+                                            className="w-full py-2.5 px-4 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                        >
+                                            {uploadingHero ? (
+                                                <>
+                                                    <Loader2 className="h-4 w-4 animate-spin" /> Subiendo foto...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="h-4 w-4" /> Subir Foto desde tu Dispositivo
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+
+                                    <div className="mt-3 pt-3 border-t border-stone-200">
+                                        <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block mb-1">
+                                            O pegar enlace directo de imagen (URL):
+                                        </label>
+                                        <input 
+                                            type="url"
+                                            value={heroImageUrl}
+                                            onChange={e => setHeroImageUrl(e.target.value)}
+                                            placeholder="https://images.unsplash.com/... o enlace web"
+                                            className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/20 text-stone-800"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Title & Subtitle */}
                         <div className="space-y-2">
