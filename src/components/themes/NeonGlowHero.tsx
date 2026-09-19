@@ -8,9 +8,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function NeonGlowHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function NeonGlowHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero: _onEditHero }: Props) {
     const primaryColor = cfg.primaryColor || cfg.primary_color || '#ff00ff';
     const eventDate = new Date(event.date_time);
 
@@ -32,7 +33,7 @@ export default function NeonGlowHero({ event, cfg, countdown, labels, heroImageU
             </nav>
 
             <div className="relative z-10 text-center max-w-4xl mx-auto flex flex-col items-center px-4 w-full">
-                <p className="text-[10px] sm:text-[12px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black text-white/60 mb-4 sm:mb-8">{labels.welcome}</p>
+                <p className="text-[10px] sm:text-[12px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black text-white/60 mb-4 sm:mb-8">{cfg.subtitle || labels.welcome}</p>
                 
                 <h1 
                     className="text-3xl sm:text-6xl md:text-8xl lg:text-9xl font-black italic tracking-tight uppercase mb-4 sm:mb-6 leading-tight drop-shadow-2xl max-w-full"

@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -8,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function SplitScreenHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function SplitScreenHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const primaryColor = cfg.button_color || cfg.buttonColor || cfg.primaryColor || cfg.primary_color || '#1B2E1D';
     const heroText = cfg.hero_text_color || cfg.heroTextColor || '#FFFFFF';
     
@@ -20,11 +22,23 @@ export default function SplitScreenHero({ event, cfg, countdown, labels, heroIma
     return (
         <div className="relative min-h-screen flex flex-col md:flex-row overflow-hidden bg-white theme-splitscreen-wrapper">
             {/* Left Image Side */}
-            <div className="w-full md:w-1/2 h-[42vh] sm:h-[48vh] md:h-screen relative theme-splitscreen-img">
+            <div 
+                onClick={onEditHero}
+                className={`w-full md:w-1/2 h-[42vh] sm:h-[48vh] md:h-screen relative theme-splitscreen-img group/split ${
+                    onEditHero ? 'cursor-pointer' : ''
+                }`}
+                title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
+            >
                 {heroImageUrl ? (
-                    <img src={heroImageUrl} alt={event.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={heroImageUrl} alt={event.title} className="absolute inset-0 w-full h-full object-cover group-hover/split:scale-105 transition-transform duration-700" />
                 ) : (
                     <div className="absolute inset-0 bg-stone-200 animate-pulse" />
+                )}
+                {onEditHero && (
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/split:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20">
+                        <Edit2 className="h-4 w-4" />
+                        <span>Cambiar Foto</span>
+                    </div>
                 )}
             </div>
 

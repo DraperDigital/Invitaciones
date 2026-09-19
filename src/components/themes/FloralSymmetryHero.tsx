@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { Edit2 } from 'lucide-react';
 
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
 const TornEdge = ({ className = '', flip = false }: { className?: string, flip?: boolean }) => (
@@ -19,7 +21,7 @@ const TornEdge = ({ className = '', flip = false }: { className?: string, flip?:
     </div>
 );
 
-export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToSection }: Props) {
+export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     
     // Theme colors: botanical eucalyptus green & romantic dusty rose
@@ -35,8 +37,12 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
     // Using the custom generated floral branch
     const floralImage = "/floral_ornament.png"; 
     
-    // Get the couple's picture for the circular avatar. Fallback to heroImage or a default.
-    const avatarUrl = (cfg.gallery_images && cfg.gallery_images[0]?.url) || heroImageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80';
+    // Get the couple's picture for the circular avatar. Prioritize dedicated floral avatar, then heroImage, then gallery, then default.
+    const avatarUrl = cfg.floral_avatar_url 
+        || heroImageUrl 
+        || (cfg.gallery_images && cfg.gallery_images[0]?.url) 
+        || (typeof cfg.gallery_images?.[0] === 'string' ? cfg.gallery_images[0] : null) 
+        || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80';
 
     return (
         <section id="hero" className="relative flex flex-col w-full bg-[var(--section-bg)]" style={{ backgroundColor: bgColor }}>
@@ -95,7 +101,21 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
             </div>
 
             {/* 2. TORN PAPER GREEN BANNER */}
-            <div className="relative w-full z-20 mt-12" style={{ backgroundColor: bannerColor }}>
+            <div className="relative w-full z-20 mt-12 group/banner" style={{ backgroundColor: bannerColor }}>
+                {onEditHero && (
+                    <div className="absolute top-6 right-6 z-30 pointer-events-auto">
+                        <button
+                            type="button"
+                            onClick={onEditHero}
+                            className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
+                            title="Editar Frases del Banner"
+                        >
+                            <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
+                            <span>Editar Banner</span>
+                        </button>
+                    </div>
+                )}
+
                 {/* Top torn edge (using the background color of the hero to cut into the banner) */}
                 <div className="absolute top-0 left-0 w-full -translate-y-[99%]">
                     <TornEdge />
@@ -117,12 +137,39 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
             </div>
 
             {/* 3. CIRCULAR AVATAR & STORY SECTION */}
-            <div className="relative w-full pt-32 pb-16 px-6 bg-[var(--section-bg)] text-center" style={{ backgroundColor: bgColor }}>
+            <div className="relative w-full pt-32 pb-16 px-6 bg-[var(--section-bg)] text-center group/story" style={{ backgroundColor: bgColor }}>
+                {onEditHero && (
+                    <div className="absolute top-8 right-6 sm:top-10 sm:right-10 z-30 pointer-events-auto">
+                        <button
+                            type="button"
+                            onClick={onEditHero}
+                            className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
+                            title="Editar Historia, Foto y Dedicatoria"
+                        >
+                            <Edit2 className="h-3.5 w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
+                            <span>Editar</span>
+                        </button>
+                    </div>
+                )}
+
                 <div className="max-w-3xl mx-auto space-y-10">
                     
                     {/* Circular Avatar */}
-                    <div className="mx-auto w-40 h-40 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 shadow-xl animate-in zoom-in duration-1000" style={{ borderColor: bgColor }}>
+                    <div 
+                        onClick={onEditHero}
+                        className={`mx-auto w-40 h-40 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 shadow-xl animate-in zoom-in duration-1000 relative group/avatar ${
+                            onEditHero ? 'cursor-pointer hover:scale-105 transition-all ring-2 ring-transparent hover:ring-[#DF3B94]/60' : ''
+                        }`} 
+                        style={{ borderColor: bgColor }}
+                        title={onEditHero ? "Haz clic para cambiar la foto" : undefined}
+                    >
                         <img src={avatarUrl} alt="Couple" className="w-full h-full object-cover" />
+                        {onEditHero && (
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1 p-2">
+                                <Edit2 className="h-5 w-5" />
+                                <span className="text-[11px]">Cambiar Foto</span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Titles */}

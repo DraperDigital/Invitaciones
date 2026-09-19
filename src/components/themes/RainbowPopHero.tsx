@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, Clock, MapPin, Sparkles, Heart, Gift } from 'lucide-react';
+import { Calendar, Clock, MapPin, Sparkles, Heart, Gift, Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -9,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function RainbowPopHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function RainbowPopHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     const childName = cfg.child_name || cfg.childName || event.title?.replace(/^(cumpleaños|cumple|mi fiesta|fiesta infantil)\s*(de\s*)?/i, '') || 'Lucas';
     const age = cfg.age || cfg.turning_age || 1;
@@ -77,8 +78,14 @@ export default function RainbowPopHero({ event, cfg, countdown, labels, heroImag
                         {/* ── Circular Rainbow Photo Badge ── */}
                         <div className="relative mb-6">
                             {/* Colorful Multi-layer Outer Rings */}
-                            <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full p-2 bg-gradient-to-tr from-[#EC4899] via-[#FBBF24] via-[#10B981] to-[#06B6D4] shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
-                                <div className="w-full h-full rounded-full p-1.5 bg-white flex items-center justify-center overflow-hidden">
+                            <div 
+                                onClick={onEditHero}
+                                className={`w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full p-2 bg-gradient-to-tr from-[#EC4899] via-[#FBBF24] via-[#10B981] to-[#06B6D4] shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300 group/popimage ${
+                                    onEditHero ? 'cursor-pointer' : ''
+                                }`}
+                                title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
+                            >
+                                <div className="w-full h-full rounded-full p-1.5 bg-white flex items-center justify-center overflow-hidden relative">
                                     {heroImageUrl ? (
                                         <img 
                                             src={heroImageUrl} 
@@ -89,6 +96,12 @@ export default function RainbowPopHero({ event, cfg, countdown, labels, heroImag
                                         <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-100 to-sky-100 flex flex-col items-center justify-center p-4">
                                             <Sparkles className="w-12 h-12 text-[#EC4899] mb-2 animate-spin" style={{ animationDuration: '8s' }} />
                                             <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">¡Fiesta Divertida!</p>
+                                        </div>
+                                    )}
+                                    {onEditHero && (
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/popimage:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1 rounded-full z-20">
+                                            <Edit2 className="h-5 w-5 text-white" />
+                                            <span className="text-[11px]">Cambiar Foto</span>
                                         </div>
                                     )}
                                 </div>

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Plane } from 'lucide-react';
+import { Plane, Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -9,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function PassportHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function PassportHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const primaryColor = cfg.primaryColor || cfg.primary_color || '#006B7D'; // Deep ocean blue
     const eventDate = new Date(event.date_time);
 
@@ -22,9 +23,15 @@ export default function PassportHero({ event, cfg, countdown, heroImageUrl, scro
 
             <div className="relative z-10 w-full max-w-sm sm:max-w-xl md:max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-[#006B7D]/10 theme-passport-card">
                 {/* Boarding Pass Left - Image */}
-                <div className="w-full md:w-2/5 h-44 sm:h-64 md:h-auto min-h-[160px] relative theme-passport-image">
+                <div 
+                    onClick={onEditHero}
+                    className={`w-full md:w-2/5 h-44 sm:h-64 md:h-auto min-h-[160px] relative theme-passport-image group/pass ${
+                        onEditHero ? 'cursor-pointer' : ''
+                    }`}
+                    title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
+                >
                     {heroImageUrl ? (
-                        <img src={heroImageUrl} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                        <img src={heroImageUrl} alt="" className="absolute inset-0 w-full h-full object-cover group-hover/pass:scale-105 transition-transform duration-500" />
                     ) : (
                         <div className="absolute inset-0 bg-[#E1E8ED]" />
                     )}
@@ -33,6 +40,12 @@ export default function PassportHero({ event, cfg, countdown, heroImageUrl, scro
                             {event.title}
                         </h2>
                     </div>
+                    {onEditHero && (
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/pass:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20">
+                            <Edit2 className="h-4 w-4" />
+                            <span>Cambiar Foto</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Boarding Pass Right - Info */}

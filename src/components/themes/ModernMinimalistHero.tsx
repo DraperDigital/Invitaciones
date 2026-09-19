@@ -8,9 +8,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function ModernMinimalistHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function ModernMinimalistHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero: _onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     
     const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#1c1917';

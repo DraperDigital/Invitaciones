@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Clock, MapPin, Gamepad2 } from 'lucide-react';
+import { Clock, MapPin, Gamepad2, Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -9,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function GamerPartyHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function GamerPartyHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     const childName = cfg.child_name || cfg.childName || event.title?.replace(/^(cumpleaños|cumple|fiesta gamer|gamer party)\s*(de\s*)?/i, '') || 'SAMUEL';
 
@@ -142,12 +143,18 @@ export default function GamerPartyHero({ event, cfg, countdown, labels, heroImag
                                 ¡Level Up!
                             </div>
 
-                            <div className="aspect-[4/4] rounded-2xl overflow-hidden bg-slate-900 relative mt-2 border border-white/10">
+                            <div 
+                                onClick={onEditHero}
+                                className={`aspect-[4/4] rounded-2xl overflow-hidden bg-slate-900 relative mt-2 border border-white/10 group/gamerphoto ${
+                                    onEditHero ? 'cursor-pointer hover:border-cyan-400/50' : ''
+                                }`}
+                                title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
+                            >
                                 {heroImageUrl ? (
                                     <img 
                                         src={heroImageUrl} 
                                         alt={childName} 
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover group-hover/gamerphoto:scale-105 transition-transform duration-500"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-tr from-slate-900 to-indigo-950">
@@ -156,9 +163,15 @@ export default function GamerPartyHero({ event, cfg, countdown, labels, heroImag
                                     </div>
                                 )}
                                 {/* Corner Controller Badge */}
-                                <div className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-md p-1.5 rounded-xl border border-white/20 text-xl select-none">
+                                <div className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-md p-1.5 rounded-xl border border-white/20 text-xl select-none z-10">
                                     🎮
                                 </div>
+                                {onEditHero && (
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/gamerphoto:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20">
+                                        <Edit2 className="h-4 w-4 text-cyan-400" />
+                                        <span>Cambiar Foto</span>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Player Invite Text */}

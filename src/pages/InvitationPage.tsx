@@ -2005,55 +2005,55 @@ END:VCALENDAR`;
     const renderHero = () => {
         // FULL-PAGE THEMES (Highest priority - override default hero)
         if (cfg.theme === 'classic-elegance-pro') {
-            return <ClassicEleganceProHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <ClassicEleganceProHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'classic-elegance' || cfg.theme === 'classic' || !cfg.theme) {
-            return <ClassicEleganceHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <ClassicEleganceHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'floral-symmetry') {
-            return <FloralSymmetryHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <FloralSymmetryHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'collage') {
             return <CollageHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'modern-minimalist') {
-            return <ModernMinimalistHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <ModernMinimalistHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'romantic-botanical') {
-            return <RomanticBotanicalHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <RomanticBotanicalHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'split-screen') {
-            return <SplitScreenHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <SplitScreenHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'magazine') {
-            return <MagazineHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <MagazineHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'neon-glow') {
-            return <NeonGlowHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <NeonGlowHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'luxury-gold') {
-            return <LuxuryGoldHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <LuxuryGoldHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'passport') {
-            return <PassportHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <PassportHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'polaroid-vintage') {
-            return <PolaroidVintageHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <PolaroidVintageHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'whimsical-kids') {
-            return <WhimsicalKidsHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <WhimsicalKidsHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'kids-farm') {
-            return <KidsFarmHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <KidsFarmHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'gamer-party') {
-            return <GamerPartyHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <GamerPartyHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'pixel-craft') {
-            return <PixelCraftHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <PixelCraftHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'rainbow-pop') {
-            return <RainbowPopHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+            return <RainbowPopHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
 
         if (planTier === 'clasico') {

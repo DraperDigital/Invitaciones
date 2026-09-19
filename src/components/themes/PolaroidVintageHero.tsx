@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -8,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     const heroBg = cfg?.heroBgColor || cfg?.hero_bg_color || '#Eae6df';
     const heroText = cfg?.hero_text_color || cfg?.heroTextColor || '#292524';
@@ -27,7 +29,13 @@ export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUr
 
             <div className="relative z-10 w-full max-w-lg mt-12 flex flex-col items-center">
                 {/* Polaroid Frame */}
-                <div className="bg-white p-4 pb-16 sm:p-6 sm:pb-20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 w-full">
+                <div 
+                    onClick={onEditHero}
+                    className={`bg-white p-4 pb-16 sm:p-6 sm:pb-20 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 w-full group/polaroid relative ${
+                        onEditHero ? 'cursor-pointer' : ''
+                    }`}
+                    title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
+                >
                     <div className="aspect-square w-full bg-stone-200 overflow-hidden shadow-inner relative">
                         {heroImageUrl ? (
                             <img src={heroImageUrl} alt="" className="w-full h-full object-cover contrast-125 sepia-[.3] hue-rotate-[-10deg]" />
@@ -36,6 +44,12 @@ export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUr
                         )}
                         {/* Film light leak overlay */}
                         <div className="absolute inset-0 bg-gradient-to-tr from-orange-500/20 via-transparent to-red-500/20 mix-blend-overlay" />
+                        {onEditHero && (
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/polaroid:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20">
+                                <Edit2 className="h-4 w-4" />
+                                <span>Cambiar Foto</span>
+                            </div>
+                        )}
                     </div>
                     
                     <div className="absolute bottom-4 left-0 right-0 text-center px-4">

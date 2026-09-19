@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -8,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time || Date.now());
     const primaryGold = cfg.accent_color || cfg.accentColor || '#C5A059';
     const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#FAF8F5';
@@ -89,7 +91,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                         {event?.title || 'ELEANOR & WILLIAM'}
                     </h1>
                     <p className="text-xs sm:text-sm uppercase tracking-[0.5em] text-[#5A5047] font-sans font-medium">
-                        CELEBRA NUESTRO AMOR
+                        {cfg.subtitle || 'CELEBRA NUESTRO AMOR'}
                     </p>
                     <div className="inline-block mt-2 px-6 py-1.5 rounded-full border border-[#C5A059]/40 bg-[#FAF8F5] text-xs sm:text-sm font-sans tracking-[0.2em] text-[#8C7A5E]">
                         {format(eventDate, "dd 'DE' MMMM, yyyy", { locale: es }).toUpperCase()} &nbsp;|&nbsp; {event?.venue_name || 'CASA CAMPESTRE'}
@@ -97,13 +99,25 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                 </div>
 
                 {/* Framed Couple Photo */}
-                <div className="relative mx-auto max-w-sm sm:max-w-md p-3 bg-white border-2 border-[#C5A059] shadow-2xl rounded-sm mb-14">
+                <div 
+                    onClick={onEditHero}
+                    className={`relative mx-auto max-w-sm sm:max-w-md p-3 bg-white border-2 border-[#C5A059] shadow-2xl rounded-sm mb-14 group/frame ${
+                        onEditHero ? 'cursor-pointer hover:scale-[1.02] transition-transform' : ''
+                    }`}
+                    title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
+                >
                     <div className="relative aspect-[3/4] overflow-hidden">
                         <img 
                             src={heroImageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80'} 
                             alt={event?.title || 'Pareja'} 
                             className="w-full h-full object-cover filter brightness-[1.02]"
                         />
+                        {onEditHero && (
+                            <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/frame:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-10">
+                                <Edit2 className="h-4 w-4" />
+                                <span>Cambiar Foto</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 

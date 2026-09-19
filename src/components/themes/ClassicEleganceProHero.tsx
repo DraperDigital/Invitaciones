@@ -8,9 +8,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function ClassicEleganceProHero({ event, cfg, countdown, heroImageUrl, scrollToSection }: Props) {
+export default function ClassicEleganceProHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero: _onEditHero }: Props) {
     const eventDate = new Date(event.date_time || Date.now());
     const gold = cfg.accent_color || cfg.accentColor || '#D4AF37';
     const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#0A0A0A';

@@ -8,9 +8,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function LuxuryGoldHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function LuxuryGoldHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero: _onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
 
     return (
@@ -36,7 +37,7 @@ export default function LuxuryGoldHero({ event, cfg, countdown, labels, heroImag
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
                 
                 <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-light mb-4 sm:mb-8 opacity-80">
-                    {labels?.welcome || labels?.tagline || cfg?.subtitle || 'GALA & CELEBRACIÓN'}
+                    {cfg?.subtitle || labels?.welcome || labels?.tagline || 'GALA & CELEBRACIÓN'}
                 </p>
                 
                 <h1 className="text-2xl sm:text-5xl md:text-7xl font-serif font-light tracking-normal sm:tracking-wide leading-tight mb-6 sm:mb-8 break-normal hyphens-none" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>

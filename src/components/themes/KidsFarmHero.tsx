@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react';
+import { Calendar, Clock, MapPin, Sparkles, Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -9,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const eventDate = new Date(event.date_time);
     const childName = cfg.child_name || cfg.childName || event.title?.replace(/^(cumpleaños|cumple|mi cumpleaños)\s*(de\s*)?/i, '') || 'El Festejado';
     const age = cfg.age || cfg.turning_age || 5;
@@ -198,7 +199,13 @@ export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageU
                     {/* RIGHT (Desktop: 5 cols): The Birthday Kid Polaroid & CTA */}
                     <div className="md:col-span-5 flex flex-col items-center space-y-5">
                         {/* Polaroid Photo Frame */}
-                        <div className="relative w-64 sm:w-72 bg-white p-3 sm:p-4 rounded-2xl shadow-2xl border-4 border-white transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                        <div 
+                            onClick={onEditHero}
+                            className={`relative w-64 sm:w-72 bg-white p-3 sm:p-4 rounded-2xl shadow-2xl border-4 border-white transform rotate-1 hover:rotate-0 transition-transform duration-300 group/farmphoto ${
+                                onEditHero ? 'cursor-pointer' : ''
+                            }`}
+                            title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
+                        >
                             {/* Confetti decoration on polaroid */}
                             <div className="absolute -top-3 -left-3 text-xl select-none">🎉</div>
                             <div className="absolute -bottom-3 -right-3 text-xl select-none">⭐</div>
@@ -215,6 +222,12 @@ export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageU
                                     <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-tr from-amber-100 to-rose-100">
                                         <span className="text-5xl mb-2">🤠</span>
                                         <p className="text-xs font-bold text-amber-900">¡Foto del Festejado!</p>
+                                    </div>
+                                )}
+                                {onEditHero && (
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/farmphoto:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20">
+                                        <Edit2 className="h-4 w-4" />
+                                        <span>Cambiar Foto</span>
                                     </div>
                                 )}
                             </div>

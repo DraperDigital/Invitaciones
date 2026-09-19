@@ -8,13 +8,14 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
 // Design tokens — matches the invitto-pro HTML exactly
 const GOLD   = '#FAC345';
 const GREEN  = '#527853';
 
-export default function RomanticBotanicalHero({ event, cfg, countdown, labels, heroImageUrl }: Props) {
+export default function RomanticBotanicalHero({ event, cfg, countdown, labels, heroImageUrl, onEditHero: _onEditHero }: Props) {
     const eventDate  = new Date(event.date_time);
     const tagline    = cfg.subtitle || labels?.tagline || 'Nuestra Boda';
     const fallbackBg = heroImageUrl

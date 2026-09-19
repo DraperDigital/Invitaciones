@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Star } from 'lucide-react';
+import { Star, Edit2 } from 'lucide-react';
 
 interface Props {
     event: any;
@@ -9,9 +9,10 @@ interface Props {
     labels: any;
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
+    onEditHero?: () => void;
 }
 
-export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection }: Props) {
+export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
     const primaryColor = cfg.button_color || cfg.buttonColor || cfg.primaryColor || cfg.primary_color || '#FFB5A7';
     const heroBg = cfg.heroBgColor || cfg.hero_bg_color || '#FDFBF7';
     const heroText = cfg.hero_text_color || cfg.heroTextColor || '#292524';
@@ -35,10 +36,22 @@ export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroI
 
             <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center text-center">
                 {heroImageUrl && (
-                    <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-full border-8 border-white shadow-xl overflow-hidden mb-8 transform -rotate-3 hover:rotate-3 transition-transform duration-500 relative">
+                    <div 
+                        onClick={onEditHero}
+                        className={`w-48 h-48 sm:w-64 sm:h-64 rounded-full border-8 border-white shadow-xl overflow-hidden mb-8 transform -rotate-3 hover:rotate-3 transition-transform duration-500 relative group/kidsphoto ${
+                            onEditHero ? 'cursor-pointer hover:scale-105' : ''
+                        }`}
+                        title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
+                    >
                         <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
                         {/* Inner highlight */}
                         <div className="absolute inset-0 rounded-full ring-inset ring-4 ring-white/30" />
+                        {onEditHero && (
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/kidsphoto:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1 z-20">
+                                <Edit2 className="h-5 w-5" />
+                                <span>Cambiar Foto</span>
+                            </div>
+                        )}
                     </div>
                 )}
 

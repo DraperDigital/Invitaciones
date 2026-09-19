@@ -38,6 +38,16 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [uploadingHero, setUploadingHero] = useState(false);
     const heroFileInputRef = useRef<HTMLInputElement>(null);
 
+    // ── Floral Symmetry & Story specifics ──
+    const [storyTitle, setStoryTitle] = useState(cfg.story_title || 'Nos encantaría que nos acompañes');
+    const [storySubtitle, setStorySubtitle] = useState(cfg.story_subtitle || 'En nuestro día tan especial');
+    const [bannerTitle, setBannerTitle] = useState(cfg.banner_title || 'Te invitamos a nuestra boda');
+    const [bannerSubtitle, setBannerSubtitle] = useState(cfg.banner_subtitle || 'Junto con nuestras familias');
+    const [saveTheDateText, setSaveTheDateText] = useState(cfg.save_the_date_text || 'Reserva la fecha');
+    const [floralAvatarUrl, setFloralAvatarUrl] = useState(cfg.floral_avatar_url || cfg.hero_image_url || cfg.heroImage || '');
+    const [uploadingFloralAvatar, setUploadingFloralAvatar] = useState(false);
+    const floralAvatarFileInputRef = useRef<HTMLInputElement>(null);
+
     // ── Collage Images (for Collage Elegante theme) ──
     const rawCollage = cfg.collage_images || cfg.collageImages;
     const [collageImages, setCollageImages] = useState<string[]>(() => {
@@ -148,6 +158,12 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setAge(cfg.age || cfg.turning_age || '');
         setHeroImageUrl(cfg.hero_image_url || cfg.heroImage || '');
         setWelcomeMessage(cfg.welcome_message || '');
+        setStoryTitle(cfg.story_title || 'Nos encantaría que nos acompañes');
+        setStorySubtitle(cfg.story_subtitle || 'En nuestro día tan especial');
+        setBannerTitle(cfg.banner_title || 'Te invitamos a nuestra boda');
+        setBannerSubtitle(cfg.banner_subtitle || 'Junto con nuestras familias');
+        setSaveTheDateText(cfg.save_the_date_text || 'Reserva la fecha');
+        setFloralAvatarUrl(cfg.floral_avatar_url || cfg.hero_image_url || cfg.heroImage || '');
         setDateTime(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
         setWelcomeTitle(cfg.welcome_title || cfg.welcomeTitle || '¡Bienvenidos!');
         setWelcomeQuote(
@@ -233,6 +249,29 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         }
     };
 
+    const handleFloralAvatarUpload = async (file: File) => {
+        if (!file || !event.id) return;
+        setUploadingFloralAvatar(true);
+        try {
+            const ext = file.name.split('.').pop() || 'jpg';
+            const path = `events/${event.id}/avatar-${Date.now()}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setFloralAvatarUrl(publicUrl);
+            if (!heroImageUrl) setHeroImageUrl(publicUrl);
+            toast.success('¡Foto de la historia subida con éxito!');
+        } catch (err: any) {
+            console.error('Error uploading floral avatar:', err);
+            toast.error('Error al subir la imagen. Intenta pegando una URL.');
+        } finally {
+            setUploadingFloralAvatar(false);
+        }
+    };
+
     const handleCollageSlotUpload = async (file: File, slotIndex: number) => {
         if (!file || !event.id) return;
         setUploadingCollage(true);
@@ -303,7 +342,14 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     hero_image_url: finalHeroImage,
                     heroImage: finalHeroImage,
                     collage_images: collageImages,
-                    collageImages: collageImages
+                    collageImages: collageImages,
+                    story_title: storyTitle,
+                    story_subtitle: storySubtitle,
+                    banner_title: bannerTitle,
+                    banner_subtitle: bannerSubtitle,
+                    save_the_date_text: saveTheDateText,
+                    floral_avatar_url: floralAvatarUrl || finalHeroImage,
+                    welcome_message: welcomeMessage
                 });
             } else if (sectionId === 'guest_welcome') {
                 await onUpdateThemeConfig({
@@ -730,6 +776,149 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 />
                             </div>
                         </div>
+
+                        {/* ── Floral Symmetry: Sección de Historia, Foto Circular & Banner ── */}
+                        {(cfg.theme === 'floral-symmetry' || cfg.story_title || cfg.floral_avatar_url) && (
+                            <div className="p-4 bg-gradient-to-br from-emerald-50/70 via-stone-50 to-pink-50/40 rounded-2xl border border-emerald-200/80 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-base">🌸</span>
+                                        <div>
+                                            <h4 className="text-xs font-bold text-[#1B2E1D]">Sección de Historia y Foto Circular</h4>
+                                            <p className="text-[10px] text-stone-500">Personaliza la foto redonda y el texto que la acompaña</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                        Simetría Floral
+                                    </span>
+                                </div>
+
+                                {/* Foto Circular Avatar */}
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black tracking-widest text-stone-600">
+                                        Foto Circular de la Pareja / Festejado
+                                    </label>
+                                    <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-stone-200">
+                                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#DF3B94] shadow-sm flex-shrink-0 bg-stone-100">
+                                            <img 
+                                                src={floralAvatarUrl || heroImageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80'} 
+                                                alt="Avatar" 
+                                                className="w-full h-full object-cover" 
+                                            />
+                                        </div>
+                                        <div className="flex-1 space-y-2">
+                                            <input
+                                                type="file"
+                                                ref={floralAvatarFileInputRef}
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) handleFloralAvatarUpload(file);
+                                                    e.target.value = '';
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => floralAvatarFileInputRef.current?.click()}
+                                                disabled={uploadingFloralAvatar}
+                                                className="w-full py-2 px-3 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                            >
+                                                {uploadingFloralAvatar ? (
+                                                    <>
+                                                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Subiendo foto...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Upload className="h-3.5 w-3.5" /> Subir Foto Circular
+                                                    </>
+                                                )}
+                                            </button>
+                                            <input
+                                                type="url"
+                                                value={floralAvatarUrl}
+                                                onChange={(e) => setFloralAvatarUrl(e.target.value)}
+                                                placeholder="O pega URL de la imagen..."
+                                                className="w-full bg-stone-50 px-3 py-1.5 rounded-lg text-xs font-mono border border-stone-200 text-stone-800"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Título de la Historia */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] uppercase font-bold tracking-wider text-stone-600">Título de la Historia</label>
+                                    <input 
+                                        type="text"
+                                        value={storyTitle}
+                                        onChange={(e) => setStoryTitle(e.target.value)}
+                                        placeholder="Ej. Nos encantaría que nos acompañes"
+                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs font-bold border border-stone-200 text-stone-800"
+                                    />
+                                </div>
+
+                                {/* Subtítulo de la Historia */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] uppercase font-bold tracking-wider text-stone-600">Subtítulo de la Historia</label>
+                                    <input 
+                                        type="text"
+                                        value={storySubtitle}
+                                        onChange={(e) => setStorySubtitle(e.target.value)}
+                                        placeholder="Ej. En nuestro día tan especial"
+                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs border border-stone-200 text-stone-800"
+                                    />
+                                </div>
+
+                                {/* Mensaje / Dedicatoria */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] uppercase font-bold tracking-wider text-stone-600">Mensaje / Dedicatoria</label>
+                                    <textarea 
+                                        rows={3}
+                                        value={welcomeMessage}
+                                        onChange={(e) => setWelcomeMessage(e.target.value)}
+                                        placeholder="Ej. Ven a disfrutar con nosotros, por favor..."
+                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs border border-stone-200 text-stone-800 resize-none"
+                                    />
+                                </div>
+
+                                {/* Frases del Banner Intermedio */}
+                                <div className="pt-3 border-t border-emerald-200/60 space-y-3">
+                                    <p className="text-[10px] uppercase font-black tracking-wider text-stone-400">Banner Verde Intermedio</p>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] uppercase font-bold text-stone-500">Frase Superior</label>
+                                            <input 
+                                                type="text"
+                                                value={bannerSubtitle}
+                                                onChange={(e) => setBannerSubtitle(e.target.value)}
+                                                placeholder="Ej. Junto con nuestras familias"
+                                                className="w-full bg-white px-2.5 py-1.5 rounded-lg text-xs border border-stone-200 text-stone-800"
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] uppercase font-bold text-stone-500">Frase Principal</label>
+                                            <input 
+                                                type="text"
+                                                value={bannerTitle}
+                                                onChange={(e) => setBannerTitle(e.target.value)}
+                                                placeholder="Ej. Te invitamos a nuestra boda"
+                                                className="w-full bg-white px-2.5 py-1.5 rounded-lg text-xs border border-stone-200 text-stone-800"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] uppercase font-bold text-stone-500">Texto Superior (Save the date)</label>
+                                        <input 
+                                            type="text"
+                                            value={saveTheDateText}
+                                            onChange={(e) => setSaveTheDateText(e.target.value)}
+                                            placeholder="Ej. Reserva la fecha"
+                                            className="w-full bg-white px-2.5 py-1.5 rounded-lg text-xs border border-stone-200 text-stone-800"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
                     {/* ── GUEST WELCOME (Bienvenida & Cita) ── */}
