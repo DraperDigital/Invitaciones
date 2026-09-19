@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { X, Save, Plus, Trash2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { X, Save, Plus, Trash2, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
 import type { SectionId } from '../lib/sectionRegistry';
 
@@ -12,6 +14,7 @@ type Props = {
 };
 
 export default function InlineSectionEditor({ sectionId, event, onClose, onUpdateThemeConfig, onUpdateEventColumn }: Props) {
+    const toast = useToast();
     const [isSaving, setIsSaving] = useState(false);
     const cfg = event.theme_config || {};
     
@@ -22,6 +25,13 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [age, setAge] = useState(cfg.age || cfg.turning_age || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
+    const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || '');
+    const [uploadingHero, setUploadingHero] = useState(false);
+    const heroFileInputRef = useRef<HTMLInputElement>(null);
+
+    // Gallery upload states
+    const [uploadingGallery, setUploadingGallery] = useState(false);
+    const galleryFileInputRef = useRef<HTMLInputElement>(null);
     
     // ── Guest Welcome ──
     const [welcomeTitle, setWelcomeTitle] = useState(cfg.welcome_title || cfg.welcomeTitle || '¡Bienvenidos!');
@@ -109,6 +119,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setSubtitle(cfg.subtitle || '');
         setChildName(cfg.child_name || cfg.childName || '');
         setAge(cfg.age || cfg.turning_age || '');
+        setHeroImageUrl(cfg.hero_image_url || cfg.heroImage || '');
         setWelcomeMessage(cfg.welcome_message || '');
         setDateTime(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
         setWelcomeTitle(cfg.welcome_title || cfg.welcomeTitle || '¡Bienvenidos!');
@@ -161,6 +172,50 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setDamasList(Array.isArray(cfg.damas) ? cfg.damas : []);
     }, [event, sectionId]);
 
+    const handleHeroUpload = async (file: File) => {
+        if (!file || !event.id) return;
+        setUploadingHero(true);
+        try {
+            const ext = file.name.split('.').pop() || 'jpg';
+            const path = `events/${event.id}/hero-${Date.now()}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setHeroImageUrl(publicUrl);
+            toast.success('¡Foto de portada subida con éxito!');
+        } catch (err: any) {
+            console.error('Error uploading hero image:', err);
+            toast.error('Error al subir la imagen. Intenta pegando una URL directa.');
+        } finally {
+            setUploadingHero(false);
+        }
+    };
+
+    const handleGalleryUpload = async (file: File) => {
+        if (!file || !event.id) return;
+        setUploadingGallery(true);
+        try {
+            const ext = file.name.split('.').pop() || 'jpg';
+            const path = `events/${event.id}/gallery-${Date.now()}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setGalleryImages(prev => [...prev, publicUrl]);
+            toast.success('¡Foto agregada a la galería!');
+        } catch (err: any) {
+            console.error('Error uploading gallery image:', err);
+            toast.error('Error al subir la imagen.');
+        } finally {
+            setUploadingGallery(false);
+        }
+    };
+
     const handleSave = async () => {
         setIsSaving(true);
         try {
@@ -171,7 +226,9 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     child_name: childName,
                     childName: childName,
                     age: Number(age) || age,
-                    turning_age: Number(age) || age
+                    turning_age: Number(age) || age,
+                    hero_image_url: heroImageUrl,
+                    heroImage: heroImageUrl
                 });
             } else if (sectionId === 'guest_welcome') {
                 await onUpdateThemeConfig({
@@ -295,48 +352,159 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
                 <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6 bg-white">
                 {sectionId === 'hero' && (
-                    <>
+                    <div className="space-y-5">
+                        {/* Hero Photo / Portada */}
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Nombre del Festejado(a)</label>
-                            <input 
-                                type="text" 
-                                value={childName} 
-                                onChange={e => setChildName(e.target.value)}
-                                placeholder="Ej. ZAIR, Lucas, Mateo, Sofía..."
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800 font-bold"
-                            />
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500 flex items-center justify-between">
+                                <span>Foto de Portada / Imagen Principal</span>
+                                {heroImageUrl && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setHeroImageUrl('')}
+                                        className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal"
+                                    >
+                                        <Trash2 className="h-3 w-3" /> Quitar foto
+                                    </button>
+                                )}
+                            </label>
+
+                            <div className="rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 p-4 transition-all hover:border-stone-300">
+                                {heroImageUrl ? (
+                                    <div className="space-y-3">
+                                        <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-stone-900 shadow-inner group">
+                                            <img 
+                                                src={heroImageUrl} 
+                                                alt="Portada" 
+                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                                            />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => heroFileInputRef.current?.click()}
+                                                    disabled={uploadingHero}
+                                                    className="px-3 py-1.5 bg-white text-stone-800 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow hover:bg-stone-50 cursor-pointer"
+                                                >
+                                                    <Upload className="h-3.5 w-3.5" /> Cambiar
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setHeroImageUrl('')}
+                                                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow cursor-pointer"
+                                                >
+                                                    <Trash2 className="h-3.5 w-3.5" /> Quitar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="py-5 text-center">
+                                        <div className="w-12 h-12 mx-auto rounded-full bg-stone-100 flex items-center justify-center text-stone-400 mb-2">
+                                            <ImageIcon className="h-6 w-6" />
+                                        </div>
+                                        <p className="text-xs font-bold text-stone-700">Sin foto de portada</p>
+                                        <p className="text-[10px] text-stone-400 mt-0.5">Sube una foto desde tu celular/computadora o pega un enlace</p>
+                                    </div>
+                                )}
+
+                                <div className="mt-3">
+                                    <input
+                                        type="file"
+                                        ref={heroFileInputRef}
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) handleHeroUpload(file);
+                                            e.target.value = '';
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => heroFileInputRef.current?.click()}
+                                        disabled={uploadingHero}
+                                        className="w-full py-2.5 px-4 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                    >
+                                        {uploadingHero ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" /> Subiendo foto...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Upload className="h-4 w-4" /> Subir Foto desde tu Dispositivo
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
+                                <div className="mt-3 pt-3 border-t border-stone-200">
+                                    <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block mb-1">
+                                        O pegar enlace directo de imagen (URL):
+                                    </label>
+                                    <input 
+                                        type="url"
+                                        value={heroImageUrl}
+                                        onChange={e => setHeroImageUrl(e.target.value)}
+                                        placeholder="https://images.unsplash.com/... o enlace web"
+                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/20 text-stone-800"
+                                    />
+                                </div>
+                            </div>
                         </div>
+
+                        {/* Title & Subtitle */}
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Edad que cumple (Años)</label>
-                            <input 
-                                type="number" 
-                                value={age} 
-                                onChange={e => setAge(e.target.value)}
-                                placeholder="Ej. 5, 1, 7..."
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Título / Frase Superior (ej. CUMPLEAÑOS)</label>
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">
+                                {event.event_type === 'wedding' 
+                                    ? 'Nombres de la Pareja / Título' 
+                                    : event.event_type === 'xv' 
+                                    ? 'Nombre de la Quinceañera / Título' 
+                                    : 'Título Principal'}
+                            </label>
                             <input 
                                 type="text" 
                                 value={title} 
                                 onChange={e => setTitle(e.target.value)}
-                                placeholder="Ej. Cumpleaños de Zair"
-                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
+                                placeholder={event.event_type === 'wedding' ? "Ej. Sofía & Alejandro" : "Ej. Cumpleaños de Zair"}
+                                className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800 font-bold"
                             />
                         </div>
+
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Subtítulo / Mensaje breve</label>
+                            <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Subtítulo / Frase</label>
                             <input 
                                 type="text" 
                                 value={subtitle} 
                                 onChange={e => setSubtitle(e.target.value)}
-                                placeholder="Ej. ¡Festejando mis 5 años!"
+                                placeholder="Ej. ¡Nos casamos! / ¡Festejando mis 5 años!"
                                 className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#1B2E1D]/10 text-stone-800"
                             />
                         </div>
-                    </>
+
+                        {/* Child/Birthday fields (shown if kids/birthday event or if already has child name/age) */}
+                        <div className="p-3.5 bg-stone-50/80 rounded-xl border border-stone-100 space-y-3">
+                            <p className="text-[10px] uppercase font-black tracking-wider text-stone-400">Datos Infantiles / Cumpleaños (Opcional)</p>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Nombre del Festejado(a)</label>
+                                <input 
+                                    type="text" 
+                                    value={childName} 
+                                    onChange={e => setChildName(e.target.value)}
+                                    placeholder="Ej. ZAIR, Lucas, Mateo, Sofía..."
+                                    className="w-full bg-white px-3 py-2 rounded-lg text-xs font-bold border border-stone-200 text-stone-800"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Edad que cumple (Años)</label>
+                                <input 
+                                    type="number" 
+                                    value={age} 
+                                    onChange={e => setAge(e.target.value)}
+                                    placeholder="Ej. 5, 1, 7..."
+                                    className="w-full bg-white px-3 py-2 rounded-lg text-xs border border-stone-200 text-stone-800"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 )}
                     {/* ── GUEST WELCOME (Bienvenida & Cita) ── */}
                     {sectionId === 'guest_welcome' && (
@@ -955,27 +1123,63 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             </div>
 
                             <div className="space-y-3 pt-2 border-t border-stone-100">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Agregar Imagen por URL</label>
-                                <div className="flex gap-2">
-                                    <input 
-                                        type="url" 
-                                        value={newImageUrl} 
-                                        onChange={e => setNewImageUrl(e.target.value)}
-                                        placeholder="https://images.unsplash.com/..."
-                                        className="flex-1 bg-stone-50 px-3 py-2 rounded-xl text-xs font-mono border-none focus:ring-2 focus:ring-[#DF3B94]/20 text-stone-800"
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Agregar Imagen a la Galería</label>
+                                
+                                <div className="space-y-2">
+                                    <input
+                                        type="file"
+                                        ref={galleryFileInputRef}
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) handleGalleryUpload(file);
+                                            e.target.value = '';
+                                        }}
                                     />
                                     <button
                                         type="button"
-                                        onClick={() => {
-                                            if (newImageUrl.trim()) {
-                                                setGalleryImages([...galleryImages, newImageUrl.trim()]);
-                                                setNewImageUrl('');
-                                            }
-                                        }}
-                                        className="px-4 py-2 bg-[#DF3B94] text-white text-xs font-bold rounded-xl shadow hover:bg-[#c22e7d] transition-all"
+                                        onClick={() => galleryFileInputRef.current?.click()}
+                                        disabled={uploadingGallery}
+                                        className="w-full py-2.5 px-4 bg-[#DF3B94] hover:bg-[#c22e7d] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
                                     >
-                                        Agregar
+                                        {uploadingGallery ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" /> Subiendo foto a la galería...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Upload className="h-4 w-4" /> Subir Foto desde tu Dispositivo
+                                            </>
+                                        )}
                                     </button>
+                                </div>
+
+                                <div className="pt-2">
+                                    <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block mb-1">
+                                        O agregar mediante enlace directo (URL):
+                                    </label>
+                                    <div className="flex gap-2">
+                                        <input 
+                                            type="url" 
+                                            value={newImageUrl} 
+                                            onChange={e => setNewImageUrl(e.target.value)}
+                                            placeholder="https://images.unsplash.com/..."
+                                            className="flex-1 bg-stone-50 px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#DF3B94]/20 text-stone-800"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                if (newImageUrl.trim()) {
+                                                    setGalleryImages([...galleryImages, newImageUrl.trim()]);
+                                                    setNewImageUrl('');
+                                                }
+                                            }}
+                                            className="px-4 py-2 bg-stone-800 text-white text-xs font-bold rounded-xl shadow hover:bg-stone-900 transition-all cursor-pointer"
+                                        >
+                                            Agregar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 

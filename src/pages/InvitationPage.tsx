@@ -812,7 +812,7 @@ END:VCALENDAR`;
     // ── Dynamic config from Visual Editor ──
     const cfg = event.theme_config || {};
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#ffffff';
-    const heroImageUrl = cfg.hero_image_url || null;
+    const heroImageUrl = cfg.hero_image_url || cfg.heroImage || null;
     const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
     const subtitle = cfg.subtitle || '';
     const welcomeMessage = cfg.welcome_message || null;
