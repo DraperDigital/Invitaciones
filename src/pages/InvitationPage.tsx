@@ -3326,7 +3326,31 @@ END:VCALENDAR`;
                                 const renderer = SECTION_COMPONENTS[section.id];
                                 const content = renderer ? renderer() : null;
                                 if (!content) return null;
-                                return <div key={section.id}>{content}</div>;
+
+                                const sectionDef = SECTION_REGISTRY.find(s => s.id === section.id);
+                                const sectionLabel = sectionDef?.label || 'Sección';
+
+                                return (
+                                    <div key={section.id} className="relative group/section">
+                                        {isAdminMode && (
+                                            <div className={`absolute ${section.id === 'hero' ? 'top-4 left-4 sm:top-6 sm:left-6' : 'top-4 right-4 sm:top-6 sm:right-6'} z-30 pointer-events-auto`}>
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setEditingSection(section.id);
+                                                    }}
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
+                                                    title={`Editar ${sectionLabel}`}
+                                                >
+                                                    <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
+                                                    <span>Editar</span>
+                                                </button>
+                                            </div>
+                                        )}
+                                        {content}
+                                    </div>
+                                );
                             })}
                             {/* El footer SIEMPRE y sin excepción va al final absoluto de la página */}
                             {renderFooter()}
