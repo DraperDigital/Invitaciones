@@ -260,8 +260,8 @@ const DashboardHome: React.FC = () => {
                                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                                         <span>Confirmados: <strong className="text-[#222B38]">{event.metrics?.confirmed || 0}</strong></span>
                                         <div className="flex items-center gap-3">
-                                            <Link to={`/dashboard/design/${event.id}`} className="text-slate-500 font-bold hover:text-[#DF3B94] flex items-center gap-1 text-[10px] uppercase tracking-wider">
-                                                <Palette className="h-3.5 w-3.5 text-[#DF3B94]" /> Diseño
+                                            <Link to={`/i/${event.slug || event.id}?t=admin`} className="text-slate-500 font-bold hover:text-[#DF3B94] flex items-center gap-1 text-[10px] uppercase tracking-wider" title="Editar diseño en vivo">
+                                                <Palette className="h-3.5 w-3.5 text-[#DF3B94]" /> Editar Diseño
                                             </Link>
                                             <Link to={`/dashboard/events/${event.id}`} className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
                                                 Gestionar <ArrowRight className="h-3.5 w-3.5" />

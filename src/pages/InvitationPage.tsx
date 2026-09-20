@@ -489,14 +489,18 @@ export default function InvitationPage() {
         }
         setEvent(eventData);
 
-        if (rawToken === 'admin' && user && user.id === eventData.user_id) {
+        const isOwner = Boolean(user && user.id === eventData.user_id);
+        const isGuestPreview = searchParams.get('preview') === 'guest';
+        const wantsAdmin = rawToken === 'admin' || searchParams.get('edit') === '1' || (isOwner && !guestToken);
+
+        if (wantsAdmin && isOwner && !isGuestPreview) {
             setIsAdminMode(true);
-        } else if (rawToken === 'admin') {
+        } else if (rawToken === 'admin' && !isOwner) {
             console.warn('[SECURITY] Admin access denied: not the event owner.');
         }
 
-        // If it's admin mode or simple preview, skip guest fetching
-        if (rawToken === 'admin') {
+        // If it's admin mode or owner preview, skip guest fetching
+        if (rawToken === 'admin' || (isOwner && !isGuestPreview && !guestToken)) {
              setLoading(false);
              return;
         }

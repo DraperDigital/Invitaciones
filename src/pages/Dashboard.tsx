@@ -205,12 +205,12 @@ export default function Dashboard() {
                                     Gestionar
                                 </Link>
                                 <Link 
-                                    to={`/dashboard/design/${event.id}`} 
+                                    to={`/i/${event.slug || event.id}?t=admin`} 
                                     className="py-2.5 px-3 bg-[#DF3B94]/10 border border-[#DF3B94]/20 text-[#DF3B94] rounded-xl text-center text-xs font-bold uppercase tracking-wider hover:bg-[#DF3B94] hover:text-white transition-all flex items-center gap-1.5"
-                                    title="Personalizar diseño de la invitación"
+                                    title="Personalizar y editar diseño en vivo"
                                 >
                                     <Palette className="h-4 w-4" />
-                                    <span>Diseño</span>
+                                    <span>Editar</span>
                                 </Link>
                                 <button
                                     onClick={() => openDeleteModal(event.id, event.title)}

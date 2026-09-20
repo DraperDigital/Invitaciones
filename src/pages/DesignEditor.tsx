@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive, Palette } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -831,6 +831,36 @@ export default function DesignEditor() {
             </div>
 
                         <div className="flex flex-col gap-6">
+                {/* ── BANNER DE ACCESO RÁPIDO: EDITOR VISUAL EN VIVO ── */}
+                <div className="bg-gradient-to-r from-[#DF3B94]/10 via-rose-50/50 to-white border border-[#DF3B94]/25 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+                    <div className="flex items-center gap-3.5 sm:gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-[#DF3B94] text-white flex items-center justify-center text-xl shrink-0 shadow-md shadow-[#DF3B94]/20">
+                            <Palette className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h3 className="text-base sm:text-lg font-bold text-stone-900">
+                                    ¿Prefieres editar viendo los cambios en tiempo real?
+                                </h3>
+                                <span className="hidden sm:inline text-[10px] uppercase font-black bg-[#DF3B94] text-white px-2 py-0.5 rounded-full tracking-wider">
+                                    Recomendado
+                                </span>
+                            </div>
+                            <p className="text-xs sm:text-sm text-stone-600 mt-0.5">
+                                Cambia la plantilla, fotos, dedicatoria, mesas de regalos y colores directamente sobre tu invitación interactiva.
+                            </p>
+                        </div>
+                    </div>
+                    <Link
+                        to={`/i/${event?.slug || event?.id || id}?t=admin`}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#DF3B94] hover:bg-[#c22e7d] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition-all shrink-0 hover:scale-[1.02] active:scale-95"
+                    >
+                        <Eye className="h-4 w-4" />
+                        <span>Abrir Editor en Vivo</span>
+                        <ArrowRight className="h-4 w-4" />
+                    </Link>
+                </div>
+
                 {/* ── TAB 1: ESTILO VISUAL ── */}
                 {activeTab === 'estilo' && (
                     <>

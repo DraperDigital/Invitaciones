@@ -9,7 +9,7 @@ import {
     Search, UserPlus,
     MapPin, Tag, Upload, FileType,
     LayoutDashboard, Users as UsersIcon, Gift, Image as ImageIcon, Plus, X as CloseIcon, Save,
-    AlertTriangle, Copy, BellRing, MessageCircle, Edit2, Eye, Clock, Loader2
+    AlertTriangle, Copy, BellRing, MessageCircle, Edit2, Eye, Clock, Loader2, Palette
 } from 'lucide-react';
 import { differenceInDays, isPast } from 'date-fns';
 import type { Event, Guest, RSVP } from '../types/database.types';
@@ -697,8 +697,8 @@ export default function EventDetails() {
                                 <Link to={`/dashboard/edit/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-emerald-600 hover:border-emerald-600 rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                     <FileType className="h-3.5 w-3.5" /> <span className="xs:inline">Editar Info</span>
                                 </Link>
-                                <Link to={`/dashboard/design/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#BD7474] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
-                                    <Edit2 className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño</span>
+                                <Link to={`/i/${event.slug || event.id}?t=admin`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#BD7474] hover:border-[#BD7474] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all" title="Editar diseño en vivo">
+                                    <Palette className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño en Vivo</span>
                                 </Link>
                                 <Link to={`/i/${event.slug || event.id}?t=admin`} target="_blank" className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#1B2E1D] hover:border-[#1B2E1D] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
                                     <Eye className="h-3.5 w-3.5" /> <span className="xs:inline">Ver</span>
