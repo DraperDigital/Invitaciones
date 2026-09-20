@@ -102,20 +102,6 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
 
             {/* 2. TORN PAPER GREEN BANNER */}
             <div className="relative w-full z-20 mt-12 group/banner" style={{ backgroundColor: bannerColor }}>
-                {onEditHero && (
-                    <div className="absolute top-6 right-6 z-30 pointer-events-auto">
-                        <button
-                            type="button"
-                            onClick={onEditHero}
-                            className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
-                            title="Editar Frases del Banner"
-                        >
-                            <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
-                            <span>Editar Banner</span>
-                        </button>
-                    </div>
-                )}
-
                 {/* Top torn edge (using the background color of the hero to cut into the banner) */}
                 <div className="absolute top-0 left-0 w-full -translate-y-[99%]">
                     <TornEdge />
@@ -143,10 +129,10 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
                         <button
                             type="button"
                             onClick={onEditHero}
-                            className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
-                            title="Editar Historia, Foto y Dedicatoria"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 rounded-lg border border-stone-200 hover:border-stone-300 shadow-sm hover:shadow transition-all text-xs font-medium normal-case tracking-normal cursor-pointer"
+                            title="Editar Portada"
                         >
-                            <Edit2 className="h-3.5 w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
+                            <Edit2 className="h-3.5 w-3.5 text-stone-400" />
                             <span>Editar</span>
                         </button>
                     </div>

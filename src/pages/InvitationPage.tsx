@@ -3370,10 +3370,10 @@ END:VCALENDAR`;
                                                         e.stopPropagation();
                                                         setEditingSection(section.id);
                                                     }}
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/95 hover:bg-[#DF3B94] text-stone-800 hover:text-white rounded-full shadow-lg hover:shadow-2xl border border-stone-200/90 hover:border-[#DF3B94] backdrop-blur-md transition-all text-[11px] sm:text-xs font-bold tracking-wide hover:scale-105 active:scale-95 group/btn cursor-pointer"
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 rounded-lg border border-stone-200 hover:border-stone-300 shadow-sm hover:shadow transition-all text-xs font-medium normal-case tracking-normal cursor-pointer"
                                                     title={`Editar ${sectionLabel}`}
                                                 >
-                                                    <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#DF3B94] group-hover/btn:text-white transition-colors" />
+                                                    <Edit2 className="h-3.5 w-3.5 text-stone-400" />
                                                     <span>Editar</span>
                                                 </button>
                                             </div>
