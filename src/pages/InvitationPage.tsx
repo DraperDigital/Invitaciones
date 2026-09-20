@@ -31,7 +31,7 @@ import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
-import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '✨' },
@@ -78,6 +78,7 @@ export default function InvitationPage() {
     const [showTemplateMenu, setShowTemplateMenu] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'auto');
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+    const [showAllThemes, setShowAllThemes] = useState(false);
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
@@ -1941,6 +1942,15 @@ END:VCALENDAR`;
         }
     };
 
+    // ── Filtrado inteligente de plantillas por tipo de evento ──
+    const effectiveEventCategory = normalizeEventCategory(
+        event?.event_type || currentDemo?.category || searchParams.get('category') || 'boda',
+        cfg.theme
+    );
+    const categoryTemplates = getTemplatesForCategory(effectiveEventCategory, cfg.theme);
+    const otherTemplates = CANONICAL_TEMPLATES.filter(t => !categoryTemplates.some(ct => ct.id === t.id));
+    const categoryLabel = EVENT_CATEGORY_LABELS[effectiveEventCategory] || 'Evento';
+
     const isPro     = cfg.isPro     === true
                    || normalizePlan(event.plan) === 'pro'
                    || (isDemo && currentVersion === 'pro');
@@ -3294,26 +3304,46 @@ END:VCALENDAR`;
                                 <Palette className="h-3.5 w-3.5 text-[#DF3B94] flex-shrink-0" />
                                 <select
                                     value={cfg.theme || 'classic'}
-                                    onChange={(e) => handleUpdateFeature('theme', e.target.value)}
-                                    className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1"
+                                    onChange={(e) => {
+                                        if (e.target.value === '__show_all__') {
+                                            setShowAllThemes(true);
+                                            return;
+                                        }
+                                        if (e.target.value === '__show_category__') {
+                                            setShowAllThemes(false);
+                                            return;
+                                        }
+                                        handleUpdateFeature('theme', e.target.value);
+                                    }}
+                                    className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1 max-w-[200px] truncate"
+                                    title={`Plantillas para ${categoryLabel}`}
                                 >
-                                    <option value="classic">🏛️ Clásica Atemporal</option>
-                                    <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
-                                    <option value="modern-minimalist">🖤 Moderna Minimalista</option>
-                                    <option value="split-screen">🌓 Vanguardia Dividida</option>
-                                    <option value="magazine">📖 Estilo Editorial</option>
-                                    <option value="romantic-botanical">🌿 Elegancia Floral</option>
-                                    <option value="floral-symmetry">🌸 Simetría Floral</option>
-                                    <option value="neon-glow">🪩 Fiesta Neón</option>
-                                    <option value="luxury-gold">💎 Lujo Metálico</option>
-                                    <option value="passport">✈️ Pase de Abordaje</option>
-                                    <option value="polaroid-vintage">📸 Retro Fotográfico</option>
-                                    <option value="whimsical-kids">🎈 Fantasía Infantil</option>
-                                    <option value="kids-farm">🚜 Granja Festiva</option>
-                                    <option value="gamer-party">🎮 Gamer Party</option>
-                                    <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
-                                    <option value="rainbow-pop">🌈 Rainbow Pop</option>
-                                    <option value="collage">🖼️ Collage Elegante</option>
+                                    <optgroup label={`Plantillas para ${categoryLabel} (${categoryTemplates.length})`}>
+                                        {categoryTemplates.map(tpl => (
+                                            <option key={tpl.id} value={tpl.id}>
+                                                {tpl.icon} {tpl.name}
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                    {!showAllThemes && otherTemplates.length > 0 && (
+                                        <option value="__show_all__">
+                                            🌐 Ver todas las plantillas (+{otherTemplates.length})...
+                                        </option>
+                                    )}
+                                    {showAllThemes && otherTemplates.length > 0 && (
+                                        <>
+                                            <optgroup label={`Otras Categorías (${otherTemplates.length})`}>
+                                                {otherTemplates.map(tpl => (
+                                                    <option key={tpl.id} value={tpl.id}>
+                                                        {tpl.icon} {tpl.name} ({tpl.categoryLabel})
+                                                    </option>
+                                                ))}
+                                            </optgroup>
+                                            <option value="__show_category__">
+                                                ✨ Mostrar solo {categoryLabel}
+                                            </option>
+                                        </>
+                                    )}
                                 </select>
                             </div>
                         </div>
@@ -3394,26 +3424,45 @@ END:VCALENDAR`;
                                             </div>
                                             <select
                                                 value={cfg.theme || 'classic'}
-                                                onChange={(e) => handleUpdateFeature('theme', e.target.value)}
+                                                onChange={(e) => {
+                                                    if (e.target.value === '__show_all__') {
+                                                        setShowAllThemes(true);
+                                                        return;
+                                                    }
+                                                    if (e.target.value === '__show_category__') {
+                                                        setShowAllThemes(false);
+                                                        return;
+                                                    }
+                                                    handleUpdateFeature('theme', e.target.value);
+                                                }}
                                                 className="w-full bg-white px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer focus:border-[#DF3B94]"
                                             >
-                                                <option value="classic">🏛️ Clásica Atemporal</option>
-                                                <option value="classic-elegance-pro">👑 Clásica Atemporal Pro</option>
-                                                <option value="modern-minimalist">🖤 Moderna Minimalista</option>
-                                                <option value="split-screen">🌓 Vanguardia Dividida</option>
-                                                <option value="magazine">📖 Estilo Editorial</option>
-                                                <option value="romantic-botanical">🌿 Elegancia Floral</option>
-                                                <option value="floral-symmetry">🌸 Simetría Floral</option>
-                                                <option value="neon-glow">🪩 Fiesta Neón</option>
-                                                <option value="luxury-gold">💎 Lujo Metálico</option>
-                                                <option value="passport">✈️ Pase de Abordaje</option>
-                                                <option value="polaroid-vintage">📸 Retro Fotográfico</option>
-                                                <option value="whimsical-kids">🎈 Fantasía Infantil</option>
-                                                <option value="kids-farm">🚜 Granja Festiva</option>
-                                                <option value="gamer-party">🎮 Gamer Party</option>
-                                                <option value="pixel-craft">🟩 Mundo Píxel (Minecraft)</option>
-                                                <option value="rainbow-pop">🌈 Rainbow Pop</option>
-                                                <option value="collage">🖼️ Collage Elegante</option>
+                                                <optgroup label={`Plantillas para ${categoryLabel} (${categoryTemplates.length})`}>
+                                                    {categoryTemplates.map(tpl => (
+                                                        <option key={tpl.id} value={tpl.id}>
+                                                            {tpl.icon} {tpl.name}
+                                                        </option>
+                                                    ))}
+                                                </optgroup>
+                                                {!showAllThemes && otherTemplates.length > 0 && (
+                                                    <option value="__show_all__">
+                                                        🌐 Ver todas las plantillas (+{otherTemplates.length})...
+                                                    </option>
+                                                )}
+                                                {showAllThemes && otherTemplates.length > 0 && (
+                                                    <>
+                                                        <optgroup label={`Otras Categorías (${otherTemplates.length})`}>
+                                                            {otherTemplates.map(tpl => (
+                                                                <option key={tpl.id} value={tpl.id}>
+                                                                    {tpl.icon} {tpl.name} ({tpl.categoryLabel})
+                                                                </option>
+                                                            ))}
+                                                        </optgroup>
+                                                        <option value="__show_category__">
+                                                            ✨ Mostrar solo {categoryLabel}
+                                                        </option>
+                                                    </>
+                                                )}
                                             </select>
                                         </div>
 

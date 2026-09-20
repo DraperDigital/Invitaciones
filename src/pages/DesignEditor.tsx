@@ -9,7 +9,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
-import { THEME_PRESET_PROFILES } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 
 type DesignConfig = {
     primaryColor: string;
@@ -361,6 +361,7 @@ export default function DesignEditor() {
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [config, setConfig] = useState<DesignConfig>(DEFAULT_CONFIG);
+    const [templateViewFilter, setTemplateViewFilter] = useState<'recommended' | 'all'>('recommended');
     const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const logoInputRef = useRef<HTMLInputElement>(null);
@@ -841,8 +842,12 @@ export default function DesignEditor() {
                     activeSection={activeSection}
                     setActiveSection={setActiveSection}
                 >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                        {[
+                    {(() => {
+                        const effectiveCategory = normalizeEventCategory(event?.event_type, config.theme);
+                        const categoryTemplates = getTemplatesForCategory(effectiveCategory, config.theme);
+                        const categoryLabel = EVENT_CATEGORY_LABELS[effectiveCategory] || 'Evento';
+
+                        const allTemplateItems = [
                             { id: 'classic', label: 'Clásica Atemporal', desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal', icon: '🏛️' },
                             { id: 'classic-elegance-pro', label: 'Clásica Atemporal Pro', desc: 'Editorial oscuro — negro profundo, oro intenso y portada inmersiva', icon: '👑' },
                             { id: 'modern-minimalist', label: 'Moderna Minimalista', desc: 'Líneas limpias, tipografía contemporánea y sobriedad monocromática', icon: '🖤' },
@@ -860,46 +865,91 @@ export default function DesignEditor() {
                             { id: 'pixel-craft', label: 'Mundo Píxel (Minecraft)', desc: 'Aventura de bloques cúbicos con Creeper, pastel con velas, banderines y estética voxel', icon: '🟩' },
                             { id: 'rainbow-pop', label: 'Rainbow Pop', desc: 'Letras burbuja multicolor, confetti pastel, tarjetas festivas con bordes celestes', icon: '🌈' },
                             { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
-                        ].map((item) => (
-                            <button
-                                key={item.id}
-                                onClick={() => {
-                                    const profile = THEME_PRESET_PROFILES[item.id] || THEME_PRESET_PROFILES.classic;
-                                    setConfig({
-                                        ...config,
-                                        theme: item.id,
-                                        primaryColor: profile.primaryColor,
-                                        accentColor: profile.accentColor,
-                                        cardBgColor: profile.cardBgColor,
-                                        heroTextColor: profile.heroTextColor,
-                                        heroBgColor: profile.heroBgColor,
-                                        buttonColor: profile.primaryColor,
-                                        typographyPreset: profile.typographyPreset
-                                    });
-                                }}
-                                className={`group relative p-5 md:p-6 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden flex flex-col justify-between ${
-                                    (config.theme || 'classic') === item.id
-                                        ? 'border-[#DF3B94] bg-[#DF3B94]/5 shadow-lg ring-2 ring-[#DF3B94]/20'
-                                        : 'border-stone-100 hover:border-stone-300 bg-white hover:shadow-md'
-                                }`}
-                            >
-                                <div className="space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-2xl">{item.icon}</span>
-                                        <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                                            (config.theme || 'classic') === item.id ? 'border-[#DF3B94] bg-[#DF3B94]' : 'border-stone-200'
-                                        }`}>
-                                            {(config.theme || 'classic') === item.id && <div className="h-2 w-2 rounded-full bg-white" />}
-                                        </div>
+                        ];
+
+                        const displayedTemplates = templateViewFilter === 'all'
+                            ? allTemplateItems
+                            : allTemplateItems.filter(item => categoryTemplates.some(ct => ct.id === item.id) || item.id === config.theme);
+
+                        return (
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-stone-100">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-bold text-stone-700">Filtro de estilo:</span>
+                                        <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] font-bold">
+                                            {categoryLabel}
+                                        </span>
                                     </div>
-                                    <div>
-                                        <h4 className="text-sm font-bold text-[#1B2E1D]">{item.label}</h4>
-                                        <p className="text-[11px] text-stone-500 font-light mt-1 leading-relaxed">{item.desc}</p>
+                                    <div className="flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl text-xs font-semibold">
+                                        <button
+                                            type="button"
+                                            onClick={() => setTemplateViewFilter('recommended')}
+                                            className={`px-3 py-1 rounded-lg transition-all ${
+                                                templateViewFilter === 'recommended'
+                                                    ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                    : 'text-stone-500 hover:text-stone-800'
+                                            }`}
+                                        >
+                                            ✨ Recomendadas ({categoryTemplates.length})
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setTemplateViewFilter('all')}
+                                            className={`px-3 py-1 rounded-lg transition-all ${
+                                                templateViewFilter === 'all'
+                                                    ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                    : 'text-stone-500 hover:text-stone-800'
+                                            }`}
+                                        >
+                                            🌐 Todas ({allTemplateItems.length})
+                                        </button>
                                     </div>
                                 </div>
-                            </button>
-                        ))}
-                    </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                                    {displayedTemplates.map((item) => (
+                                        <button
+                                            key={item.id}
+                                            onClick={() => {
+                                                const profile = THEME_PRESET_PROFILES[item.id] || THEME_PRESET_PROFILES.classic;
+                                                setConfig({
+                                                    ...config,
+                                                    theme: item.id,
+                                                    primaryColor: profile.primaryColor,
+                                                    accentColor: profile.accentColor,
+                                                    cardBgColor: profile.cardBgColor,
+                                                    heroTextColor: profile.heroTextColor,
+                                                    heroBgColor: profile.heroBgColor,
+                                                    buttonColor: profile.primaryColor,
+                                                    typographyPreset: profile.typographyPreset
+                                                });
+                                            }}
+                                            className={`group relative p-5 md:p-6 rounded-2xl md:rounded-[2rem] border-2 transition-all text-left overflow-hidden flex flex-col justify-between ${
+                                                (config.theme || 'classic') === item.id
+                                                    ? 'border-[#DF3B94] bg-[#DF3B94]/5 shadow-lg ring-2 ring-[#DF3B94]/20'
+                                                    : 'border-stone-100 hover:border-stone-300 bg-white hover:shadow-md'
+                                            }`}
+                                        >
+                                            <div className="space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-2xl">{item.icon}</span>
+                                                    <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                                                        (config.theme || 'classic') === item.id ? 'border-[#DF3B94] bg-[#DF3B94]' : 'border-stone-200'
+                                                    }`}>
+                                                        {(config.theme || 'classic') === item.id && <div className="h-2 w-2 rounded-full bg-white" />}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-sm font-bold text-[#1B2E1D]">{item.label}</h4>
+                                                    <p className="text-[11px] text-stone-500 font-light mt-1 leading-relaxed">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </CollapsibleCard>
 
 <CollapsibleCard

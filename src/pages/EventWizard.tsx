@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
-import { THEME_PRESET_PROFILES } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 
 type WizardData = {
     title: string;
@@ -167,6 +167,7 @@ export default function EventWizard() {
     const [data, setData] = useState<WizardData>(INITIAL_DATA);
     const [loading, setLoading] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [wizardTemplateFilter, setWizardTemplateFilter] = useState<'recommended' | 'all'>('recommended');
     const [searchParams] = useSearchParams();
     const isWelcome = searchParams.get('welcome') === 'true';
     const preselectedPlan = searchParams.get('plan');
@@ -475,8 +476,12 @@ export default function EventWizard() {
                                 </div>
                                 <p className="text-xs text-stone-400 font-light">Selecciona la plantilla inicial para tu invitación (puedes cambiarla después).</p>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pt-2">
-                                    {[
+                                {(() => {
+                                    const effectiveCategory = normalizeEventCategory(data.event_type, data.theme);
+                                    const categoryTemplates = getTemplatesForCategory(effectiveCategory, data.theme);
+                                    const categoryLabel = EVENT_CATEGORY_LABELS[effectiveCategory] || 'Evento';
+
+                                    const allTemplates = [
                                         { id: 'classic', name: 'Clásica Atemporal', category: 'Boda / Elegante', image: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'Boda / Lujo', image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=400&auto=format&fit=crop' },
@@ -494,33 +499,78 @@ export default function EventWizard() {
                                         { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' }
-                                    ].map(tpl => {
-                                        const isSelected = data.theme === tpl.id;
-                                        return (
-                                            <button
-                                                type="button"
-                                                key={tpl.id}
-                                                onClick={() => updateData({ theme: tpl.id })}
-                                                className={`relative flex flex-col overflow-hidden rounded-xl border text-left transition-all ${
-                                                    isSelected ? 'border-[#BD7474] ring-2 ring-[#BD7474]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
-                                                }`}
-                                            >
-                                                <div className="h-20 w-full relative">
-                                                    <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
-                                                    {isSelected && (
-                                                        <div className="absolute top-1.5 right-1.5 bg-[#BD7474] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
-                                                            ✓
-                                                        </div>
-                                                    )}
+                                    ];
+
+                                    const displayedTemplates = wizardTemplateFilter === 'all'
+                                        ? allTemplates
+                                        : allTemplates.filter(t => categoryTemplates.some(ct => ct.id === t.id) || t.id === data.theme);
+
+                                    return (
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between flex-wrap gap-2 pt-1 pb-2">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="text-[11px] font-bold text-stone-600">Recomendadas para:</span>
+                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#BD7474]/10 text-[#BD7474] font-bold">
+                                                        {categoryLabel}
+                                                    </span>
                                                 </div>
-                                                <div className="p-2 bg-white flex-1">
-                                                    <p className="text-[11px] font-bold text-stone-900 leading-tight">{tpl.name}</p>
-                                                    <p className="text-[9px] text-stone-400 mt-0.5">{tpl.category}</p>
+                                                <div className="flex items-center gap-1 bg-stone-100 p-0.5 rounded-lg text-[11px] font-semibold">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setWizardTemplateFilter('recommended')}
+                                                        className={`px-2.5 py-1 rounded-md transition-all ${
+                                                            wizardTemplateFilter === 'recommended'
+                                                                ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                                : 'text-stone-500 hover:text-stone-800'
+                                                        }`}
+                                                    >
+                                                        ✨ {categoryLabel} ({categoryTemplates.length})
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setWizardTemplateFilter('all')}
+                                                        className={`px-2.5 py-1 rounded-md transition-all ${
+                                                            wizardTemplateFilter === 'all'
+                                                                ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                                : 'text-stone-500 hover:text-stone-800'
+                                                        }`}
+                                                    >
+                                                        🌐 Todas ({allTemplates.length})
+                                                    </button>
                                                 </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                                                {displayedTemplates.map(tpl => {
+                                                    const isSelected = data.theme === tpl.id;
+                                                    return (
+                                                        <button
+                                                            type="button"
+                                                            key={tpl.id}
+                                                            onClick={() => updateData({ theme: tpl.id })}
+                                                            className={`relative flex flex-col overflow-hidden rounded-xl border text-left transition-all ${
+                                                                isSelected ? 'border-[#BD7474] ring-2 ring-[#BD7474]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
+                                                            }`}
+                                                        >
+                                                            <div className="h-20 w-full relative">
+                                                                <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
+                                                                {isSelected && (
+                                                                    <div className="absolute top-1.5 right-1.5 bg-[#BD7474] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
+                                                                        ✓
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <div className="p-2 bg-white flex-1">
+                                                                <p className="text-[11px] font-bold text-stone-900 leading-tight">{tpl.name}</p>
+                                                                <p className="text-[9px] text-stone-400 mt-0.5">{tpl.category}</p>
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
                     </div>
