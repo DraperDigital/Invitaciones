@@ -71,7 +71,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
         is_published: true,
         plan: 'clasico',
-        theme_config: { theme: 'gold' },
+        theme_config: { theme: 'gold', hero_image_url: '/images/couples/ana-carlos-clasico-hero.jpg' },
         slug: 'boda-ana-y-carlos',
         created_at: new Date().toISOString(),
     },
@@ -1627,6 +1627,7 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             isPro: true,
             theme: 'gold-premium',
+            hero_image_url: '/images/couples/ana-carlos-pro-hero.jpg',
             schedule: [
                 { time: '17:00', event: 'Ceremonia Religiosa', location: 'Capilla de la Hacienda' },
                 { time: '18:30', event: 'Cóctel de Bienvenida', location: 'Jardín Principal' },
@@ -1660,10 +1661,11 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'classic-elegance-pro',
+            theme: 'classic-elegance',
             primary_color: '#0A0A0A',
             accent_color: '#D4AF37',
             typography_preset: 'editorial',
+            hero_image_url: '/images/couples/ana-carlos-hero.jpg',
             schedule: [
                 { time: '17:00', event: 'Ceremonia Religiosa', location: 'Capilla de la Hacienda' },
                 { time: '18:30', event: 'Cóctel de Bienvenida', location: 'Jardín Principal' },
@@ -1677,7 +1679,15 @@ export const MOCK_EVENTS: Event[] = [
                 father: 'Sr. Juan García',
                 mother: 'Sra. Elena Ruiz'
             },
-            photoGallery: { enabled: true, uploadEnabled: true },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: true,
+                images: [
+                    '/images/couples/ana-carlos-gallery-1.jpg',
+                    '/images/couples/ana-carlos-gallery-2.jpg',
+                    '/images/couples/ana-carlos-gallery-3.jpg'
+                ]
+            },
             liveStream: { enabled: true, platform: 'YouTube', message: 'Sigue nuestra boda en vivo', multiCamera: true },
             hashtag: '#AnaYCarlos2026',
             countdown: true,
