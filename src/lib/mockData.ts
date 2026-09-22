@@ -289,7 +289,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 30).toISOString(),
         is_published: true,
         plan: 'clasico',
-        theme_config: { theme: 'romantic' },
+        theme_config: { theme: 'romantic', hero_image_url: '/images/couples/gabriela-arturo-hero.jpg' },
         slug: 'boda-gabriela-arturo',
         created_at: new Date().toISOString(),
     },
@@ -360,6 +360,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'premium',
         theme_config: {
             theme: 'floral-symmetry',
+            hero_image_url: '/images/couples/helena-austin-hero.jpg',
             heroBgColor: '#FAF7F5',
             primary_color: '#3A5240',
             accent_color: '#B85568',
@@ -375,7 +376,7 @@ export const MOCK_EVENTS: Event[] = [
                 { time: '17:30', event: 'Recepción', location: 'Jardín Las Rosas\nBlvd. Las Palmas 456' },
             ],
             gallery_images: [
-                { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80', caption: '1' },
+                { url: '/images/couples/helena-austin-gallery-1.jpg', caption: '1' },
             ],
             countdown: true,
             message: ''
@@ -400,6 +401,7 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             isPro: true,
             theme: 'romantic-pro',
+            hero_image_url: '/images/couples/gabriela-arturo-pro-hero.jpg',
             schedule: [
                 { time: '16:30', event: 'Ceremonia Civil', location: 'Jardín Las Palomas' },
                 { time: '17:30', event: 'Ceremonia Religiosa', location: 'Capilla del Jardín' },
@@ -496,7 +498,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 60).toISOString(),
         is_published: true,
         plan: 'clasico',
-        theme_config: { theme: 'vintage' },
+        theme_config: { theme: 'vintage', hero_image_url: '/images/couples/isabel-rodrigo-hero.jpg' },
         slug: 'boda-isabel-rodrigo',
         created_at: new Date().toISOString(),
     },
