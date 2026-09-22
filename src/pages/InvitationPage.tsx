@@ -843,6 +843,21 @@ END:VCALENDAR`;
     // ── Dynamic config from Visual Editor ──
     const cfg = event.theme_config || {};
     const isMonochromeTheme = cfg.theme === 'newspaper';
+    // Locally overrides the theme's CSS variables to flip a section to a black
+    // background with white text — used by a couple of sections in the
+    // "Primera Plana" newspaper theme for the alternating black/white bands
+    // seen in real newspaper spreads.
+    const invertedPanelStyle: React.CSSProperties | undefined = isMonochromeTheme ? ({
+        '--section-bg': '#242424',
+        '--section-bg-alt': '#1A1A1A',
+        '--card-bg': '#242424',
+        '--card-border': '#3A3A3A',
+        '--border-color': '#3A3A3A',
+        '--text-primary': '#FFFFFF',
+        '--text-secondary': '#B5B5B5',
+        '--color-accent': '255 255 255',
+        '--accent-contrast': '#1A1A1A',
+    } as React.CSSProperties) : undefined;
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#ffffff';
     const heroImageUrl = cfg.hero_image_url || cfg.heroImage || null;
     const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
@@ -2475,16 +2490,18 @@ END:VCALENDAR`;
         const items = (cfg?.itinerary?.length > 0 ? cfg.itinerary : cfg?.schedule) || [];
         if (items.length === 0) return null;
         
+        const itineraryAccentColor = isMonochromeTheme ? '#FFFFFF' : accentColor;
+
         return (
-            <section id="itinerary" key="itinerary" className="py-24 bg-[var(--section-bg-alt)]">
+            <section id="itinerary" key="itinerary" className="py-24 bg-[var(--section-bg-alt)]" style={invertedPanelStyle}>
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Itinerario</h3>
                         <p className="text-[var(--text-secondary)]">Programa del día</p>
                     </div>
-                    
+
                     <div className="invitation-itinerary-wrapper relative max-w-2xl mx-auto py-8">
-                        <div className="timeline-line absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 bg-stone-300 md:-translate-x-1/2" />
+                        <div className={`timeline-line absolute left-[27px] md:left-1/2 top-0 bottom-0 w-0.5 md:-translate-x-1/2 ${isMonochromeTheme ? 'bg-white/20' : 'bg-stone-300'}`} />
                         
                         <div className="space-y-12">
                             {items.map((item: any, idx: number) => {
@@ -2502,12 +2519,12 @@ END:VCALENDAR`;
 
                                 return (
                                     <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                                        <div className="timeline-dot absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: accentColor}}>
+                                        <div className="timeline-dot absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: itineraryAccentColor}}>
                                             <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
                                         </div>
                                         <div className={`timeline-item w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
                                             <div className="bg-[var(--section-bg)]/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-md transition-shadow">
-                                                <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${accentColor}1A`, color: accentColor}}>
+                                                <span className="inline-block px-3 py-1.5 rounded-full text-[9px] xs:text-[10px] font-bold tracking-[0.2em] uppercase mb-3" style={{backgroundColor: `${itineraryAccentColor}1A`, color: itineraryAccentColor}}>
                                                     {item.time}
                                                 </span>
                                                 <h4 className="text-lg xs:text-xl font-serif text-[var(--text-primary)]">{itemTitle}</h4>
@@ -2688,7 +2705,7 @@ END:VCALENDAR`;
     );
 
     const renderGifts = () => (
-        <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]">
+        <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]" style={invertedPanelStyle}>
             <div className="max-w-3xl mx-auto px-6">
                 <div className="text-center mb-12">
                     <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">
