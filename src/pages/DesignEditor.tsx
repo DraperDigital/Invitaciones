@@ -10,6 +10,7 @@ import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 
 type DesignConfig = {
     primaryColor: string;
@@ -307,6 +308,12 @@ export default function DesignEditor() {
         if (['matrix', 'expert', 'plan'].includes(s)) return 'plan';
         return 'estilo';
     };
+
+    // The typography picker below previews every preset at once, so load all of
+    // their decorative fonts here rather than in the public invitation pages.
+    useEffect(() => {
+        loadGoogleFonts(ALL_TYPOGRAPHY_PRESET_FONTS);
+    }, []);
 
     const [activeTab, setActiveTab] = useState<EditorTab>(getInitialTab());
     const [activeSection, setActiveSection] = useState<string | null>(() => {

@@ -20,38 +20,69 @@
     <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
     <!--
-      Google Fonts — only load what the app actually uses:
-      · Playfair Display: 400 (normal headings), 700 (bold headings)
-      · Inter: 300 (font-light), 400 (body), 500 (medium), 600 (semibold), 700 (bold)
-      · Cormorant Garamond removed — not referenced anywhere in the codebase
+      Google Fonts — only the 3 families used SITE-WIDE (headings, body copy,
+      display type on marketing pages): Playfair Display, Inter, Plus Jakarta Sans.
+
+      Every other decorative family this project uses (Outfit, Fredoka, Quicksand,
+      Press Start 2P, VT323, Manrope, Libre Baskerville, Lato) belongs to a single
+      invitation typography preset or theme (kids/gamer templates, etc.) and is
+      fetched on demand by src/lib/loadFonts.ts only when that theme actually
+      renders — not on every page load.
+
+      Loaded via the preload+swap pattern so the stylesheet fetch never blocks
+      first paint (falls back to preload-less <link rel=stylesheet> if JS is off).
     -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&family=Outfit:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Press+Start+2P&family=VT323&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
+      />
+    </noscript>
 
     <!-- <title> intentionally omitted — react-helmet-async injects per-route titles at runtime,
          and the prerender build serializes them into static HTML for crawlers. -->
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MCFY4JRZ5"></script>
+    <!-- Google tag (gtag.js) + Microsoft Clarity — deferred until window `load` so
+         they never compete with the page's own critical rendering path. Same IDs,
+         same behavior as before, just fired a beat later. -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      function __invittoLoadAnalytics() {
+        var gtagScript = document.createElement('script');
+        gtagScript.async = true;
+        gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-7MCFY4JRZ5';
+        document.head.appendChild(gtagScript);
 
-      gtag('config', 'G-7MCFY4JRZ5');
-    </script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-7MCFY4JRZ5');
 
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
         (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "wtt5sm69yn");
+      }
+
+      if (document.readyState === 'complete') {
+        setTimeout(__invittoLoadAnalytics, 1);
+      } else {
+        window.addEventListener('load', function () { setTimeout(__invittoLoadAnalytics, 1); });
+      }
     </script>
   </head>
   <body>
