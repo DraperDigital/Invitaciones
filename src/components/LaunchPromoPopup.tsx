@@ -72,6 +72,8 @@ export default function LaunchPromoPopup() {
                         remaining: data.remaining > 10 ? data.remaining : 30,
                         max: 30
                     });
+                } else {
+                    setStatus({ available: false, remaining: 0, max: 30 });
                 }
             })
             .catch(() => {
@@ -79,7 +81,7 @@ export default function LaunchPromoPopup() {
             });
 
         return () => { cancelled = true; };
-    }, [eligible, status]);
+    }, [eligible]);
 
     // Attach exit-intent + scroll + time-on-page triggers once the coupon is confirmed available
     useEffect(() => {
