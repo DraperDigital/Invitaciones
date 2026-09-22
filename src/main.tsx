@@ -5,7 +5,14 @@ import './index.css'
 import App from './App.tsx'
 import { initAnalytics } from './lib/analytics'
 
-initAnalytics();
+// Deferred until window `load` so analytics never competes with the page's
+// own critical rendering path. initAnalytics() itself checks cookie consent
+// before loading anything.
+if (document.readyState === 'complete') {
+  setTimeout(initAnalytics, 1);
+} else {
+  window.addEventListener('load', () => setTimeout(initAnalytics, 1));
+}
 
 // Automatically reload on stale dynamic import after deployment
 window.addEventListener('vite:preloadError', () => {

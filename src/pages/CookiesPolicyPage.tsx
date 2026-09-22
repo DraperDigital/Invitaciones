@@ -201,7 +201,7 @@ const CookiesPolicyPage: React.FC = () => {
                         <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">4</div>
                         <h2 className="text-2xl font-bold text-[#222B38]">Cómo gestionar o desactivar cookies</h2>
                         <p className="text-slate-600 leading-relaxed">
-                            Puedes restringir, bloquear o borrar las cookies de Invitto en cualquier momento modificando la configuración de tu navegador web:
+                            La forma más sencilla es elegir <strong>&quot;Solo necesarias&quot;</strong> en el aviso de cookies que aparece al entrar al sitio: con esa elección, Google Analytics y Microsoft Clarity nunca se cargan. También puedes restringir, bloquear o borrar cookies en cualquier momento desde la configuración de tu navegador web:
                         </p>
                         <div className="grid sm:grid-cols-2 gap-3 text-xs text-slate-600">
                             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">

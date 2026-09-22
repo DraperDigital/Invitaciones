@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Cookie, X } from 'lucide-react';
+import { initAnalytics } from '../lib/analytics';
 
 export default function CookieBanner() {
     const [isVisible, setIsVisible] = useState(false);
@@ -23,6 +24,11 @@ export default function CookieBanner() {
             localStorage.setItem('invitto_cookie_consent', choice);
         } catch {
             // Manejar posibles excepciones de storage
+        }
+        if (choice === 'all') {
+            // Starts GA4/Clarity right away instead of waiting for a reload —
+            // initAnalytics() re-reads the consent we just stored above.
+            initAnalytics();
         }
         setIsVisible(false);
     };

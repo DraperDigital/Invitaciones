@@ -186,6 +186,10 @@ const AvisoPrivacidadPage: React.FC = () => {
                                 <span className="h-1.5 w-1.5 rounded-full bg-slate-400 mt-2" />
                                 <span><strong>Resend:</strong> Envío de correos electrónicos transaccionales y confirmaciones del sistema.</span>
                             </li>
+                            <li className="flex items-start gap-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-slate-400 mt-2" />
+                                <span><strong>Google (Google Analytics) y Microsoft (Clarity):</strong> Analítica de uso del sitio para entender y mejorar la experiencia de navegación, solo si aceptaste cookies analíticas en nuestro aviso de cookies.</span>
+                            </li>
                         </ul>
                     </section>
 
@@ -214,7 +218,7 @@ const AvisoPrivacidadPage: React.FC = () => {
                         <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">7</div>
                         <h2 className="text-2xl font-bold text-[#222B38]">Cookies y tecnologías de seguimiento</h2>
                         <p className="text-slate-600 leading-relaxed">
-                            Utilizamos cookies esenciales y de sesión requeridas para el inicio de sesión y funcionamiento de la plataforma, así como herramientas analíticas agregadas (Google Analytics y Microsoft Clarity) para evaluar y mejorar la experiencia de navegación sin identificar perfiles individuales. Puedes desactivar o configurar las cookies desde los ajustes de tu navegador.
+                            Utilizamos cookies esenciales y de sesión requeridas para el inicio de sesión y funcionamiento de la plataforma, así como herramientas analíticas agregadas (Google Analytics y Microsoft Clarity) para evaluar y mejorar la experiencia de navegación sin identificar perfiles individuales. Estas últimas solo se activan si eliges &quot;Aceptar todas&quot; en nuestro aviso de cookies; si eliges &quot;Solo necesarias&quot;, no se cargan. También puedes desactivar o configurar las cookies desde los ajustes de tu navegador.
                         </p>
                     </section>
 
