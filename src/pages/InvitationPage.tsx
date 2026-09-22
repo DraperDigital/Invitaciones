@@ -3247,55 +3247,53 @@ END:VCALENDAR`;
                 </>
             )}
 
-            {/* PRE-RENDER Intro (Sobre Digital / Pantalla de Entrada) */}
+            {/* PRE-RENDER Intro (Sobre Digital a pantalla completa / Pantalla de Entrada) */}
             {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
-                <div className="invitation-content min-h-screen bg-[var(--section-bg-alt)] flex items-center justify-center p-6 relative overflow-hidden">
-                    <div className="relative z-10 max-w-3xl w-full">
-                        <div className="relative bg-[var(--section-bg)] rounded-2xl border border-[var(--card-border)] overflow-hidden">
-                            <div className="p-6 xs:p-10 sm:p-16 text-center relative">
-                                <div className="mb-8 sm:mb-12 relative">
-                                    <div className="w-full max-w-[260px] sm:w-80 h-48 sm:h-64 mx-auto relative">
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[240px] sm:w-72 h-8 bg-black/10 blur-xl rounded-full" />
-                                        <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-stone-100 to-stone-200 rounded-2xl shadow-xl" style={{ clipPath: 'polygon(0 0, 50% 45%, 100% 0, 100% 100%, 0 100%)' }} />
-                                        <div className="absolute inset-4 border-2 border-stone-300/50 rounded-xl" style={{ clipPath: 'polygon(5% 20%, 50% 50%, 95% 20%, 95% 95%, 5% 95%)' }} />
-                                        <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-gradient-to-br from-amber-100 via-rose-50 to-stone-100 border-4 border-[var(--card-border)] shadow-lg" style={{ clipPath: 'polygon(0 0, 50% 65%, 100% 0)', transformOrigin: 'top center', animation: 'envelope-flap 3s ease-in-out infinite' }} />
-                                        <div className="absolute top-16 sm:top-24 left-1/2 -translate-x-1/2 z-20">
-                                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30 overflow-hidden p-2">
-                                                {(cfg.decorative_image_url || cfg.decorativeImage) ? (
-                                                    <img
-                                                        src={cfg.decorative_image_url || cfg.decorativeImage}
-                                                        alt="Sello"
-                                                        className="h-full w-full object-contain filter drop-shadow brightness-110"
-                                                    />
-                                                ) : (
-                                                    getSealIcon()
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {guest && (
-                                    <div className="mb-6 sm:mb-8">
-                                        <p className="text-[10px] uppercase tracking-[0.5em] text-accent font-semibold mb-2 sm:mb-3">Para</p>
-                                        <h2 className="text-3xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-2">{guest.name}</h2>
-                                        <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
-                                    </div>
+                <div className="invitation-content min-h-screen w-full flex items-center justify-center overflow-hidden relative" style={{ background: 'var(--section-bg-alt)' }}>
+                    {/* Textura de papel */}
+                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] pointer-events-none" />
+
+                    {/* Líneas de doblez del sobre — de cada esquina al centro, estiradas a todo el viewport */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <line x1="0" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
+                        <line x1="100" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
+                        <line x1="0" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
+                        <line x1="100" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
+                    </svg>
+
+                    <div className="relative z-10 text-center px-6 max-w-xl w-full mx-auto">
+                        {guest && (
+                            <div className="mb-6 sm:mb-8">
+                                <p className="text-[10px] uppercase tracking-[0.5em] text-accent font-semibold mb-2 sm:mb-3">Para</p>
+                                <h2 className="text-2xl sm:text-4xl font-serif font-light text-[var(--text-primary)] mb-2">{guest.name}</h2>
+                                <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
+                            </div>
+                        )}
+                        <div className="mb-8 sm:mb-10">
+                            <h3 className="text-3xl xs:text-4xl sm:text-6xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
+                            <p className="text-[var(--text-secondary)] text-sm sm:text-base font-serif italic">
+                                {cfg.subtitle || 'Te invitan a celebrar con ellos este gran día.'}
+                            </p>
+                        </div>
+
+                        {/* Sello de cera — punto donde convergen las líneas del sobre */}
+                        <div className="mb-8 sm:mb-10 flex justify-center">
+                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30 overflow-hidden p-2">
+                                {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                                    <img
+                                        src={cfg.decorative_image_url || cfg.decorativeImage}
+                                        alt="Sello"
+                                        className="h-full w-full object-contain filter drop-shadow brightness-110"
+                                    />
+                                ) : (
+                                    getSealIcon()
                                 )}
-                                <div className="mb-8 sm:mb-10">
-                                    <h3 className="text-3xl xs:text-4xl sm:text-7xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
-                                    <p className="text-[var(--text-secondary)] text-[10px] sm:text-sm uppercase tracking-[0.4em] font-medium">
-                                        {(event.event_type as string) === 'wedding' ? 'Boda' 
-                                            : (event.event_type as string) === 'xv' ? 'XV Años' 
-                                            : (event.event_type as string) === 'graduacion' || (event.event_type as string) === 'graduation' ? 'Graduación' 
-                                            : (event.event_type as string) === 'birthday' || (event.event_type as string) === 'cumpleanos' ? 'Cumpleaños' 
-                                            : (event.event_type as string) === 'bautizo' || (event.event_type as string) === 'baptism' ? 'Bautizo' 
-                                            : (event.event_type as string) === 'comunion' ? 'Primera Comunión' 
-                                            : 'Celebración'}
-                                    </p>
-                                </div>
-                                <button onClick={() => setEnvelopeOpened(true)} style={{ background: buttonColor }} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 text-[var(--button-contrast)] rounded-full font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:opacity-90 transition-opacity shadow-lg"><Mail className="h-5 w-5 sm:h-6 sm:w-6" /><span>Abrir Invitación</span></button>
                             </div>
                         </div>
+
+                        <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:opacity-70 transition-opacity" style={{ borderColor: buttonColor, color: buttonColor }}>
+                            <span>Ver Invitación</span>
+                        </button>
                     </div>
                 </div>
             ) : (
