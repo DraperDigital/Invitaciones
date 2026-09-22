@@ -324,18 +324,18 @@ export const MOCK_EVENTS: Event[] = [
                 { time: '20:30', event: 'Bebidas y baile', location: 'Pista de baile' }
             ],
             gallery_images: [
-                { url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80', caption: '1' },
-                { url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80', caption: '2' },
-                { url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80', caption: '3' },
-                { url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80', caption: '4' },
-                { url: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80', caption: '5' }
+                { url: '/images/couples/ana-carlos-hero.jpg', caption: '1' },
+                { url: '/images/couples/ana-carlos-pro-hero.jpg', caption: '2' },
+                { url: '/images/couples/ana-carlos-clasico-hero.jpg', caption: '3' },
+                { url: '/images/couples/gabriela-arturo-hero.jpg', caption: '4' },
+                { url: '/images/couples/gabriela-arturo-pro-hero.jpg', caption: '5' },
             ],
             photoGallery: {
                 enabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80'
+                    '/images/couples/ana-carlos-hero.jpg',
+                    '/images/couples/gabriela-arturo-hero.jpg',
+                    '/images/couples/isabel-rodrigo-hero.jpg'
                 ]
             },
             countdown: true,
@@ -434,7 +434,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'modern-minimalist', hero_image_url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80',
+            theme: 'modern-minimalist', hero_image_url: '/images/couples/helena-austin-gallery-1.jpg',
             schedule: [
                 { time: '16:30', event: 'Ceremonia Civil', location: 'Jardín Las Palomas' },
                 { time: '17:30', event: 'Ceremonia Religiosa', location: 'Capilla del Jardín' },
@@ -457,10 +457,9 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true,
                 uploadEnabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80'
+                    '/images/couples/isabel-rodrigo-hero.jpg',
+                    '/images/couples/ana-carlos-gallery-1.jpg',
+                    '/images/couples/gabriela-arturo-pro-hero.jpg'
                 ]
             },
             liveStream: {
@@ -519,6 +518,7 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             isPro: true,
             theme: 'vintage-pro',
+            hero_image_url: '/images/couples/gabriela-arturo-hero.jpg',
             schedule: [
                 { time: '17:00', event: 'Bienvenida en Viñedo', location: 'Entrada Principal' },
                 { time: '17:30', event: 'Ceremonia Simbólica', location: 'Entre las Vides' },
@@ -540,9 +540,9 @@ export const MOCK_EVENTS: Event[] = [
             photoGallery: {
                 enabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80'
+                    '/images/couples/ana-carlos-gallery-1.jpg',
+                    '/images/couples/helena-austin-gallery-1.jpg',
+                    '/images/couples/ana-carlos-clasico-hero.jpg'
                 ]
             }
         },
@@ -565,7 +565,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'classic-elegance', hero_image_url: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=1600&q=80',
+            theme: 'classic-elegance', hero_image_url: '/images/couples/gabriela-arturo-pro-hero.jpg',
             ceremony: {
                 name: 'Ceremonia Simbólica',
                 location: 'Entre las Vides',
@@ -601,9 +601,9 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true,
                 uploadEnabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80'
+                    '/images/couples/ana-carlos-gallery-2.jpg',
+                    '/images/couples/ana-carlos-gallery-3.jpg',
+                    '/images/couples/isabel-rodrigo-hero.jpg'
                 ]
             },
             liveStream: {
@@ -1717,7 +1717,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
         created_at: new Date().toISOString(),
         theme_config: {
-            theme: 'split-screen', hero_image_url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80',
+            theme: 'split-screen', hero_image_url: '/images/couples/ana-carlos-gallery-2.jpg',
             typography_preset: 'moderna',
             primary_color: '#0F172A',
             accent_color: '#38BDF8',
@@ -1764,7 +1764,7 @@ export const MOCK_EVENTS: Event[] = [
         created_at: new Date().toISOString(),
         theme_config: {
             theme: 'luxury-gold',
-            hero_image_url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1600&q=80',
+            hero_image_url: '/images/couples/ana-carlos-hero.jpg',
             subtitle: 'UNA NOCHE DE DISTINCIÓN & CELEBRACIÓN',
             welcome_message: 'Nos complace invitarles a celebrar una velada inolvidable de elegancia, música y distinción con motivo de nuestro Gran Aniversario. Su grata compañía hará memorable este acontecimiento.',
             reception: {
@@ -1789,9 +1789,9 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true,
                 uploadEnabled: false,
                 images: [
-                    'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80'
+                    '/images/couples/ana-carlos-pro-hero.jpg',
+                    '/images/couples/isabel-rodrigo-hero.jpg',
+                    '/images/couples/helena-austin-hero.jpg'
                 ]
             },
             countdown: true,
@@ -1818,7 +1818,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: new Date(Date.now() + 86400000 * 15).toISOString(),
         created_at: new Date().toISOString(),
         theme_config: {
-            theme: 'passport', hero_image_url: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80',
+            theme: 'passport', hero_image_url: '/images/couples/ana-carlos-clasico-hero.jpg',
             typography_preset: 'moderna',
             primary_color: '#0B2545',
             accent_color: '#134074',
