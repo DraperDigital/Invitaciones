@@ -7,6 +7,7 @@ import {
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
+import TrustBadges from '../components/TrustBadges';
 import { FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
 import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 
@@ -1086,6 +1087,13 @@ export default function HomePage() {
                         </div>
 
                     </div>
+                </div>
+            </section>
+
+            {/* --- COMPRA CON CONFIANZA --- */}
+            <section className="py-16 md:py-20 bg-[#F8F9FA] px-6">
+                <div className="mx-auto max-w-4xl">
+                    <TrustBadges />
                 </div>
             </section>
 

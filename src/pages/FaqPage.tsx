@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
 import { FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
 import { ArrowRight, HelpCircle } from 'lucide-react';
+import TrustBadges from '../components/TrustBadges';
 
 export default function FaqPage() {
     const { user } = useAuth();
@@ -69,6 +70,10 @@ export default function FaqPage() {
                             </p>
                         </div>
                     ))}
+                </div>
+
+                <div className="mt-16">
+                    <TrustBadges />
                 </div>
 
                 <div className="mt-16 text-center bg-[#222B38] p-10 md:p-14 rounded-3xl text-white space-y-6">
