@@ -267,19 +267,25 @@ export default function InvitationPage() {
         const preset = activeVars.fontPreset || cfg.typography_preset || cfg.typographyPreset || 'romantica';
         document.documentElement.setAttribute('data-theme-font', preset);
 
-        // Playfair Display / Inter / Plus Jakarta Sans are loaded globally in index.html.
-        // Everything else here is a decorative font only some presets/themes need, so
-        // it's fetched on demand instead of shipping on every page of the site.
-        const decorativeFonts = [
-            ...(TYPOGRAPHY_PRESET_FONTS[preset] || []),
-            ...(THEME_DECORATIVE_FONTS[cfg.theme as string] || []),
-        ];
-        if (decorativeFonts.length > 0) loadGoogleFonts(decorativeFonts);
+        // Skip font loading until the real event has loaded — `themeName` falls back
+        // to 'classic' (fontPreset 'elegante') while `event` is still null, and we
+        // don't want that transient default fetching a font this invitation may
+        // never actually use.
+        if (event) {
+            // Playfair Display / Inter / Plus Jakarta Sans are loaded globally in index.html.
+            // Everything else here is a decorative font only some presets/themes need, so
+            // it's fetched on demand instead of shipping on every page of the site.
+            const decorativeFonts = [
+                ...(TYPOGRAPHY_PRESET_FONTS[preset] || []),
+                ...(THEME_DECORATIVE_FONTS[cfg.theme as string] || []),
+            ];
+            if (decorativeFonts.length > 0) loadGoogleFonts(decorativeFonts);
+        }
 
         return () => {
             document.documentElement.removeAttribute('data-theme-font');
         };
-    }, [event?.theme_config, activeVars.fontPreset]);
+    }, [event, activeVars.fontPreset]);
 
     // Custom CSS Injected from theme_config (Plan Pro/Concierge)
     const customStyles = event?.theme_config?.custom_css || '';
