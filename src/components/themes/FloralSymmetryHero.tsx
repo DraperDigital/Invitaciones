@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 
 interface Props {
@@ -149,7 +150,7 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
                         style={{ borderColor: bgColor }}
                         title={onEditHero ? "Haz clic para cambiar la foto" : undefined}
                     >
-                        <img src={avatarUrl} alt="Couple" className="w-full h-full object-cover" />
+                        <img src={avatarUrl} alt="Couple" className="w-full h-full object-cover" style={getHeroImageStyle(cfg)} />
                         {onEditHero && (
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold gap-1 p-2">
                                 <Edit2 className="h-5 w-5" />

@@ -33,6 +33,7 @@ import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
+import { getHeroImageStyle } from '../lib/heroImagePosition';
 
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '✨' },
@@ -2092,7 +2093,7 @@ END:VCALENDAR`;
                 <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
                     {heroImageUrl ? (
                         <div className="absolute inset-0">
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={getHeroImageStyle(cfg)} />
                             <div className="absolute inset-0 bg-black/30" />
                         </div>
                     ) : (
@@ -2160,7 +2161,7 @@ END:VCALENDAR`;
                 <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1B2E1D]">
                     {heroImageUrl ? (
                         <div className="absolute inset-0">
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" style={getHeroImageStyle(cfg)} />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#1B2E1D] via-transparent to-transparent" />
                         </div>
                     ) : (
@@ -2234,7 +2235,7 @@ END:VCALENDAR`;
             <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: heroBgColor }}>
                 {heroImageUrl && (
                     <div className="absolute inset-0">
-                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-80" />
+                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-80" style={getHeroImageStyle(cfg)} />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
                     </div>
                 )}
@@ -3250,10 +3251,25 @@ END:VCALENDAR`;
             {/* PRE-RENDER Intro (Sobre Digital a pantalla completa / Pantalla de Entrada) */}
             {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
                 <div className="invitation-content min-h-screen w-full flex items-center justify-center overflow-hidden relative" style={{ background: 'var(--section-bg-alt)' }}>
+                    {/* Cuerpo del sobre (panel trasero) — las 4 solapas dobladas hacia el centro, cada una con
+                        una ligera sombra/luz distinta para simular el papel doblado y solapado */}
+                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 50%)', background: 'linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 65%)' }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(0 100%, 0 0, 50% 50%)', background: 'linear-gradient(90deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 65%)' }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)', background: 'linear-gradient(270deg, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0) 65%)' }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(100% 100%, 0 100%, 50% 50%)', background: 'linear-gradient(0deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 65%)' }} />
+
                     {/* Textura de papel */}
                     <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] pointer-events-none" />
 
-                    {/* Líneas de doblez del sobre — de cada esquina al centro, estiradas a todo el viewport */}
+                    {/* Sombra suave de los pliegues (difuminada, por debajo) para dar volumen a la unión de las solapas */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-50" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ filter: 'blur(3px)' }}>
+                        <line x1="0" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
+                        <line x1="100" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
+                        <line x1="0" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
+                        <line x1="100" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
+                    </svg>
+
+                    {/* Líneas de doblez nítidas — de cada esquina al centro, marcando el corte entre solapas */}
                     <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
                         <line x1="0" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
                         <line x1="100" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />

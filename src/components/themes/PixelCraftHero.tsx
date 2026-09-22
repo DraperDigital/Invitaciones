@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Clock, MapPin, Sparkles, Cake, Compass, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -360,7 +361,7 @@ export default function PixelCraftHero({ event, cfg, countdown, labels, heroImag
                                     }`}
                                     title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
                                 >
-                                    <img src={heroImageUrl} alt={childName} className="w-full h-36 object-cover group-hover/pixelphoto:scale-105 transition-transform duration-500" />
+                                    <img src={heroImageUrl} alt={childName} className="w-full h-36 object-cover group-hover/pixelphoto:scale-105 transition-transform duration-500" style={getHeroImageStyle(cfg)} />
                                     {onEditHero && (
                                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/pixelphoto:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20 font-mono">
                                             <Edit2 className="h-4 w-4 text-[#4ADE80]" />

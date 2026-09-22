@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Plane, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -31,7 +32,7 @@ export default function PassportHero({ event, cfg, countdown, heroImageUrl, scro
                     title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
                 >
                     {heroImageUrl ? (
-                        <img src={heroImageUrl} alt="" className="absolute inset-0 w-full h-full object-cover group-hover/pass:scale-105 transition-transform duration-500" />
+                        <img src={heroImageUrl} alt="" className="absolute inset-0 w-full h-full object-cover group-hover/pass:scale-105 transition-transform duration-500" style={getHeroImageStyle(cfg)} />
                     ) : (
                         <div className="absolute inset-0 bg-[#E1E8ED]" />
                     )}

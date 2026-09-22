@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -37,7 +38,7 @@ export default function ModernMinimalistHero({ event, cfg, countdown, labels, he
             <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ backgroundColor: heroBg }}>
                 {heroImageUrl && (
                     <div className="absolute inset-0">
-                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" />
+                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" style={getHeroImageStyle(cfg)} />
                         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/80" />
                     </div>
                 )}

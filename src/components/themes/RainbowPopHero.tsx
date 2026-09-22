@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar, Clock, MapPin, Sparkles, Heart, Gift, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -87,10 +88,11 @@ export default function RainbowPopHero({ event, cfg, countdown, labels, heroImag
                             >
                                 <div className="w-full h-full rounded-full p-1.5 bg-white flex items-center justify-center overflow-hidden relative">
                                     {heroImageUrl ? (
-                                        <img 
-                                            src={heroImageUrl} 
-                                            alt={childName} 
+                                        <img
+                                            src={heroImageUrl}
+                                            alt={childName}
                                             className="w-full h-full object-cover rounded-full"
+                                            style={getHeroImageStyle(cfg)}
                                         />
                                     ) : (
                                         <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-100 to-sky-100 flex flex-col items-center justify-center p-4">

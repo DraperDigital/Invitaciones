@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getHeroBackgroundStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -24,23 +25,22 @@ export default function ClassicEleganceProHero({ event, cfg, countdown, heroImag
         return event.title.slice(0, 3).toUpperCase();
     };
 
-    const bgImage = heroImageUrl
-        ? `url(${heroImageUrl})`
-        : `linear-gradient(135deg, #141414 0%, #1a1208 50%, ${heroBg} 100%)`;
-
     return (
         <section id="hero" className="w-full relative overflow-hidden select-none" style={{ backgroundColor: heroBg }}>
 
             {/* ── Full-screen hero image ── */}
             <div
-                className="relative w-full flex flex-col"
-                style={{
-                    minHeight: '95vh',
-                    backgroundImage: bgImage,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center top',
-                }}
+                className="relative w-full flex flex-col overflow-hidden"
+                style={{ minHeight: '95vh' }}
             >
+                {/* Background photo (or fallback gradient) — separate layer so zoom/position never affects the content */}
+                <div
+                    className="absolute inset-0"
+                    style={heroImageUrl
+                        ? getHeroBackgroundStyle(cfg, heroImageUrl)
+                        : { background: `linear-gradient(135deg, #141414 0%, #1a1208 50%, ${heroBg} 100%)` }}
+                />
+
                 {/* Multi-layer overlay: bottom heavy black, subtle top vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent" />

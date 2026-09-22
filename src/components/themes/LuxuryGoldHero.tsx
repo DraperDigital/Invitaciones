@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getHeroBackgroundStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -18,9 +19,9 @@ export default function LuxuryGoldHero({ event, cfg, countdown, labels, heroImag
         <div className="relative min-h-screen bg-[#0a0a0a] text-[#d4af37] flex flex-col items-center justify-center p-3 sm:p-6 border-4 sm:border-[12px] border-[#d4af37]/20 overflow-hidden">
             {/* Subtle Luxury Background Photo if provided */}
             {heroImageUrl && (
-                <div 
-                    className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity scale-105 pointer-events-none"
-                    style={{ backgroundImage: `url("${heroImageUrl}")` }}
+                <div
+                    className="absolute inset-0 opacity-20 mix-blend-luminosity pointer-events-none"
+                    style={getHeroBackgroundStyle(cfg, heroImageUrl)}
                 />
             )}
 

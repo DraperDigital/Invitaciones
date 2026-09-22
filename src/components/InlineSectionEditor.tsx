@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
 import type { SectionId } from '../lib/sectionRegistry';
+import { getHeroImageStyle } from '../lib/heroImagePosition';
 
 type Props = {
     sectionId: SectionId;
@@ -35,6 +36,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || '');
+    const [heroImagePositionY, setHeroImagePositionY] = useState(Number(cfg.hero_image_position_y ?? 50));
+    const [heroImageZoom, setHeroImageZoom] = useState(Number(cfg.hero_image_zoom ?? 1));
     const [uploadingHero, setUploadingHero] = useState(false);
     const heroFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -157,6 +160,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setChildName(cfg.child_name || cfg.childName || '');
         setAge(cfg.age || cfg.turning_age || '');
         setHeroImageUrl(cfg.hero_image_url || cfg.heroImage || '');
+        setHeroImagePositionY(Number(cfg.hero_image_position_y ?? 50));
+        setHeroImageZoom(Number(cfg.hero_image_zoom ?? 1));
         setWelcomeMessage(cfg.welcome_message || '');
         setStoryTitle(cfg.story_title || 'Nos encantaría que nos acompañes');
         setStorySubtitle(cfg.story_subtitle || 'En nuestro día tan especial');
@@ -341,6 +346,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     turning_age: Number(age) || age,
                     hero_image_url: finalHeroImage,
                     heroImage: finalHeroImage,
+                    hero_image_position_y: heroImagePositionY,
+                    hero_image_zoom: heroImageZoom,
                     collage_images: collageImages,
                     collageImages: collageImages,
                     story_title: storyTitle,
@@ -643,10 +650,11 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                     {heroImageUrl ? (
                                         <div className="space-y-3">
                                             <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-stone-900 shadow-inner group">
-                                                <img 
-                                                    src={heroImageUrl} 
-                                                    alt="Portada" 
-                                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                                                <img
+                                                    src={heroImageUrl}
+                                                    alt="Portada"
+                                                    className="w-full h-full object-cover"
+                                                    style={getHeroImageStyle({ hero_image_position_y: heroImagePositionY, hero_image_zoom: heroImageZoom })}
                                                 />
                                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                                     <button
@@ -719,6 +727,53 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                             className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/20 text-stone-800"
                                         />
                                     </div>
+
+                                    {heroImageUrl && (
+                                        <div className="mt-3 pt-3 border-t border-stone-200 space-y-3">
+                                            <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block">
+                                                Ajustar encuadre de la foto
+                                            </label>
+                                            <div>
+                                                <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
+                                                    <span>Mover arriba / abajo</span>
+                                                    <span className="font-mono">{heroImagePositionY}%</span>
+                                                </div>
+                                                <input
+                                                    type="range"
+                                                    min={0}
+                                                    max={100}
+                                                    step={1}
+                                                    value={heroImagePositionY}
+                                                    onChange={e => setHeroImagePositionY(Number(e.target.value))}
+                                                    className="w-full accent-[#1B2E1D]"
+                                                />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
+                                                    <span>Zoom (acercar / alejar)</span>
+                                                    <span className="font-mono">{heroImageZoom.toFixed(2)}x</span>
+                                                </div>
+                                                <input
+                                                    type="range"
+                                                    min={1}
+                                                    max={2.5}
+                                                    step={0.05}
+                                                    value={heroImageZoom}
+                                                    onChange={e => setHeroImageZoom(Number(e.target.value))}
+                                                    className="w-full accent-[#1B2E1D]"
+                                                />
+                                            </div>
+                                            {(heroImagePositionY !== 50 || heroImageZoom !== 1) && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setHeroImagePositionY(50); setHeroImageZoom(1); }}
+                                                    className="text-[10px] font-bold text-stone-500 hover:text-stone-800 normal-case tracking-normal cursor-pointer"
+                                                >
+                                                    Restablecer encuadre
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
