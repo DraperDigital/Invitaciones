@@ -2401,6 +2401,18 @@ END:VCALENDAR`;
                     </div>
                 </div>
 
+                <div className="mt-16 max-w-md mx-auto text-center">
+                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--text-secondary)] mb-4">Agrega la fecha a tu calendario</p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
+                            <Calendar className="h-3.5 w-3.5" /> Google Calendar
+                        </a>
+                        <a href={generateICalLink()} className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
+                            <Calendar className="h-3.5 w-3.5" /> iCal / Outlook
+                        </a>
+                    </div>
+                </div>
+
                 {event.maps_link && (
                     <div className="mt-16 max-w-5xl mx-auto">
                         <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl overflow-hidden shadow-2xl">
