@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -38,7 +39,7 @@ export default function PolaroidVintageHero({ event, cfg, countdown, heroImageUr
                 >
                     <div className="aspect-square w-full bg-stone-200 overflow-hidden shadow-inner relative">
                         {heroImageUrl ? (
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover contrast-125 sepia-[.3] hue-rotate-[-10deg]" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover contrast-125 sepia-[.3] hue-rotate-[-10deg]" style={getHeroImageStyle(cfg)} />
                         ) : (
                             <div className="w-full h-full bg-stone-300" />
                         )}

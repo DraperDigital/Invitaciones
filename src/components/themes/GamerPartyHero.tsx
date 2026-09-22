@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Clock, MapPin, Gamepad2, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -155,6 +156,7 @@ export default function GamerPartyHero({ event, cfg, countdown, labels, heroImag
                                         src={heroImageUrl} 
                                         alt={childName} 
                                         className="w-full h-full object-cover group-hover/gamerphoto:scale-105 transition-transform duration-500"
+                                        style={getHeroImageStyle(cfg)}
                                     />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-tr from-slate-900 to-indigo-950">

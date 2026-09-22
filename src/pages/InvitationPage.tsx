@@ -33,6 +33,7 @@ import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
+import { getHeroImageStyle } from '../lib/heroImagePosition';
 
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '✨' },
@@ -2092,7 +2093,7 @@ END:VCALENDAR`;
                 <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
                     {heroImageUrl ? (
                         <div className="absolute inset-0">
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={getHeroImageStyle(cfg)} />
                             <div className="absolute inset-0 bg-black/30" />
                         </div>
                     ) : (
@@ -2160,7 +2161,7 @@ END:VCALENDAR`;
                 <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1B2E1D]">
                     {heroImageUrl ? (
                         <div className="absolute inset-0">
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-60" style={getHeroImageStyle(cfg)} />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#1B2E1D] via-transparent to-transparent" />
                         </div>
                     ) : (
@@ -2234,7 +2235,7 @@ END:VCALENDAR`;
             <section id="hero" key="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: heroBgColor }}>
                 {heroImageUrl && (
                     <div className="absolute inset-0">
-                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-80" />
+                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover opacity-80" style={getHeroImageStyle(cfg)} />
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60" />
                     </div>
                 )}

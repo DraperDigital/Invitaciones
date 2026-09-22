@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -111,6 +112,7 @@ export default function ClassicEleganceHero({ event, cfg, countdown, heroImageUr
                             src={heroImageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80'} 
                             alt={event?.title || 'Pareja'} 
                             className="w-full h-full object-cover filter brightness-[1.02]"
+                            style={getHeroImageStyle(cfg)}
                         />
                         {onEditHero && (
                             <div className="absolute inset-0 bg-black/35 opacity-0 group-hover/frame:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-10">

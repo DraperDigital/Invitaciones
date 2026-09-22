@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getHeroBackgroundStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -18,21 +19,21 @@ const GREEN  = '#527853';
 export default function RomanticBotanicalHero({ event, cfg, countdown, labels, heroImageUrl, onEditHero: _onEditHero }: Props) {
     const eventDate  = new Date(event.date_time);
     const tagline    = cfg.subtitle || labels?.tagline || 'Nuestra Boda';
-    const fallbackBg = heroImageUrl
-        ? `url(${heroImageUrl})`
-        : `linear-gradient(to bottom, ${GREEN} 0%, #2a4030 100%)`;
 
     return (
         <section
             id="hero"
             className="relative flex flex-col items-center justify-end pb-14 sm:pb-16 overflow-hidden"
-            style={{
-                minHeight: '85vh',
-                backgroundImage: fallbackBg,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
+            style={{ minHeight: '85vh' }}
         >
+            {/* Background photo (or fallback gradient) — separate layer so zoom/position never affects the content */}
+            <div
+                className="absolute inset-0"
+                style={heroImageUrl
+                    ? getHeroBackgroundStyle(cfg, heroImageUrl)
+                    : { background: `linear-gradient(to bottom, ${GREEN} 0%, #2a4030 100%)` }}
+            />
+
             {/* Dark gradient overlay — from-black/70 to-transparent */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
 

@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Star, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -43,7 +44,7 @@ export default function WhimsicalKidsHero({ event, cfg, countdown, labels, heroI
                         }`}
                         title={onEditHero ? "Haz clic para cambiar foto del festejado" : undefined}
                     >
-                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
+                        <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={getHeroImageStyle(cfg)} />
                         {/* Inner highlight */}
                         <div className="absolute inset-0 rounded-full ring-inset ring-4 ring-white/30" />
                         {onEditHero && (

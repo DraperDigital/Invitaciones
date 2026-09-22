@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -30,7 +31,7 @@ export default function SplitScreenHero({ event, cfg, countdown, labels, heroIma
                 title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
             >
                 {heroImageUrl ? (
-                    <img src={heroImageUrl} alt={event.title} className="absolute inset-0 w-full h-full object-cover group-hover/split:scale-105 transition-transform duration-700" />
+                    <img src={heroImageUrl} alt={event.title} className="absolute inset-0 w-full h-full object-cover group-hover/split:scale-105 transition-transform duration-700" style={getHeroImageStyle(cfg)} />
                 ) : (
                     <div className="absolute inset-0 bg-stone-200 animate-pulse" />
                 )}

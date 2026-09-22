@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -43,7 +44,7 @@ export default function MagazineHero({ event, cfg, countdown, heroImageUrl, scro
                             }`}
                             title={onEditHero ? "Haz clic para cambiar foto de portada" : undefined}
                         >
-                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover grayscale group-hover/mag:grayscale-0 transition-all duration-700" />
+                            <img src={heroImageUrl} alt="" className="w-full h-full object-cover grayscale group-hover/mag:grayscale-0 transition-all duration-700" style={getHeroImageStyle(cfg)} />
                             <div className="absolute inset-0 bg-black/20 group-hover/mag:bg-black/40 transition-colors" />
                             {onEditHero && (
                                 <div className="absolute inset-0 opacity-0 group-hover/mag:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold gap-1.5 z-20 pointer-events-none">

@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar, Clock, MapPin, Sparkles, Edit2 } from 'lucide-react';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -213,10 +214,11 @@ export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageU
 
                             <div className="aspect-[4/4] rounded-xl overflow-hidden bg-slate-100 relative shadow-inner border border-slate-200">
                                 {heroImageUrl ? (
-                                    <img 
-                                        src={heroImageUrl} 
-                                        alt={childName} 
+                                    <img
+                                        src={heroImageUrl}
+                                        alt={childName}
                                         className="w-full h-full object-cover"
+                                        style={getHeroImageStyle(cfg)}
                                     />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-tr from-amber-100 to-rose-100">

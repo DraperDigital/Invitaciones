@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
     event: any;
@@ -20,7 +21,7 @@ export default function NeonGlowHero({ event, cfg, countdown, labels, heroImageU
             {/* Dark background pattern or image */}
             <div className="absolute inset-0 z-0 opacity-40">
                 {heroImageUrl ? (
-                    <img src={heroImageUrl} alt="" className="w-full h-full object-cover" />
+                    <img src={heroImageUrl} alt="" className="w-full h-full object-cover" style={getHeroImageStyle(cfg)} />
                 ) : (
                     <div className="w-full h-full bg-gradient-to-b from-black via-zinc-900 to-black" />
                 )}
