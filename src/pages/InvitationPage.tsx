@@ -842,6 +842,7 @@ END:VCALENDAR`;
 
     // ── Dynamic config from Visual Editor ──
     const cfg = event.theme_config || {};
+    const isMonochromeTheme = cfg.theme === 'newspaper';
     const heroTextColor = cfg.hero_text_color || cfg.heroTextColor || '#ffffff';
     const heroImageUrl = cfg.hero_image_url || cfg.heroImage || null;
     const heroBgColor  = cfg.heroBgColor || cfg.hero_bg_color || '#1B2E1D';
@@ -2376,8 +2377,8 @@ END:VCALENDAR`;
                     {cfg.misa_name && (
                         <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                             <div className="inline-flex justify-center">
-                                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center shadow-md">
-                                    <Heart className="h-10 w-10 text-rose-400" />
+                                <div className={`h-20 w-20 rounded-full flex items-center justify-center shadow-md ${isMonochromeTheme ? 'bg-gradient-to-br from-stone-200 to-stone-100' : 'bg-gradient-to-br from-rose-100 to-rose-50'}`}>
+                                    <Heart className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-rose-400'}`} />
                                 </div>
                             </div>
                             <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.ceremony}</h4>
@@ -2403,8 +2404,8 @@ END:VCALENDAR`;
 
                     <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                         <div className="inline-flex justify-center">
-                            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center shadow-md">
-                                <Music className="h-10 w-10 text-amber-500" />
+                            <div className={`h-20 w-20 rounded-full flex items-center justify-center shadow-md ${isMonochromeTheme ? 'bg-gradient-to-br from-stone-200 to-stone-100' : 'bg-gradient-to-br from-amber-100 to-amber-50'}`}>
+                                <Music className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-amber-500'}`} />
                             </div>
                         </div>
                         <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.reception}</h4>
@@ -2749,10 +2750,11 @@ END:VCALENDAR`;
         return (
             <div id="gallery" key="gallery">
                 {galleryImages.length > 0 ? (
-                    <PhotoGallery 
-                        images={galleryImages} 
+                    <PhotoGallery
+                        images={galleryImages}
                         title={cfg?.gallery_title || cfg?.galleryTitle || "Galería de Fotos"}
                         subtitle={cfg?.gallery_subtitle || cfg?.gallerySubtitle || "Momentos inolvidables compartidos con amor."}
+                        grayscale={isMonochromeTheme}
                     />
                 ) : (
                     <section className="py-20 bg-[var(--section-bg)]">

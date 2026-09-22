@@ -10,12 +10,14 @@ interface PhotoGalleryProps {
     images: GalleryImage[];
     title?: string;
     subtitle?: string;
+    grayscale?: boolean;
 }
 
-const PhotoGallery: React.FC<PhotoGalleryProps> = ({ 
-    images, 
-    title = "Nuestra Galería", 
-    subtitle = "Momentos inolvidables compartidos con amor." 
+const PhotoGallery: React.FC<PhotoGalleryProps> = ({
+    images,
+    title = "Nuestra Galería",
+    subtitle = "Momentos inolvidables compartidos con amor.",
+    grayscale = false
 }) => {
     const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
@@ -51,10 +53,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             className="relative group cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] border-4 md:border-8 border-white dark:border-stone-800 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] bg-[var(--card-bg)] transform transition-all duration-500 hover:scale-[1.02]"
                             onClick={() => setSelectedImage(index)}
                         >
-                            <img 
-                                src={img.url} 
-                                alt={img.caption || `Gallery image ${index + 1}`} 
-                                className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                            <img
+                                src={img.url}
+                                alt={img.caption || `Gallery image ${index + 1}`}
+                                className={`w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105 ${grayscale ? 'grayscale contrast-125' : ''}`}
                                 loading="lazy"
                             />
                             <div className="absolute inset-0 bg-stone-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -105,10 +107,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     )}
 
                     <div className="max-w-4xl w-full flex flex-col items-center gap-4 sm:gap-6">
-                        <img 
-                            src={images[selectedImage].url} 
-                            alt={images[selectedImage].caption || `Gallery ${selectedImage + 1}`} 
-                            className="max-h-[75vh] w-auto max-w-full object-contain rounded-2xl md:rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300"
+                        <img
+                            src={images[selectedImage].url}
+                            alt={images[selectedImage].caption || `Gallery ${selectedImage + 1}`}
+                            className={`max-h-[75vh] w-auto max-w-full object-contain rounded-2xl md:rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300 ${grayscale ? 'grayscale contrast-125' : ''}`}
                         />
                         {images[selectedImage].caption && (
                             <div className="text-center space-y-1 max-w-lg px-4">
