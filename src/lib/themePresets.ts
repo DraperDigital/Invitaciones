@@ -98,6 +98,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#FFFFFF',
         typographyPreset: 'moderna'
     },
+    'newspaper': {
+        label: 'Primera Plana',
+        desc: 'Portada de periódico — cabecera con líneas, nota a dos columnas y tipografía editorial',
+        icon: '📰',
+        primaryColor: '#1A1A1A',
+        accentColor: '#1A1A1A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F7F6F3',
+        textPrimary: '#1A1A1A',
+        textSecondary: '#5C5C5C',
+        heroTextColor: '#1A1A1A',
+        heroBgColor: '#FFFFFF',
+        typographyPreset: 'elegante'
+    },
     'romantic-botanical': {
         label: 'Elegancia Floral',
         desc: 'Ilustraciones botánicas delicadas, verdes bosque y rosas empolvados',
@@ -286,6 +300,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion', 'corporate'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-gabriela-arturo-premium', icon: '🖤', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=800&auto=format&fit=crop' },
     { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'corporate'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-sofia-mateo-premium', icon: '🌓', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=800&auto=format&fit=crop' },
     { id: 'magazine', name: 'Estilo Editorial', category: 'xv', categories: ['xv', 'boda', 'cumpleanos', 'graduacion'], categoryLabel: 'XV / Gala', slug: 'xv-valeria-premium', icon: '📖', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop' },
+    { id: 'newspaper', name: 'Primera Plana', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-primera-plana-premium', icon: '📰', plan: 'Premium', thumbnail: '/images/couples/ana-carlos-hero.jpg' },
     { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'xv', categories: ['boda', 'xv', 'bautizo', 'comunion'], categoryLabel: 'XV / Primavera', slug: 'xv-regina-2026-premium', icon: '🌿', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=800&auto=format&fit=crop' },
     { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', categories: ['boda', 'xv', 'comunion'], categoryLabel: 'Boda / Jardín', slug: 'boda-simetria-floral', icon: '🌸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=800&auto=format&fit=crop' },
     { id: 'neon-glow', name: 'Fiesta Neón', category: 'cumpleanos', categories: ['cumpleanos', 'xv', 'graduacion'], categoryLabel: 'Cumpleaños / Party', slug: 'cumple-emilia-premium', icon: '🪩', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800&auto=format&fit=crop' },

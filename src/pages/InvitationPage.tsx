@@ -20,6 +20,7 @@ import ClassicEleganceProHero from '../components/themes/ClassicEleganceProHero'
 import RomanticBotanicalHero from '../components/themes/RomanticBotanicalHero';
 import SplitScreenHero from '../components/themes/SplitScreenHero';
 import MagazineHero from '../components/themes/MagazineHero';
+import NewspaperHero from '../components/themes/NewspaperHero';
 import NeonGlowHero from '../components/themes/NeonGlowHero';
 import LuxuryGoldHero from '../components/themes/LuxuryGoldHero';
 import PassportHero from '../components/themes/PassportHero';
@@ -147,6 +148,13 @@ export default function InvitationPage() {
             textPrimary: '#111111', textSecondary: '#4A4A4A',
             borderColor: '#222222', cardBorder: '#111111',
             accentOverride: '#E63946', fontPreset: 'moderna',
+            heroRadius: '0px', cardRadius: '0px',
+        },
+        'newspaper': {
+            sectionBg: '#FFFFFF', sectionBgAlt: '#F7F6F3', cardBg: '#FFFFFF',
+            textPrimary: '#1A1A1A', textSecondary: '#5C5C5C',
+            borderColor: '#1A1A1A26', cardBorder: '#1A1A1A',
+            accentOverride: '#1A1A1A', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '0px',
         },
         'luxury-gold': {
@@ -2059,6 +2067,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'magazine') {
             return <MagazineHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
+        }
+        if (cfg.theme === 'newspaper') {
+            return <NewspaperHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;
         }
         if (cfg.theme === 'neon-glow') {
             return <NeonGlowHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={() => setEditingSection('hero')} />;

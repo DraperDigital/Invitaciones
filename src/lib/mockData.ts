@@ -1803,6 +1803,62 @@ export const MOCK_EVENTS: Event[] = [
         }
     },
     {
+        id: 'mock-primera-plana',
+        slug: 'boda-primera-plana-premium',
+        user_id: 'mock-user-1',
+        title: 'Julieta & Luis',
+        event_type: 'wedding',
+        date_time: '2026-11-14T18:00:00Z',
+        venue_name: 'Hacienda San Pedro',
+        venue_address: 'Zamora, Michoacán',
+        maps_link: 'https://maps.google.com/?q=Hacienda+San+Pedro+Zamora',
+        dress_code: 'Formal',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: new Date(Date.now() + 86400000 * 25).toISOString(),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'newspaper',
+            hero_image_url: '/images/couples/gabriela-arturo-hero.jpg',
+            subtitle: 'Acompáñanos a celebrar este gran día',
+            banner_title: 'Nos Casamos',
+            welcome_message: 'Una propuesta, un sí y un vestido que nos concierne juntos. Nuestro amor fue creciendo con el tiempo y ahora estamos listos para crecer, madurar y anteponer siempre estos votos que estamos por pronunciar.',
+            reception: {
+                name: 'Hacienda San Pedro',
+                location: 'Zamora, Michoacán',
+                time: '18:00'
+            },
+            schedule: [
+                { time: '17:00', event: 'Ceremonia Religiosa', location: 'Templo de San Pedro y San Pablo' },
+                { time: '19:00', event: 'Recepción y Cóctel', location: 'Hacienda San Pedro' },
+                { time: '21:00', event: 'Cena y Brindis', location: 'Salón Principal' },
+                { time: '23:00', event: 'Fiesta y Baile', location: 'Terraza' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'Su presencia es el mejor regalo, pero si desean obsequiarnos algo, con gusto los recibimos en nuestra mesa de regalos.',
+                clabe: '012180015678909876',
+                bank: 'BBVA',
+                beneficiary: 'Julieta & Luis'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    '/images/couples/gabriela-arturo-pro-hero.jpg',
+                    '/images/couples/isabel-rodrigo-hero.jpg',
+                    '/images/couples/ana-carlos-gallery-1.jpg'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'elegante',
+            primary_color: '#1A1A1A',
+            accent_color: '#1A1A1A',
+            button_color: '#1A1A1A',
+            isPremium: true
+        }
+    },
+    {
         id: 'mock-destino',
         slug: 'boda-destino-premium',
         user_id: 'mock-user-1',
