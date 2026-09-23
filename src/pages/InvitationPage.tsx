@@ -35,6 +35,8 @@ import RainbowPopHero from '../components/themes/RainbowPopHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
+import { AnimatePresence, motion } from 'framer-motion';
+import ScrollReveal from '../components/invitation/ScrollReveal';
 
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '✨' },
@@ -2661,7 +2663,7 @@ END:VCALENDAR`;
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
                                     <div className="space-y-4 pt-4">
-                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center" style={{ background: buttonColor }}>
+                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center subtle-shimmer cursor-pointer" style={{ background: buttonColor }}>
                                             {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}
                                         </button>
                                         <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full h-12 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
@@ -3267,8 +3269,15 @@ END:VCALENDAR`;
             )}
 
             {/* PRE-RENDER Intro (Sobre Digital a pantalla completa / Pantalla de Entrada) */}
+            <AnimatePresence mode="wait">
             {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
-                <div className="invitation-content min-h-screen w-full flex items-center justify-center overflow-hidden relative" style={{ background: 'var(--section-bg-alt)' }}>
+                <motion.div
+                    key="envelope-screen"
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0, y: -25, scale: 0.98, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
+                    className="invitation-content min-h-screen w-full flex items-center justify-center overflow-hidden relative"
+                    style={{ background: 'var(--section-bg-alt)' }}
+                >
                     {/* Cuerpo del sobre (panel trasero) — las 4 solapas dobladas hacia el centro, cada una con
                         una ligera sombra/luz distinta para simular el papel doblado y solapado */}
                     <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 50%)', background: 'linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 65%)' }} />
@@ -3325,13 +3334,23 @@ END:VCALENDAR`;
                             </div>
                         </div>
 
-                        <button onClick={() => setEnvelopeOpened(true)} className="inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:opacity-70 transition-opacity" style={{ borderColor: buttonColor, color: buttonColor }}>
+                        <button 
+                            onClick={() => setEnvelopeOpened(true)} 
+                            className="group/btn relative inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-sm hover:shadow-md cursor-pointer subtle-shimmer overflow-hidden" 
+                            style={{ borderColor: buttonColor, color: buttonColor }}
+                        >
                             <span>Ver Invitación</span>
                         </button>
                     </div>
-                </div>
+                </motion.div>
             ) : (
-                <>
+                <motion.div
+                    key="invitation-page-body"
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="w-full"
+                >
                     {/* Floating Device Viewport & Template Selector Bar (Admin / Preview Mode) */}
                     {isAdminMode && (
                         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-300 max-w-[92vw] overflow-x-auto">
@@ -3426,7 +3445,12 @@ END:VCALENDAR`;
                                 const sectionLabel = sectionDef?.label || 'Sección';
 
                                 return (
-                                    <div key={section.id} className="relative group/section">
+                                    <ScrollReveal
+                                        key={section.id}
+                                        yOffset={section.id === 'hero' ? 0 : 18}
+                                        delay={section.id === 'hero' ? 0.05 : 0}
+                                        className="relative group/section"
+                                    >
                                         {isAdminMode && (
                                             <div className={`absolute ${section.id === 'hero' ? 'top-4 left-4 sm:top-6 sm:left-6' : 'top-4 right-4 sm:top-6 sm:right-6'} z-30 pointer-events-auto`}>
                                                 <button
@@ -3444,7 +3468,7 @@ END:VCALENDAR`;
                                             </div>
                                         )}
                                         {content}
-                                    </div>
+                                    </ScrollReveal>
                                 );
                             })}
                             {/* El footer SIEMPRE y sin excepción va al final absoluto de la página */}
@@ -3720,8 +3744,9 @@ END:VCALENDAR`;
                             </div>
                         </div>
                     )}
-                </>
+                </motion.div>
             )}
+            </AnimatePresence>
         </div>
     );
 }
