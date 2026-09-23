@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Flower2, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, Sparkles, ArrowRight, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -2039,7 +2039,7 @@ END:VCALENDAR`;
         if (type.includes('comunion') || type.includes('communion')) {
             return <Church className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
         }
-        return <Flower2 className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
+        return <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
     };
 
     const scrollToSection = (id: string) => {
@@ -2130,17 +2130,15 @@ END:VCALENDAR`;
                     )}
 
                     <div className="relative z-10 text-center px-6 py-20 max-w-2xl">
-                        <div className="mb-8">
-                            {(cfg.decorative_image_url || cfg.decorativeImage) ? (
+                        {(cfg.decorative_image_url || cfg.decorativeImage) && (
+                            <div className="mb-8">
                                 <img
                                     src={cfg.decorative_image_url || cfg.decorativeImage}
                                     alt="Logo o Monograma"
                                     className="h-16 sm:h-20 w-auto max-w-[200px] mx-auto object-contain mb-6 drop-shadow-sm"
                                 />
-                            ) : (
-                                <Flower2 className="h-12 w-12 mx-auto mb-6 animate-pulse" strokeWidth={1.5} style={{color: heroTextColor, opacity: 0.8}} />
-                            )}
-                        </div>
+                            </div>
+                        )}
                         <p className="text-sm uppercase tracking-[0.4em] mb-6 font-sans" style={{color: heroTextColor, opacity: 0.85}}>
                             {subtitle || labels.tagline}
                         </p>
@@ -2331,9 +2329,9 @@ END:VCALENDAR`;
         <section id="guest_welcome" key="guest_welcome" className="py-24 bg-[var(--section-bg)] border-b border-[var(--border-color)]">
             <div className="max-w-4xl mx-auto px-6 text-center">
                 <div className="mb-12 inline-flex items-center justify-center gap-4">
-                    <div className="h-px w-12 bg-accent/30" />
-                    <Flower2 className="h-6 w-6 text-accent/40" strokeWidth={1.5} />
-                    <div className="h-px w-12 bg-accent/30" />
+                    <div className="h-px w-12 sm:w-16 bg-accent/30" />
+                    <Sparkles className="h-4 w-4 text-accent/50" />
+                    <div className="h-px w-12 sm:w-16 bg-accent/30" />
                 </div>
                 
                 <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-light text-[var(--text-primary)] mb-6 sm:mb-8 leading-tight whitespace-pre-line break-words max-w-full">
@@ -3118,10 +3116,11 @@ END:VCALENDAR`;
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
                         <Link to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} className="no-underline">
-                            <button className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95">
-                                <Flower2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-200 shrink-0" />
+                            <button className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer">
+                                <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-200 shrink-0" />
                                 <span className="hidden sm:inline">Quiero esta plantilla</span>
                                 <span className="sm:hidden">Usar</span>
+                                <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-80" />
                             </button>
                         </Link>
 
