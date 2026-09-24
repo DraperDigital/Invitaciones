@@ -13,6 +13,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
+import { trackEvent } from '../lib/analytics';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
@@ -459,6 +460,15 @@ export default function InvitationPage() {
         fetchEventAndGuest();
     }, [slug, guestToken]);
 
+    useEffect(() => {
+        if (!event) return;
+        trackEvent('view_item', {
+            item_id: event.slug || event.id,
+            item_name: event.title,
+            item_category: event.event_type || 'invitacion'
+        });
+    }, [event?.id, event?.slug]);
+
     const fetchEventAndGuest = async () => {
         setLoading(true);
 
@@ -663,6 +673,12 @@ export default function InvitationPage() {
             // Solo si llegamos aquí, marcamos como éxito
             setRsvpChoice(status);
             setRsvpSuccess(true);
+            trackEvent('generate_lead', {
+                event_type: 'rsvp',
+                event_slug: slug,
+                status: status,
+                plus_ones: totalPlusOnes
+            });
         } catch (err: any) {
             console.error('RSVP Full Error:', err);
             const dbErrorMsg = err.message || err.details || 'Error de red';
@@ -3113,7 +3129,17 @@ END:VCALENDAR`;
                         <div className="h-4 w-px bg-white/20 mx-0.5 sm:mx-1" />
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
-                        <Link to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} className="no-underline">
+                        <Link 
+                            to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} 
+                            onClick={() => {
+                                trackEvent('select_item', {
+                                    item_name: cfg.theme || currentDemo.id || 'classic',
+                                    item_category: 'template_demo',
+                                    event_type: event?.event_type || 'evento'
+                                });
+                            }}
+                            className="no-underline"
+                        >
                             <button className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer">
                                 <span className="hidden sm:inline">Quiero esta plantilla</span>
                                 <span className="sm:hidden">Usar</span>

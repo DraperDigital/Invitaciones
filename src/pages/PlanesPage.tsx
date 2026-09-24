@@ -3,6 +3,7 @@ import { ArrowLeft, Heart, Gem, Crown, ArrowDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
 import PlanComparisonTable from '../components/PlanComparisonTable';
+import { trackEvent } from '../lib/analytics';
 
 export default function PlanesPage() {
     const { user } = useAuth();
@@ -229,7 +230,17 @@ export default function PlanesPage() {
                             </div>
 
                             <div className="mt-8 md:mt-10">
-                                <Link to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}`}>
+                                <Link 
+                                    to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}`}
+                                    onClick={() => {
+                                        trackEvent('select_item', {
+                                            item_id: plan.id,
+                                            item_name: `Plan ${plan.name}`,
+                                            price: parseInt(plan.price.replace(/\D/g, '') || '0', 10),
+                                            currency: 'MXN'
+                                        });
+                                    }}
+                                >
                                     <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
                                         plan.popular
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl'

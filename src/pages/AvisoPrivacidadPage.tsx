@@ -188,7 +188,7 @@ const AvisoPrivacidadPage: React.FC = () => {
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="h-1.5 w-1.5 rounded-full bg-slate-400 mt-2" />
-                                <span><strong>Google (Google Analytics) y Microsoft (Clarity):</strong> Analítica de uso del sitio para entender y mejorar la experiencia de navegación, solo si aceptaste cookies analíticas en nuestro aviso de cookies.</span>
+                                <span><strong>Google (Google Analytics), Microsoft (Clarity) y Meta Platforms (Meta Pixel):</strong> Analítica y medición de rendimiento del sitio y optimización publicitaria, solo si aceptaste cookies analíticas en nuestro aviso de cookies.</span>
                             </li>
                         </ul>
                     </section>

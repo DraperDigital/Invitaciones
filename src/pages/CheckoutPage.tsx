@@ -3,6 +3,7 @@ import { Check, ArrowLeft, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { trackEvent } from '../lib/analytics';
 
 export default function CheckoutPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -40,6 +41,11 @@ export default function CheckoutPage() {
     useEffect(() => {
         if (!user) {
             navigate(`/login?redirect=/checkout?plan=${planId}`);
+        } else {
+            trackEvent('begin_checkout', {
+                item_id: planId,
+                currency: 'MXN'
+            });
         }
     }, [user, navigate, planId]);
 
@@ -226,6 +232,12 @@ export default function CheckoutPage() {
                 await supabase.from('profiles').update({ plan_tier: planId }).eq('id', user.id);
 
                 setIsSuccess(true);
+                trackEvent('purchase', {
+                    transaction_id: eventId,
+                    coupon: couponCode,
+                    value: 0,
+                    currency: 'MXN'
+                });
                 setTimeout(() => {
                     navigate(`/dashboard/design/${eventId}?upgrade=success`);
                 }, 2000);

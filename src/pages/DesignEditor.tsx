@@ -376,7 +376,7 @@ export default function DesignEditor() {
     // Fire purchase event once when user lands from successful checkout
     useEffect(() => {
         if (showCelebration) {
-            trackEvent('purchase', { eventId: id });
+            trackEvent('purchase', { eventId: id, currency: 'MXN' });
         }
     }, [showCelebration, id]);
 
