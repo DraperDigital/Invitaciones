@@ -6,6 +6,7 @@ import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { trackEvent } from '../lib/analytics';
 
 type WizardData = {
     title: string;
@@ -347,6 +348,11 @@ export default function EventWizard() {
                 };
                 const { error } = await supabase.from('events').insert(insertPayload);
                 if (error) throw error;
+                trackEvent('generate_lead', {
+                    event_type: data.event_type,
+                    theme: data.theme,
+                    event_id: insertPayload.id
+                });
                 if (preselectedPlan) {
                     const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
                     navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}${couponQs}`);

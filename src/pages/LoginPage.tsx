@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, CheckCircle2, ArrowLeft, Eye, EyeOff, X } from 'lucide-react';
 import Seo from '../components/Seo';
+import { trackEvent } from '../lib/analytics';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -46,6 +47,7 @@ export default function LoginPage() {
             if (isLogin) {
                 const { error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
+                trackEvent('login', { method: 'password' });
                 navigate(redirectUrl, { replace: true });
             } else {
                 const { data, error } = await supabase.auth.signUp({
@@ -56,6 +58,7 @@ export default function LoginPage() {
                     }
                 });
                 if (error) throw error;
+                trackEvent('sign_up', { method: 'password' });
 
                 if (data.session) {
                     navigate(redirectUrl, { replace: true });

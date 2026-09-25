@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Clock, Calendar, Info } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import Seo from '../components/Seo';
+import { trackEvent } from '../lib/analytics';
 
 const Concierge: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -56,6 +57,7 @@ const Concierge: React.FC = () => {
 
     const handleWhatsAppClick = () => {
         if (!contactInfo?.whatsapp) return;
+        trackEvent('contact', { channel: 'whatsapp', source: 'concierge', event_id: eventId });
         const title = eventData?.title || 'tu evento';
         const message = encodeURIComponent(`Hola, tengo una duda sobre la invitación de "${title}"...`);
         window.open(`https://wa.me/${contactInfo.whatsapp}?text=${message}`, '_blank');

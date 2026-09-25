@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Minus, Gem, Crown, Heart, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
+import { trackEvent } from '../lib/analytics';
 
 interface PlanComparisonTableProps {
     eventId?: string | null;
@@ -649,6 +650,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                         href={`${WHATSAPP_SUPPORT_URL}?text=Hola!%20Tengo%20dudas%20sobre%20los%20planes%20de%20Invitto`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackEvent('contact', { channel: 'whatsapp', source: 'plans_table' })}
                         className="font-bold text-[#e0409a] hover:underline"
                     >
                         Escríbenos por WhatsApp para asesorarte gratis →
