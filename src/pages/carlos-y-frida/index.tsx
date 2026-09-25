@@ -145,8 +145,13 @@ export default function CarlosYFridaLanding() {
         setActiveSlide(index);
     };
 
+    const checkIsMobile = () => {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               (typeof window !== 'undefined' && 'ontouchstart' in window && Math.min(window.innerWidth, window.innerHeight) <= 800);
+    };
+
     const handleRevealClick = () => {
-        const isMobile = window.innerWidth < 768;
+        const isMobile = checkIsMobile();
         const isPortrait = window.innerHeight > window.innerWidth;
         
         if (isMobile && isPortrait) {
@@ -167,7 +172,7 @@ export default function CarlosYFridaLanding() {
         setShowVideo(false);
         setHasWatchedVideo(true);
         
-        const isMobile = window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth <= 1024);
+        const isMobile = checkIsMobile();
         
         if (wasRotatedByHintRef.current && isMobile) {
             wasRotatedByHintRef.current = false;
@@ -291,15 +296,20 @@ export default function CarlosYFridaLanding() {
                     {!hasWatchedVideo ? (
                         <div className="z-10 max-w-2xl flex flex-col items-center animate-in fade-in duration-700">
                             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-bold tracking-widest uppercase mb-8 shadow-sm">
-                                🎈 La Gran Revelación
+                                🍼 La Gran Noticia
                             </span>
                             
-                            <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-6 tracking-tight leading-tight">
-                                El secreto mejor guardado...
+                            <h2 className="text-4xl sm:text-6xl font-black text-stone-800 mb-4 tracking-tight">
+                                Nacimiento del bebé
                             </h2>
-                            <p className="text-xl sm:text-2xl text-stone-500 font-serif italic mb-10 max-w-md">
-                                Tenemos algo muy especial que queremos compartir con todos ustedes.
-                            </p>
+                            <h3 className="text-2xl sm:text-3xl font-serif italic text-stone-500 mb-10">
+                                Enero 2027
+                            </h3>
+
+                            {/* Cuenta regresiva bebé */}
+                            <div className="mb-16">
+                                <CountdownDisplay targetDate="2027-01-20T00:00:00" accentColor="text-rose-500" />
+                            </div>
 
                             <button 
                                 onClick={handleRevealClick}
@@ -308,7 +318,7 @@ export default function CarlosYFridaLanding() {
                                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[length:200%_auto] animate-gradient" />
                                 <span className="relative flex items-center gap-3">
                                     <PlayCircle className="w-6 h-6 sm:w-8 sm:h-8" />
-                                    ¿Quieres saber qué es?
+                                    ¿Quieres conocerlo?
                                 </span>
                             </button>
                         </div>

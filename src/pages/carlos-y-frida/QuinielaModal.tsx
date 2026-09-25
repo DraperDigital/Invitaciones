@@ -30,6 +30,10 @@ export default function QuinielaModal({ isOpen, onClose, initialMode = 'vote' }:
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [predictions, setPredictions] = useState<PredictionItem[]>(DEFAULT_PREDICTIONS);
     const [loadingPredictions, setLoadingPredictions] = useState(false);
+    
+    // Nombres
+    const [isSuggestingName, setIsSuggestingName] = useState(false);
+    const [suggestedNames, setSuggestedNames] = useState('');
 
     // Fetch predictions from Supabase or localStorage
     const fetchPredictions = async () => {
@@ -97,8 +101,6 @@ export default function QuinielaModal({ isOpen, onClose, initialMode = 'vote' }:
         fetchPredictions();
     };
 
-
-
     const formatGenderLabel = (g: string) => {
         if (g === 'niño') return '👦 Niño';
         if (g === 'niña') return '👧 Niña';
@@ -123,6 +125,14 @@ export default function QuinielaModal({ isOpen, onClose, initialMode = 'vote' }:
     const girlVotes = predictions.filter(p => p.gender === 'niña').length;
     const surpriseVotes = predictions.filter(p => p.gender === 'sorpresa').length;
 
+
+
+    const handleSuggestNameSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Here you would save the suggested names
+        alert('¡Gracias por tus sugerencias!');
+        setIsSuggestingName(false);
+    };
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
             <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
@@ -296,6 +306,46 @@ export default function QuinielaModal({ isOpen, onClose, initialMode = 'vote' }:
                                 >
                                     Cerrar
                                 </button>
+                            </div>
+
+                            <div className="pt-4 border-t border-stone-200 mt-2">
+                                {!isSuggestingName ? (
+                                    <button 
+                                        onClick={() => setIsSuggestingName(true)}
+                                        className="w-full py-3 bg-amber-100 text-amber-800 font-bold rounded-xl hover:bg-amber-200 transition-colors shadow-sm flex justify-center items-center gap-2 text-sm"
+                                    >
+                                        💡 Sugerir Nombres
+                                    </button>
+                                ) : (
+                                    <form onSubmit={handleSuggestNameSubmit} className="text-left animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                        <label className="block text-sm font-medium text-stone-700 mb-2">
+                                            ¿Qué nombres te gustan para el bebé?
+                                        </label>
+                                        <textarea
+                                            value={suggestedNames}
+                                            onChange={(e) => setSuggestedNames(e.target.value)}
+                                            placeholder="Ej. Si es niño Mateo, si es niña Sofía..."
+                                            rows={3}
+                                            className="w-full p-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-shadow bg-stone-50 text-stone-800 text-sm mb-3 resize-none"
+                                            required
+                                        />
+                                        <div className="flex gap-2">
+                                            <button 
+                                                type="button"
+                                                onClick={() => setIsSuggestingName(false)}
+                                                className="flex-1 py-2 bg-stone-100 text-stone-700 font-semibold rounded-xl hover:bg-stone-200 transition-colors text-sm"
+                                            >
+                                                Cancelar
+                                            </button>
+                                            <button 
+                                                type="submit"
+                                                className="flex-1 py-2 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-colors shadow-md text-sm flex justify-center items-center gap-2"
+                                            >
+                                                <Save className="w-4 h-4" /> Enviar
+                                            </button>
+                                        </div>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     )}
