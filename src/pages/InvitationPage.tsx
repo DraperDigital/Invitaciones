@@ -2520,13 +2520,58 @@ END:VCALENDAR`;
                         <div className="space-y-12">
                             {items.map((item: any, idx: number) => {
                                 const isEven = idx % 2 === 0;
-                                let ItemIcon = Heart;
-                                if (item.icon === 'wine') ItemIcon = Wine;
-                                if (item.icon === 'utensils') ItemIcon = Utensils;
-                                if (item.icon === 'music') ItemIcon = Music;
-                                if (item.icon === 'party') ItemIcon = PartyPopper;
-                                if (item.icon === 'moon') ItemIcon = Moon;
-                                if (item.icon === 'clock') ItemIcon = Clock;
+
+                                const getItineraryIcon = () => {
+                                    if (item.icon === 'crown') return Crown;
+                                    if (item.icon === 'church') return Church;
+                                    if (item.icon === 'camera') return Camera;
+                                    if (item.icon === 'wine') return Wine;
+                                    if (item.icon === 'utensils') return Utensils;
+                                    if (item.icon === 'music') return Music;
+                                    if (item.icon === 'party') return PartyPopper;
+                                    if (item.icon === 'moon') return Moon;
+                                    if (item.icon === 'clock') return Clock;
+                                    if (item.icon === 'cake') return Cake;
+                                    if (item.icon === 'heart') return Heart;
+
+                                    const text = `${item.title || ''} ${item.event || ''} ${item.description || ''} ${item.location || ''}`.toLowerCase();
+                                    
+                                    if (text.includes('misa') || text.includes('ceremonia') || text.includes('religios') || text.includes('iglesia') || text.includes('capilla')) {
+                                        return Church;
+                                    }
+                                    if (text.includes('look') || text.includes('vestido') || text.includes('princesa') || text.includes('tiara') || text.includes('corona')) {
+                                        return Crown;
+                                    }
+                                    if (text.includes('foto') || text.includes('sesión') || text.includes('sesion') || text.includes('shooting')) {
+                                        return Camera;
+                                    }
+                                    if (text.includes('recepción') || text.includes('recepcion') || text.includes('brindis') || text.includes('coctel') || text.includes('cocktail')) {
+                                        return Wine;
+                                    }
+                                    if (text.includes('cena') || text.includes('banquete') || text.includes('comida') || text.includes('almuerzo') || text.includes('buffet') || text.includes('menu')) {
+                                        return Utensils;
+                                    }
+                                    if (text.includes('vals') || text.includes('baile') || text.includes('pista') || text.includes('musica') || text.includes('música') || text.includes('cancion')) {
+                                        return event?.event_type === 'xv' ? Crown : Music;
+                                    }
+                                    if (text.includes('show') || text.includes('espectaculo') || text.includes('fiesta') || text.includes('hora loca') || text.includes('after') || text.includes('dj') || text.includes('animacion')) {
+                                        return PartyPopper;
+                                    }
+                                    if (text.includes('pastel') || text.includes('torta') || text.includes('mañanitas') || text.includes('cumple')) {
+                                        return Cake;
+                                    }
+
+                                    if (event?.event_type === 'xv') {
+                                        return Crown;
+                                    }
+                                    if (event?.event_type === 'bautizo') return Baby;
+                                    if (event?.event_type === 'graduacion') return GraduationCap;
+                                    if (event?.event_type === 'birthday') return Cake;
+
+                                    return Heart;
+                                };
+
+                                const ItemIcon = getItineraryIcon();
 
                                 const itemTitle = item.title || item.event;
                                 const itemDesc = item.description || item.location;
@@ -2718,35 +2763,61 @@ END:VCALENDAR`;
         </section>
     );
 
-    const renderGifts = () => (
-        <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]" style={invertedPanelStyle}>
-            <div className="max-w-3xl mx-auto px-6">
-                <div className="text-center mb-12">
-                    <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">
-                        {cfg?.gift_title || cfg?.giftTitle || "Mesa de Regalos"}
-                    </h3>
-                    <p className="text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto whitespace-pre-line">
-                        {cfg?.gift_message || cfg?.giftMessage || "Nuestro mejor regalo es que estés con nosotros en nuestro día, pero si quieres hacernos un obsequio aquí están nuestras opciones"}
-                    </p>
-                </div>
+    const renderGifts = () => {
+        const rawRegistryOptions = cfg?.registry_items 
+            || cfg?.giftRegistry?.options 
+            || cfg?.gift_registry?.options 
+            || [];
 
-                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-6 sm:p-12 text-center">
-                    <Gift className="h-16 w-16 mx-auto mb-8 text-accent" />
-                    {cfg?.registry_items?.length > 0 ? (
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 flex-wrap">
-                            {cfg.registry_items.map((item: any, idx: number) => (
-                                <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer" className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105 flex flex-col gap-1 items-center justify-center">
-                                    <span>{item.store}</span>
-                                    {item.description && <span className="text-[9px] opacity-80 normal-case tracking-normal">{item.description}</span>}
-                                </a>
-                            ))}
+        const storeItems = rawRegistryOptions
+            .map((item: any) => ({
+                store: item.store || item.type || item.name || 'Mesa de Regalos',
+                link: item.link || item.url || '',
+                description: item.description || ''
+            }))
+            .filter((item: any) => {
+                const name = (item.store || '').toLowerCase();
+                return !name.includes('efectivo') && !name.includes('sobre') && !name.includes('transferencia');
+            });
+
+        const finalItems = storeItems.length > 0 ? storeItems : [
+            { store: 'Liverpool', link: 'https://liverpool.com.mx' },
+            { store: 'Amazon', link: 'https://amazon.com.mx' }
+        ];
+
+        return (
+            <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]" style={invertedPanelStyle}>
+                <div className="max-w-3xl mx-auto px-6">
+                    <div className="text-center mb-12">
+                        <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-4">
+                            {cfg?.gift_title || cfg?.giftTitle || "Mesa de Regalos"}
+                        </h3>
+                        <p className="text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto whitespace-pre-line">
+                            {cfg?.gift_message || cfg?.giftMessage || "Nuestro mejor regalo es que estés con nosotros en nuestro día, pero si quieres hacernos un obsequio aquí están nuestras opciones"}
+                        </p>
+                    </div>
+
+                    <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-6 sm:p-12 text-center">
+                        <Gift className="h-16 w-16 mx-auto mb-8 text-accent" />
+                        
+                        <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4 justify-center items-center mb-8 flex-wrap">
+                            {finalItems.map((item: any, idx: number) => {
+                                const Component = item.link ? 'a' : 'div';
+                                return (
+                                    <Component
+                                        key={idx}
+                                        href={item.link || undefined}
+                                        target={item.link ? "_blank" : undefined}
+                                        rel={item.link ? "noopener noreferrer" : undefined}
+                                        className="w-full sm:w-auto min-w-[190px] max-w-[270px] px-6 py-4 rounded-2xl border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer no-underline group/btn"
+                                    >
+                                        <Gift className="h-4 w-4 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
+                                        <span className="truncate">{item.store}</span>
+                                        {item.link && <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-60 group-hover/btn:translate-x-0.5 transition-transform" />}
+                                    </Component>
+                                );
+                            })}
                         </div>
-                    ) : (
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Liverpool</button>
-                            <button className="px-6 py-3 sm:px-8 sm:py-4 rounded-full border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-medium uppercase tracking-wider transition-all hover:scale-105">Amazon</button>
-                        </div>
-                    )}
                     <div className="mt-12 pt-8 border-t border-[var(--card-border)]">
                         <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">
                             {cfg?.cash_gift_title || "Lluvia de Sobres"}
@@ -2765,7 +2836,8 @@ END:VCALENDAR`;
                 </div>
             </div>
         </section>
-    );
+        );
+    };
 
     const renderGallery = () => {
         const rawImages = cfg?.gallery_images 
@@ -3021,11 +3093,11 @@ END:VCALENDAR`;
                     </Link>
 
                     {/* Barra Inferior Flotante */}
-                    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 bg-stone-950/90 hover:bg-stone-950 backdrop-blur-xl border border-white/15 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[98vw]">
+                    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 bg-stone-950/90 hover:bg-stone-950 backdrop-blur-xl border border-white/15 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[96vw]">
                         {/* Botón Flecha Anterior */}
                         <Link
                             to={`/i/${prevDemo.slug}?t=token-preview&category=${activeCategory}`}
-                            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
+                            className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
                             title={`Ejemplo anterior de ${currentCategoryObj?.name}: ${prevDemo.name}`}
                         >
                             <ChevronLeft className="h-4 w-4 shrink-0" />
@@ -3033,14 +3105,14 @@ END:VCALENDAR`;
                         </Link>
 
                         {/* SELECTOR DE CATEGORÍA CON POPOVER */}
-                        <div className="relative">
+                        <div className="relative shrink-0">
                             <button
                                 type="button"
                                 onClick={() => {
                                     setShowCategoryMenu(prev => !prev);
                                     setShowTemplateMenu(false);
                                 }}
-                                className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all border ${
+                                className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all border ${
                                     showCategoryMenu 
                                         ? 'bg-[#DF3B94] text-white border-[#DF3B94]' 
                                         : 'bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white border-white/10'
@@ -3107,26 +3179,26 @@ END:VCALENDAR`;
                                 setShowTemplateMenu(prev => !prev);
                                 setShowCategoryMenu(false);
                             }}
-                            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95"
+                            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95 shrink-0"
                             title={`Explorar las ${effectiveDemos.length} plantillas de ${currentCategoryObj?.name}`}
                         >
-                            <span className="text-sm">{currentDemo.icon}</span>
-                            <span className="max-w-[75px] sm:max-w-[130px] truncate">{currentDemo.name}</span>
-                            <span className="text-[10px] text-stone-400 font-mono">({activeFilteredIndex + 1}/{effectiveDemos.length})</span>
-                            <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform ${showTemplateMenu ? 'rotate-180' : ''}`} />
+                            <span className="text-sm shrink-0">{currentDemo.icon}</span>
+                            <span className="max-w-[55px] xs:max-w-[85px] sm:max-w-[130px] truncate">{currentDemo.name}</span>
+                            <span className="text-[10px] text-stone-400 font-mono hidden sm:inline">({activeFilteredIndex + 1}/{effectiveDemos.length})</span>
+                            <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform shrink-0 ${showTemplateMenu ? 'rotate-180' : ''}`} />
                         </button>
 
                         {/* Botón Flecha Siguiente */}
                         <Link
                             to={`/i/${nextDemo.slug}?t=token-preview&category=${activeCategory}`}
-                            className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline"
+                            className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
                             title={`Siguiente ejemplo de ${currentCategoryObj?.name}: ${nextDemo.name}`}
                         >
                             <span className="hidden md:inline">Siguiente</span>
                             <ChevronRight className="h-4 w-4 shrink-0" />
                         </Link>
 
-                        <div className="h-4 w-px bg-white/20 mx-0.5 sm:mx-1" />
+                        <div className="h-4 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
                         <Link 
@@ -3138,24 +3210,24 @@ END:VCALENDAR`;
                                     event_type: event?.event_type || 'evento'
                                 });
                             }}
-                            className="no-underline"
+                            className="no-underline shrink-0"
                         >
-                            <button className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer">
+                            <button className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1 sm:gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
                                 <span className="hidden sm:inline">Quiero esta plantilla</span>
                                 <span className="sm:hidden">Usar</span>
                                 <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-80" />
                             </button>
                         </Link>
 
-                        {/* Botón Galería de Ejemplos */}
-                        <Link to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} title="Ver galería completa de ejemplos" className="no-underline">
+                        {/* Botón Galería de Ejemplos (Desktop & Tablet) */}
+                        <Link to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} title="Ver galería completa de ejemplos" className="no-underline hidden sm:block shrink-0">
                             <button className="p-1.5 sm:p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all flex items-center">
                                 <LayoutGrid className="h-4 w-4" />
                             </button>
                         </Link>
 
                         {/* Botón Inicio */}
-                        <Link to="/" title="Ir a inicio" className="no-underline hidden sm:block">
+                        <Link to="/" title="Ir a inicio" className="no-underline hidden md:block shrink-0">
                             <button className="p-1.5 sm:p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all flex items-center">
                                 <Home className="h-4 w-4" />
                             </button>

@@ -46,7 +46,7 @@ export const MOCK_EVENTS: Event[] = [
                 images: [
                     'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1518049362265-e5b450092420?auto=format&fit=crop&w=800&q=80'
+                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'
                 ]
             },
             registry_items: [
@@ -880,7 +880,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=1600&q=80',
+            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80',
             message: 'Con la ilusión de una princesa que cumple un sueño, te invito a celebrar conmigo el día que tanto he esperado.',
             ceremony: {
                 name: 'Ceremonia Religiosa',
@@ -935,9 +935,9 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true,
                 uploadEnabled: true,
                 images: [
-                    'https://images.unsplash.com/photo-1518049362265-e5b450092420?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1522413452208-99613f8e7150?auto=format&fit=crop&w=800&q=80'
+                    'https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=800&q=80'
                 ]
             },
             liveStream: {

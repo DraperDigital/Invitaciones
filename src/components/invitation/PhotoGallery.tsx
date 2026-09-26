@@ -50,7 +50,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     {images.map((img, index) => (
                         <div 
                             key={index}
-                            className="relative group cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] border-4 md:border-8 border-white dark:border-stone-800 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] bg-[var(--card-bg)] transform transition-all duration-500 hover:scale-[1.02]"
+                            className="gallery-card relative group cursor-pointer overflow-hidden rounded-2xl md:rounded-[2rem] border-4 md:border-8 border-white dark:border-stone-800 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] bg-[var(--card-bg)] transform transition-all duration-500 hover:scale-[1.02]"
                             onClick={() => setSelectedImage(index)}
                         >
                             <img
@@ -58,6 +58,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                 alt={img.caption || `Gallery image ${index + 1}`}
                                 className={`w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105 ${grayscale ? 'grayscale contrast-125' : ''}`}
                                 loading="lazy"
+                                onError={(e) => {
+                                    const card = e.currentTarget.closest('.gallery-card');
+                                    if (card) (card as HTMLElement).style.display = 'none';
+                                }}
                             />
                             <div className="absolute inset-0 bg-stone-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                                 <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center text-white scale-75 group-hover:scale-100 transition-transform duration-300 shadow-lg">
