@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -3375,7 +3375,28 @@ END:VCALENDAR`;
                 >
                     {/* Floating Device Viewport & Template Selector Bar (Admin / Preview Mode) */}
                     {isAdminMode && (
-                        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-2xl border border-stone-200/80 flex items-center gap-2 animate-in fade-in slide-in-from-top duration-300 max-w-[92vw] overflow-x-auto">
+                        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[60] bg-white/95 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-2xl shadow-2xl border border-stone-200/90 flex items-center gap-1.5 sm:gap-2 animate-in fade-in slide-in-from-top duration-300 max-w-[96vw]">
+                            {/* Botón Volver al Dashboard */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (event?.id) {
+                                        navigate(`/dashboard/event/${event.id}`);
+                                    } else if (user) {
+                                        navigate('/dashboard/events');
+                                    } else {
+                                        navigate('/');
+                                    }
+                                }}
+                                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-stone-700 hover:text-stone-950 hover:bg-stone-100 transition-all shrink-0 active:scale-95"
+                                title="Volver al panel del evento"
+                            >
+                                <ArrowLeft className="h-4 w-4 text-stone-700 shrink-0" />
+                                <span className="text-xs font-bold">Panel</span>
+                            </button>
+
+                            <div className="h-4 w-[1px] bg-stone-200 shrink-0" />
+
                             {/* Device Viewport Selector (Desktop only) */}
                             <div className="hidden md:flex items-center gap-1">
                                 <button
@@ -3404,10 +3425,11 @@ END:VCALENDAR`;
                                 </button>
                             </div>
 
-                            <div className="hidden md:block h-4 w-[1px] bg-stone-200" />
+                            <div className="hidden md:block h-4 w-[1px] bg-stone-200 shrink-0" />
 
-                            <div className="flex items-center gap-1.5 pl-0.5">
-                                <Palette className="h-3.5 w-3.5 text-[#DF3B94] flex-shrink-0" />
+                            {/* Selector de Plantilla */}
+                            <div className="flex items-center gap-1 sm:gap-1.5 pl-0.5 min-w-0">
+                                <Palette className="h-3.5 w-3.5 text-[#DF3B94] shrink-0" />
                                 <select
                                     value={cfg.theme || 'classic'}
                                     onChange={(e) => {
@@ -3421,7 +3443,7 @@ END:VCALENDAR`;
                                         }
                                         handleUpdateFeature('theme', e.target.value);
                                     }}
-                                    className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1 max-w-[200px] truncate"
+                                    className="bg-transparent text-xs font-bold text-[#1B2E1D] outline-none cursor-pointer hover:text-[#DF3B94] border-none py-1 pr-1 max-w-[105px] xs:max-w-[150px] sm:max-w-[190px] truncate"
                                     title={`Plantillas para ${categoryLabel}`}
                                 >
                                     <optgroup label={`Plantillas para ${categoryLabel} (${categoryTemplates.length})`}>
@@ -3433,7 +3455,7 @@ END:VCALENDAR`;
                                     </optgroup>
                                     {!showAllThemes && otherTemplates.length > 0 && (
                                         <option value="__show_all__">
-                                            🌐 Ver todas las plantillas (+{otherTemplates.length})...
+                                            🌐 Ver todas (+{otherTemplates.length})...
                                         </option>
                                     )}
                                     {showAllThemes && otherTemplates.length > 0 && (
@@ -3452,6 +3474,19 @@ END:VCALENDAR`;
                                     )}
                                 </select>
                             </div>
+
+                            <div className="h-4 w-[1px] bg-stone-200 shrink-0" />
+
+                            {/* Botón Editor de Secciones / Configuración */}
+                            <button 
+                                type="button"
+                                onClick={() => setIsAdminOpen(true)} 
+                                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#1B2E1D] hover:bg-stone-100 transition-all shrink-0 active:scale-95"
+                                title="Configuración y Secciones"
+                            >
+                                <Settings className="h-4 w-4 text-[#1B2E1D] spin-slow shrink-0" />
+                                <span className="hidden sm:inline">Secciones</span>
+                            </button>
                         </div>
                     )}
 
@@ -3474,7 +3509,7 @@ END:VCALENDAR`;
                                         className="relative group/section"
                                     >
                                         {isAdminMode && (
-                                            <div className={`absolute ${section.id === 'hero' ? 'top-4 left-4 sm:top-6 sm:left-6' : 'top-4 right-4 sm:top-6 sm:right-6'} z-30 pointer-events-auto`}>
+                                            <div className={`absolute ${section.id === 'hero' ? 'top-16 left-4 sm:top-6 sm:left-6' : 'top-4 right-4 sm:top-6 sm:right-6'} z-30 pointer-events-auto`}>
                                                 <button
                                                     type="button"
                                                     onClick={(e) => {
@@ -3501,24 +3536,36 @@ END:VCALENDAR`;
                     {/* Admin Controls */}
                     {isAdminMode && (
                         <>
-                            <button 
-                                onClick={() => setIsAdminOpen(true)} 
-                                className={`fixed ${isDemo ? 'top-20' : 'top-4'} right-4 z-[60] bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl border border-stone-200 flex items-center gap-3 hover:scale-105 hover:bg-stone-50 transition-all text-[#1B2E1D]`}
-                            >
-                                <Settings className="h-4 w-4 sm:h-5 sm:w-5 spin-slow" />
-                                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest hidden xs:inline">Editor Directo</span>
-                            </button>
                             {isAdminOpen && (
                                 <div className="fixed inset-0 z-[70] flex justify-end">
                                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsAdminOpen(false)} />
-                                    <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
-                                        <div className="flex items-center justify-between mb-8">
+                                    <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-6 sm:p-8 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-300">
+                                        <div className="flex items-center justify-between mb-6">
                                             <div className="flex items-center gap-3">
                                                 <div className="p-3 bg-[#1B2E1D] rounded-xl text-white"><Activity className="h-5 w-5" /></div>
                                                 <div><h3 className="text-lg font-serif text-[#1B2E1D]">Configuración</h3><p className="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Admin Panel</p></div>
                                             </div>
-                                            <button onClick={() => setIsAdminOpen(false)} className="p-4 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
+                                            <button onClick={() => setIsAdminOpen(false)} className="p-3 hover:bg-stone-100 rounded-full transition-colors"><X className="h-6 w-6 text-stone-400" /></button>
                                         </div>
+
+                                        {/* Botón Volver al Dashboard */}
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setIsAdminOpen(false);
+                                                if (event?.id) {
+                                                    navigate(`/dashboard/event/${event.id}`);
+                                                } else if (user) {
+                                                    navigate('/dashboard/events');
+                                                } else {
+                                                    navigate('/');
+                                                }
+                                            }}
+                                            className="w-full mb-6 flex items-center justify-center gap-2 py-3 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold rounded-2xl text-xs transition-colors shadow-sm"
+                                        >
+                                            <ArrowLeft className="h-4 w-4" />
+                                            <span>Volver al Panel del Evento</span>
+                                        </button>
 
                                         {/* Cambiador de Plantilla Card */}
                                         <div className="p-4 bg-gradient-to-r from-emerald-50/80 via-stone-50 to-white rounded-2xl border border-emerald-200/80 mb-4 flex flex-col gap-3 shadow-sm">
