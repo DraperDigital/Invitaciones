@@ -3388,11 +3388,12 @@ END:VCALENDAR`;
                                         navigate('/');
                                     }
                                 }}
-                                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-stone-700 hover:text-stone-950 hover:bg-stone-100 transition-all shrink-0 active:scale-95"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-stone-800 bg-stone-100/80 hover:bg-stone-200/90 border border-stone-200/60 transition-all shrink-0 active:scale-95 shadow-2xs"
                                 title="Volver al panel del evento"
                             >
                                 <ArrowLeft className="h-4 w-4 text-stone-700 shrink-0" />
-                                <span className="text-xs font-bold">Panel</span>
+                                <span className="text-xs font-bold hidden sm:inline">Volver al Panel</span>
+                                <span className="text-xs font-bold sm:hidden">Panel</span>
                             </button>
 
                             <div className="h-4 w-[1px] bg-stone-200 shrink-0" />
