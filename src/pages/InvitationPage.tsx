@@ -486,6 +486,74 @@ export default function InvitationPage() {
         });
     }, [event?.id, event?.slug]);
 
+    const applyWizardPreviewOverlay = (baseEvent: Event): Event => {
+        try {
+            const isWizardPreview = searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
+            if (!isWizardPreview) return baseEvent;
+
+            const raw = sessionStorage.getItem('invitto_wizard_preview_data') || localStorage.getItem('invitto_wizard_preview_data');
+            if (!raw) return baseEvent;
+            const wiz = JSON.parse(raw);
+            if (!wiz || typeof wiz !== 'object') return baseEvent;
+
+            const updated: Event = { ...baseEvent };
+            if (wiz.title) updated.title = wiz.title;
+            if (wiz.event_type) updated.event_type = wiz.event_type;
+            if (wiz.date_time) updated.date_time = wiz.date_time;
+            if (wiz.venue_name) updated.venue_name = wiz.venue_name;
+            if (wiz.venue_address) updated.venue_address = wiz.venue_address;
+            if (wiz.venue_address || wiz.venue_name) {
+                updated.maps_link = `https://maps.google.com/?q=${encodeURIComponent(wiz.venue_address || wiz.venue_name)}`;
+            }
+            if (wiz.dress_code) updated.dress_code = wiz.dress_code;
+            if (wiz.rsvp_deadline) updated.rsvp_deadline = wiz.rsvp_deadline;
+
+            const baseThemeConfig = (baseEvent.theme_config || {}) as Record<string, any>;
+            const updatedConfig = { ...baseThemeConfig };
+
+            if (wiz.theme) updatedConfig.theme = wiz.theme;
+            if (wiz.venue_time) updatedConfig.venue_time = wiz.venue_time;
+            if (wiz.misa_name) updatedConfig.misa_name = wiz.misa_name;
+            if (wiz.misa_time) updatedConfig.misa_time = wiz.misa_time;
+            if (wiz.misa_address) updatedConfig.misa_address = wiz.misa_address;
+            if (wiz.dress_code) updatedConfig.dress_code = wiz.dress_code;
+
+            if (wiz.title) {
+                updatedConfig.title = wiz.title;
+                updatedConfig.baby_name = wiz.title;
+                if (wiz.title.includes(' o ') || wiz.title.includes(' O ')) {
+                    const parts = wiz.title.replace(/[¿?]/g, '').split(/\s+[oO]\s+/);
+                    if (parts[0]) updatedConfig.boy_name = parts[0].trim();
+                    if (parts[1]) updatedConfig.girl_name = parts[1].trim();
+                }
+            }
+
+            if (updatedConfig.reception) {
+                updatedConfig.reception = {
+                    ...updatedConfig.reception,
+                    name: wiz.venue_name || updatedConfig.reception.name,
+                    location: wiz.venue_address || updatedConfig.reception.location,
+                    time: wiz.venue_time || updatedConfig.reception.time
+                };
+            }
+
+            if (updatedConfig.ceremony) {
+                updatedConfig.ceremony = {
+                    ...updatedConfig.ceremony,
+                    name: wiz.misa_name || updatedConfig.ceremony.name,
+                    location: wiz.misa_address || updatedConfig.ceremony.location,
+                    time: wiz.misa_time || updatedConfig.ceremony.time
+                };
+            }
+
+            updated.theme_config = updatedConfig;
+            return updated;
+        } catch (e) {
+            console.warn('Failed to apply wizard preview overlay', e);
+            return baseEvent;
+        }
+    };
+
     const fetchEventAndGuest = async () => {
         setLoading(true);
 
@@ -496,7 +564,7 @@ export default function InvitationPage() {
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
         if (mockMatch && (rawToken === 'token-preview' || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
-            setEvent(mockMatch);
+            setEvent(applyWizardPreviewOverlay(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
@@ -507,7 +575,7 @@ export default function InvitationPage() {
         }
 
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            setEvent(mockMatch || null);
+            setEvent(mockMatch ? applyWizardPreviewOverlay(mockMatch) : null);
             if (guestToken && mockMatch) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
@@ -528,7 +596,7 @@ export default function InvitationPage() {
             // FALLBACK TO MOCK_EVENTS FOR EXAMPLES SHOWCASE
             const mockEventFallback = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
             if (mockEventFallback) {
-                setEvent(mockEventFallback);
+                setEvent(applyWizardPreviewOverlay(mockEventFallback));
                 if (guestToken) {
                     const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                     setGuest(mockGuest || null);

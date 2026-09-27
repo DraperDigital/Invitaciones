@@ -239,7 +239,7 @@ export default function RevealDuoHero({ event, cfg, countdown, labels, heroImage
                 </div>
 
                 <div className="mb-8 px-4 py-2 rounded-full bg-gradient-to-r from-sky-50 via-purple-50 to-pink-50 border border-purple-100 text-[11px] font-semibold text-stone-700">
-                    💡 <strong>Dress code sugerido:</strong> Ven vestido de azul si crees que es niño o de rosa si crees que es niña.
+                    💡 <strong>Dress code sugerido:</strong> {event.dress_code || 'Ven vestido de azul si crees que es niño o de rosa si crees que es niña.'}
                 </div>
 
                 {/* Action CTA */}

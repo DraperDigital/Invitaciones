@@ -45,7 +45,7 @@ const MONTH_NAMES_ES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', '
 function parseTimeStr(str: string): { hour: number; minute: number; timeStr24: string; timeStrDisplay: string } | null {
     const lower = str.toLowerCase();
 
-    // 1. Con dos puntos (ej: 8:30 pm, 20:00, 8:00pm, a las 5:30 pm)
+    // 1. Con dos puntos (ej: 8:30 pm, 20:00, 8:00pm, 12:00pm, a las 5:30 pm)
     const colonMatch = lower.match(/(?:(?:a\s+las?|a\s+la|alas)\s*)?(\d{1,2}):(\d{2})\s*(am|pm|p\.m\.|a\.m\.|hrs|horas|de la tarde|de la noche|de la mañana)?/i);
     if (colonMatch) {
         let h = parseInt(colonMatch[1], 10);
@@ -100,7 +100,6 @@ function parseTimeStr(str: string): { hour: number; minute: number; timeStr24: s
     const alasMatch = lower.match(/(?:a\s+las?|a\s+la|alas)\s*(\d{1,2})(?!\d)/i);
     if (alasMatch) {
         let h = parseInt(alasMatch[1], 10);
-        // En eventos de noche/tarde (boda, fiesta, xv), 1..11 suele ser pm si no se especifica
         if (h >= 1 && h <= 6) {
             h += 12; // 1 a 6 de la tarde
         } else if (h >= 7 && h <= 11) {
@@ -210,13 +209,31 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const [previewModalSlug, setPreviewModalSlug] = useState<string | null>(null);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
 
-    // Almacenamiento temporal para pasos que requieren dos partes
+    // Almacenamiento temporal para pasos que requieren validación en 2 turnos
     const [tempDateStrYmd, setTempDateStrYmd] = useState<string>('');
     const [tempDateDisplay, setTempDateDisplay] = useState<string>('');
     const [tempMisaName, setTempMisaName] = useState<string>('');
+    const [tempVenueName, setTempVenueName] = useState<string>('');
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    // Sincroniza datos con sessionStorage y localStorage para que la vista previa en iframe o pestaña externa muestre los datos reales ingresados
+    const syncPreviewStorage = (currentData: WizardData) => {
+        try {
+            const payload = JSON.stringify(currentData);
+            sessionStorage.setItem('invitto_wizard_preview_data', payload);
+            localStorage.setItem('invitto_wizard_preview_data', payload);
+        } catch (e) {
+            console.warn('Could not sync wizard preview storage', e);
+        }
+    };
+
+    const updateDataAndSync = (patch: Partial<WizardData>) => {
+        const next = { ...data, ...patch };
+        updateData(patch);
+        syncPreviewStorage(next);
+    };
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -226,8 +243,9 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
         scrollToBottom();
     }, [messages, isTyping]);
 
-    // Inicializar la conversación
+    // Inicializar la conversación y sincronizar almacenamiento
     useEffect(() => {
+        syncPreviewStorage(data);
         if (messages.length === 0) {
             startConversation();
         }
@@ -310,7 +328,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 }
 
                 const option = EVENT_TYPE_OPTIONS.find(o => o.id === detectedType) || EVENT_TYPE_OPTIONS[0];
-                updateData({ 
+                updateDataAndSync({ 
                     event_type: detectedType as any,
                     theme: option.defaultTheme || data.theme
                 });
@@ -337,7 +355,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             case 'ask_title': {
                 const title = userText;
-                updateData({ title });
+                updateDataAndSync({ title });
 
                 addAssistantMessage(
                     `¡Me encanta! "${title}".\n\nAhora indícame la fecha y la hora del evento.\n(Ejemplo: "23 de mayo 2027 a las 8 pm" o "15/12/2026 a las 19:00 hrs")`
@@ -363,7 +381,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
                 // Caso 2: Se dio la hora pero FALTA la fecha
                 if (!parsedDate && parsedTime) {
-                    updateData({ venue_time: parsedTime.timeStr24 });
+                    updateDataAndSync({ venue_time: parsedTime.timeStr24 });
                     addAssistantMessage(
                         `Anoté el horario: **${parsedTime.timeStrDisplay}** 🕗.\n\nAhora es necesario indicar la fecha:\n**¿Qué día, mes y año se celebrará tu evento?**\n(Ejemplo: 23 de mayo de 2027 o 24/10/2026)`
                     );
@@ -391,7 +409,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     return;
                 }
 
-                updateData({
+                updateDataAndSync({
                     date_time: combinedIso,
                     venue_time: parsedTime.timeStr24
                 });
@@ -412,7 +430,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 const dateBase = tempDateStrYmd || new Date().toISOString().slice(0, 10);
                 const combinedIso = `${dateBase}T${parsedTime.timeStr24}`;
 
-                updateData({
+                updateDataAndSync({
                     date_time: combinedIso,
                     venue_time: parsedTime.timeStr24
                 });
@@ -438,7 +456,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     return;
                 }
 
-                updateData({
+                updateDataAndSync({
                     date_time: combinedIso
                 });
 
@@ -455,7 +473,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     setCurrentStep('ask_misa_details');
                 } else {
                     addAssistantMessage(
-                        '¡Perfecto, todo concentrado en un solo lugar! ✨\n\n¿En qué salón, terraza o hacienda será la fiesta o recepción y cuál es su dirección o ciudad?'
+                        '¡Perfecto, todo concentrado en un solo lugar! ✨\n\n¿Cómo se llama el salón, terraza o hacienda donde será la fiesta? (Ejemplo: Salón Las Palmas)'
                     );
                     setCurrentStep('ask_venue');
                 }
@@ -463,13 +481,12 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             }
 
             case 'ask_misa_details': {
-                // Verificar si el usuario incluyó la hora en su respuesta
                 const timeInMisa = parseTimeStr(userText);
 
                 if (!timeInMisa) {
                     // El usuario dio el nombre de la parroquia pero no dio la hora -> Insistir estrictamente
                     setTempMisaName(userText);
-                    updateData({
+                    updateDataAndSync({
                         misa_name: userText,
                         misa_address: userText
                     });
@@ -490,14 +507,14 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     churchName = userText;
                 }
 
-                updateData({
+                updateDataAndSync({
                     misa_name: churchName,
                     misa_address: churchName,
                     misa_time: timeInMisa.timeStr24
                 });
 
                 addAssistantMessage(
-                    `¡Anotado! Ceremonia religiosa en **${churchName} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nY después de la misa, ¿en qué salón, terraza o hacienda será la fiesta y en qué ciudad se ubica?`
+                    `¡Anotado! Ceremonia religiosa en **${churchName} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nAhora, ¿cómo se llama el salón, terraza o hacienda donde será la fiesta o recepción? (Ejemplo: Salón Las Palmas)`
                 );
                 setCurrentStep('ask_venue');
                 break;
@@ -512,26 +529,77 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     return;
                 }
 
-                updateData({
+                updateDataAndSync({
                     misa_time: timeInMisa.timeStr24
                 });
 
                 const church = tempMisaName || data.misa_name || 'la parroquia';
                 addAssistantMessage(
-                    `¡Excelente! Ceremonia en **${church} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nAhora, ¿en qué salón, terraza o hacienda será la fiesta o recepción y cuál es su dirección o ciudad?`
+                    `¡Excelente! Ceremonia en **${church} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nAhora, ¿cómo se llama el salón, terraza o hacienda donde será la fiesta o recepción? (Ejemplo: Hacienda San Gabriel)`
                 );
                 setCurrentStep('ask_venue');
                 break;
             }
 
             case 'ask_venue': {
-                const venue = userText;
-                updateData({
-                    venue_name: venue,
-                    venue_address: venue
+                const rawVenue = userText.trim();
+
+                // Verificar si el usuario ya incluyó la ciudad en su mensaje (ej: "Salón 1, Guadalajara" o "Salón 1 en Monterrey")
+                let detectedVenue = rawVenue;
+                let detectedCity = '';
+
+                if (rawVenue.includes(',')) {
+                    const parts = rawVenue.split(',');
+                    detectedVenue = parts[0].trim();
+                    detectedCity = parts.slice(1).join(',').trim();
+                } else if (/\s+en\s+/i.test(rawVenue)) {
+                    const parts = rawVenue.split(/\s+en\s+/i);
+                    detectedVenue = parts[0].trim();
+                    detectedCity = parts[1].trim();
+                }
+
+                if (detectedCity) {
+                    // El usuario ingresó salón y ciudad juntos
+                    const fullAddress = `${detectedVenue}, ${detectedCity}`;
+                    updateDataAndSync({
+                        venue_name: detectedVenue,
+                        venue_address: fullAddress,
+                        maps_link: `https://maps.google.com/?q=${encodeURIComponent(fullAddress)}`
+                    });
+
+                    addAssistantMessage(`¡Anotado! Lugar: **${detectedVenue} en ${detectedCity}** 📍.`);
+                    askThemeStyle();
+                    return;
+                }
+
+                // El usuario solo dio el nombre del salón (ej: "salón 1") -> Preguntar estrictamente por la ciudad
+                setTempVenueName(rawVenue);
+                updateDataAndSync({
+                    venue_name: rawVenue,
+                    venue_address: rawVenue
                 });
 
-                // En lugar de ir directo a plantillas, preguntar el estilo visual deseado
+                addAssistantMessage(
+                    `Anoté el lugar: **${rawVenue}** 📍.\n\nEs indispensable para tus invitados y para el botón de Google Maps saber la ubicación:\n**¿En qué ciudad o cuál es la dirección completa donde se ubica?**\n(Ejemplo: Guadalajara, Jal. / Monterrey / CDMX)`
+                );
+                setCurrentStep('ask_venue_city');
+                break;
+            }
+
+            case 'ask_venue_city': {
+                const cityOrAddress = userText.trim();
+                const venueName = tempVenueName || data.venue_name || 'Lugar de recepción';
+                const fullAddress = `${venueName}, ${cityOrAddress}`;
+
+                updateDataAndSync({
+                    venue_name: venueName,
+                    venue_address: fullAddress,
+                    maps_link: `https://maps.google.com/?q=${encodeURIComponent(fullAddress)}`
+                });
+
+                addAssistantMessage(
+                    `¡Perfecto! Recepción en **${venueName} (${cityOrAddress})** 📍.`
+                );
                 askThemeStyle();
                 break;
             }
@@ -544,7 +612,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             case 'ask_theme': {
                 const selectedTheme = directValue || 'classic';
-                updateData({ theme: selectedTheme });
+                updateDataAndSync({ theme: selectedTheme });
 
                 const templateObj = CANONICAL_TEMPLATES.find(t => t.id === selectedTheme);
                 const themeName = templateObj?.name || 'elegida';
@@ -577,7 +645,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             case 'ask_dress_code': {
                 const dressCode = directValue || userText;
-                updateData({ dress_code: dressCode });
+                updateDataAndSync({ dress_code: dressCode });
 
                 addAssistantMessage(
                     `Código de vestimenta: "${dressCode}".\n\n¿Te gustaría incluir información de Mesa de Regalos para tus invitados?`,
@@ -600,7 +668,6 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     addAssistantMessage('¡Muy bien! Se omitirá la mesa de regalos para centrarse en la compañía de tus invitados.');
                 }
 
-                // Si es boda o evento formal, preguntar por hospedaje
                 if (data.event_type === 'wedding') {
                     addAssistantMessage(
                         '¿Esperan invitados que viajen desde otra ciudad? ¿Te gustaría sugerir algún hotel o tarifa especial?',
@@ -650,13 +717,14 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     deadlineStr = deadline.toISOString().slice(0, 10);
                 }
 
-                updateData({ rsvp_deadline: deadlineStr });
+                updateDataAndSync({ rsvp_deadline: deadlineStr });
                 showSummary();
                 break;
             }
 
             case 'summary_chat': {
                 if (directValue === 'preview') {
+                    syncPreviewStorage(data);
                     const currentTpl = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
                     setPreviewModalSlug(currentTpl.slug);
                     return;
@@ -674,7 +742,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     const newTime = parseTimeStr(userText);
                     if (newTime) {
                         const dateOnly = (data.date_time || '2027-01-01').slice(0, 10);
-                        updateData({
+                        updateDataAndSync({
                             date_time: `${dateOnly}T${newTime.timeStr24}`,
                             venue_time: newTime.timeStr24
                         });
@@ -683,13 +751,13 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         addAssistantMessage('Indícame la nueva hora (ejemplo: "9:00 pm" o "21:00 hrs").');
                     }
                 } else if (lower.includes('salón') || lower.includes('salon') || lower.includes('hacienda') || lower.includes('lugar')) {
-                    updateData({ venue_name: userText, venue_address: userText });
+                    updateDataAndSync({ venue_name: userText, venue_address: userText });
                     addAssistantMessage(`¡Listo! Actualicé el lugar a "${userText}".`);
                 } else if (lower.includes('misa') || lower.includes('iglesia') || lower.includes('templo')) {
-                    updateData({ misa_name: userText, misa_address: userText });
+                    updateDataAndSync({ misa_name: userText, misa_address: userText });
                     addAssistantMessage(`¡Listo! Iglesia actualizada a "${userText}".`);
                 } else if (lower.includes('vestimenta') || lower.includes('ropa') || lower.includes('dress')) {
-                    updateData({ dress_code: userText });
+                    updateDataAndSync({ dress_code: userText });
                     addAssistantMessage(`¡Listo! Código de vestimenta actualizado a "${userText}".`);
                 } else {
                     addAssistantMessage(
@@ -723,7 +791,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             setCurrentStep('ask_has_misa');
         } else {
             addAssistantMessage(
-                `Entendido: **${dateDisplay} a las ${timeDisplay}** 🎉.\n\n¿En qué salón, terraza o hacienda lo van a celebrar y en qué ciudad? (Ejemplo: Salón Las Palmas, Guadalajara)`
+                `Entendido: **${dateDisplay} a las ${timeDisplay}** 🎉.\n\n¿Cómo se llama el salón, terraza o hacienda donde lo van a celebrar? (Ejemplo: Salón Las Palmas)`
             );
             setCurrentStep('ask_venue');
         }
@@ -761,7 +829,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
         }
 
         addAssistantMessage(
-            `¡Excelente lugar para celebrar! 🎉\n\nPara recomendarte la plantilla ideal: **¿Qué estilo, vibra visual o tema tienes en mente para tu evento?**`,
+            `Para recomendarte la plantilla ideal: **¿Qué estilo, vibra visual o tema tienes en mente para tu evento?**`,
             styleChips
         );
         setCurrentStep('ask_theme_style');
@@ -820,7 +888,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
         }));
 
         addAssistantMessage(
-            `¡Gran visión de estilo! Para esa temática, estas son las mejores plantillas prediseñadas para ti. Puedes ver un previo interactivo de cada una o seleccionar tu favorita:`,
+            `¡Gran visión de estilo! Para esa temática, estas son las mejores plantillas prediseñadas para ti. Puedes ver un previo interactivo con tus datos reales o seleccionar tu favorita:`,
             [
                 { label: '🎨 Ver todas las plantillas disponibles', value: 'all_templates' }
             ],
@@ -853,6 +921,11 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             true
         );
         setCurrentStep('summary_chat');
+    };
+
+    const openPreviewModal = (slug: string) => {
+        syncPreviewStorage(data);
+        setPreviewModalSlug(slug);
     };
 
     const selectedTemplateObj = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
@@ -943,10 +1016,10 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                                             type="button"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setPreviewModalSlug(tpl.slug);
+                                                                openPreviewModal(tpl.slug);
                                                             }}
-                                                            className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-stone-100 hover:bg-stone-200 text-stone-700 transition-all flex items-center gap-1"
-                                                            title="Ver demo en vivo"
+                                                            className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-stone-100 hover:bg-stone-200 text-stone-700 transition-all flex items-center gap-1 cursor-pointer"
+                                                            title="Ver demo en vivo con tus datos"
                                                         >
                                                             <Eye className="h-3 w-3 text-stone-600" />
                                                             <span>Ver previo</span>
@@ -954,7 +1027,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                                         <button
                                                             type="button"
                                                             onClick={() => handleUserResponse(`Elegí la plantilla: ${tpl.name}`, tpl.id)}
-                                                            className="px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white transition-all flex items-center gap-1 shadow-sm"
+                                                            className="px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white transition-all flex items-center gap-1 shadow-sm cursor-pointer"
                                                         >
                                                             <Check className="h-3 w-3" />
                                                             <span>Elegir</span>
@@ -982,7 +1055,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                                 <h4 className="text-base font-bold text-white truncate">{data.title || 'Mi Gran Evento'}</h4>
                                                 <p className="text-xs text-stone-400 flex items-center gap-1 mt-0.5 truncate">
                                                     <MapPin className="h-3 w-3 text-stone-500 shrink-0" />
-                                                    <span className="truncate">{data.venue_name || 'Lugar por definir'}</span>
+                                                    <span className="truncate">{data.venue_address || data.venue_name || 'Lugar por definir'}</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -1011,7 +1084,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                         <div className="pt-2 flex flex-col sm:flex-row gap-2">
                                             <button
                                                 type="button"
-                                                onClick={() => setPreviewModalSlug(selectedTemplateObj.slug)}
+                                                onClick={() => openPreviewModal(selectedTemplateObj.slug)}
                                                 className="py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white transition-all flex items-center justify-center gap-2 cursor-pointer border border-white/15"
                                             >
                                                 <Eye className="h-4 w-4 text-[#DF3B94]" />
@@ -1111,7 +1184,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                     Vista Previa Interactiva
                                 </span>
                                 <span className="text-xs text-stone-400 hidden sm:inline">
-                                    Explora la plantilla en tiempo real
+                                    Previsualizando con tus datos en tiempo real
                                 </span>
                             </div>
 
@@ -1141,7 +1214,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                 </div>
 
                                 <a
-                                    href={`/i/${previewModalSlug}?t=token-preview`}
+                                    href={`/i/${previewModalSlug}?t=token-preview&wizard_preview=1`}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="p-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-all"
@@ -1161,7 +1234,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                             </div>
                         </div>
 
-                        {/* Contenido del Iframe */}
+                        {/* Contenido del Iframe con tus datos sincronizados */}
                         <div className="flex-1 bg-stone-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden relative">
                             {previewDevice === 'mobile' ? (
                                 <div className="w-[375px] h-full max-h-[740px] rounded-[40px] border-[10px] border-stone-800 shadow-2xl overflow-hidden bg-black flex flex-col">
@@ -1169,14 +1242,14 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                         <div className="w-16 h-3 bg-stone-900 rounded-full" />
                                     </div>
                                     <iframe
-                                        src={`/i/${previewModalSlug}?t=token-preview`}
+                                        src={`/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${Date.now()}`}
                                         title="Vista Previa Móvil"
                                         className="w-full flex-1 border-0"
                                     />
                                 </div>
                             ) : (
                                 <iframe
-                                    src={`/i/${previewModalSlug}?t=token-preview`}
+                                    src={`/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${Date.now()}`}
                                     title="Vista Previa Escritorio"
                                     className="w-full h-full rounded-2xl border border-stone-800 shadow-2xl"
                                 />
@@ -1201,7 +1274,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                     onClick={() => {
                                         const matchingTpl = CANONICAL_TEMPLATES.find(t => t.slug === previewModalSlug);
                                         if (matchingTpl) {
-                                            updateData({ theme: matchingTpl.id });
+                                            updateDataAndSync({ theme: matchingTpl.id });
                                             handleUserResponse(`Elegí la plantilla: ${matchingTpl.name}`, matchingTpl.id);
                                         }
                                         setPreviewModalSlug(null);
