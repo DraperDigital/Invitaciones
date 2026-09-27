@@ -211,24 +211,49 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
     // Almacenamiento temporal para pasos que requieren validación en turnos estrictos
     const [tempMisaName, setTempMisaName] = useState<string>('');
+    const [tempMisaTime, setTempMisaTime] = useState<string>('');
     const [tempVenueName, setTempVenueName] = useState<string>('');
+    const [tempVenueTime, setTempVenueTime] = useState<string>('');
+    const [tempHotelName, setTempHotelName] = useState<string>('');
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // Sincroniza datos con sessionStorage y localStorage para que la vista previa en iframe o pestaña externa muestre los datos reales ingresados
+    // Mantener referencia siempre actualizada para no sufrir problemas de closures desactualizados
+    const latestDataRef = useRef<WizardData>(data);
+    useEffect(() => {
+        latestDataRef.current = data;
+        syncPreviewStorage(data);
+    }, [data]);
+
+    // Sincroniza datos con sessionStorage, localStorage y window global para que la vista previa en iframe muestre los datos reales ingresados
     const syncPreviewStorage = (currentData: WizardData) => {
         try {
             const payload = JSON.stringify(currentData);
             sessionStorage.setItem('invitto_wizard_preview_data', payload);
             localStorage.setItem('invitto_wizard_preview_data', payload);
+            if (typeof window !== 'undefined') {
+                (window as any).__INVITTO_WIZARD_DATA__ = currentData;
+                const iframes = document.querySelectorAll('iframe');
+                iframes.forEach(iframe => {
+                    try {
+                        iframe.contentWindow?.postMessage({
+                            type: 'INVITTO_WIZARD_DATA_UPDATE',
+                            data: currentData
+                        }, '*');
+                    } catch (err) {
+                        // ignore
+                    }
+                });
+            }
         } catch (e) {
             console.warn('Could not sync wizard preview storage', e);
         }
     };
 
     const updateDataAndSync = (patch: Partial<WizardData>) => {
-        const next = { ...data, ...patch };
+        const next = { ...latestDataRef.current, ...patch };
+        latestDataRef.current = next;
         updateData(patch);
         syncPreviewStorage(next);
     };
@@ -418,17 +443,41 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             // ── Paso Misa 1: Nombre de la Iglesia ──
             case 'ask_misa_name': {
-                const churchName = userText.trim();
-                setTempMisaName(churchName);
-                updateDataAndSync({
-                    misa_name: churchName,
-                    misa_address: churchName
-                });
+                const parsedTime = parseTimeStr(userText);
+                let churchName = userText.trim();
+                let detectedTime: string | null = null;
+                let detectedTimeDisplay: string | null = null;
 
-                addAssistantMessage(
-                    `Anoté el templo: **${churchName}** ⛪.\n\nEs un requisito indispensable para la invitación indicar el horario:\n**¿A qué hora será la misa o ceremonia religiosa?**\n(Ejemplo: 5:00 pm, 19:00 hrs o 7:00 pm)`
-                );
-                setCurrentStep('ask_misa_time');
+                if (parsedTime) {
+                    detectedTime = parsedTime.timeStr24;
+                    detectedTimeDisplay = parsedTime.timeStrDisplay;
+                    const clean = userText.replace(/(?:a\s+las?|a\s+la|alas|\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs?)).*$/i, '').trim();
+                    if (clean.length >= 3) {
+                        churchName = clean;
+                    }
+                }
+
+                setTempMisaName(churchName);
+
+                if (detectedTime) {
+                    setTempMisaTime(detectedTime);
+                    updateDataAndSync({
+                        misa_name: churchName,
+                        misa_time: detectedTime
+                    });
+                    addAssistantMessage(
+                        `Anoté la iglesia: **${churchName}** a las **${detectedTimeDisplay}** ⛪.\n\nAhora, **¿cuál es la dirección completa y en qué ciudad se ubica ${churchName}?**\n(Ejemplo: Madero #789, Col. Centro, León, Gto.)\nEsto es indispensable para que tus invitados abran la ubicación exacta de la misa en Google Maps.`
+                    );
+                    setCurrentStep('ask_misa_address');
+                } else {
+                    updateDataAndSync({
+                        misa_name: churchName
+                    });
+                    addAssistantMessage(
+                        `Anoté el templo: **${churchName}** ⛪.\n\nEs un requisito indispensable para la invitación indicar el horario:\n**¿A qué hora será la misa o ceremonia religiosa?**\n(Ejemplo: 5:00 pm, 19:00 hrs o 7:00 pm)`
+                    );
+                    setCurrentStep('ask_misa_time');
+                }
                 break;
             }
 
@@ -442,13 +491,14 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     return;
                 }
 
+                setTempMisaTime(parsedTime.timeStr24);
                 updateDataAndSync({
                     misa_time: parsedTime.timeStr24
                 });
 
-                const church = tempMisaName || data.misa_name || 'la iglesia';
+                const church = tempMisaName || latestDataRef.current?.misa_name || 'la iglesia';
                 addAssistantMessage(
-                    `Horario de misa registrado: **${parsedTime.timeStrDisplay}** ⛪.\n\nAhora, **¿cuál es la dirección completa o en qué ciudad se ubica ${church}?**\n(Ejemplo: Madero #789, Col. Centro, León, Gto.)\nEsto es indispensable para que tus invitados abran la ubicación exacta de la misa en Google Maps.`
+                    `Horario de misa registrado: **${parsedTime.timeStrDisplay}** ⛪.\n\nAhora, **¿cuál es la dirección completa y en qué ciudad se ubica ${church}?**\n(Ejemplo: Madero #789, Col. Centro, León, Gto.)\nEsto es indispensable para que tus invitados abran la ubicación exacta de la misa en Google Maps.`
                 );
                 setCurrentStep('ask_misa_address');
                 break;
@@ -457,8 +507,9 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             // ── Paso Misa 3: Dirección / Ciudad de la Misa ──
             case 'ask_misa_address': {
                 const churchAddress = userText.trim();
-                const churchName = tempMisaName || data.misa_name || 'Templo';
+                const churchName = tempMisaName || latestDataRef.current?.misa_name || 'Templo';
                 const fullMisaLocation = `${churchName}, ${churchAddress}`;
+                const savedMisaTime = tempMisaTime || latestDataRef.current?.misa_time || '18:00';
 
                 updateDataAndSync({
                     misa_name: churchName,
@@ -467,7 +518,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 });
 
                 addAssistantMessage(
-                    `¡Anotado! Ceremonia en **${churchName}** a las **${data.misa_time || '18:00'} hrs** (${churchAddress}) ⛪.\n\nAhora cuéntame de la fiesta: **¿Cómo se llama el salón, terraza, jardín o hacienda donde será la recepción?** (Ejemplo: Mansión Borbón / Salón Las Palmas)`
+                    `¡Anotado! Ceremonia en **${churchName}** a las **${savedMisaTime} hrs** (${churchAddress}) ⛪.\n\nAhora cuéntame de la fiesta: **¿Cómo se llama el salón, terraza, jardín o hacienda donde será la recepción?** (Ejemplo: Mansión Borbón / Salón Las Palmas)`
                 );
                 setCurrentStep('ask_venue_name');
                 break;
@@ -475,17 +526,43 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             // ── Paso Salón 1: Nombre del Salón / Recepción ──
             case 'ask_venue_name': {
-                const rawVenue = userText.trim();
-                setTempVenueName(rawVenue);
-                updateDataAndSync({
-                    venue_name: rawVenue,
-                    venue_address: rawVenue
-                });
+                const parsedTime = parseTimeStr(userText);
+                let rawVenue = userText.trim();
+                let detectedTime: string | null = null;
+                let detectedTimeDisplay: string | null = null;
 
-                addAssistantMessage(
-                    `¡Excelente lugar, **${rawVenue}**! 🎉\n\n**¿A qué hora comenzará la recepción o fiesta?**\n(Ejemplo: 8:30 pm, 20:30 hrs o 9:00 pm)`
-                );
-                setCurrentStep('ask_venue_time');
+                if (parsedTime) {
+                    detectedTime = parsedTime.timeStr24;
+                    detectedTimeDisplay = parsedTime.timeStrDisplay;
+                    const clean = userText.replace(/(?:a\s+las?|a\s+la|alas|\d{1,2}(?::\d{2})?\s*(?:am|pm|hrs?)).*$/i, '').trim();
+                    if (clean.length >= 3) {
+                        rawVenue = clean;
+                    }
+                }
+
+                setTempVenueName(rawVenue);
+
+                if (detectedTime) {
+                    setTempVenueTime(detectedTime);
+                    const dateOnly = (latestDataRef.current?.date_time || data.date_time || '2027-01-01').slice(0, 10);
+                    updateDataAndSync({
+                        venue_name: rawVenue,
+                        venue_time: detectedTime,
+                        date_time: `${dateOnly}T${detectedTime}:00`
+                    });
+                    addAssistantMessage(
+                        `Anoté la recepción: **${rawVenue}** a las **${detectedTimeDisplay}** 🎉.\n\nAhora, **¿cuál es la dirección completa y en qué ciudad se encuentra ${rawVenue}?**\n(Ejemplo: Av. Las Rosas 450, Zapopan, Jal.)\nEsto es indispensable para que tus invitados tengan el botón de cómo llegar con Google Maps.`
+                    );
+                    setCurrentStep('ask_venue_address');
+                } else {
+                    updateDataAndSync({
+                        venue_name: rawVenue
+                    });
+                    addAssistantMessage(
+                        `¡Excelente lugar, **${rawVenue}**! 🎉\n\n**¿A qué hora comenzará la recepción o fiesta?**\n(Ejemplo: 8:30 pm, 20:30 hrs o 9:00 pm)`
+                    );
+                    setCurrentStep('ask_venue_time');
+                }
                 break;
             }
 
@@ -499,15 +576,16 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     return;
                 }
 
-                const dateOnly = (data.date_time || '2027-01-01').slice(0, 10);
+                setTempVenueTime(parsedTime.timeStr24);
+                const dateOnly = (latestDataRef.current?.date_time || data.date_time || '2027-01-01').slice(0, 10);
                 updateDataAndSync({
                     venue_time: parsedTime.timeStr24,
                     date_time: `${dateOnly}T${parsedTime.timeStr24}:00`
                 });
 
-                const venue = tempVenueName || data.venue_name || 'el salón';
+                const venue = tempVenueName || latestDataRef.current?.venue_name || 'el salón';
                 addAssistantMessage(
-                    `Horario de recepción registrado: **${parsedTime.timeStrDisplay}** 🕗.\n\nAhora, **¿cuál es la dirección completa o en qué ciudad se encuentra ${venue}?**\n(Ejemplo: Av. Las Rosas 450, Zapopan, Jal.)\nEsto es indispensable para que tus invitados tengan el botón de cómo llegar con Google Maps.`
+                    `Horario de recepción registrado: **${parsedTime.timeStrDisplay}** 🕗.\n\nAhora, **¿cuál es la dirección completa y en qué ciudad se encuentra ${venue}?**\n(Ejemplo: Av. Las Rosas 450, Zapopan, Jal.)\nEsto es indispensable para que tus invitados tengan el botón de cómo llegar con Google Maps.`
                 );
                 setCurrentStep('ask_venue_address');
                 break;
@@ -516,8 +594,9 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             // ── Paso Salón 3: Dirección / Ciudad de la Recepción ──
             case 'ask_venue_address': {
                 const cityOrAddress = userText.trim();
-                const venueName = tempVenueName || data.venue_name || 'Salón de recepción';
+                const venueName = tempVenueName || latestDataRef.current?.venue_name || 'Salón de recepción';
                 const fullAddress = `${venueName}, ${cityOrAddress}`;
+                const savedVenueTime = tempVenueTime || latestDataRef.current?.venue_time || '20:00';
 
                 updateDataAndSync({
                     venue_name: venueName,
@@ -526,7 +605,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 });
 
                 addAssistantMessage(
-                    `¡Anotado! Recepción en **${venueName}** a las **${data.venue_time || '20:00'} hrs** (${cityOrAddress}) 📍.`
+                    `¡Anotado! Recepción en **${venueName}** a las **${savedVenueTime} hrs** (${cityOrAddress}) 📍.`
                 );
                 askThemeStyle();
                 break;
@@ -619,6 +698,11 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     );
                     setCurrentStep('ask_hotel_name');
                 } else {
+                    updateDataAndSync({
+                        hotel_name: '',
+                        hotel_address: '',
+                        hotel_code: ''
+                    });
                     askRsvpDeadline();
                 }
                 break;
@@ -627,10 +711,11 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             // ── Paso Hoteles 2: Nombre del Hotel ──
             case 'ask_hotel_name': {
                 const hotelName = userText.trim();
+                setTempHotelName(hotelName);
                 updateDataAndSync({ hotel_name: hotelName });
 
                 addAssistantMessage(
-                    `Anoté el hotel: **${hotelName}** 🏨.\n\nPara que tus invitados puedan llegar y reservar con facilidad:\n**¿Cuál es la dirección completa o zona donde se ubica, y cuentan con algún código de tarifa especial o reservación?**\n(Ejemplo: Av. López Mateos 123, Guadalajara / Código: BODA2027)`
+                    `Anoté el hotel: **${hotelName}** 🏨.\n\nPara que tus invitados puedan llegar y reservar con facilidad:\n**¿Cuál es la dirección completa o ciudad donde se ubica ${hotelName}, y cuál es el código de descuento o tarifa especial para la reservación?**\n(Ejemplo: Av. López Mateos 123, Guadalajara / Código: BODA2027)`
                 );
                 setCurrentStep('ask_hotel_address');
                 break;
@@ -639,12 +724,19 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             // ── Paso Hoteles 3: Dirección y Código del Hotel ──
             case 'ask_hotel_address': {
                 const hotelDetails = userText.trim();
+                const currentHotelName = tempHotelName || latestDataRef.current?.hotel_name || 'Hotel';
+
+                const codeMatch = hotelDetails.match(/(?:c[oó]digo|convenio|tarifa)[:\s]+([A-Za-z0-9_-]+)/i);
+                const extractedCode = codeMatch ? codeMatch[1] : undefined;
+
                 updateDataAndSync({
-                    hotel_address: hotelDetails
+                    hotel_name: currentHotelName,
+                    hotel_address: hotelDetails,
+                    hotel_code: extractedCode || latestDataRef.current?.hotel_code
                 });
 
                 addAssistantMessage(
-                    `¡Excelente! Toda la información de hospedaje en **${data.hotel_name || 'Hotel'}** (${hotelDetails}) quedó registrada para tus invitados foráneos 🏨.`
+                    `¡Excelente! Toda la información de hospedaje en **${currentHotelName}** (${hotelDetails}) quedó registrada para tus invitados foráneos 🏨.`
                 );
                 askRsvpDeadline();
                 break;
@@ -854,7 +946,8 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     };
 
     const openPreviewModal = (slug: string) => {
-        syncPreviewStorage(data);
+        const currentData = latestDataRef.current || data;
+        syncPreviewStorage(currentData);
         setPreviewModalSlug(slug);
     };
 

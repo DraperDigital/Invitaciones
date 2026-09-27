@@ -486,14 +486,39 @@ export default function InvitationPage() {
         });
     }, [event?.id, event?.slug]);
 
-    const applyWizardPreviewOverlay = (baseEvent: Event): Event => {
+    const applyWizardPreviewOverlay = (baseEvent: Event, directWiz?: any): Event => {
         try {
             const isWizardPreview = searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
             if (!isWizardPreview) return baseEvent;
 
-            const raw = sessionStorage.getItem('invitto_wizard_preview_data') || localStorage.getItem('invitto_wizard_preview_data');
-            if (!raw) return baseEvent;
-            const wiz = JSON.parse(raw);
+            // 1. Prioritize direct data or parent/top window global variable (immune to iframe storage partitioning)
+            let wiz: any = directWiz;
+            if (!wiz) {
+                try {
+                    if (typeof window !== 'undefined') {
+                        if (window.parent && (window.parent as any).__INVITTO_WIZARD_DATA__) {
+                            wiz = (window.parent as any).__INVITTO_WIZARD_DATA__;
+                        } else if (window.top && (window.top as any).__INVITTO_WIZARD_DATA__) {
+                            wiz = (window.top as any).__INVITTO_WIZARD_DATA__;
+                        } else if ((window as any).__INVITTO_WIZARD_DATA__) {
+                            wiz = (window as any).__INVITTO_WIZARD_DATA__;
+                        }
+                    }
+                } catch (crossOriginErr) {
+                    // Cross-origin restriction fallback
+                }
+            }
+
+            // 2. Fallback to storage
+            if (!wiz) {
+                try {
+                    const raw = sessionStorage.getItem('invitto_wizard_preview_data') || localStorage.getItem('invitto_wizard_preview_data');
+                    if (raw) wiz = JSON.parse(raw);
+                } catch (storageErr) {
+                    // storage failed
+                }
+            }
+
             if (!wiz || typeof wiz !== 'object') return baseEvent;
 
             const updated: Event = { ...baseEvent };
@@ -515,8 +540,16 @@ export default function InvitationPage() {
             if (wiz.venue_time) updatedConfig.venue_time = wiz.venue_time;
             if (wiz.misa_name) updatedConfig.misa_name = wiz.misa_name;
             if (wiz.misa_time) updatedConfig.misa_time = wiz.misa_time;
-            if (wiz.misa_address) updatedConfig.misa_address = wiz.misa_address;
+            if (wiz.misa_address) {
+                updatedConfig.misa_address = wiz.misa_address;
+                updatedConfig.misa_maps_link = `https://maps.google.com/?q=${encodeURIComponent(wiz.misa_address)}`;
+            }
             if (wiz.dress_code) updatedConfig.dress_code = wiz.dress_code;
+
+            // Limpiar notas de dress code hardcodeadas del demo (e.g. "Vestido floral / Garden party")
+            delete updatedConfig.dress_code_notes;
+            delete updatedConfig.dressCodeNotes;
+            delete updatedConfig.dresscode;
 
             if (wiz.title) {
                 updatedConfig.title = wiz.title;
@@ -528,34 +561,92 @@ export default function InvitationPage() {
                 }
             }
 
-            if (updatedConfig.reception) {
-                updatedConfig.reception = {
-                    ...updatedConfig.reception,
-                    name: wiz.venue_name || updatedConfig.reception.name,
-                    location: wiz.venue_address || updatedConfig.reception.location,
-                    time: wiz.venue_time || updatedConfig.reception.time
-                };
-            }
+            // Actualizar recepción con los datos reales del usuario
+            updatedConfig.reception = {
+                name: wiz.venue_name || updatedConfig.reception?.name || 'Salón de Eventos',
+                location: wiz.venue_address || updatedConfig.reception?.location || wiz.venue_name || '',
+                time: wiz.venue_time || updatedConfig.reception?.time || '20:00'
+            };
 
-            if (updatedConfig.ceremony) {
+            // Actualizar misa / ceremonia con los datos reales del usuario
+            if (wiz.misa_name) {
                 updatedConfig.ceremony = {
-                    ...updatedConfig.ceremony,
-                    name: wiz.misa_name || updatedConfig.ceremony.name,
-                    location: wiz.misa_address || updatedConfig.ceremony.location,
-                    time: wiz.misa_time || updatedConfig.ceremony.time
+                    name: wiz.misa_name,
+                    location: wiz.misa_address || wiz.misa_name,
+                    time: wiz.misa_time || '18:00'
                 };
+            } else {
+                delete updatedConfig.ceremony;
             }
 
+            // Generar itinerario dinámico adaptado a los datos reales del usuario (eliminando datos de viñedo o demo)
+            const dynamicSchedule: any[] = [];
+            if (wiz.misa_name) {
+                dynamicSchedule.push({
+                    time: wiz.misa_time || '18:00',
+                    event: 'Ceremonia Religiosa',
+                    location: wiz.misa_name
+                });
+            }
+            if (wiz.venue_name) {
+                dynamicSchedule.push({
+                    time: wiz.venue_time || '20:00',
+                    event: 'Recepción y Brindis',
+                    location: wiz.venue_name
+                });
+                dynamicSchedule.push({
+                    time: '21:30',
+                    event: 'Cena de Gala',
+                    location: wiz.venue_name
+                });
+                dynamicSchedule.push({
+                    time: '23:00',
+                    event: 'Fiesta & Pista de Baile',
+                    location: wiz.venue_name
+                });
+            }
+            if (dynamicSchedule.length > 0) {
+                updatedConfig.schedule = dynamicSchedule;
+            }
+
+            // Limpiar padres y padrinos mock que no corresponden a lo ingresado por el usuario
+            delete updatedConfig.parents;
+            delete updatedConfig.padrinos;
+
+            // Actualizar hashtag personalizado según el título ingresado
+            if (wiz.title) {
+                const cleanSlug = wiz.title.replace(/[^a-zA-Z0-9]/g, '');
+                if (cleanSlug) updatedConfig.hashtag = `#${cleanSlug}`;
+            }
+
+            // Mensaje de bienvenida limpio y acorde
+            if (wiz.title) {
+                updatedConfig.message = `Con gran alegría e ilusión, queremos compartir con ustedes este día tan especial. ¡Esperamos contar con su valiosa presencia!`;
+            }
+
+            // Manejo de hoteles: si el usuario especificó hotel, mostrarlo; si no, limpiar hoteles mock
             if (wiz.hotel_name) {
+                const hotelItem = {
+                    name: wiz.hotel_name,
+                    address: wiz.hotel_address || '',
+                    distance: wiz.hotel_address || '',
+                    code: wiz.hotel_code || '',
+                    discount: wiz.hotel_code ? `Código especial: ${wiz.hotel_code}` : (wiz.hotel_address || 'Tarifa para invitados'),
+                    isRecommended: true
+                };
                 updatedConfig.hotel_name = wiz.hotel_name;
                 updatedConfig.hotel_address = wiz.hotel_address;
                 updatedConfig.hotel_code = wiz.hotel_code;
-                updatedConfig.hotels = [{
-                    name: wiz.hotel_name,
-                    address: wiz.hotel_address,
-                    code: wiz.hotel_code
-                }];
+                updatedConfig.hotels = [hotelItem];
+                updatedConfig.accommodations = {
+                    enabled: true,
+                    hotels: [hotelItem]
+                };
                 updatedConfig.showHotels = true;
+            } else {
+                updatedConfig.hotels = [];
+                updatedConfig.accommodations = { enabled: false, hotels: [] };
+                updatedConfig.showHotels = false;
             }
 
             updated.theme_config = updatedConfig;
@@ -566,6 +657,17 @@ export default function InvitationPage() {
         }
     };
 
+    // Escuchar actualizaciones en tiempo real enviadas por postMessage desde el asistente
+    useEffect(() => {
+        const handleMessage = (e: MessageEvent) => {
+            if (e.data?.type === 'INVITTO_WIZARD_DATA_UPDATE' && e.data?.data) {
+                setEvent(prev => prev ? applyWizardPreviewOverlay(prev, e.data.data) : prev);
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, []);
+
     const fetchEventAndGuest = async () => {
         setLoading(true);
 
@@ -573,9 +675,11 @@ export default function InvitationPage() {
         const decodedSlug = decodeURIComponent(slug || '');
         const encodedSlug = encodeURIComponent(decodedSlug);
 
+        const isWizardPreview = searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
+
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
-        if (mockMatch && (rawToken === 'token-preview' || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
+        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
             setEvent(applyWizardPreviewOverlay(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
@@ -622,7 +726,7 @@ export default function InvitationPage() {
             setLoading(false);
             return;
         }
-        setEvent(eventData);
+        setEvent(applyWizardPreviewOverlay(eventData));
 
         const isOwner = Boolean(user && user.id === eventData.user_id);
         const isGuestPreview = searchParams.get('preview') === 'guest';
@@ -3091,13 +3195,19 @@ END:VCALENDAR`;
                                 )}
                                 <div>
                                     <h4 className="text-xl font-serif font-semibold text-[var(--text-primary)] mb-2">{hotel.name}</h4>
-                                    {hotel.distance && (
+                                    {(hotel.address || hotel.distance) && (
                                         <p className="text-xs text-accent font-medium mb-3 flex items-center gap-1.5">
-                                            <span>📍</span> {hotel.distance}
+                                            <span>📍</span> {hotel.address || hotel.distance}
                                         </p>
                                     )}
                                     {hotel.description && (
                                         <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4 whitespace-pre-line">{hotel.description}</p>
+                                    )}
+                                    {(hotel.code || hotel.discount) && (
+                                        <div className="mb-4 p-3 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)] text-xs">
+                                            <span className="font-semibold text-accent uppercase tracking-wider block text-[10px] mb-0.5">Código / Tarifa Especial:</span>
+                                            <span className="font-mono font-bold text-[var(--text-primary)]">{hotel.code || hotel.discount}</span>
+                                        </div>
                                     )}
                                     {hotel.price && (
                                         <p className="text-xs font-bold text-[var(--text-primary)] mb-4">
