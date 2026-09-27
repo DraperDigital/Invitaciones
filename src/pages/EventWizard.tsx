@@ -3,12 +3,13 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, Sparkles, SlidersHorizontal } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
+import WizardAiAssistant from '../components/wizard/WizardAiAssistant';
 
-type WizardData = {
+export type WizardData = {
     title: string;
     event_type: string;
     date_time: string;
@@ -177,6 +178,7 @@ export default function EventWizard() {
     const preselectedCoupon = searchParams.get('coupon');
 
     const isEditing = !!id;
+    const [creationMode, setCreationMode] = useState<'assistant' | 'manual'>(id ? 'manual' : 'assistant');
 
     useEffect(() => {
         if (!user || dataLoaded) return;
@@ -243,8 +245,8 @@ export default function EventWizard() {
         setStep((prev) => prev - 1);
     };
 
-    const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+        if (e) e.preventDefault();
         if (!user) return;
 
         // Validar que la fecha sea válida y futura (BUG-08)
@@ -393,21 +395,62 @@ export default function EventWizard() {
                 </div>
             )}
 
-            <div className="mb-8 md:mb-12">
-                <h1 className="text-2xl md:text-4xl font-display font-extrabold text-stone-900 tracking-tight mb-2">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
-                <div className="flex items-center justify-between mb-4">
-                    <p className="text-stone-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Progreso del Asistente</p>
-                    <p className="text-[#DF3B94] font-sans font-bold text-sm">Paso {step} de 3</p>
-                </div>
-                <div className="h-1.5 md:h-2 w-full rounded-full bg-stone-100 p-0.5 md:p-1 overflow-hidden">
-                    <div
-                        className="h-full rounded-full bg-[#DF3B94] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(223,59,148,0.4)]"
-                        style={{ width: `${(step / 3) * 100}%` }}
-                    />
+            {/* Selector de Modo: Asistente IA vs Formulario Clásico */}
+            <div className="flex items-center justify-center mb-8">
+                <div className="bg-stone-100 p-1.5 rounded-2xl flex items-center gap-1 border border-stone-200/80 shadow-inner">
+                    <button
+                        type="button"
+                        onClick={() => setCreationMode('assistant')}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                            creationMode === 'assistant'
+                                ? 'bg-white text-stone-900 shadow-md font-extrabold scale-[1.02]'
+                                : 'text-stone-500 hover:text-stone-800'
+                        }`}
+                    >
+                        <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                        <span>Asistente IA</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] font-black">Nuevo</span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setCreationMode('manual')}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                            creationMode === 'manual'
+                                ? 'bg-white text-stone-900 shadow-md font-extrabold scale-[1.02]'
+                                : 'text-stone-500 hover:text-stone-800'
+                        }`}
+                    >
+                        <SlidersHorizontal className="h-4 w-4 text-stone-600" />
+                        <span>Formulario Clásico</span>
+                    </button>
                 </div>
             </div>
 
-            <div className="rounded-[2rem] md:rounded-[3rem] border border-stone-200 bg-white p-6 md:p-12 shadow-sm">
+            {creationMode === 'assistant' ? (
+                <WizardAiAssistant
+                    data={data}
+                    updateData={updateData}
+                    onSwitchToManual={() => setCreationMode('manual')}
+                    onSubmit={() => handleSubmit()}
+                    loading={loading}
+                />
+            ) : (
+                <>
+                    <div className="mb-8 md:mb-12">
+                        <h1 className="text-2xl md:text-4xl font-display font-extrabold text-stone-900 tracking-tight mb-2">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
+                        <div className="flex items-center justify-between mb-4">
+                            <p className="text-stone-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Progreso del Asistente</p>
+                            <p className="text-[#DF3B94] font-sans font-bold text-sm">Paso {step} de 3</p>
+                        </div>
+                        <div className="h-1.5 md:h-2 w-full rounded-full bg-stone-100 p-0.5 md:p-1 overflow-hidden">
+                            <div
+                                className="h-full rounded-full bg-[#DF3B94] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(223,59,148,0.4)]"
+                                style={{ width: `${(step / 3) * 100}%` }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="rounded-[2rem] md:rounded-[3rem] border border-stone-200 bg-white p-6 md:p-12 shadow-sm">
                 {step === 1 && (
                     <div className="space-y-6 md:space-y-8">
                         <div className="space-y-1">
@@ -859,6 +902,8 @@ export default function EventWizard() {
                     )}
                 </div>
             </div>
-        </div>
-    );
+        </>
+    )}
+</div>
+);
 }
