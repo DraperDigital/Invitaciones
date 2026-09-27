@@ -49,7 +49,7 @@ export const EVENT_TYPE_OPTIONS = [
     { id: 'primera_comunion', label: 'Primera Comunión', icon: Wine, color: 'text-emerald-500 bg-emerald-50 border-emerald-100', defaultTheme: 'classic' },
     { id: 'confirmacion', label: 'Confirmación', icon: Church, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'classic' },
     { id: 'baby_shower', label: 'Baby Shower', icon: Baby, color: 'text-pink-500 bg-pink-50 border-pink-100', defaultTheme: 'whimsical-kids' },
-    { id: 'gender_reveal', label: 'Gender Reveal', icon: PartyPopper, color: 'text-indigo-500 bg-indigo-50 border-indigo-100', defaultTheme: 'neon-glow' },
+    { id: 'gender_reveal', label: 'Gender Reveal', icon: PartyPopper, color: 'text-indigo-500 bg-indigo-50 border-indigo-100', defaultTheme: 'reveal-duo' },
     { id: 'birthday', label: 'Cumpleaños', icon: Cake, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'neon-glow' },
     { id: 'graduacion', label: 'Graduación', icon: GraduationCap, color: 'text-blue-500 bg-blue-50 border-blue-100', defaultTheme: 'polaroid-vintage' },
     { id: 'corporate', label: 'Corporativo', icon: Building2, color: 'text-slate-600 bg-slate-100 border-slate-200', defaultTheme: 'split-screen' },
@@ -505,7 +505,9 @@ export default function EventWizard() {
                                         { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' }
+                                        { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'Gender Reveal / B&W', image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'Gender Reveal / Dúo', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' }
                                     ];
 
                                     const displayedTemplates = wizardTemplateFilter === 'all'

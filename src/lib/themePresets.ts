@@ -279,6 +279,34 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroTextColor: '#FFFFFF',
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
+    },
+    'reveal-bw': {
+        label: 'Misterio Monocromático',
+        desc: 'Blanco puro con contrastes negros y elegancia total. Cero pistas para máxima intriga.',
+        icon: '❓',
+        primaryColor: '#0A0A0A',
+        accentColor: '#171717',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FAFAFA',
+        textPrimary: '#0A0A0A',
+        textSecondary: '#525252',
+        heroTextColor: '#0A0A0A',
+        heroBgColor: '#FFFFFF',
+        typographyPreset: 'moderna'
+    },
+    'reveal-duo': {
+        label: 'Dúo Rosa & Azul',
+        desc: 'Equilibrio perfecto de celeste y rosa pastel para despistar a tus invitados hasta el final.',
+        icon: '👶',
+        primaryColor: '#0284C7',
+        accentColor: '#EC4899',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FAFAFA',
+        textPrimary: '#1E293B',
+        textSecondary: '#64748B',
+        heroTextColor: '#0284C7',
+        heroBgColor: '#F8FAFC',
+        typographyPreset: 'divertida'
     }
 };
 
@@ -313,12 +341,16 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'kids-farm', name: 'Granja Festiva', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Granja', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
-    { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Color Pop', slug: 'cumple-lucas-rainbow-pop', icon: '🌈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop' }
+    { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Color Pop', slug: 'cumple-lucas-rainbow-pop', icon: '🌈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop' },
+    // ── Plantillas de Revelación de Género ──
+    { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'gender_reveal', categories: ['gender_reveal', 'infantil', 'baby_shower'], categoryLabel: 'Gender Reveal / B&W', slug: 'gender-reveal-secreto-bw-premium', icon: '❓', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=800&auto=format&fit=crop' },
+    { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal', 'infantil', 'baby_shower'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop' }
 ];
 
 export const EVENT_CATEGORY_LABELS: Record<string, string> = {
     boda: 'Boda',
     xv: 'XV Años',
+    gender_reveal: 'Revelación de Género',
     infantil: 'Infantiles',
     cumpleanos: 'Cumpleaños',
     bautizo: 'Bautizos',
@@ -335,7 +367,8 @@ export function normalizeEventCategory(eventTypeOrCategory?: string, currentThem
     if (['xv', 'quince', 'quinceanera', 'xv-anos', 'xv_anos'].includes(lower)) return 'xv';
     if (['bautizo', 'bautizos'].includes(lower)) return 'bautizo';
     if (['comunion', 'primera_comunion', 'confirmacion'].includes(lower)) return 'comunion';
-    if (['baby_shower', 'gender_reveal', 'infantil', 'infantiles'].includes(lower)) return 'infantil';
+    if (['gender_reveal', 'gender-reveal', 'revelacion', 'revelacion_genero', 'revelacion-de-genero'].includes(lower)) return 'gender_reveal';
+    if (['baby_shower', 'infantil', 'infantiles'].includes(lower)) return 'infantil';
     if (['birthday', 'cumpleanos', 'cumple'].includes(lower)) {
         if (currentTheme && ['whimsical-kids', 'kids-farm', 'gamer-party', 'pixel-craft', 'rainbow-pop'].includes(currentTheme)) {
             return 'infantil';

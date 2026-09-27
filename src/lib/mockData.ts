@@ -2121,6 +2121,129 @@ export const MOCK_EVENTS: Event[] = [
             accent_color: '#06B6D4',
             button_color: '#EC4899'
         }
+    },
+    // Gender Reveal - Misterio Monocromático (B&W)
+    {
+        id: 'evt-reveal-bw',
+        user_id: MOCK_USER.id,
+        slug: 'gender-reveal-secreto-bw-premium',
+        title: 'Secreto en Blanco & Negro',
+        event_type: 'gender_reveal',
+        date_time: '2026-11-20T17:00:00Z',
+        venue_name: 'Hacienda El Secreto',
+        venue_address: 'Av. Acueducto 2100, Col. Colinas del Río, Guadalajara, Jal.',
+        maps_link: 'https://maps.google.com/?q=Hacienda+El+Secreto+Guadalajara',
+        dress_code: 'Monocromático Estricto (Blanco o Negro)',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: '2026-11-10T00:00:00Z',
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'reveal-bw',
+            isPremium: true,
+            baby_name: 'Bebé Navarro',
+            boy_name: 'Mateo',
+            girl_name: 'Valentina',
+            hero_tagline: 'TOP SECRET · REVELACIÓN DE GÉNERO',
+            hero_image_url: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+            message: 'Un nuevo capítulo comienza en el más absoluto misterio. Ni una sola pista antes de tiempo. Ven a descubrir con nosotros si nuestra vida se pintará de él o de ella.',
+            parents: {
+                father: 'Santiago Navarro',
+                mother: 'Camila Herrera'
+            },
+            reception: {
+                name: 'Hacienda El Secreto',
+                location: 'Av. Acueducto 2100, Colinas del Río, Guadalajara, Jal.',
+                time: '17:00'
+            },
+            schedule: [
+                { time: '17:00', event: 'Recepción & Votación Secreta 🗳️', location: 'Jardín Principal' },
+                { time: '18:30', event: 'Brindis & Juegos de Predicciones 🥂', location: 'Terraza Central' },
+                { time: '19:30', event: 'EL GRAN MOMENTO: La Gran Revelación 💥', location: 'Explanada Principal' },
+                { time: '20:30', event: 'Cena & Festejo 🎉', location: 'Salón de Cristales' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'Tu compañía y buenos deseos son nuestro mayor obsequio. Si deseas consentir a nuestro futuro bebé:',
+                liverpool_code: 'SECRETO-REVEAL-2026',
+                amazon_url: 'https://amazon.com.mx'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'moderna',
+            primary_color: '#0A0A0A',
+            accent_color: '#171717',
+            button_color: '#0A0A0A'
+        }
+    },
+    // Gender Reveal - Dúo Rosa & Azul
+    {
+        id: 'evt-reveal-duo',
+        user_id: MOCK_USER.id,
+        slug: 'gender-reveal-mateo-o-sofia-premium',
+        title: '¿Mateo o Sofía? Revelación',
+        event_type: 'gender_reveal',
+        date_time: '2026-11-28T16:30:00Z',
+        venue_name: 'Terraza Bella Vista',
+        venue_address: 'Paseo de la Floresta 880, Zapopan, Jalisco',
+        maps_link: 'https://maps.google.com/?q=Terraza+Bella+Vista+Zapopan',
+        dress_code: 'Viste de Azul si crees que es Niño o de Rosa si crees que es Niña',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: '2026-11-18T00:00:00Z',
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'reveal-duo',
+            isPremium: true,
+            baby_name: 'Bebé Garza',
+            boy_name: 'Mateo',
+            girl_name: 'Sofía',
+            hero_image_url: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
+            message: '¿Será el principito Mateo o la princesa Sofía? Tenemos el corazón dividido en dos colores. Ven listo con tu outfit y apoya a tu equipo favorito.',
+            parents: {
+                father: 'Mauricio Garza',
+                mother: 'Valeria Santos'
+            },
+            reception: {
+                name: 'Terraza Bella Vista',
+                location: 'Paseo de la Floresta 880, Zapopan, Jalisco',
+                time: '16:30'
+            },
+            schedule: [
+                { time: '16:30', event: 'Llegada de Equipos: Pulseras Azul o Rosa 💙💖', location: 'Recepción' },
+                { time: '17:30', event: 'Batalla de Juegos: Team Niño vs Team Niña 🎲', location: 'Jardín' },
+                { time: '19:00', event: '¡Humo & Confeti! La Revelación del Género 🎈', location: 'Pabellón' },
+                { time: '20:00', event: 'Cena & Música en Vivo 🎶', location: 'Terraza Principal' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: '¡Gracias por acompañarnos a descubrir el secreto más dulce! Si quieres hacernos un presente:',
+                amazon_url: 'https://amazon.com.mx',
+                liverpool_code: 'MATEO-O-SOFIA-2026'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'divertida',
+            primary_color: '#0284C7',
+            accent_color: '#EC4899',
+            button_color: '#0284C7'
+        }
     }
 ];
 

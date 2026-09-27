@@ -33,6 +33,8 @@ import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
+import RevealBwHero from '../components/themes/RevealBwHero';
+import RevealDuoHero from '../components/themes/RevealDuoHero';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
@@ -43,6 +45,7 @@ export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '✨' },
     { id: 'boda', name: 'Bodas', emoji: '💍' },
     { id: 'xv', name: 'XV Años', emoji: '👑' },
+    { id: 'gender_reveal', name: 'Revelación', emoji: '❓' },
     { id: 'infantil', name: 'Infantiles', emoji: '👶' },
     { id: 'cumpleanos', name: 'Cumpleaños', emoji: '🎂' },
     { id: 'bautizo', name: 'Bautizos', emoji: '💧' },
@@ -236,6 +239,20 @@ export default function InvitationPage() {
             borderColor: '#BAE6FD', cardBorder: '#38BDF866',
             accentOverride: '#EC4899', fontPreset: 'divertida',
             heroRadius: '28px', cardRadius: '28px',
+        },
+        'reveal-bw': {
+            sectionBg: '#FFFFFF', sectionBgAlt: '#F4F4F5', cardBg: '#FFFFFF',
+            textPrimary: '#0A0A0A', textSecondary: '#525252',
+            borderColor: '#E4E4E7', cardBorder: '#0A0A0A',
+            accentOverride: '#0A0A0A', fontPreset: 'moderna',
+            heroRadius: '0px', cardRadius: '24px',
+        },
+        'reveal-duo': {
+            sectionBg: '#FAFAFA', sectionBgAlt: '#F0F9FF', cardBg: '#FFFFFF',
+            textPrimary: '#1E293B', textSecondary: '#64748B',
+            borderColor: '#E2E8F0', cardBorder: '#38BDF844',
+            accentOverride: '#0284C7', fontPreset: 'divertida',
+            heroRadius: '24px', cardRadius: '24px',
         },
     };
 
@@ -2131,6 +2148,12 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'rainbow-pop') {
             return <RainbowPopHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'reveal-bw') {
+            return <RevealBwHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'reveal-duo') {
+            return <RevealDuoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
 
         if (planTier === 'clasico') {
