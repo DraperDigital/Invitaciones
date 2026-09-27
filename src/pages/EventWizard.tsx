@@ -125,10 +125,12 @@ const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
         showMap:          true,
         showWhatsAppRSVP: true,
         showCountdown:    true,
-        showDetails:      false,
+        showDetails:      true,
         showItinerary:    false,
         showGallery:      true,
-        showGifts:        false,
+        showGifts:        true,
+        showChambelanes:  false,
+        showHotels:       false,
     },
     graduacion: {
         showMap:          true,
@@ -592,90 +594,92 @@ export default function EventWizard() {
                             <p className="text-xs md:text-sm text-stone-500 font-normal">Define dónde ocurrirá la magia.</p>
                         </div>
                         
-                        {/* Sección Misa / Ceremonia */}
-                        <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#DF3B94] flex items-center gap-2">
-                                    <Church className="h-4 w-4" /> Misa / Ceremonia
-                                </h3>
-                                <span className="text-[11px] text-stone-600 font-medium">Opcional</span>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                        {/* Sección Misa / Ceremonia (solo para eventos religiosos/formales) */}
+                        {!['gender_reveal', 'birthday', 'corporate'].includes(data.event_type) && (
+                            <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#DF3B94] flex items-center gap-2">
+                                        <Church className="h-4 w-4" /> Misa / Ceremonia
+                                    </h3>
+                                    <span className="text-[11px] text-stone-600 font-medium">Opcional</span>
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+                                    <div>
+                                        <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Lugar / Parroquia</label>
+                                        <input
+                                            type="text"
+                                            value={data.misa_name}
+                                            onChange={(e) => updateData({ misa_name: e.target.value })}
+                                            className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                            placeholder="Ej. Parroquia de San Juan"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Hora</label>
+                                        <input
+                                            type="time"
+                                            value={data.misa_time}
+                                            onChange={(e) => updateData({ misa_time: e.target.value })}
+                                            className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                        />
+                                    </div>
+                                </div>
                                 <div>
-                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Lugar / Parroquia</label>
+                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Dirección</label>
                                     <input
                                         type="text"
-                                        value={data.misa_name}
-                                        onChange={(e) => updateData({ misa_name: e.target.value })}
+                                        value={data.misa_address}
+                                        onChange={(e) => updateData({ misa_address: e.target.value })}
                                         className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
-                                        placeholder="Ej. Parroquia de San Juan"
+                                        placeholder="Calle, Número, Colonia, Ciudad..."
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Hora</label>
-                                    <input
-                                        type="time"
-                                        value={data.misa_time}
-                                        onChange={(e) => updateData({ misa_time: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Dirección</label>
-                                <input
-                                    type="text"
-                                    value={data.misa_address}
-                                    onChange={(e) => updateData({ misa_address: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
-                                    placeholder="Calle, Número, Colonia, Ciudad..."
-                                />
-                            </div>
-                            <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
-                                        Link de Google Maps
-                                    </label>
-                                    {data.misa_maps_link && (
-                                        <a
-                                            href={data.misa_maps_link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1 text-[11px] text-emerald-600 hover:text-emerald-700 font-bold bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-full transition-colors"
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
+                                            Link de Google Maps
+                                        </label>
+                                        {data.misa_maps_link && (
+                                            <a
+                                                href={data.misa_maps_link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1 text-[11px] text-emerald-600 hover:text-emerald-700 font-bold bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-full transition-colors"
+                                            >
+                                                <ExternalLink className="h-3 w-3" /> Probar enlace
+                                            </a>
+                                        )}
+                                    </div>
+                                    <div className="relative">
+                                        <input
+                                            type="url"
+                                            value={data.misa_maps_link}
+                                            onChange={(e) => updateData({ misa_maps_link: e.target.value })}
+                                            className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white pl-10 pr-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                            placeholder="Pega aquí el enlace (ej. https://maps.app.goo.gl/...)"
+                                        />
+                                        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 pointer-events-none" />
+                                    </div>
+                                    <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const query = [data.misa_name, data.misa_address].filter(Boolean).join(' ') || 'iglesia';
+                                                window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+                                            }}
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition-all border border-stone-200 shadow-sm"
                                         >
-                                            <ExternalLink className="h-3 w-3" /> Probar enlace
-                                        </a>
-                                    )}
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type="url"
-                                        value={data.misa_maps_link}
-                                        onChange={(e) => updateData({ misa_maps_link: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white pl-10 pr-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
-                                        placeholder="Pega aquí el enlace (ej. https://maps.app.goo.gl/...)"
-                                    />
-                                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 pointer-events-none" />
-                                </div>
-                                <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            const query = [data.misa_name, data.misa_address].filter(Boolean).join(' ') || 'iglesia';
-                                            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
-                                        }}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition-all border border-stone-200 shadow-sm"
-                                    >
-                                        <MapPin className="h-3.5 w-3.5 text-[#DF3B94]" />
-                                        Buscar {data.misa_name ? `"${data.misa_name}"` : 'lugar'} en Google Maps
-                                        <ExternalLink className="h-3 w-3 text-stone-400" />
-                                    </button>
-                                    <p className="text-[11px] text-stone-500 font-normal">
-                                        💡 En Maps: haz clic en <strong>Compartir</strong> &gt; <strong>Copiar vínculo</strong> y pégalo arriba.
-                                    </p>
+                                            <MapPin className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                            Buscar {data.misa_name ? `"${data.misa_name}"` : 'lugar'} en Google Maps
+                                            <ExternalLink className="h-3 w-3 text-stone-400" />
+                                        </button>
+                                        <p className="text-[11px] text-stone-500 font-normal">
+                                            💡 En Maps: haz clic en <strong>Compartir</strong> &gt; <strong>Copiar vínculo</strong> y pégalo arriba.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* Sección Celebración */}
                         <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">

@@ -2049,7 +2049,7 @@ END:VCALENDAR`;
     ];
     // Orden garantizado: 'hero' siempre al inicio, 'guest_welcome' siempre segundo, y 'footer' siempre al final absoluto
     const savedOrder: SectionId[] = ['hero', 'guest_welcome', ...reorderableSavedOrder, 'footer'];
-    const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder);
+    const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder, effectiveEventCategory);
 
     // ── Helpers ─────────────────────────────────────────────────────
     const getSealIcon = () => {
@@ -2524,6 +2524,7 @@ END:VCALENDAR`;
     );
 
     const renderItinerary = () => {
+        if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
         const items = (cfg?.itinerary?.length > 0 ? cfg.itinerary : cfg?.schedule) || [];
         if (items.length === 0) return null;
         
@@ -2898,6 +2899,7 @@ END:VCALENDAR`;
     };
 
     const renderChambelanes = () => {
+        if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
         const hasChambelanes = cfg.chambelanes && cfg.chambelanes.length > 0;
         const hasDamas = cfg.damas && cfg.damas.length > 0;
         const hasPadrinos = cfg.padrinos && cfg.padrinos.length > 0;
@@ -2987,6 +2989,7 @@ END:VCALENDAR`;
     };
 
     const renderAccommodation = () => {
+        if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
         const hotelList = cfg.hotels || cfg.accommodations?.hotels || [];
         if (hotelList.length === 0) return null;
 
@@ -3802,7 +3805,7 @@ END:VCALENDAR`;
                                             })()}
 
                                             {/* Demás secciones reordenables */}
-                                            {buildFullPlanQueue(planTier).filter(sec => !sec.fixed).sort((a, b) => {
+                                            {buildFullPlanQueue(planTier, effectiveEventCategory, cfg.theme).filter(sec => !sec.fixed).sort((a, b) => {
                                                 const indexA = savedOrder.indexOf(a.id);
                                                 const indexB = savedOrder.indexOf(b.id);
                                                 if (indexA === -1 && indexB === -1) return 0;

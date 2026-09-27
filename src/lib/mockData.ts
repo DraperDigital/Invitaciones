@@ -2156,12 +2156,10 @@ export const MOCK_EVENTS: Event[] = [
                 location: 'Av. Acueducto 2100, Colinas del Río, Guadalajara, Jal.',
                 time: '17:00'
             },
-            schedule: [
-                { time: '17:00', event: 'Recepción & Votación Secreta 🗳️', location: 'Jardín Principal' },
-                { time: '18:30', event: 'Brindis & Juegos de Predicciones 🥂', location: 'Terraza Central' },
-                { time: '19:30', event: 'EL GRAN MOMENTO: La Gran Revelación 💥', location: 'Explanada Principal' },
-                { time: '20:30', event: 'Cena & Festejo 🎉', location: 'Salón de Cristales' }
-            ],
+            showDetails: true,
+            showItinerary: false,
+            showChambelanes: false,
+            showHotels: false,
             gift_table: {
                 enabled: true,
                 description: 'Tu compañía y buenos deseos son nuestro mayor obsequio. Si deseas consentir a nuestro futuro bebé:',
@@ -2217,12 +2215,10 @@ export const MOCK_EVENTS: Event[] = [
                 location: 'Paseo de la Floresta 880, Zapopan, Jalisco',
                 time: '16:30'
             },
-            schedule: [
-                { time: '16:30', event: 'Llegada de Equipos: Pulseras Azul o Rosa 💙💖', location: 'Recepción' },
-                { time: '17:30', event: 'Batalla de Juegos: Team Niño vs Team Niña 🎲', location: 'Jardín' },
-                { time: '19:00', event: '¡Humo & Confeti! La Revelación del Género 🎈', location: 'Pabellón' },
-                { time: '20:00', event: 'Cena & Música en Vivo 🎶', location: 'Terraza Principal' }
-            ],
+            showDetails: true,
+            showItinerary: false,
+            showChambelanes: false,
+            showHotels: false,
             gift_table: {
                 enabled: true,
                 description: '¡Gracias por acompañarnos a descubrir el secreto más dulce! Si quieres hacernos un presente:',

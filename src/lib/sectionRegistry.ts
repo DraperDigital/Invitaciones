@@ -292,8 +292,10 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
     'hero',
     'guest_welcome',
     'message',
+    'dress_code',
     'rsvp',
     'location',
+    'gifts',
     'gallery',
     'countdown',
     'footer',
@@ -331,6 +333,30 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
   ],
 };
 
+// ── Incompatibilidad de Secciones por Naturaleza de Evento ─────────────────
+export const INCOMPATIBLE_SECTIONS_BY_EVENT_TYPE: Record<string, SectionId[]> = {
+  gender_reveal: ['chambelanes', 'itinerary', 'hotels'],
+};
+
+export const INCOMPATIBLE_SECTIONS_BY_THEME: Record<string, SectionId[]> = {
+  'reveal-bw': ['chambelanes', 'itinerary', 'hotels'],
+  'reveal-duo': ['chambelanes', 'itinerary', 'hotels'],
+};
+
+export function isSectionAllowedForEvent(
+  sectionId: SectionId,
+  eventType?: string,
+  theme?: string
+): boolean {
+  if (eventType && INCOMPATIBLE_SECTIONS_BY_EVENT_TYPE[eventType]?.includes(sectionId)) {
+    return false;
+  }
+  if (theme && INCOMPATIBLE_SECTIONS_BY_THEME[theme]?.includes(sectionId)) {
+    return false;
+  }
+  return true;
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────
 
 /** Devuelve la SectionDef de una sección por su id */
@@ -348,32 +374,38 @@ export function getLayoutForEventType(eventType: string): SectionId[] {
 
 /**
  * Construye la cola de secciones a renderizar, en orden, aplicando:
- *  1. Orden del preset (layout del evento o personalizado)
- *  2. Filtro de plan (planRequired <= tier actual)
- *  3. Filtro de configKey (si configKey === false en theme_config, excluir)
+ *  1. Filtro de incompatibilidad por tipo de evento / tema
+ *  2. Orden del preset (layout del evento o personalizado)
+ *  3. Filtro de plan (planRequired <= tier actual)
+ *  4. Filtro de configKey (si configKey === false en theme_config, excluir)
  *
  * @param tier        Plan activo ('clasico' | 'pro' | 'premium')
  * @param themeConfig Objeto theme_config del evento
  * @param order       Array de SectionId — viene de theme_config.sectionOrder
- *                    (que a su vez se inicializó con el EVENT_LAYOUT_PRESET al crear)
+ * @param eventType   Tipo de evento (opcional, ej. 'gender_reveal')
  */
 export function buildSectionQueue(
   tier: PlanTier,
   themeConfig: Record<string, unknown>,
   order: SectionId[] = DEFAULT_SECTION_ORDER,
+  eventType?: string,
 ): SectionDef[] {
 
   const toSnakeCase = (str: string) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  const currentTheme = typeof themeConfig.theme === 'string' ? themeConfig.theme : undefined;
 
   const filtered = order
     .map((id) => getSectionDef(id))
     .filter((def): def is SectionDef => {
       if (!def) return false;
 
-      // 1. Filtrar por plan
+      // 1. Filtrar por compatibilidad con el evento o tema (ej. gender reveal no admite padrinos ni itinerario)
+      if (!isSectionAllowedForEvent(def.id, eventType, currentTheme)) return false;
+
+      // 2. Filtrar por plan
       if (!isPlanAtLeast(tier, def.planRequired)) return false;
 
-      // 2. Filtrar por configKey (Doble compatibilidad camelCase y snake_case)
+      // 3. Filtrar por configKey (Doble compatibilidad camelCase y snake_case)
       if (def.configKey) {
         const camelKey = def.configKey;
         const snakeKey = toSnakeCase(camelKey);
@@ -422,10 +454,13 @@ export function getReorderableSections(order: SectionId[] = DEFAULT_SECTION_ORDE
  * Útil para listados de administración/toggles.
  */
 export function buildFullPlanQueue(
-  tier: PlanTier
+  tier: PlanTier,
+  eventType?: string,
+  theme?: string,
 ): SectionDef[] {
   return SECTION_REGISTRY
     .filter((def): def is SectionDef => {
+      if (!isSectionAllowedForEvent(def.id, eventType, theme)) return false;
       return isPlanAtLeast(tier, def.planRequired);
     });
 }
