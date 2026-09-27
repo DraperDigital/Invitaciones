@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check, Lock, Sparkles } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -97,6 +97,7 @@ export default function InvitationPage() {
 
     // ── Theme name — derived from event config ──
     const themeName = event?.theme_config?.theme || 'classic';
+    const isOwner = Boolean(user && event && user.id === event.user_id);
 
     // ── CSS Variable Theme Profiles ──────────────────────────────────
     // Each theme defines the full set of CSS variables consumed by
@@ -946,14 +947,14 @@ END:VCALENDAR`;
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#FAF6EE] to-[#F7F2E7]">
+            <div className="flex h-screen items-center justify-center bg-stone-50">
                 <div className="text-center space-y-4">
                     <img 
                         src="/logo.png?v=3" 
                         alt="Invitto" 
                         className="h-10 sm:h-12 w-auto mx-auto animate-pulse object-contain drop-shadow-sm" 
                     />
-                    <p className="text-[#1B2E1D]/70 font-serif italic text-sm sm:text-base">Preparando tu invitación...</p>
+                    <p className="text-stone-600 font-sans text-sm sm:text-base font-medium">Preparando tu invitación...</p>
                 </div>
             </div>
         );
@@ -961,27 +962,27 @@ END:VCALENDAR`;
 
     if (notFound || !event) {
         return (
-            <div className="min-h-screen bg-[#FDFBF7] flex flex-col">
+            <div className="min-h-screen bg-stone-50 flex flex-col">
                 {/* Header */}
-                <header className="w-full px-6 py-5 border-b border-[#1B2E1D]/8">
-                    <Link to="/" className="text-2xl font-serif italic tracking-tighter text-[#1B2E1D]">
-                        Invitto
+                <header className="w-full px-6 py-5 border-b border-stone-200/80 bg-white/80 backdrop-blur-sm">
+                    <Link to="/" className="text-2xl font-serif font-black tracking-tight text-stone-900">
+                        Invitto<span className="text-[#DF3B94]">.</span>
                     </Link>
                 </header>
 
                 {/* Error content */}
-                <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-                    <div className="max-w-md">
+                <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
+                    <div className="max-w-md w-full bg-white rounded-3xl p-8 sm:p-10 shadow-xl border border-stone-200/80">
                         {/* Icon */}
-                        <div className="w-20 h-20 rounded-full bg-[var(--section-bg-alt)] flex items-center justify-center mx-auto mb-6">
-                            <Heart className="h-9 w-9 text-stone-300" />
+                        <div className="w-16 h-16 rounded-2xl bg-pink-50 border border-pink-200/60 flex items-center justify-center mx-auto mb-6 text-[#DF3B94]">
+                            <Heart className="h-8 w-8" />
                         </div>
 
                         {/* Message */}
-                        <h1 className="text-2xl font-serif text-[#1B2E1D] mb-3">
+                        <h1 className="text-2xl font-serif font-bold text-stone-900 mb-3">
                             Invitación no encontrada
                         </h1>
-                        <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-8">
+                        <p className="text-stone-500 text-sm leading-relaxed mb-8">
                             Es posible que el enlace haya expirado, que la invitación aún no esté disponible,
                             o que el link tenga un error tipográfico. Pide al organizador que te reenvíe el link correcto.
                         </p>
@@ -990,14 +991,14 @@ END:VCALENDAR`;
                         <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <Link
                                 to="/"
-                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#1B2E1D] text-white text-sm font-medium rounded-full hover:bg-[#1B2E1D]/90 transition-colors"
+                                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-pink-500/20"
                             >
                                 <Home className="h-4 w-4" />
                                 Ir al inicio
                             </Link>
                             <button
                                 onClick={() => window.history.back()}
-                                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-[var(--card-border)] text-[var(--text-secondary)] text-sm font-medium rounded-full hover:bg-[var(--section-bg-alt)] transition-colors"
+                                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-stone-200 text-stone-600 hover:text-stone-900 text-xs font-semibold rounded-xl hover:bg-stone-50 transition-colors cursor-pointer"
                             >
                                 Volver atrás
                             </button>
@@ -1007,9 +1008,9 @@ END:VCALENDAR`;
 
                 {/* Footer */}
                 <footer className="w-full px-6 py-4 text-center">
-                    <p className="text-xs text-[var(--text-secondary)]">
+                    <p className="text-xs text-stone-400">
                         ¿Quieres crear tu propia invitación?{' '}
-                        <Link to="/" className="underline underline-offset-2 hover:text-[var(--text-secondary)] transition-colors">
+                        <Link to="/" className="text-[#DF3B94] font-medium hover:underline">
                             Conoce Invitto
                         </Link>
                     </p>
@@ -1020,41 +1021,79 @@ END:VCALENDAR`;
 
     if (!event.is_published) {
         const isOwner = user && user.id === event.user_id;
-        if (isOwner) {
+        const isPreviewMode = searchParams.get('preview') === 'draft' || searchParams.get('preview') === '1' || searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
+
+        if (isOwner && isPreviewMode) {
+            // Se permite ver la invitación completa con el banner superior de borrador
+        } else if (isOwner) {
             return (
-                <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6">
-                    <div className="max-w-lg w-full bg-[var(--section-bg)] rounded-[2.5rem] p-10 md:p-14 text-center shadow-xl border border-[var(--border-color)]">
-                        <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-amber-50 mb-8">
-                            <Eye className="h-10 w-10 text-amber-500" />
+                <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+                    {/* Ambient Glows */}
+                    <div className="absolute top-1/4 -right-20 w-80 h-80 bg-gradient-to-bl from-[#DF3B94]/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute bottom-1/4 -left-20 w-80 h-80 bg-gradient-to-tr from-amber-300/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+                    <div className="max-w-lg w-full bg-white/95 backdrop-blur-xl rounded-[2.5rem] p-8 sm:p-12 text-center shadow-2xl shadow-stone-900/10 border border-stone-200/80 relative z-10">
+                        {/* Modern Gradient Icon Badge */}
+                        <div className="relative inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-br from-[#DF3B94] to-pink-600 text-white shadow-xl shadow-pink-500/25 mb-8">
+                            <Sparkles className="h-9 w-9 text-white animate-pulse" />
                         </div>
-                        <h2 className="text-3xl md:text-4xl font-serif text-[#1B2E1D] mb-4">Tu invitación está casi lista</h2>
-                        <p className="text-[var(--text-secondary)] font-light leading-relaxed mb-10">
+
+                        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-3 tracking-tight">
+                            Tu invitación está casi lista
+                        </h2>
+                        <p className="text-stone-600 font-sans text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
                             Esta es la vista previa de tu invitación. Para que tus invitados puedan verla y confirmar su asistencia, necesitas activar tu plan.
                         </p>
+
+                        <div className="space-y-3">
+                            <Link
+                                to={`/planes?id=${event.id}`}
+                                className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-xl shadow-pink-500/25 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                            >
+                                <Sparkles className="h-4 w-4" />
+                                <span>Activar mi invitación</span>
+                            </Link>
+
+                            <Link
+                                to={`/i/${slug}?preview=draft`}
+                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-2xl text-xs font-semibold tracking-wider transition-all cursor-pointer border border-stone-200/80 hover:border-stone-300"
+                            >
+                                <Eye className="h-4 w-4 text-[#DF3B94]" />
+                                <span>Ver cómo luce mi invitación</span>
+                            </Link>
+
+                            <Link
+                                to="/dashboard"
+                                className="block pt-3 text-xs uppercase font-bold tracking-widest text-stone-400 hover:text-stone-800 transition-colors"
+                            >
+                                Volver al panel
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div className="min-h-screen bg-stone-50 flex items-center justify-center p-6 text-center">
+                    <div className="max-w-md w-full bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-stone-200">
+                        <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-center justify-center mx-auto mb-6">
+                            <Lock className="h-8 w-8 text-amber-500" />
+                        </div>
+                        <h2 className="text-2xl font-serif font-bold text-stone-900 mb-2">Esta invitación aún no está activa</h2>
+                        <p className="text-stone-500 text-sm leading-relaxed mb-6">
+                            Pídele al anfitrión que active la invitación para que puedas ver los detalles y confirmar tu asistencia.
+                        </p>
                         <Link
-                            to={`/planes?id=${event.id}`}
-                            className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.3em] hover:bg-[#A65B5B] transition-all shadow-xl shadow-[#BD7474]/20"
+                            to="/"
+                            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-semibold tracking-wider transition-all"
                         >
-                            Activar mi invitación
-                        </Link>
-                        <Link
-                            to="/dashboard"
-                            className="block mt-6 text-[10px] uppercase font-bold tracking-widest text-[var(--text-secondary)] hover:text-[#1B2E1D] transition-colors"
-                        >
-                            Volver al panel
+                            <Home className="h-4 w-4" />
+                            <span>Ir al inicio</span>
                         </Link>
                     </div>
                 </div>
             );
         }
-        return (
-            <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-6 text-center">
-                <div>
-                    <p className="text-[var(--text-secondary)] font-serif text-2xl italic mb-2">Esta invitación aún no está activa</p>
-                    <p className="text-stone-300 text-sm">Pídele al anfitrión que la publique para poder verla.</p>
-                </div>
-            </div>
-        );
     }
 
     const eventDate = new Date(event.date_time);
@@ -3263,6 +3302,35 @@ END:VCALENDAR`;
     return (
         <div className={`min-h-screen bg-[var(--section-bg)] text-[var(--text-primary)] transition-colors duration-500 theme-${themeName}`} style={globalStyles}>
             <style>{commonStyles}</style>
+
+            {/* Sticky Draft Banner for Owner Preview */}
+            {!event.is_published && isOwner && (
+                <div className="sticky top-0 z-[1000] bg-stone-900/95 text-white px-4 py-2.5 backdrop-blur-md border-b border-stone-800 flex items-center justify-between text-xs shadow-xl">
+                    <div className="flex items-center gap-2.5">
+                        <span className="bg-[#DF3B94] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
+                            Borrador
+                        </span>
+                        <span className="text-stone-300 hidden sm:inline">
+                            Vista previa privada del anfitrión. Tus invitados no pueden verla hasta activar el plan.
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Link
+                            to={`/planes?id=${event.id}`}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white font-bold rounded-xl transition-all shadow-md shadow-pink-500/20 active:scale-95 text-xs uppercase tracking-wider"
+                        >
+                            <Sparkles className="h-3.5 w-3.5" />
+                            <span>Activar Plan</span>
+                        </Link>
+                        <Link
+                            to="/dashboard"
+                            className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-stone-200 rounded-xl transition-colors text-xs font-medium"
+                        >
+                            Panel
+                        </Link>
+                    </div>
+                </div>
+            )}
             
             {/* Demo Showcase Navigation & Template Drawer */}
             {isDemo && (
