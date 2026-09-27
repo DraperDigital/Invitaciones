@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2 } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
@@ -376,57 +376,57 @@ export default function EventWizard() {
 
             {/* Welcome Banner for new users */}
             {isWelcome && !isEditing && (
-                <div className="mb-8 p-6 bg-gradient-to-r from-[#1B2E1D] to-[#2D4A30] rounded-2xl text-white flex items-center gap-5 shadow-xl">
+                <div className="mb-8 p-6 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 rounded-2xl text-white flex items-center gap-5 shadow-xl border border-stone-800">
                     <div className="p-3 bg-white/10 rounded-xl flex-shrink-0">
-                        <PartyPopper className="h-8 w-8 text-[#BD7474]" />
+                        <PartyPopper className="h-8 w-8 text-[#DF3B94]" />
                     </div>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
-                            <Heart className="h-3 w-3 text-[#BD7474] fill-[#BD7474]" />
-                            <span className="text-[9px] uppercase font-bold tracking-widest text-[#BD7474]">Bienvenido a Invitto</span>
+                            <Heart className="h-3 w-3 text-[#DF3B94] fill-[#DF3B94]" />
+                            <span className="text-[10px] uppercase font-bold tracking-widest text-[#DF3B94]">Bienvenido a Invitto</span>
                         </div>
-                        <p className="font-serif text-xl leading-tight">¡Tu cuenta está lista! Crea tu primera invitación ahora.</p>
-                        <p className="text-stone-400 text-xs mt-1 font-light">Solo 3 pasos y tu evento estará listo para compartir.</p>
+                        <p className="font-sans font-bold text-xl leading-tight">¡Tu cuenta está lista! Crea tu primera invitación ahora.</p>
+                        <p className="text-stone-400 text-xs mt-1 font-normal">Solo 3 pasos y tu evento estará listo para compartir.</p>
                     </div>
                 </div>
             )}
 
             <div className="mb-8 md:mb-12">
-                <h1 className="text-2xl md:text-4xl font-serif text-[#1B2E1D] tracking-tight mb-2">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
+                <h1 className="text-2xl md:text-4xl font-display font-extrabold text-stone-900 tracking-tight mb-2">{isEditing ? 'Editar Invitación' : 'Crear Nueva Invitación'}</h1>
                 <div className="flex items-center justify-between mb-4">
-                    <p className="text-stone-400 text-[10px] md:text-xs uppercase font-black tracking-widest">Progreso del Asistente</p>
-                    <p className="text-[#BD7474] font-serif italic text-sm">Paso {step} de 3</p>
+                    <p className="text-stone-500 text-[10px] md:text-xs uppercase font-bold tracking-widest">Progreso del Asistente</p>
+                    <p className="text-[#DF3B94] font-sans font-bold text-sm">Paso {step} de 3</p>
                 </div>
                 <div className="h-1.5 md:h-2 w-full rounded-full bg-stone-100 p-0.5 md:p-1 overflow-hidden">
                     <div
-                        className="h-full rounded-full bg-[#1B2E1D] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(27,46,29,0.3)]"
+                        className="h-full rounded-full bg-[#DF3B94] transition-all duration-700 ease-out shadow-[0_0_10px_rgba(223,59,148,0.4)]"
                         style={{ width: `${(step / 3) * 100}%` }}
                     />
                 </div>
             </div>
 
-            <div className="rounded-[2rem] md:rounded-[3rem] border border-stone-100 bg-white p-6 md:p-12 shadow-sm">
+            <div className="rounded-[2rem] md:rounded-[3rem] border border-stone-200 bg-white p-6 md:p-12 shadow-sm">
                 {step === 1 && (
                     <div className="space-y-6 md:space-y-8">
                         <div className="space-y-1">
-                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Información Básica</h2>
-                            <p className="text-xs md:text-sm text-stone-400 font-light">Comencemos con los detalles generales de tu evento.</p>
+                            <h2 className="text-xl md:text-2xl font-display font-extrabold text-stone-900">Información Básica</h2>
+                            <p className="text-xs md:text-sm text-stone-500 font-normal">Comencemos con los detalles generales de tu evento.</p>
                         </div>
                         
                         <div className="space-y-4 md:space-y-6">
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Título del Evento</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Título del Evento</label>
                                 <input
                                     type="text"
                                     required
                                     value={data.title}
                                     onChange={(e) => updateData({ title: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all"
                                     placeholder="Ej. Boda de Ana y Carlos"
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-3 tracking-widest ml-1">¿Qué estás celebrando?</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-3 tracking-wider ml-1">¿Qué estás celebrando?</label>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                     {EVENT_TYPE_OPTIONS.map((item) => {
                                         const isSelected = data.event_type === item.id;
@@ -456,31 +456,32 @@ export default function EventWizard() {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha y Hora</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Fecha y Hora del Evento</label>
                                 <input
                                     type="datetime-local"
                                     required
                                     value={data.date_time}
                                     onChange={(e) => updateData({ date_time: e.target.value })}
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all"
                                 />
                             </div>
 
                             {/* Selección de Plantilla / Diseño */}
                             <div className="pt-4 space-y-3 border-t border-stone-100">
                                 <div className="flex items-center justify-between">
-                                    <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-700 tracking-widest ml-1">
+                                    <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
                                         Plantilla / Diseño Visual
                                     </label>
                                     <a 
                                         href="/ejemplos" 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="text-[10px] uppercase font-bold tracking-wider text-[#BD7474] hover:underline flex items-center gap-1"
+                                        className="text-xs uppercase font-bold tracking-wider text-[#DF3B94] hover:text-[#c92f82] hover:underline flex items-center gap-1"
                                     >
                                         <span>Explorar Galería en Vivo</span> ↗
                                     </a>
                                 </div>
-                                <p className="text-xs text-stone-400 font-light">Selecciona la plantilla inicial para tu invitación (puedes cambiarla después).</p>
+                                <p className="text-xs text-stone-500 font-normal">Selecciona la plantilla inicial para tu invitación (puedes cambiarla después).</p>
 
                                 {(() => {
                                     const effectiveCategory = normalizeEventCategory(data.event_type, data.theme);
@@ -515,18 +516,18 @@ export default function EventWizard() {
                                         <div className="space-y-3">
                                             <div className="flex items-center justify-between flex-wrap gap-2 pt-1 pb-2">
                                                 <div className="flex items-center gap-1.5">
-                                                    <span className="text-[11px] font-bold text-stone-600">Recomendadas para:</span>
-                                                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#BD7474]/10 text-[#BD7474] font-bold">
+                                                    <span className="text-xs font-bold text-stone-700">Recomendadas para:</span>
+                                                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] font-bold">
                                                         {categoryLabel}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-1 bg-stone-100 p-0.5 rounded-lg text-[11px] font-semibold">
+                                                <div className="flex items-center gap-1 bg-stone-100 p-0.5 rounded-lg text-xs font-semibold">
                                                     <button
                                                         type="button"
                                                         onClick={() => setWizardTemplateFilter('recommended')}
-                                                        className={`px-2.5 py-1 rounded-md transition-all ${
+                                                        className={`px-3 py-1 rounded-md transition-all ${
                                                             wizardTemplateFilter === 'recommended'
-                                                                ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                                ? 'bg-white text-stone-900 shadow-sm font-bold'
                                                                 : 'text-stone-500 hover:text-stone-800'
                                                         }`}
                                                     >
@@ -535,9 +536,9 @@ export default function EventWizard() {
                                                     <button
                                                         type="button"
                                                         onClick={() => setWizardTemplateFilter('all')}
-                                                        className={`px-2.5 py-1 rounded-md transition-all ${
+                                                        className={`px-3 py-1 rounded-md transition-all ${
                                                             wizardTemplateFilter === 'all'
-                                                                ? 'bg-white text-[#1B2E1D] shadow-sm font-bold'
+                                                                ? 'bg-white text-stone-900 shadow-sm font-bold'
                                                                 : 'text-stone-500 hover:text-stone-800'
                                                         }`}
                                                     >
@@ -555,13 +556,13 @@ export default function EventWizard() {
                                                             key={tpl.id}
                                                             onClick={() => updateData({ theme: tpl.id })}
                                                             className={`relative flex flex-col overflow-hidden rounded-xl border text-left transition-all ${
-                                                                isSelected ? 'border-[#BD7474] ring-2 ring-[#BD7474]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
+                                                                isSelected ? 'border-[#DF3B94] ring-2 ring-[#DF3B94]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
                                                             }`}
                                                         >
                                                             <div className="h-20 w-full relative">
                                                                 <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
                                                                 {isSelected && (
-                                                                    <div className="absolute top-1.5 right-1.5 bg-[#BD7474] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
+                                                                    <div className="absolute top-1.5 right-1.5 bg-[#DF3B94] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
                                                                         ✓
                                                                     </div>
                                                                 )}
@@ -585,99 +586,177 @@ export default function EventWizard() {
                 {step === 2 && (
                     <div className="space-y-6 md:space-y-10">
                         <div className="space-y-1">
-                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Ubicación del Evento</h2>
-                            <p className="text-xs md:text-sm text-stone-400 font-light">Define dónde ocurrirá la magia.</p>
+                            <h2 className="text-xl md:text-2xl font-display font-extrabold text-stone-900">Ubicación del Evento</h2>
+                            <p className="text-xs md:text-sm text-stone-500 font-normal">Define dónde ocurrirá la magia.</p>
                         </div>
                         
                         {/* Sección Misa / Ceremonia */}
-                        <div className="p-5 md:p-8 border border-stone-100 bg-stone-50/30 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
-                            <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#BD7474]">Misa / Ceremonia</h3>
+                        <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#DF3B94] flex items-center gap-2">
+                                    <Church className="h-4 w-4" /> Misa / Ceremonia
+                                </h3>
+                                <span className="text-[11px] text-stone-600 font-medium">Opcional</span>
+                            </div>
                             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                                 <div>
-                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Lugar</label>
+                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Lugar / Parroquia</label>
                                     <input
                                         type="text"
                                         value={data.misa_name}
                                         onChange={(e) => updateData({ misa_name: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
                                         placeholder="Ej. Parroquia de San Juan"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Hora</label>
+                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Hora</label>
                                     <input
                                         type="time"
                                         value={data.misa_time}
                                         onChange={(e) => updateData({ misa_time: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Dirección</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Dirección</label>
                                 <input
                                     type="text"
                                     value={data.misa_address}
                                     onChange={(e) => updateData({ misa_address: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
-                                    placeholder="Calle, Número, Colonia..."
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                    placeholder="Calle, Número, Colonia, Ciudad..."
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Link de Google Maps</label>
-                                <input
-                                    type="url"
-                                    value={data.misa_maps_link}
-                                    onChange={(e) => updateData({ misa_maps_link: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#BD7474]/5 transition-all"
-                                    placeholder="https://goo.gl/maps/..."
-                                />
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
+                                        Link de Google Maps
+                                    </label>
+                                    {data.misa_maps_link && (
+                                        <a
+                                            href={data.misa_maps_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 text-[11px] text-emerald-600 hover:text-emerald-700 font-bold bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-full transition-colors"
+                                        >
+                                            <ExternalLink className="h-3 w-3" /> Probar enlace
+                                        </a>
+                                    )}
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="url"
+                                        value={data.misa_maps_link}
+                                        onChange={(e) => updateData({ misa_maps_link: e.target.value })}
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white pl-10 pr-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                        placeholder="Pega aquí el enlace (ej. https://maps.app.goo.gl/...)"
+                                    />
+                                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 pointer-events-none" />
+                                </div>
+                                <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const query = [data.misa_name, data.misa_address].filter(Boolean).join(' ') || 'iglesia';
+                                            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition-all border border-stone-200 shadow-sm"
+                                    >
+                                        <MapPin className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                        Buscar {data.misa_name ? `"${data.misa_name}"` : 'lugar'} en Google Maps
+                                        <ExternalLink className="h-3 w-3 text-stone-400" />
+                                    </button>
+                                    <p className="text-[11px] text-stone-500 font-normal">
+                                        💡 En Maps: haz clic en <strong>Compartir</strong> &gt; <strong>Copiar vínculo</strong> y pégalo arriba.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Sección Celebración */}
-                        <div className="p-5 md:p-8 border border-stone-100 bg-stone-50/30 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
-                            <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[#1B2E1D]">Celebración / Recepción</h3>
+                        <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-xs font-black uppercase tracking-[0.25em] text-stone-900 flex items-center gap-2">
+                                    <PartyPopper className="h-4 w-4 text-[#DF3B94]" /> Celebración / Recepción
+                                </h3>
+                                <span className="text-[11px] text-stone-600 font-medium">Principal</span>
+                            </div>
                             <div className="grid md:grid-cols-2 gap-4 md:gap-6">
                                 <div>
-                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Lugar</label>
+                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Lugar / Salón o Hacienda</label>
                                     <input
                                         type="text"
                                         value={data.venue_name}
                                         onChange={(e) => updateData({ venue_name: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
                                         placeholder="Ej. Hacienda Los Arcos"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Hora</label>
+                                    <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Hora</label>
                                     <input
                                         type="time"
                                         value={data.venue_time}
                                         onChange={(e) => updateData({ venue_time: e.target.value })}
-                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Dirección</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Dirección</label>
                                 <input
                                     type="text"
                                     value={data.venue_address}
                                     onChange={(e) => updateData({ venue_address: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
-                                    placeholder="Calle Principal 123..."
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white px-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                    placeholder="Calle Principal 123, Colonia, Ciudad..."
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] uppercase font-bold text-stone-300 mb-2 tracking-widest ml-1">Link de Google Maps</label>
-                                <input
-                                    type="url"
-                                    value={data.maps_link}
-                                    onChange={(e) => updateData({ maps_link: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-white px-4 py-3 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all"
-                                    placeholder="https://goo.gl/maps/..."
-                                />
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
+                                        Link de Google Maps
+                                    </label>
+                                    {data.maps_link && (
+                                        <a
+                                            href={data.maps_link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1 text-[11px] text-emerald-600 hover:text-emerald-700 font-bold bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-full transition-colors"
+                                        >
+                                            <ExternalLink className="h-3 w-3" /> Probar enlace
+                                        </a>
+                                    )}
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        type="url"
+                                        value={data.maps_link}
+                                        onChange={(e) => updateData({ maps_link: e.target.value })}
+                                        className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-white pl-10 pr-4 py-3 text-sm md:text-base text-stone-900 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all"
+                                        placeholder="Pega aquí el enlace (ej. https://maps.app.goo.gl/...)"
+                                    />
+                                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400 pointer-events-none" />
+                                </div>
+                                <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const query = [data.venue_name, data.venue_address].filter(Boolean).join(' ') || 'salón de eventos';
+                                            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+                                        }}
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition-all border border-stone-200 shadow-sm"
+                                    >
+                                        <MapPin className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                        Buscar {data.venue_name ? `"${data.venue_name}"` : 'lugar'} en Google Maps
+                                        <ExternalLink className="h-3 w-3 text-stone-400" />
+                                    </button>
+                                    <p className="text-[11px] text-stone-500 font-normal">
+                                        💡 En Maps: haz clic en <strong>Compartir</strong> &gt; <strong>Copiar vínculo</strong> y pégalo arriba.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -686,13 +765,13 @@ export default function EventWizard() {
                 {step === 3 && (
                     <div className="space-y-8">
                         <div className="space-y-1">
-                            <h2 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Detalles Finales</h2>
-                            <p className="text-xs md:text-sm text-stone-400 font-light">Personaliza la experiencia para tus invitados.</p>
+                            <h2 className="text-xl md:text-2xl font-display font-extrabold text-stone-900">Detalles Finales</h2>
+                            <p className="text-xs md:text-sm text-stone-500 font-normal">Personaliza la experiencia para tus invitados.</p>
                         </div>
                         
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Código de Vestimenta</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Código de Vestimenta</label>
                                 <select
                                     value={
                                         ['Formal', 'Etiqueta Rigurosa (Black Tie)', 'Semiformal / Cóctel', 'Formal de Playa / Guayabera', 'Casual Elegante', 'Riguroso Blanco', 'Sin Código de Vestimenta'].includes(data.dress_code)
@@ -707,7 +786,7 @@ export default function EventWizard() {
                                             updateData({ dress_code: val });
                                         }
                                     }}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all appearance-none cursor-pointer"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all appearance-none cursor-pointer"
                                 >
                                     <option value="">Selecciona un Código de Vestimenta...</option>
                                     <option value="Formal">Formal</option>
@@ -725,18 +804,18 @@ export default function EventWizard() {
                                         type="text"
                                         value={data.dress_code}
                                         onChange={(e) => updateData({ dress_code: e.target.value })}
-                                        className="mt-3 block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                        className="mt-3 block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 text-sm text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all"
                                         placeholder="Ej. Traje de noche, Vestido largo, Vestido de cóctel..."
                                     />
                                 )}
                             </div>
                             <div>
-                                <label className="block text-[10px] md:text-xs uppercase font-bold text-stone-400 mb-2 tracking-widest ml-1">Fecha Límite para Confirmar</label>
+                                <label className="block text-xs uppercase font-bold text-stone-700 mb-2 tracking-wider ml-1">Fecha Límite para Confirmar (RSVP)</label>
                                 <input
                                     type="date"
                                     value={data.rsvp_deadline}
                                     onChange={(e) => updateData({ rsvp_deadline: e.target.value })}
-                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-100 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 focus:bg-white transition-all"
+                                    className="block w-full rounded-xl md:rounded-2xl border border-stone-200 bg-stone-50/50 px-4 py-3 md:py-4 text-sm md:text-base text-stone-900 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all"
                                 />
                             </div>
                         </div>
@@ -745,11 +824,11 @@ export default function EventWizard() {
 
                 <div className="mt-12 flex items-center justify-between pt-8 border-t border-stone-100">
                     {step > 1 ? (
-                        <button onClick={handleBack} className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-widest text-stone-400 hover:text-[#1B2E1D] transition-colors">
+                        <button onClick={handleBack} className="flex items-center gap-2 text-xs uppercase font-bold tracking-wider text-stone-600 hover:text-stone-900 transition-colors">
                             <ArrowLeft className="h-4 w-4" /> Atrás
                         </button>
                     ) : (
-                        <button onClick={() => navigate('/dashboard')} className="text-[10px] uppercase font-bold tracking-widest text-stone-300 hover:text-stone-500 transition-colors">
+                        <button onClick={() => navigate('/dashboard')} className="text-xs uppercase font-bold tracking-wider text-stone-500 hover:text-stone-800 transition-colors">
                             Cancelar
                         </button>
                     )}
@@ -758,7 +837,7 @@ export default function EventWizard() {
                         <button 
                             onClick={handleNext} 
                             disabled={!data.title || !data.date_time}
-                            className="px-8 py-4 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest shadow-xl shadow-stone-200/50 hover:bg-[#2D312E] transition-all disabled:opacity-30 disabled:grayscale flex items-center gap-2"
+                            className="px-8 py-4 bg-stone-900 text-white rounded-2xl text-xs uppercase font-bold tracking-wider shadow-xl shadow-stone-200/50 hover:bg-[#DF3B94] transition-all disabled:opacity-30 disabled:grayscale flex items-center gap-2"
                         >
                             Siguiente <ArrowRight className="h-4 w-4" />
                         </button>
@@ -766,7 +845,7 @@ export default function EventWizard() {
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="px-10 py-4 bg-[#BD7474] text-white rounded-2xl text-[10px] uppercase font-bold tracking-widest shadow-xl shadow-rose-100 hover:bg-[#A65B5B] transition-all disabled:opacity-50 flex items-center gap-3"
+                            className="px-10 py-4 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider shadow-xl shadow-pink-200/50 hover:bg-[#c92f82] transition-all disabled:opacity-50 flex items-center gap-3"
                         >
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                             {isEditing ? 'Guardar Cambios' : (preselectedPlan ? 'Continuar al Pago' : 'Elegir Plan y Publicar')}

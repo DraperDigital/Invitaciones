@@ -83,28 +83,28 @@ const Concierge: React.FC = () => {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-[#BD7474]/5 rounded-bl-[10rem] -z-0" />
                     
                     <div className="text-center space-y-4 relative z-10">
-                        <div className="h-16 w-16 bg-[#1B2E1D] rounded-full flex items-center justify-center text-white mx-auto shadow-xl ring-8 ring-stone-50">
+                        <div className="h-16 w-16 bg-[#DF3B94] rounded-2xl flex items-center justify-center text-white mx-auto shadow-xl ring-8 ring-pink-50">
                             <MessageCircle className="h-8 w-8" />
                         </div>
-                        <h1 className="text-4xl font-serif mt-6">Concierge de Invitto</h1>
-                        <p className="text-stone-400 font-light italic">Estamos aquí para hacer tu experiencia perfecta.</p>
+                        <h1 className="text-3xl sm:text-4xl font-display font-extrabold text-stone-900 mt-6">Concierge de Invitto</h1>
+                        <p className="text-stone-500 font-medium">Estamos aquí para hacer tu experiencia perfecta.</p>
                     </div>
 
                     <div className="space-y-6 relative z-10">
-                        <p className="text-stone-500 font-light text-center leading-relaxed px-4 lowercase italic text-lg">
+                        <p className="text-stone-600 font-normal text-center leading-relaxed px-4 italic text-base sm:text-lg">
                             "Si tienes alguna duda sobre la ubicación, el código de vestimenta o necesitas realizar un cambio en tu confirmación, por favor contáctanos."
                         </p>
 
                         <div className="grid grid-cols-2 gap-4 pt-4">
-                            <div className="p-6 bg-stone-50/50 rounded-2xl flex flex-col items-center justify-center text-center gap-2">
-                                <Clock className="h-4 w-4 text-[#BD7474]" />
-                                <span className="text-[9px] uppercase font-bold tracking-widest text-stone-400">Atención</span>
-                                <span className="text-xs font-serif">Inmediata</span>
+                            <div className="p-6 bg-stone-50 rounded-2xl flex flex-col items-center justify-center text-center gap-2 border border-stone-200">
+                                <Clock className="h-4 w-4 text-[#DF3B94]" />
+                                <span className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Atención</span>
+                                <span className="text-sm font-sans font-bold text-stone-900">Inmediata</span>
                             </div>
-                            <div className="p-6 bg-stone-50/50 rounded-2xl flex flex-col items-center justify-center text-center gap-2">
-                                <Calendar className="h-4 w-4 text-[#BD7474]" />
-                                <span className="text-[9px] uppercase font-bold tracking-widest text-stone-400">Días</span>
-                                <span className="text-xs font-serif">Lun - Dom</span>
+                            <div className="p-6 bg-stone-50 rounded-2xl flex flex-col items-center justify-center text-center gap-2 border border-stone-200">
+                                <Calendar className="h-4 w-4 text-[#DF3B94]" />
+                                <span className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Días</span>
+                                <span className="text-sm font-sans font-bold text-stone-900">Lun - Dom</span>
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ const Concierge: React.FC = () => {
                     <div className="pt-4 relative z-10">
                         {loading ? (
                             <div className="flex justify-center py-4">
-                                <div className="h-6 w-6 border-2 border-stone-200 border-t-[#1B2E1D] rounded-full animate-spin" />
+                                <div className="h-6 w-6 border-2 border-stone-200 border-t-[#DF3B94] rounded-full animate-spin" />
                             </div>
                         ) : contactInfo?.whatsapp ? (
                             <button 

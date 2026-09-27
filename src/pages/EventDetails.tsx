@@ -507,8 +507,8 @@ export default function EventDetails() {
     
     if (!event) return (
         <div className="text-center py-20">
-            <h2 className="text-2xl font-serif mb-4">Evento no encontrado</h2>
-            <Link to="/dashboard" className="text-stone-500 underline">Volver al panel</Link>
+            <h2 className="text-2xl font-display font-extrabold text-stone-900 mb-4">Evento no encontrado</h2>
+            <Link to="/dashboard" className="text-[#DF3B94] font-semibold hover:underline">Volver al panel</Link>
         </div>
     );
 
@@ -534,11 +534,11 @@ export default function EventDetails() {
                                     <AlertTriangle className="h-6 w-6" />
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-serif text-[#1B2E1D]">Reporte de Importación</h3>
-                                    <p className="text-stone-400 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
+                                    <h3 className="text-2xl font-display font-extrabold text-stone-900">Reporte de Importación</h3>
+                                    <p className="text-stone-500 text-xs font-semibold tracking-wider mt-0.5">Problemas detectados al procesar el archivo</p>
                                 </div>
                             </div>
-                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-300 hover:text-rose-500 transition-all">
+                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-400 hover:text-rose-500 transition-all">
                                 <CloseIcon className="h-5 w-5" />
                             </button>
                         </div>
@@ -546,8 +546,8 @@ export default function EventDetails() {
                         <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-3">
                             {importErrors.map((err, idx) => (
                                 <div key={idx} className="p-4 bg-stone-50 border border-stone-100 rounded-2xl flex gap-4 items-start animate-in slide-in-from-left duration-300" style={{ animationDelay: `${idx * 50}ms` }}>
-                                    <div className="h-2 w-2 rounded-full bg-amber-300 mt-1.5 flex-shrink-0" />
-                                    <p className="text-sm text-stone-600 leading-relaxed font-light">{err}</p>
+                                    <div className="h-2 w-2 rounded-full bg-amber-400 mt-1.5 flex-shrink-0" />
+                                    <p className="text-sm text-stone-700 leading-relaxed font-normal">{err}</p>
                                 </div>
                             ))}
                         </div>
@@ -555,7 +555,7 @@ export default function EventDetails() {
                         <div className="mt-10 flex-shrink-0">
                             <button 
                                 onClick={() => setImportErrors(null)}
-                                className="w-full py-5 bg-[#1B2E1D] text-white rounded-2xl text-[10px] uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-black transition-all"
+                                className="w-full py-5 bg-stone-900 hover:bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider shadow-xl transition-all"
                             >
                                 Entendido
                             </button>
@@ -567,14 +567,14 @@ export default function EventDetails() {
             {/* Premium Add Guest Modal Overlay */}
             {isAddOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10 animate-in fade-in duration-300">
-                    <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setIsAddOpen(false)} />
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsAddOpen(false)} />
                     <div className="relative w-full max-w-2xl bg-white rounded-[3rem] p-10 sm:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-stone-100 animate-in zoom-in slide-in-from-bottom-8 duration-500">
                         <div className="flex justify-between items-start mb-12">
                             <div className="space-y-2">
-                                <h3 className="text-4xl font-serif text-[#1B2E1D]">{editingGuestId ? 'Editar Invitado' : 'Nuevo Invitado'}</h3>
-                                <p className="text-stone-400 text-sm italic">Genera un enlace único de confirmación.</p>
+                                <h3 className="text-3xl font-display font-extrabold text-stone-900">{editingGuestId ? 'Editar Invitado' : 'Nuevo Invitado'}</h3>
+                                <p className="text-stone-500 text-sm">Genera un enlace único de confirmación.</p>
                             </div>
-                            <button onClick={() => setIsAddOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-50 text-stone-300 hover:text-rose-500 flex items-center justify-center transition-all">
+                            <button onClick={() => setIsAddOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-50 text-stone-400 hover:text-rose-500 flex items-center justify-center transition-all">
                                 <CloseIcon className="h-6 w-6" />
                             </button>
                         </div>
@@ -582,22 +582,22 @@ export default function EventDetails() {
                         <form onSubmit={saveGuest} className="space-y-6">
                             <div className="grid sm:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Nombre del Invitado</label>
+                                    <label className="text-xs uppercase font-bold tracking-wider text-stone-700 ml-1">Nombre del Invitado</label>
                                     <input 
                                         type="text" 
                                         required 
                                         autoFocus
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D] text-lg font-serif" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-stone-900 text-base font-sans font-medium" 
                                         placeholder="Ej. Sofía Velázquez"
                                         value={newGuest.name} 
                                         onChange={(e) => setNewGuest({...newGuest, name: e.target.value})} 
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Grupo / Familia</label>
+                                    <label className="text-xs uppercase font-bold tracking-wider text-stone-700 ml-1">Grupo / Familia</label>
                                     <input 
                                         type="text" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-stone-900 text-base font-sans" 
                                         placeholder="Ej. Familia Velázquez"
                                         value={newGuest.group_name} 
                                         onChange={(e) => setNewGuest({...newGuest, group_name: e.target.value})} 
@@ -606,20 +606,20 @@ export default function EventDetails() {
                             </div>
                             <div className="grid sm:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">WhatsApp <span className="text-stone-300 font-normal lowercase">(o Email)</span></label>
+                                    <label className="text-xs uppercase font-bold tracking-wider text-stone-700 ml-1">WhatsApp <span className="text-stone-400 font-normal lowercase">(o Email)</span></label>
                                     <input 
                                         type="tel" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-stone-900 text-base font-sans" 
                                         placeholder="Ej. +525512345678"
                                         value={newGuest.phone} 
                                         onChange={(e) => setNewGuest({...newGuest, phone: e.target.value})} 
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Email <span className="text-stone-300 font-normal lowercase">(o WhatsApp)</span></label>
+                                    <label className="text-xs uppercase font-bold tracking-wider text-stone-700 ml-1">Email <span className="text-stone-400 font-normal lowercase">(o WhatsApp)</span></label>
                                     <input 
                                         type="email" 
-                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#1B2E1D]/5 transition-all text-[#1B2E1D]" 
+                                        className="w-full p-5 bg-[#FDFBF7] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-stone-900 text-base font-sans" 
                                         placeholder="Ej. juan@correo.com"
                                         value={newGuest.email} 
                                         onChange={(e) => setNewGuest({...newGuest, email: e.target.value})} 
@@ -627,18 +627,18 @@ export default function EventDetails() {
                                 </div>
                             </div>
                             <div className="space-y-3">
-                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Acompañantes Adicionales</label>
-                                <div className="flex items-center gap-6 bg-[#FDFBF7] p-4 rounded-2xl w-full sm:w-1/2">
+                                <label className="text-xs uppercase font-bold tracking-wider text-stone-700 ml-1">Acompañantes Adicionales</label>
+                                <div className="flex items-center gap-6 bg-[#FDFBF7] p-4 rounded-2xl w-full sm:w-1/2 border border-stone-200">
                                     <button 
                                         type="button"
                                         onClick={() => setNewGuest({...newGuest, max_plus_ones: Math.max(0, newGuest.max_plus_ones - 1)})}
-                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-xl text-stone-700 hover:bg-stone-100 transition-colors shadow-sm"
                                     >
                                         -
                                     </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-2xl font-serif font-bold text-[#1B2E1D]">{newGuest.max_plus_ones}</span>
-                                        <p className="text-[9px] uppercase tracking-tighter text-stone-300 font-bold">Adicionales</p>
+                                        <span className="text-2xl font-sans font-extrabold text-stone-900">{newGuest.max_plus_ones}</span>
+                                        <p className="text-[10px] uppercase tracking-wider text-stone-500 font-bold">Adicionales</p>
                                     </div>
                                     <button 
                                         type="button"
@@ -732,9 +732,9 @@ export default function EventDetails() {
                             </div>
 
                             <div className="space-y-2 md:space-y-4">
-                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-[9rem] font-serif text-[#1B2E1D] tracking-tighter leading-[0.9] md:leading-[0.8] mb-2 md:mb-4 break-words">{event.title}</h1>
-                                <p className="text-base md:text-2xl text-stone-400 font-light italic flex items-center gap-2 md:gap-4 ml-1 md:ml-2">
-                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#BD7474]" /> {event.venue_name || 'Ubicación Premium'}
+                                <h1 className="text-3xl xs:text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold text-stone-900 tracking-tight leading-[1.05] mb-2 md:mb-4 break-words">{event.title}</h1>
+                                <p className="text-base md:text-xl text-stone-500 font-medium flex items-center gap-2 md:gap-4 ml-1 md:ml-2">
+                                    <MapPin className="h-4 w-4 md:h-5 md:w-5 text-[#DF3B94]" /> {event.venue_name || 'Ubicación Premium'}
                                 </p>
                             </div>
 
@@ -745,41 +745,41 @@ export default function EventDetails() {
                                 const isDeadlinePassed = deadlineDate ? isPast(deadlineDate) : false;
 
                                 return (
-                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-8 pt-10 border-t border-stone-50">
+                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-8 pt-10 border-t border-stone-100">
                                         <div className="space-y-1">
-                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha del Evento</p>
-                                            <p className="text-base font-bold text-[#1B2E1D]">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
+                                            <p className="text-xs uppercase font-bold tracking-wider text-stone-500">Fecha del Evento</p>
+                                            <p className="text-base font-bold text-stone-900">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
                                         </div>
-                                        <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                        <div className="h-10 w-px bg-stone-200 hidden lg:block" />
                                         <div className="space-y-1">
-                                            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre Confirm.</p>
-                                            <p className="text-base font-bold text-[#BD7474]">
+                                            <p className="text-xs uppercase font-bold tracking-wider text-stone-500">Cierre Confirm.</p>
+                                            <p className="text-base font-bold text-[#DF3B94]">
                                                 {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
                                             </p>
                                         </div>
                                         
                                         {deadlineDate && (
                                             <>
-                                                <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                                <div className="h-10 w-px bg-stone-200 hidden lg:block" />
                                                 <div className="col-span-2 lg:col-span-1 space-y-3 lg:space-y-0">
                                                     {isDeadlinePassed ? (
-                                                        <span className="px-4 py-2 w-fit bg-red-50 text-red-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                                        <span className="px-4 py-2 w-fit bg-red-50 text-red-600 rounded-lg text-xs uppercase font-bold tracking-wider flex items-center gap-2">
                                                             <AlertTriangle className="h-3 w-3" /> Vencido
                                                         </span>
                                                     ) : daysRemaining !== null && daysRemaining <= 14 ? (
                                                         <div className="flex flex-col sm:flex-row items-center gap-3">
-                                                            <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-2 border border-orange-100 shadow-sm animate-pulse w-full sm:w-auto">
+                                                            <span className="px-4 py-2 bg-orange-50 text-orange-600 rounded-lg text-xs uppercase font-bold tracking-wider flex items-center justify-center gap-2 border border-orange-100 shadow-sm animate-pulse w-full sm:w-auto">
                                                                 <Clock className="h-3 w-3 text-orange-500" /> Faltan {daysRemaining} Días
                                                             </span>
                                                             <button 
                                                                 onClick={() => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(`¡Hola! Te recordamos confirmar tu asistencia a "${event.title}". Quedan ${daysRemaining} días para el cierre. Por favor confirma aquí: ${window.location.origin}/i/${event.slug}`)}`, '_blank')}
-                                                                className="px-4 py-2 w-full sm:w-auto bg-[#1B2E1D] hover:bg-[#2A442E] text-white rounded-lg text-[9px] uppercase tracking-widest font-bold transition-all shadow-md flex items-center justify-center gap-2"
+                                                                className="px-4 py-2 w-full sm:w-auto bg-stone-900 hover:bg-[#DF3B94] text-white rounded-lg text-xs uppercase tracking-wider font-bold transition-all shadow-md flex items-center justify-center gap-2"
                                                             >
                                                                 <MessageCircle className="h-3 w-3" /> Recordar Inv.
                                                             </button>
                                                         </div>
                                                     ) : daysRemaining !== null && (
-                                                        <span className="px-4 py-2 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-[10px] uppercase font-bold tracking-widest flex items-center gap-2">
+                                                        <span className="px-4 py-2 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-xs uppercase font-bold tracking-wider flex items-center gap-2">
                                                             <Check className="h-3 w-3" /> Faltan {daysRemaining} días
                                                         </span>
                                                     )}
@@ -793,12 +793,12 @@ export default function EventDetails() {
 
                         <div className="lg:w-96 space-y-8">
                             {/* Visual Progress Bar Card */}
-                            <div className="p-6 md:p-10 bg-[#FDFBF7] rounded-[2rem] md:rounded-[3rem] border border-stone-100 shadow-sm space-y-4 md:space-y-6">
+                            <div className="p-6 md:p-10 bg-[#FDFBF7] rounded-[2rem] md:rounded-[3rem] border border-stone-200 shadow-sm space-y-4 md:space-y-6">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.2em] md:tracking-[0.3em] text-[#1B2E1D]">Asistencia</span>
+                                    <span className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-700">Asistencia</span>
                                     <div className="text-right">
-                                        <span className="text-2xl md:text-4xl font-serif text-[#1B2E1D]">{stats.confirmed}</span>
-                                        <span className="text-sm md:text-lg font-serif text-stone-300 ml-1">/{stats.total}</span>
+                                        <span className="text-2xl md:text-4xl font-display font-extrabold text-stone-900">{stats.confirmed}</span>
+                                        <span className="text-sm md:text-lg font-sans font-bold text-stone-400 ml-1">/{stats.total}</span>
                                     </div>
                                 </div>
                                 <div className="h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
@@ -807,13 +807,13 @@ export default function EventDetails() {
                                         style={{ width: `${percentConfirmed}%` }}
                                     />
                                 </div>
-                                <div className="flex items-center justify-center gap-2 text-stone-400">
-                                    <UsersIcon className="h-3 w-3" />
-                                    <p className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest italic">{stats.total === 0 ? 'Sin invitados' : 'En progreso'}</p>
+                                <div className="flex items-center justify-center gap-2 text-stone-500">
+                                    <UsersIcon className="h-3.5 w-3.5" />
+                                    <p className="text-[10px] md:text-xs uppercase font-bold tracking-wider">{stats.total === 0 ? 'Sin invitados' : 'En progreso'}</p>
                                 </div>
                             </div>
 
-                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-20 bg-[#1B2E1D] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-4 text-[10px] md:text-[11px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#2C482F] transition-all shadow-xl active:scale-[0.98]">
+                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-18 bg-stone-900 hover:bg-[#DF3B94] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-4 text-xs uppercase font-bold tracking-wider transition-all shadow-xl active:scale-[0.98]">
                                 <Copy className="h-4 w-4 md:h-5 md:w-5 group-hover:scale-110 transition-transform" /> <span className="hidden xs:inline">Copiar Enlace</span><span className="xs:hidden">Copiar Link</span>
                             </button>
                         </div>
@@ -831,16 +831,16 @@ export default function EventDetails() {
                             { label: 'Declinados', count: stats.declined, color: 'text-rose-600', bg: 'bg-rose-50/50' },
                             { label: 'Pendientes', count: stats.pending, color: 'text-amber-600', bg: 'bg-amber-50/50' },
                         ].map((stat, i) => (
-                            <div key={i} className={`p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-stone-100 shadow-sm transition-all hover:shadow-md ${stat.bg}`}>
-                                <p className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-stone-400 mb-2">{stat.label}</p>
-                                <p className={`text-2xl md:text-4xl font-serif ${stat.color}`}>{stat.count}</p>
+                            <div key={i} className={`p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-stone-200 shadow-sm transition-all hover:shadow-md ${stat.bg}`}>
+                                <p className="text-xs uppercase font-bold tracking-wider text-stone-500 mb-2">{stat.label}</p>
+                                <p className={`text-2xl md:text-4xl font-display font-extrabold ${stat.color}`}>{stat.count}</p>
                             </div>
                         ))}
                         {stats.pending > 0 && (
-                            <div className="col-span-full lg:col-span-1 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-[#1B2E1D] text-white shadow-2xl relative overflow-hidden flex flex-col justify-center border-none">
+                            <div className="col-span-full lg:col-span-1 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-stone-900 text-white shadow-2xl relative overflow-hidden flex flex-col justify-center border-none">
                                 <AlertTriangle className="absolute -top-4 -right-4 h-24 w-24 text-white opacity-5 rotate-12" />
-                                <p className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-[#BD7474] mb-2">Urgente</p>
-                                <p className="text-lg md:text-xl font-serif leading-tight">Faltan {stats.pending} por confirmar</p>
+                                <p className="text-xs uppercase font-bold tracking-wider text-[#DF3B94] mb-2">Urgente</p>
+                                <p className="text-lg md:text-xl font-sans font-bold leading-tight">Faltan {stats.pending} por confirmar</p>
                             </div>
                         )}
                     </div>
@@ -857,13 +857,13 @@ export default function EventDetails() {
 
                     {guests.length === 0 ? (
                         /* EMPTY STATE */
-                        <div className="py-24 px-10 bg-white rounded-[3rem] border-2 border-dashed border-stone-100 flex flex-col items-center text-center space-y-8 animate-in fade-in duration-700">
-                             <div className="h-24 w-24 bg-[#FDFBF7] rounded-[2rem] flex items-center justify-center text-stone-200">
+                        <div className="py-24 px-10 bg-white rounded-[3rem] border-2 border-dashed border-stone-200 flex flex-col items-center text-center space-y-8 animate-in fade-in duration-700">
+                             <div className="h-24 w-24 bg-[#FDFBF7] rounded-[2rem] flex items-center justify-center text-stone-300">
                                 <UsersIcon className="h-12 w-12" />
                              </div>
                              <div className="space-y-3 max-w-md">
-                                <h3 className="text-3xl font-serif text-[#1B2E1D]">Aún no tienes invitados</h3>
-                                <p className="text-stone-400 font-light italic">Empieza agregando tus primeros invitados o comparte el enlace para recibir confirmaciones automáticas.</p>
+                                <h3 className="text-2xl md:text-3xl font-display font-extrabold text-stone-900">Aún no tienes invitados</h3>
+                                <p className="text-stone-500 font-normal">Empieza agregando tus primeros invitados o comparte el enlace para recibir confirmaciones automáticas.</p>
                              </div>
                              
                              <div className="flex flex-col items-center gap-6 pt-4">
@@ -948,8 +948,8 @@ export default function EventDetails() {
                                             {filteredGuests.map((guest) => (
                                                 <tr key={guest.id} className="group hover:bg-[#FDFBF7] transition-colors">
                                                     <td className="px-4 py-8">
-                                                        <div className="font-serif text-xl text-stone-900 mb-1">{guest.name}</div>
-                                                        <div className="text-[9px] text-[#BD7474] font-bold tracking-[0.2em] uppercase">
+                                                        <div className="font-sans font-bold text-lg text-stone-900 mb-1">{guest.name}</div>
+                                                        <div className="text-[10px] text-[#DF3B94] font-bold tracking-wider uppercase">
                                                             Capacidad: {1 + (guest.max_plus_ones || 0)} Personas
                                                         </div>
                                                     </td>
@@ -1080,12 +1080,12 @@ export default function EventDetails() {
                                             <div key={guest.id} className="p-5 xs:p-6 space-y-5 hover:bg-[#FDFBF7] transition-all border-b border-stone-50 last:border-0">
                                                 <div className="flex justify-between items-start gap-4">
                                                     <div className="space-y-1.5 flex-1 min-w-0">
-                                                        <h4 className="font-serif text-lg xs:text-xl text-[#1B2E1D] leading-tight truncate">{guest.name}</h4>
+                                                        <h4 className="font-sans font-bold text-base xs:text-lg text-stone-900 leading-tight truncate">{guest.name}</h4>
                                                         <div className="flex flex-wrap items-center gap-2">
-                                                            <span className="px-2 py-0.5 bg-stone-100 text-stone-500 rounded text-[8px] uppercase font-bold tracking-widest whitespace-nowrap">
+                                                            <span className="px-2 py-0.5 bg-stone-100 text-stone-600 rounded text-[9px] uppercase font-bold tracking-wider whitespace-nowrap">
                                                                 {guest.group_name || 'Individual'}
                                                             </span>
-                                                            <span className="text-[10px] font-bold text-[#BD7474] whitespace-nowrap">
+                                                            <span className="text-[10px] font-bold text-[#DF3B94] whitespace-nowrap">
                                                                 Pax: {1 + (guest.max_plus_ones || 0)}
                                                             </span>
                                                         </div>
@@ -1200,22 +1200,22 @@ export default function EventDetails() {
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
                             <div className="space-y-4 flex-1">
                                 <div className="space-y-1">
-                                    <p className="text-[10px] uppercase font-black tracking-[0.3em] text-[#BD7474] mb-2">Seguimiento</p>
-                                    <h2 className="text-3xl sm:text-4xl font-serif text-[#1B2E1D] flex items-center gap-4">
+                                    <p className="text-xs uppercase font-bold tracking-wider text-[#DF3B94] mb-2">Seguimiento</p>
+                                    <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-stone-900 flex items-center gap-4">
                                         Invitados sin confirmar
                                     </h2>
-                                    <p className="text-stone-400 text-sm font-light italic">Aquí aparecerán las personas que aún no responden.</p>
+                                    <p className="text-stone-500 text-sm font-normal">Aquí aparecerán las personas que aún no responden.</p>
                                 </div>
                                 
                                 {/* New Search for this section */}
                                 <div className="relative max-w-md">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
                                     <input 
-                                        type="text"
-                                        placeholder="Buscar por nombre..."
-                                        className="w-full pl-11 pr-4 py-3 bg-white border border-stone-100 rounded-xl text-sm focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all shadow-sm font-light"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        type="text" 
+                                        placeholder="Buscar por nombre..." 
+                                        className="w-full pl-11 pr-4 py-3 bg-white border border-stone-200 rounded-xl text-sm focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] outline-none transition-all shadow-sm font-medium" 
+                                        value={searchQuery} 
+                                        onChange={(e) => setSearchQuery(e.target.value)} 
                                     />
                                 </div>
                             </div>
@@ -1223,7 +1223,7 @@ export default function EventDetails() {
                             {guests.filter(g => getRSVPStatus(g) === 'pending').length > 0 && (
                                 <button 
                                     onClick={sendBulkReminder}
-                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-[#1B2E1D] text-white rounded-[1.5rem] md:rounded-[2rem] text-[10px] uppercase font-black tracking-[0.2em] shadow-xl hover:bg-[#2A442E] transition-all border-b-4 border-black/20 group h-fit"
+                                    className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-5 bg-stone-900 text-white rounded-[1.5rem] md:rounded-[2rem] text-xs uppercase font-bold tracking-wider shadow-xl hover:bg-[#DF3B94] transition-all group h-fit"
                                 >
                                     <BellRing className="h-4 w-4 group-hover:rotate-12 transition-transform" /> 
                                     Enviar recordatorios masivos
@@ -1236,7 +1236,7 @@ export default function EventDetails() {
                                 <div className="h-16 w-16 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500">
                                     <Check className="h-8 w-8" />
                                 </div>
-                                <p className="text-stone-500 font-medium italic">Todos tus invitados han confirmado su asistencia. ¡Excelente!</p>
+                                <p className="text-stone-600 font-medium">Todos tus invitados han confirmado su asistencia. ¡Excelente!</p>
                             </div>
                         ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1244,12 +1244,12 @@ export default function EventDetails() {
                                     <div key={guest.id} className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
                                         <div>
                                             <div className="flex justify-between items-start mb-4">
-                                                <h3 className="font-serif text-xl text-[#1B2E1D]">{guest.name}</h3>
+                                                <h3 className="font-sans font-bold text-lg text-stone-900">{guest.name}</h3>
                                                 <span className="px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-[9px] font-bold uppercase tracking-widest">Pendiente</span>
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-stone-400 text-xs font-light">Grupo: <span className="text-stone-600 font-medium">{guest.group_name}</span></p>
-                                                <p className="text-stone-400 text-xs font-light">Asistentes: <span className="text-stone-600 font-medium">{guest.max_plus_ones + 1}</span></p>
+                                                <p className="text-stone-500 text-xs font-normal">Grupo: <span className="text-stone-700 font-semibold">{guest.group_name}</span></p>
+                                                <p className="text-stone-500 text-xs font-normal">Asistentes: <span className="text-stone-700 font-semibold">{guest.max_plus_ones + 1}</span></p>
                                             </div>
                                         </div>
                                         <div className="mt-8">
@@ -1271,13 +1271,13 @@ export default function EventDetails() {
                 <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8 px-2">
                         <div className="space-y-1">
-                             <h2 className="text-3xl font-serif text-[#1B2E1D]">Contenido Multimedia</h2>
-                             <p className="text-stone-400 text-sm font-light italic">Configura tu mesa de regalos y galería de fotos.</p>
+                             <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-stone-900">Contenido Multimedia</h2>
+                             <p className="text-stone-500 text-sm font-normal">Configura tu mesa de regalos y galería de fotos.</p>
                         </div>
                         <button 
                             onClick={handleSaveContent} 
                             disabled={isSaving}
-                            className="w-full sm:w-auto bg-[#1B2E1D] text-white px-8 h-14 rounded-2xl shadow-xl flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all"
+                            className="w-full sm:w-auto bg-stone-900 hover:bg-[#DF3B94] text-white px-8 h-14 rounded-2xl shadow-xl flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all"
                         >
                             {isSaving ? 'Guardando...' : <><Save className="h-5 w-5" /> Guardar Todo</>}
                         </button>
@@ -1286,12 +1286,12 @@ export default function EventDetails() {
                     {/* Mesa de Regalos Configuration */}
                     <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 p-6 md:p-10 shadow-sm space-y-8 md:space-y-10">
                          <div className="flex items-center gap-4 border-b border-stone-50 pb-6 md:pb-8">
-                            <div className="h-12 w-12 md:h-14 md:w-14 bg-[#BD7474]/10 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-[#BD7474]">
+                            <div className="h-12 w-12 md:h-14 md:w-14 bg-[#DF3B94]/10 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-[#DF3B94]">
                                 <Gift className="h-6 w-6 md:h-7 md:w-7" />
                             </div>
                             <div>
-                                <h3 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Mesa de Regalos</h3>
-                                <p className="text-stone-400 text-[10px] tracking-widest uppercase font-bold mt-0.5">Soporta transferencias y links</p>
+                                <h3 className="text-xl md:text-2xl font-display font-extrabold text-stone-900">Mesa de Regalos</h3>
+                                <p className="text-stone-500 text-xs tracking-wider uppercase font-bold mt-0.5">Soporta transferencias y links</p>
                             </div>
                          </div>
 
@@ -1308,7 +1308,7 @@ export default function EventDetails() {
                                     <div className="space-y-4 md:space-y-6">
                                         <div className="flex items-center gap-3">
                                             <span className="px-3 py-1 bg-white border border-stone-100 rounded-full text-[8px] uppercase font-bold text-stone-400">{item.type}</span>
-                                            <h4 className="font-serif text-base md:text-lg">{item.title}</h4>
+                                            <h4 className="font-sans font-bold text-base md:text-lg text-stone-900">{item.title}</h4>
                                         </div>
                                         
                                         {item.type === 'bank' ? (
@@ -1333,7 +1333,7 @@ export default function EventDetails() {
                             ))}
                             <button 
                                 onClick={() => setRegistryItems([...registryItems, { type: 'bank', title: 'Nueva Cuenta', bank_name: '', clabe: '', beneficiary: '' }])}
-                                className="p-8 border-2 border-dashed border-stone-100 rounded-[1.5rem] md:rounded-[2rem] flex flex-col items-center justify-center text-stone-300 hover:border-[#BD7474] hover:text-[#BD7474] transition-all gap-4 group min-h-[200px]"
+                                className="p-8 border-2 border-dashed border-stone-100 rounded-[1.5rem] md:rounded-[2rem] flex flex-col items-center justify-center text-stone-300 hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all gap-4 group min-h-[200px]"
                             >
                                 <Plus className="h-8 w-8 transition-transform group-hover:rotate-90" />
                                 <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-inherit">Agregar Transferencia</span>
@@ -1348,8 +1348,8 @@ export default function EventDetails() {
                                 <ImageIcon className="h-6 w-6 md:h-7 md:w-7" />
                             </div>
                             <div>
-                                <h3 className="text-xl md:text-2xl font-serif text-[#1B2E1D]">Galería de Fotos</h3>
-                                <p className="text-stone-400 text-[10px] tracking-widest uppercase font-bold mt-0.5">Imágenes de tu evento</p>
+                                <h3 className="text-xl md:text-2xl font-display font-extrabold text-stone-900">Galería de Fotos</h3>
+                                <p className="text-stone-500 text-xs tracking-wider uppercase font-bold mt-0.5">Imágenes de tu evento</p>
                             </div>
                          </div>
 

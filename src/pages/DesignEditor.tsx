@@ -1265,7 +1265,7 @@ export default function DesignEditor() {
                                 placeholder="Escribe algo elegante..."
                                 value={config.welcomeSubtitle}
                                 onChange={(e) => setConfig({ ...config, welcomeSubtitle: e.target.value })}
-                                className="w-full bg-stone-50/50 px-6 md:px-8 py-4 md:py-5 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-base md:text-lg font-serif focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
+                                className="w-full bg-stone-50/50 px-6 md:px-8 py-4 md:py-5 rounded-xl md:rounded-2xl border-none shadow-inner text-stone-800 text-base md:text-lg font-sans focus:ring-2 focus:ring-[#DF3B94]/20 outline-none transition-all"
                             />
                         </div>
                         
@@ -1276,7 +1276,7 @@ export default function DesignEditor() {
                                 value={config.welcomeMessage}
                                 onChange={(e) => setConfig({ ...config, welcomeMessage: e.target.value })}
                                 rows={5}
-                                className="w-full bg-stone-50/50 px-6 md:px-8 py-5 md:py-6 rounded-[1.5rem] border-none shadow-inner resize-none text-stone-600 font-serif italic text-sm md:text-base leading-relaxed focus:ring-2 focus:ring-[#1B2E1D]/5 outline-none transition-all"
+                                className="w-full bg-stone-50/50 px-6 md:px-8 py-5 md:py-6 rounded-[1.5rem] border-none shadow-inner resize-none text-stone-700 font-sans text-sm md:text-base leading-relaxed focus:ring-2 focus:ring-[#DF3B94]/20 outline-none transition-all"
                             />
                         </div>
                     </div>
@@ -1885,7 +1885,7 @@ export default function DesignEditor() {
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
                                             <div className="space-y-5">
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[9px] uppercase font-black tracking-[0.2em] text-stone-300 pl-1">Nombre Comercial</label>
+                                                    <label className="text-[10px] uppercase font-bold tracking-wider text-stone-700 pl-1">Nombre Comercial</label>
                                                     <input
                                                         type="text"
                                                         value={hotel.name}
@@ -1894,13 +1894,13 @@ export default function DesignEditor() {
                                                             newHotels[idx].name = e.target.value;
                                                             setConfig({ ...config, hotels: newHotels });
                                                         }}
-                                                        className="w-full bg-white px-5 py-4 rounded-xl md:rounded-2xl border border-stone-50 text-base font-serif font-bold text-[#1B2E1D]"
+                                                        className="w-full bg-white px-5 py-4 rounded-xl md:rounded-2xl border border-stone-200 text-base font-sans font-bold text-stone-900 focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] outline-none"
                                                         placeholder="Ej. Hyatt Regency"
                                                     />
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div className="space-y-1.5">
-                                                        <label className="text-[9px] uppercase font-black tracking-widest text-stone-300 pl-1">Cercanía</label>
+                                                        <label className="text-[10px] uppercase font-bold tracking-wider text-stone-700 pl-1">Cercanía</label>
                                                         <input
                                                             type="text"
                                                             value={hotel.distance}
@@ -1909,12 +1909,12 @@ export default function DesignEditor() {
                                                                 newHotels[idx].distance = e.target.value;
                                                                 setConfig({ ...config, hotels: newHotels });
                                                             }}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border border-stone-50 text-xs font-bold text-stone-600"
+                                                            className="w-full bg-white px-4 py-3 rounded-xl border border-stone-200 text-xs font-bold text-stone-700 focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] outline-none"
                                                             placeholder="Ej. A 5 mins"
                                                         />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="text-[9px] uppercase font-black tracking-widest text-stone-300 pl-1">Tarifa Aprox</label>
+                                                        <label className="text-[10px] uppercase font-bold tracking-wider text-stone-700 pl-1">Tarifa Aprox</label>
                                                         <input
                                                             type="text"
                                                             value={hotel.price}
@@ -1923,7 +1923,7 @@ export default function DesignEditor() {
                                                                 newHotels[idx].price = e.target.value;
                                                                 setConfig({ ...config, hotels: newHotels });
                                                             }}
-                                                            className="w-full bg-white px-4 py-3 rounded-xl border border-stone-50 text-xs font-bold text-stone-600"
+                                                            className="w-full bg-white px-4 py-3 rounded-xl border border-stone-200 text-xs font-bold text-stone-700 focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] outline-none"
                                                             placeholder="Ej. $2,400 MXN"
                                                         />
                                                     </div>
@@ -1931,7 +1931,7 @@ export default function DesignEditor() {
                                             </div>
                                             <div className="space-y-5">
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[9px] uppercase font-black tracking-[0.2em] text-stone-300 pl-1">Comentarios / Código</label>
+                                                    <label className="text-[10px] uppercase font-bold tracking-wider text-stone-700 pl-1">Comentarios / Código</label>
                                                     <textarea
                                                         value={hotel.description}
                                                         onChange={(e) => {
@@ -1940,13 +1940,13 @@ export default function DesignEditor() {
                                                             setConfig({ ...config, hotels: newHotels });
                                                         }}
                                                         rows={2}
-                                                        className="w-full bg-white px-5 py-4 rounded-xl md:rounded-2xl border border-stone-50 text-xs text-stone-500 font-medium resize-none leading-relaxed"
+                                                        className="w-full bg-white px-5 py-4 rounded-xl md:rounded-2xl border border-stone-200 text-xs text-stone-700 font-medium resize-none leading-relaxed focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] outline-none"
                                                         placeholder="Ej. 'Mencionar código BODA70 para tarifa especial'"
                                                     />
                                                 </div>
                                                 <div className="flex flex-col sm:flex-row items-center gap-4">
                                                     <div className="flex-1 space-y-1.5 w-full">
-                                                        <label className="text-[9px] uppercase font-black tracking-widest text-stone-300 pl-1">Enlace Directo</label>
+                                                        <label className="text-[10px] uppercase font-bold tracking-wider text-stone-700 pl-1">Enlace Directo</label>
                                                         <input
                                                             type="url"
                                                             value={hotel.link}
