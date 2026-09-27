@@ -546,6 +546,18 @@ export default function InvitationPage() {
                 };
             }
 
+            if (wiz.hotel_name) {
+                updatedConfig.hotel_name = wiz.hotel_name;
+                updatedConfig.hotel_address = wiz.hotel_address;
+                updatedConfig.hotel_code = wiz.hotel_code;
+                updatedConfig.hotels = [{
+                    name: wiz.hotel_name,
+                    address: wiz.hotel_address,
+                    code: wiz.hotel_code
+                }];
+                updatedConfig.showHotels = true;
+            }
+
             updated.theme_config = updatedConfig;
             return updated;
         } catch (e) {

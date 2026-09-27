@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church } from 'lucide-react';
+import { Send, Sparkles, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church, Building2 } from 'lucide-react';
 import { EVENT_TYPE_OPTIONS } from '../../pages/EventWizard';
 import { CANONICAL_TEMPLATES, getTemplatesForCategory, normalizeEventCategory } from '../../lib/themePresets';
 import type { WizardData } from '../../pages/EventWizard';
@@ -71,7 +71,7 @@ function parseTimeStr(str: string): { hour: number; minute: number; timeStr24: s
         }
     }
 
-    // 2. Sin dos puntos con indicador explícito (ej: "a las 8 pm", "8 pm", "8pm", "8 de la noche", "20 hrs")
+    // 2. Sin dos puntos con indicador explícito (ej: "a las 8 pm", "8 pm", "8pm", "7pm", "7 pm", "8 de la noche", "20 hrs")
     const wordMatch = lower.match(/(?:(?:a\s+las?|a\s+la|alas)\s*)?(\d{1,2})\s*(pm|am|p\.m\.|a\.m\.|hrs|horas|de la tarde|de la noche|de la mañana)/i);
     if (wordMatch) {
         let h = parseInt(wordMatch[1], 10);
@@ -209,9 +209,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const [previewModalSlug, setPreviewModalSlug] = useState<string | null>(null);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
 
-    // Almacenamiento temporal para pasos que requieren validación en 2 turnos
-    const [tempDateStrYmd, setTempDateStrYmd] = useState<string>('');
-    const [tempDateDisplay, setTempDateDisplay] = useState<string>('');
+    // Almacenamiento temporal para pasos que requieren validación en turnos estrictos
     const [tempMisaName, setTempMisaName] = useState<string>('');
     const [tempVenueName, setTempVenueName] = useState<string>('');
 
@@ -272,7 +270,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     isSummary
                 }
             ]);
-        }, 550);
+        }, 500);
     };
 
     const startConversation = () => {
@@ -283,7 +281,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
         }));
 
         addAssistantMessage(
-            '¡Hola! Soy tu asistente de Invitto ✨. Te ayudaré a crear y configurar tu invitación digital paso a paso.\n\nPara comenzar, ¿qué tipo de celebración estás organizando?',
+            '¡Hola! Soy tu asistente de Invitto ✨. Te ayudaré a crear y configurar tu invitación digital paso a paso con todos los detalles necesarios.\n\nPara comenzar, ¿qué tipo de celebración estás organizando?',
             typeChips
         );
         setCurrentStep('ask_event_type');
@@ -358,221 +356,126 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 updateDataAndSync({ title });
 
                 addAssistantMessage(
-                    `¡Me encanta! "${title}".\n\nAhora indícame la fecha y la hora del evento.\n(Ejemplo: "23 de mayo 2027 a las 8 pm" o "15/12/2026 a las 19:00 hrs")`
+                    `¡Me encanta! "${title}".\n\n¿En qué fecha se llevará a cabo tu evento?\n(Ejemplo: "12 de noviembre de 2027" o "24/10/2026")`
                 );
-                setCurrentStep('ask_datetime');
+                setCurrentStep('ask_date');
                 break;
             }
 
-            case 'ask_datetime': {
+            case 'ask_date': {
                 const parsedDate = parseDateStr(userText);
-                const parsedTime = parseTimeStr(userText);
-
-                // Caso 1: Se dio la fecha pero FALTA la hora
-                if (parsedDate && !parsedTime) {
-                    setTempDateStrYmd(parsedDate.dateStrYmd);
-                    setTempDateDisplay(parsedDate.dateStrDisplay);
+                if (!parsedDate) {
                     addAssistantMessage(
-                        `Anoté la fecha: **${parsedDate.dateStrDisplay}** 📅.\n\nEs un requisito indispensable para la invitación saber el horario:\n**¿A qué hora comenzará la recepción o celebración?**\n(Ejemplo: 8:00 pm, 19:30 hrs o 20:00)`
-                    );
-                    setCurrentStep('ask_time_only');
-                    return;
-                }
-
-                // Caso 2: Se dio la hora pero FALTA la fecha
-                if (!parsedDate && parsedTime) {
-                    updateDataAndSync({ venue_time: parsedTime.timeStr24 });
-                    addAssistantMessage(
-                        `Anoté el horario: **${parsedTime.timeStrDisplay}** 🕗.\n\nAhora es necesario indicar la fecha:\n**¿Qué día, mes y año se celebrará tu evento?**\n(Ejemplo: 23 de mayo de 2027 o 24/10/2026)`
-                    );
-                    setCurrentStep('ask_date_only');
-                    return;
-                }
-
-                // Caso 3: No se entendió ni fecha ni hora
-                if (!parsedDate || !parsedTime) {
-                    addAssistantMessage(
-                        'No pude identificar claramente la fecha y hora. Por favor indícalas con día, mes, año y horario.\n(Ejemplo: "23 de mayo 2027 a las 8 pm")'
+                        'Por favor indícame la fecha con día, mes y año de tu evento (Ejemplo: "12 de noviembre de 2027" o "18/11/2026").'
                     );
                     return;
                 }
 
-                // Caso 4: Se dieron AMBOS datos correctamente
-                const combinedIso = `${parsedDate.dateStrYmd}T${parsedTime.timeStr24}`;
-                const testDate = new Date(combinedIso);
-                if (isNaN(testDate.getTime())) {
-                    addAssistantMessage('La fecha ingresada no es válida. Por favor escribe una fecha válida (Ejemplo: "23 de mayo 2027 a las 8:00 pm").');
-                    return;
-                }
+                const testDate = new Date(`${parsedDate.dateStrYmd}T12:00:00`);
                 if (testDate < new Date()) {
                     addAssistantMessage('La fecha del evento debe ser a futuro. Por favor indica una fecha posterior a hoy.');
                     return;
                 }
 
                 updateDataAndSync({
-                    date_time: combinedIso,
-                    venue_time: parsedTime.timeStr24
+                    date_time: `${parsedDate.dateStrYmd}T19:00:00`
                 });
 
-                continueAfterDateTime(parsedDate.dateStrDisplay, parsedTime.timeStrDisplay);
-                break;
-            }
+                const isReligiousOrFormal = ['wedding', 'xv', 'bautizo', 'primera_comunion', 'confirmacion'].includes(data.event_type);
 
-            case 'ask_time_only': {
-                const parsedTime = parseTimeStr(userText);
-                if (!parsedTime) {
+                if (isReligiousOrFormal) {
                     addAssistantMessage(
-                        'Por favor indícame la hora de inicio en formato claro (Ejemplo: "8:00 pm", "20:00 hrs" o "a las 7 pm").'
+                        `Fecha registrada: **${parsedDate.dateStrDisplay}** 📅.\n\n¿Tendrán ceremonia religiosa o misa previa a la fiesta?`,
+                        [
+                            { label: 'Sí, tendremos ceremonia religiosa ⛪', value: 'yes' },
+                            { label: 'No, todo será en el salón o recepción ✨', value: 'no' }
+                        ]
                     );
-                    return;
-                }
-
-                const dateBase = tempDateStrYmd || new Date().toISOString().slice(0, 10);
-                const combinedIso = `${dateBase}T${parsedTime.timeStr24}`;
-
-                updateDataAndSync({
-                    date_time: combinedIso,
-                    venue_time: parsedTime.timeStr24
-                });
-
-                continueAfterDateTime(tempDateDisplay || 'la fecha indicada', parsedTime.timeStrDisplay);
-                break;
-            }
-
-            case 'ask_date_only': {
-                const parsedDate = parseDateStr(userText);
-                if (!parsedDate) {
+                    setCurrentStep('ask_has_misa');
+                } else {
                     addAssistantMessage(
-                        'Por favor indícame el día, mes y año de tu evento (Ejemplo: "23 de mayo 2027" o "18/11/2026").'
+                        `Fecha registrada: **${parsedDate.dateStrDisplay}** 📅.\n\nAhora cuéntame: **¿Cómo se llama el salón, terraza, jardín o hacienda donde lo van a celebrar?** (Ejemplo: Salón Las Palmas / Mansión Borbón)`
                     );
-                    return;
+                    setCurrentStep('ask_venue_name');
                 }
-
-                const currentTime = data.venue_time || '19:00';
-                const combinedIso = `${parsedDate.dateStrYmd}T${currentTime}`;
-                const testDate = new Date(combinedIso);
-                if (testDate < new Date()) {
-                    addAssistantMessage('La fecha del evento debe ser futura. Por favor escribe una fecha posterior a hoy.');
-                    return;
-                }
-
-                updateDataAndSync({
-                    date_time: combinedIso
-                });
-
-                const timeDisplay = `${currentTime} hrs`;
-                continueAfterDateTime(parsedDate.dateStrDisplay, timeDisplay);
                 break;
             }
 
             case 'ask_has_misa': {
                 if (lower === 'yes' || lower.includes('sí') || lower.includes('si')) {
                     addAssistantMessage(
-                        '¿Cómo se llama la parroquia o templo y a qué hora será la misa? ⛪\n(Ejemplo: Parroquia de San Juan a las 5:00 pm)'
+                        '¿Cómo se llama la parroquia, templo o iglesia donde se celebrará la misa? ⛪\n(Ejemplo: Templo Expiatorio / Parroquia San Juan)'
                     );
-                    setCurrentStep('ask_misa_details');
+                    setCurrentStep('ask_misa_name');
                 } else {
                     addAssistantMessage(
-                        '¡Perfecto, todo concentrado en un solo lugar! ✨\n\n¿Cómo se llama el salón, terraza o hacienda donde será la fiesta? (Ejemplo: Salón Las Palmas)'
+                        '¡Perfecto, todo concentrado en un solo lugar! ✨\n\n¿Cómo se llama el salón, terraza, jardín o hacienda donde será la fiesta o recepción? (Ejemplo: Mansión Borbón / Salón Las Palmas)'
                     );
-                    setCurrentStep('ask_venue');
+                    setCurrentStep('ask_venue_name');
                 }
                 break;
             }
 
-            case 'ask_misa_details': {
-                const timeInMisa = parseTimeStr(userText);
+            // ── Paso Misa 1: Nombre de la Iglesia ──
+            case 'ask_misa_name': {
+                const churchName = userText.trim();
+                setTempMisaName(churchName);
+                updateDataAndSync({
+                    misa_name: churchName,
+                    misa_address: churchName
+                });
 
-                if (!timeInMisa) {
-                    // El usuario dio el nombre de la parroquia pero no dio la hora -> Insistir estrictamente
-                    setTempMisaName(userText);
-                    updateDataAndSync({
-                        misa_name: userText,
-                        misa_address: userText
-                    });
+                addAssistantMessage(
+                    `Anoté el templo: **${churchName}** ⛪.\n\nEs un requisito indispensable para la invitación indicar el horario:\n**¿A qué hora será la misa o ceremonia religiosa?**\n(Ejemplo: 5:00 pm, 19:00 hrs o 7:00 pm)`
+                );
+                setCurrentStep('ask_misa_time');
+                break;
+            }
+
+            // ── Paso Misa 2: Hora de la Misa ──
+            case 'ask_misa_time': {
+                const parsedTime = parseTimeStr(userText);
+                if (!parsedTime) {
                     addAssistantMessage(
-                        `Tengo registrada la iglesia: **${userText}** ⛪.\n\nEs un requisito indispensable para la invitación indicar el horario:\n**¿A qué hora será la misa o ceremonia religiosa?**\n(Ejemplo: 5:00 pm o 17:00 hrs)`
+                        'Por favor indícame la hora de la misa (Ejemplo: "5:00 pm", "19:00 hrs" o "7pm").'
                     );
-                    setCurrentStep('ask_misa_time');
                     return;
                 }
 
-                // El usuario proporcionó tanto templo como hora
-                let churchName = userText
-                    .replace(/(?:a\s+las?|a\s+la|alas)?\s*\d{1,2}(?::\d{2})?\s*(?:am|pm|p\.m\.|a\.m\.|hrs|horas|de la tarde|de la noche)?/gi, '')
-                    .replace(/,\s*$/, '')
-                    .trim();
+                updateDataAndSync({
+                    misa_time: parsedTime.timeStr24
+                });
 
-                if (!churchName || churchName.length < 3) {
-                    churchName = userText;
-                }
+                const church = tempMisaName || data.misa_name || 'la iglesia';
+                addAssistantMessage(
+                    `Horario de misa registrado: **${parsedTime.timeStrDisplay}** ⛪.\n\nAhora, **¿cuál es la dirección completa o en qué ciudad se ubica ${church}?**\n(Ejemplo: Madero #789, Col. Centro, León, Gto.)\nEsto es indispensable para que tus invitados abran la ubicación exacta de la misa en Google Maps.`
+                );
+                setCurrentStep('ask_misa_address');
+                break;
+            }
+
+            // ── Paso Misa 3: Dirección / Ciudad de la Misa ──
+            case 'ask_misa_address': {
+                const churchAddress = userText.trim();
+                const churchName = tempMisaName || data.misa_name || 'Templo';
+                const fullMisaLocation = `${churchName}, ${churchAddress}`;
 
                 updateDataAndSync({
                     misa_name: churchName,
-                    misa_address: churchName,
-                    misa_time: timeInMisa.timeStr24
+                    misa_address: fullMisaLocation,
+                    misa_maps_link: `https://maps.google.com/?q=${encodeURIComponent(fullMisaLocation)}`
                 });
 
                 addAssistantMessage(
-                    `¡Anotado! Ceremonia religiosa en **${churchName} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nAhora, ¿cómo se llama el salón, terraza o hacienda donde será la fiesta o recepción? (Ejemplo: Salón Las Palmas)`
+                    `¡Anotado! Ceremonia en **${churchName}** a las **${data.misa_time || '18:00'} hrs** (${churchAddress}) ⛪.\n\nAhora cuéntame de la fiesta: **¿Cómo se llama el salón, terraza, jardín o hacienda donde será la recepción?** (Ejemplo: Mansión Borbón / Salón Las Palmas)`
                 );
-                setCurrentStep('ask_venue');
+                setCurrentStep('ask_venue_name');
                 break;
             }
 
-            case 'ask_misa_time': {
-                const timeInMisa = parseTimeStr(userText);
-                if (!timeInMisa) {
-                    addAssistantMessage(
-                        'Por favor indícame la hora de la misa (Ejemplo: "5:00 pm", "17:00 hrs" o "12 del día").'
-                    );
-                    return;
-                }
-
-                updateDataAndSync({
-                    misa_time: timeInMisa.timeStr24
-                });
-
-                const church = tempMisaName || data.misa_name || 'la parroquia';
-                addAssistantMessage(
-                    `¡Excelente! Ceremonia en **${church} a las ${timeInMisa.timeStrDisplay}** ⛪.\n\nAhora, ¿cómo se llama el salón, terraza o hacienda donde será la fiesta o recepción? (Ejemplo: Hacienda San Gabriel)`
-                );
-                setCurrentStep('ask_venue');
-                break;
-            }
-
-            case 'ask_venue': {
+            // ── Paso Salón 1: Nombre del Salón / Recepción ──
+            case 'ask_venue_name': {
                 const rawVenue = userText.trim();
-
-                // Verificar si el usuario ya incluyó la ciudad en su mensaje (ej: "Salón 1, Guadalajara" o "Salón 1 en Monterrey")
-                let detectedVenue = rawVenue;
-                let detectedCity = '';
-
-                if (rawVenue.includes(',')) {
-                    const parts = rawVenue.split(',');
-                    detectedVenue = parts[0].trim();
-                    detectedCity = parts.slice(1).join(',').trim();
-                } else if (/\s+en\s+/i.test(rawVenue)) {
-                    const parts = rawVenue.split(/\s+en\s+/i);
-                    detectedVenue = parts[0].trim();
-                    detectedCity = parts[1].trim();
-                }
-
-                if (detectedCity) {
-                    // El usuario ingresó salón y ciudad juntos
-                    const fullAddress = `${detectedVenue}, ${detectedCity}`;
-                    updateDataAndSync({
-                        venue_name: detectedVenue,
-                        venue_address: fullAddress,
-                        maps_link: `https://maps.google.com/?q=${encodeURIComponent(fullAddress)}`
-                    });
-
-                    addAssistantMessage(`¡Anotado! Lugar: **${detectedVenue} en ${detectedCity}** 📍.`);
-                    askThemeStyle();
-                    return;
-                }
-
-                // El usuario solo dio el nombre del salón (ej: "salón 1") -> Preguntar estrictamente por la ciudad
                 setTempVenueName(rawVenue);
                 updateDataAndSync({
                     venue_name: rawVenue,
@@ -580,15 +483,40 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 });
 
                 addAssistantMessage(
-                    `Anoté el lugar: **${rawVenue}** 📍.\n\nEs indispensable para tus invitados y para el botón de Google Maps saber la ubicación:\n**¿En qué ciudad o cuál es la dirección completa donde se ubica?**\n(Ejemplo: Guadalajara, Jal. / Monterrey / CDMX)`
+                    `¡Excelente lugar, **${rawVenue}**! 🎉\n\n**¿A qué hora comenzará la recepción o fiesta?**\n(Ejemplo: 8:30 pm, 20:30 hrs o 9:00 pm)`
                 );
-                setCurrentStep('ask_venue_city');
+                setCurrentStep('ask_venue_time');
                 break;
             }
 
-            case 'ask_venue_city': {
+            // ── Paso Salón 2: Hora de la Recepción ──
+            case 'ask_venue_time': {
+                const parsedTime = parseTimeStr(userText);
+                if (!parsedTime) {
+                    addAssistantMessage(
+                        'Por favor indícame la hora de inicio de la recepción (Ejemplo: "8:30 pm", "20:30 hrs" o "9:00 pm").'
+                    );
+                    return;
+                }
+
+                const dateOnly = (data.date_time || '2027-01-01').slice(0, 10);
+                updateDataAndSync({
+                    venue_time: parsedTime.timeStr24,
+                    date_time: `${dateOnly}T${parsedTime.timeStr24}:00`
+                });
+
+                const venue = tempVenueName || data.venue_name || 'el salón';
+                addAssistantMessage(
+                    `Horario de recepción registrado: **${parsedTime.timeStrDisplay}** 🕗.\n\nAhora, **¿cuál es la dirección completa o en qué ciudad se encuentra ${venue}?**\n(Ejemplo: Av. Las Rosas 450, Zapopan, Jal.)\nEsto es indispensable para que tus invitados tengan el botón de cómo llegar con Google Maps.`
+                );
+                setCurrentStep('ask_venue_address');
+                break;
+            }
+
+            // ── Paso Salón 3: Dirección / Ciudad de la Recepción ──
+            case 'ask_venue_address': {
                 const cityOrAddress = userText.trim();
-                const venueName = tempVenueName || data.venue_name || 'Lugar de recepción';
+                const venueName = tempVenueName || data.venue_name || 'Salón de recepción';
                 const fullAddress = `${venueName}, ${cityOrAddress}`;
 
                 updateDataAndSync({
@@ -598,7 +526,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 });
 
                 addAssistantMessage(
-                    `¡Perfecto! Recepción en **${venueName} (${cityOrAddress})** 📍.`
+                    `¡Anotado! Recepción en **${venueName}** a las **${data.venue_time || '20:00'} hrs** (${cityOrAddress}) 📍.`
                 );
                 askThemeStyle();
                 break;
@@ -683,10 +611,11 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 break;
             }
 
+            // ── Paso Hoteles 1: Preguntar si desean recomendar hotel ──
             case 'ask_hotels': {
                 if (lower === 'yes_hotel' || lower.includes('sí') || lower.includes('si')) {
                     addAssistantMessage(
-                        '¿Cómo se llama el hotel recomendado? (Ejemplo: Hotel Fiesta Americana / Tarifa especial con código BODA2027)'
+                        '¿Cómo se llama el hotel recomendado? 🏨\n(Ejemplo: Hotel Fiesta Americana / Quinta Real)'
                     );
                     setCurrentStep('ask_hotel_name');
                 } else {
@@ -695,8 +624,28 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 break;
             }
 
+            // ── Paso Hoteles 2: Nombre del Hotel ──
             case 'ask_hotel_name': {
-                addAssistantMessage('¡Excelente! Lo tendremos listo en la sección de hospedaje.');
+                const hotelName = userText.trim();
+                updateDataAndSync({ hotel_name: hotelName });
+
+                addAssistantMessage(
+                    `Anoté el hotel: **${hotelName}** 🏨.\n\nPara que tus invitados puedan llegar y reservar con facilidad:\n**¿Cuál es la dirección completa o zona donde se ubica, y cuentan con algún código de tarifa especial o reservación?**\n(Ejemplo: Av. López Mateos 123, Guadalajara / Código: BODA2027)`
+                );
+                setCurrentStep('ask_hotel_address');
+                break;
+            }
+
+            // ── Paso Hoteles 3: Dirección y Código del Hotel ──
+            case 'ask_hotel_address': {
+                const hotelDetails = userText.trim();
+                updateDataAndSync({
+                    hotel_address: hotelDetails
+                });
+
+                addAssistantMessage(
+                    `¡Excelente! Toda la información de hospedaje en **${data.hotel_name || 'Hotel'}** (${hotelDetails}) quedó registrada para tus invitados foráneos 🏨.`
+                );
                 askRsvpDeadline();
                 break;
             }
@@ -724,9 +673,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             case 'summary_chat': {
                 if (directValue === 'preview') {
-                    syncPreviewStorage(data);
-                    const currentTpl = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
-                    setPreviewModalSlug(currentTpl.slug);
+                    openPreviewModal(selectedTemplateObj.slug);
                     return;
                 }
                 if (directValue === 'publish') {
@@ -743,7 +690,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     if (newTime) {
                         const dateOnly = (data.date_time || '2027-01-01').slice(0, 10);
                         updateDataAndSync({
-                            date_time: `${dateOnly}T${newTime.timeStr24}`,
+                            date_time: `${dateOnly}T${newTime.timeStr24}:00`,
                             venue_time: newTime.timeStr24
                         });
                         addAssistantMessage(`¡Horario actualizado a ${newTime.timeStrDisplay}! 🎉`);
@@ -756,6 +703,9 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 } else if (lower.includes('misa') || lower.includes('iglesia') || lower.includes('templo')) {
                     updateDataAndSync({ misa_name: userText, misa_address: userText });
                     addAssistantMessage(`¡Listo! Iglesia actualizada a "${userText}".`);
+                } else if (lower.includes('hotel')) {
+                    updateDataAndSync({ hotel_name: userText, hotel_address: userText });
+                    addAssistantMessage(`¡Listo! Hotel actualizado a "${userText}".`);
                 } else if (lower.includes('vestimenta') || lower.includes('ropa') || lower.includes('dress')) {
                     updateDataAndSync({ dress_code: userText });
                     addAssistantMessage(`¡Listo! Código de vestimenta actualizado a "${userText}".`);
@@ -774,26 +724,6 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             default:
                 break;
-        }
-    };
-
-    const continueAfterDateTime = (dateDisplay: string, timeDisplay: string) => {
-        const isReligiousOrFormal = ['wedding', 'xv', 'bautizo', 'primera_comunion', 'confirmacion'].includes(data.event_type);
-
-        if (isReligiousOrFormal) {
-            addAssistantMessage(
-                `Entendido: **${dateDisplay} a las ${timeDisplay}** 🎉.\n\n¿Tendrán ceremonia religiosa o misa previa a la fiesta?`,
-                [
-                    { label: 'Sí, tendremos ceremonia religiosa ⛪', value: 'yes' },
-                    { label: 'No, todo será en el salón o recepción ✨', value: 'no' }
-                ]
-            );
-            setCurrentStep('ask_has_misa');
-        } else {
-            addAssistantMessage(
-                `Entendido: **${dateDisplay} a las ${timeDisplay}** 🎉.\n\n¿Cómo se llama el salón, terraza o hacienda donde lo van a celebrar? (Ejemplo: Salón Las Palmas)`
-            );
-            setCurrentStep('ask_venue');
         }
     };
 
@@ -952,7 +882,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         <button
                             type="button"
                             onClick={onSwitchToManual}
-                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-stone-200 transition-all flex items-center gap-1.5"
+                            className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-stone-200 transition-all flex items-center gap-1.5 cursor-pointer"
                             title="Ver en formulario tradicional"
                         >
                             <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -964,7 +894,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                 setMessages([]);
                                 startConversation();
                             }}
-                            className="p-1.5 rounded-xl text-stone-400 hover:text-white hover:bg-white/10 transition-all"
+                            className="p-1.5 rounded-xl text-stone-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
                             title="Reiniciar conversación"
                         >
                             <RotateCcw className="h-4 w-4" />
@@ -1060,21 +990,35 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs bg-stone-950/60 p-3 rounded-xl border border-white/5">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs bg-stone-950/60 p-3 rounded-xl border border-white/5">
                                             <div>
                                                 <span className="text-[10px] text-stone-500 uppercase block font-semibold flex items-center gap-1">
-                                                    <Clock className="h-2.5 w-2.5" /> Recepción
+                                                    <Clock className="h-2.5 w-2.5 text-pink-400" /> Recepción
                                                 </span>
                                                 <span className="text-stone-200 font-medium">{data.venue_time || 'Por definir'} hrs</span>
+                                                <span className="text-[10px] text-stone-400 block truncate">{data.venue_name || ''}</span>
                                             </div>
+
                                             {data.misa_name && (
                                                 <div>
                                                     <span className="text-[10px] text-stone-500 uppercase block font-semibold flex items-center gap-1">
-                                                        <Church className="h-2.5 w-2.5" /> Misa
+                                                        <Church className="h-2.5 w-2.5 text-sky-400" /> Misa
                                                     </span>
                                                     <span className="text-stone-200 font-medium">{data.misa_time || 'Por definir'} hrs</span>
+                                                    <span className="text-[10px] text-stone-400 block truncate">{data.misa_name}</span>
                                                 </div>
                                             )}
+
+                                            {data.hotel_name && (
+                                                <div>
+                                                    <span className="text-[10px] text-stone-500 uppercase block font-semibold flex items-center gap-1">
+                                                        <Building2 className="h-2.5 w-2.5 text-amber-400" /> Hotel
+                                                    </span>
+                                                    <span className="text-stone-200 font-medium truncate block">{data.hotel_name}</span>
+                                                    <span className="text-[10px] text-stone-400 block truncate">{data.hotel_address || 'Tarifa especial'}</span>
+                                                </div>
+                                            )}
+
                                             <div>
                                                 <span className="text-[10px] text-stone-500 uppercase block font-semibold">Vestimenta</span>
                                                 <span className="text-stone-200 font-medium truncate block">{data.dress_code || 'Formal'}</span>
@@ -1102,7 +1046,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                             <button
                                                 type="button"
                                                 onClick={onSwitchToManual}
-                                                className="py-3 px-4 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-300 transition-all flex items-center justify-center gap-1.5"
+                                                className="py-3 px-4 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-stone-300 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                                             >
                                                 <SlidersHorizontal className="h-3.5 w-3.5" />
                                                 <span>Editar a mano</span>
@@ -1194,7 +1138,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                     <button
                                         type="button"
                                         onClick={() => setPreviewDevice('mobile')}
-                                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                                             previewDevice === 'mobile' ? 'bg-[#DF3B94] text-white' : 'text-stone-400 hover:text-white'
                                         }`}
                                     >
@@ -1204,7 +1148,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                     <button
                                         type="button"
                                         onClick={() => setPreviewDevice('desktop')}
-                                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                                             previewDevice === 'desktop' ? 'bg-[#DF3B94] text-white' : 'text-stone-400 hover:text-white'
                                         }`}
                                     >
@@ -1226,7 +1170,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                 <button
                                     type="button"
                                     onClick={() => setPreviewModalSlug(null)}
-                                    className="p-1.5 rounded-xl bg-stone-800 hover:bg-rose-500/20 text-stone-400 hover:text-rose-400 transition-all"
+                                    className="p-1.5 rounded-xl bg-stone-800 hover:bg-rose-500/20 text-stone-400 hover:text-rose-400 transition-all cursor-pointer"
                                     title="Cerrar vista previa"
                                 >
                                     <X className="h-4 w-4" />
@@ -1265,7 +1209,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                 <button
                                     type="button"
                                     onClick={() => setPreviewModalSlug(null)}
-                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-400 hover:text-white bg-stone-800/80 hover:bg-stone-800 transition-all"
+                                    className="px-4 py-2 rounded-xl text-xs font-semibold text-stone-400 hover:text-white bg-stone-800/80 hover:bg-stone-800 transition-all cursor-pointer"
                                 >
                                     Volver al asistente
                                 </button>
@@ -1279,7 +1223,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                         }
                                         setPreviewModalSlug(null);
                                     }}
-                                    className="px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg shadow-pink-500/30 transition-all flex items-center gap-1.5"
+                                    className="px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg shadow-pink-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
                                 >
                                     <Check className="h-4 w-4" />
                                     <span>Elegir esta plantilla</span>

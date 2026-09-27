@@ -24,6 +24,9 @@ export type WizardData = {
     rsvp_deadline: string;
     theme: string;
     venue_time: string;
+    hotel_name?: string;
+    hotel_address?: string;
+    hotel_code?: string;
 };
 
 const INITIAL_DATA: WizardData = {
@@ -41,6 +44,9 @@ const INITIAL_DATA: WizardData = {
     rsvp_deadline: '',
     theme: 'classic',
     venue_time: '',
+    hotel_name: '',
+    hotel_address: '',
+    hotel_code: '',
 };
 
 export const EVENT_TYPE_OPTIONS = [
@@ -301,7 +307,11 @@ export default function EventWizard() {
                     misa_address: data.misa_address,
                     misa_maps_link: data.misa_maps_link,
                     misa_time: data.misa_time,
-                    venue_time: data.venue_time
+                    venue_time: data.venue_time,
+                    hotel_name: data.hotel_name,
+                    hotel_address: data.hotel_address,
+                    hotel_code: data.hotel_code,
+                    hotels: data.hotel_name ? [{ name: data.hotel_name, address: data.hotel_address, code: data.hotel_code }] : undefined
                 };
                 
                 const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
@@ -343,6 +353,10 @@ export default function EventWizard() {
                         misa_maps_link: data.misa_maps_link,
                         misa_time: data.misa_time,
                         venue_time: data.venue_time,
+                        hotel_name: data.hotel_name,
+                        hotel_address: data.hotel_address,
+                        hotel_code: data.hotel_code,
+                        hotels: data.hotel_name ? [{ name: data.hotel_name, address: data.hotel_address, code: data.hotel_code }] : undefined,
                         // Preset de módulos activos según tipo de evento
                         ...eventPreset,
                         // Preset de orden de secciones según tipo de evento
