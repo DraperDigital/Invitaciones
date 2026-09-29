@@ -12,7 +12,7 @@ export default function ScrollReveal({
     children,
     className = '',
     delay = 0,
-    yOffset = 20,
+    yOffset = 50,
 }: ScrollRevealProps) {
     const shouldReduceMotion = useReducedMotion();
 
@@ -24,9 +24,9 @@ export default function ScrollReveal({
         <motion.div
             initial={{ opacity: 0, y: yOffset }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: true, margin: '-50px' }}
             transition={{
-                duration: 0.75,
+                duration: 1.2,
                 delay,
                 ease: [0.22, 1, 0.36, 1], // Apple-style smooth easeOutQuint
             }}
