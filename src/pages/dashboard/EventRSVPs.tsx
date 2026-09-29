@@ -192,9 +192,9 @@ const EventRSVPs: React.FC = () => {
 
     const getStatusStyles = (status: string) => {
         switch (status) {
-            case 'yes': return 'bg-emerald-50 text-emerald-600 border-emerald-100';
-            case 'no': return 'bg-red-50 text-red-600 border-red-100';
-            default: return 'bg-stone-50 text-stone-400 border-stone-100';
+            case 'yes': return 'bg-emerald-50 text-emerald-800 border-emerald-300 font-bold';
+            case 'no': return 'bg-rose-50 text-rose-800 border-rose-300 font-bold';
+            default: return 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
         }
     };
 
@@ -755,19 +755,19 @@ const EventRSVPs: React.FC = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38]">Reporte de Importación</h3>
-                                    <p className="text-stone-400 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
+                                    <p className="text-stone-600 text-[10px] uppercase font-bold tracking-widest mt-0.5">Problemas detectados al procesar el archivo</p>
                                 </div>
                             </div>
-                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-50 rounded-xl flex items-center justify-center text-stone-300 hover:text-rose-500 transition-all">
+                            <button onClick={() => setImportErrors(null)} className="h-10 w-10 bg-stone-100 border border-stone-200 rounded-xl flex items-center justify-center text-stone-500 hover:text-stone-900 transition-all">
                                 <X className="h-5 w-5" />
                             </button>
                         </div>
 
                         <div className="flex-1 overflow-y-auto pr-4 space-y-3">
                             {importErrors.map((err, idx) => (
-                                <div key={idx} className="p-4 bg-stone-50 border border-stone-100 rounded-2xl flex gap-4 items-start">
-                                    <div className="h-2 w-2 rounded-full bg-amber-300 mt-1.5 flex-shrink-0" />
-                                    <p className="text-sm text-stone-600 leading-relaxed font-light">{err}</p>
+                                <div key={idx} className="p-4 bg-stone-50 border border-stone-200 rounded-2xl flex gap-4 items-start">
+                                    <div className="h-2 w-2 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
+                                    <p className="text-sm text-stone-800 leading-relaxed font-medium">{err}</p>
                                 </div>
                             ))}
                         </div>
@@ -788,13 +788,13 @@ const EventRSVPs: React.FC = () => {
             {isAddGuestOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-10 animate-in fade-in duration-300">
                     <div className="absolute inset-0 bg-[#DF3B94]/40 backdrop-blur-sm" onClick={() => setIsAddGuestOpen(false)} />
-                    <div className="relative w-full max-w-2xl bg-white rounded-[3rem] p-10 sm:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-stone-100">
+                    <div className="relative w-full max-w-2xl bg-white rounded-[3rem] p-10 sm:p-16 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-stone-200">
                         <div className="flex justify-between items-start mb-12">
                             <div className="space-y-2">
                                 <h3 className="text-4xl font-display font-extrabold text-[#222B38]">Nuevo Invitado</h3>
-                                <p className="text-stone-400 text-sm italic">Genera un enlace único de confirmación.</p>
+                                <p className="text-stone-600 text-sm italic font-medium">Genera un enlace único de confirmación.</p>
                             </div>
-                            <button onClick={() => setIsAddGuestOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-50 text-stone-300 hover:text-rose-500 flex items-center justify-center transition-all">
+                            <button onClick={() => setIsAddGuestOpen(false)} className="h-12 w-12 rounded-2xl bg-stone-100 border border-stone-200 text-stone-500 hover:text-stone-900 flex items-center justify-center transition-all">
                                 <X className="h-6 w-6" />
                             </button>
                         </div>
@@ -802,22 +802,22 @@ const EventRSVPs: React.FC = () => {
                         <form onSubmit={saveNewGuest} className="space-y-6">
                             <div className="grid sm:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Nombre del Invitado</label>
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-700 ml-1">Nombre del Invitado</label>
                                     <input 
                                         type="text" 
                                         required 
                                         autoFocus
-                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38] text-lg font-display font-extrabold" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-[#222B38] placeholder:text-stone-400 text-lg font-display font-extrabold" 
                                         placeholder="Ej. Sofía Velázquez"
                                         value={newGuest.name} 
                                         onChange={(e) => setNewGuest({...newGuest, name: e.target.value})} 
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Grupo / Familia</label>
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-700 ml-1">Grupo / Familia</label>
                                     <input 
                                         type="text" 
-                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-[#222B38] placeholder:text-stone-400 font-medium" 
                                         placeholder="Ej. Familia Velázquez"
                                         value={newGuest.group_name} 
                                         onChange={(e) => setNewGuest({...newGuest, group_name: e.target.value})} 
@@ -826,20 +826,20 @@ const EventRSVPs: React.FC = () => {
                             </div>
                             <div className="grid sm:grid-cols-2 gap-8">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">WhatsApp <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-700 ml-1">WhatsApp <span className="text-stone-500 font-normal lowercase">(opcional)</span></label>
                                     <input 
                                         type="tel" 
-                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-[#222B38] placeholder:text-stone-400" 
                                         placeholder="Ej. +525512345678"
                                         value={newGuest.phone} 
                                         onChange={(e) => setNewGuest({...newGuest, phone: e.target.value})} 
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Email <span className="text-stone-300 font-normal lowercase">(opcional)</span></label>
+                                    <label className="text-[10px] uppercase font-bold tracking-widest text-stone-700 ml-1">Email <span className="text-stone-500 font-normal lowercase">(opcional)</span></label>
                                     <input 
                                         type="email" 
-                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all text-[#222B38]" 
+                                        className="w-full p-5 bg-[#F8F9FA] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-[#222B38] placeholder:text-stone-400" 
                                         placeholder="Ej. juan@correo.com"
                                         value={newGuest.email} 
                                         onChange={(e) => setNewGuest({...newGuest, email: e.target.value})} 
@@ -847,23 +847,23 @@ const EventRSVPs: React.FC = () => {
                                 </div>
                             </div>
                             <div className="space-y-3">
-                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400 ml-1">Acompañantes Adicionales</label>
-                                <div className="flex items-center gap-6 bg-[#F8F9FA] p-4 rounded-2xl w-full sm:w-1/2">
+                                <label className="text-[10px] uppercase font-bold tracking-widest text-stone-700 ml-1">Acompañantes Adicionales</label>
+                                <div className="flex items-center gap-6 bg-[#F8F9FA] p-4 rounded-2xl w-full sm:w-1/2 border border-stone-200">
                                     <button 
-                                        type="button"
+                                        type="button" 
                                         onClick={() => setNewGuest({...newGuest, max_plus_ones: Math.max(0, newGuest.max_plus_ones - 1)})}
-                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-300 flex items-center justify-center text-xl font-bold text-stone-700 hover:bg-stone-100 transition-colors shadow-sm"
                                     >
                                         -
                                     </button>
                                     <div className="flex-1 text-center">
-                                        <span className="text-2xl font-display font-extrabold font-bold text-[#222B38]">{newGuest.max_plus_ones}</span>
-                                        <p className="text-[9px] uppercase tracking-tighter text-stone-300 font-bold">Adicionales</p>
+                                        <span className="text-2xl font-display font-black text-[#222B38]">{newGuest.max_plus_ones}</span>
+                                        <p className="text-[9px] uppercase tracking-wider text-stone-600 font-bold">Adicionales</p>
                                     </div>
                                     <button 
-                                        type="button"
+                                        type="button" 
                                         onClick={() => setNewGuest({...newGuest, max_plus_ones: newGuest.max_plus_ones + 1})}
-                                        className="h-12 w-12 rounded-xl bg-white border border-stone-100 flex items-center justify-center text-xl text-stone-500 hover:bg-stone-100 transition-colors shadow-sm"
+                                        className="h-12 w-12 rounded-xl bg-white border border-stone-300 flex items-center justify-center text-xl font-bold text-stone-700 hover:bg-stone-100 transition-colors shadow-sm"
                                     >
                                         +
                                     </button>
@@ -961,7 +961,7 @@ const EventRSVPs: React.FC = () => {
 
                             <div className="space-y-2 md:space-y-4">
                                 <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-display font-extrabold text-[#222B38] tracking-tighter leading-tight md:leading-[0.8] mb-2 break-words">{event.title}</h1>
-                                <p className="text-sm md:text-2xl text-stone-400 font-light italic flex items-center gap-2 md:gap-4 ml-0.5 md:ml-2">
+                                <p className="text-sm md:text-2xl text-stone-600 font-medium italic flex items-center gap-2 md:gap-4 ml-0.5 md:ml-2">
                                     <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#DF3B94]" /> <span className="truncate">{event.venue_name || 'Ubicación Premium'}</span>
                                 </p>
                             </div>
@@ -973,14 +973,14 @@ const EventRSVPs: React.FC = () => {
                                 const isDeadlinePassed = deadlineDate ? isPast(deadlineDate) : false;
 
                                 return (
-                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-4 md:gap-8 pt-6 md:pt-10 border-t border-stone-50">
+                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-4 md:gap-8 pt-6 md:pt-10 border-t border-stone-200">
                                         <div className="space-y-0.5">
-                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Fecha</p>
+                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-600">Fecha</p>
                                             <p className="text-xs md:text-base font-bold text-[#222B38] truncate">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
                                         </div>
-                                        <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                        <div className="h-10 w-px bg-stone-200 hidden lg:block" />
                                         <div className="space-y-0.5">
-                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-300">Cierre</p>
+                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-600">Cierre</p>
                                             <p className="text-xs md:text-base font-bold text-[#DF3B94] truncate">
                                                 {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
                                             </p>
@@ -988,18 +988,18 @@ const EventRSVPs: React.FC = () => {
                                         
                                         {deadlineDate && (
                                             <>
-                                                <div className="h-10 w-px bg-stone-100 hidden lg:block" />
+                                                <div className="h-10 w-px bg-stone-200 hidden lg:block" />
                                                 <div className="col-span-2 lg:col-span-1">
                                                     {isDeadlinePassed ? (
-                                                        <span className="px-3 py-1.5 w-fit bg-red-50 text-red-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
+                                                        <span className="px-3 py-1.5 w-fit bg-red-100 text-red-700 border border-red-200 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
                                                             <AlertTriangle className="h-3 w-3" /> Vencido
                                                         </span>
                                                     ) : daysRemaining !== null && daysRemaining <= 14 ? (
-                                                        <span className="px-3 py-1.5 bg-orange-50 text-orange-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 border border-orange-100 shadow-sm animate-pulse w-fit">
-                                                            <Clock className="h-3 w-3 text-orange-500" /> {daysRemaining} Días rest.
+                                                        <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 border border-orange-200 shadow-sm animate-pulse w-fit">
+                                                            <Clock className="h-3 w-3 text-orange-600" /> {daysRemaining} Días rest.
                                                         </span>
                                                     ) : daysRemaining !== null && (
-                                                        <span className="px-3 py-1.5 w-fit bg-emerald-50 text-emerald-600 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
+                                                        <span className="px-3 py-1.5 w-fit bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
                                                             <Check className="h-3 w-3" /> {daysRemaining} días
                                                         </span>
                                                     )}
@@ -1013,23 +1013,23 @@ const EventRSVPs: React.FC = () => {
 
                         <div className="lg:w-96 space-y-6 md:space-y-8">
                             {/* Visual Progress Bar Card */}
-                            <div className="p-6 md:p-8 bg-[#F8F9FA] rounded-[2rem] md:rounded-[2.5rem] border border-stone-100 shadow-sm space-y-4 md:space-y-6">
+                            <div className="p-6 md:p-8 bg-[#F8F9FA] rounded-[2rem] md:rounded-[2.5rem] border border-stone-200 shadow-sm space-y-4 md:space-y-6">
                                 <div className="flex justify-between items-end">
                                     <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#222B38]">Asistencia</span>
                                     <div className="text-right">
                                         <span className="text-2xl md:text-4xl font-display font-extrabold text-[#222B38]">{metrics.confirmados}</span>
-                                        <span className="text-sm md:text-lg font-display font-extrabold text-stone-300 ml-1">/{metrics.totalInvitados}</span>
+                                        <span className="text-sm md:text-lg font-display font-extrabold text-stone-500 ml-1">/{metrics.totalInvitados}</span>
                                     </div>
                                 </div>
-                                <div className="h-2 md:h-2.5 w-full bg-stone-100 rounded-full overflow-hidden p-0.5">
+                                <div className="h-2 md:h-2.5 w-full bg-stone-200 rounded-full overflow-hidden p-0.5">
                                     <div 
                                         className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(16,185,129,0.4)]"
                                         style={{ width: `${percentConfirmed}%` }}
                                     />
                                 </div>
-                                <div className="flex items-center justify-center gap-2 text-stone-400">
-                                    <Users className="h-3 w-3" />
-                                    <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-widest italic">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
+                                <div className="flex items-center justify-center gap-2 text-stone-600">
+                                    <Users className="h-3.5 w-3.5" />
+                                    <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-widest">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
                                 </div>
                             </div>
 
@@ -1045,20 +1045,20 @@ const EventRSVPs: React.FC = () => {
             <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                 {[
                     { label: 'Total', value: metrics.totalInvitados, color: 'text-stone-900' },
-                    { label: 'Confirm.', value: metrics.confirmados, color: 'text-emerald-500' },
-                    { label: 'Check-in', value: metrics.ingresados, color: 'text-blue-500' },
-                    { label: 'Pend.', value: metrics.pendientes, color: 'text-amber-500' },
-                    { label: 'Decl.', value: metrics.noAsistiran, color: 'text-rose-500' },
+                    { label: 'Confirm.', value: metrics.confirmados, color: 'text-emerald-700' },
+                    { label: 'Check-in', value: metrics.ingresados, color: 'text-blue-700' },
+                    { label: 'Pend.', value: metrics.pendientes, color: 'text-amber-700' },
+                    { label: 'Decl.', value: metrics.noAsistiran, color: 'text-rose-700' },
                 ].map(m => (
-                    <div key={m.label} className="bg-white p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-stone-100 shadow-sm">
-                        <p className="text-[7px] md:text-[8px] uppercase font-bold text-stone-400 mb-1 md:mb-2">{m.label}</p>
-                        <p className={`text-xl md:text-2xl font-display font-extrabold ${m.color}`}>{m.value}</p>
+                    <div key={m.label} className="bg-white p-4 md:p-6 rounded-[1.2rem] md:rounded-[1.5rem] border border-stone-200 shadow-sm">
+                        <p className="text-[8px] md:text-[10px] uppercase font-bold text-stone-600 mb-1 md:mb-2">{m.label}</p>
+                        <p className={`text-xl md:text-2xl font-display font-black ${m.color}`}>{m.value}</p>
                     </div>
                 ))}
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-stone-100 gap-6 overflow-x-auto pb-1">
+            <div className="flex border-b border-stone-200 gap-6 overflow-x-auto pb-1">
                 {[
                     { id: 'list', label: 'Lista', feature: null },
                     { id: 'statistics', label: 'Estadísticas', feature: 'metrics_dashboard' },
@@ -1072,12 +1072,12 @@ const EventRSVPs: React.FC = () => {
                         <button 
                             key={t.id} 
                             onClick={() => !isLocked && setActiveTab(t.id as any)} 
-                            className={`pb-4 text-[10px] uppercase font-bold tracking-widest relative flex items-center gap-2 ${
-                                activeTab === t.id ? 'text-[#222B38]' : 'text-stone-300'
+                            className={`pb-4 text-[11px] uppercase font-bold tracking-widest relative flex items-center gap-2 transition-colors ${
+                                activeTab === t.id ? 'text-stone-950 font-black' : 'text-stone-500 hover:text-stone-900'
                             } ${isLocked ? 'cursor-not-allowed opacity-50' : ''}`}
                         >
                             {t.label}
-                            {isLocked && <span className="text-[8px] bg-stone-100 text-stone-400 px-1.5 py-0.5 rounded-full">PRO</span>}
+                            {isLocked && <span className="text-[8px] bg-stone-200 text-stone-700 font-bold px-1.5 py-0.5 rounded-full">PRO</span>}
                             {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#DF3B94]" />}
                         </button>
                     );
@@ -1115,26 +1115,30 @@ const EventRSVPs: React.FC = () => {
                     </div>
 
                     {/* Search & Filters */}
-                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white p-4 md:p-6 rounded-[2rem] border border-stone-100 shadow-sm">
+                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white p-4 md:p-6 rounded-[2rem] border border-stone-200 shadow-sm">
                         <div className="relative w-full lg:max-w-md">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-300" />
-                            <input type="text" placeholder="Buscar por nombre o grupo..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-11 pr-4 py-3 bg-stone-50 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#DF3B94]/5 transition-all" />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
+                            <input 
+                                type="text" 
+                                placeholder="Buscar por nombre o grupo..." 
+                                value={searchQuery} 
+                                onChange={e => setSearchQuery(e.target.value)} 
+                                className="w-full pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm text-stone-900 placeholder:text-stone-500 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all" 
+                            />
                         </div>
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                             <div className="flex overflow-x-auto pb-1 sm:pb-0 gap-2 no-scrollbar flex-1 lg:flex-none">
                                 {[
-                                    { id: 'all', label: 'Todos', color: 'bg-stone-50 text-stone-400' },
-                                    { id: 'yes', label: 'Conf.', color: 'bg-emerald-50 text-emerald-600 border border-emerald-100' },
-                                    { id: 'pending', label: 'Pend.', color: 'bg-amber-50 text-amber-600 border border-amber-100' },
-                                    { id: 'no', label: 'Decl.', color: 'bg-rose-50 text-rose-600 border border-rose-100' }
+                                    { id: 'all', label: 'Todos', activeClass: 'bg-[#DF3B94] text-white border-[#DF3B94] shadow-md', inactiveClass: 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200 hover:text-stone-900' },
+                                    { id: 'yes', label: 'Conf.', activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-md', inactiveClass: 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100' },
+                                    { id: 'pending', label: 'Pend.', activeClass: 'bg-amber-500 text-white border-amber-500 shadow-md', inactiveClass: 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100' },
+                                    { id: 'no', label: 'Decl.', activeClass: 'bg-rose-600 text-white border-rose-600 shadow-md', inactiveClass: 'bg-rose-50 text-rose-800 border-rose-300 hover:bg-rose-100' }
                                 ].map(f => (
                                     <button 
                                         key={f.id} 
                                         onClick={() => setStatusFilter(f.id as any)} 
-                                        className={`flex-none px-4 py-2.5 rounded-xl text-[7px] sm:text-[8px] uppercase font-bold tracking-widest transition-all ${
-                                            statusFilter === f.id 
-                                            ? (f.id === 'all' ? 'bg-[#DF3B94] text-white shadow-md' : f.color.replace('bg-', 'bg-').split(' ')[0] + ' ' + f.color.split(' ')[1] + ' ring-2 ring-offset-1 ring-[#1B2E1D]/10 shadow-md')
-                                            : 'bg-stone-50 text-stone-400 opacity-60 hover:opacity-100'
+                                        className={`flex-none px-4 py-2.5 rounded-xl text-[8px] sm:text-[9px] uppercase font-extrabold tracking-widest border transition-all ${
+                                            statusFilter === f.id ? f.activeClass : f.inactiveClass
                                         }`}
                                     >
                                         {f.label}
@@ -1142,10 +1146,10 @@ const EventRSVPs: React.FC = () => {
                                 ))}
                             </div>
                             <div className="flex gap-2 ml-auto">
-                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 hover:text-[#222B38] flex items-center justify-center transition-colors" title="Exportar PDF">
+                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors" title="Exportar PDF">
                                     <Download className="h-4 w-4" />
                                 </button>
-                                <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-50 rounded-xl text-stone-400 flex items-center justify-center transition-colors">
+                                <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors">
                                     {viewMode === 'table' ? <LayoutDashboard className="h-4 w-4" /> : <Users className="h-4 w-4" />}
                                 </button>
                             </div>
@@ -1154,14 +1158,14 @@ const EventRSVPs: React.FC = () => {
 
                     {/* Bulk Actions Bar */}
                     {selectedIds.size > 0 && (
-                        <div className="flex flex-col sm:flex-row items-center justify-between bg-rose-50 border border-rose-100 p-4 md:p-6 rounded-[2rem] shadow-md animate-in slide-in-from-top-4 duration-500 gap-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-between bg-rose-50 border border-rose-200 p-4 md:p-6 rounded-[2rem] shadow-md animate-in slide-in-from-top-4 duration-500 gap-4">
                             <div className="flex items-center gap-3 w-full sm:w-auto">
-                                <div className="h-10 w-10 md:h-12 md:w-12 bg-rose-100 rounded-xl md:rounded-2xl flex items-center justify-center text-rose-600 font-bold text-base md:text-lg">
+                                <div className="h-10 w-10 md:h-12 md:w-12 bg-rose-200 rounded-xl md:rounded-2xl flex items-center justify-center text-rose-800 font-bold text-base md:text-lg">
                                     {selectedIds.size}
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-[10px] md:text-xs text-rose-700 font-bold uppercase tracking-widest">Seleccionados</span>
-                                    <span className="text-xs md:text-sm text-rose-600/70 italic">
+                                    <span className="text-[10px] md:text-xs text-rose-900 font-extrabold uppercase tracking-widest">Seleccionados</span>
+                                    <span className="text-xs md:text-sm text-rose-700 italic font-medium">
                                         {isBulkConfirmOpen ? '¿Estás seguro de eliminar?' : 'Acción en bloque disponible'}
                                     </span>
                                 </div>
@@ -1170,14 +1174,14 @@ const EventRSVPs: React.FC = () => {
                                 {isBulkConfirmOpen ? (
                                     <>
                                         <button 
-                                            onClick={() => setIsBulkConfirmOpen(false)}
-                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                            onClick={() => setIsBulkConfirmOpen(false)} 
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-700 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-300 hover:bg-stone-100 transition-all"
                                         >
                                             Cancelar
                                         </button>
                                         <button 
-                                            onClick={handleBulkDelete}
-                                            disabled={isDeletingBulk}
+                                            onClick={handleBulkDelete} 
+                                            disabled={isDeletingBulk} 
                                             className="flex-1 sm:flex-none px-6 py-3 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
                                         >
                                             {isDeletingBulk ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Confirmar'}
@@ -1186,13 +1190,13 @@ const EventRSVPs: React.FC = () => {
                                 ) : (
                                     <>
                                         <button 
-                                            onClick={() => { setSelectedIds(new Set()); setIsBulkConfirmOpen(false); }}
-                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-500 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-200 hover:bg-stone-50 transition-all"
+                                            onClick={() => { setSelectedIds(new Set()); setIsBulkConfirmOpen(false); }} 
+                                            className="flex-1 sm:flex-none px-6 py-3 bg-white text-stone-700 rounded-xl text-[9px] uppercase font-bold tracking-widest border border-stone-300 hover:bg-stone-100 transition-all"
                                         >
                                             Limpiar
                                         </button>
                                         <button 
-                                            onClick={() => setIsBulkConfirmOpen(true)}
+                                            onClick={() => setIsBulkConfirmOpen(true)} 
                                             className="flex-1 sm:flex-none px-6 py-3 bg-rose-600 text-white rounded-xl text-[9px] uppercase font-bold tracking-widest shadow-lg shadow-rose-200/50 hover:bg-rose-700 transition-all flex items-center justify-center gap-2"
                                         >
                                             <Trash2 className="h-3.5 w-3.5" /> Eliminar
@@ -1203,17 +1207,17 @@ const EventRSVPs: React.FC = () => {
                         </div>
                     )}
 
-                    <div className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden">
+                    <div className="bg-white rounded-[2rem] border border-stone-200 shadow-sm overflow-hidden">
                         {viewMode === 'cards' ? (
                             <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {filteredGuests.map(g => {
                                     const rsvp = g.rsvps?.[0];
                                     const status = getGuestStatus(g);
                                     const cardStyles = status === 'yes' 
-                                        ? 'border-emerald-100 bg-emerald-50/10' 
+                                        ? 'border-emerald-200 bg-emerald-50/20' 
                                         : status === 'no' 
-                                            ? 'border-rose-100 bg-rose-50/10' 
-                                            : 'border-stone-100 bg-white';
+                                            ? 'border-rose-200 bg-rose-50/20' 
+                                            : 'border-stone-200 bg-white';
 
                                     return (
                                         <div key={g.id} className={`${cardStyles} p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] border shadow-sm space-y-4 hover:shadow-md transition-all relative group/card`}>
@@ -1223,7 +1227,7 @@ const EventRSVPs: React.FC = () => {
                                                     className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                                         selectedIds.has(g.id)
                                                             ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
-                                                            : 'bg-white border-stone-200 text-transparent group-hover/card:border-stone-300'
+                                                            : 'bg-white border-stone-300 text-transparent group-hover/card:border-stone-400'
                                                     }`}
                                                 >
                                                     <Check className="h-3 w-3" />
@@ -1233,35 +1237,35 @@ const EventRSVPs: React.FC = () => {
                                             <div className="flex justify-between items-start pt-2">
                                                 <div className="pl-8">
                                                     <h4 className="font-display font-extrabold text-base sm:text-lg text-[#222B38] leading-tight mb-1">{g.name}</h4>
-                                                    <p className="text-[7px] sm:text-[8px] uppercase font-bold text-stone-300 tracking-widest">{g.group_name || 'Individual'}</p>
+                                                    <p className="text-[8px] sm:text-[9px] uppercase font-bold text-stone-500 tracking-widest">{g.group_name || 'Individual'}</p>
                                                 </div>
                                                 <div className="relative inline-flex items-center group">
                                                     <select
                                                         value={status}
                                                         onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
                                                         title="Cambiar estado"
-                                                        className={`appearance-none outline-none pl-3 pr-6 py-1 rounded-full border text-[7px] sm:text-[8px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm ${getStatusStyles(status)}`}
+                                                        className={`appearance-none outline-none pl-3 pr-6 py-1 rounded-full border text-[8px] sm:text-[9px] font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm ${getStatusStyles(status)}`}
                                                     >
-                                                        <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
-                                                        <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
-                                                        <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
+                                                        <option value="pending" className="text-amber-800 bg-white font-bold">PENDIENTE</option>
+                                                        <option value="yes" className="text-emerald-800 bg-white font-bold">CONFIRMADO</option>
+                                                        <option value="no" className="text-rose-800 bg-white font-bold">DECLINADO</option>
                                                     </select>
                                                     <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(status).split(' ')[1]}`} />
                                                 </div>
                                             </div>
                                             
-                                            <div className="grid grid-cols-3 gap-2 py-3 text-center text-stone-500 border-y border-stone-100/30">
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Pax</span>
-                                                    <span className="text-sm font-bold text-stone-700">{getGuestPax(g)}</span>
+                                            <div className="grid grid-cols-3 gap-2 py-3 text-center border-y border-stone-200">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[8px] uppercase font-bold tracking-widest text-stone-600 mb-0.5">Pax</span>
+                                                    <span className="text-sm font-black text-stone-900">{getGuestPax(g)}</span>
                                                 </div>
-                                                <div className="flex flex-col opacity-80 border-x border-stone-100/50">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Ingreso</span>
-                                                    <span className="text-[10px] font-display font-extrabold font-medium text-stone-600">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
+                                                <div className="flex flex-col border-x border-stone-200">
+                                                    <span className="text-[8px] uppercase font-bold tracking-widest text-stone-600 mb-0.5">Ingreso</span>
+                                                    <span className="text-[10px] font-semibold text-stone-700">{g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}</span>
                                                 </div>
-                                                <div className="flex flex-col opacity-80">
-                                                    <span className="text-[7px] uppercase font-bold tracking-widest text-[#222B38] mb-0.5">Mesa</span>
-                                                    <span className="text-[10px] font-bold text-stone-700 truncate px-1">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[8px] uppercase font-bold tracking-widest text-stone-600 mb-0.5">Mesa</span>
+                                                    <span className="text-[10px] font-bold text-stone-800 truncate px-1">
                                                         {g.table_id ? (tables.find(t => t.id === g.table_id)?.name || '-') : '-'}
                                                     </span>
                                                 </div>
@@ -1271,26 +1275,26 @@ const EventRSVPs: React.FC = () => {
                                                 <div className="flex items-center gap-3">
                                                     <button 
                                                         onClick={() => handleToggleSent(g)}
-                                                        className={`h-6 w-6 rounded-lg border flex items-center justify-center transition-all ${
+                                                        className={`h-7 w-7 rounded-lg border flex items-center justify-center transition-all ${
                                                             g.invitation_sent_at 
                                                                 ? 'bg-[#DF3B94] border-[#DF3B94] text-white shadow-md' 
-                                                                : 'bg-white border-stone-200 text-stone-300 hover:border-[#DF3B94]'
+                                                                : 'bg-white border-stone-300 text-stone-400 hover:border-[#DF3B94]'
                                                         }`}
                                                         title="Marcar enviado"
                                                     >
-                                                        <Check className="h-3.5 w-3.5" />
+                                                        <Check className="h-4 w-4" />
                                                     </button>
                                                     <button 
                                                         onClick={() => handleSendReminder(g)} 
-                                                        className={`h-6 w-6 rounded-lg border border-stone-200 flex items-center justify-center transition-all hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 text-stone-400`}
+                                                        className={`h-7 w-7 rounded-lg border border-stone-300 flex items-center justify-center transition-all hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 text-stone-600`}
                                                         title="WhatsApp"
                                                     >
-                                                        <MessageSquare className="h-3.5 w-3.5" />
+                                                        <MessageSquare className="h-4 w-4" />
                                                     </button>
                                                 </div>
                                                 
-                                                <div className="flex items-center gap-2">
-                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#222B38] transition-colors">
+                                                <div className="flex items-center gap-1.5">
+                                                    <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-500 hover:text-[#DF3B94] hover:bg-stone-100 rounded-lg transition-colors" title="Código QR">
                                                         <QrCode className="h-4 w-4" />
                                                     </button>
                                                     <button 
@@ -1305,11 +1309,12 @@ const EventRSVPs: React.FC = () => {
                                                                 table_id: g.table_id || ''
                                                             });
                                                         }}
-                                                        className="p-2 text-stone-300 hover:text-blue-500 transition-colors"
+                                                        className="p-2 text-stone-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        title="Editar"
                                                     >
                                                         <Edit2 className="h-4 w-4" />
                                                     </button>
-                                                    <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500 transition-colors">
+                                                    <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Eliminar">
                                                         <Trash2 className="h-4 w-4" />
                                                     </button>
                                                 </div>
@@ -1321,7 +1326,7 @@ const EventRSVPs: React.FC = () => {
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-[#F8F9FA] border-b border-stone-100 text-[10px] uppercase font-bold text-stone-400">
+                                    <thead className="bg-[#F8F9FA] border-b border-stone-200 text-[11px] uppercase font-extrabold text-stone-700 tracking-wider">
                                         <tr>
                                             <th className="px-4 py-6 w-12">
                                                 <button 
@@ -1331,7 +1336,7 @@ const EventRSVPs: React.FC = () => {
                                                             ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
                                                             : selectedIds.size > 0 
                                                                 ? 'bg-[#DF3B94]/30 border-[#DF3B94] text-white'
-                                                                : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
+                                                                : 'bg-white border-stone-300 text-transparent hover:border-stone-500'
                                                     }`}
                                                 >
                                                     <Check className="h-3 w-3" />
@@ -1348,26 +1353,26 @@ const EventRSVPs: React.FC = () => {
                                             {isManageMode && <th className="px-8 py-6 text-center">Acciones</th>}
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-stone-50">
+                                    <tbody className="divide-y divide-stone-200">
                                         {filteredGuests.map(g => (
-                                            <tr key={g.id} className={`transition-all ${selectedIds.has(g.id) ? 'bg-rose-50/50' : 'hover:bg-stone-50/50'}`}>
+                                            <tr key={g.id} className={`transition-all ${selectedIds.has(g.id) ? 'bg-rose-50/60' : 'hover:bg-stone-50/80'}`}>
                                                 <td className="px-4 py-6">
                                                     <button 
                                                         onClick={() => toggleSelectGuest(g.id)}
                                                         className={`h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all ${
                                                             selectedIds.has(g.id)
                                                                 ? 'bg-[#DF3B94] border-[#DF3B94] text-white'
-                                                                : 'bg-white border-stone-200 text-transparent hover:border-stone-400'
+                                                                : 'bg-white border-stone-300 text-transparent hover:border-stone-500'
                                                         }`}
                                                     >
                                                         <Check className="h-3 w-3" />
                                                     </button>
                                                 </td>
-                                                <td className="px-8 py-6 font-medium text-[#222B38]">
-                                                    {editingGuestId === g.id ? <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-200 px-3 py-1.5 rounded-lg w-full" /> : g.name}
+                                                <td className="px-8 py-6 font-semibold text-stone-900">
+                                                    {editingGuestId === g.id ? <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-300 px-3 py-1.5 rounded-lg w-full text-stone-900 bg-white" /> : g.name}
                                                 </td>
-                                                <td className="px-8 py-6 text-stone-400 italic">
-                                                    {editingGuestId === g.id ? <input value={editData.group_name} onChange={e => setEditData({...editData, group_name: e.target.value})} className="border border-stone-200 px-3 py-1.5 rounded-lg w-full" /> : g.group_name || 'Individual'}
+                                                <td className="px-8 py-6 text-stone-600 font-medium">
+                                                    {editingGuestId === g.id ? <input value={editData.group_name} onChange={e => setEditData({...editData, group_name: e.target.value})} className="border border-stone-300 px-3 py-1.5 rounded-lg w-full text-stone-900 bg-white" /> : g.group_name || 'Individual'}
                                                 </td>
                                                 <td className="px-8 py-6">
                                                      <div className="flex justify-center">
@@ -1376,7 +1381,7 @@ const EventRSVPs: React.FC = () => {
                                                             className={`h-6 w-6 rounded-lg border-2 flex items-center justify-center transition-all ${
                                                                 g.invitation_sent_at 
                                                                     ? 'bg-[#DF3B94] border-[#DF3B94] text-white' 
-                                                                    : 'bg-white border-stone-200 text-transparent hover:border-[#DF3B94]/30'
+                                                                    : 'bg-white border-stone-300 text-transparent hover:border-[#DF3B94]'
                                                             }`}
                                                             title={g.invitation_sent_at ? "Marcar como no enviado" : "Marcar como enviado"}
                                                         >
@@ -1389,7 +1394,7 @@ const EventRSVPs: React.FC = () => {
                                                         <select 
                                                             value={editData.status} 
                                                             onChange={e => setEditData({...editData, status: e.target.value as any})}
-                                                            className="border border-stone-200 px-2 py-1.5 rounded-lg text-xs"
+                                                            className="border border-stone-300 px-2 py-1.5 rounded-lg text-xs text-stone-900 bg-white font-semibold"
                                                         >
                                                             <option value="pending">Pendiente</option>
                                                             <option value="yes">Confirmado</option>
@@ -1401,44 +1406,44 @@ const EventRSVPs: React.FC = () => {
                                                             value={getGuestStatus(g)}
                                                             onChange={(e) => { e.stopPropagation(); handleQuickStatusToggle(g, e.target.value); }}
                                                             title="Cambiar estado"
-                                                            className={`appearance-none outline-none pl-3 pr-7 py-1.5 rounded-full border text-[8px] uppercase font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(getGuestStatus(g))}`}
+                                                            className={`appearance-none outline-none pl-3 pr-7 py-1.5 rounded-full border text-[9px] uppercase font-bold cursor-pointer transition-transform group-hover:scale-105 shadow-sm hover:shadow-md ${getStatusStyles(getGuestStatus(g))}`}
                                                         >
-                                                            <option value="pending" className="text-amber-600 bg-white">PENDIENTE</option>
-                                                            <option value="yes" className="text-emerald-600 bg-white">CONFIRMADO</option>
-                                                            <option value="no" className="text-rose-600 bg-white">DECLINADO</option>
+                                                            <option value="pending" className="text-amber-800 bg-white font-bold">PENDIENTE</option>
+                                                            <option value="yes" className="text-emerald-800 bg-white font-bold">CONFIRMADO</option>
+                                                            <option value="no" className="text-rose-800 bg-white font-bold">DECLINADO</option>
                                                         </select>
-                                                        <ChevronDown className={`absolute right-2 h-3 w-3 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(getGuestStatus(g)).split(' ')[1]}`} />
+                                                        <ChevronDown className={`absolute right-2 h-3.5 w-3.5 pointer-events-none transition-transform group-hover:scale-110 ${getStatusStyles(getGuestStatus(g)).split(' ')[1]}`} />
                                                     </div>
                                                     )}
                                                 </td>
-                                                 <td className="px-8 py-6 text-center font-bold text-stone-700">
+                                                 <td className="px-8 py-6 text-center font-bold text-stone-900">
                                                      {editingGuestId === g.id ? (
                                                          <div className="flex flex-col items-center gap-1 group/pax">
                                                              <input 
                                                                  type="number" 
-                                                                 min="1"
+                                                                 min="1" 
                                                                  value={editData.max_plus_ones + 1}
                                                                  onChange={e => {
                                                                      const total = parseInt(e.target.value) || 1;
                                                                      setEditData({...editData, max_plus_ones: Math.max(0, total - 1)});
                                                                  }}
-                                                                 className="w-14 text-center border border-stone-200 rounded py-1 text-sm bg-white focus:ring-1 focus:ring-[#DF3B94] outline-none"
+                                                                 className="w-14 text-center border border-stone-300 rounded py-1 text-sm bg-white text-stone-900 focus:ring-1 focus:ring-[#DF3B94] outline-none font-bold"
                                                              />
-                                                             <span className="text-[7px] text-stone-300 uppercase tracking-tighter">Personas</span>
+                                                             <span className="text-[8px] text-stone-500 uppercase tracking-tight font-bold">Personas</span>
                                                          </div>
                                                      ) : (
                                                          getGuestPax(g)
                                                      )}
                                                  </td>
                                                 {hasFeature('access_control') && (
-                                                    <td className="px-8 py-6 text-center text-xs text-stone-400">
-                                                        {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'}
+                                                    <td className="px-8 py-6 text-center text-xs text-stone-700 font-medium">
+                                                        {g.checked_in_at ? new Date(g.checked_in_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : <span className="text-stone-400 font-bold">-</span>}
                                                     </td>
                                                 )}
                                                 {hasFeature('table_management') && (
-                                                    <td className="px-8 py-6 text-center text-xs text-stone-400 font-medium">
+                                                    <td className="px-8 py-6 text-center text-xs text-stone-800 font-semibold">
                                                         {getGuestStatus(g) !== 'yes' ? (
-                                                            <span className="text-stone-300 text-[9px] italic" title="Solo invitados confirmados pueden tener mesa">🔒</span>
+                                                            <span className="text-stone-400 text-[10px] italic" title="Solo invitados confirmados pueden tener mesa">🔒</span>
                                                         ) : editingGuestId === g.id ? (
                                                             <select 
                                                                 value={editData.table_id || ''} 
@@ -1453,7 +1458,7 @@ const EventRSVPs: React.FC = () => {
                                                                     }
                                                                     setEditData({...editData, table_id: tid});
                                                                 }}
-                                                                className="border border-stone-200 px-2 py-1 rounded text-center text-xs bg-white cursor-pointer"
+                                                                className="border border-stone-300 px-2 py-1 rounded text-center text-xs bg-white text-stone-900 cursor-pointer font-medium"
                                                             >
                                                                 <option value="">Sin mesa</option>
                                                                 {tables.map(t => {
@@ -1489,7 +1494,7 @@ const EventRSVPs: React.FC = () => {
                                                                         toast.error('Error al asignar mesa');
                                                                     }
                                                                 }}
-                                                                className="appearance-none bg-transparent text-center text-xs cursor-pointer hover:text-[#222B38] outline-none border-b border-transparent hover:border-stone-300 pb-0.5 transition-all"
+                                                                className="appearance-none bg-transparent text-center text-xs cursor-pointer text-stone-800 hover:text-stone-950 font-semibold outline-none border-b border-transparent hover:border-stone-400 pb-0.5 transition-all"
                                                             >
                                                                 <option value="">-</option>
                                                                 {tables.map(t => {
@@ -1503,32 +1508,32 @@ const EventRSVPs: React.FC = () => {
                                                 )}
                                                 {hasFeature('access_control') && (
                                                     <td className="px-8 py-6 text-center">
-                                                        <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-300 hover:text-[#222B38]"><QrCode className="h-4 w-4" /></button>
+                                                        <button onClick={() => setSelectedGuestForQR(g)} className="p-2 text-stone-500 hover:text-[#DF3B94] hover:bg-stone-100 rounded-lg transition-colors" title="Código QR"><QrCode className="h-4 w-4" /></button>
                                                     </td>
                                                 )}
                                                 {isManageMode && (
                                                     <td className="px-8 py-6 text-center">
                                                         {editingGuestId === g.id ? (
                                                             <div className="flex gap-2 justify-center">
-                                                                <button onClick={() => handleSaveInline(g)} className="text-emerald-500"><Save className="h-4 w-4" /></button>
-                                                                <button onClick={() => setEditingGuestId(null)} className="text-stone-300"><X className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleSaveInline(g)} className="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors"><Save className="h-4 w-4" /></button>
+                                                                <button onClick={() => setEditingGuestId(null)} className="p-1.5 text-stone-500 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"><X className="h-4 w-4" /></button>
                                                             </div>
                                                         ) : (
-                                                            <div className="flex gap-2 justify-center">
-                                                                <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-300 hover:text-[#222B38]" title="Copiar Link"><Copy className="h-4 w-4" /></button>
-                                                                <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-300 hover:text-emerald-500" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
-                                                                 <button onClick={() => { 
-                                                                     setEditingGuestId(g.id); 
-                                                                     setEditData({ 
-                                                                         name: g.name, 
-                                                                         group_name: g.group_name || '', 
-                                                                         status: getGuestStatus(g), 
-                                                                         plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, 
-                                                                         max_plus_ones: g.max_plus_ones || 0,
-                                                                         table_id: g.table_id || '' 
-                                                                     }); 
-                                                                 }} className="p-2 text-stone-300 hover:text-[#222B38]" title="Editar"><Edit2 className="h-4 w-4" /></button>
-                                                                <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-300 hover:text-rose-500" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                                                            <div className="flex gap-1.5 justify-center">
+                                                                <button onClick={() => copyIndividualLink(g)} className="p-2 text-stone-500 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors" title="Copiar Link"><Copy className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleSendReminder(g)} className="p-2 text-stone-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="WhatsApp"><MessageSquare className="h-4 w-4" /></button>
+                                                                <button onClick={() => { 
+                                                                    setEditingGuestId(g.id); 
+                                                                    setEditData({ 
+                                                                        name: g.name, 
+                                                                        group_name: g.group_name || '', 
+                                                                        status: getGuestStatus(g), 
+                                                                        plus_ones_confirmed: g.rsvps?.[0]?.plus_ones_confirmed || 0, 
+                                                                        max_plus_ones: g.max_plus_ones || 0, 
+                                                                        table_id: g.table_id || '' 
+                                                                    }); 
+                                                                }} className="p-2 text-stone-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Editar"><Edit2 className="h-4 w-4" /></button>
+                                                                <button onClick={() => handleDelete(g.id)} className="p-2 text-stone-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                                                             </div>
                                                         )}
                                                     </td>
@@ -1545,8 +1550,8 @@ const EventRSVPs: React.FC = () => {
 
             {activeTab === 'statistics' && (
                 <div className="grid md:grid-cols-2 gap-8">
-                    <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm h-80">
-                        <h3 className="font-display font-extrabold mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Estado RSVP</h3>
+                    <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm h-80">
+                        <h3 className="font-display font-extrabold mb-6 text-stone-700 uppercase text-[11px] tracking-wider">Estado RSVP</h3>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={statusData} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
@@ -1556,8 +1561,8 @@ const EventRSVPs: React.FC = () => {
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
-                    <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm h-80">
-                        <h3 className="font-display font-extrabold mb-6 text-stone-400 uppercase text-[10px] tracking-widest font-bold">Check-in</h3>
+                    <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm h-80">
+                        <h3 className="font-display font-extrabold mb-6 text-stone-700 uppercase text-[11px] tracking-wider">Check-in</h3>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={attendanceData}>
                                 <XAxis dataKey="name" hide />
@@ -1574,9 +1579,9 @@ const EventRSVPs: React.FC = () => {
             {activeTab === 'messages' && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {guests.filter(g => g.rsvps?.[0]?.message).map(g => (
-                        <div key={g.id} className="bg-white p-6 rounded-[2rem] border border-stone-100 shadow-sm space-y-4">
-                            <h4 className="font-display font-extrabold text-lg">{g.name}</h4>
-                            <p className="text-stone-500 italic text-sm">"{g.rsvps[0].message}"</p>
+                        <div key={g.id} className="bg-white p-6 rounded-[2rem] border border-stone-200 shadow-sm space-y-4">
+                            <h4 className="font-display font-extrabold text-lg text-stone-900">{g.name}</h4>
+                            <p className="text-stone-700 italic text-sm font-medium">"{g.rsvps[0].message}"</p>
                         </div>
                     ))}
                 </div>
@@ -1584,12 +1589,12 @@ const EventRSVPs: React.FC = () => {
 
             {activeTab === 'tables' && (
                 <div className="space-y-8">
-                    <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
-                        <h3 className="font-display font-extrabold text-xl">Distribución de Mesas</h3>
+                    <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <h3 className="font-display font-extrabold text-xl text-stone-900">Distribución de Mesas</h3>
                         <div className="flex gap-3 w-full sm:w-auto">
                             <button 
                                 onClick={handleExportTablesPDF}
-                                className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-200 text-stone-600 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#DF3B94] transition-all"
+                                className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-300 text-stone-700 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all"
                             >
                                 <Download className="h-4 w-4" /> Exportar PDF
                             </button>
@@ -1602,9 +1607,9 @@ const EventRSVPs: React.FC = () => {
                         </div>
                     </div>
                     {isAddingTable && (
-                        <div className="bg-white p-8 rounded-[2rem] border border-stone-100 shadow-sm grid md:grid-cols-3 gap-6 items-end">
-                            <input value={newTable.name} onChange={e => setNewTable({...newTable, name: e.target.value})} placeholder="Nombre Mesa" className="bg-stone-50 p-4 rounded-xl outline-none" />
-                            <input type="number" value={newTable.capacity} onChange={e => setNewTable({...newTable, capacity: parseInt(e.target.value)})} className="bg-stone-50 p-4 rounded-xl outline-none" />
+                        <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm grid md:grid-cols-3 gap-6 items-end">
+                            <input value={newTable.name} onChange={e => setNewTable({...newTable, name: e.target.value})} placeholder="Nombre Mesa" className="bg-stone-50 p-4 rounded-xl border border-stone-200 text-stone-900 placeholder:text-stone-500 outline-none" />
+                            <input type="number" value={newTable.capacity} onChange={e => setNewTable({...newTable, capacity: parseInt(e.target.value)})} className="bg-stone-50 p-4 rounded-xl border border-stone-200 text-stone-900 outline-none" />
                             <button onClick={handleAddTable} className="py-4 bg-[#DF3B94] text-white rounded-xl font-bold text-[10px] uppercase">Guardar</button>
                         </div>
                     )}
@@ -1615,27 +1620,27 @@ const EventRSVPs: React.FC = () => {
                             const availablePax = t.capacity - occupiedPax;
                             const fillPercent = t.capacity > 0 ? Math.min((occupiedPax / t.capacity) * 100, 100) : 0;
                             return (
-                                <div key={t.id} className={`bg-white p-6 rounded-[2rem] border shadow-sm space-y-4 ${availablePax <= 0 ? 'border-emerald-200 bg-emerald-50/30' : 'border-stone-100'}`}>
+                                <div key={t.id} className={`bg-white p-6 rounded-[2rem] border shadow-sm space-y-4 ${availablePax <= 0 ? 'border-emerald-300 bg-emerald-50/30' : 'border-stone-200'}`}>
                                     <div className="flex justify-between items-start">
-                                        <h4 className="font-display font-extrabold text-lg">{t.name}</h4>
-                                        <button onClick={() => handleDeleteTable(t.id)} className="text-stone-300 hover:text-rose-500"><Trash2 className="h-4 w-4" /></button>
+                                        <h4 className="font-display font-extrabold text-lg text-stone-900">{t.name}</h4>
+                                        <button onClick={() => handleDeleteTable(t.id)} className="p-1.5 text-stone-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><Trash2 className="h-4 w-4" /></button>
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-center">
-                                            <p className="text-[8px] font-bold text-stone-400 uppercase">{occupiedPax} de {t.capacity} PAX</p>
-                                            <p className={`text-[8px] font-bold uppercase ${availablePax <= 0 ? 'text-emerald-600' : availablePax <= 2 ? 'text-amber-500' : 'text-stone-300'}`}>
+                                            <p className="text-[9px] font-bold text-stone-700 uppercase">{occupiedPax} de {t.capacity} PAX</p>
+                                            <p className={`text-[9px] font-bold uppercase ${availablePax <= 0 ? 'text-emerald-700' : availablePax <= 2 ? 'text-amber-700' : 'text-stone-600'}`}>
                                                 {availablePax <= 0 ? 'COMPLETA' : `${availablePax} libres`}
                                             </p>
                                         </div>
-                                        <div className="w-full bg-stone-100 rounded-full h-1.5">
+                                        <div className="w-full bg-stone-200 rounded-full h-1.5">
                                             <div className={`h-1.5 rounded-full transition-all ${fillPercent >= 100 ? 'bg-emerald-500' : fillPercent >= 80 ? 'bg-amber-400' : 'bg-[#DF3B94]'}`} style={{ width: `${fillPercent}%` }} />
                                         </div>
                                     </div>
                                     <div className="space-y-1">
                                         {tableGuests.map(g => (
                                             <div key={g.id} className="flex justify-between items-center text-xs">
-                                                <span className="text-stone-500">• {g.name}</span>
-                                                <span className="text-stone-300 font-bold">{getGuestPax(g)} pax</span>
+                                                <span className="text-stone-800 font-medium">• {g.name}</span>
+                                                <span className="text-stone-700 font-bold">{getGuestPax(g)} pax</span>
                                             </div>
                                         ))}
                                     </div>
@@ -1649,10 +1654,10 @@ const EventRSVPs: React.FC = () => {
             {activeTab === 'reminders' && (
                 <div className="grid md:grid-cols-3 gap-6">
                     {guests.filter(g => getGuestStatus(g) === 'pending').map(g => (
-                        <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-stone-100 shadow-sm flex justify-between items-center">
+                        <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-stone-200 shadow-sm flex justify-between items-center">
                             <div>
-                                <h4 className="font-display font-extrabold text-lg">{g.name}</h4>
-                                <p className="text-[8px] text-stone-300 uppercase font-bold">{g.last_reminder_at ? `Avisado: ${new Date(g.last_reminder_at).toLocaleDateString()}` : 'Sin avisos'}</p>
+                                <h4 className="font-display font-extrabold text-lg text-stone-900">{g.name}</h4>
+                                <p className="text-[9px] text-stone-600 uppercase font-bold">{g.last_reminder_at ? `Avisado: ${new Date(g.last_reminder_at).toLocaleDateString()}` : 'Sin avisos'}</p>
                             </div>
                             <button onClick={() => handleSendReminder(g)} className="h-10 w-10 bg-[#25D366] text-white rounded-xl flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-[#25D366]/20">
                                 <SendIcon className="h-4 w-4" />
@@ -1665,16 +1670,16 @@ const EventRSVPs: React.FC = () => {
             {/* QR Modal */}
             {selectedGuestForQR && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-stone-900/60 backdrop-blur-sm">
-                    <div className="bg-white rounded-[2.5rem] p-10 max-w-sm w-full space-y-8 text-center relative">
-                        <button onClick={() => setSelectedGuestForQR(null)} className="absolute top-6 right-6 text-stone-300"><X /></button>
-                        <h3 className="text-2xl font-display font-extrabold">{selectedGuestForQR.name}</h3>
-                        <div className="flex justify-center p-4 bg-stone-50 rounded-2xl">
+                    <div className="bg-white rounded-[2.5rem] p-10 max-w-sm w-full space-y-8 text-center relative border border-stone-200 shadow-2xl">
+                        <button onClick={() => setSelectedGuestForQR(null)} className="absolute top-6 right-6 text-stone-500 hover:text-stone-900"><X /></button>
+                        <h3 className="text-2xl font-display font-extrabold text-stone-900">{selectedGuestForQR.name}</h3>
+                        <div className="flex justify-center p-4 bg-stone-50 rounded-2xl border border-stone-200">
                             <QRCodeSVG value={`${window.location.origin}/i/${selectedGuestForQR.event?.slug || 'invite'}?t=${selectedGuestForQR.id}`} size={180} />
                         </div>
                         <button onClick={() => {
                             const msg = `Hola ${selectedGuestForQR.name}, aquí tu pase: ${window.location.origin}/i/${selectedGuestForQR.event?.slug}?t=${selectedGuestForQR.id}`;
                             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-                        }} className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold text-[10px] uppercase">Compartir WA</button>
+                        }} className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold text-[10px] uppercase shadow-lg shadow-emerald-200/50 hover:bg-[#20ba59] transition-colors">Compartir WA</button>
                     </div>
                 </div>
             )}
