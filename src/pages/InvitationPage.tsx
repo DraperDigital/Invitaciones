@@ -3867,7 +3867,7 @@ END:VCALENDAR`;
                                 return (
                                     <ScrollReveal
                                         key={section.id}
-                                        yOffset={section.id === 'hero' ? 0 : 18}
+                                        yOffset={section.id === 'hero' ? 0 : 35}
                                         delay={section.id === 'hero' ? 0.05 : 0}
                                         className="relative group/section"
                                     >
