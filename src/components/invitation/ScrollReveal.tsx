@@ -26,7 +26,7 @@ export default function ScrollReveal({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{
-                duration: 2.0,
+                duration: 3.5,
                 delay,
                 ease: [0.22, 1, 0.36, 1], // Apple-style smooth easeOutQuint
             }}
