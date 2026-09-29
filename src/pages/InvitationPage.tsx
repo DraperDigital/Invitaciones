@@ -489,7 +489,9 @@ export default function InvitationPage() {
 
     const applyWizardPreviewOverlay = (baseEvent: Event, directWiz?: any): Event => {
         try {
-            const isWizardPreview = searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
+            // SOLO aplicar si explícitamente se solicita vista previa del wizard (?wizard_preview=1)
+            // Esto evita que las plantillas del catálogo (/ejemplos) se sobrescriban con datos del asistente
+            const isWizardPreview = searchParams.get('wizard_preview') === '1';
             if (!isWizardPreview) return baseEvent;
 
             // 1. Prioritize direct data or parent/top window global variable (immune to iframe storage partitioning)
@@ -537,7 +539,11 @@ export default function InvitationPage() {
             const baseThemeConfig = (baseEvent.theme_config || {}) as Record<string, any>;
             const updatedConfig = { ...baseThemeConfig };
 
-            if (wiz.theme) updatedConfig.theme = wiz.theme;
+            // Respetar el tema original de la plantilla seleccionada (e.g. newspaper, gamer-party, etc.)
+            // Solo aplicar wiz.theme si la plantilla base no tenía tema definido o es la base genérica
+            if (wiz.theme && (!baseThemeConfig.theme || baseEvent.slug?.includes('sofia-mateo'))) {
+                updatedConfig.theme = wiz.theme;
+            }
             if (wiz.venue_time) updatedConfig.venue_time = wiz.venue_time;
             if (wiz.misa_name) updatedConfig.misa_name = wiz.misa_name;
             if (wiz.misa_time) updatedConfig.misa_time = wiz.misa_time;
@@ -676,7 +682,7 @@ export default function InvitationPage() {
         const decodedSlug = decodeURIComponent(slug || '');
         const encodedSlug = encodeURIComponent(decodedSlug);
 
-        const isWizardPreview = searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
+        const isWizardPreview = searchParams.get('wizard_preview') === '1';
 
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
