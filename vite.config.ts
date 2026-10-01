@@ -38,7 +38,35 @@ const PRERENDER_ROUTES = [
   '/blog/invitaciones-digitales-vs-papel-ecologia',
 ]
 
-const isPrerenderDisabled = process.env.DISABLE_PRERENDER === 'true';
+const isPrerenderDisabled =
+  process.env.DISABLE_PRERENDER === 'true' ||
+  process.env.NO_PRERENDER === 'true' ||
+  process.env.SKIP_PRERENDER === 'true';
+
+/**
+ * Wraps @prerenderer/rollup-plugin in a try-catch block so builds in headless/restricted
+ * environments (e.g. Hostinger, Docker containers without Chromium shared libs) won't fail
+ * the entire build process if Puppeteer cannot launch.
+ */
+function safePrerender(options: any) {
+  const plugin = prerender(options);
+  const origGenerateBundle = plugin.generateBundle;
+  if (!origGenerateBundle) return plugin;
+
+  return {
+    ...plugin,
+    async generateBundle(...args: any[]) {
+      try {
+        await origGenerateBundle.apply(this, args);
+      } catch (err: any) {
+        console.warn(
+          '[Prerender Plugin] Pre-rendering skipped (Puppeteer/Chromium unavailable in build environment):',
+          err?.message || err
+        );
+      }
+    },
+  };
+}
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -46,14 +74,21 @@ export default defineConfig({
     react(),
     // Pre-rendering only runs during `vite build`, unless DISABLE_PRERENDER is set.
     ...(!isPrerenderDisabled ? [
-      prerender({
+      safePrerender({
         routes: PRERENDER_ROUTES,
         renderer: '@prerenderer/renderer-puppeteer',
         rendererOptions: {
           // Wait long enough for the React app to mount and helmet-async to inject tags.
           renderAfterTime: 1500,
           maxConcurrentRoutes: 2,
-          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--single-process',
+            '--no-zygote',
+          ],
         },
         postProcess(renderedRoute) {
           // Strip any localhost remnants picked up during pre-render.
