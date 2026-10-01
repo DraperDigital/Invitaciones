@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import prerender from '@prerenderer/rollup-plugin'
 
@@ -48,16 +48,18 @@ const isPrerenderDisabled =
  * environments (e.g. Hostinger, Docker containers without Chromium shared libs) won't fail
  * the entire build process if Puppeteer cannot launch.
  */
-function safePrerender(options: any) {
-  const plugin = prerender(options);
+function safePrerender(options: any): Plugin {
+  const plugin = (prerender as any)(options) as Plugin;
   const origGenerateBundle = plugin.generateBundle;
   if (!origGenerateBundle) return plugin;
 
   return {
     ...plugin,
-    async generateBundle(...args: any[]) {
+    async generateBundle(this: any, ...args: any[]) {
       try {
-        await origGenerateBundle.apply(this, args);
+        if (typeof origGenerateBundle === 'function') {
+          await origGenerateBundle.apply(this, args as any);
+        }
       } catch (err: any) {
         console.warn(
           '[Prerender Plugin] Pre-rendering skipped (Puppeteer/Chromium unavailable in build environment):',
@@ -90,7 +92,7 @@ export default defineConfig({
             '--no-zygote',
           ],
         },
-        postProcess(renderedRoute) {
+        postProcess(renderedRoute: { html: string }) {
           // Strip any localhost remnants picked up during pre-render.
           renderedRoute.html = renderedRoute.html.replace(
             /localhost:\d+/g,
