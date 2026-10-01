@@ -208,6 +208,8 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     // Modal de vista previa interactiva
     const [previewModalSlug, setPreviewModalSlug] = useState<string | null>(null);
     const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
+    const [previewTimestamp, setPreviewTimestamp] = useState<number>(0);
+    const [isIframeLoading, setIsIframeLoading] = useState<boolean>(true);
 
     // Almacenamiento temporal para pasos que requieren validación en turnos estrictos
     const [tempMisaName, setTempMisaName] = useState<string>('');
@@ -948,8 +950,12 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const openPreviewModal = (slug: string) => {
         const currentData = latestDataRef.current || data;
         syncPreviewStorage(currentData);
+        setIsIframeLoading(true);
+        setPreviewTimestamp(Date.now());
         setPreviewModalSlug(slug);
     };
+
+    const previewUrl = previewModalSlug ? `/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${previewTimestamp}` : '';
 
     const selectedTemplateObj = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
 
@@ -1273,24 +1279,38 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
                         {/* Contenido del Iframe con tus datos sincronizados */}
                         <div className="flex-1 bg-stone-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden relative">
-                            {previewDevice === 'mobile' ? (
-                                <div className="w-[375px] h-full max-h-[740px] rounded-[40px] border-[10px] border-stone-800 shadow-2xl overflow-hidden bg-black flex flex-col">
-                                    <div className="h-5 bg-stone-800 flex items-center justify-center">
+                            {isIframeLoading && (
+                                <div className="absolute inset-0 bg-stone-950/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-3">
+                                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#DF3B94] to-pink-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 animate-pulse">
+                                        <Sparkles className="h-5 w-5 animate-spin" />
+                                    </div>
+                                    <p className="text-xs text-stone-300 font-medium animate-pulse">Cargando vista previa interactiva...</p>
+                                </div>
+                            )}
+
+                            <div
+                                className={`transition-all duration-300 flex flex-col overflow-hidden shadow-2xl ${
+                                    previewDevice === 'mobile'
+                                        ? 'w-[375px] h-full max-h-[740px] rounded-[40px] border-[10px] border-stone-800 bg-stone-900'
+                                        : 'w-full h-full rounded-2xl border border-stone-800 bg-stone-900'
+                                }`}
+                            >
+                                {previewDevice === 'mobile' && (
+                                    <div className="h-5 bg-stone-800 flex items-center justify-center shrink-0">
                                         <div className="w-16 h-3 bg-stone-900 rounded-full" />
                                     </div>
-                                    <iframe
-                                        src={`/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${Date.now()}`}
-                                        title="Vista Previa Móvil"
-                                        className="w-full flex-1 border-0"
-                                    />
-                                </div>
-                            ) : (
+                                )}
                                 <iframe
-                                    src={`/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${Date.now()}`}
-                                    title="Vista Previa Escritorio"
-                                    className="w-full h-full rounded-2xl border border-stone-800 shadow-2xl"
+                                    key={previewModalSlug}
+                                    src={previewUrl}
+                                    title="Vista Previa de Invitación"
+                                    onLoad={() => {
+                                        setIsIframeLoading(false);
+                                        syncPreviewStorage(latestDataRef.current);
+                                    }}
+                                    className="w-full flex-1 border-0 bg-white"
                                 />
-                            )}
+                            </div>
                         </div>
 
                         {/* Footer del Modal */}
