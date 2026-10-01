@@ -1041,7 +1041,8 @@ END:VCALENDAR`;
                     <div className="max-w-lg w-full bg-white/95 backdrop-blur-xl rounded-[2.5rem] p-8 sm:p-12 text-center shadow-2xl shadow-stone-900/10 border border-stone-200/80 relative z-10">
                         {/* Modern Gradient Icon Badge */}
                         <div className="relative inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-br from-[#DF3B94] to-pink-600 text-white shadow-xl shadow-pink-500/25 mb-8">
-                            <Sparkles className="h-9 w-9 text-white animate-pulse" />
+                            <Crown className="h-9 w-9 text-amber-200 fill-amber-200/30" />
+                            <Heart className="absolute -top-1 -right-1 h-5 w-5 text-rose-300 fill-rose-300 animate-pulse" />
                         </div>
 
                         <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-3 tracking-tight">
@@ -1056,7 +1057,7 @@ END:VCALENDAR`;
                                 to={`/planes?id=${event.id}`}
                                 className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-xl shadow-pink-500/25 hover:scale-[1.02] active:scale-95 cursor-pointer"
                             >
-                                <Sparkles className="h-4 w-4" />
+                                <Crown className="h-4 w-4 text-amber-200 fill-amber-200/40" />
                                 <span>Activar mi invitación</span>
                             </Link>
 
@@ -3325,7 +3326,7 @@ END:VCALENDAR`;
                             to={`/planes?id=${event.id}`}
                             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white font-bold rounded-xl transition-all shadow-md shadow-pink-500/20 active:scale-95 text-xs uppercase tracking-wider"
                         >
-                            <Sparkles className="h-3.5 w-3.5" />
+                            <Crown className="h-3.5 w-3.5 text-amber-200 fill-amber-200/40" />
                             <span>Activar Plan</span>
                         </Link>
                         <Link
