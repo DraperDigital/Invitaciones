@@ -620,11 +620,53 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             }
 
             case 'ask_theme': {
-                const selectedTheme = directValue || 'classic';
-                updateDataAndSync({ theme: selectedTheme });
+                const isShowAllRequest = 
+                    directValue === 'all_templates' || 
+                    lower.includes('todas') || 
+                    lower.includes('ver todas') || 
+                    lower.includes('mostrar todas') || 
+                    lower.includes('catálogo') || 
+                    lower.includes('catalogo');
 
-                const templateObj = CANONICAL_TEMPLATES.find(t => t.id === selectedTheme);
-                const themeName = templateObj?.name || 'elegida';
+                if (isShowAllRequest) {
+                    const category = normalizeEventCategory(data.event_type);
+                    const categoryTemplates = getTemplatesForCategory(category);
+                    const templatesToShow = categoryTemplates.length >= 4 ? categoryTemplates : CANONICAL_TEMPLATES;
+
+                    const cards = templatesToShow.map(t => ({
+                        id: t.id,
+                        name: t.name,
+                        thumbnail: t.thumbnail,
+                        categoryLabel: t.categoryLabel,
+                        slug: t.slug
+                    }));
+
+                    addAssistantMessage(
+                        `🎨 ¡Por supuesto! Aquí tienes **todas las plantillas disponibles** (${templatesToShow.length} diseños). Puedes previsualizar cualquiera con tus datos en tiempo real o elegir la que más te guste:`,
+                        undefined,
+                        cards
+                    );
+                    setCurrentStep('ask_theme');
+                    break;
+                }
+
+                let selectedTheme = directValue;
+                let templateObj = CANONICAL_TEMPLATES.find(t => t.id === selectedTheme);
+
+                if (!templateObj && userText) {
+                    const lowerText = userText.toLowerCase();
+                    templateObj = CANONICAL_TEMPLATES.find(t => 
+                        lowerText.includes(t.name.toLowerCase()) || 
+                        t.id.toLowerCase() === lowerText ||
+                        lowerText.includes(t.id.toLowerCase())
+                    );
+                }
+
+                if (!templateObj) {
+                    templateObj = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
+                }
+
+                updateDataAndSync({ theme: templateObj.id });
 
                 // Opciones de dress code según el evento
                 let dressChips = [
@@ -645,7 +687,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 }
 
                 addAssistantMessage(
-                    `¡Preciosa elección! La plantilla "${themeName}" lucirá increíble ✨.\n\n¿Qué código de vestimenta sugerirás a tus invitados?`,
+                    `¡Preciosa elección! La plantilla "**${templateObj.name}**" lucirá increíble ✨.\n\n¿Qué código de vestimenta sugerirás a tus invitados?`,
                     dressChips
                 );
                 setCurrentStep('ask_dress_code');
@@ -1009,17 +1051,21 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                             className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                         >
                             <div
-                                className={`max-w-[90%] sm:max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+                                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
                                     msg.sender === 'user'
-                                        ? 'bg-[#DF3B94] text-white rounded-br-none'
-                                        : 'bg-white border border-stone-200 text-stone-800 rounded-bl-none shadow-sm'
+                                        ? 'bg-[#DF3B94] text-white rounded-br-none max-w-[90%] sm:max-w-[78%]'
+                                        : msg.templateCards && msg.templateCards.length > 3
+                                            ? 'bg-white border border-stone-200 text-stone-800 rounded-bl-none shadow-sm max-w-[98%] sm:max-w-[92%]'
+                                            : 'bg-white border border-stone-200 text-stone-800 rounded-bl-none shadow-sm max-w-[90%] sm:max-w-[78%]'
                                 }`}
                             >
                                 <p className="whitespace-pre-line">{msg.text}</p>
 
                                 {/* Tarjetas de Selección de Plantillas con botón de Previsualización */}
                                 {msg.templateCards && msg.templateCards.length > 0 && (
-                                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div className={`mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 ${
+                                        msg.templateCards.length > 6 ? 'max-h-[500px] overflow-y-auto pr-1 sm:pr-2' : ''
+                                    }`}>
                                         {msg.templateCards.map((tpl) => (
                                             <div
                                                 key={tpl.id}
