@@ -185,10 +185,16 @@ export default function HomePage() {
                         </div>
                     </div>
                 )}
-            </header>
+            {/* Barra de aviso de una línea arriba del hero */}
+            <div className="pt-16 md:pt-20 bg-[#DF3B94] text-white text-[11px] md:text-xs font-bold tracking-wider py-2.5 px-4 text-center border-b border-[#C52A7C] relative z-40">
+                <Link to="/concierge-service" className="inline-flex items-center gap-1.5 hover:underline">
+                    <span>Nuevo: confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
+                    <span>→</span>
+                </Link>
+            </div>
 
             {/* --- 2. HERO SECTION --- */}
-            <section className="relative pt-28 pb-16 md:pt-48 md:pb-36 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
+            <section className="relative pt-8 pb-16 md:pt-16 md:pb-36 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
                 <div className="mx-auto max-w-7xl">
                     <div className="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
                         <div className="space-y-6 md:space-y-8 text-center lg:text-left">
