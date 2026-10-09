@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    MessageCircle,
     ArrowRight,
     Check,
-    PhoneCall,
     ShieldCheck,
     ChevronDown,
-    FileText,
-    Sparkles,
-    Calendar,
-    MessageSquare,
-    Clock,
-    Users
+    Sparkles
 } from 'lucide-react';
 import Seo from '../components/Seo';
 import { WHATSAPP_SUPPORT_NUMBER } from '../lib/constants';
