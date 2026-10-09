@@ -185,6 +185,8 @@ export default function HomePage() {
                         </div>
                     </div>
                 )}
+            </header>
+
             {/* Barra de aviso de una línea arriba del hero */}
             <div className="pt-16 md:pt-20 bg-[#DF3B94] text-white text-[11px] md:text-xs font-bold tracking-wider py-2.5 px-4 text-center border-b border-[#C52A7C] relative z-40">
                 <Link to="/concierge-service" className="inline-flex items-center gap-1.5 hover:underline">
