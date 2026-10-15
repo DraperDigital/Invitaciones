@@ -7,7 +7,7 @@ export const RAW_FAQ_ITEMS = [
     { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos todas las tarjetas de crédito y débito (Visa, Mastercard, American Express) de forma segura a través de Stripe, además de transferencias bancarias (SPEI).' },
     { q: '¿Necesito tarjeta de crédito para empezar a crear?', a: 'No, para registrarte y empezar a diseñar tu invitación en borrador no necesitas ingresar ninguna tarjeta de crédito ni método de pago.' },
     { q: '¿Sirve para XV años y eventos en México?', a: 'Sí, está diseñada especialmente para el mercado mexicano y latinoamericano. Funciona perfecto para bodas, XV años, cumpleaños, bautizos, graduaciones y cualquier evento que requiera control de asistencia.' },
-    { q: '¿Cómo comparto la invitación por WhatsApp o redes?', a: 'Una vez que publiques tu invitación, obtendrás un enlace personalizado (ej. invitto.mx/i/mi-evento). Puedes copiar y pegar este enlace en chats de WhatsApp, grupos o redes sociales. Al compartirlo, generará una vista previa automática y elegante de tu evento.' }
+    { q: '¿Cómo comparto la invitación por WhatsApp o redes?', a: 'Una vez que publiques tu invitación, obtendrás un enlace personalizado (ej. invitto.com.mx/i/mi-evento). Puedes copiar y pegar este enlace en chats de WhatsApp, grupos o redes sociales. Al compartirlo, generará una vista previa automática y elegante de tu evento.' }
 ];
 
 export const FAQ_ITEMS = RAW_FAQ_ITEMS.map(item => ({

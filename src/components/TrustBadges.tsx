@@ -2,7 +2,7 @@ import { ShieldCheck, CreditCard, HeartHandshake } from 'lucide-react';
 
 const ITEMS = [
     { icon: ShieldCheck, title: 'Pago seguro', desc: 'Conexión cifrada y pagos procesados por Stripe.' },
-    { icon: CreditCard, title: 'Métodos de pago', desc: 'Aceptamos Visa, Mastercard y American Express.' },
+    { icon: CreditCard, title: 'Métodos de pago', desc: 'Aceptamos Visa, Mastercard, American Express y transferencias SPEI.' },
     { icon: HeartHandshake, title: 'Acompañamiento real', desc: 'Te ayudamos antes y después de contratar.' },
 ];
 
@@ -30,20 +30,24 @@ export default function TrustBadges() {
             <div className="pt-8 border-t border-white/10">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Paga de forma segura con</p>
                 <div className="flex flex-wrap gap-3">
-                    <div className="h-10 px-4 rounded-xl bg-white flex items-center justify-center">
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center justify-center shadow-sm">
                         <span className="text-[#1A1F71] font-black italic text-sm tracking-tight">VISA</span>
                     </div>
-                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-2">
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-2 shadow-sm">
                         <span className="relative w-6 h-4 flex-shrink-0">
                             <span className="absolute left-0 top-0 h-4 w-4 rounded-full bg-[#EB001B]" />
                             <span className="absolute left-2 top-0 h-4 w-4 rounded-full bg-[#F79E1B] mix-blend-multiply" />
                         </span>
                         <span className="text-slate-800 font-bold text-xs">Mastercard</span>
                     </div>
-                    <div className="h-10 px-4 rounded-xl bg-white flex items-center justify-center">
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center justify-center shadow-sm">
                         <span className="text-[#2E77BC] font-black text-sm tracking-tight">AMEX</span>
                     </div>
-                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-2">
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-1.5 shadow-sm">
+                        <span className="text-[#002F6C] font-black text-xs tracking-wider">SPEI</span>
+                        <span className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">Transferencia</span>
+                    </div>
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-2 shadow-sm">
                         <ShieldCheck className="h-4 w-4 text-emerald-500" />
                         <span className="text-slate-800 font-bold text-xs">Stripe Seguro</span>
                     </div>

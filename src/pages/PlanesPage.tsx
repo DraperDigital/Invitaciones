@@ -42,11 +42,11 @@ export default function PlanesPage() {
             popular: true,
             features: [
                 'Dashboard en tiempo real',
+                'Pases digitales con código QR',
                 'Recordatorios automáticos',
                 'Control de pases y acompañantes',
                 'Importación masiva (Excel)',
                 'Métricas de visualización',
-                'Todo en un solo lugar',
             ],
             cta: 'Quiero control total',
             demoUrl: '/i/boda-isabel-rodrigo-pro'

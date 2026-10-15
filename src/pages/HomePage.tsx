@@ -53,6 +53,17 @@ const HOMEPAGE_JSONLD = [
     FAQ_JSONLD,
 ];
 
+// Fecha calculada dinámicamente a 45 días en el futuro para que el contador "45 DÍAS 12 HORAS" siempre sea exacto
+const MOCK_HERO_DATE = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 45);
+    const months = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+})();
+
 export default function HomePage() {
     const { user } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -272,7 +283,7 @@ export default function HomePage() {
                                                 Nuestra Boda
                                             </span>
                                             <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">Isabel & Rodrigo</p>
-                                            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">25 Octubre 2026</p>
+                                            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{MOCK_HERO_DATE}</p>
                                         </div>
                                     </div>
 
@@ -433,7 +444,8 @@ export default function HomePage() {
 
                         {/* Event Date Card */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-64 md:w-72 p-6 bg-[#222B38] text-white rounded-3xl shadow-2xl">
-                            <p className="text-xs font-bold uppercase tracking-widest text-[#DF3B94] mb-4 text-center">Boda Isabel & Rodrigo</p>
+                            <p className="text-xs font-bold uppercase tracking-widest text-[#DF3B94] mb-1 text-center">Boda Isabel & Rodrigo</p>
+                            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 text-center mb-4">{MOCK_HERO_DATE}</p>
                             <div className="flex justify-center gap-6 mb-6">
                                 <div className="text-center">
                                     <p className="text-3xl font-display font-extrabold">45</p>
@@ -773,31 +785,37 @@ export default function HomePage() {
             </section>
 
             {/* --- 8. COMPARATIVA RÁPIDA --- */}
-            <section className="py-20 md:py-32 bg-[#F8F9FA] px-6">
+            <section className="py-20 md:py-32 bg-[#F8F9FA] px-4 sm:px-6">
                 <div className="mx-auto max-w-4xl">
-                    <div className="text-center mb-14 space-y-4">
+                    <div className="text-center mb-10 md:mb-14 space-y-4">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white border border-slate-200 rounded-full text-xs font-bold text-slate-700 shadow-sm">
                             <span>Comparativa de Mercado</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
                             ¿Por qué Invitto frente a otras opciones?
                         </h2>
-                        <p className="text-slate-600 text-base max-w-xl mx-auto">
+                        <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto">
                             Ventajas de Invitto frente a soluciones tradicionales y aplicaciones extranjeras en México.
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-slate-100 overflow-x-auto">
-                        <table className="w-full text-left min-w-[500px]">
+                    {/* Indicador de deslizamiento en móvil */}
+                    <div className="sm:hidden text-center text-xs text-slate-400 pb-2.5 flex items-center justify-center gap-1.5 font-medium">
+                        <span>↔</span>
+                        <span>Desliza horizontalmente para comparar opciones</span>
+                    </div>
+
+                    <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 shadow-sm border border-slate-100 overflow-x-auto">
+                        <table className="w-full text-left min-w-[520px] border-collapse">
                             <thead>
-                                <tr className="border-b border-slate-100 text-xs font-bold uppercase tracking-wider text-slate-400 pb-4">
-                                    <th className="pb-4">Característica</th>
-                                    <th className="pb-4 text-center text-[#DF3B94] font-bold">Invitto</th>
-                                    <th className="pb-4 text-center">PDF / Imagen</th>
-                                    <th className="pb-4 text-center">Plataformas Globales (Zola, Paperless)</th>
+                                <tr className="border-b border-slate-100 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 pb-4">
+                                    <th className="pb-4 sticky left-0 bg-white z-10 pr-3 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.06)]">Característica</th>
+                                    <th className="pb-4 text-center text-[#DF3B94] font-bold px-3">Invitto</th>
+                                    <th className="pb-4 text-center px-3">PDF / Imagen</th>
+                                    <th className="pb-4 text-center px-3">Plataformas Globales</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 text-sm font-normal">
+                            <tbody className="divide-y divide-slate-100 text-xs sm:text-sm font-normal">
                                 {[
                                     { feature: 'Confirmación en tiempo real (RSVP)', invitto: true, pdf: false, global: true },
                                     { feature: 'Límite de pases por invitado', invitto: true, pdf: false, global: false },
@@ -807,14 +825,14 @@ export default function HomePage() {
                                     { feature: 'Ubicación con Waze / Maps', invitto: true, pdf: 'Texto', global: 'A veces' }
                                 ].map((row, idx) => (
                                     <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4 font-semibold text-[#222B38]">{row.feature}</td>
-                                        <td className="py-4 text-center font-bold text-[#DF3B94]">
+                                        <td className="py-4 font-semibold text-[#222B38] sticky left-0 bg-white z-10 pr-3 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.06)]">{row.feature}</td>
+                                        <td className="py-4 text-center font-bold text-[#DF3B94] px-3">
                                             {row.invitto === true ? <Check className="h-5 w-5 mx-auto text-[#4E7B55]" /> : row.invitto}
                                         </td>
-                                        <td className="py-4 text-center text-slate-400">
+                                        <td className="py-4 text-center text-slate-400 px-3">
                                             {row.pdf === true ? <Check className="h-4 w-4 mx-auto text-slate-400" /> : row.pdf === false ? <X className="h-4 w-4 mx-auto text-red-400" /> : row.pdf}
                                         </td>
-                                        <td className="py-4 text-center text-slate-400">
+                                        <td className="py-4 text-center text-slate-400 px-3">
                                             {row.global === true ? <Check className="h-4 w-4 mx-auto text-slate-400" /> : row.global === false ? <X className="h-4 w-4 mx-auto text-red-400" /> : row.global}
                                         </td>
                                     </tr>
@@ -892,6 +910,7 @@ export default function HomePage() {
                                         Diseñar Gratis
                                     </button>
                                 </Link>
+                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
                             </div>
                         </div>
 
@@ -913,13 +932,17 @@ export default function HomePage() {
                                         <span className="text-4xl md:text-5xl font-serif font-extrabold text-white">$1,699</span>
                                         <span className="text-xs font-bold text-[#FAC345] uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-400 font-medium mt-1">Un solo pago · Acceso de por vida</p>
+                                    <p className="text-[11px] text-slate-300 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu fiesta</p>
                                 </div>
 
                                 <ul className="space-y-3.5 text-xs text-slate-200 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                         <span><strong>Todo lo del plan Clásica</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span><strong>Pases digitales con código QR individual</strong></span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
@@ -943,9 +966,10 @@ export default function HomePage() {
                             <div className="pt-8">
                                 <Link to={user ? "/dashboard/new?plan=pro" : "/planes"}>
                                     <button className="w-full py-4 px-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#DF3B94]/30 hover:scale-[1.02] active:scale-95 transition-all">
-                                        Elegir Plan Pro
+                                        Probar Plan Pro Gratis
                                     </button>
                                 </Link>
+                                <p className="text-[11px] text-slate-300 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
                             </div>
                         </div>
 
@@ -996,6 +1020,7 @@ export default function HomePage() {
                                         Conocer Concierge
                                     </button>
                                 </Link>
+                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Asesoría sin compromiso · 5 lugares de fundadora</p>
                             </div>
                         </div>
 
@@ -1009,6 +1034,72 @@ export default function HomePage() {
                             <span>¿Quieres ver la comparativa completa de 29 características?</span>
                             <ArrowRight className="h-4 w-4" />
                         </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- CONCIERGE / SERVICIO LUXURY BANNER (Inmediatamente debajo de Precios) --- */}
+            <section className="py-20 md:py-28 bg-[#171E28] text-white px-6 overflow-hidden border-t border-white/5">
+                <div className="mx-auto max-w-7xl">
+                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                        
+                        {/* Left Copy */}
+                        <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold tracking-widest text-[#DF3B94]">
+                                <Gem className="h-4 w-4 text-[#DF3B94]" />
+                                <span>SERVICIO LUXURY · CONCIERGE</span>
+                            </div>
+
+                            <h2 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold tracking-tight leading-tight text-white">
+                                ¿No tienes tiempo? <br />
+                                <span className="italic font-light text-[#DF3B94]">Nosotros lo hacemos todo por ti.</span>
+                            </h2>
+
+                            <p className="text-base md:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                                En el plan Concierge tú solo disfrutas: cargamos tus invitados, enviamos cada invitación por WhatsApp, hacemos 4 rondas de seguimiento y te entregamos la lista final confirmada con pases QR listos para recepción.
+                            </p>
+
+                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                                <Link to="/concierge-service" className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs md:text-sm font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 group">
+                                    <span>SABER MÁS SOBRE CONCIERGE</span>
+                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-white" />
+                                </Link>
+                                <span className="text-xs text-[#FAC345] font-semibold bg-[#FAC345]/10 px-3.5 py-2 rounded-xl border border-[#FAC345]/20">
+                                    ✨ 5 lugares de fundadora disponibles este mes
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Right Card (Dark Glass Container) */}
+                        <div className="lg:col-span-5 flex justify-center">
+                            <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6 backdrop-blur-md shadow-2xl">
+                                <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+                                    <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center flex-shrink-0">
+                                        <Users className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">GESTIÓN HUMANA</p>
+                                        <p className="text-lg font-display font-bold text-white italic">Tu equipo dedicado</p>
+                                    </div>
+                                </div>
+
+                                <ul className="space-y-4">
+                                    {[
+                                        "Cargamos tus invitados por ti",
+                                        "Envío individual por WhatsApp",
+                                        "4 rondas de seguimiento telefónico",
+                                        "Pases QR individuales incluidos",
+                                        "Reporte final de asistencia impreso y digital"
+                                    ].map((item, idx) => (
+                                        <li key={idx} className="flex items-center gap-3 text-sm font-medium text-slate-200">
+                                            <Check className="h-4 w-4 text-[#DF3B94] flex-shrink-0" />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>
@@ -1033,67 +1124,6 @@ export default function HomePage() {
                                 <p className="text-xs text-slate-400 font-normal leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* --- CONCIERGE / SERVICIO LUXURY SECTION --- */}
-            <section className="py-24 md:py-36 bg-[#171E28] text-white px-6 overflow-hidden border-t border-white/5">
-                <div className="mx-auto max-w-7xl">
-                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                        
-                        {/* Left Copy */}
-                        <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold tracking-widest text-[#DF3B94]">
-                                <Gem className="h-4 w-4 text-[#DF3B94]" />
-                                <span>SERVICIO LUXURY</span>
-                            </div>
-
-                            <h2 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold tracking-tight leading-tight text-white">
-                                ¿No tienes tiempo? <br />
-                                <span className="italic font-light text-[#DF3B94]">Nosotros lo hacemos todo.</span>
-                            </h2>
-
-                            <p className="text-base md:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                                El plan Concierge: cargamos tus invitados, enviamos cada invitación por WhatsApp, hacemos 4 rondas de seguimiento y te entregamos la lista final confirmada. Tú solo disfrutas.
-                            </p>
-
-                            <div className="pt-2 flex justify-center lg:justify-start">
-                                <Link to="/concierge-service" className="inline-flex items-center gap-3 text-xs md:text-sm font-bold uppercase tracking-widest text-white hover:text-[#DF3B94] transition-colors group">
-                                    SABER MÁS SOBRE CONCIERGE <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#DF3B94]" />
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Right Card (Dark Glass Container) */}
-                        <div className="lg:col-span-5 flex justify-center">
-                            <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6 backdrop-blur-md shadow-2xl">
-                                <div className="flex items-center gap-4 pb-6 border-b border-white/10">
-                                    <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center flex-shrink-0">
-                                        <Users className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">GESTIÓN HUMANA</p>
-                                        <p className="text-lg font-display font-bold text-white italic">Tu equipo dedicado</p>
-                                    </div>
-                                </div>
-
-                                <ul className="space-y-4">
-                                    {[
-                                        "Cargamos tus invitados por ti",
-                                        "Envío individual por WhatsApp",
-                                        "4 rondas de seguimiento",
-                                        "Reporte final de asistencia"
-                                    ].map((item, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-sm font-medium text-slate-200">
-                                            <Check className="h-4 w-4 text-[#DF3B94] flex-shrink-0" />
-                                            <span>{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </section>
@@ -1144,12 +1174,14 @@ export default function HomePage() {
 
             {/* --- 11. CTA BANNER ("Organiza tu evento sin estrés") --- */}
             <section className="relative py-28 md:py-36 bg-[#222B38] text-white text-center px-6 overflow-hidden">
-                {/* Background image overlay */}
+                {/* Background image overlay (decorative with empty alt) */}
                 <div className="absolute inset-0 z-0">
                     <img
                         src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80"
-                        alt="Celebration Background"
-                        className="w-full h-full object-cover opacity-20"
+                        alt=""
+                        role="presentation"
+                        aria-hidden="true"
+                        className="w-full h-full object-cover opacity-20 pointer-events-none select-none"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#222B38]/90 via-[#222B38]/85 to-[#222B38]" />
                 </div>
@@ -1160,24 +1192,39 @@ export default function HomePage() {
                         <span className="italic font-light text-[#DF3B94]">sin estrés</span>
                     </h2>
 
-                    <p className="text-base md:text-xl text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
-                        Empieza hoy y ten control total de tus invitados en minutos.
+                    <p className="text-xl md:text-2xl font-display text-white font-medium max-w-2xl mx-auto pt-1">
+                        La invitación digital que merece tu historia
                     </p>
 
-                    <div className="pt-4 space-y-3">
+                    <p className="text-sm md:text-base text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
+                        Crea tu borrador gratis y publica cuando estés listo. RSVP inteligente, pases con código QR y confirmaciones por WhatsApp en un solo enlace.
+                    </p>
+
+                    <div className="pt-4 space-y-4">
                         <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                            <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95">
-                                {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}
+                            <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-2">
+                                <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
+                                <ArrowRight className="h-4 w-4" />
                             </button>
                         </Link>
                         <p className="text-xs text-slate-400 font-medium">
                             Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida
                         </p>
+                        <p className="text-xs text-slate-400 pt-1">
+                            ¿Dudas o necesitas asesoría personalizada? Escríbenos a{' '}
+                            <a href="mailto:soporte@invitto.com.mx" className="text-white hover:underline font-bold">
+                                soporte@invitto.com.mx
+                            </a>
+                            {' '}o por{' '}
+                            <a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-bold">
+                                WhatsApp
+                            </a>
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* --- 12. COMPREHENSIVE FOOTER (As requested in reference image) --- */}
+            {/* --- 12. COMPREHENSIVE FOOTER --- */}
             <footer className="bg-[#222B38] text-white pt-16 pb-12 px-6 border-t border-white/10">
                 <div className="mx-auto max-w-7xl space-y-12">
                     
@@ -1194,42 +1241,27 @@ export default function HomePage() {
                     </div>
 
                     {/* Main Footer Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
                         
-                        {/* Callout Box */}
-                        <div className="lg:col-span-5 bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6 flex flex-col justify-between">
-                            <div className="space-y-4">
-                                <h3 className="text-2xl md:text-3xl font-display font-extrabold leading-tight text-white">
-                                    La invitación digital <br />
-                                    <span className="text-[#DF3B94]">que merece tu historia</span>
-                                </h3>
-                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                    Crea gratis y publica cuando estés listo: RSVP, pases individuales, código QR y detalles del evento en un solo enlace.
-                                </p>
-                            </div>
-                            <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                                <button className="w-full py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs font-bold tracking-wider transition-all shadow-lg flex items-center justify-center gap-2">
-                                    {user ? 'IR AL PANEL' : 'CREAR INVITACIÓN'} <ArrowRight className="h-4 w-4" />
-                                </button>
-                            </Link>
-                        </div>
-
                         {/* Brand Column */}
-                        <div className="lg:col-span-3 space-y-4">
+                        <div className="lg:col-span-5 space-y-4">
                             <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
                                 <img src="/logo.png?v=3" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
                             </Link>
-                            <p className="text-xs text-slate-400 font-normal leading-relaxed">
+                            <p className="text-xs text-slate-400 font-normal leading-relaxed max-w-sm">
                                 <strong className="text-white font-bold">invitto.com.mx</strong> es la plataforma oficial de invitaciones digitales con RSVP inteligente en México. Sin comisiones sorpresa, cobro transparente en Pesos (MXN) y soporte local.
+                            </p>
+                            <p className="text-[11px] text-slate-500 font-medium">
+                                Bodas · XV Años · Bautizos · Cumpleaños · Eventos Privados
                             </p>
                         </div>
 
                         {/* Product Column */}
-                        <div className="lg:col-span-2 space-y-3">
+                        <div className="lg:col-span-3 space-y-3">
                             <p className="text-xs font-bold uppercase tracking-widest text-white">Producto</p>
                             <ul className="space-y-2 text-xs text-slate-400">
                                 <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
-                                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
+                                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos interactivos</Link></li>
                                 <li><Link to="/concierge-service" className="hover:text-white transition-colors">Servicio Concierge</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
                                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog y consejos</Link></li>
@@ -1237,23 +1269,25 @@ export default function HomePage() {
                             </ul>
                         </div>
 
-                        {/* Legal & Contact Column */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <div className="space-y-3">
-                                <p className="text-xs font-bold uppercase tracking-widest text-white">Legal</p>
-                                <ul className="space-y-2 text-xs text-slate-400">
-                                    <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
-                                    <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
-                                    <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
-                                </ul>
-                            </div>
-                            <div className="space-y-3">
-                                <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
-                                <ul className="space-y-2 text-xs text-slate-400">
-                                    <li><a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Soporte</a></li>
-                                    <li><Link to="/login" className="hover:text-white transition-colors">Iniciar sesión</Link></li>
-                                </ul>
-                            </div>
+                        {/* Legal Column */}
+                        <div className="lg:col-span-2 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Legal</p>
+                            <ul className="space-y-2 text-xs text-slate-400">
+                                <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
+                                <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
+                                <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Contact & Access Column */}
+                        <div className="lg:col-span-2 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
+                            <ul className="space-y-2 text-xs text-slate-400">
+                                <li><a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Soporte</a></li>
+                                <li><a href="mailto:soporte@invitto.com.mx" className="hover:text-white transition-colors">soporte@invitto.com.mx</a></li>
+                                <li><Link to="/login" className="hover:text-white transition-colors">Iniciar sesión</Link></li>
+                                <li><Link to="/dashboard/new" className="hover:text-white transition-colors">Crear borrador</Link></li>
+                            </ul>
                         </div>
 
                     </div>

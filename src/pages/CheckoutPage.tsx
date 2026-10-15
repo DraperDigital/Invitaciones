@@ -105,11 +105,11 @@ export default function CheckoutPage() {
             bg: 'bg-rose-50',
             features: [
                 'Dashboard en tiempo real',
+                'Pases digitales con código QR',
                 'Recordatorios automáticos',
                 'Control de pases y acompañantes',
                 'Importación masiva (Excel)',
-                'Métricas de visualización',
-                'Todo en un solo lugar'
+                'Métricas de visualización'
             ]
         },
         premium: {
