@@ -117,7 +117,7 @@ export default function PlanesPage() {
                 jsonLd={productJsonLd}
             />
             {/* Header / Navigation */}
-            <header className="pt-4 pb-4 md:pt-6 md:pb-6 sticky top-0 bg-white/85 backdrop-blur-md z-50 border-b border-slate-100 px-4 md:px-8">
+            <header className="pt-4 pb-4 md:pt-6 md:pb-6 sticky top-0 bg-white z-50 border-b border-slate-100 px-4 md:px-8">
                 <div className="mx-auto max-w-7xl flex justify-between items-center relative h-12 md:h-auto">
                     {/* Back link */}
                     <Link to="/" className="group flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-[#e0409a] transition-all">

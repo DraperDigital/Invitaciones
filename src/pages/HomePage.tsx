@@ -82,7 +82,7 @@ export default function HomePage() {
             />
 
             {/* --- 1. HEADER --- */}
-            <header className="fixed top-0 w-full z-50 bg-white/85 backdrop-blur-md border-b border-slate-100 px-4 md:px-6">
+            <header className="fixed top-0 w-full z-50 bg-white border-b border-slate-100 px-4 md:px-6">
                 <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
                     <Link to="/" className="flex items-center hover:opacity-95 transition-opacity">
                         <img src="/logo.png?v=3" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
@@ -138,7 +138,7 @@ export default function HomePage() {
 
                 {/* Mobile Menu Dropdown */}
                 {mobileMenuOpen && (
-                    <div className="lg:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md px-6 py-6 space-y-4 shadow-2xl animate-in slide-in-from-top-2 duration-200">
+                    <div className="lg:hidden border-t border-slate-100 bg-white px-6 py-6 space-y-4 shadow-2xl animate-in slide-in-from-top-2 duration-200">
                         <Link
                             to="/ejemplos"
                             className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
@@ -196,11 +196,14 @@ export default function HomePage() {
                 )}
             </header>
 
-            {/* Barra de aviso de una línea arriba del hero */}
-            <div className="pt-16 md:pt-20 bg-[#DF3B94] text-white text-[11px] md:text-xs font-bold tracking-wider py-2.5 px-4 text-center border-b border-[#C52A7C] relative z-40">
-                <Link to="/confirma" className="inline-flex items-center gap-1.5 hover:underline">
-                    <span>Nuevo: Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
-                    <span>→</span>
+            {/* Barra de aviso arriba del hero */}
+            <div className="mt-16 md:mt-20 bg-[#DF3B94] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#C52A7C] relative z-40 shadow-xs">
+                <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
+                    <span className="bg-white/20 text-white px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider shrink-0">
+                        Nuevo
+                    </span>
+                    <span>Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
+                    <span className="font-bold text-sm shrink-0">→</span>
                 </Link>
             </div>
 
