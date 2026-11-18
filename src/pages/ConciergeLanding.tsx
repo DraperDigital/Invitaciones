@@ -64,7 +64,7 @@ const ConciergeLanding: React.FC = () => {
             <Seo
                 title="Invitto Confirma · Confirmamos a tus invitados por ti | Invitto"
                 description="Le escribimos a cada invitado de tu boda en tu nombre hasta tener su respuesta. Tu lista final confirmada 15 días antes, sin que tú le ruegues a nadie."
-                path="/concierge-service"
+                path="/confirma"
                 jsonLd={SERVICE_JSONLD}
             />
 
@@ -85,8 +85,8 @@ const ConciergeLanding: React.FC = () => {
                         <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
                             Comparativas
                         </Link>
-                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">
-                            Concierge
+                        <Link to="/confirma" className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">
+                            Invitto Confirma
                         </Link>
                         <Link to="/blog" className="text-xs uppercase font-bold tracking-widest text-slate-300 hover:text-[#DF3B94] transition-colors">
                             Blog

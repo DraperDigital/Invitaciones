@@ -10,7 +10,10 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 // Initialize Supabase Client with Service Role Key
 const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const dbSchema = Deno.env.get('SUPABASE_DB_SCHEMA') || 'invitto';
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  db: { schema: dbSchema }
+});
 
 serve(async (req) => {
   const signature = req.headers.get('stripe-signature')
@@ -108,10 +111,14 @@ serve(async (req) => {
             }
           }
 
-          // Add or update the plan_tier in the theme_config JSON
+          // Add or update the plan_tier, isPremium, isPro in the theme_config JSON
+          const isPrem = planId === 'premium' || planId === 'concierge';
+          const isPr = planId === 'pro' || isPrem;
           const updatedThemeConfig = {
             ...themeConfig,
-            plan_tier: planId
+            plan_tier: planId,
+            isPremium: isPrem,
+            isPro: isPr
           };
 
           // Update events table (publish event and save updated theme_config)

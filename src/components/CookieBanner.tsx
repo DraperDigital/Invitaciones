@@ -1,12 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Cookie, X } from 'lucide-react';
 import { initAnalytics } from '../lib/analytics';
 
 export default function CookieBanner() {
     const [isVisible, setIsVisible] = useState(false);
+    const location = useLocation();
+
+    // No mostrar el banner a invitados que están viendo una invitación
+    const isInvitationPage = 
+        location.pathname.startsWith('/i/') || 
+        location.pathname.startsWith('/preview/') || 
+        location.pathname.startsWith('/invitacion/') ||
+        location.pathname === '/carlos-y-frida' ||
+        location.pathname === '/carlosyfrida';
 
     useEffect(() => {
+        if (isInvitationPage) {
+            setIsVisible(false);
+            return;
+        }
         try {
             const consent = localStorage.getItem('invitto_cookie_consent');
             if (!consent) {
@@ -17,7 +30,7 @@ export default function CookieBanner() {
         } catch {
             // Si localStorage está bloqueado, no mostramos el banner
         }
-    }, []);
+    }, [isInvitationPage]);
 
     const handleConsent = (choice: 'all' | 'essential') => {
         try {
@@ -33,7 +46,7 @@ export default function CookieBanner() {
         setIsVisible(false);
     };
 
-    if (!isVisible) return null;
+    if (!isVisible || isInvitationPage) return null;
 
     return (
         <aside

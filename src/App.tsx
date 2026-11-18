@@ -112,6 +112,8 @@ function AppRoutes() {
         <Route path="/politica-de-cookies" element={<Navigate to="/cookies" replace />} />
         <Route path="/concierge"     element={<Concierge />} />
         <Route path="/concierge-service" element={<ConciergeLanding />} />
+        <Route path="/confirma"      element={<ConciergeLanding />} />
+        <Route path="/invitto-confirma" element={<Navigate to="/confirma" replace />} />
         <Route path="/one"           element={<OneHomePage />} />
         <Route path="/corporativo"   element={<OneHomePage />} />
 

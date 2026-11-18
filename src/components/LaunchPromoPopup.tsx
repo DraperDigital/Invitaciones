@@ -24,6 +24,7 @@ const ALLOWED_ROUTES = [
     '/planes',
     '/ejemplos',
     '/concierge-service',
+    '/confirma',
     '/comparativas',
 ];
 const ALLOWED_PREFIXES = [

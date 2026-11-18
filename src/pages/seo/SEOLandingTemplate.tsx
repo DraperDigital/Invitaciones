@@ -67,8 +67,8 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Comparativas
             </Link>
-            <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
-              Concierge
+            <Link to="/confirma" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
+              Invitto Confirma
             </Link>
             <Link to="/blog" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
               Blog

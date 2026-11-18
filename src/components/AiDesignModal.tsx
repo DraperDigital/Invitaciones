@@ -40,73 +40,54 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
         setGenerating(true);
         setGeneratedTheme(null);
 
-        // 1. INTENTAR LLAMADA EN VIVO A OPENAI SI EXISTE VITE_OPENAI_API_KEY
-        const openAiKey = import.meta.env.VITE_OPENAI_API_KEY;
-
-        if (openAiKey) {
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${openAiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-4o-mini',
-                        response_format: { type: 'json_object' },
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'Eres un diseñador experto de invitaciones festivas. Genera un tema en formato JSON con exactamente estas propiedades: primaryColor (color hexadecimal como #1B2E1D), accentColor (color hexadecimal como #BD7474), cardBgColor (color hexadecimal claro como #F9F6F0), typographyPreset (uno de los valores: "elegante", "moderna", "romantica"), welcomeMessage (un texto de bienvenida emotivo de 20-35 palabras), welcomeSubtitle (un título corto del evento).'
-                            },
-                            {
-                                role: 'user',
-                                content: `Genera una combinación perfecta para esta invitación: "${textToUse}"`
-                            }
-                        ]
-                    })
-                });
-
-                if (response.ok) {
-                    const resData = await response.json();
-                    const aiResult = JSON.parse(resData.choices[0].message.content);
-                    if (aiResult.primaryColor && aiResult.accentColor) {
-                        setGeneratedTheme(aiResult);
-                        setGenerating(false);
-                        toast.success('¡Tema generado con éxito!');
-                        return;
-                    }
-                }
-            } catch (e) {
-                console.warn('OpenAI API call failed, falling back to local engine:', e);
-            }
-        }
-
-        // 2. MOTOR INTELIGENTE INTERNO (FALLBACK GARANTIZADO SINO HAY API KEY)
+        // Motor inteligente de diseño temático local (seguro, sin exponer API keys ni violar CSP en el cliente)
         setTimeout(() => {
             const lower = textToUse.toLowerCase();
             let primary = '#1B2E1D';
             let accent = '#BD7474';
-            let cardBg = '#C17B6A';
+            let cardBg = '#FDFBF7';
             let typography: 'elegante' | 'moderna' | 'romantica' = 'romantica';
             let welcome = 'Nos llena de alegría invitarte a compartir este momento tan especial lleno de amor y calidez.';
             let subtitle = 'Nuestra Celebración';
 
-            if (lower.includes('boda') || lower.includes('novios')) {
-                primary = '#2B3A2C';
-                accent = '#D4AF37';
-                cardBg = '#F9F6F0';
-                typography = 'elegante';
-                welcome = 'Con la bendición de nuestras familias y la alegría de nuestros corazones, te invitamos a celebrar nuestra unión eterna.';
-                subtitle = 'Nuestra Boda';
-            } else if (lower.includes('xv') || lower.includes('quince')) {
+            if (lower.includes('boda') || lower.includes('matrimonio') || lower.includes('novios')) {
+                if (lower.includes('boho') || lower.includes('jardin') || lower.includes('jardín')) {
+                    primary = '#2B3A2C';
+                    accent = '#D4AF37';
+                    cardBg = '#F9F6F0';
+                    typography = 'elegante';
+                    welcome = 'Bajo el cielo abierto y rodeados de naturaleza, queremos celebrar con las personas más importantes de nuestras vidas el día en que unimos nuestros caminos.';
+                    subtitle = 'Nuestra Boda en el Jardín';
+                } else {
+                    primary = '#1C1917';
+                    accent = '#CCA461';
+                    cardBg = '#FAF8F5';
+                    typography = 'elegante';
+                    welcome = 'Con la bendición de nuestras familias y la alegría de nuestros corazones, te invitamos a celebrar nuestra unión eterna.';
+                    subtitle = 'Nuestra Boda';
+                }
+            } else if (lower.includes('xv') || lower.includes('quince') || lower.includes('princesa')) {
                 primary = '#3A1E2B';
                 accent = '#E08DAA';
                 cardBg = '#FDF5F8';
                 typography = 'romantica';
                 welcome = 'Doy gracias a la vida por cumplir 15 años y quiero celebrar este sueño inolvidable rodeada de quienes más quiero.';
                 subtitle = 'Mis XV Años';
-            } else if (lower.includes('bautizo') || lower.includes('comunion')) {
+            } else if (lower.includes('posada') || lower.includes('navid')) {
+                primary = '#4A443E';
+                accent = '#CCA461';
+                cardBg = '#FDF8F0';
+                typography = 'elegante';
+                welcome = 'Celebremos juntos la magia de las tradiciones, la alegría de la familia y el amor que nos une en esta época tan especial.';
+                subtitle = 'Baby Posada Navideña';
+            } else if (lower.includes('baby') || lower.includes('revelacion') || lower.includes('revelación') || lower.includes('shower')) {
+                primary = '#2C3E50';
+                accent = '#E8A598';
+                cardBg = '#FDF8F5';
+                typography = 'romantica';
+                welcome = 'Una pequeña gran bendición viene en camino y queremos compartir con ustedes toda la emoción y dulzura de su llegada.';
+                subtitle = 'Baby Shower & Revelación';
+            } else if (lower.includes('bautizo') || lower.includes('comunion') || lower.includes('comunión')) {
                 primary = '#1E2D3A';
                 accent = '#A4C3B2';
                 cardBg = '#F4F7F6';
@@ -120,6 +101,13 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
                 typography = 'moderna';
                 welcome = 'Un ciclo culmina y una gran meta se cumple. Te espero para brindar y celebrar este gran logro juntos.';
                 subtitle = 'Mi Graduación';
+            } else if (lower.includes('cumple') || lower.includes('aniversario')) {
+                primary = '#1E1B4B';
+                accent = '#EC4899';
+                cardBg = '#FDF4FF';
+                typography = 'moderna';
+                welcome = 'Los mejores momentos de la vida se disfrutan con amigos y familia. ¡Ven a festejar conmigo este día tan especial!';
+                subtitle = 'Mi Cumpleaños';
             }
 
             setGeneratedTheme({
@@ -133,7 +121,7 @@ export default function AiDesignModal({ isOpen, onClose, onApplyAiTheme }: Props
 
             setGenerating(false);
             toast.success('¡Estilo generado con éxito!');
-        }, 1200);
+        }, 700);
     };
 
     const handleApply = () => {

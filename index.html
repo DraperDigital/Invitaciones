@@ -53,8 +53,20 @@
       />
     </noscript>
 
-    <!-- <title> intentionally omitted — react-helmet-async injects per-route titles at runtime,
-         and the prerender build serializes them into static HTML for crawlers. -->
+    <!-- Static Primary SEO Meta Tags (overridden by react-helmet-async on route change) -->
+    <title>Invitto · Invitaciones Digitales Inteligentes para Bodas, XV Años y Eventos</title>
+    <meta name="description" content="Crea tu invitación digital con confirmación de asistencia en tiempo real por WhatsApp, pases QR, mapas interactivos, mesa de regalos y música. Hecho en México." />
+    <link rel="canonical" href="https://invitto.com.mx/" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://invitto.com.mx/" />
+    <meta property="og:title" content="Invitto · Invitaciones Digitales Inteligentes" />
+    <meta property="og:description" content="Deja de perseguir invitados. Confirmación de asistencia en tiempo real por WhatsApp, pases QR y mesas organizadas." />
+    <meta property="og:image" content="https://invitto.com.mx/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Invitto · Invitaciones Digitales Inteligentes" />
+    <meta name="twitter:description" content="Deja de perseguir invitados. Confirmación de asistencia en tiempo real por WhatsApp, pases QR y mesas organizadas." />
+    <meta name="twitter:image" content="https://invitto.com.mx/og-image.png" />
 
     <!-- Google tag (gtag.js) + Microsoft Clarity now load from src/lib/analytics.ts,
          gated on cookie consent (invitto_cookie_consent === 'all') and called from

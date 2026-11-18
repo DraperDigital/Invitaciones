@@ -25,7 +25,10 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const dbSchema = Deno.env.get('SUPABASE_DB_SCHEMA') || 'invitto';
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      db: { schema: dbSchema }
+    });
 
     // Verify user
     const token = authHeader.replace('Bearer ', '')
@@ -33,6 +36,21 @@ serve(async (req) => {
 
     if (authError || !user) {
       throw new Error('Invalid token')
+    }
+
+    // 0. Verify event exists and belongs to this user
+    const { data: eventData, error: eventError } = await supabase
+      .from('events')
+      .select('id, user_id, theme_config')
+      .eq('id', eventId)
+      .single();
+
+    if (eventError || !eventData) {
+      throw new Error('Evento no encontrado.')
+    }
+
+    if (eventData.user_id !== user.id) {
+      throw new Error('No tienes permisos para modificar este evento.')
     }
 
     // 1. Verify coupon
@@ -119,28 +137,22 @@ serve(async (req) => {
       .update({ plan_tier: planId })
       .eq('id', user.id);
 
-    // 6. Get current theme_config to add plan_tier and publish the event
-    const { data: eventData } = await supabase
-      .from('events')
-      .select('theme_config')
-      .eq('id', eventId)
-      .single();
-
-    if (eventData) {
-      let themeConfig = eventData.theme_config || {};
-      if (typeof themeConfig === 'string') {
-        try { themeConfig = JSON.parse(themeConfig); } catch { themeConfig = {}; }
-      }
-      const updatedThemeConfig = { ...themeConfig, plan_tier: planId };
-
-      await supabase
-        .from('events')
-        .update({
-          is_published: true,
-          theme_config: updatedThemeConfig
-        })
-        .eq('id', eventId);
+    // 6. Update theme_config to add plan_tier, isPremium, isPro and publish the event
+    let themeConfig = eventData.theme_config || {};
+    if (typeof themeConfig === 'string') {
+      try { themeConfig = JSON.parse(themeConfig); } catch { themeConfig = {}; }
     }
+    const isPrem = planId === 'premium' || planId === 'concierge';
+    const isPr = planId === 'pro' || isPrem;
+    const updatedThemeConfig = { ...themeConfig, plan_tier: planId, isPremium: isPrem, isPro: isPr };
+
+    await supabase
+      .from('events')
+      .update({
+        is_published: true,
+        theme_config: updatedThemeConfig
+      })
+      .eq('id', eventId);
 
     return new Response(
       JSON.stringify({ success: true, message: 'Cupón aplicado con éxito.' }),

@@ -252,10 +252,10 @@ export default function PlanesPage() {
                                 {plan.id === 'concierge' ? (
                                     <div className="mt-4 text-center space-y-3">
                                         <Link 
-                                            to="/concierge-service" 
+                                            to="/planes/concierge" 
                                             className="block text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5 mx-auto w-fit"
                                         >
-                                            Saber más sobre Concierge →
+                                            Saber más sobre Plan Concierge →
                                         </Link>
                                         <Link 
                                             to={plan.demoUrl} 
@@ -280,6 +280,20 @@ export default function PlanesPage() {
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* Banner Invitto Confirma */}
+                <div className="mt-8 max-w-4xl mx-auto p-4 md:p-6 rounded-2xl bg-[#DF3B94]/5 border border-[#DF3B94]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-center sm:text-left">
+                        <p className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">¿Solo necesitas que confirmemos a tus invitados?</p>
+                        <p className="text-sm text-stone-600 mt-1">Conoce <strong>Invitto Confirma</strong>: le escribimos y llamamos a cada invitado en tu nombre hasta tener tu lista final cerrada. Servicio independiente desde $2,499 MXN.</p>
+                    </div>
+                    <Link
+                        to="/confirma"
+                        className="shrink-0 px-5 py-2.5 rounded-xl bg-[#DF3B94] hover:bg-[#C52A7C] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#DF3B94]/20 whitespace-nowrap"
+                    >
+                        Conocer Invitto Confirma →
+                    </Link>
                 </div>
 
                 {/* Quick Link to Detailed Comparison */}

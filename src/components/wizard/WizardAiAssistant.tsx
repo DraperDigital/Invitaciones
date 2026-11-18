@@ -218,6 +218,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const [tempVenueTime, setTempVenueTime] = useState<string>('');
     const [tempHotelName, setTempHotelName] = useState<string>('');
 
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -265,7 +266,15 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     };
 
     useEffect(() => {
-        scrollToBottom();
+        if (messages.length <= 1) {
+            // Al abrir por primera vez, asegurar que la conversación empiece desde arriba
+            // para que no corte el saludo ni la primera fila de tipos de evento
+            if (messagesContainerRef.current) {
+                messagesContainerRef.current.scrollTop = 0;
+            }
+        } else {
+            scrollToBottom();
+        }
     }, [messages, isTyping]);
 
     // Inicializar la conversación y sincronizar almacenamiento
@@ -1012,7 +1021,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         </div>
                         <div>
                             <h3 className="text-sm font-bold flex items-center gap-1.5">
-                                Invitto Concierge AI
+                                Invitto AI
                                 <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
                             </h3>
                             <p className="text-[11px] text-stone-400">Creando tu invitación de forma conversacional</p>
@@ -1024,10 +1033,10 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                             type="button"
                             onClick={onSwitchToManual}
                             className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-stone-200 transition-all flex items-center gap-1.5 cursor-pointer"
-                            title="Ver en formulario tradicional"
+                            title="Llenar en formulario tradicional"
                         >
                             <SlidersHorizontal className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Ver Formulario</span>
+                            <span className="text-[11px] sm:text-xs">Llenar Formulario</span>
                         </button>
                         <button
                             type="button"
@@ -1044,7 +1053,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 </div>
 
                 {/* Mensajes del Chat */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-stone-50/50">
+                <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-stone-50/50">
                     {messages.map((msg) => (
                         <div
                             key={msg.id}
@@ -1260,6 +1269,20 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         <Send className="h-4 w-4" />
                     </button>
                 </form>
+
+                {/* Fallback visible al formulario manual */}
+                <div className="py-2.5 px-4 bg-stone-50 border-t border-stone-200/80 flex items-center justify-between text-xs text-stone-600">
+                    <span className="hidden sm:inline">¿Prefieres no usar el asistente con IA?</span>
+                    <button
+                        type="button"
+                        onClick={onSwitchToManual}
+                        className="text-[#DF3B94] hover:text-[#C52A7C] font-bold flex items-center gap-1.5 hover:underline cursor-pointer"
+                    >
+                        <SlidersHorizontal className="h-3.5 w-3.5" />
+                        <span>Prefiero llenar un formulario tradicional</span>
+                    </button>
+                    <span className="text-[11px] text-stone-400 hidden xs:inline">Tus datos se conservan</span>
+                </div>
             </div>
 
             {/* Modal de Vista Previa Interactiva */}

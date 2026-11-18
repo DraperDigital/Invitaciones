@@ -190,7 +190,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     steps: DEFAULT_STEPS,
     testimonials: TESTIMONIALS_BODA,
     faq: [
-      { question: '¿Cuánto cuesta una invitación digital para boda?', answer: 'Invitto ofrece planes desde $349 MXN. Incluye diseño premium, RSVP integrado, música de fondo y envío ilimitado por WhatsApp. Sin costos por invitado adicional.' },
+      { question: '¿Cuánto cuesta una invitación digital para boda?', answer: 'Invitto ofrece planes desde $499 MXN. Incluye diseño premium, RSVP integrado, música de fondo y envío ilimitado por WhatsApp. Sin costos por invitado adicional.' },
       { question: '¿Puedo personalizar los colores y la tipografía?', answer: 'Sí, todas nuestras plantillas de boda son 100% personalizables. Puedes cambiar colores, tipografías, fotos, música e incluir tu itinerario, mesa de regalos y código de vestimenta.' },
       { question: '¿Cómo funciona el RSVP digital?', answer: 'Tus invitados confirman asistencia directamente desde la invitación en su celular. Tú ves las confirmaciones en tiempo real en tu panel de control, con filtros por mesa, acompañantes y restricciones alimenticias.' },
       { question: '¿Es posible incluir un mapa de ubicación?', answer: 'Sí, puedes incluir la ubicación de la ceremonia y la recepción con un mapa interactivo de Google Maps integrado directamente en tu invitación.' },
@@ -230,7 +230,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     steps: DEFAULT_STEPS,
     testimonials: TESTIMONIALS_GENERAL,
     faq: [
-      { question: '¿Cuánto cuesta una invitación digital para XV años?', answer: 'Los planes de Invitto comienzan desde $349 MXN e incluyen diseño premium, RSVP integrado, música de fondo y envío ilimitado por WhatsApp.' },
+      { question: '¿Cuánto cuesta una invitación digital para XV años?', answer: 'Los planes de Invitto comienzan desde $499 MXN e incluyen diseño premium, RSVP integrado, música de fondo y envío ilimitado por WhatsApp.' },
       { question: '¿Puedo poner la canción del vals en la invitación?', answer: 'Sí, puedes elegir cualquier canción como música de fondo para tu invitación. Se reproduce automáticamente cuando tus invitados la abren.' },
       { question: '¿Cómo sé quién va a ir a la fiesta?', answer: 'Cada invitado confirma directamente desde su celular. Tú ves en tiempo real quién va, cuántos acompañantes llevan y cualquier nota especial.' },
       { question: '¿Puedo incluir la ubicación del salón?', answer: 'Sí, incluimos un mapa interactivo de Google Maps con la dirección del salón y de la iglesia si aplica.' },
@@ -270,7 +270,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     steps: DEFAULT_STEPS,
     testimonials: TESTIMONIALS_GENERAL,
     faq: [
-      { question: '¿Puedo crear una invitación de cumpleaños gratis?', answer: 'Invitto ofrece la opción de crear y previsualizar tu invitación antes de pagar. Los planes con funciones premium comienzan desde $349 MXN.' },
+      { question: '¿Puedo crear una invitación de cumpleaños gratis?', answer: 'Invitto ofrece la opción de crear y previsualizar tu invitación antes de pagar. Los planes con funciones premium comienzan desde $499 MXN.' },
       { question: '¿Sirve para cumpleaños infantiles?', answer: 'Sí, tenemos diseños divertidos y coloridos pensados para fiestas infantiles, así como opciones más elegantes para adultos.' },
       { question: '¿Cuántos invitados puedo incluir?', answer: 'No hay límite de invitados. Puedes compartir el link con tantas personas como necesites sin costos adicionales.' },
       { question: '¿Puedo poner la hora y dirección de la fiesta?', answer: 'Sí, incluye todos los detalles: fecha, hora, dirección con mapa interactivo, código de vestimenta y notas especiales.' },
@@ -350,7 +350,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Invitto funciona para eventos en toda la zona metropolitana de Guadalajara?', answer: 'Sí, funciona para eventos en Guadalajara, Zapopan, Tlaquepaque, Tonalá y toda la zona metropolitana. Incluye mapas interactivos para cualquier ubicación.' },
       { question: '¿Tienen diseños con estilo mexicano?', answer: 'Sí, tenemos plantillas que combinan elegancia moderna con toques tradicionales mexicanos. Perfectas para bodas y XV años en Jalisco.' },
-      { question: '¿Cuánto cuesta?', answer: 'Los planes comienzan desde $349 MXN. Incluye diseño premium, RSVP integrado, música y envío ilimitado por WhatsApp.' },
+      { question: '¿Cuánto cuesta?', answer: 'Los planes comienzan desde $499 MXN. Incluye diseño premium, RSVP integrado, música y envío ilimitado por WhatsApp.' },
       { question: '¿Puedo incluir la ubicación de la iglesia y el salón?', answer: 'Sí, puedes agregar múltiples ubicaciones con mapas interactivos de Google Maps.' },
       { question: '¿Se puede personalizar completamente?', answer: 'Sí, puedes cambiar colores, tipografías, fotos, música, itinerario y más. Tu invitación, a tu estilo.' },
     ],
@@ -390,7 +390,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Invitto funciona para eventos en toda el área metropolitana de Monterrey?', answer: 'Sí, funciona para Monterrey, San Pedro Garza García, San Nicolás, Apodaca, Escobedo y toda el área metropolitana. Incluye mapas interactivos.' },
       { question: '¿Puedo usar la invitación para eventos corporativos?', answer: 'Sí, Invitto funciona perfectamente para eventos empresariales, cenas de gala, aniversarios y más.' },
       { question: '¿Los invitados necesitan descargar algo?', answer: 'No, la invitación se abre directamente en el navegador del celular. Sin apps ni descargas.' },
-      { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $349 MXN. Sin costos por invitado adicional.' },
+      { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $499 MXN. Sin costos por invitado adicional.' },
       { question: '¿Puedo ver quién ya confirmó?', answer: 'Sí, tienes un panel de control donde ves todas las confirmaciones en tiempo real con nombre, número de acompañantes y notas.' },
     ],
     ctaFinal: {
@@ -429,7 +429,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Invitto funciona para eventos en todo Guanajuato?', answer: 'Sí, funciona perfectamente para León, Irapuato, Celaya, Guanajuato capital y todo el Bajío. Incluye mapas interactivos para cualquier recinto.' },
       { question: '¿Puedo enviar las invitaciones a invitados foráneos?', answer: '¡Por supuesto! Las invitaciones digitales son ideales para compartir la ubicación, opciones de hotel y detalles del evento a familiares que vienen de otras ciudades.' },
       { question: '¿Los invitados necesitan alguna aplicación?', answer: 'No, la invitación se abre directamente en el navegador de cualquier celular. Sin apps ni descargas.' },
-      { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $349 MXN. Sin límite de envíos ni costos por invitado adicional.' },
+      { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $499 MXN. Sin límite de envíos ni costos por invitado adicional.' },
     ],
     ctaFinal: {
       title: 'Tu evento en León merece la mejor invitación',
@@ -468,7 +468,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       invittoLabel: 'Invitto (Digital)',
       competitorLabel: 'Papel Tradicional',
       rows: [
-        { feature: 'Costo por 150 invitados', invitto: 'Desde $349 MXN (total)', competitor: '$4,500 — $12,000 MXN' },
+        { feature: 'Costo por 150 invitados', invitto: 'Desde $499 MXN (total)', competitor: '$4,500 — $12,000 MXN' },
         { feature: 'Tiempo de entrega', invitto: '15 minutos', competitor: '2 — 4 semanas' },
         { feature: 'RSVP integrado', invitto: true, competitor: false },
         { feature: 'Música de fondo', invitto: true, competitor: false },
@@ -484,7 +484,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Es mal visto enviar una invitación digital a una boda?', answer: 'No, al contrario. En 2026 las invitaciones digitales son la norma en México. Ofrecen una experiencia interactiva mucho más rica que el papel y tus invitados las agradecen por la comodidad.' },
       { question: '¿Puedo complementar digital con algunas de papel?', answer: 'Sí, muchas parejas envían digital a la mayoría e imprimen unas pocas para familiares mayores. Invitto facilita ambas estrategias.' },
       { question: '¿Se ve tan elegante como una de papel?', answer: 'Sí, e incluso más. Las invitaciones de Invitto incluyen animaciones, música y diseño profesional que el papel no puede ofrecer.' },
-      { question: '¿Cuánto me ahorro vs papel?', answer: 'Para una boda de 150 invitados, una invitación de papel cuesta entre $4,500 y $12,000 MXN. Con Invitto, desde $349 MXN por todo. Un ahorro de hasta 90%.' },
+      { question: '¿Cuánto me ahorro vs papel?', answer: 'Para una boda de 150 invitados, una invitación de papel cuesta entre $4,500 y $12,000 MXN. Con Invitto, desde $499 MXN por todo. Un ahorro de hasta 90%.' },
     ],
     ctaFinal: {
       title: 'Elige lo inteligente. Elige digital.',
@@ -530,7 +530,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
         { feature: 'RSVP con gestión de mesas', invitto: true, competitor: false },
         { feature: 'Pase de acceso QR', invitto: true, competitor: false },
         { feature: 'Soporte en español', invitto: true, competitor: false },
-        { feature: 'Precio por evento', invitto: 'Desde $349 MXN', competitor: 'Desde $20 USD (~$360 MXN)' },
+        { feature: 'Precio por evento', invitto: 'Desde $499 MXN', competitor: 'Desde $20 USD (~$360 MXN)' },
       ],
     },
     testimonials: TESTIMONIALS_BODA,
@@ -584,13 +584,13 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
         { feature: 'Pase de acceso QR', invitto: true, competitor: false },
         { feature: 'RSVP con mesas', invitto: true, competitor: 'Parcial' },
         { feature: 'Soporte en español', invitto: true, competitor: false },
-        { feature: 'Precio', invitto: 'Desde $349 MXN', competitor: 'Desde $49 USD (~$900 MXN)' },
+        { feature: 'Precio', invitto: 'Desde $499 MXN', competitor: 'Desde $49 USD (~$900 MXN)' },
       ],
     },
     testimonials: TESTIMONIALS_BODA,
     faq: [
       { question: '¿Greenvelope funciona en México?', answer: 'Greenvelope opera desde Estados Unidos. Su plataforma está en inglés, cobra en dólares y su método de envío principal es email, no WhatsApp.' },
-      { question: '¿Invitto es más barato que Greenvelope?', answer: 'Sí, significativamente. Greenvelope cobra desde $49 USD (~$900 MXN), mientras que Invitto comienza desde $349 MXN con más funciones incluidas.' },
+      { question: '¿Invitto es más barato que Greenvelope?', answer: 'Sí, significativamente. Greenvelope cobra desde $49 USD (~$900 MXN), mientras que Invitto comienza desde $499 MXN con más funciones incluidas.' },
       { question: '¿Cuál tiene mejor soporte para bodas mexicanas?', answer: 'Invitto fue creada en México para bodas mexicanas. Los diseños, el idioma y las funciones están pensados para nuestras tradiciones y costumbres.' },
       { question: '¿Puedo migrar de Greenvelope a Invitto?', answer: 'Sí, puedes crear tu invitación desde cero en Invitto en menos de 15 minutos. No necesitas migrar datos — simplemente comparte tu nuevo link.' },
     ],

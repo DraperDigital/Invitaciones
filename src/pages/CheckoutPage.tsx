@@ -1,5 +1,5 @@
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, ArrowLeft, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { Check, ArrowLeft, ArrowRight, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -151,15 +151,6 @@ export default function CheckoutPage() {
         setIsApplyingCoupon(true);
         setCouponError(null);
 
-        const cleanCode = couponCode.trim().toUpperCase();
-
-        // Cupones maestros de prueba para desarrollo/QA con acceso total ilimitado
-        if (['INVITTOVIP', 'TESTMASTER', 'TESTPRO'].includes(cleanCode)) {
-            setIsCouponSuccess(true);
-            setIsApplyingCoupon(false);
-            return;
-        }
-
         try {
             if (!eventId) {
                 throw new Error("Selecciona la invitación para la que quieres aplicar el cupón.");
@@ -167,7 +158,7 @@ export default function CheckoutPage() {
             
             const { data, error } = await supabase.functions.invoke('apply-coupon', {
                 body: { 
-                    couponCode: couponCode,
+                    couponCode: couponCode.trim().toUpperCase(),
                     eventId: eventId,
                     planId: planId
                 }
@@ -212,25 +203,8 @@ export default function CheckoutPage() {
                 return;
             }
 
-            // Si el cupón fue exitoso, ya se actualizó la BD, simplemente redirigir.
+            // Si el cupón fue validado y activado por el servidor, redirigir
             if (isCouponSuccess) {
-                // FALLBACK CLIENTE: Asegurar que todo se actualice si la Edge Function antigua falló en algo
-                
-                const { data: eventData } = await supabase.from('events').select('theme_config').eq('id', eventId).single();
-                if (eventData) {
-                    let tc = eventData.theme_config || {};
-                    if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
-                    const isPrem = planId === 'premium' || planId === 'concierge';
-                    const isPr = planId === 'pro' || isPrem;
-                    await supabase.from('events').update({ 
-                        is_published: true, 
-                        theme_config: { ...tc, plan_tier: planId, isPremium: isPrem, isPro: isPr } 
-                    }).eq('id', eventId);
-                }
-                
-                // 2. Forzar actualización del plan en el perfil del usuario (para arreglar el dashboard)
-                await supabase.from('profiles').update({ plan_tier: planId }).eq('id', user.id);
-
                 setIsSuccess(true);
                 trackEvent('purchase', {
                     transaction_id: eventId,
@@ -240,7 +214,7 @@ export default function CheckoutPage() {
                 });
                 setTimeout(() => {
                     navigate(`/dashboard/design/${eventId}?upgrade=success`);
-                }, 2000);
+                }, 1500);
                 return;
             }
 
@@ -296,16 +270,17 @@ export default function CheckoutPage() {
     return (
         <div className="min-h-screen bg-[#FDFBF7] font-sans selection:bg-[#DF3B94]/10">
             {/* Header */}
-            <header className="py-6 border-b border-slate-100 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
-                <div className="mx-auto max-w-7xl px-6 md:px-8 flex justify-between items-center">
-                    <Link to={eventId ? `/planes?id=${eventId}` : "/planes"} className="group flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#222B38] transition-all">
-                        <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" /> Volver a Planes
+            <header className="py-5 sm:py-6 border-b border-slate-100 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex justify-between items-center gap-2">
+                    <Link to={eventId ? `/planes?id=${eventId}` : "/planes"} className="group flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-500 hover:text-[#222B38] transition-all shrink-0">
+                        <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 shrink-0" />
+                        <span className="hidden sm:inline">Volver a Planes</span>
                     </Link>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xl md:text-2xl font-display font-extrabold text-[#222B38]">Finalizar Orden</span>
+                    <div className="flex items-center gap-2 text-center min-w-0">
+                        <span className="text-base sm:text-xl md:text-2xl font-display font-extrabold text-[#222B38] truncate">Finalizar Orden</span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] uppercase font-bold tracking-wider">
-                        <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                    <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] uppercase font-bold tracking-wider shrink-0">
+                        <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-500 shrink-0" />
                         <span className="hidden sm:inline">Pago Seguro SSL</span>
                     </div>
                 </div>
@@ -313,18 +288,58 @@ export default function CheckoutPage() {
 
             <div className="py-12 md:py-16 px-6 md:px-8">
                 <div className="mx-auto max-w-7xl">
-                    {/* Draft selector — shown only when user landed without ?id= (e.g. browser back) */}
-                    {!eventId && draftLookupDone && (
-                        <div className="mb-12 p-8 md:p-10 bg-amber-50 border border-amber-200 rounded-3xl max-w-3xl mx-auto space-y-6">
-                            {draftEvents.length > 0 ? (
-                                <>
+                    {/* Onboarding cuando el usuario llega sin invitación ni borradores */}
+                    {!eventId && draftLookupDone && draftEvents.length === 0 ? (
+                        <div className="max-w-2xl mx-auto my-4 p-8 md:p-12 bg-white rounded-3xl border border-slate-200/80 shadow-xl text-center space-y-6">
+                            <div className="w-16 h-16 bg-[#fdf2f8] text-[#DF3B94] rounded-2xl flex items-center justify-center mx-auto border border-[#fbcfe8]">
+                                <Sparkles className="h-8 w-8" />
+                            </div>
+                            <div className="space-y-2">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                                    ✓ Diseña primero · Pagas después
+                                </span>
+                                <h2 className="text-2xl md:text-3xl font-display font-extrabold text-[#222B38]">
+                                    Crea tu borrador gratis en 2 minutos
+                                </h2>
+                                <p className="text-slate-600 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+                                    En Invitto no pagas por adelantado. Personaliza tu diseño, fecha y música con total libertad. El <strong>Plan {selectedPlan.name} (${selectedPlan.price} MXN)</strong> solo se activa cuando estés listo para publicar y enviar a tus invitados.
+                                </p>
+                            </div>
+
+                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                <Link
+                                    to={`/dashboard/new?plan=${planId}`}
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-lg shadow-[#DF3B94]/25"
+                                >
+                                    <span>Diseñar mi invitación gratis</span>
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                    to="/ejemplos"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-100 text-slate-700 rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-slate-200 transition-colors"
+                                >
+                                    Ver ejemplos interactivos
+                                </Link>
+                            </div>
+
+                            <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-6 text-xs text-slate-400 font-medium">
+                                <span>Sin tarjeta requerida para crear</span>
+                                <span>•</span>
+                                <span>Garantía de reembolso 14 días</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Selector de borradores — mostrado solo cuando el usuario tiene borradores previos */}
+                            {!eventId && draftLookupDone && draftEvents.length > 0 && (
+                                <div className="mb-12 p-8 md:p-10 bg-amber-50 border border-amber-200 rounded-3xl max-w-3xl mx-auto space-y-6">
                                     <div className="flex items-start gap-4">
                                         <div className="h-12 w-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-700 flex-shrink-0">
                                             <CheckCircle2 className="h-6 w-6" />
                                         </div>
                                         <div>
                                             <h3 className="text-xl font-display font-extrabold text-[#222B38] mb-1">¿Para qué invitación es este pago?</h3>
-                                            <p className="text-sm text-slate-600">Selecciona tu evento o crea uno nuevo.</p>
+                                            <p className="text-sm text-slate-600">Selecciona tu borrador existente o crea uno nuevo.</p>
                                         </div>
                                     </div>
                                     <div className="space-y-3">
@@ -352,23 +367,10 @@ export default function CheckoutPage() {
                                     >
                                         + Crear una nueva invitación
                                     </Link>
-                                </>
-                            ) : (
-                                <div className="text-center space-y-4">
-                                    <h3 className="text-xl font-display font-extrabold text-[#222B38]">Necesitas crear una invitación primero</h3>
-                                    <p className="text-sm text-slate-600">El pago se asocia a un evento específico. Crea tu invitación y luego completas la orden.</p>
-                                    <Link
-                                        to={`/dashboard/new?plan=${planId}`}
-                                        className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-lg"
-                                    >
-                                        Crear mi invitación
-                                    </Link>
                                 </div>
                             )}
-                        </div>
-                    )}
 
-                    <div className={`grid lg:grid-cols-12 gap-12 lg:gap-16 items-start ${!eventId ? 'opacity-40 pointer-events-none' : ''}`}>
+                            <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
                         {/* Form Section */}
                         <div className="lg:col-span-7 space-y-8">
                             <form onSubmit={handleSubmit} className="space-y-8">
@@ -554,8 +556,10 @@ export default function CheckoutPage() {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>
+            )}
         </div>
+    </div>
+</div>
     );
 }

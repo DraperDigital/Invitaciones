@@ -33,8 +33,8 @@ export default function FaqPage() {
                         <Link to="/comparativas" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Comparativas
                         </Link>
-                        <Link to="/concierge-service" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
-                            Concierge
+                        <Link to="/confirma" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
+                            Invitto Confirma
                         </Link>
                     </nav>
                     <div className="flex items-center gap-4">

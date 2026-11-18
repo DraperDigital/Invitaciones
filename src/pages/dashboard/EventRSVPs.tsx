@@ -42,6 +42,14 @@ const EventRSVPs: React.FC = () => {
     const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'yes' | 'no'>('all');
     const [viewMode, setViewMode] = useState<'table' | 'cards'>( (typeof window !== 'undefined' && window.innerWidth < 1024) ? 'cards' : 'table');
 
+    // Pagination State
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(25);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, statusFilter, pageSize]);
+
     const { user } = useAuth();
     const toast = useToast();
     const { hasFeature } = useFeatureAccess(eventId || undefined);
@@ -205,6 +213,11 @@ const EventRSVPs: React.FC = () => {
         const matchesStatus = statusFilter === 'all' || status === statusFilter;
         return matchesSearch && matchesStatus;
     });
+
+    const effectivePageSize = pageSize === -1 ? (filteredGuests.length || 1) : pageSize;
+    const totalPages = Math.max(1, Math.ceil(filteredGuests.length / effectivePageSize));
+    const startIndex = pageSize === -1 ? 0 : (currentPage - 1) * pageSize;
+    const paginatedGuests = pageSize === -1 ? filteredGuests : filteredGuests.slice(startIndex, startIndex + pageSize);
 
     const handleDelete = async (guestId: string) => {
         try {
@@ -1114,8 +1127,8 @@ const EventRSVPs: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Search & Filters */}
-                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white p-4 md:p-6 rounded-[2rem] border border-stone-200 shadow-sm">
+                    {/* Search & Filters (Sticky para no perderlo al hacer scroll) */}
+                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white/95 backdrop-blur-md p-4 md:p-6 rounded-[2rem] border border-stone-200 shadow-sm sticky top-16 md:top-20 z-20">
                         <div className="relative w-full lg:max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
                             <input 
@@ -1210,7 +1223,7 @@ const EventRSVPs: React.FC = () => {
                     <div className="bg-white rounded-[2rem] border border-stone-200 shadow-sm overflow-hidden">
                         {viewMode === 'cards' ? (
                             <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                                {filteredGuests.map(g => {
+                                {paginatedGuests.map(g => {
                                     const rsvp = g.rsvps?.[0];
                                     const status = getGuestStatus(g);
                                     const cardStyles = status === 'yes' 
@@ -1354,7 +1367,7 @@ const EventRSVPs: React.FC = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-stone-200">
-                                        {filteredGuests.map(g => (
+                                        {paginatedGuests.map(g => (
                                             <tr key={g.id} className={`transition-all ${selectedIds.has(g.id) ? 'bg-rose-50/60' : 'hover:bg-stone-50/80'}`}>
                                                 <td className="px-4 py-6">
                                                     <button 
@@ -1542,6 +1555,73 @@ const EventRSVPs: React.FC = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                            </div>
+                        )}
+
+                        {/* Paginación y Selector de tamaño */}
+                        {filteredGuests.length > 0 && (
+                            <div className="p-4 sm:p-6 bg-stone-50 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div className="text-xs text-stone-600 font-medium text-center sm:text-left">
+                                    Mostrando <span className="font-bold text-stone-900">{startIndex + 1}</span>–<span className="font-bold text-stone-900">{Math.min(startIndex + (pageSize === -1 ? filteredGuests.length : pageSize), filteredGuests.length)}</span> de <span className="font-bold text-stone-900">{filteredGuests.length}</span> invitados
+                                    {searchQuery && ` (filtrados)`}
+                                </div>
+
+                                {totalPages > 1 && (
+                                    <div className="flex items-center gap-1.5">
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            disabled={currentPage === 1}
+                                            className="px-3 py-1.5 rounded-lg border border-stone-200 bg-white text-xs font-semibold text-stone-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 transition-all cursor-pointer"
+                                        >
+                                            Anterior
+                                        </button>
+                                        <div className="flex items-center gap-1">
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                                .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1)
+                                                .map((p, idx, arr) => (
+                                                    <React.Fragment key={p}>
+                                                        {idx > 0 && arr[idx - 1] !== p - 1 && (
+                                                            <span className="px-1 text-stone-400 text-xs">…</span>
+                                                        )}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCurrentPage(p)}
+                                                            className={`h-8 w-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                                                currentPage === p
+                                                                    ? 'bg-[#DF3B94] text-white shadow-sm'
+                                                                    : 'bg-white border border-stone-200 text-stone-700 hover:bg-stone-100'
+                                                            }`}
+                                                        >
+                                                            {p}
+                                                        </button>
+                                                    </React.Fragment>
+                                                ))}
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="px-3 py-1.5 rounded-lg border border-stone-200 bg-white text-xs font-semibold text-stone-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-stone-100 transition-all cursor-pointer"
+                                        >
+                                            Siguiente
+                                        </button>
+                                    </div>
+                                )}
+
+                                <div className="flex items-center gap-2 text-xs text-stone-500">
+                                    <span>Por página:</span>
+                                    <select
+                                        value={pageSize}
+                                        onChange={e => setPageSize(Number(e.target.value))}
+                                        className="bg-white border border-stone-200 rounded-lg px-2.5 py-1 text-xs font-semibold text-stone-800 outline-none focus:border-[#DF3B94] cursor-pointer"
+                                    >
+                                        <option value={25}>25</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                        <option value={-1}>Todos</option>
+                                    </select>
+                                </div>
                             </div>
                         )}
                     </div>
