@@ -199,8 +199,8 @@ export default function HomePage() {
             {/* Barra de aviso arriba del hero */}
             <div className="mt-16 md:mt-20 bg-[#DF3B94] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#C52A7C] relative z-40 shadow-xs">
                 <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
-                    <span className="bg-white/20 text-white px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider shrink-0">
-                        Nuevo
+                    <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
+                        NUEVO
                     </span>
                     <span>Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
                     <span className="font-bold text-sm shrink-0">→</span>
