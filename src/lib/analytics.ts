@@ -91,10 +91,14 @@ function loadMetaPixel(id: string) {
 
 export function initAnalytics() {
     if (typeof window === 'undefined') return;
+
+    // Meta Pixel se carga siempre de forma incondicional
+    if (META_PIXEL_ID) loadMetaPixel(META_PIXEL_ID);
+
+    // Clarity y GA4 permanecen bajo control de consentimiento
     if (!hasAnalyticsConsent()) return;
     if (CLARITY_ID) loadClarity(CLARITY_ID);
     if (GA4_ID) loadGA4(GA4_ID);
-    if (META_PIXEL_ID) loadMetaPixel(META_PIXEL_ID);
 }
 
 // Fire a conversion event across GA4 and Meta Pixel. Safe to call anytime.
