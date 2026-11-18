@@ -22,7 +22,7 @@ serve(async (req) => {
       throw new Error('No authorization header')
     }
 
-    const { planId, eventId, origin } = await req.json()
+    const { planId, eventId, origin, email } = await req.json()
 
     if (!planId || !eventId || !origin) {
       throw new Error('Missing required parameters')
@@ -55,6 +55,7 @@ serve(async (req) => {
         oxxo: { expires_after_days: 3 },
       },
       customer_creation: 'always',
+      ...(email ? { customer_email: email } : {}),
       line_items: [
         {
           price: priceId,

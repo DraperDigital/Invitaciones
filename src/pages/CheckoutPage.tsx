@@ -255,11 +255,13 @@ export default function CheckoutPage() {
             }
 
             // Call our Edge Function to create a Stripe Checkout Session
+            const effectiveEmail = (formData.email && formData.email.trim()) || user?.email || undefined;
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
                 body: { 
                     planId: planId,
                     eventId: eventId,
-                    origin: window.location.origin
+                    origin: window.location.origin,
+                    email: effectiveEmail
                 }
             });
 
