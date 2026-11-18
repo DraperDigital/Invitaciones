@@ -11,6 +11,7 @@ import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
+import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
 
 type DesignConfig = {
     primaryColor: string;
@@ -295,6 +296,9 @@ export default function DesignEditor() {
     const [event, setEvent] = useState<any>(null);
     const eventPlanFromConfig = event?.theme_config?.plan_tier || (event?.theme_config?.isPremium ? 'premium' : event?.theme_config?.isPro ? 'pro' : 'clasico');
     const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
+
+    const checkoutIntent = syncCheckoutIntent(event?.id || id, searchParams);
+    const publishCta = (event?.id || id) ? getPublishCta(checkoutIntent, event?.id || id!) : null;
 
     const { user } = useAuth();
     const toast = useToast();
@@ -792,18 +796,18 @@ export default function DesignEditor() {
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
-                    {!event?.is_published && event?.id && (
+                    {!event?.is_published && publishCta && (
                         <Link
-                            to={`/checkout?plan=clasico&id=${event.id}`}
+                            to={publishCta.url}
                             className="flex items-center justify-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3.5 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white rounded-xl sm:rounded-2xl shadow-lg shadow-pink-500/25 transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap active:scale-95"
                         >
                             <Crown className="h-4 w-4 text-amber-200 fill-amber-200/40" />
-                            <span>Publicar mi invitación – $499</span>
+                            <span>{publishCta.buttonText}</span>
                         </Link>
                     )}
                     {event?.slug && (
                         <a
-                            href={`/i/${event.slug}?preview=draft`}
+                            href={`/i/${event.slug}?preview=draft${checkoutIntent.plan ? `&plan=${checkoutIntent.plan}` : ''}${checkoutIntent.coupon ? `&coupon=${encodeURIComponent(checkoutIntent.coupon)}` : ''}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white border-2 border-[#1B2E1D] text-[#1B2E1D] rounded-xl sm:rounded-2xl hover:bg-stone-50 transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap shadow-sm"

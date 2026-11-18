@@ -372,7 +372,7 @@ export default function EventWizard() {
                     event_id: insertPayload.id
                 });
                 toast.success('¡Tu invitación está lista! Revisa cómo quedó tu diseño.');
-                const planQs = preselectedPlan ? `&plan=${preselectedPlan}` : '&plan=clasico';
+                const planQs = preselectedPlan ? `&plan=${preselectedPlan}` : '';
                 const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
                 navigate(`/i/${generatedSlug}?preview=draft${planQs}${couponQs}`);
             }

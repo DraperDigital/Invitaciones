@@ -14,6 +14,7 @@ import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import { trackEvent } from '../lib/analytics';
+import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
@@ -100,6 +101,8 @@ export default function InvitationPage() {
     // ── Theme name — derived from event config ──
     const themeName = event?.theme_config?.theme || 'classic';
     const isOwner = Boolean(user && event && user.id === event.user_id);
+    const checkoutIntent = syncCheckoutIntent(event?.id, searchParams);
+    const publishCta = event ? getPublishCta(checkoutIntent, event.id) : null;
 
     // ── CSS Variable Theme Profiles ──────────────────────────────────
     // Each theme defines the full set of CSS variables consumed by
@@ -3497,7 +3500,7 @@ END:VCALENDAR`;
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
                                 <Link
-                                    to={`/dashboard/design/${event.id}`}
+                                    to={`/dashboard/design/${event.id}${checkoutIntent.plan ? `?plan=${checkoutIntent.plan}` : ''}${checkoutIntent.coupon ? `${checkoutIntent.plan ? '&' : '?'}coupon=${checkoutIntent.coupon}` : ''}`}
                                     className="px-2.5 sm:px-3 py-1.5 bg-white/10 hover:bg-white/20 text-stone-200 rounded-xl transition-colors text-xs font-medium flex items-center gap-1.5"
                                     title="Personalizar diseño y funciones"
                                 >
@@ -3505,14 +3508,14 @@ END:VCALENDAR`;
                                     <span className="hidden sm:inline">Personalizar</span>
                                 </Link>
                                 <Link
-                                    to={`/checkout?plan=${searchParams.get('plan') || 'clasico'}&id=${event.id}${searchParams.get('coupon') ? `&coupon=${searchParams.get('coupon')}` : ''}`}
+                                    to={publishCta ? publishCta.url : `/planes?id=${event.id}`}
                                     className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white font-bold rounded-xl transition-all shadow-md shadow-pink-500/25 active:scale-95 text-xs tracking-wide whitespace-nowrap cursor-pointer"
                                 >
                                     <Crown className="h-3.5 w-3.5 text-amber-200 fill-amber-200/40 shrink-0" />
-                                    <span>Publicar mi invitación – $499</span>
+                                    <span>{publishCta ? publishCta.buttonText : 'Publicar mi invitación – desde $499'}</span>
                                 </Link>
                                 <Link
-                                    to={`/planes?id=${event.id}`}
+                                    to={`/planes?id=${event.id}${checkoutIntent.coupon ? `&coupon=${encodeURIComponent(checkoutIntent.coupon)}` : ''}`}
                                     className="hidden lg:inline text-[11px] text-stone-400 hover:text-white underline underline-offset-2 ml-1"
                                 >
                                     Ver planes
@@ -3528,10 +3531,10 @@ END:VCALENDAR`;
                             <p className="text-xs font-bold text-white truncate">Actívala para tus invitados</p>
                         </div>
                         <Link
-                            to={`/checkout?plan=${searchParams.get('plan') || 'clasico'}&id=${event.id}${searchParams.get('coupon') ? `&coupon=${searchParams.get('coupon')}` : ''}`}
+                            to={publishCta ? publishCta.url : `/planes?id=${event.id}`}
                             className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white font-bold rounded-xl text-xs shadow-lg shadow-pink-500/30 whitespace-nowrap active:scale-95 transition-transform"
                         >
-                            <span>Publicar – $499</span>
+                            <span>{publishCta ? publishCta.mobileButtonText : 'Publicar – desde $499'}</span>
                             <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                     </div>
