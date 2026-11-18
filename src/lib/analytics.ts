@@ -26,9 +26,15 @@ const META_PIXEL_ID = (import.meta.env.VITE_META_PIXEL_ID as string | undefined)
 
 export function hasAnalyticsConsent(): boolean {
     try {
-        return localStorage.getItem('invitto_cookie_consent') === 'all';
+        const consent = localStorage.getItem('invitto_cookie_consent');
+        // Solo regresa false cuando el usuario explícitamente eligió "Solo necesarias"
+        if (consent === 'essential' || consent === 'necessary') {
+            return false;
+        }
+        // Por default regresa true para visitas nuevas y usuarios con consentimiento
+        return true;
     } catch {
-        return false;
+        return true;
     }
 }
 
