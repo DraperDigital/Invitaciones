@@ -51,9 +51,9 @@ export default function CookieBanner() {
     return (
         <aside
             aria-label="Aviso de cookies"
-            className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5"
+            className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 md:max-w-md z-[9999] transition-all duration-300 animate-in fade-in slide-in-from-bottom-5"
         >
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 md:p-6 shadow-2xl border border-slate-200/90 text-[#222B38] space-y-4">
+            <div className="bg-white rounded-3xl p-5 md:p-6 shadow-2xl border border-slate-200/90 text-[#222B38] space-y-4">
                 <div className="flex items-start gap-3">
                     <div className="h-10 w-10 rounded-2xl bg-[#fdf2f8] text-[#DF3B94] flex items-center justify-center flex-shrink-0">
                         <Cookie className="h-5 w-5" />

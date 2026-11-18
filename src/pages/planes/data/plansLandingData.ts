@@ -173,7 +173,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     faqs: [
       {
         question: '¿Cómo envían las invitaciones del Plan Pro?',
-        answer: 'El sistema genera un enlace único para cada invitado (ej. invitto.com.mx/i/familia-gonzalez). Puedes enviárselo directamente por WhatsApp con un mensaje personalizado. El plan Concierge incluye el envío automatizado si prefieres delegarlo.',
+        answer: 'El sistema genera un enlace único para cada invitado (ej. invitto.com.mx/i/familia-gonzalez). Puedes enviárselo directamente por WhatsApp con un mensaje personalizado. Si prefieres delegar los envíos y llamadas, puedes sumar el servicio Invitto Confirma.',
       },
       {
         question: '¿Qué pasa si un invitado cancela a última hora?',

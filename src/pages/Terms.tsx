@@ -160,7 +160,7 @@ const Terms: React.FC = () => {
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 mt-2 flex-shrink-0" />
-                                <span>En el plan Concierge o servicios a la medida, no haber iniciado la etapa de diseño o asignación del diseñador dedicado.</span>
+                                <span>En servicios de diseño personalizado (Diseño Pro), Invitto Confirma o servicios a la medida, no haber iniciado la etapa de diseño, asignación de diseñador o contacto con invitados.</span>
                             </li>
                         </ul>
                         <div className="p-4 bg-white/90 rounded-2xl border border-emerald-200/80 text-xs text-slate-600 space-y-2">

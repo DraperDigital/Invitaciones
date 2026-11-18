@@ -15,7 +15,6 @@ interface FeatureItem {
     clasico: string | boolean;
     pro: string | boolean;
     premium: string | boolean;
-    concierge: string | boolean;
 }
 
 interface FeatureCategory {
@@ -37,7 +36,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Personalización de colores y tipografías',
@@ -45,7 +43,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Cuenta regresiva interactiva',
@@ -53,7 +50,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Ubicación GPS interactiva (Maps / Waze)',
@@ -61,7 +57,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Itinerario detallado y código de vestimenta',
@@ -69,7 +64,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Mesa de regalos & datos bancarios',
@@ -77,7 +71,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Galería de fotos',
@@ -85,7 +78,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: 'Hasta 10 fotos',
                 pro: 'Hasta 20 fotos',
                 premium: 'Ilimitadas',
-                concierge: 'Ilimitadas',
             },
             {
                 name: 'Música de fondo personalizable',
@@ -93,7 +85,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: true,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Sección de padrinos o familiares destacados',
@@ -101,7 +92,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Sugerencias de hospedaje para foráneos',
@@ -109,7 +99,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
         ],
     },
@@ -124,7 +113,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: 'WhatsApp directo',
                 pro: 'Dashboard en tiempo real',
                 premium: 'Dashboard en tiempo real',
-                concierge: 'Gestión Concierge + Dashboard',
             },
             {
                 name: 'Panel / Dashboard administrativo',
@@ -132,7 +120,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Control de pases y boletos asignados',
@@ -140,7 +127,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Registro de acompañantes con nombre',
@@ -148,7 +134,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Importación masiva de invitados (Excel / CSV)',
@@ -156,7 +141,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Mensajes personalizados por invitado',
@@ -164,7 +148,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Recordatorios automáticos por WhatsApp',
@@ -172,7 +155,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: 'Realizados por Concierge',
             },
             {
                 name: 'Notificaciones instantáneas de confirmación',
@@ -180,7 +162,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
         ],
     },
@@ -195,7 +176,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Métricas de visualización y apertura',
@@ -203,7 +183,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Código QR individual para pases de acceso',
@@ -211,7 +190,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
             {
                 name: 'Control de acceso / Check-in con escáner en puerta',
@@ -219,13 +197,12 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: true,
                 premium: true,
-                concierge: true,
             },
         ],
     },
     {
         id: 'servicio',
-        title: 'Servicios Exclusivos & Soporte',
+        title: 'Diseño, Dominio & Soporte',
         icon: '👑',
         features: [
             {
@@ -234,7 +211,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: 'Autoservicio asistido',
                 pro: 'Autoservicio asistido',
                 premium: 'Diseñador dedicado desde cero',
-                concierge: 'Servicio 100% hecho por nosotros',
             },
             {
                 name: 'Dominio web personalizado (.com)',
@@ -242,31 +218,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: false,
                 premium: true,
-                concierge: true,
-            },
-            {
-                name: 'Gestión total de lista de invitados por nuestro equipo',
-                description: 'Nosotros capturamos, organizamos y depuramos tu lista de invitados',
-                clasico: false,
-                pro: false,
-                premium: false,
-                concierge: true,
-            },
-            {
-                name: 'Envío de invitaciones vía WhatsApp Business Pro',
-                description: 'Nuestro equipo envía las invitaciones personalizadas a tus invitados',
-                clasico: false,
-                pro: false,
-                premium: false,
-                concierge: true,
-            },
-            {
-                name: 'Rondas de seguimiento y confirmación',
-                description: 'Llamadas y mensajes de seguimiento a quienes no han confirmado',
-                clasico: false,
-                pro: false,
-                premium: false,
-                concierge: '4 rondas incluidas',
             },
             {
                 name: 'Canal de soporte y atención',
@@ -274,7 +225,6 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: 'Email / Estándar',
                 pro: 'WhatsApp prioritario',
                 premium: 'Diseñador asignado 1 a 1',
-                concierge: 'Concierge dedicado 24/7',
             },
             {
                 name: 'Reporte ejecutivo final de asistencia',
@@ -282,7 +232,13 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 clasico: false,
                 pro: 'Descarga en Excel',
                 premium: 'Descarga en Excel',
-                concierge: 'Reporte ejecutivo impreso y digital',
+            },
+            {
+                name: 'Servicio de confirmación humana (Llamadas y WhatsApp)',
+                description: 'Equipo que llama y escribe a tus invitados hasta cerrar tu lista',
+                clasico: 'Suma Invitto Confirma',
+                pro: 'Suma Invitto Confirma',
+                premium: 'Suma Invitto Confirma',
             },
         ],
     },
@@ -321,17 +277,6 @@ const PLANS_META = [
         icon: Crown,
         cta: 'Elegir Diseño Pro',
         badge: 'PERSONALIZADO',
-    },
-    {
-        id: 'concierge',
-        name: 'Concierge',
-        tagline: 'Nosotros hacemos todo',
-        price: '$4,499',
-        currency: 'MXN',
-        popular: false,
-        icon: Crown,
-        cta: 'Elegir Concierge',
-        badge: 'TODO INCLUIDO',
     },
 ];
 
@@ -403,7 +348,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 text-center">
                     Selecciona un plan para comparar:
                 </div>
-                <div className="grid grid-cols-4 gap-1 p-1 bg-stone-100 rounded-2xl border border-stone-200">
+                <div className="grid grid-cols-3 gap-1 p-1 bg-stone-100 rounded-2xl border border-stone-200">
                     {PLANS_META.map(p => (
                         <button
                             key={p.id}
@@ -428,7 +373,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                         {/* Table Header with Plans */}
                         <thead>
                             <tr className="border-b border-stone-200 bg-stone-50/70">
-                                <th className="p-4 sm:p-6 w-[28%] min-w-[200px] align-bottom bg-stone-50/90 backdrop-blur-sm sticky left-0 z-20 shadow-[2px_0_8px_rgba(0,0,0,0.03)]">
+                                <th className="p-4 sm:p-6 w-[34%] min-w-[220px] align-bottom bg-stone-50/90 backdrop-blur-sm sticky left-0 z-20 shadow-[2px_0_8px_rgba(0,0,0,0.03)]">
                                     <div className="space-y-1">
                                         <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-stone-400">
                                             Características
@@ -445,7 +390,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                                     return (
                                         <th
                                             key={plan.id}
-                                            className={`p-4 sm:p-6 w-[18%] min-w-[150px] text-center align-top relative transition-all ${
+                                            className={`p-4 sm:p-6 w-[22%] min-w-[160px] text-center align-top relative transition-all ${
                                                 isPro
                                                     ? 'bg-slate-900 text-white'
                                                     : 'text-slate-900'
@@ -531,7 +476,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                                         {/* Category Title Row */}
                                         <tr className="bg-stone-100/75 border-t-2 border-stone-200">
                                             <td
-                                                colSpan={5}
+                                                colSpan={4}
                                                 onClick={() => toggleCategory(category.id)}
                                                 className="py-3.5 px-4 sm:px-6 cursor-pointer hover:bg-stone-200/60 transition-colors select-none"
                                             >
@@ -591,11 +536,6 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
                                                     <td className="p-3.5 sm:p-4 text-center align-middle">
                                                         {renderValue(feature.premium)}
                                                     </td>
-
-                                                    {/* Concierge */}
-                                                    <td className="p-3.5 sm:p-4 text-center align-middle">
-                                                        {renderValue(feature.concierge)}
-                                                    </td>
                                                 </tr>
                                             ))}
                                     </React.Fragment>
@@ -645,13 +585,13 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left text-xs text-stone-500">
                 <Info className="w-4 h-4 text-[#e0409a] flex-shrink-0" />
                 <span>
-                    ¿Tienes dudas sobre qué plan se ajusta mejor a tu cantidad de invitados?{' '}
+                    ¿Prefieres que llamemos y confirmemos a cada uno de tus invitados? Puedes sumar el servicio <Link to="/concierge-service" className="font-bold text-[#e0409a] hover:underline">Invitto Confirma</Link> a cualquier plan desde $2,499 MXN.{' '}
                     <a
                         href={`${WHATSAPP_SUPPORT_URL}?text=Hola!%20Tengo%20dudas%20sobre%20los%20planes%20de%20Invitto`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => trackEvent('contact', { channel: 'whatsapp', source: 'plans_table' })}
-                        className="font-bold text-[#e0409a] hover:underline"
+                        className="font-bold text-[#e0409a] hover:underline ml-1"
                     >
                         Escríbenos por WhatsApp para asesorarte gratis →
                     </a>

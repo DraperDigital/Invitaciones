@@ -70,26 +70,6 @@ export default function PlanesPage() {
             ],
             cta: 'Diseño a medida',
             demoUrl: '/i/xv-regina-2026-premium'
-        },
-        {
-            id: 'concierge',
-            name: 'Concierge',
-            price: '$4,499',
-            period: 'MXN',
-            description: 'Nosotros hacemos todo',
-            subcopy: '“Yo no me encargo de nada”',
-            icon: Crown,
-            color: 'gold',
-            features: [
-                'Todo lo del plan Diseño Pro',
-                'Gestión total de lista de invitados',
-                'Envío de invitaciones vía WhatsApp Pro',
-                '4 rondas de seguimiento y confirmación',
-                'Concierge dedicado para dudas',
-                'Reporte final de asistencia',
-            ],
-            cta: 'Quiero el servicio completo',
-            demoUrl: '/i/boda-gabriela-arturo-premium'
         }
     ];
 
@@ -112,7 +92,7 @@ export default function PlanesPage() {
         <div className="min-h-screen bg-[#FFFFFF] selection:bg-[#fdf2f8] pb-20 md:pb-32 overflow-x-hidden">
             <Seo
                 title="Planes y precios — Invitaciones digitales desde $499 MXN | Invitto"
-                description="4 planes diseñados para tu evento: Clásica $499, Pro $1,699, Diseño Pro $2,499 y Concierge $4,499. Un solo pago, sin suscripciones."
+                description="3 planes diseñados para tu evento: Clásica $499, Pro $1,699 y Diseño Pro $2,499. Un solo pago, sin suscripciones."
                 path="/planes"
                 jsonLd={productJsonLd}
             />
@@ -167,16 +147,14 @@ export default function PlanesPage() {
 
             {/* Pricing Cards Grid */}
             <section className="px-6 md:px-8 max-w-[1600px] mx-auto mb-24 md:mb-40 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 md:gap-6 items-stretch">
+                <div className="grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto gap-8 md:gap-8 items-stretch">
                     {plans.map((plan) => (
                         <div 
                             key={plan.id} 
                             className={`group relative flex flex-col p-7 md:p-8 rounded-3xl border transition-all duration-300 hover:shadow-xl ${
                                 plan.popular 
                                     ? 'bg-slate-900 border-slate-800 text-white shadow-2xl shadow-[#e0409a]/15 md:scale-105 z-20' 
-                                    : plan.id === 'concierge'
-                                        ? 'bg-white border-[#e0409a]/30 text-[#1E293B] shadow-lg'
-                                        : 'bg-white border-slate-100 text-[#1E293B] shadow-sm'
+                                    : 'bg-white border-slate-100 text-[#1E293B] shadow-sm'
                             }`}
                         >
                             {plan.popular && (
@@ -249,31 +227,14 @@ export default function PlanesPage() {
                                         {plan.cta}
                                     </button>
                                 </Link>
-                                {plan.id === 'concierge' ? (
-                                    <div className="mt-4 text-center space-y-3">
-                                        <Link 
-                                            to="/planes/concierge" 
-                                            className="block text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#BD7474] hover:text-[#1B2E1D] transition-colors border-b border-[#BD7474]/20 pb-0.5 mx-auto w-fit"
-                                        >
-                                            Saber más sobre Plan Concierge →
-                                        </Link>
-                                        <Link 
-                                            to={plan.demoUrl} 
-                                            className={`block text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors mx-auto w-fit ${plan.popular ? 'text-white/60 hover:text-white' : 'text-stone-400 hover:text-[#1B2E1D]'}`}
-                                        >
-                                            Ver invitación de prueba
-                                        </Link>
-                                    </div>
-                                ) : (
-                                    <div className="mt-4 text-center">
-                                        <Link 
-                                            to={plan.demoUrl} 
-                                            className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors ${plan.popular ? 'text-white/60 hover:text-white' : 'text-stone-400 hover:text-[#1B2E1D]'}`}
-                                        >
-                                            Ver invitación de prueba
-                                        </Link>
-                                    </div>
-                                )}
+                                <div className="mt-4 text-center">
+                                    <Link 
+                                        to={plan.demoUrl} 
+                                        className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest transition-colors ${plan.popular ? 'text-white/60 hover:text-white' : 'text-stone-400 hover:text-[#1B2E1D]'}`}
+                                    >
+                                        Ver invitación de prueba
+                                    </Link>
+                                </div>
                                 <p className={`mt-4 md:mt-5 text-[7px] md:text-[8px] text-center uppercase font-bold tracking-[0.2em] opacity-30 ${plan.popular ? 'text-white' : 'text-stone-400'}`}>
                                     Activación instantánea
                                 </p>
@@ -283,17 +244,29 @@ export default function PlanesPage() {
                 </div>
 
                 {/* Banner Invitto Confirma */}
-                <div className="mt-8 max-w-4xl mx-auto p-4 md:p-6 rounded-2xl bg-[#DF3B94]/5 border border-[#DF3B94]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="text-center sm:text-left">
-                        <p className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">¿Solo necesitas que confirmemos a tus invitados?</p>
-                        <p className="text-sm text-stone-600 mt-1">Conoce <strong>Invitto Confirma</strong>: le escribimos y llamamos a cada invitado en tu nombre hasta tener tu lista final cerrada. Servicio independiente desde $2,499 MXN.</p>
+                <div className="mt-12 md:mt-16 max-w-5xl mx-auto rounded-3xl bg-gradient-to-br from-[#fdf2f8] via-white to-[#fdf2f8] border-2 border-[#DF3B94]/30 p-6 sm:p-8 md:p-10 shadow-xl shadow-[#DF3B94]/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#DF3B94]/5 rounded-bl-full pointer-events-none" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+                        <div className="text-center md:text-left space-y-2 flex-1">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#DF3B94]/10 border border-[#DF3B94]/20 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#DF3B94]">
+                                <span>Servicio de Confirmación Humana</span>
+                            </div>
+                            <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-[#1E293B] tracking-tight">
+                                ¿Solo necesitas que confirmemos a tus invitados?
+                            </h3>
+                            <p className="text-sm md:text-base text-slate-600 leading-relaxed max-w-2xl">
+                                <strong>Invitto Confirma</strong> se puede sumar a cualquier plan: nuestro equipo le escribe y llama a cada invitado en tu nombre hasta tener tu lista final 100% cerrada. <strong>Desde $2,499 MXN</strong>.
+                            </p>
+                        </div>
+                        <div className="shrink-0 w-full md:w-auto">
+                            <Link
+                                to="/concierge-service"
+                                className="inline-flex items-center justify-center w-full md:w-auto px-8 py-4 rounded-2xl bg-[#DF3B94] hover:bg-[#C52A7C] text-white text-xs md:text-sm font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#DF3B94]/30 hover:scale-[1.02] active:scale-95 text-center"
+                            >
+                                Conocer Invitto Confirma →
+                            </Link>
+                        </div>
                     </div>
-                    <Link
-                        to="/confirma"
-                        className="shrink-0 px-5 py-2.5 rounded-xl bg-[#DF3B94] hover:bg-[#C52A7C] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#DF3B94]/20 whitespace-nowrap"
-                    >
-                        Conocer Invitto Confirma →
-                    </Link>
                 </div>
 
                 {/* Quick Link to Detailed Comparison */}
