@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invitación Cut-out Motion Graphics - Hyperframes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Cinzel:wght@600;800&family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background-color: #F4EFE6;
+        font-family: 'Montserrat', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #main-composition {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 45%, #FAF7F0 0%, #EFE8DA 100%);
+      }
+
+      /* ── Papel artesanal y grano orgánico ── */
+      .paper-grain {
+        position: absolute;
+        inset: -50%;
+        width: 200%;
+        height: 200%;
+        background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+        opacity: 0.25;
+        pointer-events: none;
+        z-index: 90;
+      }
+
+      /* ── Borde cosido artesanal exterior ── */
+      .stitched-border {
+        position: absolute;
+        inset: 40px;
+        border: 2px dashed rgba(184, 150, 90, 0.45);
+        border-radius: 12px;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      /* ── Washi Tape (Cinta adhesiva semi-transparente) ── */
+      .washi-tape {
+        position: absolute;
+        width: 160px;
+        height: 40px;
+        background: rgba(228, 206, 163, 0.78);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        backdrop-filter: blur(2px);
+        transform: rotate(-3deg);
+        z-index: 35;
+        clip-path: polygon(0% 10%, 4% 0%, 96% 0%, 100% 12%, 98% 90%, 94% 100%, 5% 100%, 0% 88%);
+      }
+
+      /* ── Fotografía Polaroid Cut-out ── */
+      .polaroid-frame {
+        position: absolute;
+        left: 50%;
+        top: 260px;
+        width: 680px;
+        height: 780px;
+        background: #FFFFFF;
+        padding: 24px 24px 80px 24px;
+        border-radius: 6px;
+        box-shadow: 0 25px 50px -12px rgba(45, 30, 15, 0.25), 0 0 0 1px rgba(0,0,0,0.04);
+        transform: translateX(-50%) rotate(-2deg);
+        z-index: 20;
+      }
+      .polaroid-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 2px;
+        filter: contrast(1.05) saturate(1.1);
+      }
+      .polaroid-caption {
+        position: absolute;
+        bottom: 22px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-family: 'Caveat', cursive;
+        font-size: 38px;
+        color: #5A4E44;
+      }
+
+      /* ── Tiras de papel rasgado (Cutout Badges) ── */
+      .ripped-strip {
+        display: inline-block;
+        background: #2B2625;
+        color: #F8F4EC;
+        padding: 14px 44px;
+        font-family: 'Cinzel', serif;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        box-shadow: 0 12px 25px rgba(0,0,0,0.22);
+        clip-path: polygon(
+          0% 5%, 2% 0%, 98% 0%, 100% 8%, 98% 92%, 100% 100%, 3% 97%, 0% 90%
+        );
+        transform: rotate(1.5deg);
+      }
+
+      /* ── Sello de Cera 3D (Wax Seal) ── */
+      .wax-seal {
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #D4AF37, #8F6B1E);
+        box-shadow: 0 16px 32px rgba(90, 60, 10, 0.4), inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 45;
+        border: 4px solid #B08A28;
+      }
+      .wax-seal-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px dashed rgba(255,255,255,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Cinzel', serif;
+        font-size: 32px;
+        font-weight: 800;
+        color: #FFF2CC;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      }
+
+      /* ── Ticket / Pase VIP Perforado ── */
+      .vip-ticket {
+        position: absolute;
+        left: 50%;
+        bottom: 420px;
+        width: 820px;
+        background: #FFFFFF;
+        border-radius: 16px;
+        padding: 30px 40px;
+        box-shadow: 0 20px 40px rgba(50, 35, 20, 0.18);
+        border: 1px solid #E6D9C5;
+        transform: translateX(-50%) rotate(1deg);
+        z-index: 30;
+      }
+      .vip-ticket::before, .vip-ticket::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 32px;
+        height: 32px;
+        background: #F4EFE6;
+        border-radius: 50%;
+        transform: translateY(-50%);
+      }
+      .vip-ticket::before { left: -16px; box-shadow: inset -3px 0 5px rgba(0,0,0,0.08); }
+      .vip-ticket::after { right: -16px; box-shadow: inset 3px 0 5px rgba(0,0,0,0.08); }
+
+      /* ── Botánica / Hojas Recortadas en Capas ── */
+      .cutout-leaf {
+        position: absolute;
+        pointer-events: none;
+        z-index: 15;
+        filter: drop-shadow(0 15px 20px rgba(40, 30, 20, 0.22));
+      }
+
+      /* ── Tipografía Principal y Titulares ── */
+      .title-container {
+        position: absolute;
+        left: 50%;
+        bottom: 600px;
+        transform: translateX(-50%);
+        width: 100%;
+        text-align: center;
+        z-index: 40;
+      }
+      .main-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 72px;
+        font-weight: 800;
+        color: #241E1C;
+        margin: 12px 0;
+        line-height: 1.1;
+        letter-spacing: -1px;
+        text-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      }
+      .date-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        background: #C49A45;
+        color: #FFFFFF;
+        padding: 10px 32px;
+        border-radius: 999px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        box-shadow: 0 8px 20px rgba(196, 154, 69, 0.35);
+      }
+
+      /* ── Tarjeta Inferior de Lugar y CTA ── */
+      .venue-strip {
+        position: absolute;
+        left: 50%;
+        bottom: 120px;
+        transform: translateX(-50%);
+        width: 860px;
+        text-align: center;
+        z-index: 40;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        border: 2px solid #DECBB1;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 16px 36px rgba(0,0,0,0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="main-composition"
+      data-composition-id="main-video"
+      data-width="1080"
+      data-height="1920"
+      data-start="0"
+      data-duration="15"
+    >
+      <!-- Grano y Textura de Papel Orgánico -->
+      <div class="paper-grain"></div>
+      <div class="stitched-border"></div>
+
+      <!-- Hojas Botánicas Recortadas (SVG Layer) -->
+      <svg class="cutout-leaf leaf-left" style="top: 140px; left: -40px; width: 280px; height: 360px;" viewBox="0 0 100 130">
+        <path d="M10,120 Q30,60 80,10 Q60,70 10,120 Z" fill="#6B7F62" />
+        <path d="M15,110 Q45,70 85,35" stroke="#4C5E45" stroke-width="2" fill="none" />
+      </svg>
+      <svg class="cutout-leaf leaf-right" style="top: 680px; right: -50px; width: 300px; height: 380px; transform: scaleX(-1);" viewBox="0 0 100 130">
+        <path d="M10,120 Q30,60 80,10 Q60,70 10,120 Z" fill="#8A9A80" />
+        <path d="M15,110 Q45,70 85,35" stroke="#5E6F56" stroke-width="2" fill="none" />
+      </svg>
+
+      <!-- Cinta Washi Tape Superior -->
+      <div id="washi-tape-1" class="washi-tape" style="top: 240px; left: 50%; transform: translateX(-50%) rotate(-4deg);"></div>
+
+      <!-- Fotografía Polaroid Cut-out -->
+      <div id="polaroid-card" class="polaroid-frame">
+        <img
+          id="hero-photo"
+          class="polaroid-img"
+          src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+          alt="Pareja"
+        />
+        <div class="polaroid-caption">Nuestra Historia de Amor ❤️</div>
+      </div>
+
+      <!-- Sello de Cera (Wax Seal) con Iniciales -->
+      <div id="wax-seal-badge" class="wax-seal" style="top: 960px; right: 190px;">
+        <div class="wax-seal-inner">V & S</div>
+      </div>
+
+      <!-- Tiras de Papel Rasgado y Títulos Cinéticos -->
+      <div id="titles-wrapper" class="title-container">
+        <div id="eyebrow-strip" class="ripped-strip">
+          Nuestra Boda
+        </div>
+        <h1 id="names-heading" class="main-title">
+          Valentina & Santiago
+        </h1>
+        <div id="date-badge" class="date-badge">
+          <span>📅 Sábado</span>
+          <span>•</span>
+          <span>16 Octubre 2027</span>
+        </div>
+      </div>
+
+      <!-- Pase VIP Personalizado (Cut-out Ticket) -->
+      <div id="vip-ticket-card" class="vip-ticket">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #D6C3A8; padding-bottom: 12px; margin-bottom: 14px;">
+          <span style="font-size: 13px; font-weight: 800; letter-spacing: 3px; color: #C49A45; text-transform: uppercase;">
+            🎟️ Pase Especial de Invitado
+          </span>
+          <span style="font-size: 12px; font-weight: 700; color: #8F8073; font-family: monospace;">
+            NO. INV-0492
+          </span>
+        </div>
+        <div style="font-size: 15px; color: #786C62; letter-spacing: 2px; text-transform: uppercase;">
+          Tenemos el honor de invitar a:
+        </div>
+        <div id="guest-name-text" style="font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: #2B2625; margin: 6px 0;">
+          Familia Rodríguez Castillo
+        </div>
+        <div style="font-size: 14px; font-weight: 600; color: #C49A45;">
+          ✨ Reservado exclusivamente para 2 personas ✨
+        </div>
+      </div>
+
+      <!-- Información del Lugar y Llamado a la Acción -->
+      <div id="venue-card" class="venue-strip">
+        <div style="font-size: 14px; font-weight: 800; letter-spacing: 3px; color: #C49A45; text-transform: uppercase; margin-bottom: 6px;">
+          📍 Lugar de la Celebración
+        </div>
+        <div id="venue-name" style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #2B2625;">
+          Hacienda San José de las Palmas
+        </div>
+        <div id="venue-address" style="font-size: 17px; color: #6E6258; margin: 6px 0 16px 0;">
+          Cuernavaca, Morelos, México
+        </div>
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: #2B2625; color: #F4EFE6; padding: 12px 30px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">
+          Desliza para ver Itinerario & RSVP ↓
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════ -->
+      <!-- GSAP MOTION GRAPHICS & CUT-OUT TIMELINE COREOGRAPHY             -->
+      <!-- ═════════════════════════════════════════════════════════════════ -->
+      <script>
+        const tl = gsap.timeline({ paused: true });
+        window.__timelines = window.__timelines || {};
+
+        // 1. Entrada de Hojas Botánicas en Cut-out (0.0s - 1.2s)
+        tl.from(".leaf-left", {
+          duration: 1.2,
+          x: -120,
+          rotation: -35,
+          opacity: 0,
+          ease: "back.out(1.8)"
+        }, 0.2);
+
+        tl.from(".leaf-right", {
+          duration: 1.2,
+          x: 120,
+          rotation: 35,
+          opacity: 0,
+          ease: "back.out(1.8)"
+        }, 0.4);
+
+        // 2. Caída con física de la Foto Polaroid Cut-out (0.4s - 1.6s)
+        tl.from("#polaroid-card", {
+          duration: 1.3,
+          y: -400,
+          scale: 0.8,
+          rotation: -12,
+          opacity: 0,
+          ease: "elastic.out(1, 0.4)"
+        }, 0.5);
+
+        // Washi tape que se pega encima
+        tl.from("#washi-tape-1", {
+          duration: 0.6,
+          scaleX: 0,
+          opacity: 0,
+          ease: "power2.out"
+        }, 1.2);
+
+        // 3. Estampado de Sello de Cera con impacto (1.4s - 2.0s)
+        tl.from("#wax-seal-badge", {
+          duration: 0.7,
+          scale: 3,
+          rotation: 45,
+          opacity: 0,
+          ease: "back.out(2.5)"
+        }, 1.4);
+
+        // 4. Entrada de Títulos y Tira de Papel Rasgado (1.8s - 3.2s)
+        tl.from("#eyebrow-strip", {
+          duration: 0.8,
+          x: -150,
+          rotation: -8,
+          opacity: 0,
+          ease: "back.out(2)"
+        }, 1.8);
+
+        tl.from("#names-heading", {
+          duration: 1.0,
+          y: 40,
+          opacity: 0,
+          ease: "power3.out"
+        }, 2.1);
+
+        tl.from("#date-badge", {
+          duration: 0.8,
+          scale: 0.8,
+          opacity: 0,
+          ease: "back.out(1.7)"
+        }, 2.4);
+
+        // 5. Pase VIP Personalizado se desliza como ticket (3.0s - 4.5s)
+        tl.from("#vip-ticket-card", {
+          duration: 1.1,
+          y: 200,
+          rotation: 6,
+          opacity: 0,
+          ease: "power3.out"
+        }, 3.0);
+
+        // 6. Tarjeta de Lugar y CTA (4.0s - 5.5s)
+        tl.from("#venue-card", {
+          duration: 1.0,
+          y: 100,
+          opacity: 0,
+          ease: "power2.out"
+        }, 4.0);
+
+        // 7. Movimiento orgánico sutil continuo de la foto (Ken Burns flotante)
+        tl.to("#hero-photo", {
+          duration: 10,
+          scale: 1.08,
+          ease: "sine.inOut"
+        }, 1.0);
+
+        window.__timelines["main-video"] = tl;
+      </script>
+    </div>
+  </body>
+</html>

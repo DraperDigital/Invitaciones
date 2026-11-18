@@ -102,6 +102,9 @@ function AppRoutes() {
         <Route path="/invitacion/:slug" element={<InvitationPage />} />
         <Route path="/i/cecilia-70"     element={<Navigate to="/i/cumplea%C3%B1os-cecilia-h2657" replace />} />
         <Route path="/cecilia-70"       element={<Navigate to="/i/cumplea%C3%B1os-cecilia-h2657" replace />} />
+        <Route path="/boda-cinematica-motion-premium" element={<Navigate to="/i/boda-cinematica-motion-premium" replace />} />
+        <Route path="/baby-posada" element={<Navigate to="/i/boda-cinematica-motion-premium" replace />} />
+        <Route path="/baby-posada-revelacion" element={<Navigate to="/i/boda-cinematica-motion-premium" replace />} />
         <Route path="/aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
         <Route path="/terminos-y-condiciones" element={<Terms />} />
         <Route path="/terminos"      element={<Navigate to="/terminos-y-condiciones" replace />} />

@@ -14,6 +14,20 @@ export interface ThemeProfile {
 }
 
 export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
+    'cinematic-motion': {
+        label: 'Cinemática Motion (HTML Parallax)',
+        desc: 'Portada cinematográfica responsiva, efectos parallax multidimensionales, texturas de papel y detalles en ocre cálido',
+        icon: '🎨',
+        primaryColor: '#CCA461',
+        accentColor: '#CCA461',
+        cardBgColor: '#FDF8F0',
+        sectionBgColor: '#E1EAF2',
+        textPrimary: '#4A443E',
+        textSecondary: '#8D6B4F',
+        heroTextColor: '#4A443E',
+        heroBgColor: '#E1EAF2',
+        typographyPreset: 'elegante'
+    },
     'classic': {
         label: 'Clásica Atemporal',
         desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal',

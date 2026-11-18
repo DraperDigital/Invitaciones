@@ -59,6 +59,72 @@ export const MOCK_EVENTS: Event[] = [
         created_at: new Date().toISOString(),
     },
     {
+        id: 'evt-cinematic-motion',
+        user_id: MOCK_USER.id,
+        title: 'Baby Posada',
+        event_type: 'gender_reveal',
+        date_time: '2026-12-12T18:00:00Z',
+        venue_name: 'Jardín Las Noches Navideñas',
+        venue_address: 'Av. San Jerónimo #450, San Jerónimo Lídice, CDMX',
+        maps_link: 'https://maps.google.com/?q=San+Jeronimo+CDMX',
+        dress_code: 'Navideño Coziness (Luce un toque Azul o Rosa según tu Team)',
+        rsvp_deadline: '2026-11-30T00:00:00Z',
+        is_published: true,
+        plan: 'premium',
+        theme_config: {
+            isPremium: true,
+            theme: 'cinematic-motion',
+            heroBgColor: '#E1EAF2',
+            sectionBgColor: '#E1EAF2',
+            primary_color: '#CCA461',
+            accent_color: '#CCA461',
+            hero_text_color: '#4A443E',
+            text_primary: '#4A443E',
+            text_secondary: '#8D6B4F',
+            card_bg_color: '#FDF8F0',
+            showDetails: false,
+            show_details: false,
+            showGifts: false,
+            show_gifts: false,
+            showGallery: false,
+            show_gallery: false,
+            hero_image_url: '/images/baby-posada-art.jpg',
+            subtitle: 'Save the date • Baby Shower & Revelación de Género',
+            welcome_message: 'En esta época mágica de amor, villancicos y posadas, celebramos la bendición más grande de nuestras vidas. ¡Acompáñanos a pedir posada y a descubrir juntos si nuestro mayor regalo de Navidad será un niño o una niña!',
+            ceremony: {
+                name: 'Bienvenida & Pedir Posada',
+                location: 'Explanada Principal del Jardín',
+                address: 'Av. San Jerónimo #450, CDMX',
+                time: '18:00',
+                mapsLink: 'https://maps.google.com/?q=San+Jeronimo+CDMX'
+            },
+            reception: {
+                name: 'El Gran Momento: Revelación de Género',
+                location: 'Kiosco Central Iluminado',
+                address: 'Av. San Jerónimo #450, CDMX',
+                time: '20:00',
+                mapsLink: 'https://maps.google.com/?q=San+Jeronimo+CDMX'
+            },
+            schedule: [
+                { time: '18:00', event: 'Recepción, Ponche Navideño y Fogata', location: 'Terraza Principal' },
+                { time: '19:00', event: 'Pedir Posada y Cantos Tradicionales', location: 'Jardín Navideño' },
+                { time: '20:00', event: '¡El Gran Momento: Revelación de Género! 👦 o 👧', location: 'Kiosco Central' },
+                { time: '20:45', event: 'Piñata Navideña de la Revelación & Dulces', location: 'Explanada' },
+                { time: '21:30', event: 'Cena Navideña & Mesa de Postres', location: 'Salón de Invierno' },
+                { time: '22:30', event: 'Brindis & Celebración', location: 'Kiosco Central' }
+            ],
+            photoGallery: {
+                enabled: false,
+                images: []
+            },
+            registry_items: [],
+            showCountdown: true,
+            showEnvelope: false
+        },
+        slug: 'boda-cinematica-motion-premium',
+        created_at: new Date().toISOString(),
+    },
+    {
         id: 'evt-1',
         user_id: MOCK_USER.id,
         title: 'Boda de Ana y Carlos',
@@ -2244,6 +2310,22 @@ export const MOCK_EVENTS: Event[] = [
 ];
 
 export const MOCK_GUESTS: Guest[] = [
+    {
+        id: 'guest-cinema-1',
+        event_id: 'evt-cinematic-motion',
+        name: 'Familia Rodríguez Castillo',
+        phone: '5512345678',
+        email: 'familia.rodriguez@email.com',
+        group_name: 'family',
+        guest_token: 'token-valeria',
+        max_plus_ones: 1,
+        status: 'sent',
+        views_count: 1,
+        table_id: null,
+        last_reminder_at: null,
+        checked_in_at: null,
+        created_at: new Date().toISOString(),
+    },
     {
         id: 'guest-1',
         event_id: 'evt-1',

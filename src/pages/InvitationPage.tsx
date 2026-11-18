@@ -35,6 +35,8 @@ import PixelCraftHero from '../components/themes/PixelCraftHero';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
 import RevealBwHero from '../components/themes/RevealBwHero';
 import RevealDuoHero from '../components/themes/RevealDuoHero';
+import CinematicMotionHero from '../components/themes/CinematicMotionHero';
+import CinematicParallaxBackdrop from '../components/themes/CinematicParallaxBackdrop';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
@@ -109,6 +111,13 @@ export default function InvitationPage() {
         accentOverride?: string; fontPreset: string;
         heroBg?: string; heroRadius?: string; cardRadius?: string;
     }> = {
+        'cinematic-motion': {
+            sectionBg: '#0F172A', sectionBgAlt: '#090D16', cardBg: '#182235',
+            textPrimary: '#F8FAFC', textSecondary: '#94A3B8',
+            borderColor: '#EAB30833', cardBorder: '#EAB30844',
+            accentOverride: '#EAB308', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '16px',
+        },
         'classic': {
             sectionBg: '#FAF8F5', sectionBgAlt: '#F5F2EC', cardBg: '#FFFFFF',
             textPrimary: '#2B2625', textSecondary: '#7A6E65',
@@ -1165,6 +1174,7 @@ END:VCALENDAR`;
     const isGamerPartyTheme    = themeName === 'gamer-party';
     const isPixelCraftTheme    = themeName === 'pixel-craft';
     const isRainbowPopTheme    = themeName === 'rainbow-pop';
+    const isCinematicMotionTheme = themeName === 'cinematic-motion';
 
     const themeSpecificCSS = isClassicTheme ? `
         /* ── Elegancia Clásica overrides ── */
@@ -1843,6 +1853,155 @@ END:VCALENDAR`;
             background: ${_accentColor} !important;
             color: var(--accent-contrast) !important;
         }
+    ` : isCinematicMotionTheme ? `
+        /* ── Cinemática Dinámica (Paper & Motion) overrides ── */
+        .invitation-content {
+            background-color: transparent !important;
+            color: #4A443E !important;
+        }
+
+        .invitation-content section {
+            background-color: transparent !important;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Headings with high-contrast carbón / gris oscuro */
+        .invitation-content h1,
+        .invitation-content h2,
+        .invitation-content h3 {
+            font-family: 'Cinzel', 'Playfair Display', serif !important;
+            color: #4A443E !important;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .invitation-content h4 {
+            color: #8D6B4F !important;
+            letter-spacing: 0.05em;
+        }
+
+        .invitation-content p,
+        .invitation-content span,
+        .invitation-content label {
+            color: #4A443E;
+        }
+
+        /* Warm Crema / Beige frosted cards (#FDF8F0) with Ocre (#CCA461) border */
+        .invitation-content [class*="rounded-3xl"],
+        .invitation-content [class*="rounded-2xl"],
+        .invitation-content [class*="rounded-xl"] {
+            background: rgba(253, 248, 240, 0.94) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            border: 1.5px solid rgba(204, 164, 97, 0.4) !important;
+            box-shadow: 0 12px 32px -8px rgba(74, 68, 62, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease !important;
+        }
+
+        .invitation-content [class*="rounded-3xl"]:hover,
+        .invitation-content [class*="rounded-2xl"]:hover,
+        .invitation-content [class*="rounded-xl"]:hover {
+            border-color: rgba(204, 164, 97, 0.7) !important;
+            box-shadow: 0 18px 40px -6px rgba(74, 68, 62, 0.15), 0 0 18px rgba(204, 164, 97, 0.25) !important;
+        }
+
+        /* Section divider with warm ocre line */
+        .invitation-content section::after {
+            content: '';
+            display: block;
+            width: 140px;
+            height: 1.5px;
+            margin: 2.75rem auto 0;
+            background: linear-gradient(90deg, transparent 0%, #CCA461 50%, transparent 100%);
+            opacity: 0.8;
+        }
+
+        .invitation-content #footer::after {
+            display: none !important;
+        }
+
+        /* Warm Ocre buttons (#CCA461) with Crema text (#FDF8F0) */
+        .invitation-content button[style*="background"],
+        .invitation-content a > button[style*="background"],
+        .invitation-content a.bg-accent,
+        .invitation-content button.bg-accent {
+            background: #CCA461 !important;
+            color: #FDF8F0 !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(253, 248, 240, 0.4) !important;
+            box-shadow: 0 6px 20px -3px rgba(204, 164, 97, 0.4) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .invitation-content button[style*="background"]:hover,
+        .invitation-content a > button[style*="background"]:hover {
+            background: #b89150 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px -3px rgba(204, 164, 97, 0.55) !important;
+        }
+
+        /* Outline buttons */
+        .invitation-content button.border-accent,
+        .invitation-content a.border-accent,
+        .invitation-content button:not([style*="background"]):not(.bg-accent) {
+            border: 1.5px solid rgba(204, 164, 97, 0.6) !important;
+            color: #8D6B4F !important;
+            background: rgba(253, 248, 240, 0.85) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Timeline in itinerary */
+        .invitation-content #itinerary .timeline-line,
+        .invitation-content #itinerary .bg-stone-300 {
+            background: #CCA461 !important;
+            box-shadow: 0 0 10px rgba(204, 164, 97, 0.4) !important;
+        }
+
+        /* RSVP Section */
+        .invitation-content #rsvp {
+            background: rgba(253, 248, 240, 0.95) !important;
+            border-radius: 2rem !important;
+            border: 1.5px solid rgba(204, 164, 97, 0.45) !important;
+            box-shadow: 0 16px 40px rgba(74, 68, 62, 0.1) !important;
+            color: #4A443E !important;
+        }
+
+        .invitation-content #rsvp h2,
+        .invitation-content #rsvp h3 {
+            color: #4A443E !important;
+        }
+
+        .invitation-content #rsvp label,
+        .invitation-content #rsvp p {
+            color: #8D6B4F !important;
+        }
+
+        .invitation-content #rsvp input,
+        .invitation-content #rsvp textarea,
+        .invitation-content #rsvp select {
+            background: #FFFFFF !important;
+            border: 1.5px solid rgba(204, 164, 97, 0.4) !important;
+            color: #4A443E !important;
+            border-radius: 0.85rem !important;
+        }
+
+        .invitation-content #rsvp input:focus,
+        .invitation-content #rsvp textarea:focus,
+        .invitation-content #rsvp select:focus {
+            border-color: #CCA461 !important;
+            box-shadow: 0 0 0 2px rgba(204, 164, 97, 0.25) !important;
+            outline: none !important;
+        }
+
+        /* Footer */
+        .invitation-content #footer {
+            background: transparent !important;
+            border-top: 1px solid rgba(204, 164, 97, 0.35) !important;
+            color: #8D6B4F !important;
+        }
     ` : '';
 
     // Inject styles directly into tags for dynamic updates - Scoped to .invitation-content
@@ -2325,6 +2484,9 @@ END:VCALENDAR`;
     // ── Section Renderers ───────────────────────────────────────────
     const renderHero = () => {
         // FULL-PAGE THEMES (Highest priority - override default hero)
+        if (cfg.theme === 'cinematic-motion') {
+            return <CinematicMotionHero key="hero" event={event} guest={guest} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
         if (cfg.theme === 'classic-elegance-pro') {
             return <ClassicEleganceProHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
@@ -2754,7 +2916,7 @@ END:VCALENDAR`;
     );
 
     const renderItinerary = () => {
-        if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
+        if ((effectiveEventCategory === 'gender_reveal' && cfg.theme !== 'cinematic-motion') || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
         const items = (cfg?.itinerary?.length > 0 ? cfg.itinerary : cfg?.schedule) || [];
         if (items.length === 0) return null;
         
@@ -2827,13 +2989,29 @@ END:VCALENDAR`;
 
                                 const ItemIcon = getItineraryIcon();
 
+                                const getPosadaIcon = () => {
+                                    if (!isCinematicMotionTheme) return null;
+                                    const txt = `${item.title || ''} ${item.event || ''} ${item.description || ''} ${item.location || ''}`.toLowerCase();
+                                    if (txt.includes('piñata') || txt.includes('pinata')) return '/images/icons/pinata.png';
+                                    if (txt.includes('posada') || txt.includes('canto') || txt.includes('farol')) return '/images/icons/farol.png';
+                                    if (txt.includes('revelación') || txt.includes('revelacion') || txt.includes('luz') || txt.includes('luces')) return '/images/icons/luces.png';
+                                    if (txt.includes('bebé') || txt.includes('bebe') || txt.includes('cena')) return '/images/icons/bebe.png';
+                                    if (txt.includes('fogata') || txt.includes('ponche') || txt.includes('vela')) return '/images/icons/vela.png';
+                                    return null;
+                                };
+                                const posadaIcon = getPosadaIcon();
+
                                 const itemTitle = item.title || item.event;
                                 const itemDesc = item.description || item.location;
 
                                 return (
                                     <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? 'md:flex-row-reverse' : ''}`}>
                                         <div className="timeline-dot absolute left-0 md:left-1/2 md:-translate-x-1/2 w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-[var(--section-bg)] border-4 border-[var(--border-color)] flex items-center justify-center z-10 shadow-md transition-transform hover:scale-110" style={{color: itineraryAccentColor}}>
-                                            <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
+                                            {posadaIcon ? (
+                                                <img src={posadaIcon} alt="Icono" className="w-6 h-6 xs:w-7 xs:h-7 object-contain" />
+                                            ) : (
+                                                <ItemIcon className="h-5 w-5 xs:h-6 xs:w-6" />
+                                            )}
                                         </div>
                                         <div className={`timeline-item w-full md:w-1/2 pl-16 md:pl-0 ${isEven ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'}`}>
                                             <div className="bg-[var(--section-bg)]/80 backdrop-blur-sm p-5 xs:p-6 rounded-2xl border border-[var(--border-color)]/50 shadow-sm hover:shadow-md transition-shadow">
@@ -3309,6 +3487,11 @@ END:VCALENDAR`;
     return (
         <div className={`min-h-screen bg-[var(--section-bg)] text-[var(--text-primary)] transition-colors duration-500 theme-${themeName}`} style={globalStyles}>
             <style>{commonStyles}</style>
+
+            {/* Parallax Backdrop for Cinematic Motion Theme */}
+            {isCinematicMotionTheme && (
+                <CinematicParallaxBackdrop accentColor={_accentColor} />
+            )}
 
             {/* Sticky Draft Banner for Owner Preview */}
             {!event.is_published && isOwner && (
