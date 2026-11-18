@@ -49,14 +49,10 @@ serve(async (req) => {
 
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'oxxo', 'customer_balance'],
+      payment_method_types: ['card', 'oxxo'],
       payment_method_options: {
         card: { installments: { enabled: true } },
         oxxo: { expires_after_days: 3 },
-        customer_balance: {
-          funding_type: 'bank_transfer',
-          bank_transfer: { type: 'mx_bank_transfer' },
-        },
       },
       customer_creation: 'always',
       line_items: [

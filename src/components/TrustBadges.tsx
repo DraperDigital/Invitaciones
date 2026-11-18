@@ -2,7 +2,7 @@ import { ShieldCheck, CreditCard, HeartHandshake } from 'lucide-react';
 
 const ITEMS = [
     { icon: ShieldCheck, title: 'Pago seguro', desc: 'Conexión cifrada y pagos procesados por Stripe.' },
-    { icon: CreditCard, title: 'Métodos de pago', desc: 'Aceptamos Visa, Mastercard, American Express y transferencias SPEI.' },
+    { icon: CreditCard, title: 'Métodos de pago', desc: 'Aceptamos tarjeta (Visa, Mastercard, Amex), OXXO y meses sin intereses.' },
     { icon: HeartHandshake, title: 'Acompañamiento real', desc: 'Te ayudamos antes y después de contratar.' },
 ];
 
@@ -44,8 +44,10 @@ export default function TrustBadges() {
                         <span className="text-[#2E77BC] font-black text-sm tracking-tight">AMEX</span>
                     </div>
                     <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-1.5 shadow-sm">
-                        <span className="text-[#002F6C] font-black text-xs tracking-wider">SPEI</span>
-                        <span className="text-[10px] text-slate-600 font-bold uppercase tracking-tight">Transferencia</span>
+                        <span className="text-[#E31B23] font-black text-xs tracking-wider">OXXO</span>
+                    </div>
+                    <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-1.5 shadow-sm">
+                        <span className="text-slate-800 font-bold text-xs tracking-tight">Meses sin intereses</span>
                     </div>
                     <div className="h-10 px-4 rounded-xl bg-white flex items-center gap-2 shadow-sm">
                         <ShieldCheck className="h-4 w-4 text-emerald-500" />
