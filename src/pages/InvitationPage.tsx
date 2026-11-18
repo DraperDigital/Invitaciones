@@ -890,9 +890,19 @@ export default function InvitationPage() {
             // Solo si llegamos aquí, marcamos como éxito
             setRsvpChoice(status);
             setRsvpSuccess(true);
-            trackEvent('generate_lead', {
-                event_type: 'rsvp',
-                event_slug: slug,
+
+            const eventCategoria = event?.event_type || 'evento';
+            const eventSlug = slug || event?.slug || '';
+
+            if (typeof window !== 'undefined' && (window as any).fbq) {
+                (window as any).fbq('trackCustom', 'InvitadoConfirmo', {
+                    categoria: eventCategoria,
+                    slug: eventSlug
+                });
+            }
+            trackEvent('InvitadoConfirmo', {
+                categoria: eventCategoria,
+                slug: eventSlug,
                 status: status,
                 plus_ones: totalPlusOnes
             });
@@ -3457,15 +3467,40 @@ END:VCALENDAR`;
         );
     };
 
-    const renderFooter = () => (
-        <footer id="footer" key="footer" className="bg-[var(--section-bg-alt)] text-[var(--text-primary)] py-10 text-center space-y-4">
-            <div className="h-px w-32 mx-auto mb-6" style={{backgroundColor: accentColor, opacity: 0.4}} />
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-secondary)]">
-                Creado con amor · <a href="https://invitto.com.mx/" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Invitto</a>
-            </p>
-            <p className="text-[10px] text-[var(--text-secondary)]">© 2026 Todos los derechos reservados</p>
-        </footer>
-    );
+    const renderFooter = () => {
+        const handleWatermarkClick = () => {
+            const eventCategoria = event?.event_type || 'evento';
+            const eventSlug = slug || event?.slug || '';
+            if (typeof window !== 'undefined' && (window as any).fbq) {
+                (window as any).fbq('trackCustom', 'ClicMarcaAgua', {
+                    categoria: eventCategoria,
+                    slug: eventSlug
+                });
+            }
+            trackEvent('ClicMarcaAgua', {
+                categoria: eventCategoria,
+                slug: eventSlug
+            });
+        };
+
+        return (
+            <footer id="footer" key="footer" className="bg-[var(--section-bg-alt)] text-[var(--text-primary)] py-10 text-center space-y-4">
+                <div className="h-px w-32 mx-auto mb-6" style={{backgroundColor: accentColor, opacity: 0.4}} />
+                <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-secondary)]">
+                    Creado con amor · <a 
+                        href="https://invitto.com.mx/" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        onClick={handleWatermarkClick}
+                        className="hover:text-accent transition-colors underline decoration-dotted underline-offset-4"
+                    >
+                        Crea tu invitación con Invitto
+                    </a>
+                </p>
+                <p className="text-[10px] text-[var(--text-secondary)]">© 2026 Todos los derechos reservados</p>
+            </footer>
+        );
+    };
 
     // ── Section Mapping ──────────────────────────────────────────────
     const SECTION_COMPONENTS: Record<SectionId, () => React.ReactNode> = {
@@ -3678,10 +3713,18 @@ END:VCALENDAR`;
                         <Link 
                             to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} 
                             onClick={() => {
-                                trackEvent('select_item', {
-                                    item_name: cfg.theme || currentDemo.id || 'classic',
-                                    item_category: 'template_demo',
-                                    event_type: event?.event_type || 'evento'
+                                const eventCategoria = event?.event_type || 'evento';
+                                const eventSlug = slug || event?.slug || '';
+                                if (typeof window !== 'undefined' && (window as any).fbq) {
+                                    (window as any).fbq('trackCustom', 'ClicMarcaAgua', {
+                                        categoria: eventCategoria,
+                                        slug: eventSlug
+                                    });
+                                }
+                                trackEvent('ClicMarcaAgua', {
+                                    categoria: eventCategoria,
+                                    slug: eventSlug,
+                                    item_name: cfg.theme || currentDemo.id || 'classic'
                                 });
                             }}
                             className="no-underline shrink-0"
@@ -3824,7 +3867,22 @@ END:VCALENDAR`;
                                     </Link>
                                     <Link
                                         to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`}
-                                        onClick={() => setShowTemplateMenu(false)}
+                                        onClick={() => {
+                                            setShowTemplateMenu(false);
+                                            const eventCategoria = event?.event_type || 'evento';
+                                            const eventSlug = slug || event?.slug || '';
+                                            if (typeof window !== 'undefined' && (window as any).fbq) {
+                                                (window as any).fbq('trackCustom', 'ClicMarcaAgua', {
+                                                    categoria: eventCategoria,
+                                                    slug: eventSlug
+                                                });
+                                            }
+                                            trackEvent('ClicMarcaAgua', {
+                                                categoria: eventCategoria,
+                                                slug: eventSlug,
+                                                item_name: cfg.theme || currentDemo.id || 'classic'
+                                            });
+                                        }}
                                         className="px-4 py-2 rounded-xl text-xs font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-md transition-all active:scale-95 no-underline"
                                     >
                                         Comenzar con {currentDemo.name}
