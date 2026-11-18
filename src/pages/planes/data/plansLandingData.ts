@@ -283,26 +283,30 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     name: 'Concierge',
     price: '$4,499',
     period: 'MXN',
-    description: 'Servicio llave en mano. Nosotros nos encargamos de toda la gestión de tus invitados.',
-    subcopy: '“Yo no me encargo de nada”',
+    description: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.',
+    subcopy: '“Diseño Pro + Invitto Confirma”',
     icon: Crown,
     demoUrl: '/i/boda-gabriela-arturo-premium',
     seo: {
       title: 'Plan Concierge — Gestión de Invitados y Envío por WhatsApp Humano',
-      description: 'Servicio premium de guante blanco. Cargamos tu lista, enviamos las invitaciones uno a uno por WhatsApp y hacemos 4 rondas de confirmación. $4,499 MXN.',
+      description: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Cargamos tu lista, 3 rondas de seguimiento + 1 llamada a pendientes + reconfirmación 7 días antes, lista final entregada 15 días antes y garantía de devolución 100%. $4,499 MXN.',
       path: '/planes/concierge',
     },
     hero: {
       badge: 'Servicio VIP',
       title: 'Despreocúpate por completo de las confirmaciones',
-      subtitle: 'El único servicio de guante blanco en México. Un asistente dedicado se encarga de subir tus listas, enviar cada invitación personalizada por WhatsApp y realizar el seguimiento humano necesario.',
+      subtitle: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Un equipo dedicado diseña tu invitación digital desde cero, carga tus listas, envía cada invitación personalizada por WhatsApp y realiza el seguimiento humano completo.',
       cta: 'Adquirir Plan Concierge',
     },
     details: {
       introTitle: 'Un equipo a tu servicio para cuidar de tus invitados',
-      introDesc: 'El tiempo antes de tu evento es valioso. No lo desperdicies enviando cientos de mensajes de texto o llamando para confirmar alérgenos. Tu asistente Concierge atiende dudas, coordina los cambios de mesa y entrega un reporte ejecutivo de asistencia impecable.',
+      introDesc: 'El tiempo antes de tu evento es valioso. No lo desperdicies enviando cientos de mensajes de texto o llamando para confirmar alérgenos. Tu asistente Concierge diseña tu invitación, atiende dudas, coordina los cambios de mesa y entrega un reporte ejecutivo de asistencia impecable.',
     },
     features: [
+      {
+        title: 'Diseño Pro Exclusivo y Dominio .com',
+        description: 'Todo lo del plan Diseño Pro: diseñador gráfico dedicado para tu invitación desde cero y dominio web propio .com.',
+      },
       {
         title: 'Asistente Humano Dedicado',
         description: 'Se te asigna un concierge especializado disponible vía WhatsApp o llamada para cualquier cambio o solicitud operativa en tu lista.',
@@ -312,8 +316,12 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
         description: 'No hacemos spam robótico. Enviamos cada invitación una por una con un trato cálido y educado a nombre tuyo para asegurar la entrega.',
       },
       {
-        title: '4 Rondes de Seguimiento Estratégico',
-        description: 'Contactamos amablemente a los invitados rezagados en fechas clave para garantizar que tu lista de asistencia esté cerrada a tiempo.',
+        title: '3 Rondas de Seguimiento + 1 Llamada + Reconfirmación',
+        description: '3 rondas de seguimiento por WhatsApp, 1 llamada personalizada a quienes sigan pendientes y reconfirmación final 7 días antes del evento.',
+      },
+      {
+        title: 'Garantía 100% y Entrega 15 Días Antes',
+        description: 'Lista final confirmada entregada 15 días antes del evento. Si no entregamos la lista con la respuesta de cada invitación a tiempo, te devolvemos el 100%.',
       },
       {
         title: 'Carga de Listas y Depuración',
@@ -330,23 +338,27 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     ],
     faqs: [
       {
+        question: '¿Cómo funciona el proceso de seguimiento y la garantía?',
+        answer: 'El seguimiento de Concierge es exactamente el mismo proceso de Invitto Confirma: 3 rondas de seguimiento por WhatsApp + 1 llamada a pendientes + reconfirmación 7 días antes. Entregamos tu lista final 15 días antes del evento con garantía del 100% si no la entregamos a tiempo.',
+      },
+      {
+        question: '¿Qué diferencia hay entre el Plan Concierge e Invitto Confirma?',
+        answer: 'Invitto Confirma ($2,499 / $3,499) es únicamente el servicio de confirmación para cuando tú mismo creas tu invitación digital. El Plan Concierge ($4,499) incluye el Plan Diseño Pro completo (diseño hecho por diseñador y dominio .com) + Invitto Confirma + atención personalizada a las dudas de tus invitados.',
+      },
+      {
         question: '¿Los mensajes se envían de forma automática?',
         answer: 'No. Los enviamos de manera manual y humanizada para evitar bloqueos y garantizar que tus invitados sientan un trato exclusivo e importante.',
       },
       {
         question: '¿Qué pasa si cambian de opinión sobre su asistencia?',
         answer: 'Tus invitados nos pueden escribir a la línea Concierge de soporte. Nosotros realizamos el ajuste en la base de datos de inmediato y te lo notificamos.',
-      },
-      {
-        question: '¿El servicio incluye diseño personalizado?',
-        answer: 'Sí. El Plan Concierge incluye todas las ventajas del Plan Diseño Pro: diseñador gráfico dedicado para tu invitación digital y dominio web propio `.com`.',
       }
     ],
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: 'Invitto Plan Concierge',
-      description: 'Servicio de gestión integral de invitados con envío personalizado por WhatsApp, seguimiento telefónico y reporte ejecutivo.',
+      description: 'Diseño Pro + Invitto Confirma + atención a tus invitados con seguimiento humano y garantía de entrega 15 días antes.',
       brand: { '@type': 'Brand', name: 'Invitto' },
       offers: {
         '@type': 'Offer',

@@ -73,11 +73,11 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: 'heading',
-        content: 'Opción 4: Diseño A Medida e Invitto Confirma (Desde $2,499 MXN)'
+        content: 'Opción 4: Diseño A Medida, Invitto Confirma o Plan Concierge (Desde $2,499 hasta $4,499 MXN)'
       },
       {
         type: 'paragraph',
-        content: 'Para eventos de lujo o parejas que no tienen tiempo, existen servicios premium. Por un lado, con el Plan Diseño Pro ($2,499 MXN) un diseñador gráfico profesional programa una página web única y a la medida. Por otro lado, con el servicio Invitto Confirma (desde $2,499 MXN), un equipo humano se encarga de enviar las invitaciones por WhatsApp, hacer rondas de seguimiento telefónico a quienes no han respondido, y entregarte la lista final confirmada en Excel.'
+        content: 'Para eventos de lujo o parejas que no tienen tiempo, existen opciones integrales. Si tú haces tu invitación pero quieres que llamemos a tus invitados, puedes sumar Invitto Confirma ($2,499 MXN). Y si quieres que un equipo haga absolutamente todo —diseño desde cero a tu medida, dominio propio, atención de dudas y confirmación con 3 rondas + llamada y entrega 15 días antes con garantía del 100%—, el Plan Concierge ($4,499 MXN) es la solución completa llave en mano.'
       },
       {
         type: 'heading',

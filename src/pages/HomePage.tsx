@@ -36,8 +36,8 @@ const HOMEPAGE_JSONLD = [
             '@type': 'AggregateOffer',
             priceCurrency: 'MXN',
             lowPrice: '499',
-            highPrice: '2499',
-            offerCount: '3',
+            highPrice: '4499',
+            offerCount: '4',
             price: '499',
         },
         aggregateRating: {
@@ -574,54 +574,54 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        {/* Plan Diseño Pro */}
+                        {/* Plan Concierge */}
                         <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                             <div className="space-y-6">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">A TU MEDIDA</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Diseño Pro</h3>
-                                    <p className="text-xs text-slate-500 mt-1">Diseño único desde cero con diseñador experto y dominio personalizado.</p>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">TODO INCLUIDO · LLAVE EN MANO</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
+                                    <p className="text-xs text-slate-500 mt-1">Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-slate-200/60">
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$2,499</span>
+                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$4,499</span>
                                         <span className="text-xs font-bold text-slate-400 uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Un solo pago · Diseñador dedicado</p>
+                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Servicio completo con equipo humano</p>
                                 </div>
 
                                 <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Pro</strong></span>
+                                        <span><strong>Todo lo del plan Diseño Pro (diseño a medida)</strong></span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Diseño exclusivo creado desde cero por expertos</span>
+                                        <span><strong>Incluye Invitto Confirma:</strong> confirmamos por ti</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Dominio personalizado (.com)</span>
+                                        <span>3 rondas + llamada a pendientes + reconfirmación</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Control de acceso con Check-in QR</span>
+                                        <span>Lista final 15 días antes o garantía de 100%</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Soporte prioritario 1 a 1</span>
+                                        <span>Línea de atención para dudas de tus invitados</span>
                                     </li>
                                 </ul>
                             </div>
 
                             <div className="pt-8">
-                                <Link to={user ? "/dashboard/new?plan=premium" : "/planes"}>
+                                <Link to="/planes/concierge">
                                     <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
-                                        Elegir Diseño Pro
+                                        Conocer Plan Concierge
                                     </button>
                                 </Link>
-                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Diseño personalizado · Sin suscripciones</p>
+                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Servicio completo · Garantía de entrega</p>
                             </div>
                         </div>
 
@@ -657,7 +657,7 @@ export default function HomePage() {
                             </h2>
 
                             <p className="text-base md:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                                Con el servicio <strong>Invitto Confirma</strong> tú solo disfrutas: cargamos tus invitados, enviamos cada invitación por WhatsApp, hacemos 4 rondas de seguimiento y te entregamos la lista final confirmada con pases QR listos para recepción.
+                                Con el servicio <strong>Invitto Confirma</strong> tú solo disfrutas: cargamos tus invitados, enviamos cada invitación por WhatsApp, hacemos 3 rondas de seguimiento + 1 llamada a pendientes + reconfirmación 7 días antes, y te entregamos la lista final confirmada 15 días antes del evento (o te devolvemos el 100%).
                             </p>
 
                             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -688,8 +688,8 @@ export default function HomePage() {
                                     {[
                                         "Cargamos tus invitados por ti",
                                         "Envío individual por WhatsApp",
-                                        "4 rondas de seguimiento telefónico",
-                                        "Pases QR individuales incluidos",
+                                        "3 rondas de seguimiento + llamada a pendientes",
+                                        "Garantía: lista final 15 días antes o devolución 100%",
                                         "Reporte final de asistencia impreso y digital"
                                     ].map((item, idx) => (
                                         <li key={idx} className="flex items-center gap-3 text-sm font-medium text-slate-200">

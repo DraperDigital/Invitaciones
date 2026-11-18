@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom';
+import PlanLandingTemplate from './PlanLandingTemplate';
+import { PLANS_LANDING_DATA } from './data/plansLandingData';
 
 export default function PlanConciergePage() {
-  return <Navigate to="/concierge-service" replace />;
+  return <PlanLandingTemplate data={PLANS_LANDING_DATA['concierge']} />;
 }

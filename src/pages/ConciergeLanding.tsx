@@ -437,6 +437,14 @@ const ConciergeLanding: React.FC = () => {
                         <p className="text-xs text-slate-400 font-medium">
                             Te contestamos por WhatsApp el mismo día.
                         </p>
+                        <div className="pt-2 text-center">
+                            <Link
+                                to="/planes/concierge"
+                                className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-[#DF3B94] font-medium transition-colors border-b border-slate-600 hover:border-[#DF3B94] pb-0.5"
+                            >
+                                ¿También quieres diseño a medida y que nos encarguemos de todo? Conoce el plan Concierge →
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>

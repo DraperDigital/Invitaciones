@@ -40,6 +40,7 @@ const OneHomePage         = React.lazy(() => import('./pages/corporate/OneHomePa
 const PlanClasica          = React.lazy(() => import('./pages/planes/PlanClasicaPage'));
 const PlanPro              = React.lazy(() => import('./pages/planes/PlanProPage'));
 const PlanPremium          = React.lazy(() => import('./pages/planes/PlanPremiumPage'));
+const PlanConcierge        = React.lazy(() => import('./pages/planes/PlanConciergePage'));
 
 // Blog pages
 const BlogIndex            = React.lazy(() => import('./pages/blog/BlogIndexPage'));
@@ -139,7 +140,7 @@ function AppRoutes() {
         <Route path="/planes/clasica"                      element={<PlanClasica />} />
         <Route path="/planes/pro"                          element={<PlanPro />} />
         <Route path="/planes/premium"                      element={<PlanPremium />} />
-        <Route path="/planes/concierge"                    element={<Navigate to="/concierge-service" replace />} />
+        <Route path="/planes/concierge"                    element={<PlanConcierge />} />
         <Route path="/comparativas"                        element={<ComparativasHub />} />
 
         {/* Blog Routes */}

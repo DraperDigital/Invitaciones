@@ -135,10 +135,10 @@ export default function CheckoutPage() {
             bg: 'bg-amber-50',
             features: [
                 'Todo lo del plan Diseño Pro',
-                'Gestión de lista de invitados',
-                'Envío vía WhatsApp Profesional',
-                '4 rondas de seguimiento',
-                'Concierge dedicado 24/7',
+                'Incluye Invitto Confirma',
+                '3 rondas + llamada + reconfirmación',
+                'Lista final 15 días antes o 100% reembolso',
+                'Atención a dudas de tus invitados',
                 'Reporte final de asistencia'
             ]
         }
