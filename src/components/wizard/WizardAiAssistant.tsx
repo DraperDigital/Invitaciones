@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church, Building2 } from 'lucide-react';
+import { Send, Sparkles, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church, Building2, Upload, Loader2 } from 'lucide-react';
 import { EVENT_TYPE_OPTIONS } from '../../pages/EventWizard';
 import { CANONICAL_TEMPLATES, getTemplatesForCategory, normalizeEventCategory } from '../../lib/themePresets';
 import type { WizardData } from '../../pages/EventWizard';
+import { supabase } from '../../lib/supabase';
+import { useToast } from '../../context/ToastContext';
 
 interface Message {
     id: string;
@@ -221,6 +223,49 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+    const toast = useToast();
+
+    const handleHeroPhotoUpload = async (file: File) => {
+        if (!file) return;
+        setIsUploadingPhoto(true);
+        try {
+            const ext = file.name.split('.').pop() || 'jpg';
+            const path = `uploads/wizard-${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+
+            let photoUrl = '';
+            if (!uploadError) {
+                const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+                photoUrl = urlData.publicUrl;
+            } else {
+                photoUrl = await new Promise<string>((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result as string);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            updateDataAndSync({
+                hero_image_url: photoUrl,
+                heroImage: photoUrl
+            });
+
+            addAssistantMessage(
+                '¡Qué hermosa foto! 📸 Ya la coloqué como portada principal de tu invitación.\n\nPuedes verla en la vista previa o reencuadrarla cuando gustes en el editor.'
+            );
+            showSummary();
+        } catch (err: any) {
+            console.error('Error subiendo foto:', err);
+            toast.error('No se pudo subir la imagen. Continuaremos y podrás agregarla después.');
+            showSummary();
+        } finally {
+            setIsUploadingPhoto(false);
+        }
+    };
 
     // Mantener referencia siempre actualizada para no sufrir problemas de closures desactualizados
     const latestDataRef = useRef<WizardData>(data);
@@ -721,10 +766,26 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
             case 'ask_gifts': {
                 if (lower.includes('liverpool') || lower.includes('amazon') || directValue === 'registry') {
+                    updateDataAndSync({
+                        showGifts: true,
+                        show_gifts: true,
+                        gift_registry_type: 'registry'
+                    });
                     addAssistantMessage('¡Anotado! Podrás enlazar tus números de evento de Liverpool o Amazon fácilmente.');
                 } else if (lower.includes('sobres') || lower.includes('transferencia') || directValue === 'cash') {
+                    updateDataAndSync({
+                        showGifts: true,
+                        show_gifts: true,
+                        gift_registry_type: 'cash'
+                    });
                     addAssistantMessage('¡Perfecto! Se habilitará la opción para tu cuenta CLABE y lluvia de sobres con mensaje cordial.');
                 } else {
+                    updateDataAndSync({
+                        showGifts: false,
+                        show_gifts: false,
+                        gift_registry_type: 'none',
+                        gift_message: 'Su presencia es el mejor regalo'
+                    });
                     addAssistantMessage('¡Muy bien! Se omitirá la mesa de regalos para centrarse en la compañía de tus invitados.');
                 }
 
@@ -812,7 +873,48 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 }
 
                 updateDataAndSync({ rsvp_deadline: deadlineStr });
-                showSummary();
+                askHeroPhoto();
+                break;
+            }
+
+            case 'ask_hero_photo': {
+                if (directValue === 'upload_photo') {
+                    fileInputRef.current?.click();
+                    return;
+                }
+
+                if (
+                    directValue === 'skip_photo' ||
+                    lower.includes('sin foto') ||
+                    lower.includes('despues') ||
+                    lower.includes('después') ||
+                    lower.includes('no') ||
+                    lower.includes('omitir') ||
+                    lower.includes('continuar') ||
+                    lower.includes('luego')
+                ) {
+                    addAssistantMessage('¡Entendido! Usaremos una imagen de muestra elegante y podrás subir tu propia foto en cualquier momento en el editor.');
+                    showSummary();
+                    break;
+                }
+
+                if (userText.startsWith('http://') || userText.startsWith('https://')) {
+                    updateDataAndSync({
+                        hero_image_url: userText.trim(),
+                        heroImage: userText.trim()
+                    });
+                    addAssistantMessage('¡Listo! Enlace de foto registrado como portada principal.');
+                    showSummary();
+                    break;
+                }
+
+                addAssistantMessage(
+                    'Puedes seleccionar tu foto desde tu dispositivo o continuar sin foto por ahora:',
+                    [
+                        { label: 'Subir foto de portada 📸', value: 'upload_photo' },
+                        { label: 'Continuar sin foto por ahora ✨', value: 'skip_photo' }
+                    ]
+                );
                 break;
             }
 
@@ -974,7 +1076,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
     const askRsvpDeadline = () => {
         addAssistantMessage(
-            'Por último: ¿hasta qué fecha tendrán tus invitados para confirmar su asistencia (RSVP)?',
+            '¿Hasta qué fecha tendrán tus invitados para confirmar su asistencia (RSVP)?',
             [
                 { label: '2 semanas antes del evento 📅', value: '2_weeks' },
                 { label: '1 mes antes del evento 🗓️', value: '1_month' },
@@ -982,6 +1084,17 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             ]
         );
         setCurrentStep('ask_rsvp_deadline');
+    };
+
+    const askHeroPhoto = () => {
+        addAssistantMessage(
+            '📸 **¡Casi listos! ¿Tienes una foto de portada para tu invitación?**\n\nEs la foto principal que verán tus invitados al abrirla. Puedes subirla ahora para verla en tu vista previa, o continuar sin foto y agregarla después en el editor:',
+            [
+                { label: 'Subir foto de portada 📸', value: 'upload_photo' },
+                { label: 'Continuar sin foto por ahora ✨', value: 'skip_photo' }
+            ]
+        );
+        setCurrentStep('ask_hero_photo');
     };
 
     const showSummary = () => {
@@ -1009,6 +1122,24 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     const previewUrl = previewModalSlug ? `/i/${previewModalSlug}?t=token-preview&wizard_preview=1&_ts=${previewTimestamp}` : '';
 
     const selectedTemplateObj = CANONICAL_TEMPLATES.find(t => t.id === data.theme) || CANONICAL_TEMPLATES[0];
+
+    const renderFormattedChatText = (text: string, isUser: boolean) => {
+        const parts = text.split(/(\*\*[^*]+\*\*)/g);
+        return parts.map((part, idx) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                const inner = part.slice(2, -2);
+                return (
+                    <strong
+                        key={idx}
+                        className={isUser ? 'font-bold' : 'font-extrabold text-stone-900'}
+                    >
+                        {inner}
+                    </strong>
+                );
+            }
+            return part;
+        });
+    };
 
     return (
         <>
@@ -1068,7 +1199,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                             : 'bg-white border border-stone-200 text-stone-800 rounded-bl-none shadow-sm max-w-[90%] sm:max-w-[78%]'
                                 }`}
                             >
-                                <p className="whitespace-pre-line">{msg.text}</p>
+                                <p className="whitespace-pre-line">{renderFormattedChatText(msg.text, msg.sender === 'user')}</p>
 
                                 {/* Tarjetas de Selección de Plantillas con botón de Previsualización */}
                                 {msg.templateCards && msg.templateCards.length > 0 && (
@@ -1128,7 +1259,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                     <div className="mt-4 bg-stone-900 text-white rounded-2xl p-5 border border-stone-800 shadow-xl space-y-4">
                                         <div className="flex items-center gap-3">
                                             <img 
-                                                src={selectedTemplateObj.thumbnail} 
+                                                src={data.hero_image_url || data.heroImage || selectedTemplateObj.thumbnail} 
                                                 alt={selectedTemplateObj.name} 
                                                 className="w-16 h-16 rounded-xl object-cover border border-white/20 shadow-md"
                                             />
@@ -1241,8 +1372,51 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         </div>
                     )}
 
+                    {currentStep === 'ask_hero_photo' && (
+                        <div className="mt-3 p-4 bg-gradient-to-r from-pink-50 to-stone-50 border-2 border-dashed border-[#DF3B94]/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+                            <div className="flex items-center gap-3 text-left">
+                                <div className="p-2.5 bg-[#DF3B94]/10 rounded-xl text-[#DF3B94]">
+                                    <Upload className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-stone-800">Sube tu foto de portada</p>
+                                    <p className="text-[11px] text-stone-500">Formatos JPG, PNG o WEBP de tu celular o computadora</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isUploadingPhoto}
+                                className="w-full sm:w-auto px-4 py-2.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                            >
+                                {isUploadingPhoto ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        <span>Subiendo foto...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Upload className="h-4 w-4" />
+                                        <span>Seleccionar archivo</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
                     <div ref={messagesEndRef} />
                 </div>
+
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleHeroPhotoUpload(file);
+                    }}
+                />
 
                 {/* Barra de Entrada / Chat Input */}
                 <form

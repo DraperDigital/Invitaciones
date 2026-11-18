@@ -396,10 +396,31 @@ export function normalizeEventCategory(eventTypeOrCategory?: string, currentThem
 
 export function getTemplatesForCategory(categoryOrType?: string, currentTheme?: string): CanonicalTemplate[] {
     const cat = normalizeEventCategory(categoryOrType, currentTheme);
-    if (cat === 'todas') return CANONICAL_TEMPLATES;
-    return CANONICAL_TEMPLATES.filter(tpl => {
-        if (currentTheme && tpl.id === currentTheme) return true;
-        return tpl.category === cat || (tpl.categories && tpl.categories.includes(cat));
+    const list = cat === 'todas' 
+        ? CANONICAL_TEMPLATES 
+        : CANONICAL_TEMPLATES.filter(tpl => {
+            if (currentTheme && tpl.id === currentTheme) return true;
+            return tpl.category === cat || (tpl.categories && tpl.categories.includes(cat));
+        });
+
+    if (cat === 'todas') return list;
+
+    const catName = EVENT_CATEGORY_LABELS[cat] || 'Evento';
+    return list.map(tpl => {
+        // Si la plantilla es recomendada o compatible con otra categoría (ej. boda usando plantilla de xv),
+        // adaptar la etiqueta de categoría para que no confunda al usuario con "XV / Primavera" en una boda
+        if (tpl.category !== cat && tpl.categories?.includes(cat)) {
+            let style = tpl.name;
+            if (tpl.id === 'romantic-botanical') style = 'Elegancia Floral';
+            else if (tpl.id === 'magazine') style = 'Editorial';
+            else if (tpl.categoryLabel.includes('/')) style = tpl.categoryLabel.split('/')[1].trim();
+
+            return {
+                ...tpl,
+                categoryLabel: `${catName} / ${style}`
+            };
+        }
+        return tpl;
     });
 }
 

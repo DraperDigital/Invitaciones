@@ -9,6 +9,19 @@ import { getPlatformContext } from './utils/context';
 
 import CookieBanner from './components/CookieBanner';
 
+// Auto-recover from deployment version changes (Vite dynamic import preload errors)
+if (typeof window !== 'undefined') {
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+    const lastReload = sessionStorage.getItem('invitto_last_chunk_reload');
+    const now = Date.now();
+    if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+      sessionStorage.setItem('invitto_last_chunk_reload', now.toString());
+      window.location.reload();
+    }
+  });
+}
+
 // Lazy-loaded pages — each page gets its own chunk (split at route level)
 const HomePage            = React.lazy(() => import('./pages/HomePage'));
 const LoginPage           = React.lazy(() => import('./pages/LoginPage'));

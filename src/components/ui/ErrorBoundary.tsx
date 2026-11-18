@@ -22,6 +22,21 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     console.error('[ErrorBoundary] Uncaught error:', error, info.componentStack);
+    const msg = error?.message || '';
+    // Auto-reload on deployment chunk version mismatches
+    if (
+      msg.includes('dynamically imported module') ||
+      msg.includes('Failed to fetch') ||
+      msg.includes('Loading chunk') ||
+      msg.includes('Importing a module script failed')
+    ) {
+      const lastReload = sessionStorage.getItem('invitto_last_chunk_reload');
+      const now = Date.now();
+      if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+        sessionStorage.setItem('invitto_last_chunk_reload', now.toString());
+        window.location.reload();
+      }
+    }
   }
 
   private handleReload = () => {

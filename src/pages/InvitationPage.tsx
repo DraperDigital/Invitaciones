@@ -668,6 +668,27 @@ export default function InvitationPage() {
                 updatedConfig.showHotels = false;
             }
 
+            // Manejo de regalos en la vista previa del wizard
+            if (wiz.showGifts === false || wiz.show_gifts === false || wiz.gift_registry_type === 'none') {
+                updatedConfig.showGifts = false;
+                updatedConfig.show_gifts = false;
+                updatedConfig.gift_registry_type = 'none';
+                updatedConfig.gift_message = wiz.gift_message || 'Su presencia es el mejor regalo';
+                updatedConfig.registry_items = [];
+            } else if (wiz.showGifts === true || wiz.show_gifts === true) {
+                updatedConfig.showGifts = true;
+                updatedConfig.show_gifts = true;
+                if (wiz.gift_registry_type) updatedConfig.gift_registry_type = wiz.gift_registry_type;
+                if (wiz.gift_message) updatedConfig.gift_message = wiz.gift_message;
+            }
+
+            // Manejo de foto de portada en la vista previa del wizard
+            if (wiz.hero_image_url || wiz.heroImage) {
+                const img = wiz.hero_image_url || wiz.heroImage;
+                updatedConfig.hero_image_url = img;
+                updatedConfig.heroImage = img;
+            }
+
             updated.theme_config = updatedConfig;
             return updated;
         } catch (e) {
@@ -3160,6 +3181,14 @@ END:VCALENDAR`;
     );
 
     const renderGifts = () => {
+        // Si el usuario desactivó regalos o eligió "Su presencia es el mejor regalo"
+        if (cfg?.showGifts === false || cfg?.show_gifts === false || cfg?.gift_registry_type === 'none') {
+            return null;
+        }
+
+        const isCashOnly = cfg?.gift_registry_type === 'cash';
+        const isRegistryOnly = cfg?.gift_registry_type === 'registry';
+
         const rawRegistryOptions = cfg?.registry_items 
             || cfg?.giftRegistry?.options 
             || cfg?.gift_registry?.options 
@@ -3176,10 +3205,11 @@ END:VCALENDAR`;
                 return !name.includes('efectivo') && !name.includes('sobre') && !name.includes('transferencia');
             });
 
-        const finalItems = storeItems.length > 0 ? storeItems : [
+        // Solo mostrar tiendas si no es exclusivamente efectivo y hay tiendas configuradas (o fallback para modo registro)
+        const finalItems = isCashOnly ? [] : (storeItems.length > 0 ? storeItems : (isRegistryOnly ? [
             { store: 'Liverpool', link: 'https://liverpool.com.mx' },
             { store: 'Amazon', link: 'https://amazon.com.mx' }
-        ];
+        ] : []));
 
         return (
             <section id="gifts" key="gifts" className="py-24 bg-[var(--section-bg-alt)]" style={invertedPanelStyle}>
@@ -3196,42 +3226,47 @@ END:VCALENDAR`;
                     <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-6 sm:p-12 text-center">
                         <Gift className="h-16 w-16 mx-auto mb-8 text-accent" />
                         
-                        <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4 justify-center items-center mb-8 flex-wrap">
-                            {finalItems.map((item: any, idx: number) => {
-                                const Component = item.link ? 'a' : 'div';
-                                return (
-                                    <Component
-                                        key={idx}
-                                        href={item.link || undefined}
-                                        target={item.link ? "_blank" : undefined}
-                                        rel={item.link ? "noopener noreferrer" : undefined}
-                                        className="w-full sm:w-auto min-w-[190px] max-w-[270px] px-6 py-4 rounded-2xl border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer no-underline group/btn"
-                                    >
-                                        <Gift className="h-4 w-4 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
-                                        <span className="truncate">{item.store}</span>
-                                        {item.link && <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-60 group-hover/btn:translate-x-0.5 transition-transform" />}
-                                    </Component>
-                                );
-                            })}
-                        </div>
-                    <div className="mt-12 pt-8 border-t border-[var(--card-border)]">
-                        <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">
-                            {cfg?.cash_gift_title || "Lluvia de Sobres"}
-                        </p>
-                        <p className="text-[var(--text-secondary)] max-w-md mx-auto text-sm whitespace-pre-line">
-                            {cfg?.cash_gift_message || cfg?.cashGiftMessage || "Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho"}
-                        </p>
-                        {(cfg?.bank_name || cfg?.bank_clabe || cfg?.bank_beneficiary) && (
-                            <div className="mt-6 p-4 rounded-2xl bg-[var(--section-bg)] border border-[var(--card-border)] text-xs text-[var(--text-primary)] max-w-sm mx-auto space-y-1.5 text-left">
-                                {cfg.bank_name && <p><span className="font-bold text-accent">Banco:</span> {cfg.bank_name}</p>}
-                                {cfg.bank_clabe && <p><span className="font-bold text-accent">CLABE:</span> {cfg.bank_clabe}</p>}
-                                {cfg.bank_beneficiary && <p><span className="font-bold text-accent">Beneficiario:</span> {cfg.bank_beneficiary}</p>}
+                        {finalItems.length > 0 && (
+                            <div className="flex flex-col sm:flex-row gap-3.5 sm:gap-4 justify-center items-center mb-8 flex-wrap">
+                                {finalItems.map((item: any, idx: number) => {
+                                    const Component = item.link ? 'a' : 'div';
+                                    return (
+                                        <Component
+                                            key={idx}
+                                            href={item.link || undefined}
+                                            target={item.link ? "_blank" : undefined}
+                                            rel={item.link ? "noopener noreferrer" : undefined}
+                                            className="w-full sm:w-auto min-w-[190px] max-w-[270px] px-6 py-4 rounded-2xl border-2 border-accent text-accent hover:bg-accent hover:text-[var(--accent-contrast)] font-sans font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xs hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer no-underline group/btn"
+                                        >
+                                            <Gift className="h-4 w-4 shrink-0 opacity-70 group-hover/btn:scale-110 transition-transform" />
+                                            <span className="truncate">{item.store}</span>
+                                            {item.link && <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-60 group-hover/btn:translate-x-0.5 transition-transform" />}
+                                        </Component>
+                                    );
+                                })}
+                            </div>
+                        )}
+
+                        {!isRegistryOnly && (
+                            <div className={finalItems.length > 0 ? "mt-12 pt-8 border-t border-[var(--card-border)]" : ""}>
+                                <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-4">
+                                    {cfg?.cash_gift_title || "Lluvia de Sobres"}
+                                </p>
+                                <p className="text-[var(--text-secondary)] max-w-md mx-auto text-sm whitespace-pre-line">
+                                    {cfg?.cash_gift_message || cfg?.cashGiftMessage || "Si prefieres hacernos un obsequio en efectivo, te lo agradeceremos mucho"}
+                                </p>
+                                {(cfg?.bank_name || cfg?.bank_clabe || cfg?.bank_beneficiary) && (
+                                    <div className="mt-6 p-4 rounded-2xl bg-[var(--section-bg)] border border-[var(--card-border)] text-xs text-[var(--text-primary)] max-w-sm mx-auto space-y-1.5 text-left">
+                                        {cfg.bank_name && <p><span className="font-bold text-accent">Banco:</span> {cfg.bank_name}</p>}
+                                        {cfg.bank_clabe && <p><span className="font-bold text-accent">CLABE:</span> {cfg.bank_clabe}</p>}
+                                        {cfg.bank_beneficiary && <p><span className="font-bold text-accent">Beneficiario:</span> {cfg.bank_beneficiary}</p>}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
         );
     };
 

@@ -24,10 +24,14 @@ export default function CheckoutPage() {
     const [draftEvents, setDraftEvents] = useState<{ id: string; title: string; date_time: string | null }[]>([]);
     const [draftLookupDone, setDraftLookupDone] = useState(false);
 
+    // Pre-fill user details from localStorage, user_metadata or event
+    const initialName = (typeof window !== 'undefined' ? localStorage.getItem('invitto_user_name') : null) || user?.user_metadata?.full_name || user?.user_metadata?.name || '';
+    const initialPhone = (typeof window !== 'undefined' ? localStorage.getItem('invitto_user_phone') : null) || user?.user_metadata?.phone || (user as any)?.phone || '';
+
     const [formData, setFormData] = useState({
-        name: '',
+        name: initialName,
         email: user?.email || '',
-        phone: '',
+        phone: initialPhone,
         cardNumber: '',
         expiry: '',
         cvv: '',
@@ -37,6 +41,38 @@ export default function CheckoutPage() {
 
     const eventId = searchParams.get('id');
     const promoCoupon = searchParams.get('coupon');
+
+    // Auto-sync profile name / phone / event host details if empty
+    useEffect(() => {
+        if (!user) return;
+        const storedName = localStorage.getItem('invitto_user_name') || user.user_metadata?.full_name || user.user_metadata?.name || '';
+        const storedPhone = localStorage.getItem('invitto_user_phone') || user.user_metadata?.phone || (user as any).phone || '';
+
+        setFormData(prev => ({
+            ...prev,
+            email: prev.email || user.email || '',
+            name: prev.name || storedName,
+            phone: prev.phone || storedPhone
+        }));
+    }, [user]);
+
+    // If event exists, prefill host name if still missing
+    useEffect(() => {
+        if (!eventId) return;
+        let cancelled = false;
+        (async () => {
+            const { data } = await supabase.from('events').select('title, theme_config').eq('id', eventId).maybeSingle();
+            if (cancelled || !data) return;
+            const eventHost = data.title || data.theme_config?.title;
+            if (eventHost) {
+                setFormData(prev => ({
+                    ...prev,
+                    name: prev.name || eventHost
+                }));
+            }
+        })();
+        return () => { cancelled = true; };
+    }, [eventId]);
 
     useEffect(() => {
         if (!user) {
@@ -395,7 +431,11 @@ export default function CheckoutPage() {
                                                 className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all text-[#222B38] text-sm" 
                                                 placeholder="Ej. Ana García"
                                                 value={formData.name}
-                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setFormData(prev => ({ ...prev, name: val }));
+                                                    try { localStorage.setItem('invitto_user_name', val); } catch {}
+                                                }}
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -406,7 +446,11 @@ export default function CheckoutPage() {
                                                 className="w-full p-4 bg-slate-50 rounded-2xl border border-slate-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] focus:bg-white transition-all text-[#222B38] text-sm" 
                                                 placeholder="+52 55 ..."
                                                 value={formData.phone}
-                                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    setFormData(prev => ({ ...prev, phone: val }));
+                                                    try { localStorage.setItem('invitto_user_phone', val); } catch {}
+                                                }}
                                             />
                                         </div>
                                         <div className="md:col-span-2 space-y-2">
@@ -539,18 +583,16 @@ export default function CheckoutPage() {
                                         </div>
                                     </div>
 
-                                    {/* Trust */}
-                                    <div className="flex items-center gap-4 pt-2 border-t border-white/5">
-                                        <div className="flex -space-x-2">
-                                            {[1,2,3].map(i => (
-                                                <div key={i} className="h-8 w-8 rounded-full border-2 border-[#222B38] bg-slate-200 flex items-center justify-center overflow-hidden">
-                                                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="user" />
-                                                </div>
-                                            ))}
+                                    {/* Trust & Guarantee */}
+                                    <div className="pt-4 border-t border-white/10 space-y-2.5">
+                                        <div className="flex items-center gap-2.5 text-xs text-slate-300">
+                                            <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+                                            <span>Pago 100% seguro con encriptación SSL y Stripe</span>
                                         </div>
-                                        <p className="text-xs text-slate-400 font-medium">
-                                            Únete a más de <span className="text-white font-bold">1,200+</span> anfitriones satisfechos.
-                                        </p>
+                                        <div className="flex items-center gap-2.5 text-xs text-slate-300">
+                                            <Heart className="h-4 w-4 text-rose-400 shrink-0" />
+                                            <span>Soporte personalizado vía WhatsApp para tu evento</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

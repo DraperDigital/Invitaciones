@@ -27,6 +27,12 @@ export type WizardData = {
     hotel_name?: string;
     hotel_address?: string;
     hotel_code?: string;
+    showGifts?: boolean;
+    show_gifts?: boolean;
+    gift_registry_type?: string;
+    gift_message?: string;
+    hero_image_url?: string;
+    heroImage?: string;
 };
 
 const INITIAL_DATA: WizardData = {
@@ -47,6 +53,12 @@ const INITIAL_DATA: WizardData = {
     hotel_name: '',
     hotel_address: '',
     hotel_code: '',
+    showGifts: undefined,
+    show_gifts: undefined,
+    gift_registry_type: undefined,
+    gift_message: undefined,
+    hero_image_url: undefined,
+    heroImage: undefined,
 };
 
 export const EVENT_TYPE_OPTIONS = [
@@ -311,7 +323,13 @@ export default function EventWizard() {
                     hotel_name: data.hotel_name,
                     hotel_address: data.hotel_address,
                     hotel_code: data.hotel_code,
-                    hotels: data.hotel_name ? [{ name: data.hotel_name, address: data.hotel_address, code: data.hotel_code }] : undefined
+                    hotels: data.hotel_name ? [{ name: data.hotel_name, address: data.hotel_address, code: data.hotel_code }] : undefined,
+                    ...(data.showGifts !== undefined ? { showGifts: data.showGifts, show_gifts: data.showGifts } : {}),
+                    ...(data.show_gifts !== undefined ? { showGifts: data.show_gifts, show_gifts: data.show_gifts } : {}),
+                    ...(data.gift_registry_type ? { gift_registry_type: data.gift_registry_type } : {}),
+                    ...(data.gift_message ? { gift_message: data.gift_message } : {}),
+                    ...(data.hero_image_url ? { hero_image_url: data.hero_image_url, heroImage: data.hero_image_url } : {}),
+                    ...(data.heroImage ? { hero_image_url: data.heroImage, heroImage: data.heroImage } : {}),
                 };
                 
                 const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
@@ -333,6 +351,9 @@ export default function EventWizard() {
                     .replace(/-+/g, '-');
 
                 const generatedSlug = `${normalizedTitle || 'evento'}-${crypto.randomUUID().slice(0, 5)}`;
+
+                const effectiveShowGifts = data.showGifts ?? data.show_gifts ?? eventPreset.showGifts;
+                const effectiveHeroImage = data.hero_image_url || data.heroImage || undefined;
 
                 const insertPayload = {
                     id: crypto.randomUUID(),
@@ -357,8 +378,15 @@ export default function EventWizard() {
                         hotel_address: data.hotel_address,
                         hotel_code: data.hotel_code,
                         hotels: data.hotel_name ? [{ name: data.hotel_name, address: data.hotel_address, code: data.hotel_code }] : undefined,
+                        hero_image_url: effectiveHeroImage,
+                        heroImage: effectiveHeroImage,
                         // Preset de módulos activos según tipo de evento
                         ...eventPreset,
+                        // Respetar explícitamente la preferencia de regalos del usuario sobre el preset
+                        showGifts: effectiveShowGifts,
+                        show_gifts: effectiveShowGifts,
+                        gift_registry_type: data.gift_registry_type,
+                        gift_message: data.gift_message,
                         // Preset de orden de secciones según tipo de evento
                         sectionOrder: layoutOrder,
                     },
