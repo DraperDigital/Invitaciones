@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive, Palette } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive, Palette, Crown } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -791,10 +791,19 @@ export default function DesignEditor() {
                     </div>
                     <p className="text-xs md:text-sm font-light italic text-stone-500 mt-2">Personaliza la estética y funciones de tu invitación.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
+                    {!event?.is_published && event?.id && (
+                        <Link
+                            to={`/checkout?plan=clasico&id=${event.id}`}
+                            className="flex items-center justify-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3.5 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white rounded-xl sm:rounded-2xl shadow-lg shadow-pink-500/25 transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap active:scale-95"
+                        >
+                            <Crown className="h-4 w-4 text-amber-200 fill-amber-200/40" />
+                            <span>Publicar mi invitación – $499</span>
+                        </Link>
+                    )}
                     {event?.slug && (
                         <a
-                            href={`/i/${event.slug}?t=admin`}
+                            href={`/i/${event.slug}?preview=draft`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3.5 bg-white border-2 border-[#1B2E1D] text-[#1B2E1D] rounded-xl sm:rounded-2xl hover:bg-stone-50 transition-all text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap shadow-sm"

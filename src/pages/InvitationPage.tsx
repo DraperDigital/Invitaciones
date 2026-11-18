@@ -1046,58 +1046,9 @@ END:VCALENDAR`;
 
     if (!event.is_published) {
         const isOwner = user && user.id === event.user_id;
-        const isPreviewMode = searchParams.get('preview') === 'draft' || searchParams.get('preview') === '1' || searchParams.get('wizard_preview') === '1' || rawToken === 'token-preview';
 
-        if (isOwner && isPreviewMode) {
-            // Se permite ver la invitación completa con el banner superior de borrador
-        } else if (isOwner) {
-            return (
-                <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
-                    {/* Ambient Glows */}
-                    <div className="absolute top-1/4 -right-20 w-80 h-80 bg-gradient-to-bl from-[#DF3B94]/15 to-transparent rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute bottom-1/4 -left-20 w-80 h-80 bg-gradient-to-tr from-amber-300/15 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-                    <div className="max-w-lg w-full bg-white/95 backdrop-blur-xl rounded-[2.5rem] p-8 sm:p-12 text-center shadow-2xl shadow-stone-900/10 border border-stone-200/80 relative z-10">
-                        {/* Modern Gradient Icon Badge */}
-                        <div className="relative inline-flex items-center justify-center h-20 w-20 rounded-3xl bg-gradient-to-br from-[#DF3B94] to-pink-600 text-white shadow-xl shadow-pink-500/25 mb-8">
-                            <Crown className="h-9 w-9 text-amber-200 fill-amber-200/30" />
-                            <Heart className="absolute -top-1 -right-1 h-5 w-5 text-rose-300 fill-rose-300 animate-pulse" />
-                        </div>
-
-                        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mb-3 tracking-tight">
-                            Tu invitación está casi lista
-                        </h2>
-                        <p className="text-stone-600 font-sans text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
-                            Esta es la vista previa de tu invitación. Para que tus invitados puedan verla y confirmar su asistencia, necesitas activar tu plan.
-                        </p>
-
-                        <div className="space-y-3">
-                            <Link
-                                to={`/planes?id=${event.id}`}
-                                className="w-full inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-xl shadow-pink-500/25 hover:scale-[1.02] active:scale-95 cursor-pointer"
-                            >
-                                <Crown className="h-4 w-4 text-amber-200 fill-amber-200/40" />
-                                <span>Activar mi invitación</span>
-                            </Link>
-
-                            <Link
-                                to={`/i/${slug}?preview=draft`}
-                                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-2xl text-xs font-semibold tracking-wider transition-all cursor-pointer border border-stone-200/80 hover:border-stone-300"
-                            >
-                                <Eye className="h-4 w-4 text-[#DF3B94]" />
-                                <span>Ver cómo luce mi invitación</span>
-                            </Link>
-
-                            <Link
-                                to="/dashboard"
-                                className="block pt-3 text-xs uppercase font-bold tracking-widest text-stone-400 hover:text-stone-800 transition-colors"
-                            >
-                                Volver al panel
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            );
+        if (isOwner) {
+            // El anfitrión siempre puede ver su invitación completa en modo borrador
         } else {
             return (
                 <div className="min-h-screen bg-stone-50 flex items-center justify-center p-6 text-center">
@@ -3530,31 +3481,67 @@ END:VCALENDAR`;
 
             {/* Sticky Draft Banner for Owner Preview */}
             {!event.is_published && isOwner && (
-                <div className="sticky top-0 z-[1000] bg-stone-900/95 text-white px-4 py-2.5 backdrop-blur-md border-b border-stone-800 flex items-center justify-between text-xs shadow-xl">
-                    <div className="flex items-center gap-2.5">
-                        <span className="bg-[#DF3B94] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm">
-                            Borrador
-                        </span>
-                        <span className="text-stone-300 hidden sm:inline">
-                            Vista previa privada del anfitrión. Tus invitados no pueden verla hasta activar el plan.
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
+                <>
+                    <aside aria-label="Aviso de borrador" className="sticky top-0 z-[1000] bg-stone-950/95 text-white px-3 sm:px-6 py-2.5 backdrop-blur-md border-b border-white/10 shadow-2xl">
+                        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 text-xs">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="bg-[#DF3B94] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm shrink-0">
+                                    Borrador
+                                </span>
+                                <p className="text-stone-300 truncate hidden md:inline">
+                                    Solo tú puedes ver esta vista previa con tus datos. Publícala para compartirla con tus invitados.
+                                </p>
+                                <p className="text-stone-300 truncate md:hidden text-[11px]">
+                                    Vista previa de tu invitación
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                                <Link
+                                    to={`/dashboard/design/${event.id}`}
+                                    className="px-2.5 sm:px-3 py-1.5 bg-white/10 hover:bg-white/20 text-stone-200 rounded-xl transition-colors text-xs font-medium flex items-center gap-1.5"
+                                    title="Personalizar diseño y funciones"
+                                >
+                                    <Palette className="h-3.5 w-3.5 text-stone-400" />
+                                    <span className="hidden sm:inline">Personalizar</span>
+                                </Link>
+                                <Link
+                                    to={`/checkout?plan=${searchParams.get('plan') || 'clasico'}&id=${event.id}${searchParams.get('coupon') ? `&coupon=${searchParams.get('coupon')}` : ''}`}
+                                    className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white font-bold rounded-xl transition-all shadow-md shadow-pink-500/25 active:scale-95 text-xs tracking-wide whitespace-nowrap cursor-pointer"
+                                >
+                                    <Crown className="h-3.5 w-3.5 text-amber-200 fill-amber-200/40 shrink-0" />
+                                    <span>Publicar mi invitación – $499</span>
+                                </Link>
+                                <Link
+                                    to={`/planes?id=${event.id}`}
+                                    className="hidden lg:inline text-[11px] text-stone-400 hover:text-white underline underline-offset-2 ml-1"
+                                >
+                                    Ver planes
+                                </Link>
+                            </div>
+                        </div>
+                    </aside>
+
+                    {/* Mobile Floating Action Bar for Draft */}
+                    <div className="fixed bottom-4 left-3 right-3 z-[995] sm:hidden bg-stone-950/95 backdrop-blur-md text-white p-3 rounded-2xl shadow-2xl border border-white/15 flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                            <p className="text-[10px] text-stone-400 font-semibold uppercase tracking-wider">¿Te gustó cómo quedó?</p>
+                            <p className="text-xs font-bold text-white truncate">Actívala para tus invitados</p>
+                        </div>
                         <Link
-                            to={`/planes?id=${event.id}`}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white font-bold rounded-xl transition-all shadow-md shadow-pink-500/20 active:scale-95 text-xs uppercase tracking-wider"
+                            to={`/checkout?plan=${searchParams.get('plan') || 'clasico'}&id=${event.id}${searchParams.get('coupon') ? `&coupon=${searchParams.get('coupon')}` : ''}`}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 hover:from-[#C52A7C] hover:to-pink-700 text-white font-bold rounded-xl text-xs shadow-lg shadow-pink-500/30 whitespace-nowrap active:scale-95 transition-transform"
                         >
-                            <Crown className="h-3.5 w-3.5 text-amber-200 fill-amber-200/40" />
-                            <span>Activar Plan</span>
-                        </Link>
-                        <Link
-                            to="/dashboard"
-                            className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-stone-200 rounded-xl transition-colors text-xs font-medium"
-                        >
-                            Panel
+                            <span>Publicar – $499</span>
+                            <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                     </div>
-                </div>
+
+                    {/* Subtle Draft Watermark Badge on Desktop */}
+                    <div className="fixed bottom-6 left-6 z-[900] pointer-events-none opacity-80 select-none hidden sm:flex items-center gap-2 bg-stone-950/80 backdrop-blur-md text-stone-300 px-3.5 py-1.5 rounded-full border border-white/15 shadow-xl text-[10px] font-mono uppercase tracking-widest">
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                        <span>Borrador · Vista Previa Privada</span>
+                    </div>
+                </>
             )}
             
             {/* Demo Showcase Navigation & Template Drawer */}

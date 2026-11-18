@@ -371,13 +371,10 @@ export default function EventWizard() {
                     theme: data.theme,
                     event_id: insertPayload.id
                 });
-                if (preselectedPlan) {
-                    const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
-                    navigate(`/checkout?plan=${preselectedPlan}&id=${insertPayload.id}${couponQs}`);
-                } else {
-                    toast.success('¡Evento creado! Elige un plan para activar y publicar tu invitación.');
-                    navigate(`/planes?id=${insertPayload.id}`);
-                }
+                toast.success('¡Tu invitación está lista! Revisa cómo quedó tu diseño.');
+                const planQs = preselectedPlan ? `&plan=${preselectedPlan}` : '&plan=clasico';
+                const couponQs = preselectedCoupon ? `&coupon=${preselectedCoupon}` : '';
+                navigate(`/i/${generatedSlug}?preview=draft${planQs}${couponQs}`);
             }
         } catch (err: any) {
             console.error('Error submitting event:', err);
