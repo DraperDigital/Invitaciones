@@ -34,8 +34,11 @@ serve(async (req) => {
       return new Response(`Webhook Error: ${err.message}`, { status: 400 })
     }
 
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object
+    const session = event.data.object as any
+    const pagado =
+      (event.type === 'checkout.session.completed' && session.payment_status === 'paid') ||
+      event.type === 'checkout.session.async_payment_succeeded'
+    if (pagado) {
       
       const eventId = session.metadata?.eventId
       const planId = session.metadata?.planId

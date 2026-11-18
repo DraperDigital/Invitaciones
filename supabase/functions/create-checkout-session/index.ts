@@ -32,16 +32,16 @@ serve(async (req) => {
     let priceId = '';
     switch (planId) {
       case 'clasico':
-        priceId = 'price_1U9xICK2PT24BEhhOBxEkVi4';
+        priceId = 'price_1Ud3rgK2SjbKQms7CYNbOWmB';
         break;
       case 'pro':
-        priceId = 'price_1U9xIoK2PT24BEhhjs4oiIqv';
+        priceId = 'price_1Ud3rvK2SjbKQms7MQRUtsM2';
         break;
       case 'premium': // Diseño Pro
-        priceId = 'price_1U9xJYK2PT24BEhhIXcFYNIx';
+        priceId = 'price_1Ud3s5K2SjbKQms7y9ZQI4vY';
         break;
       case 'concierge':
-        priceId = 'price_1U9xM8K2PT24BEhhAzia2B4d';
+        priceId = 'price_1Ud3sEK2SjbKQms7PXykglMR';
         break;
       default:
         throw new Error('Invalid plan ID');
@@ -49,7 +49,16 @@ serve(async (req) => {
 
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'oxxo', 'customer_balance'],
+      payment_method_options: {
+        card: { installments: { enabled: true } },
+        oxxo: { expires_after_days: 3 },
+        customer_balance: {
+          funding_type: 'bank_transfer',
+          bank_transfer: { type: 'mx_bank_transfer' },
+        },
+      },
+      customer_creation: 'always',
       line_items: [
         {
           price: priceId,
