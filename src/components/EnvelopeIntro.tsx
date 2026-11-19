@@ -142,6 +142,14 @@ export default function EnvelopeIntro({
     const rawInk = textPrimaryColor || effectiveCfg.text_primary || '#3E5543';
     const rawInkSoft = textSecondaryColor || effectiveCfg.text_secondary || '#6E8572';
 
+    // Estados acumulativos fieles al prototipo (classList.add):
+    // una vez que el sello se quiebra, la clase 'cracked' permanece durante 'open', 'flapdown' y 'lifted'
+    // para que las dos mitades del sello se mantengan desvanecidas (opacity: 0) y no vuelvan a aparecer.
+    const isCracked = envelopeState !== 'idle';
+    const isOpen = envelopeState === 'open' || envelopeState === 'flapdown' || envelopeState === 'lifted';
+    const isFlapDown = envelopeState === 'flapdown' || envelopeState === 'lifted';
+    const isLifted = envelopeState === 'lifted';
+
     const handleOpen = () => {
         if (isOpeningRef.current) return;
         isOpeningRef.current = true;
@@ -503,6 +511,12 @@ export default function EnvelopeIntro({
                 .env-envelope.cracked .env-seal {
                     pointer-events: none;
                 }
+                .env-envelope.flapdown .env-seal,
+                .env-envelope.lifted .env-seal {
+                    opacity: 0 !important;
+                    visibility: hidden !important;
+                    pointer-events: none !important;
+                }
 
                 .env-hint {
                     font-size: 11px;
@@ -518,6 +532,83 @@ export default function EnvelopeIntro({
                 }
                 .env-stage.busy .env-hint {
                     opacity: 0 !important;
+                }
+
+                /* Versión Desktop: 40% más grande (360px * 1.4 = 504px) */
+                @media (min-width: 640px) {
+                    .env-scene {
+                        width: min(86vw, 430px);
+                    }
+                    .env-seal {
+                        width: 78px;
+                        height: 78px;
+                        margin: -39px 0 0 -39px;
+                    }
+                    .env-letter .n {
+                        font-size: clamp(32px, 5vw, 44px);
+                    }
+                }
+
+                @media (min-width: 768px) {
+                    .env-stage {
+                        gap: 36px;
+                    }
+                    .env-to small {
+                        font-size: 12px;
+                        letter-spacing: .46em;
+                        margin-bottom: 8px;
+                    }
+                    .env-to strong {
+                        font-size: 38px;
+                    }
+                    .env-scene {
+                        width: min(88vw, 504px);
+                    }
+                    .env-ground {
+                        bottom: -24px;
+                        height: 36px;
+                    }
+                    .env-letter {
+                        padding: 18px 24px;
+                    }
+                    .env-letter .k {
+                        font-size: 11px;
+                        letter-spacing: .42em;
+                    }
+                    .env-letter .n {
+                        font-size: clamp(38px, 4vw, 52px);
+                        margin: 10px 0 6px;
+                    }
+                    .env-letter .d {
+                        font-size: 18px;
+                        letter-spacing: .32em;
+                    }
+                    .env-letter svg {
+                        width: 96px;
+                        height: 24px;
+                        margin-top: 12px;
+                    }
+                    .env-seal {
+                        width: 92px;
+                        height: 92px;
+                        margin: -46px 0 0 -46px;
+                    }
+                    .env-seal .ring {
+                        inset: -14px;
+                        border-width: 2px;
+                    }
+                    .env-envelope.cracked .env-seal .half.a {
+                        transform: translate(-38px, 44px) rotate(-38deg);
+                        opacity: 0;
+                    }
+                    .env-envelope.cracked .env-seal .half.b {
+                        transform: translate(38px, 50px) rotate(34deg);
+                        opacity: 0;
+                    }
+                    .env-hint {
+                        font-size: 13px;
+                        letter-spacing: .34em;
+                    }
                 }
 
                 @keyframes envRise {
@@ -594,10 +685,10 @@ export default function EnvelopeIntro({
                 <div className="env-ground" />
                 <div
                     className={`env-envelope ${envelopeState === 'idle' ? 'idle' : ''} ${
-                        envelopeState === 'cracked' ? 'cracked' : ''
-                    } ${envelopeState === 'open' || envelopeState === 'flapdown' || envelopeState === 'lifted' ? 'open' : ''} ${
-                        envelopeState === 'flapdown' || envelopeState === 'lifted' ? 'flapdown' : ''
-                    } ${envelopeState === 'lifted' ? 'lifted' : ''}`}
+                        isCracked ? 'cracked' : ''
+                    } ${isOpen ? 'open' : ''} ${isFlapDown ? 'flapdown' : ''} ${
+                        isLifted ? 'lifted' : ''
+                    }`}
                 >
                     <div className="env-back" />
 
