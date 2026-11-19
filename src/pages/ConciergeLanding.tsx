@@ -22,10 +22,9 @@ const SERVICE_JSONLD = {
     description: 'Le escribimos a cada invitado de tu boda en tu nombre hasta tener su respuesta. Tu lista final confirmada 15 días antes, sin que tú le ruegues a nadie.',
     offers: {
         '@type': 'Offer',
-        price: '2499',
+        price: '3499',
         priceCurrency: 'MXN',
-        availability: 'https://schema.org/InStock',
-        validThrough: '2026-11-02'
+        availability: 'https://schema.org/InStock'
     },
 };
 
@@ -114,7 +113,7 @@ const ConciergeLanding: React.FC = () => {
                     <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
                         <Sparkles className="h-4 w-4 text-[#DF3B94]" />
                         <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">
-                            INVITTO CONFIRMA · 5 LUGARES DE FUNDADORA
+                            INVITTO CONFIRMA · CONFIRMAMOS A TUS INVITADOS POR TI
                         </span>
                     </div>
                     
@@ -137,12 +136,11 @@ const ConciergeLanding: React.FC = () => {
                             Quiero mi lista confirmada <ArrowRight className="h-5 w-5" />
                         </a>
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 text-xs text-slate-300 font-semibold">
-                            <span>Precio de fundadora:</span>
-                            <span className="text-[#F5B837] font-bold">$2,499 MXN</span>
-                            <span className="line-through text-slate-500">$3,499</span>
+                            <span>Servicio completo:</span>
+                            <span className="text-[#F5B837] font-bold">$3,499 MXN</span>
                         </div>
                         <p className="text-xs text-slate-400 font-medium">
-                            Solo para las primeras 5 bodas · cierra el 2 de noviembre
+                            Apartas con el 50% ($1,750 MXN) · Liquidación al entregar tu lista
                         </p>
                     </div>
                 </div>
@@ -299,13 +297,12 @@ const ConciergeLanding: React.FC = () => {
                 <div className="max-w-4xl mx-auto">
                     <div className="bg-gradient-to-b from-white/10 to-white/5 p-8 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl space-y-8">
                         <div className="text-center space-y-3 border-b border-white/10 pb-8">
-                            <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">PRECIO DE FUNDADORA</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">PRECIO TRANSPARENTE</span>
                             <div className="flex items-center justify-center gap-3">
-                                <span className="text-4xl md:text-6xl font-display font-extrabold text-white">$2,499 MXN</span>
-                                <span className="text-xl md:text-2xl line-through text-slate-500 font-bold">$3,499</span>
+                                <span className="text-4xl md:text-6xl font-display font-extrabold text-white">$3,499 MXN</span>
                             </div>
                             <p className="text-sm md:text-base text-slate-300 font-medium">
-                                Para las primeras 5 bodas · cierra el 2 de noviembre de 2026
+                                Pago único para tu evento · Sin letras chiquitas
                             </p>
                         </div>
 
@@ -338,7 +335,7 @@ const ConciergeLanding: React.FC = () => {
 
                         <div className="text-center space-y-6 pt-4 border-t border-white/10">
                             <p className="text-xs md:text-sm text-slate-400 font-medium">
-                                ¿Más de 120 invitaciones? $500 por cada 50 adicionales. Apartas con $1,250.
+                                ¿Más de 120 invitaciones? $500 por cada 50 adicionales. Apartas con el 50% ($1,750 MXN).
                             </p>
                             <a
                                 href={WHATSAPP_CONFIRMA_URL}
@@ -422,7 +419,7 @@ const ConciergeLanding: React.FC = () => {
                     </h2>
 
                     <p className="text-base md:text-xl text-slate-300 font-normal">
-                        Quedan 5 lugares de fundadora para bodas de noviembre a febrero.
+                        Nos encargamos de confirmar a cada uno de tus invitados para que disfrutes tu evento sin estrés.
                     </p>
 
                     <div className="pt-2 flex flex-col items-center gap-3">

@@ -294,7 +294,7 @@ export default function PlanesPage() {
                                 ¿Solo necesitas que confirmemos a tus invitados?
                             </h3>
                             <p className="text-sm md:text-base text-slate-600 leading-relaxed max-w-2xl">
-                                <strong>Invitto Confirma</strong>: confirmamos a tus invitados por ti. Se suma a cualquier plan, desde $2,499. ¿Quieres que también diseñemos tu invitación? Eso es el <strong>plan Concierge</strong>.
+                                <strong>Invitto Confirma</strong>: confirmamos a tus invitados por ti. Se suma a cualquier plan, desde $3,499. ¿Quieres que también diseñemos tu invitación? Eso es el <strong>plan Concierge</strong>.
                             </p>
                         </div>
                         <div className="shrink-0 w-full md:w-auto">

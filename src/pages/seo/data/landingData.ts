@@ -295,7 +295,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     hero: {
       badge: 'Ciudad de México',
       h1: 'Invitaciones digitales para eventos en CDMX',
-      subtitle: 'La plataforma mexicana preferida para crear invitaciones de boda, XV años y todo tipo de celebraciones en la Ciudad de México.',
+      subtitle: 'La plataforma mexicana para crear invitaciones de boda, XV años y todo tipo de celebraciones en la Ciudad de México.',
       cta: 'Crear mi invitación',
     },
     benefits: [
@@ -373,7 +373,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     hero: {
       badge: 'Monterrey',
       h1: 'Invitaciones digitales para eventos en Monterrey',
-      subtitle: 'La plataforma mexicana preferida para invitaciones de boda, XV años y celebraciones en la Sultana del Norte. Diseño premium con RSVP.',
+      subtitle: 'La plataforma mexicana para invitaciones de boda, XV años y celebraciones en la Sultana del Norte. Diseño premium con RSVP.',
       cta: 'Crear mi invitación',
     },
     benefits: [

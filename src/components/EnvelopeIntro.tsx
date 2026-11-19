@@ -24,33 +24,51 @@ export interface EnvelopeIntroProps {
 }
 
 /**
- * Extrae iniciales elegantes del título del evento.
- * Ej: "Ana & Luis" -> "A&L", "Sofía y Mateo" -> "S&A", "Mis XV Valeria" -> "V", "Carlos" -> "C".
+ * Extrae iniciales elegantes del título del evento a partir de los NOMBRES.
+ * Separa por conectores (" & ", " y ", " e ") y toma la inicial de la última palabra
+ * antes del separador y la primera palabra después ("Boda de Ana y Luis" -> "A&L").
+ * Ignora palabras como "Boda", "de", "del", "Mis", "XV", "años", "Bautizo", "Prueba", etc.
+ * Si solo hay un nombre ("Mis XV Valeria"), extrae una sola inicial ("V").
  */
 function getInitials(title?: string): string {
     if (!title || typeof title !== 'string') return 'I';
     const trimmed = title.trim();
 
-    // 1. Limpiar prefijos comunes como "Boda de", "Nuestra Boda", "Mis XV Años", etc.
-    const cleaned = trimmed
-        .replace(/^(?:Boda|Nuestra Boda|Boda de|Mis XV Años|Mis XV|XV Años|XV|Bautizo de|Bautizo|Cumpleaños de|Cumple de|Graduación de|Graduacion de)\s+/i, '')
-        .trim();
+    const stopWords = new Set([
+        'boda', 'de', 'del', 'los', 'las', 'la', 'el', 'mis', 'mi', 'nuestra', 'nuestro',
+        'xv', 'anos', 'años', 'bautizo', 'cumpleanos', 'cumpleaños', 'cumple',
+        'prueba', 'test', 'demo', 'evento', 'fiesta', 'graduacion', 'graduación',
+        'aniversario', 'primera', 'comunion', 'comunión', 'baby', 'shower', 'revelacion', 'revelación'
+    ]);
 
-    // 2. Buscar dos nombres separados por conectores con espacios (&, y, +, e, /)
-    const matchTwo = cleaned.match(/^([A-Za-zÁÉÍÓÚÑáéíóúñ]+)(?:\s*&\s*|\s+(?:y|Y|e|E|\+|\/)\s+)([A-Za-zÁÉÍÓÚÑáéíóúñ]+)/);
-    if (matchTwo) {
-        const first = matchTwo[1].charAt(0).toUpperCase();
-        const second = matchTwo[2].charAt(0).toUpperCase();
-        return `${first}&${second}`;
+    // Separadores: ' & ', ' y ', ' e ' (o & directo)
+    const separatorRegex = /\s+(?:&|y|e)\s+|\s*&\s*/i;
+    if (separatorRegex.test(trimmed)) {
+        const parts = trimmed.split(separatorRegex);
+        if (parts.length >= 2) {
+            const leftTokens = parts[0].trim().split(/\s+/).map(w => w.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '')).filter(Boolean);
+            const rightTokens = parts[1].trim().split(/\s+/).map(w => w.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '')).filter(Boolean);
+
+            const leftWord = leftTokens.length > 0 ? leftTokens[leftTokens.length - 1] : '';
+            const rightWord = rightTokens.length > 0 ? rightTokens[0] : '';
+
+            if (leftWord && rightWord) {
+                return (leftWord.charAt(0) + '&' + rightWord.charAt(0)).toUpperCase();
+            }
+        }
     }
 
-    // 3. Un solo nombre o palabra principal
-    const firstWord = cleaned.split(/\s+/)[0];
-    if (firstWord && firstWord.length > 0) {
-        return firstWord.charAt(0).toUpperCase();
-    }
+    // Si solo hay un nombre o no hay conector: ignorar palabras de ocasión y tomar el primer nombre
+    const words = trimmed.split(/\s+/).map(w => w.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '')).filter(Boolean);
+    const meaningful = words.filter(w => !stopWords.has(w.toLowerCase()));
 
-    return trimmed.charAt(0).toUpperCase() || 'I';
+    if (meaningful.length > 0) {
+        return meaningful[0].charAt(0).toUpperCase();
+    }
+    if (words.length > 0) {
+        return words[0].charAt(0).toUpperCase();
+    }
+    return 'I';
 }
 
 /**

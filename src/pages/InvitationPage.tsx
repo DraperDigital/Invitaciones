@@ -4158,11 +4158,11 @@ END:VCALENDAR`;
                             <button 
                                 type="button"
                                 onClick={() => setIsColorPickerOpen(true)}
-                                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#1B2E1D] hover:bg-stone-100 transition-all shrink-0 active:scale-95"
+                                className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#1B2E1D] hover:bg-stone-100 transition-all shrink-0 active:scale-95"
                                 title="Paletas de Color"
                             >
                                 <span className="text-sm shrink-0 leading-none">🎨</span>
-                                <span className="hidden sm:inline">Colores</span>
+                                <span className="text-[11px] sm:text-xs">Colores</span>
                             </button>
 
                             <div className="h-4 w-[1px] bg-stone-200 shrink-0" />

@@ -94,21 +94,21 @@ let hasLoadedThirdParty = false;
 export function initAnalytics() {
     if (typeof window === 'undefined') return;
 
-    // Meta Pixel se carga siempre de forma incondicional
+    // Solo se ejecutan si el usuario no ha rechazado explícitamente las cookies analíticas
+    if (!hasAnalyticsConsent()) return;
+
+    // Meta Pixel respeta la elección del usuario ('necessary' / 'essential')
     if (META_PIXEL_ID) loadMetaPixel(META_PIXEL_ID);
 
-    // Clarity y GA4 permanecen bajo control de consentimiento
-    if (!hasAnalyticsConsent()) return;
     if (CLARITY_ID) loadClarity(CLARITY_ID);
     if (GA4_ID) loadGA4(GA4_ID);
 }
 
 /**
  * Loads third-party tracking scripts:
- * - Meta Pixel loads directly on window 'load' (without waiting for user interaction/click)
- *   to preserve ad attribution.
- * - gtag (GA4/Ads) and Clarity load after window 'load' via requestIdleCallback
- *   to keep the main thread completely free during critical initial rendering.
+ * - Meta Pixel loads on window 'load' (respetando si el usuario ya eligió 'essential'/'necessary').
+ * - gtag (GA4/Ads) y Clarity se difieren con requestIdleCallback.
+ * - Por defecto, si el visitante aún no ha elegido nada, hasAnalyticsConsent() regresa true.
  */
 export function setupDeferredAnalytics() {
     if (typeof window === 'undefined') return;
@@ -117,8 +117,8 @@ export function setupDeferredAnalytics() {
         if (hasLoadedThirdParty) return;
         hasLoadedThirdParty = true;
 
-        // 1. Meta Pixel se carga en el evento load para atribución inmediata
-        if (META_PIXEL_ID) {
+        // 1. Meta Pixel se carga en el evento load si hay consentimiento (o visita nueva por defecto)
+        if (hasAnalyticsConsent() && META_PIXEL_ID) {
             loadMetaPixel(META_PIXEL_ID);
         }
 

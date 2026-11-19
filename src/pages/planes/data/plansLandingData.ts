@@ -343,7 +343,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
       },
       {
         question: '¿Qué diferencia hay entre el Plan Concierge e Invitto Confirma?',
-        answer: 'Invitto Confirma ($2,499 / $3,499) es únicamente el servicio de confirmación para cuando tú mismo creas tu invitación digital. El Plan Concierge ($4,499) incluye el Plan Diseño Pro completo (diseño hecho por diseñador y dominio .com) + Invitto Confirma + atención personalizada a las dudas de tus invitados.',
+        answer: 'Invitto Confirma ($3,499) es únicamente el servicio de confirmación para cuando tú mismo creas tu invitación digital. El Plan Concierge ($4,499) incluye el Plan Diseño Pro completo (diseño hecho por diseñador y dominio .com) + Invitto Confirma + atención personalizada a las dudas de tus invitados.',
       },
       {
         question: '¿Los mensajes se envían de forma automática?',

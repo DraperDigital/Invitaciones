@@ -79,7 +79,7 @@ export default function ColorPalettePicker({
             />
 
             {/* Panel Container (Bottom sheet on mobile, centered modal on desktop) */}
-            <div className="relative w-full md:max-w-xl max-h-[88vh] bg-white rounded-t-[2.5rem] md:rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom md:zoom-in-95 duration-300 border border-stone-100">
+            <div className="relative w-full md:max-w-xl max-h-[85vh] bg-white rounded-t-[2.5rem] md:rounded-[2rem] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom md:zoom-in-95 duration-300 border border-stone-100 pb-[env(safe-area-inset-bottom,0px)]">
                 {/* Mobile Drag Indicator */}
                 <div className="md:hidden flex justify-center pt-3 pb-1">
                     <div className="w-12 h-1 bg-stone-200 rounded-full" />
@@ -192,6 +192,7 @@ export default function ColorPalettePicker({
                                             } else {
                                                 onSelectPalette(palette);
                                             }
+                                            onClose();
                                         }}
                                         className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer relative group flex flex-col justify-between gap-2.5 ${
                                             isSelected

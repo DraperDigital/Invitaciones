@@ -653,7 +653,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left text-xs text-stone-500">
                 <Info className="w-4 h-4 text-[#e0409a] flex-shrink-0" />
                 <span>
-                    ¿Prefieres que llamemos y confirmemos a cada uno de tus invitados? Puedes sumar el servicio <Link to="/concierge-service" className="font-bold text-[#e0409a] hover:underline">Invitto Confirma</Link> a cualquier plan desde $2,499 MXN.{' '}
+                    ¿Prefieres que llamemos y confirmemos a cada uno de tus invitados? Puedes sumar el servicio <Link to="/concierge-service" className="font-bold text-[#e0409a] hover:underline">Invitto Confirma</Link> a cualquier plan desde $3,499 MXN.{' '}
                     <a
                         href={`${WHATSAPP_SUPPORT_URL}?text=Hola!%20Tengo%20dudas%20sobre%20los%20planes%20de%20Invitto`}
                         target="_blank"

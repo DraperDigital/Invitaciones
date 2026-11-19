@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
-    Check, Star, ChevronDown, ArrowRight,
+    Check, Sparkles, ChevronDown, ArrowRight,
     X, Users, Gem, Menu
 } from 'lucide-react';
 import { useState } from 'react';
@@ -39,13 +39,6 @@ const HOMEPAGE_JSONLD = [
             highPrice: '4499',
             offerCount: '4',
             price: '499',
-        },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.9',
-            reviewCount: '128',
-            bestRating: '5',
-            worstRating: '1',
         },
     },
     FAQ_JSONLD,
@@ -212,8 +205,7 @@ export default function HomePage() {
                         <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
                             NUEVO
                         </span>
-                        <span>Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
-                        <span className="font-bold text-sm shrink-0">→</span>
+                        <span>Nuevo: Invitto Confirma · confirmamos a tus invitados por ti →</span>
                     </Link>
                 </div>
 
@@ -352,7 +344,7 @@ export default function HomePage() {
                                             <div className="h-6 w-6 rounded-full bg-[#4E7B55]/15 text-[#4E7B55] flex items-center justify-center font-bold text-[10px]">
                                                 ✓
                                             </div>
-                                            <span className="truncate">Familia Morales +3 confirmados</span>
+                                            <span className="truncate">Ejemplo: Invitados confirmados</span>
                                         </div>
                                     </div>
                                 </div>
@@ -692,7 +684,7 @@ export default function HomePage() {
                                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-white" />
                                 </Link>
                                 <span className="text-xs text-[#FAC345] font-semibold bg-[#FAC345]/10 px-3.5 py-2 rounded-xl border border-[#FAC345]/20">
-                                    ✨ 5 lugares de fundadora disponibles este mes
+                                    ✨ Servicio disponible para cualquier plan
                                 </span>
                             </div>
                         </div>
@@ -731,90 +723,92 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* --- 5. PRUEBA SOCIAL (HISTORIAS REALES) --- */}
+            {/* --- 5. ASÍ SE VE UNA INVITACIÓN INVITTO --- */}
             <section className="py-20 md:py-32 bg-white border-y border-slate-100">
                 <div className="mx-auto max-w-7xl px-6">
                     <div className="text-center mb-16 space-y-4">
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <Star className="h-4 w-4 fill-current text-[#F5B837]" />
-                            <span>Historias Reales</span>
+                            <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                            <span>Diseños Reales</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
-                            Parejas y familias que ya confían en Invitto
+                            Así se ve una invitación Invitto
                         </h2>
                         <p className="text-slate-600 max-w-xl mx-auto text-base">
-                            Organiza tu evento sin estrés con la plataforma preferida en México.
+                            Explora nuestras plantillas interactivas y prueba la experiencia tal como la recibirán tus invitados.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
                             {
-                                quote: 'No queríamos un grupo gigante de WhatsApp donde todos opinan. Con Invitto enviamos el link y en 3 días teníamos el 80% de las confirmaciones.',
-                                names: 'Sofía & Mateo',
-                                initials: 'SM',
-                                event: 'Boda en Valle de Bravo • 220 invitados',
-                                rating: 5,
+                                title: 'Boda Elegante Clásica',
+                                names: 'Ana & Carlos',
+                                event: 'Boda de Ensueño',
+                                description: 'Tipografía serif sofisticada, sobre digital interactivo y confirmación por pases familiares.',
                                 tag: 'Boda',
-                                demoUrl: '/i/boda-ana-y-carlos'
+                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
                             },
                             {
-                                quote: 'El control de pases por familia fue la salvación. Evitamos que primos lejanos trajeran acompañantes no contemplados.',
-                                names: 'Familia Morales',
-                                initials: 'FM',
-                                event: 'XV Años de Valentina • CDMX',
-                                rating: 5,
+                                title: 'XV Años Glamour',
+                                names: 'Valentina',
+                                event: 'Mis XV Años',
+                                description: 'Diseño moderno con cuenta regresiva, código de vestimenta, mesa de regalos y pase QR.',
                                 tag: 'XV Años',
-                                demoUrl: '/i/xv-valeria-premium'
+                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
                             },
                             {
-                                quote: 'Súper fácil de configurar. En 10 minutos la teníamos lista con la ubicación en Google Maps y la mesa de regalos.',
-                                names: 'Carolina & Diego',
-                                initials: 'CD',
-                                event: 'Bautizo de Sebastián • Guadalajara',
-                                rating: 5,
-                                tag: 'Bautizo',
-                                demoUrl: '/i/bautizo-victoria'
+                                title: 'Cumpleaños & Aniversario',
+                                names: 'Cecilia',
+                                event: '70 Aniversario',
+                                description: 'Música de fondo, mapa interactivo para salón y confirmación ágil vía WhatsApp.',
+                                tag: 'Cumpleaños',
+                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
                             }
                         ].map((card, i) => (
                             <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 flex flex-col justify-between space-y-6 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all">
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex text-[#F5B837] gap-1">
-                                            {Array.from({ length: card.rating }).map((_, r) => (
-                                                <Star key={r} className="h-4 w-4 fill-current" />
-                                            ))}
-                                        </div>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-100">{card.tag}</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200/60 font-mono">
+                                            Ejemplo
+                                        </span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-100">
+                                            {card.tag}
+                                        </span>
                                     </div>
-                                    <p className="text-sm font-normal italic text-slate-600 leading-relaxed">
-                                        "{card.quote}"
+                                    <h3 className="font-display font-extrabold text-[#222B38] text-xl leading-tight">
+                                        {card.title}
+                                    </h3>
+                                    <p className="text-sm font-normal text-slate-600 leading-relaxed">
+                                        {card.description}
                                     </p>
                                 </div>
                                 <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-[#fdf2f8] text-[#C52A7C] font-bold text-xs flex items-center justify-center border border-[#fbcfe8] flex-shrink-0">
-                                            {card.initials}
-                                        </div>
-                                        <div>
-                                            <div className="flex items-center gap-1.5">
-                                                <p className="font-display font-bold text-[#222B38] text-base leading-tight">{card.names}</p>
-                                                <span className="text-xs text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">✓ Verificado</span>
-                                            </div>
-                                            <p className="text-xs text-slate-600 font-medium mt-0.5">{card.event}</p>
-                                        </div>
+                                    <div>
+                                        <p className="font-display font-bold text-[#222B38] text-sm leading-tight">{card.names}</p>
+                                        <p className="text-xs text-slate-500 font-medium mt-0.5">{card.event}</p>
                                     </div>
                                     <Link
                                         to={card.demoUrl}
-                                        className="text-[11px] font-bold text-[#C52A7C] hover:text-[#DF3B94] transition-colors inline-flex items-center gap-1 group/demo flex-shrink-0"
-                                        title={`Ver invitación demo similar a la de ${card.names}`}
+                                        className="px-4 py-2 bg-white hover:bg-slate-50 text-[#C2287B] border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shadow-2xs hover:-translate-y-0.5"
+                                        title={`Ver demo de ${card.title}`}
                                     >
-                                        <span className="hidden sm:inline">Ver demo</span>
-                                        <ArrowRight className="h-3 w-3 group-hover/demo:translate-x-0.5 transition-transform" />
+                                        <span>Ver Demo</span>
+                                        <ArrowRight className="h-3.5 w-3.5" />
                                     </Link>
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <Link
+                            to="/ejemplos"
+                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group"
+                        >
+                            <span>VER TODOS LOS EJEMPLOS Y PLANTILLAS</span>
+                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
+                        </Link>
                     </div>
                 </div>
             </section>
