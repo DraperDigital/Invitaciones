@@ -10,7 +10,7 @@ import {
 import Seo from '../components/Seo';
 import { WHATSAPP_SUPPORT_NUMBER } from '../lib/constants';
 
-const WHATSAPP_CONFIRMA_URL = `https://wa.me/${WHATSAPP_SUPPORT_NUMBER}?text=LISTA%20-%20Vengo%20de%20la%20p%C3%A1gina%20de%20Invitto%20Confirma`;
+const WHATSAPP_CONFIRMA_URL = `https://wa.me/${WHATSAPP_SUPPORT_NUMBER}?text=LISTA%20-%20Invitto%20Confirma`;
 
 const SERVICE_JSONLD = {
     '@context': 'https://schema.org',

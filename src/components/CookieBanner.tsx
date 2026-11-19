@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+
+export const EVENTO_CONSENTIMIENTO_COOKIES = 'invitto:consentimiento-cookies';
 import { Link, useLocation } from 'react-router-dom';
 import { Cookie, X } from 'lucide-react';
 import { initAnalytics } from '../lib/analytics';
@@ -44,6 +46,8 @@ export default function CookieBanner() {
             initAnalytics();
         }
         setIsVisible(false);
+        // Avisa a otros elementos flotantes (p. ej. la burbuja de WhatsApp) que ya pueden aparecer.
+        window.dispatchEvent(new Event(EVENTO_CONSENTIMIENTO_COOKIES));
     };
 
     if (!isVisible || isInvitationPage) return null;
