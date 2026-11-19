@@ -85,7 +85,15 @@ export default function HomePage() {
             <header className="fixed top-0 w-full z-50 bg-white border-b border-slate-100 px-4 md:px-6">
                 <div className="mx-auto max-w-7xl h-16 md:h-20 flex items-center justify-between">
                     <Link to="/" className="flex items-center hover:opacity-95 transition-opacity">
-                        <img src="/logo.png?v=3" alt="Invitto" className="h-8 md:h-10 w-auto object-contain" />
+                        <img
+                            src="/logo.png?v=3"
+                            alt="Invitto"
+                            width={160}
+                            height={40}
+                            loading="eager"
+                            decoding="async"
+                            className="h-8 md:h-10 w-auto object-contain"
+                        />
                     </Link>
 
                     <nav className="hidden lg:flex items-center gap-8">
@@ -196,143 +204,156 @@ export default function HomePage() {
                 )}
             </header>
 
-            {/* Barra de aviso arriba del hero */}
-            <div className="mt-16 md:mt-20 bg-[#DF3B94] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#C52A7C] relative z-40 shadow-xs">
-                <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
-                    <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
-                        NUEVO
-                    </span>
-                    <span>Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
-                    <span className="font-bold text-sm shrink-0">→</span>
-                </Link>
-            </div>
+            {/* --- MAIN CONTENT LANDMARK --- */}
+            <main id="main-content">
+                {/* Barra de aviso arriba del hero */}
+                <div className="mt-16 md:mt-20 bg-[#DF3B94] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#C52A7C] relative z-40 shadow-xs">
+                    <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
+                        <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
+                            NUEVO
+                        </span>
+                        <span>Invitto Confirma · confirmamos a tus invitados por ti. 5 lugares de fundadora</span>
+                        <span className="font-bold text-sm shrink-0">→</span>
+                    </Link>
+                </div>
 
-            {/* --- 1. HERO SECTION (Optimizado para pliegue en escritorio 1366x800 y móvil) --- */}
-            <section className="relative pt-6 pb-10 md:pt-10 md:pb-14 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
-                <div className="mx-auto max-w-7xl">
-                    <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
-                        <div className="space-y-4 md:space-y-5 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                                <span className="h-2 w-2 rounded-full bg-[#DF3B94] animate-pulse" />
-                                <span>RSVP inteligente en tiempo real · Sin perseguir invitados</span>
-                            </div>
-
-                            <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-display font-extrabold text-[#222B38] tracking-tight leading-[1.15]">
-                                Deja de perseguir invitados.<br />
-                                <span className="bg-gradient-to-r from-[#DF3B94] via-[#F5B837] to-[#DF3B94] bg-clip-text text-transparent">
-                                    Ten el control de tu evento
-                                </span><br />
-                                desde el primer día.
-                            </h1>
-
-                            <p className="text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
-                                Tus invitados confirman con un clic. Tú ves en tiempo real quién va, quién no y cuántos acompañantes traen. Sin WhatsApp saturado, sin Excel.
-                            </p>
-
-                            <div className="space-y-3 pt-1">
-                                <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-3">
-                                    <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
-                                        <button className="w-full px-7 py-3.5 md:px-8 md:py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#DF3B94]/25 flex items-center justify-center gap-3">
-                                            {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
-                                        </button>
-                                    </Link>
-                                    <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
-                                        VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
-                                    </Link>
+                {/* --- 1. HERO SECTION (Optimizado para pliegue en escritorio 1366x800 y móvil) --- */}
+                <section className="relative pt-6 pb-10 md:pt-10 md:pb-14 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
+                    <div className="mx-auto max-w-7xl">
+                        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                            <div className="space-y-4 md:space-y-5 text-center lg:text-left">
+                                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                                    <span className="h-2 w-2 rounded-full bg-[#DF3B94] animate-pulse" />
+                                    <span>RSVP inteligente en tiempo real · Sin perseguir invitados</span>
                                 </div>
 
-                                {/* Trust, Pricing & Free Trial Anchor */}
-                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-slate-500 pt-1">
-                                    <span className="font-semibold text-slate-700">Diseña gratis</span>
-                                    <span className="text-slate-300">•</span>
-                                    <span>Planes desde <strong className="text-[#222B38] font-bold">$499 MXN</strong> (pago único)</span>
-                                    <span className="text-slate-300">•</span>
-                                    <span>Sin tarjeta para empezar</span>
-                                </div>
-                            </div>
+                                <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-display font-extrabold text-[#222B38] tracking-tight leading-[1.15]">
+                                    Deja de perseguir invitados.<br />
+                                    <span className="bg-gradient-to-r from-[#DF3B94] via-[#F5B837] to-[#DF3B94] bg-clip-text text-transparent">
+                                        Ten el control de tu evento
+                                    </span><br />
+                                    desde el primer día.
+                                </h1>
 
-                            <div className="pt-2 flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-medium">
-                                <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Confirmaciones WhatsApp</span>
-                                <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Pases QR</span>
-                                <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Borrador en 5 min</span>
-                            </div>
-                        </div>
+                                <p className="text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
+                                    Tus invitados confirman con un clic. Tú ves en tiempo real quién va, quién no y cuántos acompañantes traen. Sin WhatsApp saturado, sin Excel.
+                                </p>
 
-                        {/* Right Column: Layered Product Collage (Smartphone + Live RSVP + QR Pass) */}
-                        <div className="relative mt-12 lg:mt-0 flex items-center justify-center">
-                            
-                            {/* Ambient Glows */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#DF3B94]/10 rounded-full blur-[100px] pointer-events-none" />
-                            <div className="absolute top-1/3 left-10 w-72 h-72 bg-[#F5B837]/15 rounded-full blur-[80px] pointer-events-none" />
-
-                            {/* 1. Main Smartphone Frame */}
-                            <div className="relative z-20 mx-auto w-full max-w-[290px] xs:max-w-[320px] lg:max-w-[340px] aspect-[9/18] bg-slate-900 rounded-[2.8rem] p-3 shadow-2xl shadow-[#222B38]/20 ring-1 ring-slate-800">
-                                {/* Speaker notch */}
-                                <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center">
-                                    <div className="w-3 h-1 bg-slate-800 rounded-full" />
-                                </div>
-
-                                {/* Phone Screen Content */}
-                                <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white">
-                                    {/* Event Hero Cover */}
-                                    <div className="relative h-2/3 w-full">
-                                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" className="w-full h-full object-cover" alt="Boda Isabel & Rodrigo" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                                        
-                                        <div className="absolute bottom-4 left-0 w-full px-5 z-10 text-center">
-                                            <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] uppercase font-bold tracking-widest text-[#F5B837] border border-white/10 inline-block mb-2">
-                                                Nuestra Boda
-                                            </span>
-                                            <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">Isabel & Rodrigo</p>
-                                            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{MOCK_HERO_DATE}</p>
-                                        </div>
+                                <div className="space-y-3 pt-1">
+                                    <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-3">
+                                        <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
+                                            <button className="w-full px-7 py-3.5 md:px-8 md:py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#DF3B94]/25 flex items-center justify-center gap-3">
+                                                {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
+                                            </button>
+                                        </Link>
+                                        <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
+                                            VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
+                                        </Link>
                                     </div>
 
-                                    {/* Action Buttons inside Phone */}
-                                    <div className="p-4 space-y-2 bg-slate-950 z-10">
-                                        <div className="flex justify-center gap-3 text-center text-[10px] font-bold">
-                                            <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                <p className="text-sm font-display text-[#DF3B94]">45</p>
-                                                <p className="text-[8px] text-slate-400">DÍAS</p>
+                                    {/* Trust, Pricing & Free Trial Anchor */}
+                                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-slate-600 pt-1">
+                                        <span className="font-semibold text-slate-800">Diseña gratis</span>
+                                        <span className="text-slate-400">•</span>
+                                        <span>Planes desde <strong className="text-[#222B38] font-bold">$499 MXN</strong> (pago único)</span>
+                                        <span className="text-slate-400">•</span>
+                                        <span>Sin tarjeta para empezar</span>
+                                    </div>
+                                </div>
+
+                                <div className="pt-2 flex items-center justify-center lg:justify-start gap-6 text-xs text-slate-600 font-medium">
+                                    <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Confirmaciones WhatsApp</span>
+                                    <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Pases QR</span>
+                                    <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-[#4E7B55]" /> Borrador en 5 min</span>
+                                </div>
+                            </div>
+
+                            {/* Right Column: Layered Product Collage (Smartphone + Live RSVP + QR Pass) */}
+                            <div className="relative mt-12 lg:mt-0 flex items-center justify-center">
+                                
+                                {/* Ambient Glows */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#DF3B94]/10 rounded-full blur-[100px] pointer-events-none" />
+                                <div className="absolute top-1/3 left-10 w-72 h-72 bg-[#F5B837]/15 rounded-full blur-[80px] pointer-events-none" />
+
+                                {/* 1. Main Smartphone Frame */}
+                                <div className="relative z-20 mx-auto w-full max-w-[290px] xs:max-w-[320px] lg:max-w-[340px] aspect-[9/18] bg-slate-900 rounded-[2.8rem] p-3 shadow-2xl shadow-[#222B38]/20 ring-1 ring-slate-800">
+                                    {/* Speaker notch */}
+                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center">
+                                        <div className="w-3 h-1 bg-slate-800 rounded-full" />
+                                    </div>
+
+                                    {/* Phone Screen Content */}
+                                    <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white">
+                                        {/* Event Hero Cover */}
+                                        <div className="relative h-2/3 w-full">
+                                            <img
+                                                src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop"
+                                                srcSet="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=75&fm=webp&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=75&fm=webp&auto=format&fit=crop 1200w"
+                                                sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px"
+                                                width={340}
+                                                height={450}
+                                                fetchPriority="high"
+                                                loading="eager"
+                                                decoding="async"
+                                                className="w-full h-full object-cover"
+                                                alt="Boda Isabel & Rodrigo"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                                            
+                                            <div className="absolute bottom-4 left-0 w-full px-5 z-10 text-center">
+                                                <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] uppercase font-bold tracking-widest text-[#F5B837] border border-white/10 inline-block mb-2">
+                                                    Nuestra Boda
+                                                </span>
+                                                <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">Isabel & Rodrigo</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{MOCK_HERO_DATE}</p>
                                             </div>
-                                            <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                <p className="text-sm font-display text-[#F5B837]">12</p>
-                                                <p className="text-[8px] text-slate-400">HORAS</p>
+                                        </div>
+
+                                        {/* Action Buttons inside Phone */}
+                                        <div className="p-4 space-y-2 bg-slate-950 z-10">
+                                            <div className="flex justify-center gap-3 text-center text-[10px] font-bold">
+                                                <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
+                                                    <p className="text-sm font-display text-[#DF3B94]">45</p>
+                                                    <p className="text-[8px] text-slate-400">DÍAS</p>
+                                                </div>
+                                                <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
+                                                    <p className="text-sm font-display text-[#F5B837]">12</p>
+                                                    <p className="text-[8px] text-slate-400">HORAS</p>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <button className="w-full py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md">
-                                            Confirmar Asistencia
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* 2. Top-Right Floating Card: Live RSVP Counter */}
-                            <div className="absolute -top-4 -right-2 lg:-right-10 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] xs:w-[260px] animate-fade-in">
-                                <div className="flex items-center justify-between mb-3">
-                                    <div className="flex items-center gap-2">
-                                        <span className="h-2.5 w-2.5 rounded-full bg-[#4E7B55] animate-pulse" />
-                                        <span className="text-[11px] font-bold text-slate-800">RSVP en Vivo</span>
-                                    </div>
-                                    <span className="px-2 py-0.5 bg-[#fdf2f8] text-[#DF3B94] text-[10px] font-bold rounded-full">84%</span>
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-xs font-semibold text-slate-600">
-                                        <span>142 Asistirán</span>
-                                        <span className="text-slate-400">Meta: 170</span>
-                                    </div>
-                                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                        <div className="bg-gradient-to-r from-[#DF3B94] to-[#F5B837] h-full rounded-full w-[84%]" />
-                                    </div>
-                                    <div className="pt-2 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-                                        <div className="h-6 w-6 rounded-full bg-[#4E7B55]/15 text-[#4E7B55] flex items-center justify-center font-bold text-[10px]">
-                                            ✓
+                                            <button className="w-full py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md">
+                                                Confirmar Asistencia
+                                            </button>
                                         </div>
-                                        <span className="truncate">Familia Morales +3 confirmados</span>
                                     </div>
                                 </div>
-                            </div>
+
+                                {/* 2. Top-Right Floating Card: Live RSVP Counter */}
+                                <div className="absolute -top-4 -right-2 lg:-right-10 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] xs:w-[260px] animate-fade-in">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-2">
+                                            <span className="h-2.5 w-2.5 rounded-full bg-[#4E7B55] animate-pulse" />
+                                            <span className="text-[11px] font-bold text-slate-800">RSVP en Vivo</span>
+                                        </div>
+                                        <span className="px-2 py-0.5 bg-[#fdf2f8] text-[#C52A7C] text-[10px] font-bold rounded-full">84%</span>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-xs font-semibold text-slate-600">
+                                            <span>142 Asistirán</span>
+                                            <span className="text-slate-600">Meta: 170</span>
+                                        </div>
+                                        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                            <div className="bg-gradient-to-r from-[#DF3B94] to-[#F5B837] h-full rounded-full w-[84%]" />
+                                        </div>
+                                        <div className="pt-2 flex items-center gap-2 text-[11px] text-slate-600 font-medium">
+                                            <div className="h-6 w-6 rounded-full bg-[#4E7B55]/15 text-[#4E7B55] flex items-center justify-center font-bold text-[10px]">
+                                                ✓
+                                            </div>
+                                            <span className="truncate">Familia Morales +3 confirmados</span>
+                                        </div>
+                                    </div>
+                                </div>
 
                             {/* 3. Bottom-Left Floating Card: QR Digital Pass */}
                             <div className="absolute bottom-6 -left-4 lg:-left-12 z-30 p-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[230px] xs:w-[250px]">
@@ -401,7 +422,7 @@ export default function HomePage() {
                                 </div>
                                 <div>
                                     <p className="font-bold text-slate-900 text-sm">¡Asistencia Confirmada!</p>
-                                    <p className="text-xs text-slate-500">Mesa 12 • 4 pax</p>
+                                    <p className="text-xs text-slate-600">Mesa 12 • 4 pax</p>
                                 </div>
                             </div>
                         </div>
@@ -445,7 +466,7 @@ export default function HomePage() {
                         ].map((item, i) => (
                             <div key={i} className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-4 hover:border-[#DF3B94]/50 transition-all">
                                 <span className="text-3xl font-display font-extrabold text-[#DF3B94]">{item.step}</span>
-                                <h4 className="text-base font-bold text-white">{item.title}</h4>
+                                <h3 className="text-base font-bold text-white">{item.title}</h3>
                                 <p className="text-xs text-slate-400 font-normal leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
@@ -457,8 +478,8 @@ export default function HomePage() {
             <section className="py-20 md:py-32 bg-white px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl">
                     <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                            <Check className="h-3.5 w-3.5 text-[#DF3B94]" />
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                            <Check className="h-3.5 w-3.5 text-[#C52A7C]" />
                             <span>Precios Claros · Un Solo Pago</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
@@ -475,17 +496,17 @@ export default function HomePage() {
                         <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                             <div className="space-y-6">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">PLAN BÁSICO</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">PLAN BÁSICO</span>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Clásica</h3>
-                                    <p className="text-xs text-slate-500 mt-1">Para celebraciones íntimas que solo buscan una invitación hermosa.</p>
+                                    <p className="text-xs text-slate-600 mt-1">Para celebraciones íntimas que solo buscan una invitación hermosa.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-slate-200/60">
                                     <div className="flex items-baseline gap-1.5">
                                         <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$499</span>
-                                        <span className="text-xs font-bold text-slate-400 uppercase">MXN</span>
+                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Un solo pago · Sin mensualidades</p>
+                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Sin mensualidades</p>
                                 </div>
 
                                 <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
@@ -514,7 +535,7 @@ export default function HomePage() {
                                         Diseñar Gratis
                                     </button>
                                 </Link>
-                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
+                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
                             </div>
                         </div>
 
@@ -583,15 +604,15 @@ export default function HomePage() {
                                 <div>
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">TODO INCLUIDO · LLAVE EN MANO</span>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
-                                    <p className="text-xs text-slate-500 mt-1">Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.</p>
+                                    <p className="text-xs text-slate-600 mt-1">Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-slate-200/60">
                                     <div className="flex items-baseline gap-1.5">
                                         <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$4,499</span>
-                                        <span className="text-xs font-bold text-slate-400 uppercase">MXN</span>
+                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 font-medium mt-1">Servicio completo con equipo humano</p>
+                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Servicio completo con equipo humano</p>
                                 </div>
 
                                 <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
@@ -624,7 +645,7 @@ export default function HomePage() {
                                         Conocer Plan Concierge
                                     </button>
                                 </Link>
-                                <p className="text-[11px] text-slate-500 text-center mt-2.5 font-medium">Servicio completo · Garantía de entrega</p>
+                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Servicio completo · Garantía de entrega</p>
                             </div>
                         </div>
 
@@ -712,7 +733,7 @@ export default function HomePage() {
             <section className="py-20 md:py-32 bg-white border-y border-slate-100">
                 <div className="mx-auto max-w-7xl px-6">
                     <div className="text-center mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
                             <Star className="h-4 w-4 fill-current text-[#F5B837]" />
                             <span>Historias Reales</span>
                         </div>
@@ -770,7 +791,7 @@ export default function HomePage() {
                                 </div>
                                 <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-[#fdf2f8] text-[#DF3B94] font-bold text-xs flex items-center justify-center border border-[#fbcfe8] flex-shrink-0">
+                                        <div className="w-10 h-10 rounded-full bg-[#fdf2f8] text-[#C52A7C] font-bold text-xs flex items-center justify-center border border-[#fbcfe8] flex-shrink-0">
                                             {card.initials}
                                         </div>
                                         <div>
@@ -778,12 +799,12 @@ export default function HomePage() {
                                                 <p className="font-display font-bold text-[#222B38] text-base leading-tight">{card.names}</p>
                                                 <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-full">✓ Verificado</span>
                                             </div>
-                                            <p className="text-xs text-slate-400 font-medium mt-0.5">{card.event}</p>
+                                            <p className="text-xs text-slate-600 font-medium mt-0.5">{card.event}</p>
                                         </div>
                                     </div>
                                     <Link
                                         to={card.demoUrl}
-                                        className="text-[11px] font-bold text-[#DF3B94] hover:text-[#C52A7C] transition-colors inline-flex items-center gap-1 group/demo flex-shrink-0"
+                                        className="text-[11px] font-bold text-[#C52A7C] hover:text-[#DF3B94] transition-colors inline-flex items-center gap-1 group/demo flex-shrink-0"
                                         title={`Ver invitación demo similar a la de ${card.names}`}
                                     >
                                         <span className="hidden sm:inline">Ver demo</span>
@@ -803,7 +824,7 @@ export default function HomePage() {
                         <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">
                             Preguntas Frecuentes
                         </h2>
-                        <p className="text-slate-500 text-sm mt-2">Todo lo que necesitas saber antes de empezar</p>
+                        <p className="text-slate-600 text-sm mt-2">Todo lo que necesitas saber antes de empezar</p>
                     </div>
 
                     <div className="space-y-4">
@@ -838,10 +859,14 @@ export default function HomePage() {
                 {/* Background image overlay (decorative with empty alt) */}
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80"
+                        src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=75&fm=webp&auto=format&fit=crop"
                         alt=""
                         role="presentation"
                         aria-hidden="true"
+                        width={1200}
+                        height={600}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover opacity-20 pointer-events-none select-none"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#222B38]/90 via-[#222B38]/85 to-[#222B38]" />
@@ -884,6 +909,7 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
+            </main>
 
             {/* --- 12. COMPREHENSIVE FOOTER --- */}
             <footer className="bg-[#222B38] text-white pt-16 pb-12 px-6 border-t border-white/10">
@@ -907,12 +933,20 @@ export default function HomePage() {
                         {/* Brand Column */}
                         <div className="lg:col-span-5 space-y-4">
                             <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
-                                <img src="/logo.png?v=3" alt="Invitto" className="h-8 w-auto object-contain brightness-0 invert" />
+                                <img
+                                    src="/logo.png?v=3"
+                                    alt="Invitto"
+                                    width={128}
+                                    height={32}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="h-8 w-auto object-contain brightness-0 invert"
+                                />
                             </Link>
                             <p className="text-xs text-slate-400 font-normal leading-relaxed max-w-sm">
                                 <strong className="text-white font-bold">invitto.com.mx</strong> es la plataforma oficial de invitaciones digitales con RSVP inteligente en México. Sin comisiones sorpresa, cobro transparente en Pesos (MXN) y soporte local.
                             </p>
-                            <p className="text-[11px] text-slate-500 font-medium">
+                            <p className="text-[11px] text-slate-400 font-medium">
                                 Bodas · XV Años · Bautizos · Cumpleaños · Eventos Privados
                             </p>
                         </div>
@@ -954,7 +988,7 @@ export default function HomePage() {
                     </div>
 
                     {/* Bottom Line */}
-                    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
+                    <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-400 font-bold">
                         <p>© 2026 INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
                         <p>HECHO CON CARIÑO EN MÉXICO</p>
                     </div>

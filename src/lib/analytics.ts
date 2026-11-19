@@ -89,6 +89,8 @@ function loadMetaPixel(id: string) {
     }
 }
 
+let hasLoadedThirdParty = false;
+
 export function initAnalytics() {
     if (typeof window === 'undefined') return;
 
@@ -99,6 +101,45 @@ export function initAnalytics() {
     if (!hasAnalyticsConsent()) return;
     if (CLARITY_ID) loadClarity(CLARITY_ID);
     if (GA4_ID) loadGA4(GA4_ID);
+}
+
+/**
+ * Loads third-party tracking scripts (Meta Pixel, Google Analytics 4, Microsoft Clarity)
+ * deferred until the first user interaction (scroll, click, touchstart, keydown) or after
+ * 4 seconds from window 'load', whichever occurs first.
+ * Ensures the critical rendering path and initial main thread are 100% free.
+ */
+export function setupDeferredAnalytics() {
+    if (typeof window === 'undefined') return;
+
+    const loadScripts = () => {
+        if (hasLoadedThirdParty) return;
+        hasLoadedThirdParty = true;
+
+        window.removeEventListener('scroll', loadScripts);
+        window.removeEventListener('click', loadScripts);
+        window.removeEventListener('touchstart', loadScripts);
+        window.removeEventListener('keydown', loadScripts);
+
+        initAnalytics();
+    };
+
+    const attachListeners = () => {
+        // First user interaction triggers immediate load
+        window.addEventListener('scroll', loadScripts, { once: true, passive: true });
+        window.addEventListener('click', loadScripts, { once: true, passive: true });
+        window.addEventListener('touchstart', loadScripts, { once: true, passive: true });
+        window.addEventListener('keydown', loadScripts, { once: true, passive: true });
+
+        // Fallback: 4 seconds after window load if no interaction occurred
+        setTimeout(loadScripts, 4000);
+    };
+
+    if (document.readyState === 'complete') {
+        attachListeners();
+    } else {
+        window.addEventListener('load', attachListeners, { once: true });
+    }
 }
 
 // Fire a conversion event across GA4 and Meta Pixel. Safe to call anytime.

@@ -59,7 +59,7 @@ export default function CollageHero({ event, cfg, heroImageUrl, onEditHero }: Pr
     };
     const hasDarkBg = isDarkBg(heroBgColor);
     const titleColor = heroTextColor || (hasDarkBg ? '#FFFFFF' : primaryColor);
-    const subtitleColor = heroTextColor || (hasDarkBg ? 'rgba(255,255,255,0.85)' : '#4A4A4A');
+    const subtitleColor = heroTextColor || (hasDarkBg ? 'rgba(255,255,255,0.95)' : '#333333');
 
     return (
         <section id="hero" className="relative flex flex-col w-full min-h-[85vh] md:min-h-screen">
@@ -176,7 +176,10 @@ export default function CollageHero({ event, cfg, heroImageUrl, onEditHero }: Pr
                             title={onEditHero ? "Haz clic para cambiar las fotos del collage" : undefined}
                             className={`absolute right-0 top-32 w-48 h-56 object-cover rounded-2xl shadow-xl rotate-6 z-10 border-4 border-white transition-transform duration-300 ${onEditHero ? 'cursor-pointer hover:scale-105 hover:z-30' : ''}`} 
                         />
-                        <p className="absolute bottom-4 right-10 text-xs font-serif italic text-stone-500 tracking-widest z-30 opacity-70">
+                        <p 
+                            className="absolute bottom-4 right-10 text-xs font-serif italic tracking-widest z-30 font-medium drop-shadow-xs"
+                            style={{ color: subtitleColor }}
+                        >
                             {cfg.subtitle || "Y así comienza la aventura"}
                         </p>
                     </div>

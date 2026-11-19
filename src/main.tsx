@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import * as Sentry from "@sentry/react";
 import './index.css'
 import App from './App.tsx'
-import { initAnalytics } from './lib/analytics'
+import { setupDeferredAnalytics } from './lib/analytics'
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -17,14 +17,9 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
 });
 
-// Deferred until window `load` so analytics never competes with the page's
-// own critical rendering path. initAnalytics() itself checks cookie consent
-// before loading anything.
-if (document.readyState === 'complete') {
-  setTimeout(initAnalytics, 1);
-} else {
-  window.addEventListener('load', () => setTimeout(initAnalytics, 1));
-}
+// Deferred third-party trackers (Meta Pixel, GA4, Clarity) until first user interaction
+// or 4s after window `load`, keeping the initial critical rendering path clean.
+setupDeferredAnalytics();
 
 // Automatically reload on stale dynamic import after deployment
 window.addEventListener('vite:preloadError', () => {

@@ -2,6 +2,13 @@
   RewriteEngine On
   RewriteBase /
   RewriteRule ^index\.html$ - [L]
+
+  # Return real 404 for ai-catalog.json and missing json, xml, txt files
+  RewriteCond %{REQUEST_URI} ^/(\.well-known/)?ai-catalog\.json$ [NC,OR]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} \.(json|xml|txt)$ [NC]
+  RewriteRule ^ - [R=404,L]
+
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l

@@ -15,15 +15,57 @@
   status = 301
   force = true
 
+# Explicit 404 for AI catalog / metadata probes not present on the server
+[[redirects]]
+  from = "/.well-known/ai-catalog.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/ai-catalog.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.well-known/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Non-existent json, xml, and txt files return real 404 instead of SPA index.html
+# Netlify serves existing static files (e.g. sitemap.xml, robots.txt, llms.txt)
+# directly from dist/ before checking these non-forced redirects.
+[[redirects]]
+  from = "/*.json"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/*.xml"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/*.txt"
+  to = "/404.html"
+  status = 404
+
 # SPA routing — all paths serve index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# ── index.html ──────────────────────────────────────────────────────────────
+# ── index.html & root ────────────────────────────────────────────────────────
 # Never cache the SPA shell — browsers must always fetch the latest HTML
 # so they pick up new hashed asset filenames after each deploy.
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
 [[headers]]
   for = "/index.html"
   [headers.values]

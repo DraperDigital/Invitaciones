@@ -40,6 +40,12 @@ import RevealDuoHero from '../components/themes/RevealDuoHero';
 import CinematicMotionHero from '../components/themes/CinematicMotionHero';
 import CinematicParallaxBackdrop from '../components/themes/CinematicParallaxBackdrop';
 import EnvelopeIntro from '../components/EnvelopeIntro';
+import ColorPalettePicker from '../components/ColorPalettePicker';
+import {
+    getColorPaletteThemeConfig,
+    COLOR_OVERRIDE_KEYS,
+    type ColorPalette
+} from '../lib/colorPalettes';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
@@ -83,6 +89,11 @@ export default function InvitationPage() {
     const toast = useToast();
     const { user } = useAuth();
     const [event, setEvent] = useState<Event | null>(null);
+    const eventRef = useRef<Event | null>(event);
+    eventRef.current = event;
+    useEffect(() => {
+        eventRef.current = event;
+    }, [event]);
     const [guest, setGuest] = useState<Guest | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -277,12 +288,13 @@ export default function InvitationPage() {
 
     // Prioridad: 1. Elección explícita del usuario -> 2. Variable del perfil del tema
     const sectionBg     = userCfg.section_bg_color || userCfg.sectionBgColor || activeVars.sectionBg;
-    const sectionBgAlt  = activeVars.sectionBgAlt;
+    const sectionBgAlt  = userCfg.section_bg_alt_color || userCfg.sectionBgAltColor || activeVars.sectionBgAlt;
     const cardBg        = userCfg.card_bg_color || userCfg.cardBgColor || activeVars.cardBg;
-    const textPrimary   = userCfg.text_primary || userCfg.textPrimary || activeVars.textPrimary;
+    const textPrimary   = userCfg.text_primary || userCfg.textPrimary || userCfg.primary_color || activeVars.textPrimary;
     const textSecondary = userCfg.text_secondary || userCfg.textSecondary || activeVars.textSecondary;
-    const borderColor   = activeVars.borderColor;
-    const cardBorder    = activeVars.cardBorder;
+    const isDarkPalette = userCfg.color_palette_id === 'negro-dorado' || (userCfg.section_bg_color && userCfg.section_bg_color.startsWith('#1'));
+    const borderColor   = userCfg.border_color || userCfg.borderColor || (isDarkPalette ? '#262A30' : activeVars.borderColor);
+    const cardBorder    = userCfg.card_border || userCfg.cardBorder || (isDarkPalette ? 'rgba(212, 175, 55, 0.25)' : activeVars.cardBorder);
 
     // ACENTOS y BOTONES: el usuario tiene prioridad sobre activeVars.accentOverride
     const _accentColor = userCfg.accent_color || userCfg.accentColor || activeVars.accentOverride || userCfg.primary_color || '#BD7474';
@@ -344,6 +356,7 @@ export default function InvitationPage() {
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
+    const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
     const [deviceView, setDeviceView] = useState<'mobile' | 'desktop'>('desktop');
 
     // PLUS ONES States
@@ -368,21 +381,30 @@ export default function InvitationPage() {
     };
 
     const handleUpdateFeature = async (keyOrUpdates: string | Record<string, any>, value?: any) => {
-        if (!event) return;
+        const currentEvent = eventRef.current;
+        if (!currentEvent) return;
         
         const updates: Record<string, any> = typeof keyOrUpdates === 'string'
             ? { [keyOrUpdates]: value }
             : keyOrUpdates;
 
+        const baseThemeConfig = currentEvent.theme_config || {};
+
+        // Guardamos los valores previos de las claves afectadas para revertir SOLO estas en caso de error
+        const previousKeys: Record<string, any> = {};
+        for (const k of Object.keys(updates)) {
+            previousKeys[k] = (baseThemeConfig as any)[k];
+        }
+
         // Feedback local instantáneo (UI reactiva)
         const updatedConfig = { 
-            ...(event.theme_config || {}), 
+            ...baseThemeConfig, 
             ...updates 
         };
 
         // Si cambiamos de tema, sincronizamos automáticamente fotos de portada, colores y tipografía del preset
         if (updates.theme) {
-            const syncedPhotos = syncHeroPhotoForNewTheme(event.theme_config || {}, updates.theme);
+            const syncedPhotos = syncHeroPhotoForNewTheme(baseThemeConfig, updates.theme);
             Object.assign(updatedConfig, syncedPhotos);
             if (THEME_PRESET_PROFILES[updates.theme]) {
                 const profile = THEME_PRESET_PROFILES[updates.theme];
@@ -406,63 +428,140 @@ export default function InvitationPage() {
         // Sincronizamos con el formato legacy (snake_case)
         for (const [k, v] of Object.entries(updates)) {
             const legacyKey = KEY_MAPPINGS[k];
-            if (legacyKey) (updatedConfig as any)[legacyKey] = v;
+            if (legacyKey) {
+                previousKeys[legacyKey] = (baseThemeConfig as any)[legacyKey];
+                (updatedConfig as any)[legacyKey] = v;
+            }
         }
         
-        setEvent({ ...event, theme_config: updatedConfig });
+        // Actualizamos ref síncronamente y estado de forma funcional
+        eventRef.current = { ...currentEvent, theme_config: updatedConfig };
+        setEvent(prev => prev ? ({ ...prev, theme_config: updatedConfig }) : prev);
         
         try {
-            const { data: updated, error: updateError } = await supabase
-                .from('events')
-                .update({ theme_config: updatedConfig })
-                .eq('id', event.id)
-                .select('id');
+            if (currentEvent.id && !currentEvent.id.toString().startsWith('demo-')) {
+                const { data: updated, error: updateError } = await supabase
+                    .from('events')
+                    .update({ theme_config: updatedConfig })
+                    .eq('id', currentEvent.id)
+                    .select('id');
 
-            if (updateError) throw updateError;
+                if (updateError) throw updateError;
 
-            if (!updated || updated.length === 0) {
-                console.warn('Supabase update affected 0 rows, check RLS or mock mode');
+                if (!updated || updated.length === 0) {
+                    console.warn('Supabase update affected 0 rows, check RLS or mock mode');
+                }
             }
 
             toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
-            if (rawToken === 'token-preview' || !user) {
+            if (rawToken === 'token-preview' || !user || currentEvent.id.toString().startsWith('demo-')) {
                 toast.success('¡Guardado en vista previa!');
             } else {
                 toast.error('Error al guardar: ' + (err.message || 'Error de red'));
-                setEvent({ ...event, theme_config: event.theme_config });
+                // Revertir únicamente las claves que fueron modificadas en esta llamada
+                const revertedConfig = { ...(eventRef.current?.theme_config || {}) };
+                for (const [k, v] of Object.entries(previousKeys)) {
+                    if (v === undefined) {
+                        delete (revertedConfig as any)[k];
+                    } else {
+                        (revertedConfig as any)[k] = v;
+                    }
+                }
+                if (eventRef.current) {
+                    eventRef.current = { ...eventRef.current, theme_config: revertedConfig };
+                }
+                setEvent(prev => prev ? ({ ...prev, theme_config: revertedConfig }) : prev);
             }
         }
     };
 
+    const handleApplyPalette = async (palette: ColorPalette) => {
+        const updates = getColorPaletteThemeConfig(palette);
+        await handleUpdateFeature(updates);
+    };
+
+    const handleResetColorPalette = async () => {
+        const currentEvent = eventRef.current;
+        if (!currentEvent) return;
+        const baseConfig = { ...(currentEvent.theme_config || {}) };
+        COLOR_OVERRIDE_KEYS.forEach((k) => {
+            delete baseConfig[k];
+        });
+        eventRef.current = { ...currentEvent, theme_config: baseConfig };
+        setEvent(prev => prev ? ({ ...prev, theme_config: baseConfig }) : prev);
+        try {
+            if (currentEvent.id && !currentEvent.id.toString().startsWith('demo-')) {
+                await supabase
+                    .from('events')
+                    .update({ theme_config: baseConfig })
+                    .eq('id', currentEvent.id);
+            }
+            toast.success('Colores originales de la plantilla restaurados');
+        } catch (e) {
+            console.error('Error resetting color palette:', e);
+        }
+    };
+
     const handleUpdateEventColumn = async (columnOrUpdates: string | Record<string, any>, value?: any) => {
-        if (!event) return;
+        const currentEvent = eventRef.current;
+        if (!currentEvent) return;
         
         const updates: Record<string, any> = typeof columnOrUpdates === 'string'
             ? { [columnOrUpdates]: value }
             : columnOrUpdates;
 
-        const updatedEvent = { ...event, ...updates };
-        setEvent(updatedEvent as Event);
+        // Guardamos los valores previos de las columnas afectadas para revertir SOLO estas en caso de error
+        const previousColumnValues: Record<string, any> = {};
+        for (const k of Object.keys(updates)) {
+            previousColumnValues[k] = (currentEvent as any)[k];
+        }
+
+        // Actualizamos ref síncronamente y estado de forma funcional
+        eventRef.current = { ...currentEvent, ...updates };
+        setEvent(prev => prev ? ({ ...prev, ...updates }) : prev);
         
         try {
-            const { error } = await supabase
-                .from('events')
-                .update(updates)
-                .eq('id', event.id);
+            if (currentEvent.id && !currentEvent.id.toString().startsWith('demo-')) {
+                const { error } = await supabase
+                    .from('events')
+                    .update(updates)
+                    .eq('id', currentEvent.id);
 
-            if (error) throw error;
+                if (error) throw error;
+            }
             toast.success('¡Guardado!');
         } catch (err: any) {
             console.error('[SYNC_ERROR]', err);
-            if (rawToken === 'token-preview' || !user) {
+            if (rawToken === 'token-preview' || !user || currentEvent.id.toString().startsWith('demo-')) {
                 toast.success('¡Guardado en vista previa!');
             } else {
                 toast.error('Error al guardar: ' + (err.message || 'Error de red'));
-                setEvent(event); // revert
+                // Revertir únicamente las columnas modificadas por esta llamada
+                if (eventRef.current) {
+                    eventRef.current = { ...eventRef.current, ...previousColumnValues };
+                }
+                setEvent(prev => prev ? ({ ...prev, ...previousColumnValues }) : prev);
             }
         }
+    };
+
+    const handleCloseSectionEditor = (savedSectionId?: SectionId) => {
+        setEditingSection(null);
+        if (!savedSectionId) return;
+
+        const targetId = savedSectionId === 'countdown' ? 'hero' : savedSectionId;
+        setTimeout(() => {
+            const el = document.getElementById(targetId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('section-save-highlight');
+                setTimeout(() => {
+                    el.classList.remove('section-save-highlight');
+                }, 1300);
+            }
+        }, 100);
     };
 
     const downloadQR = useCallback(async (isDesktop: boolean = false) => {
@@ -2325,6 +2424,29 @@ END:VCALENDAR`;
         .invitation-content.is-mobile-preview .theme-classicpro-countdown span:first-child {
             font-size: 1.85rem !important;
         }
+
+        /* ── Visual feedback highlight on save ── */
+        @keyframes sectionSavePulse {
+            0% {
+                outline: 2px solid transparent;
+                box-shadow: 0 0 0 0 transparent;
+            }
+            30% {
+                outline: 3px solid var(--color-accent-raw, ${_accentColor});
+                outline-offset: -2px;
+                box-shadow: 0 0 35px 6px var(--color-accent-raw, ${_accentColor});
+            }
+            100% {
+                outline: 2px solid transparent;
+                box-shadow: 0 0 0 0 transparent;
+            }
+        }
+        .section-save-highlight {
+            animation: sectionSavePulse 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            position: relative;
+            z-index: 20;
+        }
+
         ${themeSpecificCSS}
         ${customStyles}
     `;
@@ -4032,6 +4154,19 @@ END:VCALENDAR`;
 
                             <div className="h-4 w-[1px] bg-stone-200 shrink-0" />
 
+                            {/* Botón Selector de Paletas de Color */}
+                            <button 
+                                type="button"
+                                onClick={() => setIsColorPickerOpen(true)}
+                                className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-bold text-[#1B2E1D] hover:bg-stone-100 transition-all shrink-0 active:scale-95"
+                                title="Paletas de Color"
+                            >
+                                <span className="text-sm shrink-0 leading-none">🎨</span>
+                                <span className="hidden sm:inline">Colores</span>
+                            </button>
+
+                            <div className="h-4 w-[1px] bg-stone-200 shrink-0" />
+
                             {/* Botón Editor de Secciones / Configuración */}
                             <button 
                                 type="button"
@@ -4346,9 +4481,29 @@ END:VCALENDAR`;
                         <InlineSectionEditor 
                             sectionId={editingSection}
                             event={event}
-                            onClose={() => setEditingSection(null)}
+                            onClose={handleCloseSectionEditor}
                             onUpdateThemeConfig={handleUpdateFeature}
                             onUpdateEventColumn={handleUpdateEventColumn}
+                        />
+                    )}
+
+                    {/* Color Palette Picker Modal / Sheet */}
+                    {isAdminMode && isColorPickerOpen && event && (
+                        <ColorPalettePicker
+                            isOpen={isColorPickerOpen}
+                            onClose={() => setIsColorPickerOpen(false)}
+                            activePaletteId={cfg.color_palette_id}
+                            currentThemeConfig={cfg}
+                            eventType={event.event_type || effectiveEventCategory || 'boda'}
+                            onSelectPalette={handleApplyPalette}
+                            onResetOriginal={handleResetColorPalette}
+                            onGoToDetailDesign={() => {
+                                if (event.id && !event.id.toString().startsWith('demo-')) {
+                                    navigate(`/dashboard/events/${event.id}/design?section=palette`);
+                                } else {
+                                    setIsAdminOpen(true);
+                                }
+                            }}
                         />
                     )}
 

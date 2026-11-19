@@ -10,7 +10,7 @@ import { getHeroPhotoSlot, getHeroSaveFields } from '../lib/heroPhotoSlots';
 type Props = {
     sectionId: SectionId;
     event: Event;
-    onClose: () => void;
+    onClose: (savedSectionId?: SectionId) => void;
     onUpdateThemeConfig: (keyOrUpdates: string | Record<string, any>, value?: any) => Promise<void>;
     onUpdateEventColumn: (columnOrUpdates: string | Record<string, any>, value?: any) => Promise<void>;
 };
@@ -489,7 +489,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     damas: damasList.filter(s => s.trim().length > 0)
                 });
             }
-            onClose();
+            onClose(sectionId);
         } finally {
             setIsSaving(false);
         }
@@ -512,7 +512,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => onClose()} />
             <div className="relative w-full max-w-lg bg-white shadow-2xl rounded-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden">
                 <div className="flex items-center justify-between p-6 border-b border-stone-100 bg-white">
                     <div>
@@ -521,7 +521,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             {sectionTitles[sectionId as string] || sectionId}
                         </p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-stone-100 rounded-full transition-colors">
+                    <button onClick={() => onClose()} className="p-2 hover:bg-stone-100 rounded-full transition-colors">
                         <X className="h-5 w-5 text-stone-400" />
                     </button>
                 </div>
