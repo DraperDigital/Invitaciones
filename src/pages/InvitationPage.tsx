@@ -33,6 +33,7 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
+import { syncHeroPhotoForNewTheme } from '../lib/heroPhotoSlots';
 import RainbowPopHero from '../components/themes/RainbowPopHero';
 import RevealBwHero from '../components/themes/RevealBwHero';
 import RevealDuoHero from '../components/themes/RevealDuoHero';
@@ -377,23 +378,27 @@ export default function InvitationPage() {
             ...updates 
         };
 
-        // Si cambiamos de tema, sincronizamos automáticamente los colores y tipografía del preset
-        if (updates.theme && THEME_PRESET_PROFILES[updates.theme]) {
-            const profile = THEME_PRESET_PROFILES[updates.theme];
-            updatedConfig.primaryColor = profile.primaryColor;
-            updatedConfig.primary_color = profile.primaryColor;
-            updatedConfig.accentColor = profile.accentColor;
-            updatedConfig.accent_color = profile.accentColor;
-            updatedConfig.cardBgColor = profile.cardBgColor;
-            updatedConfig.card_bg_color = profile.cardBgColor;
-            updatedConfig.buttonColor = profile.primaryColor;
-            updatedConfig.button_color = profile.primaryColor;
-            updatedConfig.heroTextColor = profile.heroTextColor;
-            updatedConfig.hero_text_color = profile.heroTextColor;
-            updatedConfig.heroBgColor = profile.heroBgColor;
-            updatedConfig.hero_bg_color = profile.heroBgColor;
-            updatedConfig.typographyPreset = profile.typographyPreset;
-            updatedConfig.typography_preset = profile.typographyPreset;
+        // Si cambiamos de tema, sincronizamos automáticamente fotos de portada, colores y tipografía del preset
+        if (updates.theme) {
+            const syncedPhotos = syncHeroPhotoForNewTheme(event.theme_config || {}, updates.theme);
+            Object.assign(updatedConfig, syncedPhotos);
+            if (THEME_PRESET_PROFILES[updates.theme]) {
+                const profile = THEME_PRESET_PROFILES[updates.theme];
+                updatedConfig.primaryColor = profile.primaryColor;
+                updatedConfig.primary_color = profile.primaryColor;
+                updatedConfig.accentColor = profile.accentColor;
+                updatedConfig.accent_color = profile.accentColor;
+                updatedConfig.cardBgColor = profile.cardBgColor;
+                updatedConfig.card_bg_color = profile.cardBgColor;
+                updatedConfig.buttonColor = profile.primaryColor;
+                updatedConfig.button_color = profile.primaryColor;
+                updatedConfig.heroTextColor = profile.heroTextColor;
+                updatedConfig.hero_text_color = profile.heroTextColor;
+                updatedConfig.heroBgColor = profile.heroBgColor;
+                updatedConfig.hero_bg_color = profile.heroBgColor;
+                updatedConfig.typographyPreset = profile.typographyPreset;
+                updatedConfig.typography_preset = profile.typographyPreset;
+            }
         }
         
         // Sincronizamos con el formato legacy (snake_case)

@@ -12,6 +12,7 @@ import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
+import { syncHeroPhotoForNewTheme } from '../lib/heroPhotoSlots';
 
 type DesignConfig = {
     primaryColor: string;
@@ -52,6 +53,8 @@ type DesignConfig = {
     // Premium Features
     showEnvelope: boolean;
     theme: string;
+    floral_avatar_url?: string;
+    collage_images?: string[];
 
     // Ubicación Detallada (Misa / Ceremonia)
     misa_name: string;
@@ -560,9 +563,11 @@ export default function DesignEditor() {
                 .single();
 
             const existingConfig = currentEvent?.theme_config || {};
+            const syncedHeroFields = syncHeroPhotoForNewTheme(config, config.theme || existingConfig.theme || 'classic');
 
             const newThemeConfig = {
                 ...existingConfig,
+                ...syncedHeroFields,
                 // Save with both snake_case and camelCase keys for 100% interoperability
                 primary_color:    config.primaryColor,
                 primaryColor:     config.primaryColor,
@@ -1019,8 +1024,10 @@ export default function DesignEditor() {
                                             key={item.id}
                                             onClick={() => {
                                                 const profile = THEME_PRESET_PROFILES[item.id] || THEME_PRESET_PROFILES.classic;
+                                                const syncedPhotos = syncHeroPhotoForNewTheme(config, item.id);
                                                 setConfig({
                                                     ...config,
+                                                    ...syncedPhotos,
                                                     theme: item.id,
                                                     primaryColor: profile.primaryColor,
                                                     accentColor: profile.accentColor,

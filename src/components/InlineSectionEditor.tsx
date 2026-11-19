@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Save, Plus, Trash2, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { X, Save, Plus, Trash2, Upload, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
 import type { SectionId } from '../lib/sectionRegistry';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
+import { getHeroPhotoSlot, getHeroSaveFields } from '../lib/heroPhotoSlots';
 
 type Props = {
     sectionId: SectionId;
@@ -26,7 +27,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const toast = useToast();
     const [isSaving, setIsSaving] = useState(false);
     const cfg = event.theme_config || {};
-    const isCollageTheme = cfg.theme === 'collage' || (Array.isArray(cfg.collage_images) && cfg.collage_images.length > 0);
+    const heroSlot = getHeroPhotoSlot(cfg.theme);
+    const isCollageTheme = cfg.theme === 'collage';
     
     // ── Hero & Common ──
     const [title, setTitle] = useState(event.title || '');
@@ -35,11 +37,16 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [age, setAge] = useState(cfg.age || cfg.turning_age || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
-    const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || '');
+    const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || cfg.floral_avatar_url || '');
     const [heroImagePositionY, setHeroImagePositionY] = useState(Number(cfg.hero_image_position_y ?? 50));
     const [heroImageZoom, setHeroImageZoom] = useState(Number(cfg.hero_image_zoom ?? 1));
     const [uploadingHero, setUploadingHero] = useState(false);
     const heroFileInputRef = useRef<HTMLInputElement>(null);
+
+    // ── Decorative Monogram / Logo ──
+    const [decorativeImageUrl, setDecorativeImageUrl] = useState(cfg.decorative_image_url || cfg.decorativeImage || '');
+    const [uploadingDecorative, setUploadingDecorative] = useState(false);
+    const decorativeFileInputRef = useRef<HTMLInputElement>(null);
 
     // ── Floral Symmetry & Story specifics ──
     const [storyTitle, setStoryTitle] = useState(cfg.story_title || 'Nos encantaría que nos acompañes');
@@ -159,9 +166,10 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         setSubtitle(cfg.subtitle || '');
         setChildName(cfg.child_name || cfg.childName || '');
         setAge(cfg.age || cfg.turning_age || '');
-        setHeroImageUrl(cfg.hero_image_url || cfg.heroImage || '');
+        setHeroImageUrl(cfg.hero_image_url || cfg.heroImage || cfg.floral_avatar_url || '');
         setHeroImagePositionY(Number(cfg.hero_image_position_y ?? 50));
         setHeroImageZoom(Number(cfg.hero_image_zoom ?? 1));
+        setDecorativeImageUrl(cfg.decorative_image_url || cfg.decorativeImage || '');
         setWelcomeMessage(cfg.welcome_message || '');
         setStoryTitle(cfg.story_title || 'Nos encantaría que nos acompañes');
         setStorySubtitle(cfg.story_subtitle || 'En nuestro día tan especial');
@@ -245,6 +253,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
             const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
             const publicUrl = urlData.publicUrl + '?t=' + Date.now();
             setHeroImageUrl(publicUrl);
+            setFloralAvatarUrl(publicUrl);
             toast.success('¡Foto de portada subida con éxito!');
         } catch (err: any) {
             console.error('Error uploading hero image:', err);
@@ -267,13 +276,35 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
             const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
             const publicUrl = urlData.publicUrl + '?t=' + Date.now();
             setFloralAvatarUrl(publicUrl);
-            if (!heroImageUrl) setHeroImageUrl(publicUrl);
-            toast.success('¡Foto de la historia subida con éxito!');
+            setHeroImageUrl(publicUrl);
+            toast.success('¡Foto circular subida con éxito!');
         } catch (err: any) {
             console.error('Error uploading floral avatar:', err);
             toast.error('Error al subir la imagen. Intenta pegando una URL.');
         } finally {
             setUploadingFloralAvatar(false);
+        }
+    };
+
+    const handleDecorativeUpload = async (file: File) => {
+        if (!file || !event.id) return;
+        setUploadingDecorative(true);
+        try {
+            const ext = file.name.split('.').pop() || 'png';
+            const path = `events/${event.id}/decorative-${Date.now()}.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setDecorativeImageUrl(publicUrl);
+            toast.success('¡Logo / Monograma subido con éxito!');
+        } catch (err: any) {
+            console.error('Error uploading decorative image:', err);
+            toast.error('Error al subir el logo. Intenta pegando una URL directa.');
+        } finally {
+            setUploadingDecorative(false);
         }
     };
 
@@ -337,27 +368,44 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         try {
             if (sectionId === 'hero') {
                 if (title !== event.title) await onUpdateEventColumn('title', title);
-                const finalHeroImage = isCollageTheme ? (collageImages[0] || heroImageUrl) : heroImageUrl;
-                await onUpdateThemeConfig({
+
+                const photoFields = getHeroSaveFields(cfg.theme, {
+                    heroImageUrl,
+                    floralAvatarUrl,
+                    decorativeImageUrl,
+                    collageImages,
+                    heroImagePositionY,
+                    heroImageZoom,
+                });
+
+                const heroThemeConfigPatch: Record<string, any> = {
+                    ...photoFields,
                     subtitle,
                     child_name: childName,
                     childName: childName,
                     age: Number(age) || age,
                     turning_age: Number(age) || age,
-                    hero_image_url: finalHeroImage,
-                    heroImage: finalHeroImage,
-                    hero_image_position_y: heroImagePositionY,
-                    hero_image_zoom: heroImageZoom,
-                    collage_images: collageImages,
-                    collageImages: collageImages,
-                    story_title: storyTitle,
-                    story_subtitle: storySubtitle,
-                    banner_title: bannerTitle,
-                    banner_subtitle: bannerSubtitle,
-                    save_the_date_text: saveTheDateText,
-                    floral_avatar_url: floralAvatarUrl || finalHeroImage,
                     welcome_message: welcomeMessage
-                });
+                };
+
+                // Si la plantilla NO es collage y existen residuos previos de collage_images, los eliminamos
+                if (!isCollageTheme && (cfg.collage_images || cfg.collageImages)) {
+                    heroThemeConfigPatch.collage_images = null;
+                    heroThemeConfigPatch.collageImages = null;
+                }
+
+                // Campos de texto específicos por plantilla
+                if (cfg.theme === 'floral-symmetry') {
+                    heroThemeConfigPatch.story_title = storyTitle;
+                    heroThemeConfigPatch.story_subtitle = storySubtitle;
+                    heroThemeConfigPatch.banner_title = bannerTitle;
+                    heroThemeConfigPatch.banner_subtitle = bannerSubtitle;
+                    heroThemeConfigPatch.save_the_date_text = saveTheDateText;
+                } else if (cfg.theme === 'newspaper') {
+                    heroThemeConfigPatch.banner_title = bannerTitle;
+                }
+
+                await onUpdateThemeConfig(heroThemeConfigPatch);
             } else if (sectionId === 'guest_welcome') {
                 await onUpdateThemeConfig({
                     welcome_title: welcomeTitle,
@@ -481,8 +529,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                 <div className="overflow-y-auto max-h-[70vh] p-6 space-y-6 bg-white">
                 {sectionId === 'hero' && (
                     <div className="space-y-5">
-                        {/* Hero Photo or Collage Photos depending on theme */}
-                        {isCollageTheme ? (
+                        {/* ── 1. Controles de Foto según el Mapa de la Plantilla Actual ── */}
+                        {isCollageTheme && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div>
@@ -631,15 +679,144 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                     </div>
                                 </div>
                             </div>
-                        ) : (
+                        )}
+
+                        {heroSlot.type === 'circle' && (
+                            <div className="space-y-3">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-700 flex items-center justify-between">
+                                    <span>{heroSlot.heroLabel}</span>
+                                    {(floralAvatarUrl || heroImageUrl) && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setFloralAvatarUrl('');
+                                                setHeroImageUrl('');
+                                            }}
+                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal cursor-pointer"
+                                        >
+                                            <Trash2 className="h-3 w-3" /> Quitar foto
+                                        </button>
+                                    )}
+                                </label>
+                                <p className="text-[11px] text-stone-500">{heroSlot.heroHelpText}</p>
+                                <div className="rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 p-4 transition-all hover:border-stone-300">
+                                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                                        <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-[#DF3B94] shadow-md flex-shrink-0 bg-stone-900 relative group">
+                                            {(floralAvatarUrl || heroImageUrl) ? (
+                                                <img 
+                                                    src={floralAvatarUrl || heroImageUrl} 
+                                                    alt="Foto circular" 
+                                                    className="w-full h-full object-cover"
+                                                    style={getHeroImageStyle({ hero_image_position_y: heroImagePositionY, hero_image_zoom: heroImageZoom })}
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-stone-400 bg-stone-100">
+                                                    <ImageIcon className="h-8 w-8" />
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="flex-1 w-full space-y-2.5">
+                                            <input
+                                                type="file"
+                                                ref={floralAvatarFileInputRef}
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) handleFloralAvatarUpload(file);
+                                                    e.target.value = '';
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => floralAvatarFileInputRef.current?.click()}
+                                                disabled={uploadingFloralAvatar}
+                                                className="w-full py-2.5 px-4 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                            >
+                                                {uploadingFloralAvatar ? (
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin" /> Subiendo foto...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Upload className="h-4 w-4" /> Subir Foto Circular
+                                                    </>
+                                                )}
+                                            </button>
+                                            <input 
+                                                type="url"
+                                                value={floralAvatarUrl || heroImageUrl}
+                                                onChange={e => {
+                                                    setFloralAvatarUrl(e.target.value);
+                                                    setHeroImageUrl(e.target.value);
+                                                }}
+                                                placeholder="O pega URL de la imagen..."
+                                                className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#DF3B94]/20 text-stone-800"
+                                            />
+                                        </div>
+                                    </div>
+                                    {(floralAvatarUrl || heroImageUrl) && (
+                                        <div className="mt-3 pt-3 border-t border-stone-200 space-y-3">
+                                            <label className="text-[9px] uppercase font-bold text-stone-400 tracking-wider block">
+                                                Ajustar encuadre de la foto
+                                            </label>
+                                            <div>
+                                                <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
+                                                    <span>Mover arriba / abajo</span>
+                                                    <span className="font-mono">{heroImagePositionY}%</span>
+                                                </div>
+                                                <input
+                                                    type="range"
+                                                    min={0}
+                                                    max={100}
+                                                    step={1}
+                                                    value={heroImagePositionY}
+                                                    onChange={e => setHeroImagePositionY(Number(e.target.value))}
+                                                    className="w-full accent-[#1B2E1D]"
+                                                />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center justify-between text-[10px] text-stone-500 mb-1">
+                                                    <span>Zoom (acercar / alejar)</span>
+                                                    <span className="font-mono">{heroImageZoom.toFixed(2)}x</span>
+                                                </div>
+                                                <input
+                                                    type="range"
+                                                    min={1}
+                                                    max={2.5}
+                                                    step={0.05}
+                                                    value={heroImageZoom}
+                                                    onChange={e => setHeroImageZoom(Number(e.target.value))}
+                                                    className="w-full accent-[#1B2E1D]"
+                                                />
+                                            </div>
+                                            {(heroImagePositionY !== 50 || heroImageZoom !== 1) && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setHeroImagePositionY(50); setHeroImageZoom(1); }}
+                                                    className="text-[10px] font-bold text-stone-500 hover:text-stone-800 normal-case tracking-normal cursor-pointer"
+                                                >
+                                                    Restablecer encuadre
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {(heroSlot.type === 'single' || heroSlot.type === 'single_with_decorative') && (
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase font-black tracking-widest text-stone-500 flex items-center justify-between">
-                                    <span>Foto de Portada / Imagen Principal</span>
+                                    <span>{heroSlot.heroLabel}</span>
                                     {heroImageUrl && (
                                         <button
                                             type="button"
-                                            onClick={() => setHeroImageUrl('')}
-                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal"
+                                            onClick={() => {
+                                                setHeroImageUrl('');
+                                                setFloralAvatarUrl('');
+                                            }}
+                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal cursor-pointer"
                                         >
                                             <Trash2 className="h-3 w-3" /> Quitar foto
                                         </button>
@@ -667,7 +844,10 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => setHeroImageUrl('')}
+                                                        onClick={() => {
+                                                            setHeroImageUrl('');
+                                                            setFloralAvatarUrl('');
+                                                        }}
                                                         className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow cursor-pointer"
                                                     >
                                                         <Trash2 className="h-3.5 w-3.5" /> Quitar
@@ -722,7 +902,10 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                         <input 
                                             type="url"
                                             value={heroImageUrl}
-                                            onChange={e => setHeroImageUrl(e.target.value)}
+                                            onChange={e => {
+                                                setHeroImageUrl(e.target.value);
+                                                setFloralAvatarUrl(e.target.value);
+                                            }}
                                             placeholder="https://images.unsplash.com/... o enlace web"
                                             className="w-full bg-white px-3 py-2 rounded-xl text-xs font-mono border border-stone-200 focus:outline-none focus:ring-2 focus:ring-[#1B2E1D]/20 text-stone-800"
                                         />
@@ -774,6 +957,71 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                             )}
                                         </div>
                                     )}
+                                </div>
+                            </div>
+                        )}
+
+                        {heroSlot.hasDecorativeImage && (
+                            <div className="space-y-2 pt-2 border-t border-stone-100">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500 flex items-center justify-between">
+                                    <span>Monograma / Logo Ornamental (Opcional)</span>
+                                    {decorativeImageUrl && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setDecorativeImageUrl('')}
+                                            className="text-[10px] font-bold text-rose-500 hover:text-rose-700 flex items-center gap-1 normal-case tracking-normal cursor-pointer"
+                                        >
+                                            <Trash2 className="h-3 w-3" /> Quitar logo
+                                        </button>
+                                    )}
+                                </label>
+                                <p className="text-[11px] text-stone-500">
+                                    Se muestra en la cabecera sobre las iniciales o el título (formato PNG transparente recomendado).
+                                </p>
+                                <div className="rounded-2xl border-2 border-dashed border-stone-200 bg-stone-50/70 p-3 transition-all hover:border-stone-300 flex items-center gap-3">
+                                    <div className="w-16 h-16 rounded-xl bg-white border border-stone-200 flex items-center justify-center overflow-hidden flex-shrink-0 p-1">
+                                        {decorativeImageUrl ? (
+                                            <img src={decorativeImageUrl} alt="Logo" className="w-full h-full object-contain" />
+                                        ) : (
+                                            <Sparkles className="h-5 w-5 text-amber-500" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 space-y-1.5">
+                                        <input
+                                            type="file"
+                                            ref={decorativeFileInputRef}
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) handleDecorativeUpload(file);
+                                                e.target.value = '';
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => decorativeFileInputRef.current?.click()}
+                                            disabled={uploadingDecorative}
+                                            className="w-full py-1.5 px-3 bg-stone-800 hover:bg-stone-900 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                                        >
+                                            {uploadingDecorative ? (
+                                                <>
+                                                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Subiendo logo...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="h-3.5 w-3.5" /> Subir Logo / Monograma
+                                                </>
+                                            )}
+                                        </button>
+                                        <input
+                                            type="url"
+                                            value={decorativeImageUrl}
+                                            onChange={(e) => setDecorativeImageUrl(e.target.value)}
+                                            placeholder="O pega URL de tu logo..."
+                                            className="w-full bg-white px-2.5 py-1 rounded-lg text-xs font-mono border border-stone-200 text-stone-800"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -832,72 +1080,20 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                             </div>
                         </div>
 
-                        {/* ── Floral Symmetry: Sección de Historia, Foto Circular & Banner ── */}
-                        {(cfg.theme === 'floral-symmetry' || cfg.story_title || cfg.floral_avatar_url) && (
+                        {/* ── Floral Symmetry: Sección de Historia & Banner ── */}
+                        {cfg.theme === 'floral-symmetry' && (
                             <div className="p-4 bg-gradient-to-br from-emerald-50/70 via-stone-50 to-pink-50/40 rounded-2xl border border-emerald-200/80 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2">
                                         <span className="text-base">🌸</span>
                                         <div>
-                                            <h4 className="text-xs font-bold text-[#1B2E1D]">Sección de Historia y Foto Circular</h4>
-                                            <p className="text-[10px] text-stone-500">Personaliza la foto redonda y el texto que la acompaña</p>
+                                            <h4 className="text-xs font-bold text-[#1B2E1D]">Sección de Historia y Banner</h4>
+                                            <p className="text-[10px] text-stone-500">Personaliza el texto de historia y el banner verde intermedio</p>
                                         </div>
                                     </div>
                                     <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
                                         Simetría Floral
                                     </span>
-                                </div>
-
-                                {/* Foto Circular Avatar */}
-                                <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-stone-600">
-                                        Foto Circular de la Pareja / Festejado
-                                    </label>
-                                    <div className="flex items-center gap-4 p-3 bg-white rounded-xl border border-stone-200">
-                                        <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-[#DF3B94] shadow-sm flex-shrink-0 bg-stone-100">
-                                            <img 
-                                                src={floralAvatarUrl || heroImageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=400&q=80'} 
-                                                alt="Avatar" 
-                                                className="w-full h-full object-cover" 
-                                            />
-                                        </div>
-                                        <div className="flex-1 space-y-2">
-                                            <input
-                                                type="file"
-                                                ref={floralAvatarFileInputRef}
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={(e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (file) handleFloralAvatarUpload(file);
-                                                    e.target.value = '';
-                                                }}
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => floralAvatarFileInputRef.current?.click()}
-                                                disabled={uploadingFloralAvatar}
-                                                className="w-full py-2 px-3 bg-[#1B2E1D] hover:bg-[#2c492f] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50 cursor-pointer"
-                                            >
-                                                {uploadingFloralAvatar ? (
-                                                    <>
-                                                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Subiendo foto...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Upload className="h-3.5 w-3.5" /> Subir Foto Circular
-                                                    </>
-                                                )}
-                                            </button>
-                                            <input
-                                                type="url"
-                                                value={floralAvatarUrl}
-                                                onChange={(e) => setFloralAvatarUrl(e.target.value)}
-                                                placeholder="O pega URL de la imagen..."
-                                                className="w-full bg-stone-50 px-3 py-1.5 rounded-lg text-xs font-mono border border-stone-200 text-stone-800"
-                                            />
-                                        </div>
-                                    </div>
                                 </div>
 
                                 {/* Título de la Historia */}
