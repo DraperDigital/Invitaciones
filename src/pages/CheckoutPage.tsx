@@ -376,7 +376,7 @@ export default function CheckoutPage() {
                             <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-6 text-xs text-slate-400 font-medium">
                                 <span>Sin tarjeta requerida para crear</span>
                                 <span>•</span>
-                                <span>Garantía de reembolso 14 días</span>
+                                <span>Garantía de reembolso de 7 días</span>
                             </div>
                         </div>
                     ) : (
