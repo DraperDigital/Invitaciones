@@ -610,7 +610,7 @@ export default function EventDetails() {
                                     <input 
                                         type="tel" 
                                         className="w-full p-5 bg-[#FDFBF7] rounded-2xl border border-stone-200 outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94] transition-all text-stone-900 text-base font-sans" 
-                                        placeholder="Ej. +525661985585"
+                                        placeholder="Ej. +5215650314529"
                                         value={newGuest.phone} 
                                         onChange={(e) => setNewGuest({...newGuest, phone: e.target.value})} 
                                     />
@@ -887,7 +887,7 @@ export default function EventDetails() {
                                         <Upload className="h-4 w-4 text-emerald-500" /> Importar CSV
                                     </button>
                                     <div className="h-4 w-px bg-stone-200" />
-                                    <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+525661985585,juan@ejemplo.com')} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-white hover:shadow-sm transition-all">
+                                    <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+5215650314529,juan@ejemplo.com')} className="flex items-center gap-2 px-5 py-3 rounded-xl text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-white hover:shadow-sm transition-all">
                                         <FileType className="h-4 w-4 text-[#BD7474]" /> Descargar Plantilla
                                     </button>
                                 </div>
@@ -909,7 +909,7 @@ export default function EventDetails() {
                                     />
                                 </div>
                                     <div className="flex bg-white p-1 rounded-xl border border-stone-100 shadow-sm">
-                                        <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+525661985585,juan@ejemplo.com')} className="flex items-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all border-l border-stone-100 whitespace-nowrap">
+                                        <button onClick={() => downloadCSV('plantilla.csv', 'Nombre,Grupo,Pax_Extra,WhatsApp,Email\nJuan Perez,Familia,2,+5215650314529,juan@ejemplo.com')} className="flex items-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-stone-500 hover:bg-stone-50 transition-all border-l border-stone-100 whitespace-nowrap">
                                             <FileType className="h-3.5 w-3.5 md:h-4 md:w-4 text-[#BD7474]" /> Plantilla
                                         </button>
                                         <button onClick={handleDeleteAllGuests} className="flex items-center gap-2 px-4 md:px-5 py-2.5 md:py-3 rounded-lg md:rounded-xl text-[8px] md:text-[9px] uppercase font-bold tracking-widest text-rose-500 hover:bg-rose-50 transition-all border-l border-stone-100 whitespace-nowrap">
