@@ -33,7 +33,7 @@ export default function FloatingWhatsAppButton() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
-            className="fixed bottom-20 sm:bottom-6 right-5 sm:right-6 z-40 w-14 h-14 rounded-full bg-gradient-to-tr from-[#DF3B94] to-[#F5B837] text-white shadow-xl shadow-[#DF3B94]/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DF3B94]"
+            className="fixed bottom-20 sm:bottom-6 right-5 sm:right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-xl shadow-[#25D366]/40 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366]"
         >
             <svg
                 viewBox="0 0 24 24"
