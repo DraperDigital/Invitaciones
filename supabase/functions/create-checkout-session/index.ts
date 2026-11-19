@@ -22,7 +22,27 @@ serve(async (req) => {
       throw new Error('No authorization header')
     }
 
-    const { planId, eventId, origin, email } = await req.json()
+    const body = await req.json()
+    const { sessionId, planId, eventId, origin, email, fbp, fbc } = body
+
+    // Consultar el estado de una sesión de Stripe
+    if (sessionId) {
+      const session = await stripe.checkout.sessions.retrieve(sessionId)
+      return new Response(
+        JSON.stringify({
+          id: session.id,
+          payment_status: session.payment_status,
+          status: session.status,
+          amount_total: session.amount_total,
+          planId: session.metadata?.planId,
+          eventId: session.metadata?.eventId,
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
+      )
+    }
 
     if (!planId || !eventId || !origin) {
       throw new Error('Missing required parameters')
@@ -63,12 +83,14 @@ serve(async (req) => {
         },
       ],
       mode: 'payment',
-      success_url: `${origin}/dashboard/design/${eventId}?upgrade=success`,
+      success_url: `${origin}/dashboard/design/${eventId}?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout?plan=${planId}&id=${eventId}&canceled=true`,
       client_reference_id: eventId,
       metadata: {
         planId: planId,
         eventId: eventId,
+        ...(fbp ? { fbp: String(fbp) } : {}),
+        ...(fbc ? { fbc: String(fbc) } : {}),
       }
     })
 

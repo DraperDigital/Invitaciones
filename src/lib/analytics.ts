@@ -102,7 +102,11 @@ export function initAnalytics() {
 }
 
 // Fire a conversion event across GA4 and Meta Pixel. Safe to call anytime.
-export function trackEvent(name: string, params: Record<string, unknown> = {}) {
+export function trackEvent(
+    name: string,
+    params: Record<string, unknown> = {},
+    options?: { eventID?: string }
+) {
     if (typeof window === 'undefined') return;
 
     // Google Analytics 4
@@ -124,10 +128,21 @@ export function trackEvent(name: string, params: Record<string, unknown> = {}) {
         };
 
         const metaEvent = metaEventMap[name];
+        const eventId = (options?.eventID || params.event_id || params.eventId) as string | undefined;
+        const fbqOptions = eventId ? { eventID: eventId } : undefined;
+
         if (metaEvent) {
-            window.fbq('track', metaEvent, params);
+            if (fbqOptions) {
+                window.fbq('track', metaEvent, params, fbqOptions);
+            } else {
+                window.fbq('track', metaEvent, params);
+            }
         } else {
-            window.fbq('trackCustom', name, params);
+            if (fbqOptions) {
+                window.fbq('trackCustom', name, params, fbqOptions);
+            } else {
+                window.fbq('trackCustom', name, params);
+            }
         }
     }
 }

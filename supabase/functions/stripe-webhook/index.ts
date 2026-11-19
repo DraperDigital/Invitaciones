@@ -156,6 +156,70 @@ serve(async (req) => {
 
         console.log(`Successfully upgraded event ${eventId} to plan ${planId}`);
       }
+
+      // Meta Conversions API (CAPI) - Purchase event from server
+      try {
+        const metaCapiToken = Deno.env.get('META_CAPI_TOKEN');
+        if (metaCapiToken) {
+          const rawEmail = session.customer_details?.email || session.customer_email;
+          let hashedEmail: string | undefined = undefined;
+
+          if (rawEmail && typeof rawEmail === 'string' && rawEmail.trim()) {
+            const msgBuffer = new TextEncoder().encode(rawEmail.trim().toLowerCase());
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            hashedEmail = Array.from(new Uint8Array(hashBuffer))
+              .map((b) => b.toString(16).padStart(2, '0'))
+              .join('');
+          }
+
+          const userData: Record<string, any> = {};
+          if (hashedEmail) {
+            userData.em = [hashedEmail];
+          }
+          if (session.metadata?.fbp) {
+            userData.fbp = session.metadata.fbp;
+          }
+          if (session.metadata?.fbc) {
+            userData.fbc = session.metadata.fbc;
+          }
+
+          const capiPayload = {
+            data: [
+              {
+                event_name: 'Purchase',
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: 'purchase_' + session.id,
+                action_source: 'website',
+                event_source_url: 'https://invitto.com.mx/checkout',
+                user_data: userData,
+                custom_data: {
+                  value: (session.amount_total || 0) / 100,
+                  currency: 'MXN',
+                  content_name: session.metadata?.planId,
+                },
+              },
+            ],
+          };
+
+          const metaRes = await fetch(
+            `https://graph.facebook.com/v21.0/2108628290018190/events?access_token=${metaCapiToken}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(capiPayload),
+            }
+          );
+
+          const metaJson = await metaRes.json();
+          if (!metaRes.ok) {
+            console.error('Meta CAPI error response:', metaJson);
+          } else {
+            console.log('Meta CAPI purchase event recorded:', metaJson);
+          }
+        }
+      } catch (metaErr: any) {
+        console.error('Meta CAPI request failed:', metaErr?.message || metaErr);
+      }
     }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 })

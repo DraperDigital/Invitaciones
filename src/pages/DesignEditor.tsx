@@ -376,18 +376,74 @@ export default function DesignEditor() {
     const [showCelebration, setShowCelebration] = useState(searchParams.get('upgrade') === 'success');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const logoInputRef = useRef<HTMLInputElement>(null);
+    const purchaseTrackedRef = useRef(false);
 
     // Fire purchase event once when user lands from successful checkout
     useEffect(() => {
-        if (showCelebration) {
-            trackEvent('purchase', { eventId: id, currency: 'MXN' });
+        if (!showCelebration || purchaseTrackedRef.current) return;
+
+        const sessionId = searchParams.get('session_id');
+
+        // Si no viene session_id (ej. cupón gratuito), se marca como procesado para no duplicar
+        if (!sessionId) {
+            purchaseTrackedRef.current = true;
+            return;
         }
-    }, [showCelebration, id]);
+
+        let isCancelled = false;
+        (async () => {
+            try {
+                const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+                    body: { sessionId }
+                });
+
+                if (isCancelled) return;
+
+                if (error || !data) {
+                    console.error('Error verifying checkout session status:', error);
+                    return;
+                }
+
+                // Si el regreso viene de un pago con OXXO pendiente, NO dispares purchase
+                // en el navegador (el servidor lo enviará vía webhook cuando se pague).
+                if (data.payment_status !== 'paid') {
+                    console.log('Pago con OXXO pendiente; esperando confirmación vía webhook.');
+                    setShowCelebration(false);
+                    toast.info('Ficha de pago OXXO generada. Tu invitación se activará en cuanto completes tu pago en tienda.');
+                    return;
+                }
+
+                // Pago confirmado con tarjeta
+                purchaseTrackedRef.current = true;
+                const paidValue = typeof data.amount_total === 'number' ? data.amount_total / 100 : 499;
+                const planCode = data.planId || config.plan || 'clasico';
+
+                trackEvent('purchase', {
+                    value: paidValue,
+                    currency: 'MXN',
+                    transaction_id: sessionId,
+                    event_id: 'purchase_' + sessionId,
+                    content_name: planCode,
+                    plan: planCode,
+                    eventId: id
+                }, {
+                    eventID: 'purchase_' + sessionId
+                });
+            } catch (err) {
+                console.error('Error checking checkout session status:', err);
+            }
+        })();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [showCelebration, searchParams, id, config.plan, toast]);
 
     const handleCloseCelebration = () => {
         setShowCelebration(false);
         // Clean URL so refresh doesn't replay the celebration
         searchParams.delete('upgrade');
+        searchParams.delete('session_id');
         setSearchParams(searchParams, { replace: true });
     };
 

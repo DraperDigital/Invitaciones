@@ -5,6 +5,14 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { trackEvent } from '../lib/analytics';
 
+function getCookie(name: string): string | undefined {
+    if (typeof document === 'undefined') return undefined;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+    return undefined;
+}
+
 export default function CheckoutPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -256,12 +264,17 @@ export default function CheckoutPage() {
 
             // Call our Edge Function to create a Stripe Checkout Session
             const effectiveEmail = (formData.email && formData.email.trim()) || user?.email || undefined;
+            const fbp = getCookie('_fbp');
+            const fbc = getCookie('_fbc');
+
             const { data, error } = await supabase.functions.invoke('create-checkout-session', {
                 body: { 
                     planId: planId,
                     eventId: eventId,
                     origin: window.location.origin,
-                    email: effectiveEmail
+                    email: effectiveEmail,
+                    fbp: fbp || undefined,
+                    fbc: fbc || undefined
                 }
             });
 
