@@ -39,6 +39,7 @@ import RevealBwHero from '../components/themes/RevealBwHero';
 import RevealDuoHero from '../components/themes/RevealDuoHero';
 import CinematicMotionHero from '../components/themes/CinematicMotionHero';
 import CinematicParallaxBackdrop from '../components/themes/CinematicParallaxBackdrop';
+import EnvelopeIntro from '../components/EnvelopeIntro';
 import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
@@ -2430,30 +2431,6 @@ END:VCALENDAR`;
     const savedOrder: SectionId[] = ['hero', 'guest_welcome', ...reorderableSavedOrder, 'footer'];
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder, effectiveEventCategory);
 
-    // ── Helpers ─────────────────────────────────────────────────────
-    const getSealIcon = () => {
-        const type = (event?.event_type || '').toLowerCase();
-        if (type.includes('wedding') || type.includes('boda')) {
-            return <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" fill="currentColor" />;
-        }
-        if (type.includes('graduation') || type.includes('graduacion') || type.includes('graduación')) {
-            return <GraduationCap className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
-        }
-        if (type.includes('xv') || type.includes('quince')) {
-            return <Crown className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
-        }
-        if (type.includes('birthday') || type.includes('cumple')) {
-            return <Cake className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
-        }
-        if (type.includes('bapt') || type.includes('bautizo')) {
-            return <Baby className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
-        }
-        if (type.includes('comunion') || type.includes('communion')) {
-            return <Church className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" />;
-        }
-        return <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-red-100 animate-pulse" fill="currentColor" />;
-    };
-
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
         if (element) {
@@ -3924,81 +3901,22 @@ END:VCALENDAR`;
                 </>
             )}
 
-            {/* PRE-RENDER Intro (Sobre Digital a pantalla completa / Pantalla de Entrada) */}
+            {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
             {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
-                <motion.div
+                <EnvelopeIntro
                     key="envelope-screen"
-                    initial={{ opacity: 1 }}
-                    exit={{ opacity: 0, y: -25, scale: 0.98, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
-                    className="invitation-content min-h-screen w-full flex items-center justify-center overflow-hidden relative"
-                    style={{ background: 'var(--section-bg-alt)' }}
-                >
-                    {/* Cuerpo del sobre (panel trasero) — las 4 solapas dobladas hacia el centro, cada una con
-                        una ligera sombra/luz distinta para simular el papel doblado y solapado */}
-                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 50%)', background: 'linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 65%)' }} />
-                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(0 100%, 0 0, 50% 50%)', background: 'linear-gradient(90deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 65%)' }} />
-                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)', background: 'linear-gradient(270deg, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0) 65%)' }} />
-                    <div className="absolute inset-0 pointer-events-none" style={{ clipPath: 'polygon(100% 100%, 0 100%, 50% 50%)', background: 'linear-gradient(0deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 65%)' }} />
-
-                    {/* Textura de papel */}
-                    <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] pointer-events-none" />
-
-                    {/* Sombra suave de los pliegues (difuminada, por debajo) para dar volumen a la unión de las solapas */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-50" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ filter: 'blur(3px)' }}>
-                        <line x1="0" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
-                        <line x1="100" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
-                        <line x1="0" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
-                        <line x1="100" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="3" />
-                    </svg>
-
-                    {/* Líneas de doblez nítidas — de cada esquina al centro, marcando el corte entre solapas */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <line x1="0" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
-                        <line x1="100" y1="0" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
-                        <line x1="0" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
-                        <line x1="100" y1="100" x2="50" y2="50" vectorEffect="non-scaling-stroke" className="stroke-[var(--card-border)]" strokeWidth="1" />
-                    </svg>
-
-                    <div className="relative z-10 text-center px-6 max-w-xl w-full mx-auto">
-                        {guest && (
-                            <div className="mb-6 sm:mb-8">
-                                <p className="text-[10px] uppercase tracking-[0.5em] text-accent font-semibold mb-2 sm:mb-3">Para</p>
-                                <h2 className="text-2xl sm:text-4xl font-serif font-light text-[var(--text-primary)] mb-2">{guest.name}</h2>
-                                <div className="h-px w-24 sm:w-32 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto" />
-                            </div>
-                        )}
-                        <div className="mb-8 sm:mb-10">
-                            <h3 className="text-3xl xs:text-4xl sm:text-6xl font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-stone-800 via-accent to-stone-800 mb-2 sm:mb-4 leading-tight">{event.title}</h3>
-                            <p className="text-[var(--text-secondary)] text-sm sm:text-base font-serif italic">
-                                {cfg.subtitle || 'Te invitan a celebrar con ellos este gran día.'}
-                            </p>
-                        </div>
-
-                        {/* Sello de cera — punto donde convergen las líneas del sobre */}
-                        <div className="mb-8 sm:mb-10 flex justify-center">
-                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-600 via-red-700 to-red-900 shadow-2xl flex items-center justify-center border-4 border-red-400/30 overflow-hidden p-2">
-                                {(cfg.decorative_image_url || cfg.decorativeImage) ? (
-                                    <img
-                                        src={cfg.decorative_image_url || cfg.decorativeImage}
-                                        alt="Sello"
-                                        className="h-full w-full object-contain filter drop-shadow brightness-110"
-                                    />
-                                ) : (
-                                    getSealIcon()
-                                )}
-                            </div>
-                        </div>
-
-                        <button 
-                            onClick={() => setEnvelopeOpened(true)} 
-                            className="group/btn relative inline-flex items-center gap-2 sm:gap-3 px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 font-sans font-bold uppercase tracking-widest text-[10px] sm:text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-sm hover:shadow-md cursor-pointer subtle-shimmer overflow-hidden" 
-                            style={{ borderColor: buttonColor, color: buttonColor }}
-                        >
-                            <span>Ver Invitación</span>
-                        </button>
-                    </div>
-                </motion.div>
+                    event={event}
+                    guest={guest}
+                    cfg={cfg}
+                    onOpen={() => setEnvelopeOpened(true)}
+                    accentColor={_accentColor}
+                    cardBgColor={cardBg}
+                    sectionBgColor={sectionBg}
+                    sectionBgAltColor={sectionBgAlt}
+                    textPrimaryColor={textPrimary}
+                    textSecondaryColor={textSecondary}
+                />
             ) : (
                 <motion.div
                     key="invitation-page-body"
