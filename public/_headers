@@ -1,0 +1,27 @@
+# Netlify Headers Configuration
+
+# 1. HTML files: no-cache
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# 2. Hashed build assets: 1 year immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 3. Static files in /public without hash: 30 days (2592000s)
+/*.png
+  Cache-Control: public, max-age=2592000
+/*.jpg
+  Cache-Control: public, max-age=2592000
+/*.jpeg
+  Cache-Control: public, max-age=2592000
+/*.webp
+  Cache-Control: public, max-age=2592000
+/*.svg
+  Cache-Control: public, max-age=2592000
+/*.ico
+  Cache-Control: public, max-age=2592000

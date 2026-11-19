@@ -125,17 +125,17 @@ export default function HomePage() {
 
                         {user ? (
                             <Link to="/dashboard">
-                                <button className="px-4 py-2 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
+                                <button className="px-4 py-2 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95">
                                     Dashboard
                                 </button>
                             </Link>
                         ) : (
                             <>
-                                <Link to="/login" className="hidden sm:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
+                                <Link to="/login" className="hidden sm:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#C2287B] transition-colors">
                                     Ingresar
                                 </Link>
                                 <Link to="/planes" className="hidden sm:block">
-                                    <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
+                                    <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95">
                                         Comenzar
                                     </button>
                                 </Link>
@@ -185,7 +185,7 @@ export default function HomePage() {
                         <div className="pt-3 flex flex-col gap-3">
                             <Link
                                 to={user ? '/dashboard' : '/planes'}
-                                className="block w-full text-center px-6 py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 active:scale-95"
+                                className="block w-full text-center px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 active:scale-95"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 {user ? 'Mi Dashboard' : 'Comenzar'}
@@ -207,7 +207,7 @@ export default function HomePage() {
             {/* --- MAIN CONTENT LANDMARK --- */}
             <main id="main-content">
                 {/* Barra de aviso arriba del hero */}
-                <div className="mt-16 md:mt-20 bg-[#DF3B94] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#C52A7C] relative z-40 shadow-xs">
+                <div className="mt-16 md:mt-20 bg-[#C2287B] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#A81B65] relative z-40 shadow-xs">
                     <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
                         <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
                             NUEVO
@@ -222,14 +222,14 @@ export default function HomePage() {
                     <div className="mx-auto max-w-7xl">
                         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
                             <div className="space-y-4 md:space-y-5 text-center lg:text-left">
-                                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                                    <span className="h-2 w-2 rounded-full bg-[#DF3B94] animate-pulse" />
+                                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C2287B]">
+                                    <span className="h-2 w-2 rounded-full bg-[#C2287B] animate-pulse" />
                                     <span>RSVP inteligente en tiempo real · Sin perseguir invitados</span>
                                 </div>
 
                                 <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-display font-extrabold text-[#222B38] tracking-tight leading-[1.15]">
                                     Deja de perseguir invitados.<br />
-                                    <span className="bg-gradient-to-r from-[#DF3B94] via-[#F5B837] to-[#DF3B94] bg-clip-text text-transparent">
+                                    <span className="bg-gradient-to-r from-[#C2287B] via-[#B45309] to-[#C2287B] bg-clip-text text-transparent">
                                         Ten el control de tu evento
                                     </span><br />
                                     desde el primer día.
@@ -242,12 +242,12 @@ export default function HomePage() {
                                 <div className="space-y-3 pt-1">
                                     <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-3">
                                         <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
-                                            <button className="w-full px-7 py-3.5 md:px-8 md:py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#DF3B94]/25 flex items-center justify-center gap-3">
+                                            <button className="w-full px-7 py-3.5 md:px-8 md:py-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#C2287B]/25 flex items-center justify-center gap-3">
                                                 {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
                                             </button>
                                         </Link>
-                                        <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#DF3B94] hover:border-[#DF3B94]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
-                                            VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#DF3B94]">→</span>
+                                        <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#C2287B] hover:border-[#C2287B]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
+                                            VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#C2287B]">→</span>
                                         </Link>
                                     </div>
 
@@ -387,7 +387,7 @@ export default function HomePage() {
             <section className="py-16 md:py-24 bg-[#F8F9FA] px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 md:gap-20 items-center">
                     <div className="space-y-6 md:space-y-8 text-center lg:text-left">
-                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C2287B]">
                             <span>Experiencia del Invitado</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] leading-tight">
@@ -405,14 +405,14 @@ export default function HomePage() {
                             ))}
                         </ul>
                         <div className="pt-4 flex justify-center lg:justify-start">
-                            <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#222B38] hover:text-[#DF3B94] transition-colors group">
-                                PROBAR DEMO INTERACTIVA <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#DF3B94]" />
+                            <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group">
+                                PROBAR DEMO INTERACTIVA <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
                             </Link>
                         </div>
                     </div>
 
                     <div className="relative h-[400px] md:h-[480px] w-full flex items-center justify-center">
-                        <div className="absolute inset-0 bg-[#DF3B94]/5 rounded-full blur-[80px]" />
+                        <div className="absolute inset-0 bg-[#C2287B]/5 rounded-full blur-[80px]" />
                         
                         {/* RSVP Card */}
                         <div className="absolute top-4 left-0 z-20 w-56 md:w-64 p-5 bg-white rounded-3xl shadow-xl border border-slate-100 transform -rotate-3 hover:rotate-0 transition-all duration-300">
@@ -429,7 +429,7 @@ export default function HomePage() {
 
                         {/* Event Date Card */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-64 md:w-72 p-6 bg-[#222B38] text-white rounded-3xl shadow-2xl">
-                            <p className="text-xs font-bold uppercase tracking-widest text-[#DF3B94] mb-1 text-center">Boda Isabel & Rodrigo</p>
+                            <p className="text-xs font-bold uppercase tracking-widest text-[#FF80BF] mb-1 text-center">Boda Isabel & Rodrigo</p>
                             <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 text-center mb-4">{MOCK_HERO_DATE}</p>
                             <div className="flex justify-center gap-6 mb-6">
                                 <div className="text-center">
@@ -442,7 +442,7 @@ export default function HomePage() {
                                     <p className="text-[10px] uppercase font-bold text-white/50">Hrs</p>
                                 </div>
                             </div>
-                            <button className="w-full py-3 bg-[#DF3B94] hover:bg-[#C52A7C] rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md transition-colors">
+                            <button className="w-full py-3 bg-[#C2287B] hover:bg-[#A81B65] rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md transition-colors">
                                 Confirmar Asistencia
                             </button>
                         </div>
@@ -540,8 +540,8 @@ export default function HomePage() {
                         </div>
 
                         {/* Plan Pro (Destacado) */}
-                        <div className="relative bg-slate-900 text-white rounded-3xl p-8 border-2 border-[#DF3B94] shadow-2xl shadow-[#DF3B94]/20 flex flex-col justify-between lg:-translate-y-2">
-                            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#DF3B94] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                        <div className="relative bg-slate-900 text-white rounded-3xl p-8 border-2 border-[#C2287B] shadow-2xl shadow-[#C2287B]/20 flex flex-col justify-between lg:-translate-y-2">
+                            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C2287B] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
                                 <Gem className="h-3 w-3" /> MÁS ELEGIDO
                             </div>
 
@@ -590,7 +590,7 @@ export default function HomePage() {
 
                             <div className="pt-8">
                                 <Link to={user ? "/dashboard/new?plan=pro" : "/planes"}>
-                                    <button className="w-full py-4 px-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#DF3B94]/30 hover:scale-[1.02] active:scale-95 transition-all">
+                                    <button className="w-full py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all">
                                         Probar Plan Pro Gratis
                                     </button>
                                 </Link>
@@ -602,7 +602,7 @@ export default function HomePage() {
                         <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                             <div className="space-y-6">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">TODO INCLUIDO · LLAVE EN MANO</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
                                     <p className="text-xs text-slate-600 mt-1">Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.</p>
                                 </div>
@@ -641,7 +641,7 @@ export default function HomePage() {
 
                             <div className="pt-8">
                                 <Link to="/planes/concierge">
-                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
+                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#C2287B] hover:text-[#C2287B] transition-all">
                                         Conocer Plan Concierge
                                     </button>
                                 </Link>
@@ -654,7 +654,7 @@ export default function HomePage() {
                     <div className="mt-12 text-center">
                         <Link 
                             to="/planes" 
-                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#DF3B94] hover:text-[#C52A7C] transition-colors"
+                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#C2287B] hover:text-[#A81B65] transition-colors"
                         >
                             <span>¿Quieres ver la comparativa completa de 29 características?</span>
                             <ArrowRight className="h-4 w-4" />
@@ -670,14 +670,14 @@ export default function HomePage() {
                         
                         {/* Left Copy */}
                         <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold tracking-widest text-[#DF3B94]">
-                                <Gem className="h-4 w-4 text-[#DF3B94]" />
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold tracking-widest text-[#FF80BF]">
+                                <Gem className="h-4 w-4 text-[#FF80BF]" />
                                 <span>SERVICIO VIP · INVITTO CONFIRMA</span>
                             </div>
 
                             <h2 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold tracking-tight leading-tight text-white">
                                 ¿No tienes tiempo? <br />
-                                <span className="italic font-light text-[#DF3B94]">Confirmamos a tus invitados por ti.</span>
+                                <span className="italic font-light text-[#FF80BF]">Confirmamos a tus invitados por ti.</span>
                             </h2>
 
                             <p className="text-base md:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -685,7 +685,7 @@ export default function HomePage() {
                             </p>
 
                             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                                <Link to="/confirma" className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs md:text-sm font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 group">
+                                <Link to="/confirma" className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs md:text-sm font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 group">
                                     <span>SABER MÁS SOBRE INVITTO CONFIRMA</span>
                                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-white" />
                                 </Link>
@@ -699,11 +699,11 @@ export default function HomePage() {
                         <div className="lg:col-span-5 flex justify-center">
                             <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6 backdrop-blur-md shadow-2xl">
                                 <div className="flex items-center gap-4 pb-6 border-b border-white/10">
-                                    <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/15 text-[#DF3B94] flex items-center justify-center flex-shrink-0">
+                                    <div className="h-12 w-12 rounded-2xl bg-[#C2287B]/20 text-[#FF80BF] flex items-center justify-center flex-shrink-0">
                                         <Users className="h-6 w-6" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#DF3B94]">GESTIÓN HUMANA</p>
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#FF80BF]">GESTIÓN HUMANA</p>
                                         <p className="text-lg font-display font-bold text-white italic">Tu equipo dedicado</p>
                                     </div>
                                 </div>
@@ -888,7 +888,7 @@ export default function HomePage() {
 
                     <div className="pt-4 space-y-4">
                         <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                            <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-2">
+                            <button className="px-10 py-5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-2">
                                 <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
                                 <ArrowRight className="h-4 w-4" />
                             </button>
@@ -918,7 +918,7 @@ export default function HomePage() {
                     {/* Top Guarantee Bar */}
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-12 border-b border-white/10 text-xs">
                         <div className="space-y-1 text-center md:text-left">
-                            <p className="font-bold tracking-wider uppercase text-[#DF3B94]">El camino más fácil a tu evento</p>
+                            <p className="font-bold tracking-wider uppercase text-[#FF80BF]">El camino más fácil a tu evento</p>
                             <p className="text-slate-400">Sin mensualidades · Crea gratis · Paga solo al publicar · Sin tarjetas</p>
                         </div>
                         <div className="text-center md:text-right text-slate-400">

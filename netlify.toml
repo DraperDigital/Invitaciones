@@ -78,11 +78,36 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# ── Static files in /public (favicon, images, etc.) ────────────────────────
+# ── Static files in /public without hash (30 days = 2592000s) ──────────────
 [[headers]]
   for = "/*.svg"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
 
 # ── Security + performance headers on every response ────────────────────────
 [[headers]]
