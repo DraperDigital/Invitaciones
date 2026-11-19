@@ -59,7 +59,7 @@ export default function CookieBanner() {
                         <Cookie className="h-5 w-5" />
                     </div>
                     <div className="flex-1 space-y-1">
-                        <h4 className="text-sm font-bold text-[#222B38] flex items-center justify-between">
+                        <p className="text-sm font-bold text-[#222B38] flex items-center justify-between">
                             <span>Privacidad y Cookies</span>
                             <button
                                 onClick={() => handleConsent('essential')}
@@ -68,7 +68,7 @@ export default function CookieBanner() {
                             >
                                 <X className="h-4 w-4" />
                             </button>
-                        </h4>
+                        </p>
                         <p className="text-xs text-slate-600 leading-relaxed">
                             Usamos cookies esenciales para tu sesión y pagos, y analíticas anónimas para mejorar Invitto. Consulta nuestra{' '}
                             <Link to="/cookies" className="text-[#DF3B94] font-semibold underline hover:text-[#C52A7C]">

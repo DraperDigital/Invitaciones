@@ -2,10 +2,11 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
-import DashboardLayout from './components/layout/DashboardLayout';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import Toaster from './components/ui/Toaster';
 import { getPlatformContext } from './utils/context';
+
+const DashboardLayout     = React.lazy(() => import('./components/layout/DashboardLayout'));
 
 import CookieBanner from './components/CookieBanner';
 

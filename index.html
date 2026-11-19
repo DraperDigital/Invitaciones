@@ -15,45 +15,25 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
 
-    <!-- DNS prefetch & preconnect for external services -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="dns-prefetch" href="https://images.unsplash.com" />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-
-    <!-- Preload LCP hero image (Isabel & Rodrigo) with exact responsive sizes/widths -->
+    <!-- Preload local LCP hero image (Isabel & Rodrigo) with responsive srcset -->
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop"
-      imagesrcset="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=75&fm=webp&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=75&fm=webp&auto=format&fit=crop 1200w"
+      type="image/webp"
+      href="/assets/hero-wedding.webp"
+      imagesrcset="/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w"
       imagesizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px"
       fetchpriority="high"
     />
 
-    <!--
-      Google Fonts — optimized site-wide weights (Inter 400-700, Plus Jakarta Sans 600-800).
-      Decorative fonts are loaded dynamically by src/lib/loadFonts.ts per invitation theme.
-    -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preload ONLY the H1 font (Plus Jakarta Sans 800, hosted locally) -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      as="font"
+      type="font/woff2"
+      href="/fonts/plus-jakarta-sans-800.woff2"
+      crossorigin
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
 
     <!-- Static Primary SEO Meta Tags (overridden by react-helmet-async on route change) -->
     <title>Invitto · Invitaciones Digitales Inteligentes para Bodas, XV Años y Eventos</title>

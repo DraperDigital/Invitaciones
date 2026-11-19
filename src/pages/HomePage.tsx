@@ -286,18 +286,20 @@ export default function HomePage() {
                                     <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white">
                                         {/* Event Hero Cover */}
                                         <div className="relative h-2/3 w-full">
-                                            <img
-                                                src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop"
-                                                srcSet="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&q=75&fm=webp&auto=format&fit=crop 400w, https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=75&fm=webp&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=75&fm=webp&auto=format&fit=crop 1200w"
-                                                sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px"
-                                                width={340}
-                                                height={450}
-                                                fetchPriority="high"
-                                                loading="eager"
-                                                decoding="async"
-                                                className="w-full h-full object-cover"
-                                                alt="Boda Isabel & Rodrigo"
-                                            />
+                                            <picture>
+                                                <source srcSet="/assets/hero-wedding.avif" type="image/avif" />
+                                                <source srcSet="/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w" type="image/webp" sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px" />
+                                                <img
+                                                    src="/assets/hero-wedding.webp"
+                                                    width={340}
+                                                    height={450}
+                                                    fetchPriority="high"
+                                                    loading="eager"
+                                                    decoding="async"
+                                                    className="w-full h-full object-cover"
+                                                    alt="Boda Isabel & Rodrigo"
+                                                />
+                                            </picture>
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                                             
                                             <div className="absolute bottom-4 left-0 w-full px-5 z-10 text-center">
@@ -797,7 +799,7 @@ export default function HomePage() {
                                         <div>
                                             <div className="flex items-center gap-1.5">
                                                 <p className="font-display font-bold text-[#222B38] text-base leading-tight">{card.names}</p>
-                                                <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-full">✓ Verificado</span>
+                                                <span className="text-xs text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">✓ Verificado</span>
                                             </div>
                                             <p className="text-xs text-slate-600 font-medium mt-0.5">{card.event}</p>
                                         </div>

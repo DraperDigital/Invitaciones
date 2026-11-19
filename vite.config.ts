@@ -1,6 +1,39 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import prerender from '@prerenderer/rollup-plugin'
+import Beasties from 'beasties'
+import fs from 'node:fs'
+import path from 'node:path'
+
+/**
+ * Beasties plugin to extract and inline critical CSS directly into dist/index.html
+ * for fast first contentful paint (FCP) and optimal Speed Index.
+ */
+function beastiesPlugin(): Plugin {
+  return {
+    name: 'vite-plugin-beasties',
+    enforce: 'post',
+    apply: 'build',
+    async closeBundle() {
+      try {
+        const beasties = new Beasties({
+          path: path.resolve('dist'),
+          publicPath: '/',
+          pruneSource: false,
+        });
+        const indexPath = path.resolve('dist/index.html');
+        if (fs.existsSync(indexPath)) {
+          const rawHtml = fs.readFileSync(indexPath, 'utf-8');
+          const inlinedHtml = await beasties.process(rawHtml);
+          fs.writeFileSync(indexPath, inlinedHtml, 'utf-8');
+          console.log('[Beasties] Critical CSS successfully inlined into dist/index.html');
+        }
+      } catch (err: any) {
+        console.warn('[Beasties] Critical CSS inlining skipped:', err?.message || err);
+      }
+    },
+  };
+}
 
 // Public routes to pre-render at build time. Each gets a real HTML file with
 // per-route <title>, meta tags and JSON-LD baked in — crawlers no longer wait
@@ -74,6 +107,7 @@ function safePrerender(options: any): Plugin {
 export default defineConfig({
   plugins: [
     react(),
+    beastiesPlugin(),
     // Pre-rendering only runs during `vite build`, unless DISABLE_PRERENDER is set.
     ...(!isPrerenderDisabled ? [
       safePrerender({

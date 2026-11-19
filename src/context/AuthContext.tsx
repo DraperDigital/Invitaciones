@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
 
 type AuthContextType = {
     session: Session | null;
@@ -31,22 +30,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return;
         }
 
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
+        let isMounted = true;
+        let unsubscribe: (() => void) | undefined;
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
+        // Dynamic import keeps initial landing page bundle completely free of @supabase/supabase-js
+        import('../lib/supabase')
+            .then(({ supabase }) => {
+                if (!isMounted) return;
 
-        return () => subscription.unsubscribe();
+                supabase.auth.getSession().then(({ data: { session } }) => {
+                    if (!isMounted) return;
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                    setLoading(false);
+                });
+
+                const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+                    if (!isMounted) return;
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                    setLoading(false);
+                });
+
+                unsubscribe = () => subscription.unsubscribe();
+            })
+            .catch((err) => {
+                console.error('Failed to load auth client:', err);
+                if (isMounted) setLoading(false);
+            });
+
+        return () => {
+            isMounted = false;
+            if (unsubscribe) unsubscribe();
+        };
     }, []);
 
     const signOut = async () => {
+        const { supabase } = await import('../lib/supabase');
         await supabase.auth.signOut();
     };
 

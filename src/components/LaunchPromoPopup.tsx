@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { X, ArrowRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { trackEvent } from '../lib/analytics';
 import { useAuth } from '../context/AuthContext';
 
 const COUPON_CODE = 'INVITTO26PRO';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabase.drapersystems.online';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzg3ODc4NTY3LCJleHAiOjIxMDMyMzg1Njd9.4q4MMElCLvG_Rt5HZcDpTHda_oT0ISq2jsA6EogABCA';
 const DISMISSED_STORAGE_KEY = 'invitto_promo_dismissed_at';
 const DISMISSED_TTL_HOURS = 24;
 const TIME_ON_PRICING_MS = 30_000; // 30s
@@ -63,9 +64,21 @@ export default function LaunchPromoPopup() {
         if (!eligible) return;
         let cancelled = false;
 
-        supabase.functions
-            .invoke('coupon-status', { body: { code: COUPON_CODE } })
-            .then(({ data }) => {
+        // Query coupon status via lightweight fetch without pulling supabase-js into bundle
+        fetch(`${SUPABASE_URL}/functions/v1/coupon-status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({ code: COUPON_CODE }),
+        })
+            .then(async (res) => {
+                if (!res.ok) throw new Error('Status failed');
+                return res.json();
+            })
+            .then((data) => {
                 if (cancelled) return;
                 if (data && data.available) {
                     setStatus({

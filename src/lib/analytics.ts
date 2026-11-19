@@ -104,41 +104,44 @@ export function initAnalytics() {
 }
 
 /**
- * Loads third-party tracking scripts (Meta Pixel, Google Analytics 4, Microsoft Clarity)
- * deferred until the first user interaction (scroll, click, touchstart, keydown) or after
- * 4 seconds from window 'load', whichever occurs first.
- * Ensures the critical rendering path and initial main thread are 100% free.
+ * Loads third-party tracking scripts:
+ * - Meta Pixel loads directly on window 'load' (without waiting for user interaction/click)
+ *   to preserve ad attribution.
+ * - gtag (GA4/Ads) and Clarity load after window 'load' via requestIdleCallback
+ *   to keep the main thread completely free during critical initial rendering.
  */
 export function setupDeferredAnalytics() {
     if (typeof window === 'undefined') return;
 
-    const loadScripts = () => {
+    const onWindowLoaded = () => {
         if (hasLoadedThirdParty) return;
         hasLoadedThirdParty = true;
 
-        window.removeEventListener('scroll', loadScripts);
-        window.removeEventListener('click', loadScripts);
-        window.removeEventListener('touchstart', loadScripts);
-        window.removeEventListener('keydown', loadScripts);
+        // 1. Meta Pixel se carga en el evento load para atribución inmediata
+        if (META_PIXEL_ID) {
+            loadMetaPixel(META_PIXEL_ID);
+        }
 
-        initAnalytics();
-    };
+        // 2. gtag (Google Analytics / Ads) y Clarity se difieren con requestIdleCallback
+        const loadGtagAndClarity = () => {
+            if (!hasAnalyticsConsent()) return;
+            if (GA4_ID) loadGA4(GA4_ID);
+            if (CLARITY_ID) loadClarity(CLARITY_ID);
+        };
 
-    const attachListeners = () => {
-        // First user interaction triggers immediate load
-        window.addEventListener('scroll', loadScripts, { once: true, passive: true });
-        window.addEventListener('click', loadScripts, { once: true, passive: true });
-        window.addEventListener('touchstart', loadScripts, { once: true, passive: true });
-        window.addEventListener('keydown', loadScripts, { once: true, passive: true });
-
-        // Fallback: 4 seconds after window load if no interaction occurred
-        setTimeout(loadScripts, 4000);
+        if ('requestIdleCallback' in window) {
+            (window as any).requestIdleCallback(() => {
+                loadGtagAndClarity();
+            }, { timeout: 3000 });
+        } else {
+            setTimeout(loadGtagAndClarity, 1500);
+        }
     };
 
     if (document.readyState === 'complete') {
-        attachListeners();
+        onWindowLoaded();
     } else {
-        window.addEventListener('load', attachListeners, { once: true });
+        window.addEventListener('load', onWindowLoaded, { once: true });
     }
 }
 
