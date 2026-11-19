@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { loadGoogleFonts } from '../lib/loadFonts';
+import { THEME_PRESET_PROFILES } from '../lib/themePresets';
 
 export interface EnvelopeIntroProps {
     event: {
@@ -14,6 +15,7 @@ export interface EnvelopeIntroProps {
     cfg?: Record<string, any>;
     onOpen: () => void;
     accentColor?: string;
+    primaryColor?: string;
     cardBgColor?: string;
     sectionBgColor?: string;
     sectionBgAltColor?: string;
@@ -82,13 +84,24 @@ function formatEnvelopeDate(dateTimeStr?: string | null): string {
 }
 
 /**
- * Oscurece un color hexadecimal para el sombreado del sello de cera.
+ * Oscurece un color hexadecimal o rgb para el sombreado del sello de cera y papel.
  */
-function darkenHex(hex?: string, percent: number = 25): string {
-    if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) return '#8E3F53';
-    let c = hex.slice(1);
-    if (c.length === 3) c = c.split('').map(x => x + x).join('');
-    if (c.length !== 6) return '#8E3F53';
+function darkenHex(color?: string, percent: number = 25): string {
+    if (!color || typeof color !== 'string') return '#8E3F53';
+    const clean = color.trim();
+    if (clean.startsWith('rgb')) {
+        const m = clean.match(/\d+/g);
+        if (m && m.length >= 3) {
+            const r = Math.max(0, parseInt(m[0], 10) - Math.round(255 * (percent / 100)));
+            const g = Math.max(0, parseInt(m[1], 10) - Math.round(255 * (percent / 100)));
+            const b = Math.max(0, parseInt(m[2], 10) - Math.round(255 * (percent / 100)));
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+        }
+    }
+    if (!clean.startsWith('#')) return '#8E3F53';
+    let c = clean.slice(1);
+    if (c.length === 3 || c.length === 4) c = c.slice(0, 3).split('').map(x => x + x).join('');
+    if (c.length >= 6) c = c.slice(0, 6);
     const num = parseInt(c, 16);
     if (isNaN(num)) return '#8E3F53';
     const r = Math.max(0, (num >> 16) - Math.round(255 * (percent / 100)));
@@ -103,6 +116,7 @@ export default function EnvelopeIntro({
     cfg,
     onOpen,
     accentColor,
+    primaryColor,
     cardBgColor,
     sectionBgColor,
     sectionBgAltColor,
@@ -134,13 +148,57 @@ export default function EnvelopeIntro({
     const eventLabel = getEventLabel(event.event_type);
     const formattedDate = formatEnvelopeDate(event.date_time);
 
-    // Mapeo dinámico de colores con variables de la plantilla activa
-    const rawAccent = accentColor || effectiveCfg.accent_color || effectiveCfg.accentColor || '#B85C70';
+    // Identificar plantilla activa para obtener perfil de colores de respaldo fiel al diseño
+    const activeThemeId = (effectiveCfg.theme || event.theme_config?.theme || 'classic') as string;
+    const presetProfile = THEME_PRESET_PROFILES[activeThemeId] || THEME_PRESET_PROFILES['classic'];
+
+    // Mapeo dinámico y robusto de colores según la plantilla activa y las elecciones del usuario
+    const rawAccent = accentColor
+        || effectiveCfg.accent_color
+        || effectiveCfg.accentColor
+        || presetProfile?.accentColor
+        || '#C5A059';
+
     const accentDark = darkenHex(rawAccent, 28);
-    const rawPaper = cardBgColor || effectiveCfg.card_bg_color || effectiveCfg.cardBgColor || '#FBF8F3';
-    const rawBg = sectionBgAltColor || sectionBgColor || effectiveCfg.section_bg_color || '#F6F0E8';
-    const rawInk = textPrimaryColor || effectiveCfg.text_primary || '#3E5543';
-    const rawInkSoft = textSecondaryColor || effectiveCfg.text_secondary || '#6E8572';
+
+    const rawPrimary = primaryColor
+        || effectiveCfg.primary_color
+        || effectiveCfg.primaryColor
+        || effectiveCfg.button_color
+        || effectiveCfg.buttonColor
+        || presetProfile?.primaryColor
+        || '#2B2625';
+
+    const rawPaper = cardBgColor
+        || effectiveCfg.card_bg_color
+        || effectiveCfg.cardBgColor
+        || presetProfile?.cardBgColor
+        || '#FFFFFF';
+
+    const rawBg = sectionBgAltColor
+        || sectionBgColor
+        || effectiveCfg.section_bg_color
+        || effectiveCfg.sectionBgColor
+        || presetProfile?.sectionBgColor
+        || '#FAF8F5';
+
+    const rawInk = textPrimaryColor
+        || effectiveCfg.text_primary
+        || effectiveCfg.textPrimary
+        || presetProfile?.textPrimary
+        || rawPrimary;
+
+    const rawInkSoft = textSecondaryColor
+        || effectiveCfg.text_secondary
+        || effectiveCfg.textSecondary
+        || presetProfile?.textSecondary
+        || '#7A6E65';
+
+    // El forro interior de la solapa usa el tono primario/secundario de la plantilla activa
+    const rawLiner = rawPrimary || rawInkSoft;
+
+    // Sombra del papel calculada de manera robusta sin depender de color-mix
+    const paperShade = darkenHex(rawPaper, 8);
 
     // Estados acumulativos fieles al prototipo (classList.add):
     // una vez que el sello se quiebra, la clase 'cracked' permanece durante 'open', 'flapdown' y 'lifted'
@@ -216,12 +274,12 @@ export default function EnvelopeIntro({
             style={{
                 '--env-bg': rawBg,
                 '--env-paper': rawPaper,
-                '--env-paper-shade': `color-mix(in srgb, ${rawPaper} 88%, #9E8C78 12%)`,
+                '--env-paper-shade': paperShade,
                 '--env-ink': rawInk,
                 '--env-ink-soft': rawInkSoft,
                 '--env-accent': rawAccent,
                 '--env-accent-dark': accentDark,
-                '--env-liner': rawInkSoft,
+                '--env-liner': rawLiner,
             } as React.CSSProperties}
         >
             <style>{`
@@ -634,9 +692,9 @@ export default function EnvelopeIntro({
             <svg width="0" height="0" style={{ position: 'absolute' }}>
                 <defs>
                     <radialGradient id="invitto-wax-gradient" cx="38%" cy="32%" r="75%">
-                        <stop offset="0%" stopColor="var(--env-accent)" stopOpacity="1" />
-                        <stop offset="65%" stopColor="var(--env-accent-dark)" />
-                        <stop offset="100%" stopColor="var(--env-accent-dark)" />
+                        <stop offset="0%" stopColor={rawAccent} stopOpacity="1" />
+                        <stop offset="65%" stopColor={accentDark} />
+                        <stop offset="100%" stopColor={accentDark} />
                     </radialGradient>
                     <symbol id="invitto-waxseal-symbol" viewBox="0 0 66 66">
                         <path
@@ -697,9 +755,9 @@ export default function EnvelopeIntro({
                         <div className="k">{eventLabel}</div>
                         <div className="n">{event.title}</div>
                         {formattedDate && <div className="d">{formattedDate}</div>}
-                        <svg viewBox="0 0 70 18" fill="none" stroke="currentColor" style={{ color: 'var(--env-ink-soft)' }}>
-                            <path d="M2 9h66" strokeWidth=".8" />
-                            <path d="M35 3c-3 3-3 9 0 12 3-3 3-9 0-12z" fill="var(--env-accent)" stroke="none" opacity=".8" />
+                        <svg viewBox="0 0 70 18" fill="none">
+                            <path d="M2 9h66" stroke={rawInkSoft} strokeWidth=".8" />
+                            <path d="M35 3c-3 3-3 9 0 12 3-3 3-9 0-12z" fill={rawAccent} stroke="none" opacity=".85" />
                         </svg>
                     </div>
 

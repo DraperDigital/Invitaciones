@@ -148,6 +148,7 @@ export default function InvitationPage() {
             sectionBg: '#FFFFFF', sectionBgAlt: '#F5F5F7', cardBg: '#F5F5F7',
             textPrimary: '#111111', textSecondary: '#555555',
             borderColor: '#E5E5E5', cardBorder: '#DDDDDD',
+            accentOverride: '#222222',
             fontPreset: 'moderna', heroRadius: '0px', cardRadius: '0px',
         },
         'romantic-botanical': {
@@ -3911,6 +3912,7 @@ END:VCALENDAR`;
                     cfg={cfg}
                     onOpen={() => setEnvelopeOpened(true)}
                     accentColor={_accentColor}
+                    primaryColor={userCfg.primary_color || userCfg.primaryColor || _buttonColor}
                     cardBgColor={cardBg}
                     sectionBgColor={sectionBg}
                     sectionBgAltColor={sectionBgAlt}
