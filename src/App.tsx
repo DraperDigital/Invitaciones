@@ -188,6 +188,7 @@ function AppRoutes() {
 }
 
 import ScrollToTop from './components/ScrollToTop';
+import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
 const LaunchPromoPopup = React.lazy(() => import('./components/LaunchPromoPopup'));
 
 function App() {
@@ -207,6 +208,8 @@ function App() {
             <Suspense fallback={null}>
               <LaunchPromoPopup />
             </Suspense>
+            {/* Botón flotante de WhatsApp — solo en páginas públicas */}
+            <FloatingWhatsAppButton />
             {/* Cookie Consent Banner */}
             <CookieBanner />
           </BrowserRouter>
