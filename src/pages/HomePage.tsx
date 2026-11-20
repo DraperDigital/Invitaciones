@@ -468,7 +468,150 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* --- 4. RESUMEN DE PLANES Y PRECIOS --- */}
+            {/* --- 4. ASÍ SE VE UNA INVITACIÓN INVITTO --- */}
+            <section className="py-20 md:py-32 bg-white border-y border-slate-100">
+                <div className="mx-auto max-w-7xl px-6">
+                    <div className="text-center mb-16 space-y-4">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                            <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                            <span>Diseños Reales</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
+                            Así se ve una invitación Invitto
+                        </h2>
+                        <p className="text-slate-600 max-w-xl mx-auto text-base">
+                            Explora nuestras plantillas interactivas y prueba la experiencia tal como la recibirán tus invitados.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {[
+                            {
+                                title: 'Boda Elegante Clásica',
+                                names: 'Isabel & Rodrigo',
+                                event: 'Boda de Ensueño',
+                                description: 'Tipografía serif sofisticada, sobre digital interactivo y confirmación por pases familiares.',
+                                tag: 'Boda',
+                                demoUrl: '/i/boda-isabel-rodrigo-premium'
+                            },
+                            {
+                                title: 'XV Años Glamour',
+                                names: 'Valeria',
+                                event: 'Mis XV Años',
+                                description: 'Diseño moderno con cuenta regresiva, código de vestimenta, mesa de regalos y pase QR.',
+                                tag: 'XV Años',
+                                demoUrl: '/i/xv-valeria-premium'
+                            },
+                            {
+                                title: 'Cumpleaños & Fiesta',
+                                names: 'Emilia',
+                                event: 'Festejo Especial',
+                                description: 'Música de fondo, mapa interactivo para salón y confirmación ágil vía WhatsApp.',
+                                tag: 'Cumpleaños',
+                                demoUrl: '/i/cumple-emilia-premium'
+                            }
+                        ].map((card, i) => (
+                            <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 flex flex-col justify-between space-y-6 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all">
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200/60 font-mono">
+                                            Ejemplo
+                                        </span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-100">
+                                            {card.tag}
+                                        </span>
+                                    </div>
+                                    <h3 className="font-display font-extrabold text-[#222B38] text-xl leading-tight">
+                                        {card.title}
+                                    </h3>
+                                    <p className="text-sm font-normal text-slate-600 leading-relaxed">
+                                        {card.description}
+                                    </p>
+                                </div>
+                                <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
+                                    <div>
+                                        <p className="font-display font-bold text-[#222B38] text-sm leading-tight">{card.names}</p>
+                                        <p className="text-xs text-slate-500 font-medium mt-0.5">{card.event}</p>
+                                    </div>
+                                    <Link
+                                        to={card.demoUrl}
+                                        className="px-4 py-2 bg-white hover:bg-slate-50 text-[#C2287B] border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shadow-2xs hover:-translate-y-0.5"
+                                        title={`Ver demo de ${card.title}`}
+                                    >
+                                        <span>Ver Demo</span>
+                                        <ArrowRight className="h-3.5 w-3.5" />
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <Link
+                            to="/ejemplos"
+                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group"
+                        >
+                            <span>VER TODOS LOS EJEMPLOS Y PLANTILLAS</span>
+                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 5. ¿QUÉ CELEBRAS? (8 Event Types) --- */}
+            <section className="py-20 md:py-28 bg-[#F8F9FA] px-6 border-b border-slate-100">
+                <div className="mx-auto max-w-7xl">
+                    <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                            <Sparkles className="h-3.5 w-3.5 text-[#C52A7C]" />
+                            <span>Invitaciones por Categoría</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
+                            ¿Qué celebras?
+                        </h2>
+                        <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                            Cada evento tiene su propia magia y necesidades especiales. Elige tu tipo de fiesta para ver funciones diseñadas para ti.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                        {[
+                            { title: 'Boda', slug: 'invitaciones-digitales-boda', icon: '💍', desc: 'Diseños románticos, confirmación por familia, pases y mesa de regalos.' },
+                            { title: 'XV Años', slug: 'invitaciones-digitales-xv-anos', icon: '👑', desc: 'Vals, música, padrinos, cuenta regresiva y pase de acceso con QR.' },
+                            { title: 'Cumpleaños', slug: 'invitaciones-digitales-cumpleanos', icon: '🎂', desc: 'Festejos para todas las edades sin el caos de los grupos de WhatsApp.' },
+                            { title: 'Bautizo', slug: 'invitaciones-digitales-bautizo', icon: '🕊️', desc: 'Diseños angelicales con sección de padrinos, iglesia y comida familiar.' },
+                            { title: 'Primera Comunión', slug: 'invitaciones-digitales-primera-comunion', icon: '✨', desc: 'Ceremonia solemne, horarios puntuales, mapas y confirmación rápida.' },
+                            { title: 'Baby Shower', slug: 'invitaciones-digitales-baby-shower', icon: '🍼', desc: 'Mesa de regalos Liverpool/Amazon, guía de pañales y confirmación tierna.' },
+                            { title: 'Revelación de Género', slug: 'invitaciones-digitales-revelacion-de-genero', icon: '🎈', desc: '¿Team Rosa o Azul? Dinámicas interactivas y cuenta regresiva al gran secreto.' },
+                            { title: 'Graduación', slug: 'invitaciones-digitales-graduacion', icon: '🎓', desc: 'Pases de gala individuales, check-in con QR y fotos de generación.' }
+                        ].map((event, idx) => (
+                            <Link
+                                key={idx}
+                                to={`/${event.slug}`}
+                                className="bg-white rounded-3xl p-6 border border-slate-200/80 hover:border-[#DF3B94]/40 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all group flex flex-col justify-between"
+                            >
+                                <div className="space-y-3">
+                                    <div className="w-12 h-12 rounded-2xl bg-[#fdf2f8] text-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                        {event.icon}
+                                    </div>
+                                    <h3 className="text-xl font-display font-extrabold text-[#222B38] group-hover:text-[#C2287B] transition-colors">
+                                        {event.title}
+                                    </h3>
+                                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                                        {event.desc}
+                                    </p>
+                                </div>
+                                <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#C2287B]">
+                                    <span>Ver invitación</span>
+                                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* --- 6. RESUMEN DE PLANES Y PRECIOS --- */}
             <section className="py-20 md:py-32 bg-white px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl">
                     <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
@@ -723,95 +866,7 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* --- 5. ASÍ SE VE UNA INVITACIÓN INVITTO --- */}
-            <section className="py-20 md:py-32 bg-white border-y border-slate-100">
-                <div className="mx-auto max-w-7xl px-6">
-                    <div className="text-center mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <Sparkles className="h-4 w-4 text-[#DF3B94]" />
-                            <span>Diseños Reales</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
-                            Así se ve una invitación Invitto
-                        </h2>
-                        <p className="text-slate-600 max-w-xl mx-auto text-base">
-                            Explora nuestras plantillas interactivas y prueba la experiencia tal como la recibirán tus invitados.
-                        </p>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                title: 'Boda Elegante Clásica',
-                                names: 'Ana & Carlos',
-                                event: 'Boda de Ensueño',
-                                description: 'Tipografía serif sofisticada, sobre digital interactivo y confirmación por pases familiares.',
-                                tag: 'Boda',
-                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
-                            },
-                            {
-                                title: 'XV Años Glamour',
-                                names: 'Valentina',
-                                event: 'Mis XV Años',
-                                description: 'Diseño moderno con cuenta regresiva, código de vestimenta, mesa de regalos y pase QR.',
-                                tag: 'XV Años',
-                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
-                            },
-                            {
-                                title: 'Cumpleaños & Aniversario',
-                                names: 'Cecilia',
-                                event: '70 Aniversario',
-                                description: 'Música de fondo, mapa interactivo para salón y confirmación ágil vía WhatsApp.',
-                                tag: 'Cumpleaños',
-                                demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657'
-                            }
-                        ].map((card, i) => (
-                            <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 flex flex-col justify-between space-y-6 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all">
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200/60 font-mono">
-                                            Ejemplo
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-100">
-                                            {card.tag}
-                                        </span>
-                                    </div>
-                                    <h3 className="font-display font-extrabold text-[#222B38] text-xl leading-tight">
-                                        {card.title}
-                                    </h3>
-                                    <p className="text-sm font-normal text-slate-600 leading-relaxed">
-                                        {card.description}
-                                    </p>
-                                </div>
-                                <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                                    <div>
-                                        <p className="font-display font-bold text-[#222B38] text-sm leading-tight">{card.names}</p>
-                                        <p className="text-xs text-slate-500 font-medium mt-0.5">{card.event}</p>
-                                    </div>
-                                    <Link
-                                        to={card.demoUrl}
-                                        className="px-4 py-2 bg-white hover:bg-slate-50 text-[#C2287B] border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shadow-2xs hover:-translate-y-0.5"
-                                        title={`Ver demo de ${card.title}`}
-                                    >
-                                        <span>Ver Demo</span>
-                                        <ArrowRight className="h-3.5 w-3.5" />
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="mt-12 text-center">
-                        <Link
-                            to="/ejemplos"
-                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group"
-                        >
-                            <span>VER TODOS LOS EJEMPLOS Y PLANTILLAS</span>
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
 
             {/* --- 6. PREGUNTAS FRECUENTES --- */}
             <section className="py-20 md:py-28 bg-white">
@@ -924,10 +979,10 @@ export default function HomePage() {
                     </div>
 
                     {/* Main Footer Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-8 lg:gap-8">
                         
                         {/* Brand Column */}
-                        <div className="lg:col-span-5 space-y-4">
+                        <div className="col-span-2 md:col-span-3 lg:col-span-3 space-y-4">
                             <Link to="/" className="inline-block hover:opacity-90 transition-opacity">
                                 <img
                                     src="/logo.png?v=3"
@@ -943,41 +998,58 @@ export default function HomePage() {
                                 <strong className="text-white font-bold">invitto.com.mx</strong> es la plataforma oficial de invitaciones digitales con RSVP inteligente en México. Sin comisiones sorpresa, cobro transparente en Pesos (MXN) y soporte local.
                             </p>
                             <p className="text-[11px] text-slate-400 font-medium">
-                                Bodas · XV Años · Bautizos · Cumpleaños · Eventos Privados
+                                León, Guanajuato · Hecho en México
                             </p>
                         </div>
 
+                        {/* Invitaciones para... Column */}
+                        <div className="col-span-1 md:col-span-1 lg:col-span-3 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Invitaciones para…</p>
+                            <ul className="space-y-2 text-xs text-slate-400">
+                                <li><Link to="/invitaciones-digitales-boda" className="hover:text-white transition-colors">Bodas</Link></li>
+                                <li><Link to="/invitaciones-digitales-xv-anos" className="hover:text-white transition-colors">XV Años</Link></li>
+                                <li><Link to="/invitaciones-digitales-cumpleanos" className="hover:text-white transition-colors">Cumpleaños</Link></li>
+                                <li><Link to="/invitaciones-digitales-bautizo" className="hover:text-white transition-colors">Bautizos</Link></li>
+                                <li><Link to="/invitaciones-digitales-primera-comunion" className="hover:text-white transition-colors">Primera Comunión</Link></li>
+                                <li><Link to="/invitaciones-digitales-baby-shower" className="hover:text-white transition-colors">Baby Shower</Link></li>
+                                <li><Link to="/invitaciones-digitales-revelacion-de-genero" className="hover:text-white transition-colors">Revelación de Género</Link></li>
+                                <li><Link to="/invitaciones-digitales-graduacion" className="hover:text-white transition-colors">Graduaciones</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Por ciudad Column */}
+                        <div className="col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Por ciudad</p>
+                            <ul className="space-y-2 text-xs text-slate-400">
+                                <li><Link to="/invitaciones-digitales-cdmx" className="hover:text-white transition-colors">CDMX</Link></li>
+                                <li><Link to="/invitaciones-digitales-guadalajara" className="hover:text-white transition-colors">Guadalajara</Link></li>
+                                <li><Link to="/invitaciones-digitales-monterrey" className="hover:text-white transition-colors">Monterrey</Link></li>
+                                <li><Link to="/invitaciones-digitales-leon" className="hover:text-white transition-colors">León, Gto.</Link></li>
+                            </ul>
+                        </div>
+
                         {/* Product Column */}
-                        <div className="lg:col-span-3 space-y-3">
+                        <div className="col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
                             <p className="text-xs font-bold uppercase tracking-widest text-white">Producto</p>
                             <ul className="space-y-2 text-xs text-slate-400">
                                 <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
-                                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos interactivos</Link></li>
+                                <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                                 <li><Link to="/confirma" className="hover:text-white transition-colors">Invitto Confirma</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
-                                <li><Link to="/blog" className="hover:text-white transition-colors">Blog y consejos</Link></li>
-                                <li><Link to="/faq" className="hover:text-white transition-colors">Preguntas frecuentes (FAQ)</Link></li>
+                                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                                <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
                             </ul>
                         </div>
 
-                        {/* Legal Column */}
-                        <div className="lg:col-span-2 space-y-3">
-                            <p className="text-xs font-bold uppercase tracking-widest text-white">Legal</p>
-                            <ul className="space-y-2 text-xs text-slate-400">
-                                <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
-                                <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Aviso de privacidad</Link></li>
-                                <li><Link to="/cookies" className="hover:text-white transition-colors">Política de cookies</Link></li>
-                            </ul>
-                        </div>
-
-                        {/* Contact & Access Column */}
-                        <div className="lg:col-span-2 space-y-3">
-                            <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto</p>
+                        {/* Contact & Legal Column */}
+                        <div className="col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white">Contacto y Legal</p>
                             <ul className="space-y-2 text-xs text-slate-400">
                                 <li><a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp Soporte</a></li>
                                 <li><a href="mailto:soporte@invitto.com.mx" className="hover:text-white transition-colors">soporte@invitto.com.mx</a></li>
                                 <li><Link to="/login" className="hover:text-white transition-colors">Iniciar sesión</Link></li>
-                                <li><Link to="/dashboard/new" className="hover:text-white transition-colors">Crear borrador</Link></li>
+                                <li><Link to="/terminos-y-condiciones" className="hover:text-white transition-colors">Términos</Link></li>
+                                <li><Link to="/aviso-de-privacidad" className="hover:text-white transition-colors">Privacidad</Link></li>
                             </ul>
                         </div>
 

@@ -64,6 +64,10 @@ const BlogPost             = React.lazy(() => import('./pages/blog/BlogPostPage'
 const InvitacionesBoda       = React.lazy(() => import('./pages/seo/InvitacionesBodaPage'));
 const InvitacionesXV         = React.lazy(() => import('./pages/seo/InvitacionesXVPage'));
 const InvitacionesCumpleanos = React.lazy(() => import('./pages/seo/InvitacionesCumpleanosPage'));
+const InvitacionesBautizo    = React.lazy(() => import('./pages/seo/InvitacionesBautizoPage'));
+const InvitacionesComunion   = React.lazy(() => import('./pages/seo/InvitacionesPrimeraComunionPage'));
+const InvitacionesBabyShower = React.lazy(() => import('./pages/seo/InvitacionesBabyShowerPage'));
+const InvitacionesGraduacion = React.lazy(() => import('./pages/seo/InvitacionesGraduacionPage'));
 const InvitacionesCDMX       = React.lazy(() => import('./pages/seo/InvitacionesCDMXPage'));
 const InvitacionesGDL        = React.lazy(() => import('./pages/seo/InvitacionesGuadalajaraPage'));
 const InvitacionesMTY        = React.lazy(() => import('./pages/seo/InvitacionesMonterreyPage'));
@@ -132,15 +136,19 @@ function AppRoutes() {
         <Route path="/corporativo"   element={<OneHomePage />} />
 
         {/* SEO Programmatic Landing Pages */}
-        <Route path="/invitaciones-digitales-boda"         element={<InvitacionesBoda />} />
-        <Route path="/invitaciones-digitales-xv-anos"      element={<InvitacionesXV />} />
-        <Route path="/invitaciones-digitales-cumpleanos"   element={<InvitacionesCumpleanos />} />
-        <Route path="/invitaciones-digitales-cdmx"         element={<InvitacionesCDMX />} />
-        <Route path="/invitaciones-digitales-guadalajara"  element={<InvitacionesGDL />} />
-        <Route path="/invitaciones-digitales-monterrey"    element={<InvitacionesMTY />} />
-        <Route path="/invitaciones-digitales-leon"         element={<InvitacionesLeon />} />
-        <Route path="/invitaciones-digitales-vs-papel"     element={<InvitacionesVsPapel />} />
+        <Route path="/invitaciones-digitales-boda"                 element={<InvitacionesBoda />} />
+        <Route path="/invitaciones-digitales-xv-anos"              element={<InvitacionesXV />} />
+        <Route path="/invitaciones-digitales-cumpleanos"           element={<InvitacionesCumpleanos />} />
+        <Route path="/invitaciones-digitales-bautizo"              element={<InvitacionesBautizo />} />
+        <Route path="/invitaciones-digitales-primera-comunion"      element={<InvitacionesComunion />} />
+        <Route path="/invitaciones-digitales-baby-shower"          element={<InvitacionesBabyShower />} />
         <Route path="/invitaciones-digitales-revelacion-de-genero" element={<InvitacionesRevelacion />} />
+        <Route path="/invitaciones-digitales-graduacion"           element={<InvitacionesGraduacion />} />
+        <Route path="/invitaciones-digitales-cdmx"                 element={<InvitacionesCDMX />} />
+        <Route path="/invitaciones-digitales-guadalajara"          element={<InvitacionesGDL />} />
+        <Route path="/invitaciones-digitales-monterrey"            element={<InvitacionesMTY />} />
+        <Route path="/invitaciones-digitales-leon"                 element={<InvitacionesLeon />} />
+        <Route path="/invitaciones-digitales-vs-papel"             element={<InvitacionesVsPapel />} />
         <Route path="/invitto-vs-paperless-post"           element={<InvittoVsPaperless />} />
         <Route path="/invitto-vs-greenvelope"              element={<InvittoVsGreenvelope />} />
         <Route path="/invitto-vs-otras-plataformas"        element={<InvittoVsOtras />} />

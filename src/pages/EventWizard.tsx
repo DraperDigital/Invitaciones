@@ -203,9 +203,16 @@ export default function EventWizard() {
 
         if (!id) {
             const preselectedTheme = searchParams.get('theme');
-            if (preselectedTheme) {
-                setData(prev => ({ ...prev, theme: preselectedTheme }));
-            }
+            const preselectedTipo = searchParams.get('tipo');
+            const matchedTipo = preselectedTipo ? EVENT_TYPE_OPTIONS.find(opt => opt.id === preselectedTipo) : null;
+
+            setData(prev => ({
+                ...prev,
+                ...(matchedTipo ? {
+                    event_type: matchedTipo.id,
+                    theme: preselectedTheme || matchedTipo.defaultTheme || prev.theme
+                } : (preselectedTheme ? { theme: preselectedTheme } : {}))
+            }));
             setDataLoaded(true);
             return;
         }
