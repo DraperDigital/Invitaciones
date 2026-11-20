@@ -27,8 +27,6 @@ export default function ColorPalettePicker({
     onResetOriginal,
     onGoToDetailDesign,
 }: ColorPalettePickerProps) {
-    if (!isOpen) return null;
-
     // Detect if current theme_config has any custom color overrides
     const hasColorOverrides = Boolean(
         currentThemeConfig.accent_color ||
@@ -69,6 +67,8 @@ export default function ColorPalettePicker({
         const palette = generatePaletteFromColor(newColor, `Los colores ${weddingOrEventLabel}`);
         onSelectPalette(palette);
     };
+
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-[90] flex items-end md:items-center justify-center">

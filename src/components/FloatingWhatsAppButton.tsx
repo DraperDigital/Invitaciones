@@ -11,13 +11,9 @@ export default function FloatingWhatsAppButton() {
 
     const [showBubble, setShowBubble] = useState(false);
 
-    // No mostrar en el dashboard administrativo
-    if (pathname.startsWith('/dashboard')) {
-        return null;
-    }
-
-    // No mostrar en las invitaciones de los invitados ni previews
-    if (
+    // Calcular si debe ocultarse en ciertas rutas (dashboard, invitaciones, etc.)
+    const hidden = (
+        pathname.startsWith('/dashboard') ||
         pathname.startsWith('/i/') ||
         pathname.startsWith('/preview/') ||
         pathname.startsWith('/invitacion/') ||
@@ -27,11 +23,11 @@ export default function FloatingWhatsAppButton() {
         pathname === '/baby-posada' ||
         pathname === '/baby-posada-revelacion' ||
         pathname === '/cecilia-70'
-    ) {
-        return null;
-    }
+    );
 
     useEffect(() => {
+        if (hidden) return;
+
         let isDismissed = false;
         try {
             isDismissed = Boolean(sessionStorage.getItem(BUBBLE_DISMISSED_KEY));
@@ -65,7 +61,12 @@ export default function FloatingWhatsAppButton() {
             clearTimeout(timer);
             window.removeEventListener('scroll', handleScroll);
         };
-    }, [pathname]);
+    }, [pathname, hidden]);
+
+    // El return null se ejecuta después de TODOS los hooks para cumplir con las Reglas de Hooks de React
+    if (hidden) {
+        return null;
+    }
 
     const handleDismissBubble = (e: React.MouseEvent) => {
         e.preventDefault();

@@ -200,6 +200,28 @@ import ScrollToTop from './components/ScrollToTop';
 import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
 const LaunchPromoPopup = React.lazy(() => import('./components/LaunchPromoPopup'));
 
+function RoutedApp() {
+  const location = useLocation();
+  return (
+    <>
+      {/* Reset scroll on navigation */}
+      <ScrollToTop />
+      {/* Boundary interno: captura errores de render en cualquier ruta y reinicia su estado al cambiar de ruta */}
+      <ErrorBoundary key={location.pathname} resetKey={location.pathname}>
+        <AppRoutes />
+      </ErrorBoundary>
+      {/* Launch promo popup — self-contained, only renders on public routes */}
+      <Suspense fallback={null}>
+        <LaunchPromoPopup />
+      </Suspense>
+      {/* Botón flotante de WhatsApp — solo en páginas públicas */}
+      <FloatingWhatsAppButton />
+      {/* Cookie Consent Banner */}
+      <CookieBanner />
+    </>
+  );
+}
+
 function App() {
   return (
     // Boundary externo: captura errores en AuthProvider o BrowserRouter
@@ -207,20 +229,7 @@ function App() {
       <ToastProvider>
         <AuthProvider>
           <BrowserRouter>
-            {/* Reset scroll on navigation */}
-            <ScrollToTop />
-            {/* Boundary interno: captura errores de render en cualquier ruta */}
-            <ErrorBoundary>
-              <AppRoutes />
-            </ErrorBoundary>
-            {/* Launch promo popup — self-contained, only renders on public routes */}
-            <Suspense fallback={null}>
-              <LaunchPromoPopup />
-            </Suspense>
-            {/* Botón flotante de WhatsApp — solo en páginas públicas */}
-            <FloatingWhatsAppButton />
-            {/* Cookie Consent Banner */}
-            <CookieBanner />
+            <RoutedApp />
           </BrowserRouter>
         </AuthProvider>
         {/* Toaster fuera del router para que sobreviva navegaciones */}

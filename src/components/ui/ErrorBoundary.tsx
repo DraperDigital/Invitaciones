@@ -3,21 +3,34 @@ import { Component, type ErrorInfo, type ReactNode } from 'react';
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  resetKey?: string;
 }
 
 interface State {
   hasError: boolean;
   error: Error | null;
+  prevResetKey?: string;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, prevResetKey: props.resetKey };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error };
+  }
+
+  static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
+    if (props.resetKey !== undefined && props.resetKey !== state.prevResetKey) {
+      return {
+        hasError: false,
+        error: null,
+        prevResetKey: props.resetKey,
+      };
+    }
+    return null;
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
