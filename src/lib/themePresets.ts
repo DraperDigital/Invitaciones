@@ -294,6 +294,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
     },
+    'lirio-vainilla': {
+        label: 'Lirio Vainilla',
+        desc: 'Estilo flat lay: tarjetas de papel, sobre con forro de lirios, sello de cera y tonos salvia',
+        icon: '🤍',
+        primaryColor: '#1D1D1B',
+        accentColor: '#1D1D1B',
+        cardBgColor: '#FBFAF6',
+        sectionBgColor: '#DCDCD2',
+        textPrimary: '#1D1D1B',
+        textSecondary: '#55554F',
+        heroTextColor: '#1D1D1B',
+        heroBgColor: '#DCDCD2',
+        typographyPreset: 'romantica'
+    },
     'reveal-bw': {
         label: 'Misterio Monocromático',
         desc: 'Blanco puro con contrastes negros y elegancia total. Cero pistas para máxima intriga.',
@@ -349,6 +363,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categories: ['boda', 'xv', 'corporate', 'graduacion', 'cumpleanos'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categories: ['boda', 'graduacion', 'cumpleanos', 'xv'], categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo'], categoryLabel: 'Boda / Flat lay', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
     // ── Plantillas Infantiles Exclusivas ──
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
