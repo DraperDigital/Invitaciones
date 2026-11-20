@@ -38,7 +38,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [age, setAge] = useState(cfg.age || cfg.turning_age || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
     const [closingMessage, setClosingMessage] = useState<string>(cfg.closing_message ?? cfg.closingMessage ?? getDefaultClosingMessage(event.event_type));
-    const [showClosingMessage, setShowClosingMessage] = useState<boolean>(cfg.show_closing_message !== false && cfg.showClosingMessage !== false);
+    const [showClosingMessage, setShowClosingMessage] = useState<boolean>(cfg.show_closing_message === true || cfg.showClosingMessage === true);
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || cfg.floral_avatar_url || '');
     const [heroImagePositionY, setHeroImagePositionY] = useState(Number(cfg.hero_image_position_y ?? 50));

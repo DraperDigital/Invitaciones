@@ -3654,7 +3654,9 @@ END:VCALENDAR`;
         // Mensaje de cierre: parte del módulo Pie en TODAS las plantillas.
         // Texto editable (closing_message); si no hay, se sugiere uno según el tipo de evento.
         // Tipografía: usa la de títulos de la plantilla (font-serif / reglas del tema), no una fija.
-        const showClosing = cfg.show_closing_message !== false && cfg.showClosingMessage !== false;
+        // Solo se muestra si show_closing_message === true: las invitaciones nuevas lo traen prendido
+        // desde el asistente; las que ya existían no cambian hasta que el anfitrión lo active.
+        const showClosing = cfg.show_closing_message === true || cfg.showClosingMessage === true;
         const closingText = (cfg.closing_message ?? cfg.closingMessage ?? getDefaultClosingMessage(event?.event_type)).trim();
         const closingDate = event?.date_time ? new Date(event.date_time) : null;
         const closingDateLabel = closingDate && !isNaN(closingDate.getTime()) ? format(closingDate, 'dd · MM · yyyy') : '';

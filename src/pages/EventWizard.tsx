@@ -480,6 +480,8 @@ export default function EventWizard() {
                         gift_message: data.gift_message,
                         // Preset de orden de secciones según tipo de evento
                         sectionOrder: layoutOrder,
+                        // Mensaje de cierre del Pie: prendido para invitaciones nuevas
+                        show_closing_message: true,
                     },
                     slug: generatedSlug,
                 };
