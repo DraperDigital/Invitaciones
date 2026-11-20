@@ -282,10 +282,10 @@ const ConciergeLanding: React.FC = () => {
                         <div className="bg-white/5 p-6 rounded-2xl border border-white/10 space-y-2">
                             <div className="flex items-center gap-2 text-[#DF3B94]">
                                 <Check className="h-5 w-5 shrink-0" />
-                                <h4 className="font-bold text-sm text-white">Un número que puedes darle al salón.</h4>
+                                <h4 className="font-bold text-sm text-white">Tu lista final para el salón.</h4>
                             </div>
                             <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                Tu lista final en Excel con el total de pases confirmados.
+                                Organizada en Excel y a tiempo, con la respuesta clara de cada invitación.
                             </p>
                         </div>
                     </div>
@@ -415,11 +415,11 @@ const ConciergeLanding: React.FC = () => {
                     </div>
 
                     <h2 className="text-3xl md:text-5xl font-display font-extrabold text-white leading-tight">
-                        Que la lista que le das al salón sea la real.
+                        Tu lista final a tiempo y con respuestas claras.
                     </h2>
 
                     <p className="text-base md:text-xl text-slate-300 font-normal">
-                        Nos encargamos de confirmar a cada uno de tus invitados para que disfrutes tu evento sin estrés.
+                        Buscamos un sí o un no claro de cada invitación y reconfirmamos la semana de tu evento para que disfrutes sin incertidumbre.
                     </p>
 
                     <div className="pt-2 flex flex-col items-center gap-3">

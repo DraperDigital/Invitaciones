@@ -77,7 +77,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: 'paragraph',
-        content: 'Para eventos de lujo o parejas que no tienen tiempo, existen opciones integrales. Si tú haces tu invitación pero quieres que llamemos a tus invitados, puedes sumar Invitto Confirma ($3,499 MXN). Y si quieres que un equipo haga absolutamente todo —diseño desde cero a tu medida, dominio propio, atención de dudas y confirmación con 3 rondas + llamada y entrega 15 días antes con garantía del 100%—, el Plan Concierge ($4,499 MXN) es la solución completa llave en mano.'
+        content: 'Para eventos de lujo o parejas que no tienen tiempo, existen opciones integrales. Si tú haces tu invitación pero quieres que llamemos a tus invitados, puedes sumar Invitto Confirma ($3,499 MXN). Y si quieres que un equipo haga absolutamente todo —diseño desde cero a tu medida, dominio propio, atención de dudas, confirmación con 3 rondas + llamada, entrega de tu lista final 15 días antes con garantía y reconfirmación la semana del evento—, el Plan Concierge ($4,499 MXN) es la solución completa llave en mano.'
       },
       {
         type: 'heading',
@@ -125,7 +125,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: 'paragraph',
-        content: 'Con el papel impreso, el proceso de confirmación es lento e ineficiente: los novios deben llamar o enviar mensajes uno por uno. Una invitación digital inteligente incluye un sistema RSVP integrado que actualiza instantáneamente un panel de control con el número exacto de adultos y niños confirmados, intolerancias alimentarias y comentarios.'
+        content: 'Con el papel impreso, el proceso de confirmación es lento e ineficiente: los novios deben llamar o enviar mensajes uno por uno. Una invitación digital inteligente incluye un sistema RSVP integrado que actualiza instantáneamente un panel de control con las respuestas y pases confirmados de cada familia, intolerancias alimentarias y comentarios.'
       },
       {
         type: 'heading',
