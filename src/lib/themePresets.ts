@@ -294,6 +294,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
     },
+    'lirio-vainilla': {
+        label: 'Lirio Vainilla (diseño a la medida)',
+        desc: 'Estilo flat lay: tarjetas de papel, sobre con forro de lirios, sello de cera y tonos salvia',
+        icon: '🤍',
+        primaryColor: '#1D1D1B',
+        accentColor: '#1D1D1B',
+        cardBgColor: '#FBFAF6',
+        sectionBgColor: '#DCDCD2',
+        textPrimary: '#1D1D1B',
+        textSecondary: '#55554F',
+        heroTextColor: '#1D1D1B',
+        heroBgColor: '#DCDCD2',
+        typographyPreset: 'romantica'
+    },
     'reveal-bw': {
         label: 'Misterio Monocromático',
         desc: 'Blanco puro con contrastes negros y elegancia total. Cero pistas para máxima intriga.',
