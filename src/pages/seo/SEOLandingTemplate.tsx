@@ -850,7 +850,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
         {/* ─── Footer ─────────────────────────────────────────────────────── */}
         <footer className="py-12 px-4 md:px-6 border-t text-center text-xs space-y-4" style={{ borderColor: th.line, color: th.muted }}>
           <div className="flex justify-center items-center gap-6 font-semibold">
-            <Link to="/planes" className="hover:underline">Planes y precios</Link>
+            <Link to={data.eventType ? `/planes?tipo=${data.eventType}` : '/planes'} className="hover:underline">Planes y precios</Link>
             <Link to="/ejemplos" className="hover:underline">Ejemplos</Link>
             <Link to="/confirma" className="hover:underline">Invitto Confirma</Link>
             <Link to="/terminos" className="hover:underline">Términos</Link>
@@ -1196,7 +1196,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             <div className="lg:col-span-4 space-y-3">
               <p className="text-xs font-bold uppercase tracking-widest text-white">Navegación</p>
               <ul className="space-y-2 text-xs text-slate-400">
-                <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
+                <li><Link to={data.eventType ? `/planes?tipo=${data.eventType}` : '/planes'} className="hover:text-white transition-colors">Planes y precios</Link></li>
                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>

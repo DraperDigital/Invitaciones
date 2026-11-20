@@ -22,6 +22,7 @@ interface Props {
     onSwitchToManual: () => void;
     onSubmit: () => void;
     loading: boolean;
+    isTypePreselected?: boolean;
 }
 
 const MONTHS_MAP: Record<string, number> = {
@@ -201,7 +202,7 @@ function parseDateStr(str: string): { year: number; month: number; day: number; 
     return null;
 }
 
-export default function WizardAiAssistant({ data, updateData, onSwitchToManual, onSubmit, loading }: Props) {
+export default function WizardAiAssistant({ data, updateData, onSwitchToManual, onSubmit, loading, isTypePreselected }: Props) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [currentStep, setCurrentStep] = useState<string>('intro');
@@ -355,6 +356,40 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
     };
 
     const startConversation = () => {
+        if (isTypePreselected && data.event_type) {
+            const option = EVENT_TYPE_OPTIONS.find(o => o.id === data.event_type) || EVENT_TYPE_OPTIONS[0];
+
+            let namePrompt = '¡Excelente! ¿Cómo se llaman los novios? (Ejemplo: Sofía & Carlos)';
+            if (data.event_type === 'xv') {
+                namePrompt = '¡Qué hermosa celebración! ¿Cuál es el nombre de la quinceañera? (Ejemplo: Valeria)';
+            } else if (data.event_type === 'gender_reveal') {
+                namePrompt = '¡Felicidades por esta nueva etapa! ¿Qué título llevará la revelación? (Ejemplo: ¿Mateo o Sofía? / Revelación Bebé Navarro)';
+            } else if (data.event_type === 'baby_shower') {
+                namePrompt = '¡Qué tierna ocasión! ¿Cómo se llamará el bebé o la futura mamá? (Ejemplo: Baby Shower de Lucas / Mamá Regina)';
+            } else if (data.event_type === 'bautizo') {
+                namePrompt = '¡Bendiciones! ¿Cuál es el nombre del pequeño o pequeña que se bautiza? (Ejemplo: Bautizo de Santiago)';
+            } else if (data.event_type === 'birthday') {
+                namePrompt = '¡A festejar la vida! ¿Cómo se llama el cumpleañero o cumpleañera y cuántos años cumple? (Ejemplo: Cumpleaños de Emilia - 30 Años)';
+            } else if (data.event_type === 'graduacion') {
+                namePrompt = '¡Gran logro! ¿Cuál es el nombre del graduado o la generación escolar? (Ejemplo: Graduación Ana - Lic. en Psicología)';
+            } else if (data.event_type === 'primera_comunion') {
+                namePrompt = '¡Qué momento tan especial! ¿Cuál es el nombre de quien hace la Primera Comunión? (Ejemplo: Primera Comunión de Mateo)';
+            } else if (data.event_type === 'confirmacion') {
+                namePrompt = '¡Bendiciones! ¿Cuál es el nombre de quien recibe la Confirmación? (Ejemplo: Confirmación de Andrea)';
+            } else if (data.event_type === 'corporate') {
+                namePrompt = '¡Excelente! ¿Cuál es el nombre de tu empresa o el título del evento? (Ejemplo: Gala Anual Grupo Innova)';
+            }
+
+            addAssistantMessage(
+                `¡Hola! Soy tu asistente de Invitto ✨. Veo que estás organizando tu invitación para **${option.label}**. ¡Excelente elección! 🎉\n\n${namePrompt}`,
+                [
+                    { label: '🔄 Cambiar a otro tipo de evento', value: '__change_event_type__' }
+                ]
+            );
+            setCurrentStep('ask_title');
+            return;
+        }
+
         const typeChips = EVENT_TYPE_OPTIONS.map(opt => ({
             label: opt.label,
             value: opt.id,
@@ -390,6 +425,20 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
 
     const processStep = (step: string, userText: string, directValue?: string) => {
         const lower = (directValue || userText).toLowerCase();
+
+        if (directValue === '__change_event_type__' || lower === '__change_event_type__' || lower.includes('cambiar tipo') || lower.includes('cambiar evento') || lower.includes('otro tipo')) {
+            const typeChips = EVENT_TYPE_OPTIONS.map(opt => ({
+                label: opt.label,
+                value: opt.id,
+                icon: opt.icon
+            }));
+            addAssistantMessage(
+                '¡Sin problema! ¿Qué tipo de celebración prefieres organizar?',
+                typeChips
+            );
+            setCurrentStep('ask_event_type');
+            return;
+        }
 
         switch (step) {
             case 'ask_event_type': {

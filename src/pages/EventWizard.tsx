@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, Sparkles, SlidersHorizontal } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
 import WizardAiAssistant from '../components/wizard/WizardAiAssistant';
 
@@ -180,16 +180,63 @@ const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
     },
 };
 
+export function resolvePreselectedEventType(searchParams: URLSearchParams): { eventType: string; theme?: string } | null {
+    const rawTipo = searchParams.get('tipo') || searchParams.get('type') || searchParams.get('event_type') || searchParams.get('category');
+    const rawTheme = searchParams.get('theme');
+
+    let matchedId: string | null = null;
+
+    if (rawTipo) {
+        const lower = rawTipo.toLowerCase().trim();
+        if (['wedding', 'boda', 'bodas'].includes(lower)) matchedId = 'wedding';
+        else if (['xv', 'quince', 'quinceanera', 'quinceañera', 'xv-anos', 'xv_anos'].includes(lower)) matchedId = 'xv';
+        else if (['birthday', 'cumple', 'cumpleanos', 'cumpleaños', 'aniversario'].includes(lower)) matchedId = 'birthday';
+        else if (['bautizo', 'bautizos', 'bautismo'].includes(lower)) matchedId = 'bautizo';
+        else if (['primera_comunion', 'comunion', 'comunión'].includes(lower)) matchedId = 'primera_comunion';
+        else if (['confirmacion', 'confirmación'].includes(lower)) matchedId = 'confirmacion';
+        else if (['baby_shower', 'baby-shower', 'babyshower'].includes(lower)) matchedId = 'baby_shower';
+        else if (['gender_reveal', 'gender-reveal', 'revelacion', 'revelación'].includes(lower)) matchedId = 'gender_reveal';
+        else if (['graduacion', 'graduación'].includes(lower)) matchedId = 'graduacion';
+        else if (['corporate', 'corporativo', 'empresa', 'gala'].includes(lower)) matchedId = 'corporate';
+        else {
+            const direct = EVENT_TYPE_OPTIONS.find(o => o.id === lower);
+            if (direct) matchedId = direct.id;
+        }
+    }
+
+    // Si no hubo tipo directo pero sí theme, inferir la categoría desde CANONICAL_TEMPLATES
+    if (!matchedId && rawTheme) {
+        const tpl = CANONICAL_TEMPLATES.find(t => t.id === rawTheme || t.slug === rawTheme);
+        if (tpl) {
+            const cat = tpl.category;
+            if (cat === 'boda') matchedId = 'wedding';
+            else if (cat === 'xv') matchedId = 'xv';
+            else if (cat === 'cumpleanos') matchedId = 'birthday';
+            else if (cat === 'bautizo') matchedId = 'bautizo';
+            else if (cat === 'comunion') matchedId = 'primera_comunion';
+            else if (cat === 'gender_reveal') matchedId = 'gender_reveal';
+            else if (cat === 'graduacion') matchedId = 'graduacion';
+            else if (cat === 'infantil') matchedId = 'bautizo';
+            else if (cat === 'corporate') matchedId = 'corporate';
+        }
+    }
+
+    if (matchedId) {
+        const option = EVENT_TYPE_OPTIONS.find(o => o.id === matchedId);
+        return {
+            eventType: matchedId,
+            theme: rawTheme || option?.defaultTheme
+        };
+    }
+
+    return null;
+}
+
 export default function EventWizard() {
     const { user } = useAuth();
     const navigate = useNavigate();
     const toast = useToast();
     const { id } = useParams<{ id: string }>();
-    const [step, setStep] = useState(1);
-    const [data, setData] = useState<WizardData>(INITIAL_DATA);
-    const [loading, setLoading] = useState(false);
-    const [dataLoaded, setDataLoaded] = useState(false);
-    const [wizardTemplateFilter, setWizardTemplateFilter] = useState<'recommended' | 'all'>('recommended');
     const [searchParams] = useSearchParams();
     const isWelcome = searchParams.get('welcome') === 'true';
     const preselectedPlan = searchParams.get('plan');
@@ -197,22 +244,48 @@ export default function EventWizard() {
 
     const isEditing = !!id;
     const [creationMode, setCreationMode] = useState<'assistant' | 'manual'>(id ? 'manual' : 'assistant');
+    const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [wizardTemplateFilter, setWizardTemplateFilter] = useState<'recommended' | 'all'>('recommended');
+
+    const [isTypePreselected, setIsTypePreselected] = useState(() => {
+        if (id) return true;
+        return Boolean(resolvePreselectedEventType(searchParams));
+    });
+
+    const [data, setData] = useState<WizardData>(() => {
+        if (id) return INITIAL_DATA;
+        const resolved = resolvePreselectedEventType(searchParams);
+        if (resolved) {
+            const matched = EVENT_TYPE_OPTIONS.find(opt => opt.id === resolved.eventType);
+            return {
+                ...INITIAL_DATA,
+                event_type: resolved.eventType,
+                theme: resolved.theme || matched?.defaultTheme || INITIAL_DATA.theme
+            };
+        }
+        const rawTheme = searchParams.get('theme');
+        if (rawTheme) {
+            return { ...INITIAL_DATA, theme: rawTheme };
+        }
+        return INITIAL_DATA;
+    });
 
     useEffect(() => {
         if (!user || dataLoaded) return;
 
         if (!id) {
-            const preselectedTheme = searchParams.get('theme');
-            const preselectedTipo = searchParams.get('tipo');
-            const matchedTipo = preselectedTipo ? EVENT_TYPE_OPTIONS.find(opt => opt.id === preselectedTipo) : null;
-
-            setData(prev => ({
-                ...prev,
-                ...(matchedTipo ? {
-                    event_type: matchedTipo.id,
-                    theme: preselectedTheme || matchedTipo.defaultTheme || prev.theme
-                } : (preselectedTheme ? { theme: preselectedTheme } : {}))
-            }));
+            const resolved = resolvePreselectedEventType(searchParams);
+            if (resolved) {
+                const matchedTipo = EVENT_TYPE_OPTIONS.find(opt => opt.id === resolved.eventType);
+                setData(prev => ({
+                    ...prev,
+                    event_type: resolved.eventType,
+                    theme: resolved.theme || matchedTipo?.defaultTheme || prev.theme
+                }));
+                setIsTypePreselected(true);
+            }
             setDataLoaded(true);
             return;
         }
@@ -479,6 +552,7 @@ export default function EventWizard() {
                     onSwitchToManual={() => setCreationMode('manual')}
                     onSubmit={() => handleSubmit()}
                     loading={loading}
+                    isTypePreselected={isTypePreselected}
                 />
             ) : (
                 <>

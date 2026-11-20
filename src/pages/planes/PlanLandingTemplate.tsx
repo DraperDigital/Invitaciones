@@ -13,6 +13,8 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const eventId = searchParams.get('id');
+  const theme = searchParams.get('theme');
+  const tipo = searchParams.get('tipo') || searchParams.get('type') || searchParams.get('category');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
 
   const ctaLink = eventId 
     ? `/checkout?plan=${data.id}&id=${eventId}` 
-    : `/dashboard/new?plan=${data.id}`;
+    : `/dashboard/new?plan=${data.id}${theme ? `&theme=${theme}` : ''}${tipo ? `&tipo=${tipo}` : ''}`;
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] font-sans text-[#222B38]">

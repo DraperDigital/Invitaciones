@@ -10,6 +10,7 @@ export default function PlanesPage() {
     const [searchParams] = useSearchParams();
     const eventId = searchParams.get('id');
     const theme = searchParams.get('theme');
+    const tipo = searchParams.get('tipo') || searchParams.get('type') || searchParams.get('category');
     const plans = [
         {
             id: 'clasico',
@@ -231,7 +232,7 @@ export default function PlanesPage() {
 
                             <div className="mt-8 md:mt-10">
                                 <Link 
-                                    to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}`}
+                                    to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}${tipo ? `&tipo=${tipo}` : ''}`}
                                     onClick={() => {
                                         trackEvent('select_item', {
                                             item_id: plan.id,
@@ -322,7 +323,7 @@ export default function PlanesPage() {
 
             {/* Detailed Comparison Table Section */}
             <section id="comparativa" className="border-t border-stone-200/80 bg-gradient-to-b from-stone-50/50 via-white to-stone-50/30">
-                <PlanComparisonTable eventId={eventId} theme={theme} />
+                <PlanComparisonTable eventId={eventId} theme={theme} tipo={tipo} />
             </section>
 
             {/* Final Statement */}

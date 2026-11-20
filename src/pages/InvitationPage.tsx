@@ -3841,9 +3841,9 @@ END:VCALENDAR`;
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
                         <Link 
-                            to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`} 
+                            to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}&tipo=${event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding'}`} 
                             onClick={() => {
-                                const eventCategoria = event?.event_type || 'evento';
+                                const eventCategoria = event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding';
                                 const eventSlug = slug || event?.slug || '';
                                 if (typeof window !== 'undefined' && (window as any).fbq) {
                                     (window as any).fbq('trackCustom', 'ClicMarcaAgua', {
@@ -3996,10 +3996,10 @@ END:VCALENDAR`;
                                         <span>Ver Galería</span>
                                     </Link>
                                     <Link
-                                        to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}`}
+                                        to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}&tipo=${event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding'}`}
                                         onClick={() => {
                                             setShowTemplateMenu(false);
-                                            const eventCategoria = event?.event_type || 'evento';
+                                            const eventCategoria = event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding';
                                             const eventSlug = slug || event?.slug || '';
                                             if (typeof window !== 'undefined' && (window as any).fbq) {
                                                 (window as any).fbq('trackCustom', 'ClicMarcaAgua', {

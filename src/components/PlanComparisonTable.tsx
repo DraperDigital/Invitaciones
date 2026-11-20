@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Check, Minus, Gem, Crown, Heart, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 import { trackEvent } from '../lib/analytics';
@@ -7,6 +7,7 @@ import { trackEvent } from '../lib/analytics';
 interface PlanComparisonTableProps {
     eventId?: string | null;
     theme?: string | null;
+    tipo?: string | null;
 }
 
 interface FeatureItem {
@@ -343,7 +344,9 @@ const PLANS_META = [
     },
 ];
 
-export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTableProps) {
+export default function PlanComparisonTable({ eventId, theme, tipo }: PlanComparisonTableProps) {
+    const [searchParams] = useSearchParams();
+    const effectiveTipo = tipo || searchParams.get('tipo') || searchParams.get('type') || searchParams.get('category');
     const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
     const [selectedMobilePlan, setSelectedMobilePlan] = useState<string>('pro');
 
@@ -357,7 +360,7 @@ export default function PlanComparisonTable({ eventId, theme }: PlanComparisonTa
     const getPlanUrl = (planId: string) => {
         return eventId
             ? `/checkout?plan=${planId}&id=${eventId}`
-            : `/dashboard/new?plan=${planId}${theme ? `&theme=${theme}` : ''}`;
+            : `/dashboard/new?plan=${planId}${theme ? `&theme=${theme}` : ''}${effectiveTipo ? `&tipo=${effectiveTipo}` : ''}`;
     };
 
     const renderValue = (val: string | boolean, isHighlighted = false) => {
