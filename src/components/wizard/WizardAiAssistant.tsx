@@ -1146,17 +1146,12 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             <div className="bg-white rounded-3xl border border-stone-200 shadow-xl overflow-hidden flex flex-col h-[750px] max-h-[85vh]">
                 {/* Header del Asistente */}
                 <div className="px-6 py-4 border-b border-stone-100 bg-gradient-to-r from-stone-900 to-stone-950 text-white flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#DF3B94] to-pink-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30">
-                            <Sparkles className="h-5 w-5 animate-pulse" />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold flex items-center gap-1.5">
-                                Invitto AI
-                                <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
-                            </h3>
-                            <p className="text-[11px] text-stone-400">Creando tu invitación de forma conversacional</p>
-                        </div>
+                    <div>
+                        <h3 className="text-sm font-bold flex items-center gap-1.5">
+                            Invitto AI
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping" />
+                        </h3>
+                        <p className="text-[11px] text-stone-400">Creando tu invitación de forma conversacional</p>
                     </div>
 
                     <div className="flex items-center gap-2">
