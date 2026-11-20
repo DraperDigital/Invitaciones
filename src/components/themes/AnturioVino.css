@@ -1,0 +1,295 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Anturio Vino — piel collage "flat lay" en vino, papel y oro
+   Todo va bajo .theme-anturio-vino (clase que pone InvitationPage en la raíz).
+   No cambia la estructura de los módulos: solo su apariencia.
+   Paleta 60/30/10: papel y gris cálido (60) · vino (30) · oro y olivo (10).
+   ────────────────────────────────────────────────────────────────────── */
+
+.theme-anturio-vino {
+  --av-paper: #f4efe6;
+  --av-paper2: #ede4d4;
+  --av-ink: #3b1a1f;
+  --av-wine: #5c1a26;
+  --av-wine2: #7a2533;
+  --av-gold: #b8973f;
+  --av-olive: #6d7746;
+  --av-bg: #d9d7d3;
+  --av-tex: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 .09 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  --av-anth: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 160'><defs><radialGradient id='g' cx='40%25' cy='35%25' r='75%25'><stop offset='0' stop-color='%237d2536'/><stop offset='.55' stop-color='%234a0f1d'/><stop offset='1' stop-color='%2322050c'/></radialGradient></defs><path d='M60 18 C30 -6 -4 22 8 58 C18 88 46 104 60 128 C74 104 102 88 112 58 C124 22 90 -6 60 18Z' fill='url(%23g)'/><path d='M58 28 C54 10 62 -2 70 -8' stroke='%23e6d8a0' stroke-width='5' stroke-linecap='round' fill='none'/><path d='M60 126 C62 140 58 150 54 160' stroke='%233a0b16' stroke-width='3' fill='none'/></svg>");
+  --av-cartouche: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 400' preserveAspectRatio='none'><defs><radialGradient id='o' cx='50%25' cy='40%25' r='70%25'><stop offset='0' stop-color='%237e8955'/><stop offset='1' stop-color='%235a6339'/></radialGradient></defs><path d='M150 6 C176 6 186 26 206 26 C232 26 244 12 262 26 C282 42 270 64 282 82 C296 104 296 126 288 146 C282 166 296 186 294 210 C292 236 278 250 280 274 C282 300 268 322 248 340 C226 360 196 366 176 382 C164 392 158 396 150 396 C142 396 136 392 124 382 C104 366 74 360 52 340 C32 322 18 300 20 274 C22 250 8 236 6 210 C4 186 18 166 12 146 C4 126 4 104 18 82 C30 64 18 42 38 26 C56 12 68 26 94 26 C114 26 124 6 150 6Z' fill='url(%23o)'/><path d='M150 20 C172 20 182 38 204 38 C226 38 240 26 254 38 C270 52 258 70 270 86 C282 106 282 126 274 146 C268 166 282 186 280 210 C278 232 264 248 266 272 C268 296 254 314 238 330 C218 348 192 354 172 370 C162 378 156 382 150 382 C144 382 138 378 128 370 C108 354 82 348 62 330 C46 314 32 296 34 272 C36 248 22 232 20 210 C18 186 32 166 26 146 C18 126 18 106 30 86 C42 70 30 52 46 38 C60 26 74 38 96 38 C118 38 128 20 150 20Z' fill='none' stroke='%23c9b06a' stroke-width='1.2' opacity='.7'/></svg>");
+  --av-tassel: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 70'><circle cx='17' cy='6' r='5' fill='%23c9a447'/><rect x='11' y='10' width='12' height='9' rx='3' fill='%23b8973f'/><path d='M10 19 L4 66 L30 66 L24 19Z' fill='%23c9a447'/><path d='M12 24 L8 64 M17 24 L17 64 M22 24 L26 64' stroke='%238d6c22' stroke-width='1' opacity='.7'/></svg>");
+  font-family: 'Libre Caslon Text', Georgia, serif !important;
+  color: var(--av-ink);
+  overflow-x: hidden;
+}
+
+/* ── Tipografía ─────────────────────────────────────────────────────── */
+.theme-anturio-vino .font-serif { font-family: 'Libre Caslon Text', Georgia, serif !important; }
+.theme-anturio-vino .font-sans  { font-family: 'Libre Caslon Text', Georgia, serif !important; }
+
+/* Títulos de módulo → versalitas vino con mucho aire */
+.theme-anturio-vino section h3[class*="text-4xl"],
+.theme-anturio-vino section h3[class*="text-3xl"],
+.theme-anturio-vino #gallery h2,
+.theme-anturio-vino #rsvp h2 {
+  font-family: 'Libre Caslon Text', Georgia, serif !important;
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  line-height: 1.3 !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  color: var(--av-wine) !important;
+}
+/* Bienvenida → nombres finos con & caligráfico */
+.theme-anturio-vino #guest_welcome h2 {
+  font-family: 'Italiana', serif !important;
+  font-weight: 400 !important;
+  font-size: 44px !important;
+  letter-spacing: .06em !important;
+  color: var(--av-wine) !important;
+}
+.theme-anturio-vino #guest_welcome p { font-style: italic; color: #5a3a3a !important; }
+
+.theme-anturio-vino section h4,
+.theme-anturio-vino section [class*="text-2xl"][class*="uppercase"] {
+  letter-spacing: .14em !important;
+  color: var(--av-wine) !important;
+}
+
+/* ── Fondos de sección ──────────────────────────────────────────────── */
+.theme-anturio-vino section,
+.theme-anturio-vino #gallery > * {
+  background-image: var(--av-tex) !important;
+}
+
+/* ── Tarjetas → papel con orilla rasgada ────────────────────────────── */
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"] {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--av-paper) var(--av-tex);
+  filter: url(#av-deckle) drop-shadow(0 12px 14px rgba(40, 20, 10, .24));
+  pointer-events: none;
+}
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"]:nth-child(even)::before { background-color: var(--av-paper2); }
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"]::before { display: none; }
+
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"]:nth-child(odd)  { transform: rotate(-1.4deg); }
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"]:nth-child(even) { transform: rotate(1.2deg); }
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"]:hover { transform: rotate(0deg); }
+.theme-anturio-vino section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"] { transform: none; }
+
+/* Anturio sobre la esquina de la primera tarjeta de ubicación */
+.theme-anturio-vino #location .invitation-locations-wrapper > :first-child::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -14px;
+  width: 74px;
+  height: 98px;
+  background: var(--av-anth) center / contain no-repeat;
+  filter: drop-shadow(0 8px 8px rgba(30, 0, 10, .35));
+  transform: rotate(24deg);
+  pointer-events: none;
+}
+
+/* ── Código de vestimenta → cartucho verde olivo con borla ──────────── */
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"] {
+  transform: none !important;
+  padding: 64px 40px 72px !important;
+  margin-bottom: 56px;
+}
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"]::before {
+  background: var(--av-cartouche) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, .25));
+}
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"]::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -58px;
+  width: 30px;
+  height: 64px;
+  margin-left: -15px;
+  background: var(--av-tassel) center / contain no-repeat;
+}
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"] * { color: #f2ead6 !important; }
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"] h3,
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"] h4,
+.theme-anturio-vino #dress_code [class*="bg-[var(--card-bg)]"] [class*="text-2xl"] {
+  color: #fff7e6 !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase;
+}
+
+/* ── Botones → píldora de línea vino ────────────────────────────────── */
+.theme-anturio-vino section a[class*="rounded-full"] {
+  background: transparent !important;
+  color: var(--av-wine) !important;
+  border: 1.5px solid var(--av-wine) !important;
+  box-shadow: none !important;
+  font-family: 'Libre Caslon Text', serif !important;
+  letter-spacing: .18em !important;
+}
+.theme-anturio-vino section button[class*="rounded-2xl"],
+.theme-anturio-vino section a[class*="rounded-xl"],
+.theme-anturio-vino section a[class*="rounded-2xl"] {
+  border-radius: 999px !important;
+  font-family: 'Libre Caslon Text', serif !important;
+  letter-spacing: .18em !important;
+  box-shadow: none !important;
+}
+.theme-anturio-vino section input,
+.theme-anturio-vino section textarea,
+.theme-anturio-vino section select {
+  border-radius: 6px !important;
+  font-family: 'Libre Caslon Text', serif !important;
+}
+
+/* Íconos de color → vino / oro */
+.theme-anturio-vino #location .rounded-full:not(a):not(button) { background: #efe4d6 !important; }
+.theme-anturio-vino .text-accent,
+.theme-anturio-vino #location .rounded-full:not(a):not(button) svg { color: var(--av-wine) !important; stroke: var(--av-wine) !important; }
+
+/* ── RSVP: sello de cera dorado ─────────────────────────────────────── */
+.theme-anturio-vino #rsvp { position: relative; padding-top: 104px !important; }
+.theme-anturio-vino #rsvp::before {
+  content: '';
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  width: 66px;
+  height: 66px;
+  margin-left: -33px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ecd58e, #c9a447 45%, #8d6c22 100%);
+  box-shadow: inset 0 0 0 9px rgba(0, 0, 0, 0), inset 0 0 0 10px rgba(122, 92, 27, .45);
+  filter: url(#av-deckle-s) drop-shadow(0 4px 5px rgba(0, 0, 0, .3));
+}
+
+/* ── Galería: fotos tipo polaroid ───────────────────────────────────── */
+.theme-anturio-vino #gallery img {
+  border: 10px solid #fbfaf7;
+  border-bottom-width: 34px;
+  border-radius: 0 !important;
+  box-shadow: 0 14px 22px -10px rgba(0, 0, 0, .35);
+}
+.theme-anturio-vino #gallery [class*="rounded"] { border-radius: 0 !important; }
+
+/* ── Pie: banda sólida vino "Te esperamos" ──────────────────────────── */
+.theme-anturio-vino #footer { padding-top: 0 !important; }
+.theme-anturio-vino #footer::before {
+  content: 'Te esperamos';
+  display: grid;
+  place-items: center;
+  height: 240px;
+  margin-bottom: 28px;
+  font-family: 'Pinyon Script', cursive;
+  font-size: 56px;
+  color: #f4efe6;
+  background: var(--av-wine);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   PORTADA
+   ══════════════════════════════════════════════════════════════════════ */
+.av-hero {
+  position: relative;
+  min-height: 100svh;
+  padding: 36px 18px 40px;
+  background: #d9d7d3 var(--av-tex);
+  color: #3b1a1f;
+  overflow: hidden;
+}
+.av-letters { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.av-letter {
+  position: absolute; width: 62vw; max-width: 320px; padding: 20px 16px;
+  background: #e9dcc3 var(--av-tex); filter: url(#av-deckle);
+  font-family: 'La Belle Aurore', cursive; color: #6b5640; font-size: 15px; line-height: 1.7; opacity: .7;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+}
+.av-l1 { top: 4%; left: -22vw; transform: rotate(-6deg); }
+.av-l2 { top: 52%; right: -24vw; transform: rotate(5deg); }
+
+.av-hero-inner { position: relative; max-width: 440px; margin: 0 auto; }
+
+.av-arch {
+  position: relative; width: 74%; height: 400px; margin-left: 3%;
+  border-radius: 999px 999px 6px 6px; background: #5c1a26; padding: 11px;
+  box-shadow: 0 14px 24px rgba(40, 10, 10, .28);
+  opacity: 0; transform: translateY(24px) rotate(-2deg);
+  transition: opacity .9s ease, transform 1s cubic-bezier(.2, .7, .2, 1);
+}
+.av-hero.is-shown .av-arch { opacity: 1; transform: rotate(-2deg); }
+.av-arch.is-editable { cursor: pointer; }
+.av-arch-inner { position: relative; width: 100%; height: 100%; border-radius: 999px 999px 2px 2px; border: 1.5px solid #b8973f; overflow: hidden; }
+.av-arch-inner img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.35) saturate(.85) contrast(1.02); }
+.av-arch-empty { width: 100%; height: 100%; background: linear-gradient(#d9d0bb, #7d6e4e); }
+.av-edit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, .4); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.av-arch:hover .av-edit { opacity: 1; }
+
+.av-seal {
+  width: 70px; height: 70px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, #ecd58e, #c9a447 45%, #8d6c22 100%);
+  filter: url(#av-deckle-s) drop-shadow(0 4px 5px rgba(0, 0, 0, .3));
+  font-family: 'Pinyon Script', cursive; color: #7a5c1b; font-size: 24px; text-shadow: 0 1px 0 #f3e2a6;
+}
+.av-seal span { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; border: 1.5px solid rgba(122, 92, 27, .5); }
+.av-hero-seal { position: absolute; left: 4%; top: 352px; z-index: 6; transform: rotate(-12deg); }
+
+.av-card {
+  position: relative; isolation: isolate; z-index: 5;
+  width: 80%; margin: -90px 0 0 auto; padding: 34px 20px 28px; text-align: center;
+  opacity: 0; transform: translateY(40px) rotate(1.5deg);
+  transition: opacity .9s ease .5s, transform 1s cubic-bezier(.2, .7, .2, 1) .5s;
+}
+.av-hero.is-shown .av-card { opacity: 1; transform: rotate(1.5deg); }
+.av-card::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: #f4efe6 var(--av-tex);
+  filter: url(#av-deckle) drop-shadow(0 12px 16px rgba(40, 20, 10, .25));
+}
+.av-kicker { font-style: italic; font-weight: 700; font-size: 15px; color: #5c1a26; }
+.av-names { font-family: 'Italiana', serif; font-weight: 400; font-size: 42px; line-height: 1.05; letter-spacing: .05em; color: #5c1a26; margin: 12px 0 4px; }
+.av-amp { font-family: 'Pinyon Script', cursive; font-size: 1.1em; color: #7a2533; letter-spacing: 0; }
+.av-rule { width: 60px; height: 1px; background: #b8973f; margin: 14px auto; }
+.av-date { font-weight: 700; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: #5c1a26; }
+.av-year { font-size: 14px; letter-spacing: .3em; color: #6a4a4a; margin-top: 2px; }
+.av-city { font-size: 15px; margin-top: 6px; color: #4a2f2f; }
+.av-count { margin: 18px 0 4px; padding-top: 14px; border-top: 1px solid #d9cbb8; }
+.av-count-label { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #5c1a26; }
+.av-count-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 8px; }
+.av-count-grid b { display: block; font-family: 'Italiana', serif; font-weight: 400; font-size: 34px; line-height: 1; color: #5c1a26; }
+.av-count-grid small { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #7b6a5f; }
+.av-btn {
+  margin-top: 16px; padding: 11px 22px; border: 1.5px solid #5c1a26; border-radius: 999px; background: transparent;
+  color: #5c1a26; font-family: 'Libre Caslon Text', serif; font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; cursor: pointer;
+}
+
+.av-flower { position: absolute; pointer-events: none; z-index: 7; filter: drop-shadow(0 8px 8px rgba(30, 0, 10, .35)); }
+.av-flower-1 { width: 84px; left: -6px; top: 470px; transform: rotate(-24deg); }
+.av-flower-2 { width: 64px; right: -6px; top: 360px; transform: rotate(26deg); }
+
+.av-scroll { text-align: center; margin-top: 30px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #6a5a50; }
+.av-scroll i { display: block; width: 1px; height: 26px; background: #6a5a50; margin: 6px auto 0; animation: av-drip 1.8s infinite; }
+@keyframes av-drip {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-arch, .av-card { transition: none !important; }
+  .av-scroll i { animation: none; }
+}
