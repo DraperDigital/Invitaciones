@@ -5,18 +5,31 @@ import { WHATSAPP_SUPPORT_NUMBER } from '../lib/constants';
 
 const BUBBLE_DISMISSED_KEY = 'invitto_wa_bubble_dismissed';
 
+// Landings de eventos que ya cuentan con su propia barra fija inferior con botón de WhatsApp
+const EVENT_LANDING_ROUTES = [
+    '/invitaciones-digitales-boda',
+    '/invitaciones-digitales-xv-anos',
+    '/invitaciones-digitales-cumpleanos',
+    '/invitaciones-digitales-bautizo',
+    '/invitaciones-digitales-primera-comunion',
+    '/invitaciones-digitales-baby-shower',
+    '/invitaciones-digitales-revelacion-de-genero',
+    '/invitaciones-digitales-graduacion',
+];
+
 export default function FloatingWhatsAppButton() {
     const location = useLocation();
     const pathname = location.pathname;
 
     const [showBubble, setShowBubble] = useState(false);
 
-    // Calcular si debe ocultarse en ciertas rutas (dashboard, invitaciones, etc.)
+    // Calcular si debe ocultarse en ciertas rutas (dashboard, invitaciones, landings de evento con barra fija inferior, etc.)
     const hidden = (
         pathname.startsWith('/dashboard') ||
         pathname.startsWith('/i/') ||
         pathname.startsWith('/preview/') ||
         pathname.startsWith('/invitacion/') ||
+        EVENT_LANDING_ROUTES.includes(pathname) ||
         pathname === '/carlos-y-frida' ||
         pathname === '/carlosyfrida' ||
         pathname === '/boda-cinematica-motion-premium' ||
