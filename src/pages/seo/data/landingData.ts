@@ -256,7 +256,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     hero: {
       badge: 'Cumpleaños',
       h1: 'Invitaciones digitales para cumpleaños que sorprenden',
-      subtitle: 'Diseños divertidos y modernos para cualquier edad. Con RSVP integrado para saber exactamente cuántos asistirán a tu fiesta.',
+      subtitle: 'Diseños divertidos y modernos para cualquier edad. Con confirmación RSVP integrada para recibir las respuestas de tus invitados al instante.',
       cta: 'Crear mi invitación de cumpleaños',
     },
     benefits: [
@@ -618,7 +618,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     },
     benefits: [
       { icon: Zap, title: 'Más que un simple diseño plano', description: 'A diferencia de enviar un PDF o imagen estática, Invitto es una web interactiva con botones, mapas y animaciones.' },
-      { icon: BarChart3, title: 'Control de asistencia (RSVP) real', description: 'Otras plataformas solo te dan diseño. Invitto te da tecnología para saber quién asiste y gestionar tus pases.' },
+      { icon: BarChart3, title: 'Control de confirmaciones (RSVP) real', description: 'Otras plataformas solo te dan diseño. Invitto te da tecnología para recibir confirmaciones y gestionar tus pases por familia.' },
       { icon: MessageCircle, title: 'El mejor envío por WhatsApp', description: 'Las plataformas globales están pensadas para email. Invitto genera las mejores tarjetas de previsualización para WhatsApp.' },
       { icon: QrCode, title: 'Boletos QR integrados', description: 'La mayoría de las plataformas te cobran extra por accesos. En Invitto, el control por código QR viene incluido en tu plan.' },
       { icon: DollarSign, title: 'Precios claros en pesos (MXN)', description: 'Sin suscripciones mensuales ocultas ni cargos en dólares. Paga una sola vez por evento en tu propia moneda.' },
