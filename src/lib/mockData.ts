@@ -438,7 +438,6 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             isPremium: true,
             theme: 'anturio-vino',
-            welcome_title: 'Ana & Julián',
             welcome_quote: 'Y con el corazón hecho ilusión, queremos compartir contigo el inicio de esta nueva etapa.',
             welcome_message: 'Con la bendición de nuestros padres y la alegría de quienes nos han acompañado en el camino, te invitamos a celebrar nuestra boda.',
             misa_name: 'Catedral de Monterrey',
@@ -483,7 +482,6 @@ export const MOCK_EVENTS: Event[] = [
         theme_config: {
             isPremium: true,
             theme: 'lirio-vainilla',
-            welcome_title: 'Barbara & Leonardo',
             welcome_quote: '"El amor nos encontró, la vida nos unió y hoy elegimos caminar juntos para siempre."',
             welcome_message: 'El primer instante\nUna noche lluviosa, un tropiezo en medio de la ciudad y dos miradas que se cruzaron por primera vez.\n\nEl hilo que nos unió\nCafés por las tardes, caminatas entre libros y risas que borraron la rutina.\n\nLa gran promesa\nEn un momento que detuvo el tiempo decidimos dar el paso. Y queremos que estés ahí.',
             misa_name: 'Catedral de Monterrey',
