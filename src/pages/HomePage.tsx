@@ -117,20 +117,22 @@ export default function HomePage() {
                         </button>
 
                         {user ? (
-                            <Link to="/dashboard">
-                                <button className="px-4 py-2 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95">
-                                    Dashboard
-                                </button>
+                            <Link 
+                                to="/dashboard"
+                                className="min-h-[44px] px-4 py-2 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95 flex items-center justify-center no-underline"
+                            >
+                                Dashboard
                             </Link>
                         ) : (
                             <>
-                                <Link to="/login" className="hidden sm:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#C2287B] transition-colors">
+                                <Link to="/login" className="hidden sm:inline-flex items-center min-h-[44px] text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#C2287B] transition-colors">
                                     Ingresar
                                 </Link>
-                                <Link to="/dashboard/new" className="hidden sm:block">
-                                    <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95">
-                                        Comenzar
-                                    </button>
+                                <Link 
+                                    to="/dashboard/new" 
+                                    className="hidden sm:flex items-center justify-center min-h-[44px] px-5 py-2.5 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95 no-underline"
+                                >
+                                    Comenzar
                                 </Link>
                             </>
                         )}
@@ -233,10 +235,11 @@ export default function HomePage() {
 
                                 <div className="space-y-3 pt-1">
                                     <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-3">
-                                        <Link to={user ? "/dashboard" : "/dashboard/new"} className="w-full xs:w-auto">
-                                            <button className="w-full px-7 py-3.5 md:px-8 md:py-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#C2287B]/25 flex items-center justify-center gap-3">
-                                                {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
-                                            </button>
+                                        <Link 
+                                            to={user ? "/dashboard" : "/dashboard/new"} 
+                                            className="w-full xs:w-auto min-h-[44px] px-7 py-3.5 md:px-8 md:py-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all active:scale-95 shadow-xl shadow-[#C2287B]/25 flex items-center justify-center gap-3 no-underline"
+                                        >
+                                            {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
                                         </Link>
                                         <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#C2287B] hover:border-[#C2287B]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
                                             VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#C2287B]">→</span>
@@ -667,10 +670,11 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to="/dashboard/new?plan=clasico">
-                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
-                                        Diseñar Gratis
-                                    </button>
+                                <Link 
+                                    to="/dashboard/new?plan=clasico"
+                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
+                                >
+                                    Diseñar Gratis
                                 </Link>
                                 <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
                             </div>
@@ -722,10 +726,11 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to="/dashboard/new?plan=pro">
-                                    <button className="w-full py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all">
-                                        Probar Plan Pro Gratis
-                                    </button>
+                                <Link 
+                                    to="/dashboard/new?plan=pro"
+                                    className="w-full min-h-[44px] py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center text-center no-underline"
+                                >
+                                    Probar Plan Pro Gratis
                                 </Link>
                                 <p className="text-[11px] text-slate-300 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
                             </div>
@@ -773,10 +778,11 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to="/dashboard/new?plan=premium">
-                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
-                                        Elegir Diseño Pro
-                                    </button>
+                                <Link 
+                                    to="/dashboard/new?plan=premium"
+                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
+                                >
+                                    Elegir Diseño Pro
                                 </Link>
                                 <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
                             </div>
@@ -824,10 +830,11 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to="/planes/concierge">
-                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#C2287B] hover:text-[#C2287B] transition-all">
-                                        Conocer Plan Concierge
-                                    </button>
+                                <Link 
+                                    to="/planes/concierge"
+                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#C2287B] hover:text-[#C2287B] transition-all flex items-center justify-center text-center no-underline"
+                                >
+                                    Conocer Plan Concierge
                                 </Link>
                                 <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Servicio completo · Garantía de entrega</p>
                             </div>
@@ -985,11 +992,12 @@ export default function HomePage() {
                     </p>
 
                     <div className="pt-4 space-y-4">
-                        <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                            <button className="px-10 py-5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center gap-2">
-                                <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
-                                <ArrowRight className="h-4 w-4" />
-                            </button>
+                        <Link 
+                            to={user ? "/dashboard" : "/dashboard/new"}
+                            className="min-h-[44px] px-10 py-5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center justify-center gap-2 no-underline"
+                        >
+                            <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
+                            <ArrowRight className="h-4 w-4" />
                         </Link>
                         <p className="text-xs text-slate-400 font-medium">
                             Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida

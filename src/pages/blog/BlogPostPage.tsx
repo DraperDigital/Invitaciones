@@ -222,10 +222,11 @@ export default function BlogPostPage() {
                 Crea una invitación web espectacular con confirmación inteligente de asistencia, control de pases individuales y pases QR.
               </p>
               <div className="pt-2 relative z-10">
-                <Link to="/planes">
-                  <button className="w-full py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-                    Ver planes y precios <ArrowRight className="h-4 w-4" />
-                  </button>
+                <Link 
+                  to="/planes" 
+                  className="w-full min-h-[44px] py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 no-underline"
+                >
+                  Ver planes y precios <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>

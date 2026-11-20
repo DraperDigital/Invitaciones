@@ -266,14 +266,13 @@ export default function PlanesPage() {
                                             currency: 'MXN'
                                         });
                                     }}
-                                >
-                                    <button className={`w-full py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 ${
+                                    className={`w-full min-h-[44px] py-4 md:py-5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center text-center no-underline ${
                                         plan.popular
                                             ? 'bg-white text-[#1B2E1D] hover:bg-stone-100 shadow-2xl'
                                             : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E] shadow-xl'
-                                    }`}>
-                                        {plan.cta}
-                                    </button>
+                                    }`}
+                                >
+                                    {plan.cta}
                                 </Link>
                                 {plan.id === 'concierge' ? (
                                     <div className="mt-4 text-center space-y-2">

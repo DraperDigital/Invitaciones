@@ -125,17 +125,20 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link to={ctaLink} className="w-full sm:w-auto">
-              <button className="w-full px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all shadow-xl shadow-[#DF3B94]/25 inline-flex items-center justify-center gap-3 active:scale-95">
-                {data.hero.cta}
-                <ArrowRight className="h-4 w-4" />
-              </button>
+            <Link 
+              to={ctaLink} 
+              className="w-full sm:w-auto min-h-[44px] px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all shadow-xl shadow-[#DF3B94]/25 inline-flex items-center justify-center gap-3 active:scale-95 no-underline"
+            >
+              {data.hero.cta}
+              <ArrowRight className="h-4 w-4" />
             </Link>
 
-            <Link to={data.demoUrl} target="_blank" className="w-full sm:w-auto">
-              <button className="w-full px-10 py-5 bg-white text-slate-700 border border-slate-200 rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:border-[#DF3B94]/30 hover:text-[#DF3B94] transition-all shadow-sm">
-                Ver demo de prueba
-              </button>
+            <Link 
+              to={data.demoUrl} 
+              target="_blank" 
+              className="w-full sm:w-auto min-h-[44px] px-10 py-5 bg-white text-slate-700 border border-slate-200 rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:border-[#DF3B94]/30 hover:text-[#DF3B94] transition-all shadow-sm inline-flex items-center justify-center no-underline"
+            >
+              Ver demo de prueba
             </Link>
           </div>
 
@@ -233,10 +236,11 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
             Activa el {data.name} y personaliza cada detalle visual con el respaldo y la tecnología de Invitto.
           </p>
           <div className="pt-4">
-            <Link to={ctaLink} className="inline-block w-full xs:w-auto">
-              <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-2xl active:scale-95">
-                Contratar ahora
-              </button>
+            <Link 
+              to={ctaLink} 
+              className="inline-flex items-center justify-center min-h-[44px] w-full xs:w-auto px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-2xl active:scale-95 no-underline"
+            >
+              Contratar ahora
             </Link>
           </div>
         </div>

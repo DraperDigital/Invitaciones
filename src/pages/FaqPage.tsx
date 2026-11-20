@@ -38,10 +38,11 @@ export default function FaqPage() {
                         </Link>
                     </nav>
                     <div className="flex items-center gap-4">
-                        <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                            <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
-                                {user ? 'Dashboard' : 'Comenzar'}
-                            </button>
+                        <Link 
+                            to={user ? "/dashboard" : "/dashboard/new"}
+                            className="min-h-[44px] px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95 flex items-center justify-center no-underline"
+                        >
+                            {user ? 'Dashboard' : 'Comenzar'}
                         </Link>
                     </div>
                 </div>
@@ -81,10 +82,11 @@ export default function FaqPage() {
                     <p className="text-slate-300 font-normal text-sm md:text-base max-w-xl mx-auto">
                         Empieza hoy mismo de forma gratuita y paga solo cuando estés listo para compartir.
                     </p>
-                    <Link to={user ? "/dashboard" : "/dashboard/new"}>
-                        <button className="px-8 py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg hover:-translate-y-0.5 active:scale-95 inline-flex items-center gap-2">
-                            {user ? 'Ir al Dashboard' : 'Comenzar gratis'} <ArrowRight className="h-4 w-4" />
-                        </button>
+                    <Link 
+                        to={user ? "/dashboard" : "/dashboard/new"}
+                        className="min-h-[44px] px-8 py-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg hover:-translate-y-0.5 active:scale-95 inline-flex items-center justify-center gap-2 no-underline"
+                    >
+                        {user ? 'Ir al Dashboard' : 'Comenzar gratis'} <ArrowRight className="h-4 w-4" />
                     </Link>
                 </div>
             </main>

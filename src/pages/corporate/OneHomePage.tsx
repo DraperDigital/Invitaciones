@@ -157,17 +157,19 @@ export default function OneHomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 max-w-md mx-auto">
-            <a href="#demo" className="w-full sm:w-auto">
-              <button className="w-full px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider uppercase transition-all shadow-xl shadow-[#2563EB]/30 flex items-center justify-center gap-3 active:scale-95">
-                Probar Demo Ejecutiva
-                <ArrowRight className="h-4 w-4" />
-              </button>
+            <a 
+              href="#demo" 
+              className="w-full sm:w-auto min-h-[44px] px-8 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider uppercase transition-all shadow-xl shadow-[#2563EB]/30 flex items-center justify-center gap-3 active:scale-95 no-underline"
+            >
+              Probar Demo Ejecutiva
+              <ArrowRight className="h-4 w-4" />
             </a>
 
-            <a href="#planes" className="w-full sm:w-auto">
-              <button className="w-full px-8 py-4 bg-slate-800 text-slate-200 border border-slate-700 rounded-2xl text-xs md:text-sm font-bold tracking-wider uppercase hover:bg-slate-700 transition-all">
-                Ver Planes Enterprise
-              </button>
+            <a 
+              href="#planes" 
+              className="w-full sm:w-auto min-h-[44px] px-8 py-4 bg-slate-800 text-slate-200 border border-slate-700 rounded-2xl text-xs md:text-sm font-bold tracking-wider uppercase hover:bg-slate-700 transition-all flex items-center justify-center no-underline"
+            >
+              Ver Planes Enterprise
             </a>
           </div>
 
@@ -465,10 +467,11 @@ export default function OneHomePage() {
                 </div>
 
                 <div className="pt-8">
-                  <Link to={`/login?redirect=/checkout?plan=${plan.id}`}>
-                    <button className="w-full py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg active:scale-95">
-                      {plan.cta}
-                    </button>
+                  <Link 
+                    to={`/login?redirect=/checkout?plan=${plan.id}`}
+                    className="w-full min-h-[44px] py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-2xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg active:scale-95 flex items-center justify-center text-center no-underline"
+                  >
+                    {plan.cta}
                   </Link>
                 </div>
               </div>

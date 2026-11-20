@@ -109,13 +109,14 @@ export default function Dashboard() {
                         {isCorporate ? 'Administra tus cumbres y eventos B2B.' : 'Administra y edita todos tus eventos desde un solo lugar.'}
                     </p>
                 </div>
-                <Link to="/dashboard/new">
-                    <button className={`px-6 py-3.5 ${
+                <Link 
+                    to="/dashboard/new"
+                    className={`min-h-[44px] px-6 py-3.5 ${
                         isCorporate ? 'bg-[#2563EB] hover:bg-[#1D4ED8]' : 'bg-[#DF3B94] hover:bg-[#C52A7C]'
-                    } text-white rounded-2xl text-xs uppercase font-bold tracking-wider transition-all shadow-lg active:scale-95 flex items-center gap-2`}>
-                        <Plus className="h-4 w-4" />
-                        <span>{isCorporate ? 'Crear Evento B2B' : 'Crear Nuevo Evento'}</span>
-                    </button>
+                    } text-white rounded-2xl text-xs uppercase font-bold tracking-wider transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 no-underline`}
+                >
+                    <Plus className="h-4 w-4" />
+                    <span>{isCorporate ? 'Crear Evento B2B' : 'Crear Nuevo Evento'}</span>
                 </Link>
             </div>
 
@@ -129,10 +130,11 @@ export default function Dashboard() {
                         Comienza creando tu primer evento digital para gestionar invitaciones y asistencias.
                     </p>
                     <div>
-                        <Link to="/dashboard/new">
-                            <button className="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs uppercase font-bold tracking-wider transition-all">
-                                <Plus className="inline h-4 w-4 mr-2" /> Crear Evento
-                            </button>
+                        <Link 
+                            to="/dashboard/new"
+                            className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs uppercase font-bold tracking-wider transition-all no-underline"
+                        >
+                            <Plus className="inline h-4 w-4 mr-2" /> Crear Evento
                         </Link>
                     </div>
                 </div>

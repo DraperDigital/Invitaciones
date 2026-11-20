@@ -1007,11 +1007,12 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             {data.hero.subtitle}
           </p>
 
-          <Link to={primaryCtaUrl}>
-            <button className="w-full xs:w-auto px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all shadow-xl shadow-[#DF3B94]/25 inline-flex items-center justify-center gap-3 active:scale-95">
-              {data.hero.cta}
-              <ArrowRight className="h-4 w-4" />
-            </button>
+          <Link 
+            to={primaryCtaUrl}
+            className="w-full xs:w-auto min-h-[44px] px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-2xl text-xs md:text-sm font-bold tracking-wider hover:-translate-y-0.5 transition-all shadow-xl shadow-[#DF3B94]/25 inline-flex items-center justify-center gap-3 active:scale-95 no-underline"
+          >
+            {data.hero.cta}
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
@@ -1172,10 +1173,11 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             {data.ctaFinal.subtitle}
           </p>
           <div className="pt-4">
-            <Link to={primaryCtaUrl} className="inline-block w-full xs:w-auto">
-              <button className="px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-2xl active:scale-95">
-                {data.ctaFinal.cta}
-              </button>
+            <Link 
+              to={primaryCtaUrl} 
+              className="inline-flex items-center justify-center min-h-[44px] w-full xs:w-auto px-10 py-5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all shadow-2xl active:scale-95 no-underline"
+            >
+              {data.ctaFinal.cta}
             </Link>
           </div>
         </div>

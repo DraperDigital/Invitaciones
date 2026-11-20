@@ -59,16 +59,18 @@ const NotFoundPage: React.FC = () => {
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
-                        <Link to="/" className="w-full sm:w-auto">
-                            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#DF3B94]/20 active:scale-95">
-                                <Home className="h-4 w-4 text-white/90" />
-                                <span>Volver al Inicio</span>
-                            </button>
+                        <Link 
+                            to="/" 
+                            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#DF3B94]/20 active:scale-95 no-underline"
+                        >
+                            <Home className="h-4 w-4 text-white/90" />
+                            <span>Volver al Inicio</span>
                         </Link>
-                        <Link to="/ejemplos" className="w-full sm:w-auto">
-                            <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95">
-                                <span>Ver Plantillas</span>
-                            </button>
+                        <Link 
+                            to="/ejemplos" 
+                            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95 no-underline"
+                        >
+                            <span>Ver Plantillas</span>
                         </Link>
                     </div>
 

@@ -522,16 +522,15 @@ export default function PlanComparisonTable({ eventId, theme, tipo }: PlanCompar
                                                     </span>
                                                 </div>
 
-                                                <Link to={getPlanUrl(plan.id)} className="block pt-1">
-                                                    <button
-                                                        className={`w-full py-2.5 px-3 rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-95 ${
-                                                            isPro
-                                                                ? 'bg-[#e0409a] text-white hover:bg-[#c93284] shadow-[#e0409a]/25'
-                                                                : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E]'
-                                                        }`}
-                                                    >
-                                                        {plan.cta}
-                                                    </button>
+                                                <Link 
+                                                    to={getPlanUrl(plan.id)} 
+                                                    className={`block w-full min-h-[44px] py-2.5 px-3 rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-95 text-center flex items-center justify-center no-underline ${
+                                                        isPro
+                                                            ? 'bg-[#e0409a] text-white hover:bg-[#c93284] shadow-[#e0409a]/25'
+                                                            : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E]'
+                                                    }`}
+                                                >
+                                                    {plan.cta}
                                                 </Link>
                                             </div>
                                         </th>
@@ -639,16 +638,15 @@ export default function PlanComparisonTable({ eventId, theme, tipo }: PlanCompar
                                                 <div className="text-xl sm:text-2xl font-serif font-bold text-slate-900">
                                                     {plan.price}
                                                 </div>
-                                                <Link to={getPlanUrl(plan.id)} className="block">
-                                                    <button
-                                                        className={`w-full py-2.5 px-3 rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-95 ${
-                                                            isPro
-                                                                ? 'bg-[#e0409a] text-white hover:bg-[#c93284] shadow-[#e0409a]/25'
-                                                                : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E]'
-                                                        }`}
-                                                    >
-                                                        {plan.cta}
-                                                    </button>
+                                                <Link 
+                                                    to={getPlanUrl(plan.id)} 
+                                                    className={`block w-full min-h-[44px] py-2.5 px-3 rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-md hover:scale-[1.02] active:scale-95 text-center flex items-center justify-center no-underline ${
+                                                        isPro
+                                                            ? 'bg-[#e0409a] text-white hover:bg-[#c93284] shadow-[#e0409a]/25'
+                                                            : 'bg-[#1B2E1D] text-white hover:bg-[#2D312E]'
+                                                    }`}
+                                                >
+                                                    {plan.cta}
                                                 </Link>
                                             </div>
                                         </td>

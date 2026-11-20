@@ -23,6 +23,7 @@ interface Props {
     onSubmit: () => void;
     loading: boolean;
     isTypePreselected?: boolean;
+    isThemePreselected?: boolean;
 }
 
 const MONTHS_MAP: Record<string, number> = {
@@ -202,7 +203,7 @@ function parseDateStr(str: string): { year: number; month: number; day: number; 
     return null;
 }
 
-export default function WizardAiAssistant({ data, updateData, onSwitchToManual, onSubmit, loading, isTypePreselected }: Props) {
+export default function WizardAiAssistant({ data, updateData, onSwitchToManual, onSubmit, loading, isTypePreselected, isThemePreselected }: Props) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [currentStep, setCurrentStep] = useState<string>('intro');
@@ -712,7 +713,39 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 addAssistantMessage(
                     `¡Anotado! Recepción en **${venueName}** a las **${savedVenueTime} hrs** (${cityOrAddress}) 📍.`
                 );
-                askThemeStyle();
+
+                if (isThemePreselected) {
+                    const currentTheme = latestDataRef.current?.theme || data.theme;
+                    const templateObj = CANONICAL_TEMPLATES.find(t => t.id === currentTheme || t.slug === currentTheme) || CANONICAL_TEMPLATES.find(t => t.id === 'classic');
+                    const templateName = templateObj ? templateObj.name : currentTheme;
+
+                    updateDataAndSync({ theme: templateObj?.id || currentTheme });
+
+                    let dressChips = [
+                        { label: 'Formal', value: 'Formal' },
+                        { label: 'Etiqueta Rigurosa (Black Tie)', value: 'Etiqueta Rigurosa (Black Tie)' },
+                        { label: 'Cóctel / Semiformal', value: 'Semiformal / Cóctel' },
+                        { label: 'Formal de Playa / Guayabera', value: 'Formal de Playa / Guayabera' },
+                        { label: 'Sin código (Libre)', value: 'Sin Código de Vestimenta' }
+                    ];
+
+                    if (data.event_type === 'gender_reveal') {
+                        dressChips = [
+                            { label: 'Viste de Azul o Rosa 💙💖', value: 'Viste de azul si crees que es niño o de rosa si crees que es niña' },
+                            { label: 'Monocromático (Blanco o Negro) 🤍🖤', value: 'Monocromático Estricto (Blanco o Negro)' },
+                            { label: 'Casual Elegante', value: 'Casual Elegante' },
+                            { label: 'Sin código (Libre)', value: 'Sin Código de Vestimenta' }
+                        ];
+                    }
+
+                    addAssistantMessage(
+                        `Usaremos la plantilla **${templateName}** que elegiste. Podrás cambiarla después en el editor.\n\n¿Qué código de vestimenta sugerirás a tus invitados?`,
+                        dressChips
+                    );
+                    setCurrentStep('ask_dress_code');
+                } else {
+                    askThemeStyle();
+                }
                 break;
             }
 

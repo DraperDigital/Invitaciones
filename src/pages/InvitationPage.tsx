@@ -2952,10 +2952,14 @@ END:VCALENDAR`;
                                 </div>
                             </div>
                             {cfg.misa_maps_link && (
-                                <a href={cfg.misa_maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
-                                    <button className="px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
-                                        ¿Cómo llegar?
-                                    </button>
+                                <a 
+                                    href={cfg.misa_maps_link} 
+                                    target="_blank" 
+                                    rel="noreferrer" 
+                                    className="mt-auto pt-4 inline-flex items-center justify-center min-h-[44px] px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline" 
+                                    style={{ background: buttonColor }}
+                                >
+                                    ¿Cómo llegar?
                                 </a>
                             )}
                         </div>
@@ -2981,10 +2985,14 @@ END:VCALENDAR`;
                             </div>
                         </div>
                         {event.maps_link && (
-                            <a href={event.maps_link} target="_blank" rel="noreferrer" className="mt-auto pt-4">
-                                <button className="px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5" style={{ background: buttonColor }}>
-                                    ¿Cómo llegar?
-                                </button>
+                            <a 
+                                href={event.maps_link} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="mt-auto pt-4 inline-flex items-center justify-center min-h-[44px] px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline" 
+                                style={{ background: buttonColor }}
+                            >
+                                ¿Cómo llegar?
                             </a>
                         )}
                     </div>
@@ -3561,13 +3569,14 @@ END:VCALENDAR`;
                                     )}
                                 </div>
                                 {hotel.link && (
-                                    <a href={hotel.link.startsWith('http') ? hotel.link : `https://${hotel.link}`} target="_blank" rel="noopener noreferrer" className="mt-4 block">
-                                        <button
-                                            className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-[var(--button-contrast)] hover:opacity-90 transition-opacity shadow-md"
-                                            style={{ background: buttonColor }}
-                                        >
-                                            Ver Hotel / Reservar
-                                        </button>
+                                    <a 
+                                        href={hotel.link.startsWith('http') ? hotel.link : `https://${hotel.link}`} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="mt-4 flex items-center justify-center min-h-[44px] w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-[var(--button-contrast)] hover:opacity-90 transition-opacity shadow-md no-underline"
+                                        style={{ background: buttonColor }}
+                                    >
+                                        Ver Hotel / Reservar
                                     </a>
                                 )}
                             </div>
@@ -3749,114 +3758,135 @@ END:VCALENDAR`;
                     </Link>
 
                     {/* Barra Inferior Flotante */}
-                    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 bg-stone-950/90 hover:bg-stone-950 backdrop-blur-xl border border-white/15 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[96vw]">
-                        {/* Botón Flecha Anterior */}
-                        <Link
-                            to={`/i/${prevDemo.slug}?t=token-preview&category=${activeCategory}`}
-                            className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
-                            title={`Ejemplo anterior de ${currentCategoryObj?.name}: ${prevDemo.name}`}
-                        >
-                            <ChevronLeft className="h-4 w-4 shrink-0" />
-                            <span className="hidden md:inline">Anterior</span>
-                        </Link>
+                    <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-[999] flex flex-col sm:flex-row items-center gap-2 p-2 sm:p-2 bg-stone-950/95 sm:bg-stone-950/90 backdrop-blur-xl border border-white/15 rounded-2xl sm:rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.55)] transition-all max-w-[96vw] w-[calc(100vw-24px)] sm:w-auto">
+                        {/* Fila de controles de navegación (en móvil superior, en desktop en línea) */}
+                        <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 w-full sm:w-auto">
+                            {/* Botón Flecha Anterior */}
+                            <Link
+                                to={`/i/${prevDemo.slug}?t=token-preview&category=${activeCategory}`}
+                                className="flex items-center justify-center gap-1 px-2.5 sm:px-2.5 py-2 sm:py-2 min-h-[44px] sm:min-h-0 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
+                                title={`Ejemplo anterior de ${currentCategoryObj?.name}: ${prevDemo.name}`}
+                            >
+                                <ChevronLeft className="h-4 w-4 shrink-0" />
+                                <span className="hidden md:inline">Anterior</span>
+                            </Link>
 
-                        {/* SELECTOR DE CATEGORÍA CON POPOVER */}
-                        <div className="relative shrink-0">
+                            {/* SELECTOR DE CATEGORÍA CON POPOVER */}
+                            <div className="relative shrink-0">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowCategoryMenu(prev => !prev);
+                                        setShowTemplateMenu(false);
+                                    }}
+                                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 sm:py-2 min-h-[44px] sm:min-h-0 rounded-full text-xs font-bold transition-all border ${
+                                        showCategoryMenu 
+                                            ? 'bg-[#DF3B94] text-white border-[#DF3B94]' 
+                                            : 'bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white border-white/10'
+                                    }`}
+                                    title="Filtrar por categoría (Bodas, Infantiles, XV, etc.)"
+                                >
+                                    <span className="text-xs sm:text-sm">{currentCategoryObj?.emoji}</span>
+                                    <span className="inline max-w-[90px] sm:max-w-[90px] truncate">{currentCategoryObj?.name}</span>
+                                    <ChevronDown className={`h-3 w-3 text-stone-400 transition-transform ${showCategoryMenu ? 'rotate-180 text-white' : ''}`} />
+                                </button>
+
+                                {/* Dropdown Popover de Categorías */}
+                                {showCategoryMenu && (
+                                    <>
+                                        <div 
+                                            className="fixed inset-0 z-40 bg-transparent" 
+                                            onClick={() => setShowCategoryMenu(false)} 
+                                        />
+                                        <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-56 sm:w-64 bg-stone-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                                            <div className="px-3 py-1.5 border-b border-white/10 mb-1 flex items-center justify-between">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Filtrar por Categoría</span>
+                                                <span className="text-[10px] text-stone-500 font-mono">{CANONICAL_TEMPLATES.length} modelos</span>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {DEMO_CATEGORIES.map(cat => {
+                                                    const isSel = activeCategory === cat.id;
+                                                    const count = cat.id === 'todas'
+                                                        ? CANONICAL_TEMPLATES.length
+                                                        : CANONICAL_TEMPLATES.filter(t => t.category === cat.id || (t.categories && t.categories.includes(cat.id))).length;
+                                                    return (
+                                                        <button
+                                                            key={cat.id}
+                                                            type="button"
+                                                            onClick={() => handleSelectCategory(cat.id)}
+                                                            className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                                                isSel
+                                                                    ? 'bg-[#DF3B94] text-white font-bold shadow-md'
+                                                                    : 'text-stone-300 hover:text-white hover:bg-white/10'
+                                                            }`}
+                                                        >
+                                                            <div className="flex items-center gap-2">
+                                                                <span>{cat.emoji}</span>
+                                                                <span>{cat.name}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isSel ? 'bg-black/20 text-white' : 'bg-stone-800 text-stone-400'}`}>
+                                                                    {count}
+                                                                </span>
+                                                                {isSel && <Check className="w-3.5 h-3.5 text-white" />}
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Botón Selector / Catálogo de Modelos (abre Drawer lateral) */}
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setShowCategoryMenu(prev => !prev);
-                                    setShowTemplateMenu(false);
+                                    setShowTemplateMenu(prev => !prev);
+                                    setShowCategoryMenu(false);
                                 }}
-                                className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-bold transition-all border ${
-                                    showCategoryMenu 
-                                        ? 'bg-[#DF3B94] text-white border-[#DF3B94]' 
-                                        : 'bg-white/10 hover:bg-white/20 text-stone-200 hover:text-white border-white/10'
-                                }`}
-                                title="Filtrar por categoría (Bodas, Infantiles, XV, etc.)"
+                                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-2 sm:py-2 min-h-[44px] sm:min-h-0 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95 shrink-0"
+                                title={`Explorar las ${effectiveDemos.length} plantillas de ${currentCategoryObj?.name}`}
                             >
-                                <span className="text-xs sm:text-sm">{currentCategoryObj?.emoji}</span>
-                                <span className="hidden sm:inline max-w-[90px] truncate">{currentCategoryObj?.name}</span>
-                                <ChevronDown className={`h-3 w-3 text-stone-400 transition-transform ${showCategoryMenu ? 'rotate-180 text-white' : ''}`} />
+                                <span className="text-sm shrink-0">{currentDemo.icon}</span>
+                                <span className="max-w-[70px] xs:max-w-[100px] sm:max-w-[130px] truncate">{currentDemo.name}</span>
+                                <span className="text-[10px] text-stone-400 font-mono hidden sm:inline">({activeFilteredIndex + 1}/{effectiveDemos.length})</span>
+                                <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform shrink-0 ${showTemplateMenu ? 'rotate-180' : ''}`} />
                             </button>
 
-                            {/* Dropdown Popover de Categorías */}
-                            {showCategoryMenu && (
-                                <>
-                                    <div 
-                                        className="fixed inset-0 z-40 bg-transparent" 
-                                        onClick={() => setShowCategoryMenu(false)} 
-                                    />
-                                    <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 z-50 w-56 sm:w-64 bg-stone-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
-                                        <div className="px-3 py-1.5 border-b border-white/10 mb-1 flex items-center justify-between">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Filtrar por Categoría</span>
-                                            <span className="text-[10px] text-stone-500 font-mono">{CANONICAL_TEMPLATES.length} modelos</span>
-                                        </div>
-                                        <div className="space-y-1">
-                                            {DEMO_CATEGORIES.map(cat => {
-                                                const isSel = activeCategory === cat.id;
-                                                const count = cat.id === 'todas'
-                                                    ? CANONICAL_TEMPLATES.length
-                                                    : CANONICAL_TEMPLATES.filter(t => t.category === cat.id || (t.categories && t.categories.includes(cat.id))).length;
-                                                return (
-                                                    <button
-                                                        key={cat.id}
-                                                        type="button"
-                                                        onClick={() => handleSelectCategory(cat.id)}
-                                                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                                                            isSel
-                                                                ? 'bg-[#DF3B94] text-white font-bold shadow-md'
-                                                                : 'text-stone-300 hover:text-white hover:bg-white/10'
-                                                        }`}
-                                                    >
-                                                        <div className="flex items-center gap-2">
-                                                            <span>{cat.emoji}</span>
-                                                            <span>{cat.name}</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-1.5">
-                                                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${isSel ? 'bg-black/20 text-white' : 'bg-stone-800 text-stone-400'}`}>
-                                                                {count}
-                                                            </span>
-                                                            {isSel && <Check className="w-3.5 h-3.5 text-white" />}
-                                                        </div>
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </>
-                            )}
+                            {/* Botón Flecha Siguiente */}
+                            <Link
+                                to={`/i/${nextDemo.slug}?t=token-preview&category=${activeCategory}`}
+                                className="flex items-center justify-center gap-1 px-2.5 sm:px-2.5 py-2 sm:py-2 min-h-[44px] sm:min-h-0 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
+                                title={`Siguiente ejemplo de ${currentCategoryObj?.name}: ${nextDemo.name}`}
+                            >
+                                <span className="hidden md:inline">Siguiente</span>
+                                <ChevronRight className="h-4 w-4 shrink-0" />
+                            </Link>
+
+                            <div className="hidden sm:block h-4 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
+
+                            {/* Botón Galería de Ejemplos (Desktop & Tablet) */}
+                            <Link 
+                                to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} 
+                                title="Ver galería completa de ejemplos" 
+                                className="no-underline hidden sm:flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                            >
+                                <LayoutGrid className="h-4 w-4" />
+                            </Link>
+
+                            {/* Botón Inicio */}
+                            <Link 
+                                to="/" 
+                                title="Ir a inicio" 
+                                className="no-underline hidden md:flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                            >
+                                <Home className="h-4 w-4" />
+                            </Link>
                         </div>
 
-                        {/* Botón Selector / Catálogo de Modelos (abre Drawer lateral) */}
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setShowTemplateMenu(prev => !prev);
-                                setShowCategoryMenu(false);
-                            }}
-                            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 hover:border-white/25 active:scale-95 shrink-0"
-                            title={`Explorar las ${effectiveDemos.length} plantillas de ${currentCategoryObj?.name}`}
-                        >
-                            <span className="text-sm shrink-0">{currentDemo.icon}</span>
-                            <span className="max-w-[55px] xs:max-w-[85px] sm:max-w-[130px] truncate">{currentDemo.name}</span>
-                            <span className="text-[10px] text-stone-400 font-mono hidden sm:inline">({activeFilteredIndex + 1}/{effectiveDemos.length})</span>
-                            <ChevronDown className={`h-3.5 w-3.5 text-stone-400 transition-transform shrink-0 ${showTemplateMenu ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        {/* Botón Flecha Siguiente */}
-                        <Link
-                            to={`/i/${nextDemo.slug}?t=token-preview&category=${activeCategory}`}
-                            className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1.5 sm:py-2 rounded-full text-xs font-semibold text-stone-200 hover:text-white hover:bg-white/10 transition-colors no-underline shrink-0"
-                            title={`Siguiente ejemplo de ${currentCategoryObj?.name}: ${nextDemo.name}`}
-                        >
-                            <span className="hidden md:inline">Siguiente</span>
-                            <ChevronRight className="h-4 w-4 shrink-0" />
-                        </Link>
-
-                        <div className="h-4 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
-
-                        {/* Botón Principal: Quiero usar esta plantilla */}
+                        {/* Botón Principal: Usar esta plantilla (En móvil: fila completa; En desktop: en línea) */}
                         <Link 
                             to={buildCreateUrl(cfg.theme || currentDemo.id || 'classic', event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding')} 
                             onClick={() => {
@@ -3874,27 +3904,11 @@ END:VCALENDAR`;
                                     item_name: cfg.theme || currentDemo.id || 'classic'
                                 });
                             }}
-                            className="no-underline shrink-0"
+                            className="w-full sm:w-auto min-h-[44px] px-4 sm:px-5 py-2.5 sm:py-2 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap no-underline shrink-0"
                         >
-                            <button className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg flex items-center gap-1 sm:gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap">
-                                <span className="hidden sm:inline">Quiero esta plantilla</span>
-                                <span className="sm:hidden">Usar</span>
-                                <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-80" />
-                            </button>
-                        </Link>
-
-                        {/* Botón Galería de Ejemplos (Desktop & Tablet) */}
-                        <Link to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} title="Ver galería completa de ejemplos" className="no-underline hidden sm:block shrink-0">
-                            <button className="p-1.5 sm:p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all flex items-center">
-                                <LayoutGrid className="h-4 w-4" />
-                            </button>
-                        </Link>
-
-                        {/* Botón Inicio */}
-                        <Link to="/" title="Ir a inicio" className="no-underline hidden md:block shrink-0">
-                            <button className="p-1.5 sm:p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all flex items-center">
-                                <Home className="h-4 w-4" />
-                            </button>
+                            <span className="sm:hidden">Usar esta plantilla</span>
+                            <span className="hidden sm:inline">Quiero esta plantilla</span>
+                            <ArrowRight className="h-3.5 w-3.5 shrink-0 opacity-80" />
                         </Link>
                     </div>
 

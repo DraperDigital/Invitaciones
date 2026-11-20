@@ -254,6 +254,12 @@ export default function EventWizard() {
         return Boolean(resolvePreselectedEventType(searchParams));
     });
 
+    const [isThemePreselected, setIsThemePreselected] = useState(() => {
+        if (id) return false;
+        const rawTheme = searchParams.get('theme');
+        return Boolean(rawTheme && CANONICAL_TEMPLATES.some(t => t.id === rawTheme || t.slug === rawTheme));
+    });
+
     const [data, setData] = useState<WizardData>(() => {
         if (id) return INITIAL_DATA;
         const resolved = resolvePreselectedEventType(searchParams);
@@ -276,6 +282,11 @@ export default function EventWizard() {
         if (!user || dataLoaded) return;
 
         if (!id) {
+            const rawTheme = searchParams.get('theme');
+            const validTheme = rawTheme && CANONICAL_TEMPLATES.some(t => t.id === rawTheme || t.slug === rawTheme);
+            if (validTheme) {
+                setIsThemePreselected(true);
+            }
             const resolved = resolvePreselectedEventType(searchParams);
             if (resolved) {
                 const matchedTipo = EVENT_TYPE_OPTIONS.find(opt => opt.id === resolved.eventType);
@@ -552,6 +563,7 @@ export default function EventWizard() {
                     onSubmit={() => handleSubmit()}
                     loading={loading}
                     isTypePreselected={isTypePreselected}
+                    isThemePreselected={isThemePreselected}
                 />
             ) : (
                 <>
@@ -633,9 +645,16 @@ export default function EventWizard() {
                             {/* Selección de Plantilla / Diseño */}
                             <div className="pt-4 space-y-3 border-t border-stone-100">
                                 <div className="flex items-center justify-between">
-                                    <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
-                                        Plantilla / Diseño Visual
-                                    </label>
+                                    <div className="flex items-center gap-2">
+                                        <label className="block text-xs uppercase font-bold text-stone-700 tracking-wider ml-1">
+                                            Plantilla / Diseño Visual
+                                        </label>
+                                        {isThemePreselected && (
+                                            <span className="text-[10px] bg-pink-100 text-[#DF3B94] font-semibold px-2 py-0.5 rounded-full">
+                                                Plantilla preseleccionada
+                                            </span>
+                                        )}
+                                    </div>
                                     <a 
                                         href="/ejemplos" 
                                         target="_blank" 
