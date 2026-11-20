@@ -293,6 +293,14 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
                 premium: 'Descarga en Excel',
                 concierge: 'Reporte ejecutivo impreso y digital',
             },
+            {
+                name: 'Vigencia de la invitación',
+                description: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tu evento',
+                clasico: '30 días post-evento',
+                pro: '30 días post-evento',
+                premium: '30 días post-evento',
+                concierge: '30 días post-evento',
+            },
         ],
     },
 ];
@@ -506,11 +514,11 @@ export default function PlanComparisonTable({ eventId, theme, tipo }: PlanCompar
                                                         </span>
                                                     </div>
                                                     <span
-                                                        className={`text-[10px] uppercase font-bold tracking-widest block mt-0.5 ${
-                                                            isPro ? 'text-slate-400' : 'text-slate-400'
+                                                        className={`text-[10px] font-semibold block mt-0.5 ${
+                                                            isPro ? 'text-slate-300' : 'text-slate-500'
                                                         }`}
                                                     >
-                                                        Un solo pago
+                                                        Un solo pago · Activa hasta 30 días después de tu evento
                                                     </span>
                                                 </div>
 

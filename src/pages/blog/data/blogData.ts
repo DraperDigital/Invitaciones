@@ -104,7 +104,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     seo: {
       title: '5 Ventajas de usar invitaciones digitales para tu boda — Invitto',
-      description: 'Descubre por qué las invitaciones web de boda son la mejor opción en México: control de pases, mapas dinámicos, mesas de regalos y más.',
+      description: 'Descubre las ventajas de las invitaciones web de boda en México: control de pases, mapas dinámicos, mesas de regalos y más.',
     },
     content: [
       {

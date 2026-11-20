@@ -230,7 +230,7 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
             Comienza tu evento hoy mismo
           </h2>
           <p className="text-base md:text-xl text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
-            Activa el {data.name} y personaliza cada detalle visual con el respaldo y la distinción de Invitto.
+            Activa el {data.name} y personaliza cada detalle visual con el respaldo y la tecnología de Invitto.
           </p>
           <div className="pt-4">
             <Link to={ctaLink} className="inline-block w-full xs:w-auto">
@@ -270,7 +270,7 @@ export default function PlanLandingTemplate({ data }: PlanLandingTemplateProps) 
             </div>
           </div>
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-            <p>© 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
+            <p>© {new Date().getFullYear()} INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
             <p>HECHO CON CARIÑO EN MÉXICO</p>
           </div>
         </div>

@@ -162,7 +162,7 @@ export default function LoginPage() {
                         <img src="/logo.png?v=3" alt="Invitto" className="h-10 w-auto object-contain brightness-0 invert mb-6" />
                     </Link>
                     <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs font-bold tracking-wider border border-white/10 text-slate-200">
-                        <span>Plataforma #1 de Invitaciones Digitales</span>
+                        <span>Invitaciones digitales con confirmación en tiempo real</span>
                     </div>
                     <h1 className="text-5xl md:text-6xl font-display font-extrabold leading-tight">
                         Tu evento, <span className="text-[#DF3B94]">sin estrés.</span>
@@ -173,7 +173,7 @@ export default function LoginPage() {
                 </div>
 
                 <div className="absolute bottom-12 left-20 text-xs uppercase tracking-widest text-slate-500 font-bold">
-                    © 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS
+                    © {new Date().getFullYear()} INVITTO.MX · TODOS LOS DERECHOS RESERVADOS
                 </div>
             </div>
 

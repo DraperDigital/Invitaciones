@@ -172,13 +172,13 @@ export default function PlanesPage() {
                     </div>
 
                     <h1 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold text-[#1E293B] leading-tight tracking-tight">
-                        Tu evento merece <br className="hidden xs:block" />
+                        Deja de perseguir invitados.<br className="hidden xs:block" />
                         <span className="bg-gradient-to-r from-[#e0409a] via-[#FF6B6B] to-[#e0409a] bg-clip-text text-transparent">
-                            distinción total.
+                            Ten el control de tu evento.
                         </span>
                     </h1>
                     <p className="text-base md:text-lg text-slate-600 font-normal max-w-xl mx-auto leading-relaxed">
-                        Selecciona el nivel de control y personalización que mejor se adapte a tu celebración.
+                        Tus invitados confirman con un clic. Tú ves en tiempo real quién va, quién no y cuántos acompañantes traen. Un solo pago, sin mensualidades.
                     </p>
                 </div>
             </section>
@@ -236,7 +236,7 @@ export default function PlanesPage() {
                                         <span className="text-4xl md:text-5xl font-serif tracking-tighter">{plan.price}</span>
                                         <span className={`text-[9px] md:text-[10px] font-bold uppercase tracking-widest ${plan.popular ? 'text-white/40' : 'text-stone-300'}`}>{plan.period}</span>
                                     </div>
-                                    <p className={`text-[7px] md:text-[8px] uppercase font-bold tracking-widest ${plan.popular ? 'text-white/20' : 'text-stone-200'}`}>Un solo pago · De por vida</p>
+                                    <p className={`text-[10px] md:text-[11px] font-medium tracking-wide ${plan.popular ? 'text-white/80' : 'text-stone-500'}`}>Un solo pago · Activa hasta 30 días después de tu evento</p>
                                 </div>
 
                                 <div className={`h-px w-full ${plan.popular ? 'bg-white/10' : 'bg-stone-50'}`} />

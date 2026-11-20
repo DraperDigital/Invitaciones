@@ -77,7 +77,7 @@ const NotFoundPage: React.FC = () => {
 
             {/* Subtle Footer Note */}
             <footer className="w-full text-center py-6 text-xs text-slate-400 border-t border-slate-100">
-                <p>© 2026 Invitto · Invitaciones Digitales</p>
+                <p>© {new Date().getFullYear()} Invitto · Invitaciones Digitales</p>
             </footer>
         </div>
     );

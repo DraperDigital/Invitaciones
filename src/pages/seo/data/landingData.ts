@@ -383,7 +383,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Puedo cambiar datos después de mandarla?', answer: 'Sí. El link es el mismo y se actualiza solo en tiempo real para todos tus invitados.' },
       { question: '¿Cómo puedo pagar?', answer: 'Aceptamos tarjeta de débito o crédito, OXXO, meses sin intereses, Apple Pay y Google Pay.' },
       { question: '¿Puedo poner mi mesa de regalos?', answer: 'Sí: Liverpool, Amazon, tiendas departamentales o datos para transferencia bancaria directa.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación permanece activa desde que la creas hasta 30 días naturales después de tu boda, para que tú y tus invitados puedan consultar fotos, itinerario y mesa de regalos sin prisas.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tu boda, para que tú y tus invitados puedan consultar fotos, itinerario y mesa de regalos sin prisas.' },
     ],
     ctaFinal: {
       title: 'Tu fecha ya empezó a correr.',
@@ -554,7 +554,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Puedo poner chambelanes y padrinos?', answer: 'Sí, tienen su propia sección destacada con foto y nombre de lo que apadrinan.' },
       { question: '¿Cuántas fotos puedo subir?', answer: 'Plan Clásica incluye 10 fotos, Plan Pro 20 y Diseño Pro fotos ilimitadas.' },
       { question: '¿Cómo puedo pagar?', answer: 'Tarjeta de crédito o débito, OXXO, meses sin intereses, Apple Pay y Google Pay.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Permanece activa desde la creación hasta 30 días naturales después de los XV años.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tus XV años.' },
     ],
     ctaFinal: {
       title: 'Los XV se planean con meses, pero la lista se cierra en semanas.',
@@ -704,7 +704,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     guaranteeTitle: 'Cero riesgo.',
     guaranteeText: 'Ármala gratis y mírala terminada. Si pagas y no te convence, tienes <b>7 días para pedir tu reembolso</b>.',
     closingTitle: 'Tu cumple se acerca: festeja sin complicaciones.',
-    closingLead: 'Manda tu invitación hoy y ten la lista de confirmados lista para planear la mejor fiesta.',
+    closingLead: 'Manda tu invitación hoy y ten la lista de confirmados lista para planear tu fiesta con calma.',
     closingCta: 'Crear mi invitación gratis',
     seo: {
       title: 'Invitaciones Digitales para Cumpleaños — Modernas y Fáciles',
@@ -723,11 +723,11 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Puedo poner sugerencia de regalos o sobre?', answer: 'Sí, puedes enlazar tu mesa de regalos o agregar datos bancarios con botón para copiar CLABE.' },
       { question: '¿Funciona para fiestas infantiles y de adultos?', answer: 'Sí, tenemos plantillas temáticas para niños, jóvenes y adultos.' },
-      { question: '¿Cuánto tiempo permanece activa?', answer: 'Tu invitación permanece activa desde que la creas hasta 30 días naturales después del cumpleaños.' },
+      { question: '¿Cuánto tiempo permanece activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tu cumpleaños.' },
     ],
     ctaFinal: {
       title: 'Tu cumple se acerca: festeja sin complicaciones.',
-      subtitle: 'Manda tu invitación hoy y ten la lista de confirmados lista para planear la mejor fiesta.',
+      subtitle: 'Manda tu invitación hoy y ten la lista de confirmados lista para planear tu fiesta con calma.',
       cta: 'Crear mi invitación gratis',
     },
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
@@ -892,7 +892,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Puedo subir varias fotos de mi bebé?', answer: 'Sí, incluye una galería de fotos con música de fondo.' },
       { question: '¿Puedo especificar el código de vestimenta?', answer: 'Sí, puedes indicar dress code formal, guayabera, tonos claros o lo que prefieras.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Permanece activa desde la creación hasta 30 días naturales después del bautizo.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después del bautizo.' },
     ],
     ctaFinal: {
       title: 'Celebra el bautizo de tu bebé con paz mental.',
@@ -1061,7 +1061,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Puedo incluir datos bancarios para regalos?', answer: 'Sí, puedes agregar tu CLABE interbancaria con botón para copiar fácil.' },
       { question: '¿La invitación se ve bien en cualquier celular?', answer: 'Sí, está optimizada para verse perfecta en iPhone, Android y computadoras.' },
-      { question: '¿Cuánto tiempo permanece activa?', answer: 'Desde que la creas hasta 30 días naturales posteriores a la Primera Comunión.' },
+      { question: '¿Cuánto tiempo permanece activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de la Primera Comunión.' },
     ],
     ctaFinal: {
       title: 'Un día de fe y alegría: prepáralo con anticipación.',
@@ -1230,7 +1230,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Se pueden agregar dinámicas o juegos?', answer: 'Sí, puedes incluir itinerario de los juegos y momentos especiales.' },
       { question: '¿Mis invitadas necesitan descargar algo?', answer: 'No, la invitación abre directo en cualquier celular.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Hasta 30 días naturales posteriores al baby shower.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después del baby shower.' },
     ],
     ctaFinal: {
       title: 'Tu bebé está por llegar: celébralo sin prisas.',
@@ -1399,7 +1399,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Puedo sugerir que vengan vestidos del color de su elección?', answer: 'Sí, puedes detallar el código de vestimenta temático en una sección dedicada.' },
       { question: '¿Funciona bien en cualquier celular?', answer: 'Sí, abre directo en WhatsApp en iPhone y Android sin necesidad de descargar aplicaciones.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Permanece activa desde la creación hasta 30 días después del evento.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después del evento.' },
     ],
     ctaFinal: {
       title: '¿Niño o niña? La cuenta regresiva ya empezó.',
@@ -1568,7 +1568,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     faq: [
       { question: '¿Se puede indicar código de vestimenta riguroso (Black Tie / Formal)?', answer: 'Sí, hay una sección especial para especificar el dress code con ejemplos visuales.' },
       { question: '¿Puedo incluir datos bancarios para regalos de graduación?', answer: 'Sí, cuenta con sección de regalos o transferencia bancaria.' },
-      { question: '¿Cuánto tiempo sigue activa?', answer: 'Desde su creación hasta 30 días naturales después de la fecha de la graduación.' },
+      { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de la fecha de la graduación.' },
     ],
     ctaFinal: {
       title: 'Años de esfuerzo merecen una celebración impecable.',
@@ -1726,7 +1726,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Cuánto cuesta una invitación digital?', answer: 'Los planes comienzan desde $499 MXN. Sin límite de envíos ni costos por invitado adicional.' },
     ],
     ctaFinal: {
-      title: 'Tu evento en León merece la mejor invitación',
+      title: 'Tu evento en León con confirmación clara',
       subtitle: 'Crea tu invitación premium en minutos y compártela con un click.',
       cta: 'Empezar ahora',
     },
@@ -1793,7 +1793,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     slug: 'invitto-vs-paperless-post',
     seo: {
       title: 'Invitto vs Paperless Post — Comparativa Completa 2026',
-      description: 'Compara Invitto vs Paperless Post: precios en pesos, funciones, diseño y soporte. Descubre por qué Invitto es la mejor opción en México.',
+      description: 'Compara Invitto vs Paperless Post: precios en pesos, funciones, diseño y soporte. Descubre las ventajas de Invitto para eventos en México.',
       path: '/invitto-vs-paperless-post',
     },
     hero: {
@@ -1847,7 +1847,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     slug: 'invitto-vs-greenvelope',
     seo: {
       title: 'Invitto vs Greenvelope — Comparativa México 2026',
-      description: 'Compara Invitto vs Greenvelope: funciones, precios en pesos y experiencia para eventos en México. Descubre la mejor opción.',
+      description: 'Compara Invitto vs Greenvelope: funciones, precios en pesos y experiencia para eventos en México. Conoce la diferencia y elige la opción ideal para tu evento.',
       path: '/invitto-vs-greenvelope',
     },
     hero: {
@@ -1889,8 +1889,8 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Puedo migrar de Greenvelope a Invitto?', answer: 'Sí, puedes crear tu invitación desde cero en Invitto en menos de 15 minutos. No necesitas migrar datos — simplemente comparte tu nuevo link.' },
     ],
     ctaFinal: {
-      title: 'La mejor alternativa a Greenvelope en México',
-      subtitle: 'Más funciones, mejor precio, hecho para ti.',
+      title: 'La alternativa a Greenvelope pensada para México',
+      subtitle: 'Más funciones, precios en pesos y hecho para tu evento.',
       cta: 'Comenzar con Invitto',
     },
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
@@ -1913,7 +1913,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     benefits: [
       { icon: Zap, title: 'Más que un simple diseño plano', description: 'A diferencia de enviar un PDF o imagen estática, Invitto es una web interactiva con botones, mapas y animaciones.' },
       { icon: BarChart3, title: 'Control de confirmaciones (RSVP) real', description: 'Otras plataformas solo te dan diseño. Invitto te da tecnología para recibir confirmaciones y gestionar tus pases por familia.' },
-      { icon: MessageCircle, title: 'El mejor envío por WhatsApp', description: 'Las plataformas globales están pensadas para email. Invitto genera las mejores tarjetas de previsualización para WhatsApp.' },
+      { icon: MessageCircle, title: 'Envío optimizado para WhatsApp', description: 'Las plataformas globales están pensadas para email. Invitto genera tarjetas de previsualización claras y atractivas para WhatsApp.' },
       { icon: QrCode, title: 'Boletos QR integrados', description: 'La mayoría de las plataformas te cobran extra por accesos. En Invitto, el control por código QR viene incluido en tu plan.' },
       { icon: DollarSign, title: 'Precios claros en pesos (MXN)', description: 'Sin suscripciones mensuales ocultas ni cargos en dólares. Paga una sola vez por evento en tu propia moneda.' },
       { icon: Shield, title: 'Soporte humano en español', description: 'Si tienes dudas, no hablas con un robot en inglés. Tienes soporte dedicado en México listo para ayudarte.' },

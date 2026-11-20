@@ -2575,11 +2575,24 @@ END:VCALENDAR`;
     };
 
     const eventLabels: Record<string, { ceremony: string; reception: string; tagline: string; welcome: string }> = {
-        wedding:    { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos', welcome: 'Nuestra Boda' },
-        birthday:   { ceremony: 'Misa', reception: 'Celebración', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
-        xv:         { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
-        baptism:    { ceremony: 'Misa de Bautizo', reception: 'Celebración', tagline: 'Bautizo', welcome: 'Mi Bautizo' },
-        graduation: { ceremony: 'Ceremonia', reception: 'Festejo', tagline: 'Graduación', welcome: 'Mi Graduación' },
+        wedding:          { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos', welcome: 'Nuestra Boda' },
+        boda:             { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos', welcome: 'Nuestra Boda' },
+        birthday:         { ceremony: 'Celebración', reception: 'Fiesta', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
+        cumpleanos:       { ceremony: 'Celebración', reception: 'Fiesta', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
+        xv:               { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
+        xv_anos:          { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
+        bautizo:          { ceremony: 'Misa de Bautizo', reception: 'Recepción Familiar', tagline: 'Mi Bautizo', welcome: 'Mi Bautizo' },
+        baptism:          { ceremony: 'Misa de Bautizo', reception: 'Recepción Familiar', tagline: 'Mi Bautizo', welcome: 'Mi Bautizo' },
+        primera_comunion: { ceremony: 'Misa de Primera Comunión', reception: 'Celebración', tagline: 'Mi Primera Comunión', welcome: 'Mi Primera Comunión' },
+        comunion:         { ceremony: 'Misa de Primera Comunión', reception: 'Celebración', tagline: 'Mi Primera Comunión', welcome: 'Mi Primera Comunión' },
+        first_communion:  { ceremony: 'Misa de Primera Comunión', reception: 'Celebración', tagline: 'Mi Primera Comunión', welcome: 'Mi Primera Comunión' },
+        confirmacion:     { ceremony: 'Misa de Confirmación', reception: 'Celebración', tagline: 'Mi Confirmación', welcome: 'Mi Confirmación' },
+        baby_shower:      { ceremony: 'Celebración', reception: 'Fiesta de Baby Shower', tagline: 'Baby Shower', welcome: 'Nuestro Baby Shower' },
+        gender_reveal:    { ceremony: 'Dinámica de Revelación', reception: 'Celebración', tagline: 'Revelación de Género', welcome: 'Revelación de Género' },
+        graduacion:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Mi Graduación', welcome: 'Mi Graduación' },
+        graduation:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Graduación', welcome: 'Mi Graduación' },
+        corporate:        { ceremony: 'Conferencia', reception: 'Recepción', tagline: 'Evento Corporativo', welcome: 'Bienvenidos' },
+        other:            { ceremony: 'Ceremonia', reception: 'Celebración', tagline: 'Nuestra Celebración', welcome: 'Bienvenidos' }
     };
     const labels = eventLabels[event.event_type] || eventLabels['birthday'];
 
@@ -3214,7 +3227,7 @@ END:VCALENDAR`;
                                     <h3 className="text-3xl sm:text-4xl font-serif font-light text-[var(--text-primary)] mb-1">Confirma tu asistencia</h3>
                                     {event.rsvp_deadline && (
                                         <p className="text-sm text-[var(--text-secondary)] mb-4">
-                                            Favor de confirmarte antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
+                                            Por favor confirma tu asistencia antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
                                         </p>
                                     )}
                                     {cfg.rsvp_notes && (
@@ -3398,26 +3411,18 @@ END:VCALENDAR`;
             .map((img: any) => typeof img === 'string' ? { url: img, caption: '' } : img)
             .filter((img: any) => typeof img?.url === 'string' && img.url.trim().length > 0);
 
+        if (galleryImages.length === 0) {
+            return null;
+        }
+
         return (
             <div id="gallery" key="gallery">
-                {galleryImages.length > 0 ? (
-                    <PhotoGallery
-                        images={galleryImages}
-                        title={cfg?.gallery_title || cfg?.galleryTitle || "Galería de Fotos"}
-                        subtitle={cfg?.gallery_subtitle || cfg?.gallerySubtitle || "Momentos inolvidables compartidos con amor."}
-                        grayscale={isMonochromeTheme}
-                    />
-                ) : (
-                    <section className="py-20 bg-[var(--section-bg)]">
-                        <div className="max-w-3xl mx-auto px-6 text-center">
-                            <Camera className="h-16 w-16 mx-auto mb-8 text-stone-300" />
-                            <h3 className="text-3xl font-serif font-light text-[var(--text-primary)] mb-4">Galería de Fotos</h3>
-                            <p className="text-[var(--text-secondary)] text-sm max-w-md mx-auto">
-                                Será un gusto poder compartir este día contigo. Después del evento, podrás encontrar aquí las fotos del día.
-                            </p>
-                        </div>
-                    </section>
-                )}
+                <PhotoGallery
+                    images={galleryImages}
+                    title={cfg?.gallery_title || cfg?.galleryTitle || "Galería de Fotos"}
+                    subtitle={cfg?.gallery_subtitle || cfg?.gallerySubtitle || "Momentos inolvidables compartidos con amor."}
+                    grayscale={isMonochromeTheme}
+                />
             </div>
         );
     };
@@ -3603,7 +3608,7 @@ END:VCALENDAR`;
                         Crea tu invitación con Invitto
                     </a>
                 </p>
-                <p className="text-[10px] text-[var(--text-secondary)]">© 2026 Todos los derechos reservados</p>
+                <p className="text-[10px] text-[var(--text-secondary)]">© {new Date().getFullYear()} Todos los derechos reservados</p>
             </footer>
         );
     };

@@ -855,7 +855,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             <Link to="/confirma" className="hover:underline">Invitto Confirma</Link>
             <Link to="/terminos" className="hover:underline">Términos</Link>
           </div>
-          <p>© 2026 Invitto · Hecho con cariño en México · León, Gto.</p>
+          <p>© {new Date().getFullYear()} Invitto · Hecho con cariño en México · León, Gto.</p>
         </footer>
 
         {/* ─── Sticky Mobile Bar ──────────────────────────────────────────── */}
@@ -1209,7 +1209,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             </div>
           </div>
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-            <p>© 2026 INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
+            <p>© {new Date().getFullYear()} INVITTO.MX · TODOS LOS DERECHOS RESERVADOS</p>
             <p>HECHO CON CARIÑO EN MÉXICO</p>
           </div>
         </div>

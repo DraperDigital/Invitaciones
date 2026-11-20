@@ -627,26 +627,26 @@ export default function HomePage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
                         
                         {/* Plan Clásica */}
-                        <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                             <div className="space-y-6">
                                 <div>
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">PLAN BÁSICO</span>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Clásica</h3>
-                                    <p className="text-xs text-slate-600 mt-1">Para celebraciones íntimas que solo buscan una invitación hermosa.</p>
+                                    <p className="text-xs text-slate-600 mt-1">Solo lo básico: para celebraciones íntimas que buscan una invitación hermosa.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-slate-200/60">
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$499</span>
+                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$499</span>
                                         <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Sin mensualidades</p>
+                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
                                 </div>
 
-                                <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
+                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                         <span>Información del evento y cuenta regresiva</span>
@@ -677,7 +677,7 @@ export default function HomePage() {
                         </div>
 
                         {/* Plan Pro (Destacado) */}
-                        <div className="relative bg-slate-900 text-white rounded-3xl p-8 border-2 border-[#C2287B] shadow-2xl shadow-[#C2287B]/20 flex flex-col justify-between lg:-translate-y-2">
+                        <div className="relative bg-slate-900 text-white rounded-3xl p-7 border-2 border-[#C2287B] shadow-2xl shadow-[#C2287B]/20 flex flex-col justify-between lg:-translate-y-2">
                             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C2287B] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
                                 <Gem className="h-3 w-3" /> MÁS ELEGIDO
                             </div>
@@ -686,18 +686,18 @@ export default function HomePage() {
                                 <div>
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAC345]">CONTROL TOTAL</span>
                                     <h3 className="text-2xl font-display font-extrabold text-white mt-1">Pro</h3>
-                                    <p className="text-xs text-slate-300 mt-1">Para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
+                                    <p className="text-xs text-slate-300 mt-1">Control total: para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-white/10">
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-white">$1,699</span>
+                                        <span className="text-4xl font-serif font-extrabold text-white">$1,699</span>
                                         <span className="text-xs font-bold text-[#FAC345] uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-300 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu fiesta</p>
+                                    <p className="text-[11px] text-slate-300 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
                                 </div>
 
-                                <ul className="space-y-3.5 text-xs text-slate-200 font-medium">
+                                <ul className="space-y-3 text-xs text-slate-200 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                         <span><strong>Todo lo del plan Clásica</strong></span>
@@ -716,10 +716,6 @@ export default function HomePage() {
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span>Importación de invitados desde Excel</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                         <span>Recordatorios de RSVP para tus invitados</span>
                                     </li>
                                 </ul>
@@ -735,27 +731,78 @@ export default function HomePage() {
                             </div>
                         </div>
 
-                        {/* Plan Concierge */}
-                        <div className="bg-[#F8F9FA] rounded-3xl p-8 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                        {/* Plan Diseño Pro */}
+                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                             <div className="space-y-6">
                                 <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
-                                    <p className="text-xs text-slate-600 mt-1">Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.</p>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">PERSONALIZADO</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Diseño Pro</h3>
+                                    <p className="text-xs text-slate-600 mt-1">Diseño a tu medida: plantillas exclusivas, paleta y tipografía adaptadas a tu concepto.</p>
                                 </div>
 
                                 <div className="py-2 border-y border-slate-200/60">
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl md:text-5xl font-serif font-extrabold text-[#222B38]">$4,499</span>
+                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$2,499</span>
                                         <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
                                     </div>
-                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Servicio completo con equipo humano</p>
+                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
                                 </div>
 
-                                <ul className="space-y-3.5 text-xs text-slate-700 font-medium">
+                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Diseño Pro (diseño a medida)</strong></span>
+                                        <span><strong>Todo lo del plan Pro</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span><strong>Plantillas exclusivas de alta gama</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Ajuste de tipografía y paleta por diseñador</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Música de fondo personalizada</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Soporte prioritario por WhatsApp</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="pt-8">
+                                <Link to="/dashboard/new?plan=premium">
+                                    <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
+                                        Elegir Diseño Pro
+                                    </button>
+                                </Link>
+                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
+                            </div>
+                        </div>
+
+                        {/* Plan Concierge */}
+                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                            <div className="space-y-6">
+                                <div>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
+                                    <p className="text-xs text-slate-600 mt-1">Nosotros hacemos todo: Diseño Pro + Invitto Confirma (llamamos y confirmamos a tus invitados).</p>
+                                </div>
+
+                                <div className="py-2 border-y border-slate-200/60">
+                                    <div className="flex items-baseline gap-1.5">
+                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$4,499</span>
+                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
+                                </div>
+
+                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span><strong>Todo lo del plan Diseño Pro</strong></span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
@@ -767,11 +814,11 @@ export default function HomePage() {
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Lista final 15 días antes o garantía de 100%</span>
+                                        <span>Lista final cerrada 15 días antes del evento</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Línea de atención para dudas de tus invitados</span>
+                                        <span>Atención dedicada a dudas de tus invitados</span>
                                     </li>
                                 </ul>
                             </div>
@@ -1057,7 +1104,7 @@ export default function HomePage() {
 
                     {/* Bottom Line */}
                     <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-400 font-bold">
-                        <p>© 2026 INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
+                        <p>© {new Date().getFullYear()} INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
                         <p>HECHO CON CARIÑO EN MÉXICO</p>
                     </div>
 

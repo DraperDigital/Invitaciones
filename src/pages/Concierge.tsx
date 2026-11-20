@@ -132,7 +132,7 @@ const Concierge: React.FC = () => {
                     </div>
 
                     <p className="text-[8px] uppercase tracking-[0.2em] font-medium text-stone-300 text-center">
-                        © 2026 INVITTO LUXURY CONCIERGE SERVICE
+                        © {new Date().getFullYear()} INVITTO LUXURY CONCIERGE SERVICE
                     </p>
                 </div>
             </div>

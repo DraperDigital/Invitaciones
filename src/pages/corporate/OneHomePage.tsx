@@ -505,7 +505,7 @@ export default function OneHomePage() {
             </div>
           </div>
           <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-mono text-slate-500">
-            <p>© 2026 INVITTO ONE · VERTICAL B2B ENTERPRISE</p>
+            <p>© {new Date().getFullYear()} INVITTO ONE · VERTICAL B2B ENTERPRISE</p>
             <p>TECNOLOGÍA DE ACCESO SEGURO</p>
           </div>
         </div>

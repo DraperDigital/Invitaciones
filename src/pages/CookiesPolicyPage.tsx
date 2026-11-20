@@ -295,7 +295,7 @@ const CookiesPolicyPage: React.FC = () => {
                     </div>
 
                     <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-                        <p>© 2026 INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
+                        <p>© {new Date().getFullYear()} INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
                         <p>HECHO CON CARIÑO EN MÉXICO</p>
                     </div>
                 </div>

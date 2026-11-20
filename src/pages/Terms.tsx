@@ -87,7 +87,7 @@ const Terms: React.FC = () => {
                         </div>
                         <h3 className="text-lg font-bold text-[#222B38]">Un solo pago transparente</h3>
                         <p className="text-slate-600 text-sm leading-relaxed">
-                            Sin mensualidades forzosas ni cobros sorpresa recurrentes. Pagas únicamente por tu evento y tu invitación permanece activa hasta concluir tu celebración.
+                            Sin mensualidades forzosas ni cobros sorpresa recurrentes. Pagas únicamente por tu evento: tu invitación queda activa desde que la publicas hasta 30 días después de tu evento.
                         </p>
                     </div>
 
@@ -199,7 +199,7 @@ const Terms: React.FC = () => {
                         <div className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">6</div>
                         <h2 className="text-2xl font-bold text-[#222B38]">Vigencia de tu invitación</h2>
                         <p className="text-slate-600 leading-relaxed">
-                            Tu invitación digital interactiva permanece en línea y totalmente funcional hasta la fecha del evento indicada en tu panel de control. Posteriormente, mantenemos el acceso a tu cuenta durante <strong>30 días naturales adicionales</strong> a la conclusión de tu celebración para que puedas consultar métricas, ver felicitaciones y exportar tu lista completa de confirmaciones (RSVP) en Excel o CSV.
+                            Tu invitación digital interactiva queda activa desde que la publicas hasta <strong>30 días naturales después de tu evento</strong>. Durante todo este tiempo, la invitación sigue en línea y totalmente funcional, con acceso total a tu panel de control para consultar métricas, ver felicitaciones y exportar tu lista completa de confirmaciones (RSVP) en Excel o CSV.
                         </p>
                     </section>
 
@@ -304,7 +304,7 @@ const Terms: React.FC = () => {
                     </div>
 
                     <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-                        <p>© 2026 INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
+                        <p>© {new Date().getFullYear()} INVITTO.COM.MX · PLATAFORMA OFICIAL EN MÉXICO · TODOS LOS DERECHOS RESERVADOS</p>
                         <p>HECHO CON CARIÑO EN MÉXICO</p>
                     </div>
                 </div>
