@@ -156,6 +156,23 @@ serve(async (req) => {
           }
         }
 
+        // Incrementar uso del cupón si se aplicó en la orden pagada
+        const usedCoupon = session.metadata?.coupon;
+        if (usedCoupon && typeof usedCoupon === 'string' && usedCoupon.trim()) {
+          try {
+            const { error: incError } = await supabase.rpc('increment_coupon_use', {
+              coupon_code: usedCoupon.trim().toUpperCase(),
+            });
+            if (incError) {
+              console.error(`Error incrementing coupon use for ${usedCoupon}:`, incError);
+            } else {
+              console.log(`Successfully incremented coupon use for ${usedCoupon}`);
+            }
+          } catch (cErr) {
+            console.error(`Exception incrementing coupon ${usedCoupon}:`, cErr);
+          }
+        }
+
         console.log(`Successfully upgraded event ${eventId} to plan ${planId}`);
       }
 

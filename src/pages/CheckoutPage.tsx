@@ -208,45 +208,23 @@ export default function CheckoutPage() {
 
             const cleanCode = couponCode.trim().toUpperCase();
 
-            // 1. Consultar el cupón directamente en la tabla invitto.coupons
-            let couponData: any = null;
-            const { data: directCoupon, error: directError } = await supabase
-                .from('coupons')
-                .select('*')
-                .eq('code', cleanCode)
-                .maybeSingle();
-
-            if (!directError && directCoupon) {
-                couponData = directCoupon;
-            } else {
-                // Fallback por si la tabla invitto.coupons tiene RLS restrictivo para anon/authenticated
-                const { data: edgeData, error: edgeError } = await supabase.functions.invoke('apply-coupon', {
-                    body: { 
-                        couponCode: cleanCode,
-                        eventId: eventId,
-                        planId: planId,
-                        checkOnly: true
-                    }
+            // Usar la función RPC validar_cupon de invitto
+            const { data: rpcData, error: rpcError } = await supabase
+                .schema('invitto')
+                .rpc('validar_cupon', { 
+                    p_code: cleanCode, 
+                    p_plan: planId 
                 });
 
-                if (edgeError) {
-                    let errorMessage = edgeError.message;
-                    try {
-                        const body = await edgeError.context.json();
-                        if (body && body.error) errorMessage = body.error;
-                    } catch (_) {}
-                    throw new Error(errorMessage);
-                }
+            if (rpcError) {
+                console.error('Error RPC validar_cupon:', rpcError);
+                throw new Error("Error al validar el cupón.");
+            }
 
-                if (edgeData?.error) {
-                    throw new Error(edgeData.error);
-                }
+            const couponData = Array.isArray(rpcData) ? rpcData[0] : rpcData;
 
-                if (edgeData?.coupon) {
-                    couponData = edgeData.coupon;
-                } else {
-                    throw new Error("Cupón inválido o no encontrado.");
-                }
+            if (!couponData || !couponData.code) {
+                throw new Error("Cupón inválido o no encontrado.");
             }
 
             // 2. Validar que active sea true
