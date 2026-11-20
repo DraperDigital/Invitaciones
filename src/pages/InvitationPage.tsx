@@ -115,7 +115,19 @@ export default function InvitationPage() {
     const themeName = event?.theme_config?.theme || 'classic';
     const isOwner = Boolean(user && event && user.id === event.user_id);
     const checkoutIntent = syncCheckoutIntent(event?.id, searchParams);
-    const publishCta = event ? getPublishCta(checkoutIntent, event.id) : null;
+    const publishCta = event ? getPublishCta(checkoutIntent, event.id, themeName) : null;
+
+    const buildCreateUrl = (themeId: string, eventType?: string) => {
+        const params = new URLSearchParams();
+        for (const [k, v] of searchParams.entries()) {
+            if (k.startsWith('utm_') || k === 'fbclid') {
+                params.set(k, v);
+            }
+        }
+        params.set('theme', themeId);
+        if (eventType) params.set('tipo', eventType);
+        return `/dashboard/new?${params.toString()}`;
+    };
 
     // ── CSS Variable Theme Profiles ──────────────────────────────────
     // Each theme defines the full set of CSS variables consumed by
@@ -3655,7 +3667,7 @@ END:VCALENDAR`;
                                     <span>{publishCta ? publishCta.buttonText : 'Publicar mi invitación – desde $499'}</span>
                                 </Link>
                                 <Link
-                                    to={`/planes?id=${event.id}${checkoutIntent.coupon ? `&coupon=${encodeURIComponent(checkoutIntent.coupon)}` : ''}`}
+                                    to={`/planes?id=${event.id}&theme=${themeName}${checkoutIntent.coupon ? `&coupon=${encodeURIComponent(checkoutIntent.coupon)}` : ''}`}
                                     className="hidden lg:inline text-[11px] text-stone-400 hover:text-white underline underline-offset-2 ml-1"
                                 >
                                     Ver planes
@@ -3841,7 +3853,7 @@ END:VCALENDAR`;
 
                         {/* Botón Principal: Quiero usar esta plantilla */}
                         <Link 
-                            to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}&tipo=${event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding'}`} 
+                            to={buildCreateUrl(cfg.theme || currentDemo.id || 'classic', event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding')} 
                             onClick={() => {
                                 const eventCategoria = event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding';
                                 const eventSlug = slug || event?.slug || '';
@@ -3996,7 +4008,7 @@ END:VCALENDAR`;
                                         <span>Ver Galería</span>
                                     </Link>
                                     <Link
-                                        to={`/planes?theme=${cfg.theme || currentDemo.id || 'classic'}&tipo=${event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding'}`}
+                                        to={buildCreateUrl(cfg.theme || currentDemo.id || 'classic', event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding')}
                                         onClick={() => {
                                             setShowTemplateMenu(false);
                                             const eventCategoria = event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding';

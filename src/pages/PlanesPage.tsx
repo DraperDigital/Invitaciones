@@ -1,16 +1,33 @@
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Heart, Gem, Crown, ArrowDown } from 'lucide-react';
+import { ArrowLeft, Heart, Gem, Crown, ArrowDown, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 import Seo from '../components/Seo';
 import PlanComparisonTable from '../components/PlanComparisonTable';
 import { trackEvent } from '../lib/analytics';
+import { getTemplateRequiredPlan } from '../lib/themePresets';
 
 export default function PlanesPage() {
     const { user } = useAuth();
     const [searchParams] = useSearchParams();
     const eventId = searchParams.get('id');
     const theme = searchParams.get('theme');
+    const planParam = searchParams.get('plan');
     const tipo = searchParams.get('tipo') || searchParams.get('type') || searchParams.get('category');
+
+    const [eventTheme, setEventTheme] = useState<string | null>(theme);
+
+    useEffect(() => {
+        if (!eventId || theme) return;
+        supabase.from('events').select('theme_config').eq('id', eventId).single().then(({ data }) => {
+            if (data?.theme_config?.theme) {
+                setEventTheme(data.theme_config.theme);
+            }
+        });
+    }, [eventId, theme]);
+
+    const requiredPlan = planParam || (eventTheme ? getTemplateRequiredPlan(eventTheme) : null);
     const plans = [
         {
             id: 'clasico',
@@ -169,18 +186,26 @@ export default function PlanesPage() {
             {/* Pricing Cards Grid */}
             <section className="px-6 md:px-8 max-w-[1600px] mx-auto mb-24 md:mb-40 pt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-w-[1600px] mx-auto gap-8 md:gap-6 items-stretch">
-                    {plans.map((plan) => (
+                    {plans.map((plan) => {
+                        const isPreselectedByTemplate = requiredPlan === plan.id;
+                        return (
                         <div 
                             key={plan.id} 
                             className={`group relative flex flex-col p-7 md:p-8 rounded-3xl border transition-all duration-300 hover:shadow-xl ${
-                                plan.popular 
-                                    ? 'bg-slate-900 border-slate-800 text-white shadow-2xl shadow-[#e0409a]/15 md:scale-105 z-20' 
-                                    : plan.id === 'concierge'
-                                        ? 'bg-white border-[#e0409a]/30 text-[#1E293B] shadow-lg'
-                                        : 'bg-white border-slate-100 text-[#1E293B] shadow-sm'
+                                isPreselectedByTemplate
+                                    ? 'bg-slate-900 border-[#DF3B94] text-white shadow-2xl shadow-[#DF3B94]/25 ring-2 ring-[#DF3B94] md:scale-105 z-30'
+                                    : plan.popular 
+                                        ? 'bg-slate-900 border-slate-800 text-white shadow-2xl shadow-[#e0409a]/15 md:scale-105 z-20' 
+                                        : plan.id === 'concierge'
+                                            ? 'bg-white border-[#e0409a]/30 text-[#1E293B] shadow-lg'
+                                            : 'bg-white border-slate-100 text-[#1E293B] shadow-sm'
                             }`}
                         >
-                            {plan.popular && (
+                            {isPreselectedByTemplate ? (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 text-white text-[10px] uppercase font-black tracking-widest rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                                    <Sparkles className="h-3.5 w-3.5" /> Esta plantilla es del plan {plan.name}
+                                </div>
+                            ) : plan.popular && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-[#e0409a] text-white text-[10px] uppercase font-bold tracking-widest rounded-full shadow-lg flex items-center gap-2 whitespace-nowrap">
                                     <Gem className="h-3.5 w-3.5" /> MÁS POPULAR
                                 </div>
@@ -280,7 +305,7 @@ export default function PlanesPage() {
                                 </p>
                             </div>
                         </div>
-                    ))}
+                    ); })}
                 </div>
 
                 {/* Banner Invitto Confirma */}

@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
@@ -526,7 +526,6 @@ export default function EventWizard() {
                                 : 'text-stone-500 hover:text-stone-800'
                         }`}
                     >
-                        <Sparkles className="h-4 w-4 text-[#DF3B94]" />
                         <span>Asistente IA</span>
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94] font-black">Nuevo</span>
                     </button>
@@ -1017,7 +1016,7 @@ export default function EventWizard() {
                             className="px-10 py-4 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider shadow-xl shadow-pink-200/50 hover:bg-[#c92f82] transition-all disabled:opacity-50 flex items-center gap-3"
                         >
                             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                            {isEditing ? 'Guardar Cambios' : (preselectedPlan ? 'Continuar al Pago' : 'Elegir Plan y Publicar')}
+                            {isEditing ? 'Guardar Cambios' : 'Elegir plan y publicar'}
                         </button>
                     )}
                 </div>

@@ -1151,7 +1151,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             `🎉 ¡Felicidades! He recopilado toda la información para tu invitación.\n\nPuedes ver la vista previa para asegurarte de que todo luce perfecto, hacer ajustes o publicarla de inmediato:`,
             [
                 { label: '👁️ Ver Vista Previa', value: 'preview' },
-                { label: '🚀 Guardar y Publicar', value: 'publish' },
+                { label: '🚀 Elegir plan y publicar', value: 'publish' },
                 { label: '📝 Editar en Formulario Clásico', value: 'manual' }
             ],
             undefined,
@@ -1370,7 +1370,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                                 className="flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                                             >
                                                 <Sparkles className="h-4 w-4" />
-                                                <span>Guardar y Publicar</span>
+                                                <span>Elegir plan y publicar</span>
                                             </button>
                                             <button
                                                 type="button"

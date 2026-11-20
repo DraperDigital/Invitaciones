@@ -424,3 +424,17 @@ export function getTemplatesForCategory(categoryOrType?: string, currentTheme?: 
     });
 }
 
+/**
+ * Devuelve el plan mínimo requerido por una plantilla.
+ * Las plantillas avanzadas del catálogo corresponden al plan Pro (o Diseño Pro / Premium si así está marcado).
+ */
+export function getTemplateRequiredPlan(themeIdOrSlug?: string | null): 'clasico' | 'pro' | 'premium' {
+    if (!themeIdOrSlug || themeIdOrSlug === 'classic') return 'clasico';
+    const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
+    if (!tpl) return 'clasico';
+    const p = (tpl.plan || '').toLowerCase();
+    if (p.includes('diseño pro')) return 'premium';
+    return 'pro';
+}
+
+

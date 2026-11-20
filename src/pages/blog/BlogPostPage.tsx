@@ -78,7 +78,7 @@ export default function BlogPostPage() {
             </button>
 
             <Link
-              to={user ? '/dashboard' : '/planes'}
+              to={user ? '/dashboard' : '/dashboard/new'}
               className="hidden sm:inline-flex px-6 py-2.5 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20"
             >
               {user ? 'Mi Dashboard' : 'Comenzar'}

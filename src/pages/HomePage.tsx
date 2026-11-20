@@ -127,7 +127,7 @@ export default function HomePage() {
                                 <Link to="/login" className="hidden sm:inline-block text-[10px] md:text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#C2287B] transition-colors">
                                     Ingresar
                                 </Link>
-                                <Link to="/planes" className="hidden sm:block">
+                                <Link to="/dashboard/new" className="hidden sm:block">
                                     <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 hover:-translate-y-0.5 active:scale-95">
                                         Comenzar
                                     </button>
@@ -177,7 +177,7 @@ export default function HomePage() {
                         </Link>
                         <div className="pt-3 flex flex-col gap-3">
                             <Link
-                                to={user ? '/dashboard' : '/planes'}
+                                to={user ? '/dashboard' : '/dashboard/new'}
                                 className="block w-full text-center px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 active:scale-95"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
@@ -667,7 +667,7 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to={user ? "/dashboard/new?plan=clasico" : "/planes"}>
+                                <Link to="/dashboard/new?plan=clasico">
                                     <button className="w-full py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all">
                                         Diseñar Gratis
                                     </button>
@@ -726,7 +726,7 @@ export default function HomePage() {
                             </div>
 
                             <div className="pt-8">
-                                <Link to={user ? "/dashboard/new?plan=pro" : "/planes"}>
+                                <Link to="/dashboard/new?plan=pro">
                                     <button className="w-full py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all">
                                         Probar Plan Pro Gratis
                                     </button>

@@ -61,10 +61,11 @@ export function syncCheckoutIntent(eventId?: string | null, searchParams?: URLSe
  * - Con plan específico: "Publicar mi invitación – $X" -> /checkout?plan=...&id=...
  * - Sin plan: "Publicar mi invitación – desde $499" -> /planes?id=...
  */
-export function getPublishCta(intent: DraftCheckoutIntent, eventId: string) {
+export function getPublishCta(intent: DraftCheckoutIntent, eventId: string, themeName?: string | null) {
     const planKey = intent.plan?.toLowerCase();
     const planInfo = planKey ? PLAN_PRICES[planKey] : null;
     const couponQs = intent.coupon ? `&coupon=${encodeURIComponent(intent.coupon)}` : '';
+    const themeQs = themeName ? `&theme=${encodeURIComponent(themeName)}` : '';
 
     if (planInfo && planKey) {
         return {
@@ -80,7 +81,7 @@ export function getPublishCta(intent: DraftCheckoutIntent, eventId: string) {
     return {
         buttonText: 'Publicar mi invitación – desde $499',
         mobileButtonText: 'Publicar – desde $499',
-        url: `/planes?id=${eventId}${couponQs}`,
+        url: `/planes?id=${eventId}${themeQs}${couponQs}`,
         hasSpecificPlan: false,
         planKey: null,
         planInfo: null

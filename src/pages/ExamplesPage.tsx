@@ -70,7 +70,7 @@ export default function ExamplesPage() {
                         </Link>
                     </nav>
                     <div className="flex items-center gap-4">
-                        <Link to={user ? "/dashboard" : "/planes"}>
+                        <Link to={user ? "/dashboard" : "/dashboard/new"}>
                             <button className="px-5 py-2.5 md:px-6 md:py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-[10px] md:text-xs uppercase font-bold tracking-widest transition-all shadow-lg shadow-[#DF3B94]/20 hover:-translate-y-0.5 active:scale-95">
                                 {user ? 'Ir al Panel' : 'Comenzar'}
                             </button>

@@ -70,7 +70,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
 
   const primaryCtaUrl = data.isEventLanding
     ? buildCtaUrl('/dashboard/new', data.eventType)
-    : (user ? buildCtaUrl('/dashboard/new') : buildCtaUrl('/planes'));
+    : buildCtaUrl('/dashboard/new');
 
   const waUrl = `https://wa.me/5215650314529?text=${encodeURIComponent(
     data.waMessage || 'Hola, quiero información sobre las invitaciones digitales de Invitto'
