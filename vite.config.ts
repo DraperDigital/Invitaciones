@@ -1,5 +1,13 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+const tsDeepmerge = require('ts-deepmerge')
+if (tsDeepmerge && !tsDeepmerge.default && tsDeepmerge.merge) {
+  tsDeepmerge.default = tsDeepmerge.merge
+}
+
 import prerender from '@prerenderer/rollup-plugin'
 import Beasties from 'beasties'
 import fs from 'node:fs'
