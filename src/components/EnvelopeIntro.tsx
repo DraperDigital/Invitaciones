@@ -159,9 +159,10 @@ export default function EnvelopeIntro({
     const isOpeningRef = useRef(false);
     const timersRef = useRef<number[]>([]);
 
-    // Cargar fuentes decorativas para el sobre (Cormorant Garamond, Outfit, Manrope)
+    // Cargar fuentes decorativas para el sobre (Cinzel para el sello de cera, Cormorant Garamond, Outfit, Manrope)
     useEffect(() => {
         loadGoogleFonts([
+            'Cinzel:wght@600;700',
             'Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600',
             'Outfit:wght@500;600;700',
             'Manrope:wght@500;600;700'
@@ -177,6 +178,25 @@ export default function EnvelopeIntro({
     const initials = getInitials(event.title);
     const eventLabel = getEventLabel(event.event_type);
     const formattedDate = formatEnvelopeDate(event.date_time);
+
+    // Ajuste proporcional y centrado exacto para el monograma del sello de cera
+    const isCoupleInitials = initials.includes('&');
+    let sealFontSize = '19px';
+    let sealLetterSpacing = '0px';
+    let displayInitials = initials;
+
+    if (isCoupleInitials) {
+        sealFontSize = '11px';
+        sealLetterSpacing = '0.5px';
+        const parts = initials.split('&').map(s => s.trim());
+        displayInitials = `${parts[0] || ''}&${parts[1] || ''}`;
+    } else if (initials.length === 2) {
+        sealFontSize = '13.5px';
+        sealLetterSpacing = '0.5px';
+    } else {
+        sealFontSize = '19px';
+        sealLetterSpacing = '0px';
+    }
 
     // Identificar plantilla activa para obtener perfil de colores de respaldo fiel al diseño
     const activeThemeId = (effectiveCfg.theme || event.theme_config?.theme || 'classic') as string;
@@ -805,13 +825,17 @@ export default function EnvelopeIntro({
                         <stop offset="65%" stopColor={accentDark} />
                         <stop offset="100%" stopColor={accentDark} />
                     </radialGradient>
+                    <filter id="invitto-seal-emboss" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="1" stdDeviation="0.4" floodColor="rgba(0,0,0,0.38)" />
+                    </filter>
                     <symbol id="invitto-waxseal-symbol" viewBox="0 0 66 66">
                         <path
                             d="M33 3c5 0 7 3 11 4s8 0 10 4 1 7 3 11 6 6 6 11-4 7-5 11-1 8-5 10-7 1-11 3-6 6-9 6-6-4-10-5-8 1-10-3-1-7-3-11-6-6-6-11 4-7 5-11 1-8 5-10 7-1 11-3 3-6 8-6z"
                             fill="url(#invitto-wax-gradient)"
                         />
-                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth="2" />
-                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(255,255,255,.18)" strokeWidth="1" transform="translate(-.6 -.6)" />
+                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="1.8" />
+                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(255,255,255,.2)" strokeWidth="0.8" transform="translate(-.5 -.5)" />
+                        <ellipse cx="24" cy="20" rx="8" ry="4" fill="rgba(255,255,255,.22)" transform="rotate(-25 24 20)" />
                         {decorativeImage ? (
                             <image
                                 href={decorativeImage}
@@ -825,16 +849,20 @@ export default function EnvelopeIntro({
                         ) : (
                             <text
                                 x="33"
-                                y="39"
+                                y="33"
                                 textAnchor="middle"
-                                fontFamily="'Pinyon Script', cursive, serif"
-                                fontSize="20"
-                                fill="rgba(255,255,255,.92)"
+                                dominantBaseline="central"
+                                alignmentBaseline="central"
+                                fontFamily="'Cinzel', 'Playfair Display', 'Cormorant Garamond', Georgia, serif"
+                                fontWeight="700"
+                                fontSize={sealFontSize}
+                                letterSpacing={sealLetterSpacing}
+                                fill="rgba(255,255,255,.95)"
+                                filter="url(#invitto-seal-emboss)"
                             >
-                                {initials}
+                                {displayInitials}
                             </text>
                         )}
-                        <ellipse cx="24" cy="20" rx="8" ry="4" fill="rgba(255,255,255,.22)" transform="rotate(-25 24 20)" />
                     </symbol>
                 </defs>
             </svg>
