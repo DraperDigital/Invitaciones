@@ -186,19 +186,18 @@
 }
 .theme-anturio-vino #gallery [class*="rounded"] { border-radius: 0 !important; }
 
-/* ── Pie: banda sólida vino "Te esperamos" ──────────────────────────── */
-.theme-anturio-vino #footer { padding-top: 0 !important; }
-.theme-anturio-vino #footer::before {
-  content: 'Te esperamos';
-  display: grid;
-  place-items: center;
-  height: 240px;
-  margin-bottom: 28px;
-  font-family: 'Pinyon Script', cursive;
-  font-size: 56px;
-  color: #f4efe6;
-  background: var(--av-wine);
+/* ── Pie: mensaje de cierre (módulo Pie) en vino sólido ─────────────── */
+.theme-anturio-vino .invitation-closing {
+  background: var(--av-wine) var(--av-tex) !important;
+  color: #f4efe6 !important;
 }
+.theme-anturio-vino .invitation-closing .invitation-closing-title {
+  font-family: 'Italiana', serif !important;
+  font-weight: 400 !important;
+  letter-spacing: .06em !important;
+  color: #f4efe6 !important;
+}
+.theme-anturio-vino .invitation-closing-ornament span:nth-child(2) { background: var(--av-gold) !important; opacity: 1 !important; }
 
 /* ══════════════════════════════════════════════════════════════════════
    PORTADA

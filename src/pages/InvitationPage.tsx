@@ -11,7 +11,7 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY, getDefaultClosingMessage } from '../lib/sectionRegistry';
 import type { SectionId } from '../lib/sectionRegistry';
 import { trackEvent } from '../lib/analytics';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
@@ -3651,8 +3651,60 @@ END:VCALENDAR`;
             });
         };
 
+        // Mensaje de cierre: parte del módulo Pie en TODAS las plantillas.
+        // Texto editable (closing_message); si no hay, se sugiere uno según el tipo de evento.
+        // Tipografía: usa la de títulos de la plantilla (font-serif / reglas del tema), no una fija.
+        const showClosing = cfg.show_closing_message !== false && cfg.showClosingMessage !== false;
+        const closingText = (cfg.closing_message ?? cfg.closingMessage ?? getDefaultClosingMessage(event?.event_type)).trim();
+        const closingDate = event?.date_time ? new Date(event.date_time) : null;
+        const closingDateLabel = closingDate && !isNaN(closingDate.getTime()) ? format(closingDate, 'dd · MM · yyyy') : '';
+
         return (
-            <footer id="footer" key="footer" className="bg-[var(--section-bg-alt)] text-[var(--text-primary)] py-10 text-center space-y-4">
+            <footer id="footer" key="footer" className={`bg-[var(--section-bg-alt)] text-[var(--text-primary)] ${showClosing && closingText ? '' : 'pt-10'} pb-10 text-center space-y-4`}>
+                {showClosing && closingText && (
+                    <div
+                        className="invitation-closing relative px-8 py-20 sm:py-24 mb-10"
+                        style={{ background: 'var(--color-button-raw)', color: 'var(--button-contrast)' }}
+                    >
+                        {isAdminMode && (
+                            <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setEditingSection('footer'); }}
+                                className="absolute top-4 right-4 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-lg border border-stone-200 shadow-sm text-xs font-medium normal-case tracking-normal cursor-pointer"
+                                title="Editar mensaje de cierre"
+                            >
+                                <Edit2 className="h-3.5 w-3.5 text-stone-400" />
+                                <span>Editar</span>
+                            </button>
+                        )}
+                        <div className="invitation-closing-ornament mx-auto mb-8 flex items-center justify-center gap-3" aria-hidden="true">
+                            <span className="h-px w-10 bg-current opacity-40" />
+                            <span className="h-1.5 w-1.5 rotate-45 bg-current opacity-60" />
+                            <span className="h-px w-10 bg-current opacity-40" />
+                        </div>
+                        <h2
+                            className="invitation-closing-title font-serif font-light mx-auto max-w-xl whitespace-pre-line"
+                            style={{ fontSize: 'clamp(2.4rem, 10vw, 4rem)', lineHeight: 1.1, textWrap: 'balance' } as React.CSSProperties}
+                        >
+                            {closingText}
+                        </h2>
+                        {(event?.title || closingDateLabel) && (
+                            <p className="invitation-closing-sub mt-7 text-[11px] uppercase tracking-[0.32em] opacity-75">
+                                {[event?.title, closingDateLabel].filter(Boolean).join('  ·  ')}
+                            </p>
+                        )}
+                    </div>
+                )}
+                {isAdminMode && !(showClosing && closingText) && (
+                    <button
+                        type="button"
+                        onClick={() => setEditingSection('footer')}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-stone-700 rounded-lg border border-stone-200 shadow-sm text-xs font-medium normal-case tracking-normal cursor-pointer"
+                    >
+                        <Edit2 className="h-3.5 w-3.5 text-stone-400" />
+                        <span>Agregar mensaje de cierre</span>
+                    </button>
+                )}
                 <div className="h-px w-32 mx-auto mb-6" style={{backgroundColor: accentColor, opacity: 0.4}} />
                 <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--text-secondary)]">
                     Creado con amor · <a 
