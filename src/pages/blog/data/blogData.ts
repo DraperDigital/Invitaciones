@@ -69,7 +69,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: 'paragraph',
-        content: 'Si tu evento es formal y pagas un banquete por persona, necesitas saber exactamente quién asistirá. Las invitaciones inteligentes en este rango (como el Plan Pro de Invitto por $1,699 MXN) incluyen un sistema de RSVP (confirmación). Tú cargas tu lista de invitados con el número de pases permitidos por familia, y la plataforma lleva el conteo automático en tiempo real. Te ahorra decenas de horas de estar persiguiendo gente.'
+        content: 'Si tu evento es formal y pagas un banquete por persona, necesitas tener una respuesta clara de cada invitación a tiempo. Las invitaciones inteligentes en este rango (como el Plan Pro de Invitto por $1,699 MXN) incluyen un sistema de RSVP (confirmación). Tú cargas tu lista de invitados con el número de pases permitidos por familia, y la plataforma lleva el conteo automático en tiempo real. Te ahorra decenas de horas de estar persiguiendo gente.'
       },
       {
         type: 'heading',
@@ -351,7 +351,7 @@ export const BLOG_POSTS: BlogPost[] = [
           'Impresión de boletos de recepción adicionales.',
           'Rotulación caligráfica a mano de los nombres.',
           'Costos de mensajería para enviarlas a familiares en otros estados.',
-          'Pérdida de dinero por confirmaciones imprecisas que obligan a pagar platillos de banquete extra.'
+          'Incertidumbre en las respuestas que complica cerrar la lista final a tiempo.'
         ]
       },
       {

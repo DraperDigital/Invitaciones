@@ -39,7 +39,7 @@ const FAQ_ITEMS = [
     },
     {
         q: '¿Cuándo me entregan la lista?',
-        a: '15 días antes de tu boda, o en la fecha que te pida tu salón para cerrar el número de platillos. Nos la dices al apartar.'
+        a: '15 días antes de tu boda, o en la fecha que te pida tu salón para entregar tu lista final. Nos la dices al apartar.'
     },
     {
         q: '¿Mis invitados van a saber que contratamos a alguien?',
@@ -119,7 +119,7 @@ const ConciergeLanding: React.FC = () => {
                     
                     <h1 className="text-4xl xs:text-5xl md:text-6xl lg:text-7xl font-display font-extrabold text-white leading-tight tracking-tight">
                         ¿Cuántos de los que te dijeron "sí" <br />
-                        <span className="italic font-light text-[#DF3B94]">van a llegar de verdad?</span>
+                        <span className="italic font-light text-[#DF3B94]">están confirmados de verdad?</span>
                     </h1>
                     
                     <p className="text-base md:text-xl text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed">
@@ -169,14 +169,14 @@ const ConciergeLanding: React.FC = () => {
                         </div>
                         <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#DF3B94]/30 transition-all flex flex-col justify-between">
                             <p className="text-base md:text-lg italic text-slate-200 font-serif leading-relaxed">
-                                "Pagamos 116 platillos y llegaron 102 personas."
+                                "Es lo peor estar esperando a que confirmen."
                             </p>
                         </div>
                     </div>
 
                     <div className="max-w-3xl mx-auto text-center space-y-4">
                         <p className="text-base md:text-lg text-slate-300 font-normal leading-relaxed">
-                            Cada lugar vacío en tu boda cuesta entre $400 y $1,500. Y casi siempre es de alguien que dijo que sí. No es mala suerte: es que nadie volvió a preguntar a tiempo.
+                            Las cancelaciones pasan en cualquier boda. Lo que sí puedes evitar es quedarte con puros 'a lo mejor' y enterarte tarde. Nosotros buscamos un sí o un no claro de cada invitación y lo reconfirmamos la semana de tu boda.
                         </p>
                         <p className="text-xs text-slate-500 font-medium">
                             Frases reales de novias en foros y redes sobre bodas en México.
