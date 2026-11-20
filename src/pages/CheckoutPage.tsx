@@ -372,7 +372,6 @@ export default function CheckoutPage() {
                     email: effectiveEmail,
                     fbp: fbp || undefined,
                     fbc: fbc || undefined,
-                    amount: appliedCoupon ? appliedCoupon.finalPrice : undefined,
                     coupon: appliedCoupon ? appliedCoupon.code : undefined
                 }
             });

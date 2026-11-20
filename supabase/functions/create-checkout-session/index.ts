@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import Stripe from "npm:stripe@13.6.0"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
   apiVersion: '2023-10-16',
@@ -9,6 +10,36 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+const dbSchema = Deno.env.get('SUPABASE_DB_SCHEMA') || 'invitto'
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  db: { schema: dbSchema },
+})
+
+const PLANS: Record<string, { name: string; price: number; priceId: string }> = {
+  clasico: {
+    name: 'Clásica',
+    price: 499,
+    priceId: 'price_1Ud3rgK2SjbKQms7CYNbOWmB',
+  },
+  pro: {
+    name: 'Pro',
+    price: 1699,
+    priceId: 'price_1Ud3rvK2SjbKQms7MQRUtsM2',
+  },
+  premium: {
+    name: 'Diseño Pro',
+    price: 2499,
+    priceId: 'price_1Ud3s5K2SjbKQms7y9ZQI4vY',
+  },
+  concierge: {
+    name: 'Concierge',
+    price: 4499,
+    priceId: 'price_1Ud3sEK2SjbKQms7PXykglMR',
+  },
 }
 
 serve(async (req) => {
@@ -23,7 +54,8 @@ serve(async (req) => {
     }
 
     const body = await req.json()
-    const { sessionId, planId, eventId, origin, email, fbp, fbc, amount, coupon } = body
+    // NUNCA aceptamos 'amount' desde el cliente; se calcula estrictamente en el servidor
+    const { sessionId, planId, eventId, origin, email, fbp, fbc, coupon } = body
 
     // Consultar el estado de una sesión de Stripe
     if (sessionId) {
@@ -48,24 +80,91 @@ serve(async (req) => {
       throw new Error('Missing required parameters')
     }
 
-    // Map the planId to Stripe Price ID
-    let priceId = '';
-    switch (planId) {
-      case 'clasico':
-        priceId = 'price_1Ud3rgK2SjbKQms7CYNbOWmB';
-        break;
-      case 'pro':
-        priceId = 'price_1Ud3rvK2SjbKQms7MQRUtsM2';
-        break;
-      case 'premium': // Diseño Pro
-        priceId = 'price_1Ud3s5K2SjbKQms7y9ZQI4vY';
-        break;
-      case 'concierge':
-        priceId = 'price_1Ud3sEK2SjbKQms7PXykglMR';
-        break;
-      default:
-        throw new Error('Invalid plan ID');
+    const planConfig = PLANS[planId]
+    if (!planConfig) {
+      throw new Error('Invalid plan ID')
     }
+
+    let finalPrice = planConfig.price
+    let cleanCoupon: string | undefined = undefined
+
+    // Si se envió cupón, se vuelve a validar en el servidor contra invitto.coupons
+    if (coupon && typeof coupon === 'string' && coupon.trim()) {
+      cleanCoupon = coupon.trim().toUpperCase()
+
+      const { data: couponData, error: couponError } = await supabase
+        .from('coupons')
+        .select('*')
+        .eq('code', cleanCoupon)
+        .maybeSingle()
+
+      if (couponError || !couponData) {
+        throw new Error('Cupón inválido o no encontrado.')
+      }
+
+      if (couponData.active === false) {
+        throw new Error('Este cupón no se encuentra activo.')
+      }
+
+      if (couponData.expires_at && new Date(couponData.expires_at) < new Date()) {
+        throw new Error('Este cupón ya ha expirado.')
+      }
+
+      if (
+        typeof couponData.max_uses === 'number' &&
+        typeof couponData.current_uses === 'number' &&
+        couponData.current_uses >= couponData.max_uses
+      ) {
+        throw new Error('Este cupón ya ha alcanzado su límite de usos.')
+      }
+
+      // Validar plan_id: si está vacío, aplica a cualquier plan
+      if (couponData.plan_id && String(couponData.plan_id).trim() !== '') {
+        if (String(couponData.plan_id).trim().toLowerCase() !== planId.trim().toLowerCase()) {
+          throw new Error('Este cupón no es válido para el plan seleccionado.')
+        }
+      }
+
+      // Calcular precio en el servidor:
+      // 1) override_price
+      // 2) discount_percent (redondeado a pesos)
+      // 3) solo si no tiene ninguno cubre el 100%
+      const hasOverride = couponData.override_price !== null && couponData.override_price !== undefined && couponData.override_price !== '' && !isNaN(Number(couponData.override_price))
+      const hasPercent = couponData.discount_percent !== null && couponData.discount_percent !== undefined && couponData.discount_percent !== '' && !isNaN(Number(couponData.discount_percent))
+
+      if (hasOverride) {
+        finalPrice = Math.max(0, Math.round(Number(couponData.override_price)))
+      } else if (hasPercent) {
+        const percent = Math.min(100, Math.max(0, Number(couponData.discount_percent)))
+        const discount = Math.round((planConfig.price * percent) / 100)
+        finalPrice = Math.max(0, planConfig.price - discount)
+      } else {
+        finalPrice = 0
+      }
+
+      if (finalPrice <= 0) {
+        throw new Error('Este cupón cubre el 100% y no requiere pasarela de pago.')
+      }
+    }
+
+    // Configurar line_items: si hay descuento calculado en servidor usamos price_data, sino el precio estándar
+    const lineItems = (cleanCoupon && finalPrice < planConfig.price) ? [
+      {
+        price_data: {
+          currency: 'mxn',
+          product_data: {
+            name: `Plan ${planConfig.name} (Cupón ${cleanCoupon})`,
+          },
+          unit_amount: finalPrice * 100,
+        },
+        quantity: 1,
+      },
+    ] : [
+      {
+        price: planConfig.priceId,
+        quantity: 1,
+      },
+    ]
 
     // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
@@ -76,23 +175,7 @@ serve(async (req) => {
       },
       customer_creation: 'always',
       ...(email ? { customer_email: email } : {}),
-      line_items: amount && Number(amount) > 0 ? [
-        {
-          price_data: {
-            currency: 'mxn',
-            product_data: {
-              name: `Plan ${planId.toUpperCase()} (Descuento Aplicado)`,
-            },
-            unit_amount: Math.round(Number(amount) * 100),
-          },
-          quantity: 1,
-        },
-      ] : [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
+      line_items: lineItems,
       mode: 'payment',
       success_url: `${origin}/dashboard/design/${eventId}?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/checkout?plan=${planId}&id=${eventId}&canceled=true`,
@@ -100,8 +183,8 @@ serve(async (req) => {
       metadata: {
         planId: planId,
         eventId: eventId,
-        ...(coupon ? { coupon: String(coupon) } : {}),
-        ...(amount ? { amount: String(amount) } : {}),
+        ...(cleanCoupon ? { coupon: cleanCoupon } : {}),
+        ...(cleanCoupon ? { amount: String(finalPrice) } : {}),
         ...(fbp ? { fbp: String(fbp) } : {}),
         ...(fbc ? { fbc: String(fbc) } : {}),
       }

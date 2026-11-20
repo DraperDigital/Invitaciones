@@ -90,8 +90,10 @@ serve(async (req) => {
       }
     }
 
-    const hasOverride = coupon.override_price !== null && coupon.override_price !== undefined && !isNaN(Number(coupon.override_price))
-    const hasPercent = coupon.discount_percent !== null && coupon.discount_percent !== undefined && !isNaN(Number(coupon.discount_percent))
+    const hasOverride = coupon.override_price !== null && coupon.override_price !== undefined && coupon.override_price !== ''
+    const discountPercent = (coupon.discount_percent !== null && coupon.discount_percent !== undefined && coupon.discount_percent !== '')
+      ? Number(coupon.discount_percent)
+      : null
 
     if (checkOnly) {
       return new Response(
@@ -112,12 +114,10 @@ serve(async (req) => {
       )
     }
 
-    // Si NO es checkOnly, solo se puede aplicar al 100% si no requiere pago
-    if (hasOverride && Number(coupon.override_price) > 0) {
-      throw new Error('Este cupón tiene un precio especial y debe procesarse en el checkout.')
-    }
-    if (hasPercent && Number(coupon.discount_percent) < 100) {
-      throw new Error('Este cupón tiene un descuento parcial y debe procesarse en el checkout.')
+    // Regla estricta: solo activa el plan sin pago si el cupón no tiene override_price y su discount_percent es nulo o 100
+    const isFreeAllowed = !hasOverride && (discountPercent === null || discountPercent === 100)
+    if (!isFreeAllowed) {
+      throw new Error('Este cupón no cubre el plan al 100% y requiere pago en el checkout.')
     }
 
     // 2. Increment coupon usage
