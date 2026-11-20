@@ -128,6 +128,18 @@ function darkenHex(color?: string, percent: number = 25): string {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+function isDarkColor(hex?: string): boolean {
+    if (!hex || typeof hex !== 'string') return false;
+    let c = hex.replace('#', '').trim();
+    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+    if (c.length < 6) return false;
+    const r = parseInt(c.substring(0, 2), 16) || 0;
+    const g = parseInt(c.substring(2, 4), 16) || 0;
+    const b = parseInt(c.substring(4, 6), 16) || 0;
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq < 135;
+}
+
 export default function EnvelopeIntro({
     event,
     guest,
@@ -147,11 +159,11 @@ export default function EnvelopeIntro({
     const isOpeningRef = useRef(false);
     const timersRef = useRef<number[]>([]);
 
-    // Cargar fuentes decorativas para el sobre (Cormorant Garamond, Pinyon Script, Manrope)
+    // Cargar fuentes decorativas para el sobre (Cormorant Garamond, Outfit, Manrope)
     useEffect(() => {
         loadGoogleFonts([
-            'Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400',
-            'Pinyon+Script',
+            'Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600',
+            'Outfit:wght@500;600;700',
             'Manrope:wght@500;600;700'
         ]);
         return () => {
@@ -176,8 +188,6 @@ export default function EnvelopeIntro({
         || effectiveCfg.accentColor
         || presetProfile?.accentColor
         || '#C5A059';
-
-    const accentDark = darkenHex(rawAccent, 28);
 
     const rawPrimary = primaryColor
         || effectiveCfg.primary_color
@@ -211,6 +221,77 @@ export default function EnvelopeIntro({
         || effectiveCfg.textSecondary
         || presetProfile?.textSecondary
         || '#7A6E65';
+
+    // Regla 80/15/5 y salvaguarda de contraste estricta:
+    // Si la tarjeta interior (papel) es oscura, la tinta (15%) DEBE ser clara. Si es clara, la tinta DEBE ser oscura.
+    const paperIsDark = isDarkColor(rawPaper);
+
+    let finalInk = rawInk;
+    if (paperIsDark) {
+        if (isDarkColor(finalInk)) {
+            if (activeThemeId === 'luxury-gold' || activeThemeId === 'classic-elegance-pro') {
+                finalInk = '#F5D76E';
+            } else if (presetProfile?.heroTextColor && !isDarkColor(presetProfile.heroTextColor)) {
+                finalInk = presetProfile.heroTextColor;
+            } else {
+                finalInk = '#FFFFFF';
+            }
+        }
+    } else {
+        if (!isDarkColor(finalInk)) {
+            if (presetProfile?.textPrimary && isDarkColor(presetProfile.textPrimary)) {
+                finalInk = presetProfile.textPrimary;
+            } else {
+                finalInk = '#1E293B';
+            }
+        }
+    }
+
+    let finalInkSoft = rawInkSoft;
+    if (paperIsDark) {
+        if (isDarkColor(finalInkSoft)) {
+            finalInkSoft = (activeThemeId === 'luxury-gold' || activeThemeId === 'classic-elegance-pro') ? '#D4AF37' : '#CBD5E1';
+        }
+    } else {
+        if (!isDarkColor(finalInkSoft)) {
+            finalInkSoft = '#64748B';
+        }
+    }
+
+    // Acento para el sello y etiqueta .k (5% acento):
+    let finalAccent = rawAccent;
+    if (paperIsDark && isDarkColor(finalAccent)) {
+        finalAccent = (activeThemeId === 'luxury-gold' || activeThemeId === 'classic-elegance-pro') ? '#D4AF37' : '#F5D76E';
+    }
+    const accentDark = darkenHex(finalAccent, 28);
+
+    // Contraste para el fondo general del escenario y texto del destinatario (.env-to)
+    const bgIsDark = isDarkColor(rawBg);
+    const stageInk = bgIsDark ? '#FFFFFF' : '#1E293B';
+    const stageInkSoft = bgIsDark ? '#94A3B8' : '#64748B';
+
+    // Tipografía dinámica adaptada al preset del tema (100% legible y con alta personalidad)
+    const fontPreset = presetProfile?.typographyPreset || effectiveCfg.typography_preset || effectiveCfg.typographyPreset || 'elegante';
+
+    let titleFontFamily = "'Cormorant Garamond', Georgia, serif";
+    let titleFontWeight = '600';
+    let titleFontStyle = 'italic';
+    let titleLetterSpacing = '0.01em';
+    let titleFontSize = 'clamp(24px, 7vw, 32px)';
+
+    if (fontPreset === 'divertida') {
+        titleFontFamily = "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif";
+        titleFontWeight = '700';
+        titleFontStyle = 'normal';
+        titleLetterSpacing = '-0.01em';
+        titleFontSize = 'clamp(18px, 5.2vw, 24px)';
+    } else if (fontPreset === 'moderna') {
+        titleFontFamily = "'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif";
+        titleFontWeight = '600';
+        titleFontStyle = 'normal';
+        titleLetterSpacing = '0.01em';
+        titleFontSize = 'clamp(19px, 5.5vw, 25px)';
+    }
 
     // El forro interior de la solapa usa el tono primario/secundario de la plantilla activa
     const rawLiner = rawPrimary || rawInkSoft;
@@ -293,11 +374,18 @@ export default function EnvelopeIntro({
                 '--env-bg': rawBg,
                 '--env-paper': rawPaper,
                 '--env-paper-shade': paperShade,
-                '--env-ink': rawInk,
-                '--env-ink-soft': rawInkSoft,
-                '--env-accent': rawAccent,
+                '--env-ink': finalInk,
+                '--env-ink-soft': finalInkSoft,
+                '--env-accent': finalAccent,
                 '--env-accent-dark': accentDark,
                 '--env-liner': rawLiner,
+                '--env-stage-ink': stageInk,
+                '--env-stage-ink-soft': stageInkSoft,
+                '--env-title-font': titleFontFamily,
+                '--env-title-weight': titleFontWeight,
+                '--env-title-style': titleFontStyle,
+                '--env-title-spacing': titleLetterSpacing,
+                '--env-title-size': titleFontSize,
             } as React.CSSProperties}
         >
             <style>{`
@@ -349,16 +437,16 @@ export default function EnvelopeIntro({
                     font-size: 10px;
                     letter-spacing: .42em;
                     text-transform: uppercase;
-                    color: var(--env-ink-soft);
+                    color: var(--env-stage-ink-soft);
                     margin-bottom: 6px;
                     font-weight: 600;
                 }
                 .env-to strong {
-                    font-family: 'Cormorant Garamond', Georgia, serif;
+                    font-family: var(--env-title-font);
                     font-weight: 500;
                     font-size: clamp(24px, 6vw, 30px);
                     letter-spacing: .01em;
-                    color: var(--env-ink);
+                    color: var(--env-stage-ink);
                 }
 
                 .env-scene {
@@ -431,9 +519,12 @@ export default function EnvelopeIntro({
                     font-weight: 700;
                 }
                 .env-letter .n {
-                    font-family: 'Pinyon Script', cursive, serif;
-                    font-size: clamp(28px, 8.5vw, 38px);
-                    line-height: 1.05;
+                    font-family: var(--env-title-font);
+                    font-weight: var(--env-title-weight);
+                    font-style: var(--env-title-style);
+                    letter-spacing: var(--env-title-spacing);
+                    font-size: var(--env-title-size);
+                    line-height: 1.15;
                     color: var(--env-ink);
                     margin: 6px 0 4px;
                 }
@@ -652,7 +743,7 @@ export default function EnvelopeIntro({
                         letter-spacing: .42em;
                     }
                     .env-letter .n {
-                        font-size: clamp(38px, 4vw, 52px);
+                        font-size: calc(var(--env-title-size) * 1.25);
                         margin: 10px 0 6px;
                     }
                     .env-letter .d {
@@ -710,7 +801,7 @@ export default function EnvelopeIntro({
             <svg width="0" height="0" style={{ position: 'absolute' }}>
                 <defs>
                     <radialGradient id="invitto-wax-gradient" cx="38%" cy="32%" r="75%">
-                        <stop offset="0%" stopColor={rawAccent} stopOpacity="1" />
+                        <stop offset="0%" stopColor={finalAccent} stopOpacity="1" />
                         <stop offset="65%" stopColor={accentDark} />
                         <stop offset="100%" stopColor={accentDark} />
                     </radialGradient>
@@ -774,8 +865,8 @@ export default function EnvelopeIntro({
                         <div className="n">{event.title}</div>
                         {formattedDate && <div className="d">{formattedDate}</div>}
                         <svg viewBox="0 0 70 18" fill="none">
-                            <path d="M2 9h66" stroke={rawInkSoft} strokeWidth=".8" />
-                            <path d="M35 3c-3 3-3 9 0 12 3-3 3-9 0-12z" fill={rawAccent} stroke="none" opacity=".85" />
+                            <path d="M2 9h66" stroke={finalInkSoft} strokeWidth=".8" />
+                            <path d="M35 3c-3 3-3 9 0 12 3-3 3-9 0-12z" fill={finalAccent} stroke="none" opacity=".85" />
                         </svg>
                     </div>
 

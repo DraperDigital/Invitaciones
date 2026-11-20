@@ -1809,9 +1809,11 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'classic-elegance',
-            primary_color: '#0A0A0A',
+            theme: 'classic-elegance-pro',
+            primary_color: '#D4AF37',
             accent_color: '#D4AF37',
+            text_primary: '#F5E9C9',
+            text_secondary: '#D4AF37',
             typography_preset: 'editorial',
             hero_image_url: '/images/couples/ana-carlos-hero.jpg',
             schedule: [
@@ -1942,9 +1944,11 @@ export const MOCK_EVENTS: Event[] = [
             },
             countdown: true,
             typography_preset: 'elegante',
-            primary_color: '#000000',
+            primary_color: '#D4AF37',
             accent_color: '#D4AF37',
             button_color: '#D4AF37',
+            text_primary: '#F5D76E',
+            text_secondary: '#D4AF37',
             isPremium: true
         }
     },
@@ -2135,10 +2139,12 @@ export const MOCK_EVENTS: Event[] = [
                 ]
             },
             countdown: true,
-            typography_preset: 'moderna',
-            primary_color: '#EF4444',
-            accent_color: '#10B981',
-            button_color: '#EF4444'
+            typography_preset: 'divertida',
+            primary_color: '#10B981',
+            accent_color: '#3B82F6',
+            button_color: '#10B981',
+            text_primary: '#F9FAFB',
+            text_secondary: '#9CA3AF'
         }
     },
     {
@@ -2196,7 +2202,9 @@ export const MOCK_EVENTS: Event[] = [
             typography_preset: 'divertida',
             primary_color: '#22C55E',
             accent_color: '#FACC15',
-            button_color: '#22C55E'
+            button_color: '#22C55E',
+            text_primary: '#FFFFFF',
+            text_secondary: '#FEF3C7'
         }
     },
     {

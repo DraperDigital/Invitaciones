@@ -109,10 +109,10 @@ export default function FloralSymmetryHero({ event, cfg, heroImageUrl, scrollToS
                 </div>
 
                 <div className="py-24 px-6 text-center text-white space-y-6">
-                    <p className="text-xs sm:text-sm font-sans uppercase tracking-[0.3em] opacity-80">
+                    <p className="text-xs sm:text-sm font-sans uppercase tracking-[0.3em] opacity-90" style={{ color: '#ffffff' }}>
                         {cfg.banner_subtitle || "Junto con nuestras familias"}
                     </p>
-                    <h2 className="text-3xl sm:text-5xl font-serif font-light uppercase tracking-widest leading-tight">
+                    <h2 className="text-3xl sm:text-5xl font-serif font-light uppercase tracking-widest leading-tight" style={{ color: '#ffffff' }}>
                         {cfg.banner_title || "Te invitamos a nuestra boda"}
                     </h2>
                 </div>

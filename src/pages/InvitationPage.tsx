@@ -75,6 +75,18 @@ function getContrastColor(hexColor: string) {
     return (yiq >= 128) ? '#111111' : '#ffffff';
 }
 
+function isDarkColor(hexColor?: string): boolean {
+    if (!hexColor || typeof hexColor !== 'string') return false;
+    let hex = hexColor.replace('#', '').trim();
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    if (hex.length < 6) return false;
+    const r = parseInt(hex.substring(0,2), 16) || 0;
+    const g = parseInt(hex.substring(2,4), 16) || 0;
+    const b = parseInt(hex.substring(4,6), 16) || 0;
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return yiq < 135;
+}
+
 export default function InvitationPage() {
     const { slug } = useParams<{ slug: string }>();
     const [searchParams] = useSearchParams();
@@ -172,7 +184,7 @@ export default function InvitationPage() {
             sectionBg: '#FFFFFF', sectionBgAlt: '#F5F5F7', cardBg: '#F5F5F7',
             textPrimary: '#111111', textSecondary: '#555555',
             borderColor: '#E5E5E5', cardBorder: '#DDDDDD',
-            accentOverride: '#222222',
+            accentOverride: '#475569',
             fontPreset: 'moderna', heroRadius: '0px', cardRadius: '0px',
         },
         'romantic-botanical': {
@@ -310,9 +322,23 @@ export default function InvitationPage() {
     const sectionBg     = userCfg.section_bg_color || userCfg.sectionBgColor || activeVars.sectionBg;
     const sectionBgAlt  = userCfg.section_bg_alt_color || userCfg.sectionBgAltColor || activeVars.sectionBgAlt;
     const cardBg        = userCfg.card_bg_color || userCfg.cardBgColor || activeVars.cardBg;
-    const textPrimary   = userCfg.text_primary || userCfg.textPrimary || userCfg.primary_color || activeVars.textPrimary;
-    const textSecondary = userCfg.text_secondary || userCfg.textSecondary || activeVars.textSecondary;
-    const isDarkPalette = userCfg.color_palette_id === 'negro-dorado' || (userCfg.section_bg_color && userCfg.section_bg_color.startsWith('#1'));
+
+    // Regla 80/15/5 y salvaguarda de contraste estricta:
+    // NUNCA usar primary_color como fallback de text_primary.
+    // Si la superficie de fondo es oscura, el texto DEBE ser claro. Si es clara, el texto DEBE ser oscuro.
+    const rawTextPrimary   = userCfg.text_primary || userCfg.textPrimary || activeVars.textPrimary;
+    const rawTextSecondary = userCfg.text_secondary || userCfg.textSecondary || activeVars.textSecondary;
+    const bgIsDark = isDarkColor(sectionBg);
+
+    const textPrimary = bgIsDark
+        ? (isDarkColor(rawTextPrimary) ? (activeVars.textPrimary && !isDarkColor(activeVars.textPrimary) ? activeVars.textPrimary : '#F8FAFC') : rawTextPrimary)
+        : (!isDarkColor(rawTextPrimary) ? (activeVars.textPrimary && isDarkColor(activeVars.textPrimary) ? activeVars.textPrimary : '#1E293B') : rawTextPrimary);
+
+    const textSecondary = bgIsDark
+        ? (isDarkColor(rawTextSecondary) ? (activeVars.textSecondary && !isDarkColor(activeVars.textSecondary) ? activeVars.textSecondary : '#CBD5E1') : rawTextSecondary)
+        : (!isDarkColor(rawTextSecondary) ? (activeVars.textSecondary && isDarkColor(activeVars.textSecondary) ? activeVars.textSecondary : '#64748B') : rawTextSecondary);
+
+    const isDarkPalette = userCfg.color_palette_id === 'negro-dorado' || bgIsDark;
     const borderColor   = userCfg.border_color || userCfg.borderColor || (isDarkPalette ? '#262A30' : activeVars.borderColor);
     const cardBorder    = userCfg.card_border || userCfg.cardBorder || (isDarkPalette ? 'rgba(212, 175, 55, 0.25)' : activeVars.cardBorder);
 
