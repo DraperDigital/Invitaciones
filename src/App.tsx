@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import ErrorBoundary from './components/ui/ErrorBoundary';
@@ -104,6 +104,12 @@ const RootIndexRoute = () => {
   return isCorporate ? <OneHomePage /> : <HomePage />;
 };
 
+function EventRedirect() {
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  return <Navigate to={`/dashboard/events/${id}${location.search}`} replace />;
+}
+
 function AppRoutes() {
   return (
     <Suspense fallback={<PageFallback />}>
@@ -179,7 +185,7 @@ function AppRoutes() {
           <Route path="invitations"           element={<Navigate to="/dashboard/events" replace />} />
           <Route path="events"                element={<Dashboard />} />
           <Route path="events/:id"            element={<EventRSVPs />} />
-          <Route path="event/:id"             element={<EventRSVPs />} />
+          <Route path="event/:id"             element={<EventRedirect />} />
           <Route path="rsvps"                 element={<EventRSVPs />} />
           <Route path="checkin"               element={<CheckIn />} />
           <Route path="checkin/:eventId"      element={<CheckIn />} />

@@ -342,7 +342,7 @@ export default function EventWizard() {
                 const { error } = await supabase.from('events').update({ ...payload, theme_config: newConfig }).eq('id', id);
                 if (error) throw error;
                 toast.success('¡Evento actualizado!');
-                navigate(`/dashboard/event/${id}`);
+                navigate(`/dashboard/events/${id}`);
             } else {
                 const eventPreset = EVENT_TYPE_PRESETS[data.event_type] || EVENT_TYPE_PRESETS.other;
                 const layoutOrder = getLayoutForEventType(data.event_type);

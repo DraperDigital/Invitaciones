@@ -839,7 +839,7 @@ export default function DesignEditor() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <Link to={`/dashboard/event/${id}`} className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-600 mb-4 md:mb-6 transition-colors font-bold uppercase tracking-widest text-[9px] md:text-[10px]">
+                    <Link to={`/dashboard/events/${id}`} className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-600 mb-4 md:mb-6 transition-colors font-bold uppercase tracking-widest text-[9px] md:text-[10px]">
                         <ArrowLeft className="h-3 w-3 md:h-4 md:w-4" /> Volver al panel
                     </Link>
                     <div className="flex items-center gap-3 flex-wrap">

@@ -4057,7 +4057,7 @@ END:VCALENDAR`;
                                 type="button"
                                 onClick={() => {
                                     if (event?.id) {
-                                        navigate(`/dashboard/event/${event.id}`);
+                                        navigate(`/dashboard/events/${event.id}`);
                                     } else if (user) {
                                         navigate('/dashboard/events');
                                     } else {
@@ -4244,7 +4244,7 @@ END:VCALENDAR`;
                                             onClick={() => {
                                                 setIsAdminOpen(false);
                                                 if (event?.id) {
-                                                    navigate(`/dashboard/event/${event.id}`);
+                                                    navigate(`/dashboard/events/${event.id}`);
                                                 } else if (user) {
                                                     navigate('/dashboard/events');
                                                 } else {
@@ -4499,7 +4499,7 @@ END:VCALENDAR`;
                             onResetOriginal={handleResetColorPalette}
                             onGoToDetailDesign={() => {
                                 if (event.id && !event.id.toString().startsWith('demo-')) {
-                                    navigate(`/dashboard/events/${event.id}/design?section=palette`);
+                                    navigate(`/dashboard/design/${event.id}?section=palette`);
                                 } else {
                                     setIsAdminOpen(true);
                                 }

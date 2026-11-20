@@ -1,28 +1,56 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
-import { useSearchParams, Link, useLocation } from 'react-router-dom';
+import { useSearchParams, Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { 
     Check, X, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
     Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown,
-    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette
+    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette, Crown
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
 import { differenceInDays, isPast } from 'date-fns';
 import { useFeatureAccess } from '../../hooks/useFeatureAccess';
+import { EVENT_TYPE_OPTIONS } from '../EventWizard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+// Helper: Formatear tipo de evento a etiqueta en español
+function formatEventType(type?: string): string {
+    if (!type) return 'Evento';
+    const found = EVENT_TYPE_OPTIONS.find(opt => opt.id === type || opt.label.toLowerCase() === type.toLowerCase());
+    if (found) return found.label;
+    if (type.toLowerCase() === 'gender_reveal') return 'Revelación de Género';
+    if (type.toLowerCase() === 'birthday') return 'Cumpleaños';
+    if (type.toLowerCase() === 'wedding') return 'Boda';
+    if (type.toLowerCase() === 'xv') return 'XV Años';
+    return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+// Helper: Formatear fecha con locale es-MX ("11 de diciembre de 2026")
+function formatEventDate(dateVal?: string | Date | null): string {
+    if (!dateVal) return 'Sin definir';
+    try {
+        const d = typeof dateVal === 'string' ? new Date(dateVal) : dateVal;
+        if (isNaN(d.getTime())) return 'Sin definir';
+        return d.toLocaleDateString('es-MX', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    } catch {
+        return 'Sin definir';
+    }
+}
 
 const EventRSVPs: React.FC = () => {
-    const location = useLocation();
-    const isEventDashboard = location.pathname.startsWith('/dashboard/event/');
-    const [searchParams, setSearchParams] = useSearchParams();
+    const { id: routeEventId } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const eventIdFromUrl = searchParams.get('event');
-    const [eventId, setEventId] = useState<string | null>(eventIdFromUrl);
+    const [eventId, setEventId] = useState<string | null>(routeEventId || eventIdFromUrl);
     const [guests, setGuests] = useState<any[]>([]);
     const [event, setEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
@@ -31,6 +59,10 @@ const EventRSVPs: React.FC = () => {
     const [userEvents, setUserEvents] = useState<any[]>([]);
     const [reminderTemplate] = useState('¡Hola {nombre}! 🌟 Te escribimos para recordarte la invitación a "{evento}". \n\nPuedes ver todos los detalles y confirmar aquí: {link} \n\n¡Te esperamos!');
     const [tables, setTables] = useState<any[]>([]);
+    const [proModalFeature, setProModalFeature] = useState<string | null>(null);
+
+    // Se muestra el dashboard de evento y sus botones de acción siempre que haya un evento seleccionado
+    const isEventDashboard = Boolean(event);
     
     // Inline Edit State
     const [editingGuestId, setEditingGuestId] = useState<string | null>(null);
@@ -100,7 +132,8 @@ const EventRSVPs: React.FC = () => {
 
                 setUserEvents(eventsData || []);
 
-                let activeId = eventIdFromUrl;
+                // Fuente de evento: 1) useParams (:id), 2) ?event=, 3) localStorage, 4) primer evento
+                let activeId = routeEventId || eventIdFromUrl;
                 if (!activeId) {
                     activeId = localStorage.getItem(`last_managed_event_id_${user.id}`);
                     if (!activeId && eventsData?.length) {
@@ -144,11 +177,15 @@ const EventRSVPs: React.FC = () => {
         };
 
         fetchData();
-    }, [eventIdFromUrl, user]);
+    }, [routeEventId, eventIdFromUrl, user]);
 
     const handleEventChange = (id: string) => {
-        setSearchParams({ event: id });
+        if (!id) return;
         setEventId(id);
+        if (user) {
+            localStorage.setItem(`last_managed_event_id_${user.id}`, id);
+        }
+        navigate(`/dashboard/events/${id}`);
     };
 
     // Helper: leer estado desde guests.status (fuente confiable) y mapear a formato rsvp
@@ -746,7 +783,7 @@ const EventRSVPs: React.FC = () => {
     const percentConfirmed = metrics.totalInvitados > 0 ? Math.round((metrics.confirmados / metrics.totalInvitados) * 100) : 0;
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-12 space-y-12 bg-[#F8F9FA]">
+        <div className="space-y-6 sm:space-y-8">
             {/* Hidden CSV Input */}
             <input 
                 type="file" 
@@ -899,85 +936,135 @@ const EventRSVPs: React.FC = () => {
                 </div>
             )}
             {/* Top Navigation & Fast Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
-                <div className="flex flex-col gap-2">
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-[#DF3B94]">Dashboard</p>
-                    <select value={eventId || ''} onChange={(e) => handleEventChange(e.target.value)} className="text-3xl font-display font-extrabold bg-transparent outline-none border-b border-transparent focus:border-stone-200 transition-all">
-                        {userEvents.map(ev => <option key={ev.id} value={ev.id} className="text-base font-sans">{ev.title}</option>)}
-                    </select>
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+                <div className="flex flex-col gap-1 w-full sm:w-auto">
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-[#DF3B94]">Evento</p>
+                    <div className="relative inline-block w-full sm:w-auto">
+                        <select 
+                            value={eventId || ''} 
+                            onChange={(e) => handleEventChange(e.target.value)} 
+                            className="w-full sm:w-auto pr-8 text-xl sm:text-2xl md:text-3xl font-display font-black text-[#222B38] bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] transition-all cursor-pointer py-1 truncate"
+                        >
+                            {userEvents.map(ev => (
+                                <option key={ev.id} value={ev.id} className="text-base font-sans text-stone-900">
+                                    {ev.title}
+                                </option>
+                            ))}
+                        </select>
+                        <ChevronDown className="h-4 w-4 text-stone-400 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-                    <div className="flex bg-white p-1.5 rounded-[1.5rem] border border-stone-100 shadow-sm w-full sm:w-auto justify-between sm:justify-start gap-2">
-                        <Link to="/dashboard" className="h-10 w-10 bg-stone-50 border border-stone-100 rounded-xl flex items-center justify-center text-stone-400 hover:text-[#222B38] transition-all group">
-                            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1" />
-                        </Link>
-                        
-                        {isEventDashboard && (
-                            <>
-                                <div className="h-10 w-px bg-stone-50 hidden sm:block mx-1" />
-                                <div className="flex items-center gap-2">
-                                    <Link to={`/dashboard/edit/${event.id}`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-emerald-600 hover:border-emerald-600 rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
-                                        <Edit2 className="h-3.5 w-3.5" /> <span className="xs:inline">Editar Info</span>
-                                    </Link>
-                                    <Link to={`/i/${event.slug || event.id}?t=admin`} className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#DF3B94] hover:border-[#DF3B94] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all" title="Editar diseño en vivo">
-                                        <Palette className="h-3.5 w-3.5" /> <span className="xs:inline">Diseño en Vivo</span>
-                                    </Link>
-                                    <Link to={`/i/${event.slug || event.id}?t=admin`} target="_blank" className="px-4 h-10 bg-white border border-stone-200 text-stone-600 hover:text-[#222B38] hover:border-[#DF3B94] rounded-xl text-[8px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-2 transition-all">
-                                        <Eye className="h-3.5 w-3.5" /> <span className="xs:inline">Ver</span>
-                                    </Link>
-                                </div>
-                            </>
-                        )}
-                    </div>
+                {isEventDashboard && event && (
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+                        {/* Fila superior en celular con iconos + texto corto */}
+                        <div className="grid grid-cols-4 sm:flex items-center gap-1.5 sm:gap-2 bg-white p-1 rounded-2xl border border-stone-200 shadow-xs">
+                            <Link 
+                                to="/dashboard" 
+                                className="h-11 min-h-[44px] px-2.5 sm:px-3 bg-stone-50 hover:bg-stone-100 border border-stone-200 text-stone-600 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold transition-all whitespace-nowrap"
+                                title="Volver a mis eventos"
+                                aria-label="Volver"
+                            >
+                                <ArrowLeft className="h-4 w-4 shrink-0" />
+                                <span className="hidden sm:inline">Volver</span>
+                            </Link>
+                            
+                            <Link 
+                                to={`/dashboard/edit/${event.id}`} 
+                                className="h-11 min-h-[44px] px-2.5 sm:px-3 bg-white hover:bg-stone-50 border border-stone-200 hover:border-emerald-600 hover:text-emerald-700 text-stone-700 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all whitespace-nowrap"
+                                title="Editar información del evento"
+                                aria-label="Editar información"
+                            >
+                                <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                                <span>Editar</span>
+                            </Link>
 
-                    <div className="flex gap-2 w-full sm:w-auto">
-                        {isEventDashboard && (
-                            <>
-                                <button 
-                                    onClick={shareOnWhatsApp}
-                                    className="flex-1 sm:flex-none px-8 h-10 bg-[#25D366] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-emerald-100/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all"
-                                >
-                                    <MessageSquare className="h-4 w-4" /> <span>Compartir</span>
-                                </button>
-                                {hasFeature('access_control') && (
-                                    <Link 
-                                        to={`/dashboard/checkin/${event.id}`}
-                                        className="flex-1 sm:flex-none px-8 h-10 bg-[#DF3B94] text-white rounded-[1.5rem] text-[9px] uppercase font-black tracking-widest shadow-lg shadow-stone-200/50 flex items-center justify-center gap-3 hover:translate-y-[-2px] transition-all border border-white/10"
-                                    >
-                                        <QrCode className="h-4 w-4 text-[#DF3B94]" /> <span>Check-in</span>
-                                    </Link>
+                            <Link 
+                                to={`/dashboard/design/${event.id}`} 
+                                className="h-11 min-h-[44px] px-2.5 sm:px-3 bg-white hover:bg-stone-50 border border-stone-200 hover:border-[#DF3B94] hover:text-[#DF3B94] text-stone-700 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all whitespace-nowrap" 
+                                title="Editar diseño en vivo"
+                                aria-label="Diseño en vivo"
+                            >
+                                <Palette className="h-3.5 w-3.5 shrink-0" />
+                                <span>Diseño</span>
+                            </Link>
+
+                            <Link 
+                                to={`/i/${event.slug || event.id}?t=admin`} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="h-11 min-h-[44px] px-2.5 sm:px-3 bg-white hover:bg-stone-50 border border-stone-200 hover:border-[#222B38] text-stone-700 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all whitespace-nowrap"
+                                title="Ver invitación terminada"
+                                aria-label="Ver invitación"
+                            >
+                                <Eye className="h-3.5 w-3.5 shrink-0" />
+                                <span>Ver</span>
+                            </Link>
+                        </div>
+
+                        {/* Fila inferior en celular: Compartir y Check-in a lo ancho */}
+                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
+                            <button 
+                                type="button"
+                                onClick={shareOnWhatsApp}
+                                className="h-11 min-h-[44px] px-4 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-2xl text-xs font-bold shadow-md shadow-[#25D366]/20 flex items-center justify-center gap-2 transition-all whitespace-nowrap active:scale-95 cursor-pointer"
+                                title="Compartir por WhatsApp"
+                                aria-label="Compartir por WhatsApp"
+                            >
+                                <MessageSquare className="h-4 w-4 shrink-0" />
+                                <span className="whitespace-nowrap">Compartir</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (hasFeature('access_control')) {
+                                        navigate(`/dashboard/checkin/${event.id}`);
+                                    } else {
+                                        setProModalFeature('access_control');
+                                    }
+                                }}
+                                className={`h-11 min-h-[44px] px-4 rounded-2xl text-xs font-bold shadow-md flex items-center justify-center gap-2 transition-all whitespace-nowrap active:scale-95 cursor-pointer ${
+                                    hasFeature('access_control')
+                                        ? 'bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-[#DF3B94]/20'
+                                        : 'bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300'
+                                }`}
+                                title="Acceso al Check-in QR"
+                                aria-label="Check-in"
+                            >
+                                <QrCode className="h-4 w-4 shrink-0" />
+                                <span className="whitespace-nowrap">Check-in</span>
+                                {!hasFeature('access_control') && (
+                                    <span className="text-[9px] bg-[#DF3B94] text-white px-1.5 py-0.5 rounded-full font-black ml-0.5">
+                                        PRO
+                                    </span>
                                 )}
-                            </>
-                        )}
-                        {/* Download removed from here as per user request */}
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Event Hero Profile - Condicional */}
-            {isEventDashboard && (
-                <div className="bg-white rounded-[2rem] md:rounded-[4rem] border border-stone-100 p-6 md:p-20 shadow-sm relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-[30rem] md:w-[50rem] h-[30rem] md:h-[50rem] bg-stone-50 rounded-full -translate-y-1/2 translate-x-1/3 -z-0 group-hover:bg-[#DF3B94]/5 transition-colors duration-1000" />
-                    
-                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-10 md:gap-16">
-                        <div className="space-y-6 md:space-y-12 flex-1">
-                            <div className="flex flex-wrap items-center gap-2 md:gap-4">
-                                <span className="px-3 md:px-6 py-1 md:py-2 bg-[#DF3B94]/10 text-[#DF3B94] text-[7px] md:text-[10px] uppercase font-black tracking-[0.3em] md:tracking-[0.4em] rounded-full">
-                                    {event.event_type}
+            {isEventDashboard && event && (
+                <div className="bg-white rounded-2xl sm:rounded-3xl border border-stone-200 p-4 sm:p-6 md:p-8 shadow-sm relative overflow-hidden group">
+                    <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 md:gap-8">
+                        <div className="space-y-4 flex-1">
+                            {/* Badges */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span className="px-3 py-1 bg-[#DF3B94]/10 text-[#DF3B94] text-xs font-bold rounded-full">
+                                    {formatEventType(event.event_type)}
                                 </span>
-                                <span className={`flex items-center gap-2 px-3 md:px-5 py-1 md:py-2 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-stone-50 text-stone-300'} rounded-full text-[7px] md:text-[9px] uppercase font-black tracking-widest`}>
-                                    <div className={`h-1 w-1 md:h-1.5 md:w-1.5 rounded-full ${percentConfirmed > 0 ? 'bg-emerald-500 animate-pulse outline outline-4 outline-emerald-100' : 'bg-stone-200'}`} />
-                                    {percentConfirmed}% Conf.
+                                <span className={`flex items-center gap-1.5 px-3 py-1 ${percentConfirmed > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-stone-500'} rounded-full text-xs font-bold`}>
+                                    <span className={`h-1.5 w-1.5 rounded-full ${percentConfirmed > 0 ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'}`} />
+                                    {percentConfirmed}% Confirmado
                                 </span>
                             </div>
 
-                            <div className="space-y-2 md:space-y-4">
-                                <h1 className="text-3xl xs:text-4xl sm:text-7xl lg:text-8xl font-display font-extrabold text-[#222B38] tracking-tighter leading-tight md:leading-[0.8] mb-2 break-words">{event.title}</h1>
-                                <p className="text-sm md:text-2xl text-stone-600 font-medium italic flex items-center gap-2 md:gap-4 ml-0.5 md:ml-2">
-                                    <MapPin className="h-4 w-4 md:h-6 md:w-6 text-[#DF3B94]" /> <span className="truncate">{event.venue_name || 'Ubicación Premium'}</span>
-                                </p>
-                            </div>
+                            {/* Ubicación y detalles clave */}
+                            <p className="text-sm md:text-base text-stone-700 font-medium flex items-center gap-2">
+                                <MapPin className="h-4 w-4 text-[#DF3B94] shrink-0" />
+                                <span className="truncate">{event.venue_name || 'Ubicación por definir'}</span>
+                            </p>
 
                             {/* Event Timeline & RSVP Deadline Block */}
                             {(() => {
@@ -986,34 +1073,37 @@ const EventRSVPs: React.FC = () => {
                                 const isDeadlinePassed = deadlineDate ? isPast(deadlineDate) : false;
 
                                 return (
-                                    <div className="grid grid-cols-2 lg:flex lg:items-center gap-4 md:gap-8 pt-6 md:pt-10 border-t border-stone-200">
+                                    <div className="grid grid-cols-2 sm:flex sm:items-center gap-4 sm:gap-6 pt-4 border-t border-stone-100 text-xs">
                                         <div className="space-y-0.5">
-                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-600">Fecha</p>
-                                            <p className="text-xs md:text-base font-bold text-[#222B38] truncate">{event.date_time ? new Date(event.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Próximamente'}</p>
+                                            <p className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Fecha del Evento</p>
+                                            <p className="text-xs sm:text-sm font-bold text-[#222B38] flex items-center gap-1.5">
+                                                <Clock className="h-3.5 w-3.5 text-stone-400 shrink-0" />
+                                                {formatEventDate(event.date_time)}
+                                            </p>
                                         </div>
-                                        <div className="h-10 w-px bg-stone-200 hidden lg:block" />
+                                        <div className="h-8 w-px bg-stone-200 hidden sm:block" />
                                         <div className="space-y-0.5">
-                                            <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] text-stone-600">Cierre</p>
-                                            <p className="text-xs md:text-base font-bold text-[#DF3B94] truncate">
-                                                {deadlineDate ? deadlineDate.toLocaleDateString(undefined, { dateStyle: 'medium' }) : 'Sin definir'}
+                                            <p className="text-[10px] uppercase font-bold tracking-wider text-stone-500">Límite RSVP</p>
+                                            <p className="text-xs sm:text-sm font-bold text-[#DF3B94]">
+                                                {formatEventDate(event.rsvp_deadline)}
                                             </p>
                                         </div>
                                         
                                         {deadlineDate && (
                                             <>
-                                                <div className="h-10 w-px bg-stone-200 hidden lg:block" />
-                                                <div className="col-span-2 lg:col-span-1">
+                                                <div className="h-8 w-px bg-stone-200 hidden sm:block" />
+                                                <div className="col-span-2 sm:col-span-1 flex items-center">
                                                     {isDeadlinePassed ? (
-                                                        <span className="px-3 py-1.5 w-fit bg-red-100 text-red-700 border border-red-200 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
-                                                            <AlertTriangle className="h-3 w-3" /> Vencido
+                                                        <span className="px-2.5 py-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold flex items-center gap-1">
+                                                            <AlertTriangle className="h-3.5 w-3.5" /> Vencido
                                                         </span>
                                                     ) : daysRemaining !== null && daysRemaining <= 14 ? (
-                                                        <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center justify-center gap-1.5 border border-orange-200 shadow-sm animate-pulse w-fit">
-                                                            <Clock className="h-3 w-3 text-orange-600" /> {daysRemaining} Días rest.
+                                                        <span className="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-xs font-bold flex items-center gap-1 animate-pulse">
+                                                            <Clock className="h-3.5 w-3.5 text-amber-600" /> {daysRemaining} días restantes
                                                         </span>
                                                     ) : daysRemaining !== null && (
-                                                        <span className="px-3 py-1.5 w-fit bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-[8px] md:text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5">
-                                                            <Check className="h-3 w-3" /> {daysRemaining} días
+                                                        <span className="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold flex items-center gap-1">
+                                                            <Check className="h-3.5 w-3.5" /> {daysRemaining} días
                                                         </span>
                                                     )}
                                                 </div>
@@ -1024,30 +1114,39 @@ const EventRSVPs: React.FC = () => {
                             })()}
                         </div>
 
-                        <div className="lg:w-96 space-y-6 md:space-y-8">
+                        <div className="w-full lg:w-80 space-y-3">
                             {/* Visual Progress Bar Card */}
-                            <div className="p-6 md:p-8 bg-[#F8F9FA] rounded-[2rem] md:rounded-[2.5rem] border border-stone-200 shadow-sm space-y-4 md:space-y-6">
+                            <div className="p-4 sm:p-5 bg-stone-50 rounded-2xl border border-stone-200 space-y-3">
                                 <div className="flex justify-between items-end">
-                                    <span className="text-[9px] md:text-[11px] uppercase font-black tracking-[0.3em] text-[#222B38]">Asistencia</span>
+                                    <span className="text-xs uppercase font-bold tracking-wider text-[#222B38]">Confirmados</span>
                                     <div className="text-right">
-                                        <span className="text-2xl md:text-4xl font-display font-extrabold text-[#222B38]">{metrics.confirmados}</span>
-                                        <span className="text-sm md:text-lg font-display font-extrabold text-stone-500 ml-1">/{metrics.totalInvitados}</span>
+                                        <span className="text-2xl font-display font-extrabold text-[#222B38]">{metrics.confirmados}</span>
+                                        <span className="text-sm font-display font-extrabold text-stone-500 ml-1">/{metrics.totalInvitados}</span>
                                     </div>
                                 </div>
-                                <div className="h-2 md:h-2.5 w-full bg-stone-200 rounded-full overflow-hidden p-0.5">
+                                <div className="h-2.5 w-full bg-stone-200 rounded-full overflow-hidden p-0.5">
                                     <div 
                                         className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(16,185,129,0.4)]"
                                         style={{ width: `${percentConfirmed}%` }}
                                     />
                                 </div>
-                                <div className="flex items-center justify-center gap-2 text-stone-600">
-                                    <Users className="h-3.5 w-3.5" />
-                                    <p className="text-[8px] md:text-[10px] uppercase font-bold tracking-widest">{metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}</p>
+                                <div className="flex items-center justify-between text-xs text-stone-600 font-medium">
+                                    <span className="flex items-center gap-1.5">
+                                        <Users className="h-3.5 w-3.5 text-stone-400" />
+                                        {metrics.totalInvitados === 0 ? 'Sin invitados' : 'En tiempo real'}
+                                    </span>
+                                    <span className="font-bold text-emerald-700">{percentConfirmed}%</span>
                                 </div>
                             </div>
 
-                            <button onClick={copyGeneralLink} className="group w-full h-14 md:h-16 bg-[#DF3B94] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center gap-3 md:gap-4 text-[9px] md:text-[10px] uppercase font-bold tracking-[0.3em] md:tracking-[0.4em] hover:bg-[#C52A7C] transition-all shadow-xl hover:translate-y-[-4px]">
-                                <Copy className="h-4 w-4 group-hover:scale-110 transition-transform" /> <span>Copiar Link</span>
+                            <button
+                                type="button"
+                                onClick={copyGeneralLink}
+                                className="w-full h-11 min-h-[44px] bg-white hover:bg-stone-50 text-stone-700 border border-stone-200 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
+                                title="Copiar link de la invitación"
+                            >
+                                <Copy className="h-4 w-4 text-[#DF3B94]" />
+                                <span>Copiar Link de Invitación</span>
                             </button>
                         </div>
                     </div>
@@ -1071,30 +1170,40 @@ const EventRSVPs: React.FC = () => {
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-stone-200 gap-6 overflow-x-auto pb-1">
-                {[
-                    { id: 'list', label: 'Lista', feature: null },
-                    { id: 'statistics', label: 'Estadísticas', feature: 'metrics_dashboard' },
-                    { id: 'messages', label: 'Mensajes', feature: 'guest_dashboard' },
-                    { id: 'tables', label: 'Mesas', feature: 'table_management' },
-                    { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' }
-                ].map(t => {
-                    const isLocked = t.feature ? !hasFeature(t.feature as any) : false;
-                    
-                    return (
-                        <button 
-                            key={t.id} 
-                            onClick={() => !isLocked && setActiveTab(t.id as any)} 
-                            className={`pb-4 text-[11px] uppercase font-bold tracking-widest relative flex items-center gap-2 transition-colors ${
-                                activeTab === t.id ? 'text-stone-950 font-black' : 'text-stone-500 hover:text-stone-900'
-                            } ${isLocked ? 'cursor-not-allowed opacity-50' : ''}`}
-                        >
-                            {t.label}
-                            {isLocked && <span className="text-[8px] bg-stone-200 text-stone-700 font-bold px-1.5 py-0.5 rounded-full">PRO</span>}
-                            {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#DF3B94]" />}
-                        </button>
-                    );
-                })}
+            <div className="relative">
+                <div className="flex border-b border-stone-200 gap-2 sm:gap-6 overflow-x-auto pb-1 no-scrollbar">
+                    {[
+                        { id: 'list', label: 'Lista', feature: null },
+                        { id: 'statistics', label: 'Estadísticas', feature: 'metrics_dashboard' },
+                        { id: 'messages', label: 'Mensajes', feature: 'guest_dashboard' },
+                        { id: 'tables', label: 'Mesas', feature: 'table_management' },
+                        { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' }
+                    ].map(t => {
+                        const isLocked = t.feature ? !hasFeature(t.feature as any) : false;
+                        
+                        return (
+                            <button 
+                                key={t.id} 
+                                onClick={() => {
+                                    if (isLocked) {
+                                        setProModalFeature(t.feature);
+                                    } else {
+                                        setActiveTab(t.id as any);
+                                    }
+                                }} 
+                                className={`pb-3.5 px-2 text-xs uppercase font-bold tracking-wider relative flex items-center gap-1.5 transition-colors whitespace-nowrap flex-shrink-0 cursor-pointer ${
+                                    activeTab === t.id ? 'text-stone-950 font-black' : 'text-stone-500 hover:text-stone-900'
+                                } ${isLocked ? 'opacity-70 hover:opacity-100' : ''}`}
+                            >
+                                {t.label}
+                                {isLocked && <span className="text-[9px] bg-stone-200 text-stone-700 font-bold px-1.5 py-0.5 rounded-full">PRO</span>}
+                                {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#DF3B94]" />}
+                            </button>
+                        );
+                    })}
+                </div>
+                {/* Degradado al borde derecho para indicar scroll en celular */}
+                <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#F8F9FA] to-transparent sm:hidden" />
             </div>
 
             {/* Content Rendering */}
@@ -1102,33 +1211,35 @@ const EventRSVPs: React.FC = () => {
                 <div className="space-y-6">
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                         <button 
+                            type="button"
                             onClick={() => setIsAddGuestOpen(!isAddGuestOpen)} 
-                            className="w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 bg-[#DF3B94] text-white rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-lg shadow-rose-100/50 hover:bg-[#C52A7C] transition-all flex items-center justify-center gap-3"
+                            className="w-full sm:w-auto px-6 md:px-8 h-12 md:h-14 bg-[#DF3B94] text-white rounded-xl md:rounded-2xl text-xs uppercase font-bold tracking-wider shadow-md hover:bg-[#C52A7C] transition-all flex items-center justify-center gap-2.5 cursor-pointer"
                         >
                             <UserPlus className="h-4 w-4 md:h-5 md:w-5" /> <span>Nueva Invitación</span>
                         </button>
                         <button 
+                            type="button"
                             onClick={() => {
                                 if (!hasFeature('guest_import_excel')) {
-                                    toast.error('La importación masiva no está disponible en el plan Clásico. Sube de plan para habilitar esta función.');
+                                    setProModalFeature('guest_import_excel');
                                     return;
                                 }
                                 fileInputRef.current?.click();
                             }}
-                            className={`w-full sm:w-auto px-6 md:px-8 h-14 md:h-16 border-2 border-dashed rounded-2xl md:rounded-[2.5rem] text-[9px] md:text-[10px] uppercase font-black tracking-widest shadow-sm flex items-center justify-center gap-3 transition-all ${
+                            className={`w-full sm:w-auto px-6 md:px-8 h-12 md:h-14 border-2 border-dashed rounded-xl md:rounded-2xl text-xs uppercase font-bold tracking-wider shadow-xs flex items-center justify-center gap-2.5 transition-all cursor-pointer ${
                                 hasFeature('guest_import_excel') 
                                     ? 'bg-white text-[#222B38] border-stone-200 hover:border-[#DF3B94] hover:bg-stone-50' 
-                                    : 'bg-stone-50 text-stone-300 border-stone-100 cursor-not-allowed opacity-60'
+                                    : 'bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100'
                             }`}
                         >
                             <Upload className="h-4 w-4 md:h-5 md:w-5" /> 
                             <span>Importar CSV</span>
-                            {!hasFeature('guest_import_excel') && <span className="text-[8px] bg-[#DF3B94] text-white px-1.5 py-0.5 rounded-full ml-1">PRO</span>}
+                            {!hasFeature('guest_import_excel') && <span className="text-[9px] bg-[#DF3B94] text-white font-black px-1.5 py-0.5 rounded-full ml-1">PRO</span>}
                         </button>
                     </div>
 
                     {/* Search & Filters (Sticky para no perderlo al hacer scroll) */}
-                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white/95 backdrop-blur-md p-4 md:p-6 rounded-[2rem] border border-stone-200 shadow-sm sticky top-16 md:top-20 z-20">
+                    <div className="flex flex-col lg:flex-row gap-4 justify-between bg-white/95 backdrop-blur-md p-4 md:p-6 rounded-2xl md:rounded-3xl border border-stone-200 shadow-sm sticky top-16 md:top-20 z-20">
                         <div className="relative w-full lg:max-w-md">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
                             <input 
@@ -1140,29 +1251,45 @@ const EventRSVPs: React.FC = () => {
                             />
                         </div>
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                            <div className="flex overflow-x-auto pb-1 sm:pb-0 gap-2 no-scrollbar flex-1 lg:flex-none">
-                                {[
-                                    { id: 'all', label: 'Todos', activeClass: 'bg-[#DF3B94] text-white border-[#DF3B94] shadow-md', inactiveClass: 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200 hover:text-stone-900' },
-                                    { id: 'yes', label: 'Conf.', activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-md', inactiveClass: 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100' },
-                                    { id: 'pending', label: 'Pend.', activeClass: 'bg-amber-500 text-white border-amber-500 shadow-md', inactiveClass: 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100' },
-                                    { id: 'no', label: 'Decl.', activeClass: 'bg-rose-600 text-white border-rose-600 shadow-md', inactiveClass: 'bg-rose-50 text-rose-800 border-rose-300 hover:bg-rose-100' }
-                                ].map(f => (
-                                    <button 
-                                        key={f.id} 
-                                        onClick={() => setStatusFilter(f.id as any)} 
-                                        className={`flex-none px-4 py-2.5 rounded-xl text-[8px] sm:text-[9px] uppercase font-extrabold tracking-widest border transition-all ${
-                                            statusFilter === f.id ? f.activeClass : f.inactiveClass
-                                        }`}
-                                    >
-                                        {f.label}
-                                    </button>
-                                ))}
+                            <div className="relative flex-1 lg:flex-none">
+                                <div className="flex overflow-x-auto pb-1 sm:pb-0 gap-2 no-scrollbar">
+                                    {[
+                                        { id: 'all', label: 'Todos', activeClass: 'bg-[#DF3B94] text-white border-[#DF3B94] shadow-md', inactiveClass: 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200 hover:text-stone-900' },
+                                        { id: 'yes', label: 'Conf.', activeClass: 'bg-emerald-600 text-white border-emerald-600 shadow-md', inactiveClass: 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100' },
+                                        { id: 'pending', label: 'Pend.', activeClass: 'bg-amber-500 text-white border-amber-500 shadow-md', inactiveClass: 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100' },
+                                        { id: 'no', label: 'Decl.', activeClass: 'bg-rose-600 text-white border-rose-600 shadow-md', inactiveClass: 'bg-rose-50 text-rose-800 border-rose-300 hover:bg-rose-100' }
+                                    ].map(f => (
+                                        <button 
+                                            key={f.id} 
+                                            type="button"
+                                            onClick={() => setStatusFilter(f.id as any)} 
+                                            className={`flex-none px-3.5 py-2 rounded-xl text-xs font-bold border transition-all whitespace-nowrap min-h-[38px] cursor-pointer ${
+                                                statusFilter === f.id ? f.activeClass : f.inactiveClass
+                                            }`}
+                                        >
+                                            {f.label}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white to-transparent sm:hidden" />
                             </div>
                             <div className="flex gap-2 ml-auto">
-                                <button onClick={handleExportPDF} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors" title="Exportar PDF">
+                                <button 
+                                    type="button"
+                                    onClick={handleExportPDF} 
+                                    className="h-11 w-11 min-h-[44px] min-w-[44px] bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors cursor-pointer" 
+                                    title="Exportar lista en PDF"
+                                    aria-label="Exportar lista en PDF"
+                                >
                                     <Download className="h-4 w-4" />
                                 </button>
-                                <button onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} className="h-10 w-10 sm:h-11 sm:w-11 bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors">
+                                <button 
+                                    type="button"
+                                    onClick={() => setViewMode(viewMode === 'table' ? 'cards' : 'table')} 
+                                    className="h-11 w-11 min-h-[44px] min-w-[44px] bg-stone-100 border border-stone-200 rounded-xl text-stone-700 hover:text-stone-950 hover:bg-stone-200 flex items-center justify-center transition-colors cursor-pointer"
+                                    title={viewMode === 'table' ? 'Cambiar a vista de tarjetas' : 'Cambiar a vista de tabla'}
+                                    aria-label={viewMode === 'table' ? 'Cambiar a vista de tarjetas' : 'Cambiar a vista de tabla'}
+                                >
                                     {viewMode === 'table' ? <LayoutDashboard className="h-4 w-4" /> : <Users className="h-4 w-4" />}
                                 </button>
                             </div>
@@ -1220,7 +1347,55 @@ const EventRSVPs: React.FC = () => {
                         </div>
                     )}
 
-                    <div className="bg-white rounded-[2rem] border border-stone-200 shadow-sm overflow-hidden">
+                    {/* Lista de Invitados / Empty State */}
+                    {guests.length === 0 ? (
+                        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-stone-200 shadow-sm space-y-4">
+                            <div className="w-16 h-16 bg-rose-50 text-[#DF3B94] rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+                                <Users className="h-8 w-8" />
+                            </div>
+                            <div className="space-y-1">
+                                <h3 className="text-lg font-bold text-stone-900">Aún no tienes invitados</h3>
+                                <p className="text-sm text-stone-500 max-w-sm mx-auto">Comienza agregando a tus invitados manualmente o importa una lista completa en formato CSV/Excel.</p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsAddGuestOpen(true)}
+                                    className="w-full sm:w-auto px-6 py-3 bg-[#DF3B94] text-white rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    <UserPlus className="h-4 w-4" />
+                                    Agregar el primero
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (!hasFeature('guest_import_excel')) {
+                                            setProModalFeature('guest_import_excel');
+                                            return;
+                                        }
+                                        fileInputRef.current?.click();
+                                    }}
+                                    className="w-full sm:w-auto px-6 py-3 bg-white text-stone-700 border border-stone-200 rounded-xl text-xs uppercase font-bold tracking-wider hover:bg-stone-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    <Upload className="h-4 w-4" />
+                                    Importar desde Excel
+                                </button>
+                            </div>
+                        </div>
+                    ) : filteredGuests.length === 0 ? (
+                        <div className="text-center py-16 px-4 bg-white rounded-3xl border border-stone-200 shadow-sm space-y-3">
+                            <Search className="h-8 w-8 text-stone-400 mx-auto" />
+                            <p className="text-sm font-bold text-stone-700">No se encontraron invitados con los filtros seleccionados.</p>
+                            <button
+                                type="button"
+                                onClick={() => { setSearchQuery(''); setStatusFilter('all'); }}
+                                className="text-xs font-bold text-[#DF3B94] hover:underline cursor-pointer"
+                            >
+                                Limpiar filtros
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="bg-white rounded-[2rem] border border-stone-200 shadow-sm overflow-hidden">
                         {viewMode === 'cards' ? (
                             <div className="p-4 sm:p-8 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                 {paginatedGuests.map(g => {
@@ -1625,6 +1800,7 @@ const EventRSVPs: React.FC = () => {
                             </div>
                         )}
                     </div>
+                    )}
                 </div>
             )}
 
@@ -1760,6 +1936,47 @@ const EventRSVPs: React.FC = () => {
                             const msg = `Hola ${selectedGuestForQR.name}, aquí tu pase: ${window.location.origin}/i/${selectedGuestForQR.event?.slug}?t=${selectedGuestForQR.id}`;
                             window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                         }} className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold text-[10px] uppercase shadow-lg shadow-emerald-200/50 hover:bg-[#20ba59] transition-colors">Compartir WA</button>
+                    </div>
+                </div>
+            )}
+            {/* Pro Feature Modal */}
+            {proModalFeature && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+                    <div className="bg-white rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl border border-stone-200 space-y-5 text-center animate-in zoom-in-95 duration-200">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#DF3B94] to-[#C52A7C] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#DF3B94]/30">
+                            <Crown className="h-7 w-7" />
+                        </div>
+                        <div className="space-y-2">
+                            <h3 className="text-xl font-display font-extrabold text-[#222B38]">
+                                Esta función es del plan Pro
+                            </h3>
+                            <p className="text-sm text-stone-600 leading-relaxed">
+                                {proModalFeature === 'metrics_dashboard' && 'Consulta analíticas detalladas, tasa de confirmación por grupo y tiempos de respuesta con el plan Pro.'}
+                                {proModalFeature === 'guest_dashboard' && 'Visualiza y gestiona las dedicatorias y mensajes privados de tus invitados con el plan Pro.'}
+                                {proModalFeature === 'table_management' && 'Organiza a tus invitados por mesas y asigna asientos fácilmente con el plan Pro.'}
+                                {proModalFeature === 'reminders_automatic' && 'Envía recordatorios masivos y automáticos por WhatsApp con el plan Pro.'}
+                                {proModalFeature === 'guest_import_excel' && 'Importa cientos de invitados en segundos desde un archivo Excel o CSV con el plan Pro.'}
+                                {proModalFeature === 'access_control' && 'Controla el acceso en puerta con escáner de códigos QR y pases individuales con el plan Pro.'}
+                                {!['metrics_dashboard', 'guest_dashboard', 'table_management', 'reminders_automatic', 'guest_import_excel', 'access_control'].includes(proModalFeature) &&
+                                    'Mejora tu evento al plan Pro para desbloquear todas las herramientas avanzadas de gestión.'}
+                            </p>
+                        </div>
+                        <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+                            <button
+                                type="button"
+                                onClick={() => setProModalFeature(null)}
+                                className="flex-1 py-3 px-4 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                            >
+                                Cerrar
+                            </button>
+                            <Link
+                                to="/planes"
+                                className="flex-1 py-3 px-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#DF3B94]/20 flex items-center justify-center gap-1.5"
+                            >
+                                <Crown className="h-4 w-4" />
+                                Mejorar plan
+                            </Link>
+                        </div>
                     </div>
                 </div>
             )}

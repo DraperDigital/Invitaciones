@@ -18,6 +18,23 @@ export default function DashboardLayout() {
 
     const { isCorporate } = getPlatformContext();
 
+    // Cierre automático del menú móvil al cambiar de ruta
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location.pathname]);
+
+    // Bloqueo del scroll de la página mientras el menú móvil está abierto
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isMobileMenuOpen]);
+
     useEffect(() => {
         if (!user) return;
         const dismissed = localStorage.getItem(`onboarding_dismissed_${user.id}`);
@@ -122,7 +139,7 @@ export default function DashboardLayout() {
             {/* Main Content Area */}
             <div className="flex-1 lg:ml-72 flex flex-col min-w-0">
                 {/* Mobile Header */}
-                <header className="lg:hidden bg-[#222B38] text-white p-4 flex items-center justify-between sticky top-0 z-40 border-b border-slate-800">
+                <header className="lg:hidden bg-[#222B38] text-white px-4 h-16 flex items-center justify-between sticky top-0 z-[60] border-b border-slate-800">
                     <Link to="/" className="flex items-center gap-2">
                         {isCorporate ? (
                             <img src="/logo-one-white.png?v=1" alt="Invitto One" className="h-8 w-auto object-contain" />
@@ -132,39 +149,53 @@ export default function DashboardLayout() {
                     </Link>
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-2 text-slate-300 hover:text-white"
-                        aria-label="Abrir menú"
+                        className="p-2 text-slate-300 hover:text-white cursor-pointer"
+                        aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
                     >
                         {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </button>
                 </header>
 
-                {/* Mobile Dropdown Menu */}
+                {/* Mobile Dropdown Menu (Fijo bajo el header con backdrop oscuro) */}
                 {isMobileMenuOpen && (
-                    <div className="lg:hidden bg-[#222B38] border-b border-slate-800 px-6 py-6 space-y-3 z-30 animate-in slide-in-from-top-2">
-                        {navItems.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                                <Link
-                                    key={item.name}
-                                    to={item.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs uppercase tracking-wider font-bold ${
-                                        isActive(item.href) ? 'bg-white/10 text-white' : 'text-slate-400'
-                                    }`}
+                    <div className="lg:hidden fixed inset-0 top-16 z-50">
+                        {/* Fondo oscuro detrás que lo cierra al tocar */}
+                        <div
+                            className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-200 cursor-pointer"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            aria-hidden="true"
+                        />
+                        {/* Panel del menú fijo bajo el header */}
+                        <div className="relative bg-[#222B38] border-b border-slate-800 px-6 py-6 space-y-3 z-10 shadow-2xl max-h-[calc(100vh-6rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200">
+                            {navItems.map((item) => {
+                                const Icon = item.icon;
+                                const active = isActive(item.href);
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        to={item.href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className={`flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-xs uppercase tracking-wider font-bold transition-all ${
+                                            active
+                                                ? 'bg-white/10 text-white border border-white/10 shadow-md'
+                                                : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                        }`}
+                                    >
+                                        <Icon className={`h-5 w-5 ${active ? 'text-[#DF3B94]' : 'text-slate-400'}`} />
+                                        {item.name}
+                                    </Link>
+                                );
+                            })}
+                            <div className="pt-4 border-t border-slate-800">
+                                <button
+                                    onClick={handleSignOut}
+                                    className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 hover:text-rose-300 text-xs uppercase font-bold tracking-wider rounded-xl hover:bg-rose-500/10 transition-all cursor-pointer"
                                 >
-                                    <Icon className="h-5 w-5" />
-                                    {item.name}
-                                </Link>
-                            );
-                        })}
-                        <button
-                            onClick={handleSignOut}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 text-xs uppercase font-bold tracking-wider pt-4 border-t border-slate-800"
-                        >
-                            <LogOut className="h-4 w-4" />
-                            Cerrar Sesión
-                        </button>
+                                    <LogOut className="h-4 w-4" />
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
 
