@@ -688,6 +688,7 @@ export default function EventWizard() {
                                         { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'Boda / Flat lay', image: '/images/templates/lirio-vainilla.jpg' },
                                         { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'Gender Reveal / B&W', image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'Gender Reveal / Dúo', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' }

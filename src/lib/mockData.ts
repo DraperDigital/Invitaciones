@@ -421,7 +421,7 @@ export const MOCK_EVENTS: Event[] = [
         slug: 'boda-collage-premium',
         created_at: new Date().toISOString(),
     },
-    // BARBARA & LEONARDO - LIRIO VAINILLA (prueba de diseño a la medida, no es plantilla de catálogo)
+    // BARBARA & LEONARDO - LIRIO VAINILLA 
     {
         id: 'evt-lirio-vainilla',
         user_id: MOCK_USER.id,

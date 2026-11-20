@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'lirio-vainilla': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto Polaroid de la Portada',
+        heroHelpText: 'Foto en polaroid junto al sobre y la tarjeta en arco.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'polaroid-vintage': {
         type: 'single',
         photoCount: 1,
