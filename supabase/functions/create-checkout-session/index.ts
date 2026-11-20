@@ -23,7 +23,7 @@ serve(async (req) => {
     }
 
     const body = await req.json()
-    const { sessionId, planId, eventId, origin, email, fbp, fbc } = body
+    const { sessionId, planId, eventId, origin, email, fbp, fbc, amount, coupon } = body
 
     // Consultar el estado de una sesión de Stripe
     if (sessionId) {
@@ -76,7 +76,18 @@ serve(async (req) => {
       },
       customer_creation: 'always',
       ...(email ? { customer_email: email } : {}),
-      line_items: [
+      line_items: amount && Number(amount) > 0 ? [
+        {
+          price_data: {
+            currency: 'mxn',
+            product_data: {
+              name: `Plan ${planId.toUpperCase()} (Descuento Aplicado)`,
+            },
+            unit_amount: Math.round(Number(amount) * 100),
+          },
+          quantity: 1,
+        },
+      ] : [
         {
           price: priceId,
           quantity: 1,
@@ -89,6 +100,8 @@ serve(async (req) => {
       metadata: {
         planId: planId,
         eventId: eventId,
+        ...(coupon ? { coupon: String(coupon) } : {}),
+        ...(amount ? { amount: String(amount) } : {}),
         ...(fbp ? { fbp: String(fbp) } : {}),
         ...(fbc ? { fbc: String(fbc) } : {}),
       }

@@ -17,7 +17,7 @@ serve(async (req) => {
       throw new Error('No authorization header')
     }
 
-    const { couponCode, eventId, planId } = await req.json()
+    const { couponCode, eventId, planId, checkOnly } = await req.json()
 
     if (!couponCode || !eventId || !planId) {
       throw new Error('Missing required parameters')
@@ -61,19 +61,63 @@ serve(async (req) => {
       .single()
 
     if (couponError || !coupon) {
-      throw new Error('Cupón inválido.')
+      throw new Error('Cupón inválido o no encontrado.')
     }
 
-    if (coupon.current_uses >= coupon.max_uses) {
+    if (coupon.active === false) {
+      throw new Error('Este cupón no se encuentra activo.')
+    }
+
+    if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) {
+      throw new Error('Este cupón ha expirado.')
+    }
+
+    if (typeof coupon.max_uses === 'number' && typeof coupon.current_uses === 'number' && coupon.current_uses >= coupon.max_uses) {
       throw new Error('Este cupón ya ha alcanzado su límite de usos.')
     }
 
-    // Check if the plan is allowed for this coupon
-    // "INVITTO26" allows 'clasico' and 'premium'
+    // Validar plan_id: si está vacío, aplica a cualquier plan
+    if (coupon.plan_id && coupon.plan_id.trim() !== '') {
+      if (coupon.plan_id.trim().toLowerCase() !== planId.trim().toLowerCase()) {
+        throw new Error('Este cupón no es válido para el plan seleccionado.')
+      }
+    }
+
+    // Check if the plan is allowed for this coupon legacy rule
     if (coupon.code === 'INVITTO26') {
       if (planId !== 'clasico' && planId !== 'premium') {
         throw new Error('Este cupón solo es válido para los planes Clásica y Diseño Pro.')
       }
+    }
+
+    const hasOverride = coupon.override_price !== null && coupon.override_price !== undefined && !isNaN(Number(coupon.override_price))
+    const hasPercent = coupon.discount_percent !== null && coupon.discount_percent !== undefined && !isNaN(Number(coupon.discount_percent))
+
+    if (checkOnly) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          coupon: {
+            code: coupon.code,
+            active: coupon.active,
+            expires_at: coupon.expires_at,
+            max_uses: coupon.max_uses,
+            current_uses: coupon.current_uses,
+            plan_id: coupon.plan_id,
+            override_price: coupon.override_price,
+            discount_percent: coupon.discount_percent,
+          }
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      )
+    }
+
+    // Si NO es checkOnly, solo se puede aplicar al 100% si no requiere pago
+    if (hasOverride && Number(coupon.override_price) > 0) {
+      throw new Error('Este cupón tiene un precio especial y debe procesarse en el checkout.')
+    }
+    if (hasPercent && Number(coupon.discount_percent) < 100) {
+      throw new Error('Este cupón tiene un descuento parcial y debe procesarse en el checkout.')
     }
 
     // 2. Increment coupon usage

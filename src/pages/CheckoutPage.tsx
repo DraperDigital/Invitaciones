@@ -25,7 +25,13 @@ export default function CheckoutPage() {
 
     const [couponCode, setCouponCode] = useState('');
     const [couponError, setCouponError] = useState<string | null>(null);
-    const [isCouponSuccess, setIsCouponSuccess] = useState(false);
+    const [appliedCoupon, setAppliedCoupon] = useState<{
+        code: string;
+        finalPrice: number;
+        message: string;
+        isFullDiscount: boolean;
+        discountType: 'override' | 'percent' | 'full';
+    } | null>(null);
     const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
 
     // Fallback when ?id= is missing from the URL (browser back, manual nav, etc.)
@@ -199,35 +205,127 @@ export default function CheckoutPage() {
             if (!eventId) {
                 throw new Error("Selecciona la invitación para la que quieres aplicar el cupón.");
             }
-            
-            const { data, error } = await supabase.functions.invoke('apply-coupon', {
-                body: { 
-                    couponCode: couponCode.trim().toUpperCase(),
-                    eventId: eventId,
-                    planId: planId
-                }
-            });
 
-            if (error) {
-                let errorMessage = error.message;
-                try {
-                    // Access response body context for FunctionsHttpError
-                    const body = await error.context.json();
-                    if (body && body.error) {
-                        errorMessage = body.error;
+            const cleanCode = couponCode.trim().toUpperCase();
+
+            // 1. Consultar el cupón directamente en la tabla invitto.coupons
+            let couponData: any = null;
+            const { data: directCoupon, error: directError } = await supabase
+                .from('coupons')
+                .select('*')
+                .eq('code', cleanCode)
+                .maybeSingle();
+
+            if (!directError && directCoupon) {
+                couponData = directCoupon;
+            } else {
+                // Fallback por si la tabla invitto.coupons tiene RLS restrictivo para anon/authenticated
+                const { data: edgeData, error: edgeError } = await supabase.functions.invoke('apply-coupon', {
+                    body: { 
+                        couponCode: cleanCode,
+                        eventId: eventId,
+                        planId: planId,
+                        checkOnly: true
                     }
-                } catch (_) {}
-                throw new Error(errorMessage);
+                });
+
+                if (edgeError) {
+                    let errorMessage = edgeError.message;
+                    try {
+                        const body = await edgeError.context.json();
+                        if (body && body.error) errorMessage = body.error;
+                    } catch (_) {}
+                    throw new Error(errorMessage);
+                }
+
+                if (edgeData?.error) {
+                    throw new Error(edgeData.error);
+                }
+
+                if (edgeData?.coupon) {
+                    couponData = edgeData.coupon;
+                } else {
+                    throw new Error("Cupón inválido o no encontrado.");
+                }
             }
 
-            if (data && data.error) {
-                throw new Error(data.error);
+            // 2. Validar que active sea true
+            if (couponData.active === false) {
+                throw new Error("Este cupón no se encuentra activo.");
             }
 
-            setIsCouponSuccess(true);
+            // 3. Validar que expires_at no haya pasado
+            if (couponData.expires_at && new Date(couponData.expires_at).getTime() < Date.now()) {
+                throw new Error("Este cupón ya ha expirado.");
+            }
+
+            // 4. Validar que current_uses < max_uses
+            if (
+                typeof couponData.max_uses === 'number' &&
+                typeof couponData.current_uses === 'number' &&
+                couponData.current_uses >= couponData.max_uses
+            ) {
+                throw new Error("Este cupón ya alcanzó su límite máximo de usos.");
+            }
+
+            // 5. Validar plan_id: si está vacío, aplica a cualquier plan
+            if (couponData.plan_id && String(couponData.plan_id).trim() !== '') {
+                const targetPlan = String(couponData.plan_id).trim().toLowerCase();
+                if (targetPlan !== planId.toLowerCase()) {
+                    const planName = plans[targetPlan as keyof typeof plans]?.name || targetPlan;
+                    throw new Error(`Este cupón solo es válido para el plan ${planName}.`);
+                }
+            }
+
+            // 6. Calcular el precio según las reglas:
+            // 1) si el cupón tiene override_price, usa ese precio;
+            // 2) si tiene discount_percent, cobra el precio del plan menos ese porcentaje (redondeado a pesos);
+            // 3) solo si no tiene ninguno de los dos, cubre el plan completo (INVITTO26, INVITTO26PRO, PRUEBA-CARLOS).
+            const originalPrice = selectedPlan.price;
+            let finalPrice = originalPrice;
+            let message = '';
+            let discountType: 'override' | 'percent' | 'full' = 'full';
+
+            const hasOverride = couponData.override_price !== null && couponData.override_price !== undefined && couponData.override_price !== '' && !isNaN(Number(couponData.override_price));
+            const hasPercent = couponData.discount_percent !== null && couponData.discount_percent !== undefined && couponData.discount_percent !== '' && !isNaN(Number(couponData.discount_percent));
+
+            if (hasOverride) {
+                finalPrice = Math.max(0, Math.round(Number(couponData.override_price)));
+                discountType = 'override';
+                if (finalPrice === 0) {
+                    message = `¡Cupón aplicado exitosamente! El plan ${selectedPlan.name} ha sido cubierto al 100%.`;
+                } else {
+                    const saving = Math.max(0, originalPrice - finalPrice);
+                    message = `Cupón aplicado: precio especial de $${finalPrice.toLocaleString('es-MX')} MXN${saving > 0 ? ` (ahorras $${saving.toLocaleString('es-MX')} MXN)` : ''}`;
+                }
+            } else if (hasPercent) {
+                const percent = Math.min(100, Math.max(0, Number(couponData.discount_percent)));
+                const discount = Math.round((originalPrice * percent) / 100);
+                finalPrice = Math.max(0, originalPrice - discount);
+                discountType = 'percent';
+                if (finalPrice === 0 || percent === 100) {
+                    message = `Cupón aplicado: 100% de descuento (el plan ${selectedPlan.name} queda cubierto al 100%)`;
+                } else {
+                    message = `Cupón aplicado: ${percent}% de descuento`;
+                }
+            } else {
+                // Sin override_price ni discount_percent -> cubre el 100%
+                finalPrice = 0;
+                discountType = 'full';
+                message = `¡Cupón aplicado exitosamente! El plan ${selectedPlan.name} ha sido cubierto al 100%.`;
+            }
+
+            setAppliedCoupon({
+                code: cleanCode,
+                discountType,
+                finalPrice,
+                message,
+                isFullDiscount: finalPrice === 0
+            });
         } catch (err: any) {
             console.error('Coupon error:', err);
             setCouponError(err.message);
+            setAppliedCoupon(null);
         } finally {
             setIsApplyingCoupon(false);
         }
@@ -247,12 +345,33 @@ export default function CheckoutPage() {
                 return;
             }
 
-            // Si el cupón fue validado y activado por el servidor, redirigir
-            if (isCouponSuccess) {
+            // Si el cupón cubre el 100% (gratuito)
+            if (appliedCoupon && appliedCoupon.isFullDiscount) {
+                const { data, error: applyError } = await supabase.functions.invoke('apply-coupon', {
+                    body: { 
+                        couponCode: appliedCoupon.code,
+                        eventId: eventId,
+                        planId: planId
+                    }
+                });
+
+                if (applyError) {
+                    let errorMessage = applyError.message;
+                    try {
+                        const body = await applyError.context.json();
+                        if (body && body.error) errorMessage = body.error;
+                    } catch (_) {}
+                    throw new Error(errorMessage);
+                }
+
+                if (data && data.error) {
+                    throw new Error(data.error);
+                }
+
                 setIsSuccess(true);
                 trackEvent('purchase', {
                     transaction_id: eventId,
-                    coupon: couponCode,
+                    coupon: appliedCoupon.code,
                     value: 0,
                     currency: 'MXN'
                 });
@@ -262,7 +381,7 @@ export default function CheckoutPage() {
                 return;
             }
 
-            // Call our Edge Function to create a Stripe Checkout Session
+            // Si es con pago (normal o con descuento parcial)
             const effectiveEmail = (formData.email && formData.email.trim()) || user?.email || undefined;
             const fbp = getCookie('_fbp');
             const fbc = getCookie('_fbc');
@@ -274,7 +393,9 @@ export default function CheckoutPage() {
                     origin: window.location.origin,
                     email: effectiveEmail,
                     fbp: fbp || undefined,
-                    fbc: fbc || undefined
+                    fbc: fbc || undefined,
+                    amount: appliedCoupon ? appliedCoupon.finalPrice : undefined,
+                    coupon: appliedCoupon ? appliedCoupon.code : undefined
                 }
             });
 
@@ -503,19 +624,30 @@ export default function CheckoutPage() {
                                                 onChange={(e) => {
                                                     setCouponCode(e.target.value.toUpperCase());
                                                     setCouponError(null);
+                                                    if (appliedCoupon) setAppliedCoupon(null);
                                                 }}
                                             />
                                             <button
                                                 type="button"
                                                 onClick={handleApplyCoupon}
-                                                disabled={!couponCode || isApplyingCoupon || isCouponSuccess}
-                                                className="px-8 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-md disabled:opacity-50 shrink-0"
+                                                disabled={!couponCode || isApplyingCoupon || appliedCoupon !== null}
+                                                className="px-8 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-wider hover:bg-[#C52A7C] transition-all shadow-md disabled:opacity-50 shrink-0 cursor-pointer"
                                             >
-                                                {isApplyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Aplicar'}
+                                                {isApplyingCoupon ? (
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                ) : appliedCoupon ? (
+                                                    'Aplicado'
+                                                ) : (
+                                                    'Aplicar'
+                                                )}
                                             </button>
                                         </div>
                                         {couponError && <p className="text-xs text-rose-500 ml-1">{couponError}</p>}
-                                        {isCouponSuccess && <p className="text-xs text-emerald-600 ml-1 font-bold">¡Cupón aplicado exitosamente! El plan {selectedPlan.name} ha sido cubierto al 100%.</p>}
+                                        {appliedCoupon && (
+                                            <p className="text-xs text-emerald-600 ml-1 font-bold">
+                                                {appliedCoupon.message}
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
 
@@ -528,7 +660,7 @@ export default function CheckoutPage() {
                                 <button 
                                     type="submit" 
                                     disabled={isProcessing}
-                                    className="group relative w-full py-5 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-[#C52A7C] transition-all disabled:opacity-50 overflow-hidden active:scale-[0.99]"
+                                    className="group relative w-full py-5 bg-[#DF3B94] text-white rounded-2xl text-xs uppercase font-bold tracking-[0.2em] shadow-xl hover:bg-[#C52A7C] transition-all disabled:opacity-50 overflow-hidden active:scale-[0.99] cursor-pointer"
                                 >
                                     {isProcessing ? (
                                         <div className="flex items-center justify-center gap-3">
@@ -537,9 +669,9 @@ export default function CheckoutPage() {
                                         </div>
                                     ) : (
                                         <span>
-                                            {isCouponSuccess 
+                                            {appliedCoupon && appliedCoupon.isFullDiscount
                                                 ? "Continuar al Dashboard" 
-                                                : `Confirmar y Pagar — $${selectedPlan.price} MXN`}
+                                                : `Confirmar y Pagar — $${(appliedCoupon ? appliedCoupon.finalPrice : selectedPlan.price).toLocaleString('es-MX')} MXN`}
                                         </span>
                                     )}
                                 </button>
@@ -588,15 +720,41 @@ export default function CheckoutPage() {
                                     </div>
 
                                     {/* Total */}
-                                    <div className="pt-8 border-t border-white/10 space-y-2">
-                                        <div className="flex justify-between items-end">
-                                            <span className="text-slate-400 text-sm">Inversión Total</span>
-                                            <span className="text-4xl font-display font-extrabold tracking-tight">${selectedPlan.price} <span className="text-base font-normal text-slate-400">MXN</span></span>
+                                    {appliedCoupon ? (
+                                        <div className="pt-8 border-t border-white/10 space-y-3">
+                                            <div className="flex justify-between items-center text-sm text-slate-400">
+                                                <span>Precio original</span>
+                                                <span className="line-through">${selectedPlan.price.toLocaleString('es-MX')} MXN</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-xs font-bold text-emerald-400">
+                                                <span>{appliedCoupon.message}</span>
+                                                <span>-${(selectedPlan.price - appliedCoupon.finalPrice).toLocaleString('es-MX')} MXN</span>
+                                            </div>
+                                            <div className="flex justify-between items-end pt-2 border-t border-white/10">
+                                                <span className="text-slate-300 text-sm font-medium">Inversión Total</span>
+                                                <span className="text-4xl font-display font-extrabold tracking-tight text-white">
+                                                    ${appliedCoupon.finalPrice.toLocaleString('es-MX')}{' '}
+                                                    <span className="text-base font-normal text-slate-400">MXN</span>
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-end gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                                                <Check className="h-4 w-4" /> Incluye impuestos
+                                            </div>
                                         </div>
-                                        <div className="flex justify-end gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
-                                            <Check className="h-4 w-4" /> Incluye impuestos
+                                    ) : (
+                                        <div className="pt-8 border-t border-white/10 space-y-2">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-slate-400 text-sm">Inversión Total</span>
+                                                <span className="text-4xl font-display font-extrabold tracking-tight">
+                                                    ${selectedPlan.price.toLocaleString('es-MX')}{' '}
+                                                    <span className="text-base font-normal text-slate-400">MXN</span>
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-end gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                                                <Check className="h-4 w-4" /> Incluye impuestos
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                     {/* Trust & Guarantee */}
                                     <div className="pt-4 border-t border-white/10 space-y-2.5">
