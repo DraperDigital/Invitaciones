@@ -35,7 +35,7 @@ export type SectionId =
   | 'gallery'        // Galería de fotos (Premium)
   | 'chambelanes'    // Corte de honor / damas (Pro+)
   | 'hotels'         // Hospedaje (Premium — futuro)
-  | 'footer';        // FIJO — siempre último
+  | 'footer';        // FIJO — siempre último (incluye el mensaje de cierre editable)
 
 export type PlanTier = 'clasico' | 'pro' | 'premium';
 
@@ -463,4 +463,16 @@ export function buildFullPlanQueue(
       if (!isSectionAllowedForEvent(def.id, eventType, theme)) return false;
       return isPlanAtLeast(tier, def.planRequired);
     });
+}
+
+/** Mensaje de cierre sugerido para el módulo Pie, según el tipo de evento. */
+export function getDefaultClosingMessage(eventType?: string): string {
+    switch ((eventType || '').toLowerCase()) {
+        case 'xv': case 'xv_anos': return 'Te espero';
+        case 'birthday': case 'cumpleanos': return '¡Te espero!';
+        case 'graduacion': case 'graduation': return '¡Celebra conmigo!';
+        case 'gender_reveal': return '¡Descúbrelo con nosotros!';
+        case 'corporate': return 'Le esperamos';
+        default: return 'Te esperamos';
+    }
 }

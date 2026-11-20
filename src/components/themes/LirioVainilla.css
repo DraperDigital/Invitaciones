@@ -146,19 +146,19 @@
 }
 .theme-lirio-vainilla #gallery [class*="rounded"] { border-radius: 0 !important; }
 
-/* ── Pie: banda sólida verde olivo "Te esperamos" ────────────────────── */
-.theme-lirio-vainilla #footer { padding-top: 0 !important; }
-.theme-lirio-vainilla #footer::before {
-  content: 'Te esperamos';
-  display: grid;
-  place-items: center;
-  height: 260px;
-  margin-bottom: 28px;
-  font-family: 'Pinyon Script', cursive;
-  font-size: 56px;
-  color: #f4f1e6;
-  background: #4f5534;
+/* ── Pie: mensaje de cierre (módulo Pie) en verde olivo ─────────────── */
+.theme-lirio-vainilla .invitation-closing {
+  background: #4f5534 var(--lv-tex) !important;
+  color: #f4f1e6 !important;
 }
+.theme-lirio-vainilla .invitation-closing .invitation-closing-title {
+  font-family: 'Pinyon Script', cursive !important;
+  font-weight: 400 !important;
+  font-size: clamp(3rem, 14vw, 4.5rem) !important;
+  line-height: 1.05 !important;
+  color: #f4f1e6 !important;
+}
+.theme-lirio-vainilla .invitation-closing-sub { font-family: 'Marcellus', serif !important; }
 
 /* ══════════════════════════════════════════════════════════════════════
    PORTADA

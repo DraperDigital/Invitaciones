@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
 import type { SectionId } from '../lib/sectionRegistry';
+import { getDefaultClosingMessage } from '../lib/sectionRegistry';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
 import { getHeroPhotoSlot, getHeroSaveFields } from '../lib/heroPhotoSlots';
 
@@ -36,6 +37,8 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
     const [childName, setChildName] = useState(cfg.child_name || cfg.childName || '');
     const [age, setAge] = useState(cfg.age || cfg.turning_age || '');
     const [welcomeMessage, setWelcomeMessage] = useState(cfg.welcome_message || '');
+    const [closingMessage, setClosingMessage] = useState<string>(cfg.closing_message ?? cfg.closingMessage ?? getDefaultClosingMessage(event.event_type));
+    const [showClosingMessage, setShowClosingMessage] = useState<boolean>(cfg.show_closing_message === true || cfg.showClosingMessage === true);
     const [dateTime, setDateTime] = useState(event.date_time ? new Date(event.date_time).toISOString().slice(0, 16) : '');
     const [heroImageUrl, setHeroImageUrl] = useState(cfg.hero_image_url || cfg.heroImage || cfg.floral_avatar_url || '');
     const [heroImagePositionY, setHeroImagePositionY] = useState(Number(cfg.hero_image_position_y ?? 50));
@@ -475,6 +478,11 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                     rsvp_notes: rsvpNotes,
                     whatsapp_number: whatsappNumber
                 });
+            } else if (sectionId === 'footer') {
+                await onUpdateThemeConfig({
+                    closing_message: closingMessage.trim(),
+                    show_closing_message: showClosingMessage
+                });
             } else if (sectionId === 'chambelanes') {
                 const updatedParents = {
                     ...(cfg.parents || {}),
@@ -508,6 +516,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
         'gifts': 'Mesa de Regalos y Datos Bancarios',
         'chambelanes': 'Corte de Honor y Padres',
         'rsvp': 'Confirmación de Asistencia (RSVP)',
+        'footer': 'Mensaje de Cierre',
     };
 
     return (
@@ -1206,6 +1215,34 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                 <p className="text-[10px] text-stone-400">Aparece en cursiva elegante debajo del saludo.</p>
                             </div>
                         </div>
+                    )}
+
+                    {/* ── FOOTER: mensaje de cierre ── */}
+                    {sectionId === 'footer' && (
+                        <>
+                            <label className="flex items-center justify-between gap-4 bg-stone-50 px-4 py-3 rounded-xl cursor-pointer">
+                                <span className="text-sm text-stone-700">Mostrar mensaje de cierre</span>
+                                <input
+                                    type="checkbox"
+                                    checked={showClosingMessage}
+                                    onChange={e => setShowClosingMessage(e.target.checked)}
+                                    className="h-5 w-5 accent-[#DF3B94]"
+                                />
+                            </label>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black tracking-widest text-stone-500">Mensaje de cierre</label>
+                                <input
+                                    type="text"
+                                    value={closingMessage}
+                                    maxLength={60}
+                                    disabled={!showClosingMessage}
+                                    onChange={e => setClosingMessage(e.target.value)}
+                                    placeholder={getDefaultClosingMessage(event.event_type)}
+                                    className="w-full bg-stone-50 px-4 py-3 rounded-xl text-sm border-none focus:ring-2 focus:ring-[#DF3B94]/20 text-stone-800 disabled:opacity-50"
+                                />
+                                <p className="text-[10px] text-stone-400">Es lo último que lee tu invitado. Se muestra con la tipografía de tu plantilla.</p>
+                            </div>
+                        </>
                     )}
 
                     {/* ── MESSAGE ── */}

@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'anturio-vino': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto dentro del Arco',
+        heroHelpText: 'Foto enmarcada en el arco vino con filo dorado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'lirio-vainilla': {
         type: 'single',
         photoCount: 1,

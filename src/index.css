@@ -250,3 +250,15 @@
   position: relative;
   z-index: 10;
 }
+
+/* Mensaje de cierre del módulo Pie (todas las plantillas).
+   La familia tipográfica la pone la plantilla (font-serif / reglas del tema);
+   aquí solo se fija una escala grande que no pisen los estilos móviles genéricos. */
+.invitation-closing .invitation-closing-title {
+  font-size: clamp(2.6rem, 11vw, 4.25rem) !important;
+  line-height: 1.08 !important;
+  text-wrap: balance;
+}
+.invitation-closing .invitation-closing-sub {
+  line-height: 1.9;
+}
