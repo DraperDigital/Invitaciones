@@ -221,7 +221,7 @@
   font-size: clamp(3.2rem, 14vw, 4.4rem);
   line-height: 1;
 }
-.lr-count-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; margin-top: 10px; }
+.lr-count-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; margin: 10px auto 0; max-width: 520px; }
 .lr-count-cell { position: relative; }
 .lr-count-cell b {
   display: block;
