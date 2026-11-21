@@ -723,7 +723,7 @@ export default function EventWizard() {
                                                                 : 'text-stone-500 hover:text-stone-800'
                                                         }`}
                                                     >
-                                                        ✨ {categoryLabel} ({categoryTemplates.length})
+                                                        {categoryLabel} ({categoryTemplates.length})
                                                     </button>
                                                     <button
                                                         type="button"

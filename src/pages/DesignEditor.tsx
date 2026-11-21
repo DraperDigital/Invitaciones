@@ -959,7 +959,7 @@ export default function DesignEditor() {
                         const categoryLabel = EVENT_CATEGORY_LABELS[effectiveCategory] || 'Evento';
 
                         const allTemplateItems = [
-                            { id: 'cinematic-motion', label: '🔒 Cinemática Motion (HTML Parallax)', desc: 'Portada fluida responsive, efectos parallax, partículas en Canvas y tipografía de oro', icon: '✨' },
+                            { id: 'cinematic-motion', label: '🔒 Cinemática Motion (HTML Parallax)', desc: 'Portada fluida responsive, efectos parallax, partículas en Canvas y tipografía de oro', icon: '🎬' },
                             { id: 'classic', label: 'Clásica Atemporal', desc: 'Fondo marfil, ornamentos dorados y tipografía con serifa atemporal', icon: '🏛️' },
                             { id: 'classic-elegance-pro', label: 'Clásica Atemporal Pro', desc: 'Editorial oscuro — negro profundo, oro intenso y portada inmersiva', icon: '👑' },
                             { id: 'modern-minimalist', label: 'Moderna Minimalista', desc: 'Líneas limpias, tipografía contemporánea y sobriedad monocromática', icon: '🖤' },
@@ -1007,7 +1007,7 @@ export default function DesignEditor() {
                                                     : 'text-stone-500 hover:text-stone-800'
                                             }`}
                                         >
-                                            ✨ Recomendadas ({categoryTemplates.length})
+                                            Recomendadas ({categoryTemplates.length})
                                         </button>
                                         <button
                                             type="button"

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church, Building2, Upload, Loader2 } from 'lucide-react';
+import { Send, RotateCcw, MapPin, SlidersHorizontal, Eye, ExternalLink, X, Smartphone, Monitor, Check, Clock, Church, Building2, Upload, Loader2 } from 'lucide-react';
 import { EVENT_TYPE_OPTIONS } from '../../pages/EventWizard';
 import { CANONICAL_TEMPLATES, getTemplatesForCategory, normalizeEventCategory } from '../../lib/themePresets';
 import type { WizardData } from '../../pages/EventWizard';
@@ -382,7 +382,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             }
 
             addAssistantMessage(
-                `¡Hola! Soy tu asistente de Invitto ✨. Veo que estás organizando tu invitación para **${option.label}**. ¡Excelente elección! 🎉\n\n${namePrompt}`,
+                `¡Hola! Soy tu asistente de Invitto. Veo que estás organizando tu invitación para **${option.label}**. ¡Excelente elección! 🎉\n\n${namePrompt}`,
                 [
                     { label: '🔄 Cambiar a otro tipo de evento', value: '__change_event_type__' }
                 ]
@@ -398,7 +398,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
         }));
 
         addAssistantMessage(
-            '¡Hola! Soy tu asistente de Invitto ✨. Te ayudaré a crear y configurar tu invitación digital paso a paso con todos los detalles necesarios.\n\nPara comenzar, ¿qué tipo de celebración estás organizando?',
+            '¡Hola! Soy tu asistente de Invitto. Te ayudaré a crear y configurar tu invitación digital paso a paso con todos los detalles necesarios.\n\nPara comenzar, ¿qué tipo de celebración estás organizando?',
             typeChips
         );
         setCurrentStep('ask_event_type');
@@ -519,7 +519,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                         `Fecha registrada: **${parsedDate.dateStrDisplay}** 📅.\n\n¿Tendrán ceremonia religiosa o misa previa a la fiesta?`,
                         [
                             { label: 'Sí, tendremos ceremonia religiosa ⛪', value: 'yes' },
-                            { label: 'No, todo será en el salón o recepción ✨', value: 'no' }
+                            { label: 'No, todo será en el salón o recepción', value: 'no' }
                         ]
                     );
                     setCurrentStep('ask_has_misa');
@@ -540,7 +540,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     setCurrentStep('ask_misa_name');
                 } else {
                     addAssistantMessage(
-                        '¡Perfecto, todo concentrado en un solo lugar! ✨\n\n¿Cómo se llama el salón, terraza, jardín o hacienda donde será la fiesta o recepción? (Ejemplo: Mansión Borbón / Salón Las Palmas)'
+                        '¡Perfecto, todo concentrado en un solo lugar!\n\n¿Cómo se llama el salón, terraza, jardín o hacienda donde será la fiesta o recepción? (Ejemplo: Mansión Borbón / Salón Las Palmas)'
                     );
                     setCurrentStep('ask_venue_name');
                 }
@@ -823,7 +823,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                 }
 
                 addAssistantMessage(
-                    `¡Preciosa elección! La plantilla "**${templateObj.name}**" lucirá increíble ✨.\n\n¿Qué código de vestimenta sugerirás a tus invitados?`,
+                    `¡Preciosa elección! La plantilla "**${templateObj.name}**" lucirá increíble.\n\n¿Qué código de vestimenta sugerirás a tus invitados?`,
                     dressChips
                 );
                 setCurrentStep('ask_dress_code');
@@ -839,7 +839,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     [
                         { label: 'Sí, Liverpool y/o Amazon 🎁', value: 'registry' },
                         { label: 'Lluvia de Sobres / Transferencia ✉️', value: 'cash' },
-                        { label: 'Su presencia es el mejor regalo ✨', value: 'none' }
+                        { label: 'Su presencia es el mejor regalo', value: 'none' }
                     ]
                 );
                 setCurrentStep('ask_gifts');
@@ -994,7 +994,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                     'Puedes seleccionar tu foto desde tu dispositivo o continuar sin foto por ahora:',
                     [
                         { label: 'Subir foto de portada 📸', value: 'upload_photo' },
-                        { label: 'Continuar sin foto por ahora ✨', value: 'skip_photo' }
+                        { label: 'Continuar sin foto por ahora', value: 'skip_photo' }
                     ]
                 );
                 break;
@@ -1162,7 +1162,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             [
                 { label: '2 semanas antes del evento 📅', value: '2_weeks' },
                 { label: '1 mes antes del evento 🗓️', value: '1_month' },
-                { label: 'Sin fecha límite estricta ✨', value: 'flexible' }
+                { label: 'Sin fecha límite estricta', value: 'flexible' }
             ]
         );
         setCurrentStep('ask_rsvp_deadline');
@@ -1173,7 +1173,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
             '📸 **¡Casi listos! ¿Tienes una foto de portada para tu invitación?**\n\nEs la foto principal que verán tus invitados al abrirla. Puedes subirla ahora para verla en tu vista previa, o continuar sin foto y agregarla después en el editor:',
             [
                 { label: 'Subir foto de portada 📸', value: 'upload_photo' },
-                { label: 'Continuar sin foto por ahora ✨', value: 'skip_photo' }
+                { label: 'Continuar sin foto por ahora', value: 'skip_photo' }
             ]
         );
         setCurrentStep('ask_hero_photo');
@@ -1402,7 +1402,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                                                 disabled={loading}
                                                 className="flex-1 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#DF3B94] hover:bg-[#C52A7C] text-white shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                                             >
-                                                <Sparkles className="h-4 w-4" />
+                                                <Check className="h-4 w-4" />
                                                 <span>Elegir plan y publicar</span>
                                             </button>
                                             <button
@@ -1602,7 +1602,7 @@ export default function WizardAiAssistant({ data, updateData, onSwitchToManual, 
                             {isIframeLoading && (
                                 <div className="absolute inset-0 bg-stone-950/90 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#DF3B94] to-pink-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 animate-pulse">
-                                        <Sparkles className="h-5 w-5 animate-spin" />
+                                        <Loader2 className="h-5 w-5 animate-spin" />
                                     </div>
                                     <p className="text-xs text-stone-300 font-medium animate-pulse">Cargando vista previa interactiva...</p>
                                 </div>

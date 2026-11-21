@@ -2109,7 +2109,7 @@ export const MOCK_EVENTS: Event[] = [
                 { time: '21:00', event: 'Bienvenida & Cóctel Dorado 🍸', location: 'Foyer Principal' },
                 { time: '22:00', event: 'Cena de Gala & Brindis de Honor 🥂', location: 'Salón Imperial' },
                 { time: '23:30', event: 'Apertura de Pista & Orquesta en Vivo 🎷', location: 'Pista Central' },
-                { time: '01:00', event: 'Tornamesa & Celebración de Medianoche ✨', location: 'Salón Imperial' }
+                { time: '01:00', event: 'Tornamesa & Celebración de Medianoche 🎶', location: 'Salón Imperial' }
             ],
             gift_table: {
                 enabled: true,

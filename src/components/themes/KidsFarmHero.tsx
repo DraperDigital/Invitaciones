@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, Clock, MapPin, Sparkles, Edit2 } from 'lucide-react';
+import { Calendar, Clock, MapPin, Edit2 } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
@@ -114,7 +114,6 @@ export default function KidsFarmHero({ event, cfg, countdown, labels, heroImageU
                     {/* Age Badge */}
                     <div className="flex justify-center items-center gap-2">
                         <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-400 text-amber-950 font-black text-xs sm:text-sm rounded-full shadow-md uppercase tracking-wider border-2 border-white">
-                            <Sparkles className="w-4 h-4 text-amber-950" />
                             ¡Festejando mis {age} años!
                         </span>
                     </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
-    Check, Sparkles, ChevronDown, ArrowRight,
+    Check, ChevronDown, ArrowRight,
     X, Users, Gem, Menu
 } from 'lucide-react';
 import { useState } from 'react';
@@ -475,8 +475,7 @@ export default function HomePage() {
             <section className="py-20 md:py-32 bg-white border-y border-slate-100">
                 <div className="mx-auto max-w-7xl px-6">
                     <div className="text-center mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
                             <span>Diseños Reales</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
@@ -565,8 +564,7 @@ export default function HomePage() {
             <section className="py-20 md:py-28 bg-[#F8F9FA] px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl">
                     <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <Sparkles className="h-3.5 w-3.5 text-[#C52A7C]" />
+                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
                             <span>Invitaciones por Categoría</span>
                         </div>
                         <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
@@ -583,7 +581,7 @@ export default function HomePage() {
                             { title: 'XV Años', slug: 'invitaciones-digitales-xv-anos', icon: '👑', desc: 'Vals, música, padrinos, cuenta regresiva y pase de acceso con QR.' },
                             { title: 'Cumpleaños', slug: 'invitaciones-digitales-cumpleanos', icon: '🎂', desc: 'Festejos para todas las edades sin el caos de los grupos de WhatsApp.' },
                             { title: 'Bautizo', slug: 'invitaciones-digitales-bautizo', icon: '🕊️', desc: 'Diseños angelicales con sección de padrinos, iglesia y comida familiar.' },
-                            { title: 'Primera Comunión', slug: 'invitaciones-digitales-primera-comunion', icon: '✨', desc: 'Ceremonia solemne, horarios puntuales, mapas y confirmación rápida.' },
+                            { title: 'Primera Comunión', slug: 'invitaciones-digitales-primera-comunion', icon: '⛪', desc: 'Ceremonia solemne, horarios puntuales, mapas y confirmación rápida.' },
                             { title: 'Baby Shower', slug: 'invitaciones-digitales-baby-shower', icon: '🍼', desc: 'Mesa de regalos Liverpool/Amazon, guía de pañales y confirmación tierna.' },
                             { title: 'Revelación de Género', slug: 'invitaciones-digitales-revelacion-de-genero', icon: '🎈', desc: '¿Team Rosa o Azul? Dinámicas interactivas y cuenta regresiva al gran secreto.' },
                             { title: 'Graduación', slug: 'invitaciones-digitales-graduacion', icon: '🎓', desc: 'Pases de gala individuales, check-in con QR y fotos de generación.' }
@@ -881,7 +879,7 @@ export default function HomePage() {
                                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-white" />
                                 </Link>
                                 <span className="text-xs text-[#FAC345] font-semibold bg-[#FAC345]/10 px-3.5 py-2 rounded-xl border border-[#FAC345]/20">
-                                    ✨ Servicio disponible para cualquier plan
+                                    Servicio disponible para cualquier plan
                                 </span>
                             </div>
                         </div>

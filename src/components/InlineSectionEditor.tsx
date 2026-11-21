@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, Save, Plus, Trash2, Upload, Image as ImageIcon, Loader2, Sparkles } from 'lucide-react';
+import { X, Save, Plus, Trash2, Upload, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import type { Event } from '../types/database.types';
@@ -992,7 +992,7 @@ export default function InlineSectionEditor({ sectionId, event, onClose, onUpdat
                                         {decorativeImageUrl ? (
                                             <img src={decorativeImageUrl} alt="Logo" className="w-full h-full object-contain" />
                                         ) : (
-                                            <Sparkles className="h-5 w-5 text-amber-500" />
+                                            <ImageIcon className="h-5 w-5 text-stone-400" />
                                         )}
                                     </div>
                                     <div className="flex-1 space-y-1.5">

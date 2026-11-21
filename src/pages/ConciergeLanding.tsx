@@ -4,8 +4,7 @@ import {
     ArrowRight,
     Check,
     ShieldCheck,
-    ChevronDown,
-    Sparkles
+    ChevronDown
 } from 'lucide-react';
 import Seo from '../components/Seo';
 import { WHATSAPP_SUPPORT_NUMBER } from '../lib/constants';
@@ -110,8 +109,7 @@ const ConciergeLanding: React.FC = () => {
                 <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[#DF3B94]/15 rounded-full blur-[140px] pointer-events-none" />
                 
                 <div className="max-w-4xl mx-auto text-center space-y-6 md:space-y-8 relative z-10">
-                    <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
-                        <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                    <div className="inline-flex items-center px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
                         <span className="text-xs font-bold uppercase tracking-widest text-[#DF3B94]">
                             INVITTO CONFIRMA · CONFIRMAMOS A TUS INVITADOS POR TI
                         </span>

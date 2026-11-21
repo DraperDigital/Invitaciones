@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Sparkles, Heart, MapPin, Calendar, Clock, Edit2 } from 'lucide-react';
+import { Heart, MapPin, Calendar, Clock, Edit2 } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
@@ -166,7 +166,6 @@ export default function RevealDuoHero({ event, cfg, countdown, labels, heroImage
                 {/* Interactive Prediction Voting Poll: Blue vs Pink */}
                 <div className="w-full max-w-md bg-white border border-stone-200 rounded-3xl p-6 mb-12 shadow-xl shadow-stone-200/50">
                     <p className="text-xs font-black uppercase tracking-widest text-stone-800 mb-1 flex items-center justify-center gap-2">
-                        <Sparkles className="h-4 w-4 text-amber-500" />
                         ¿Qué crees que será?
                     </p>
                     <p className="text-[11px] text-stone-500 mb-4">

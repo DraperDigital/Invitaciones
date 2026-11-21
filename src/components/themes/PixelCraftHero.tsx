@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Clock, MapPin, Sparkles, Cake, Compass, Edit2 } from 'lucide-react';
+import { Clock, MapPin, Cake, Compass, Edit2 } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
@@ -92,7 +92,6 @@ export default function PixelCraftHero({ event, cfg, countdown, labels, heroImag
                     <div className="inline-block relative">
                         {/* Subtitle tag */}
                         <div className="inline-flex items-center gap-2 px-4 py-1 mb-2 bg-[#22C55E]/20 border-2 border-[#22C55E] rounded-md backdrop-blur-sm shadow-md">
-                            <Sparkles className="w-3.5 h-3.5 text-[#4ADE80] animate-spin" />
                             <span 
                                 className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.25em] text-[#86EFAC]"
                                 style={{ fontFamily: '"Press Start 2P", monospace' }}

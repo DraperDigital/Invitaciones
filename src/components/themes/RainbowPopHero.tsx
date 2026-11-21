@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, Clock, MapPin, Sparkles, Heart, Gift, Edit2 } from 'lucide-react';
+import { Calendar, Clock, MapPin, Heart, Gift, Edit2 } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
@@ -96,7 +96,7 @@ export default function RainbowPopHero({ event, cfg, countdown, labels, heroImag
                                         />
                                     ) : (
                                         <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-100 to-sky-100 flex flex-col items-center justify-center p-4">
-                                            <Sparkles className="w-12 h-12 text-[#EC4899] mb-2 animate-spin" style={{ animationDuration: '8s' }} />
+                                            <Heart className="w-12 h-12 text-[#EC4899] mb-2" />
                                             <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">¡Fiesta Divertida!</p>
                                         </div>
                                     )}
@@ -120,7 +120,6 @@ export default function RainbowPopHero({ event, cfg, countdown, labels, heroImag
 
                         {/* ── Tagline Pill (e.g. "MI CUMPLEAÑOS" or "MI 1ER AÑITO") ── */}
                         <div className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-md shadow-pink-500/20 mb-3">
-                            <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
                             <span 
                                 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider"
                                 style={{ fontFamily: '"Fredoka", "Quicksand", sans-serif' }}

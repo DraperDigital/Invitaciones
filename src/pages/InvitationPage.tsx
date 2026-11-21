@@ -58,7 +58,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ScrollReveal from '../components/invitation/ScrollReveal';
 
 export const DEMO_CATEGORIES = [
-    { id: 'todas', name: 'Todas', emoji: '✨' },
+    { id: 'todas', name: 'Todas', emoji: '📂' },
     { id: 'boda', name: 'Bodas', emoji: '💍' },
     { id: 'xv', name: 'XV Años', emoji: '👑' },
     { id: 'gender_reveal', name: 'Revelación', emoji: '❓' },
@@ -4311,7 +4311,7 @@ END:VCALENDAR`;
                                                 ))}
                                             </optgroup>
                                             <option value="__show_category__">
-                                                ✨ Mostrar solo {categoryLabel}
+                                                Mostrar solo {categoryLabel}
                                             </option>
                                         </>
                                     )}
@@ -4473,7 +4473,7 @@ END:VCALENDAR`;
                                                             ))}
                                                         </optgroup>
                                                         <option value="__show_category__">
-                                                            ✨ Mostrar solo {categoryLabel}
+                                                            Mostrar solo {categoryLabel}
                                                         </option>
                                                     </>
                                                 )}

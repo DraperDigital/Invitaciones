@@ -1,5 +1,5 @@
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { Check, ArrowLeft, ArrowRight, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+import { Check, ArrowLeft, ArrowRight, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -441,7 +441,7 @@ export default function CheckoutPage() {
                     {!eventId && draftLookupDone && draftEvents.length === 0 ? (
                         <div className="max-w-2xl mx-auto my-4 p-8 md:p-12 bg-white rounded-3xl border border-slate-200/80 shadow-xl text-center space-y-6">
                             <div className="w-16 h-16 bg-[#fdf2f8] text-[#DF3B94] rounded-2xl flex items-center justify-center mx-auto border border-[#fbcfe8]">
-                                <Sparkles className="h-8 w-8" />
+                                <Heart className="h-8 w-8" />
                             </div>
                             <div className="space-y-2">
                                 <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-bold uppercase tracking-wider">

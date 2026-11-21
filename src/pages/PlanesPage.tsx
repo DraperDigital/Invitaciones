@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Heart, Gem, Crown, ArrowDown, Sparkles } from 'lucide-react';
+import { ArrowLeft, Heart, Gem, Crown, ArrowDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import Seo from '../components/Seo';
@@ -202,8 +202,8 @@ export default function PlanesPage() {
                             }`}
                         >
                             {isPreselectedByTemplate ? (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 text-white text-[10px] uppercase font-black tracking-widest rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap">
-                                    <Sparkles className="h-3.5 w-3.5" /> Esta plantilla es del plan {plan.name}
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-2 bg-gradient-to-r from-[#DF3B94] to-pink-600 text-white text-[10px] uppercase font-black tracking-widest rounded-full shadow-lg flex items-center whitespace-nowrap">
+                                    Esta plantilla es del plan {plan.name}
                                 </div>
                             ) : plan.popular && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-6 py-2 bg-[#e0409a] text-white text-[10px] uppercase font-bold tracking-widest rounded-full shadow-lg flex items-center gap-2 whitespace-nowrap">

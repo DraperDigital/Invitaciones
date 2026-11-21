@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Sparkles, HelpCircle, MapPin, Calendar, Clock, Edit2, Heart } from 'lucide-react';
+import { HelpCircle, MapPin, Calendar, Clock, Edit2, Heart } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 
 interface Props {
@@ -158,7 +158,6 @@ export default function RevealBwHero({ event, cfg, countdown, labels, heroImageU
                 {/* Interactive Intuition Poll / Votación para invitados */}
                 <div className="w-full max-w-md bg-stone-50 border-2 border-black rounded-3xl p-6 mb-12 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
                     <p className="text-xs font-black uppercase tracking-widest text-black mb-1 flex items-center justify-center gap-2">
-                        <Sparkles className="h-4 w-4 text-black" />
                         ¿Cuál es tu predicción?
                     </p>
                     <p className="text-[11px] text-stone-500 mb-4">

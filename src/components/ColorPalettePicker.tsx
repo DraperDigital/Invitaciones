@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Check, Sparkles, ArrowRight, Palette as PaletteIcon } from 'lucide-react';
+import { X, Check, ArrowRight, Palette as PaletteIcon } from 'lucide-react';
 import {
     PRESET_COLOR_PALETTES,
     generatePaletteFromColor,
@@ -117,7 +117,7 @@ export default function ColorPalettePicker({
                     <div className="p-4 sm:p-5 bg-gradient-to-br from-amber-50/60 via-stone-50 to-pink-50/40 rounded-2xl border border-stone-200/80 shadow-xs space-y-3">
                         <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                                <Sparkles className="h-4 w-4 text-[#C5A059]" />
+                                <PaletteIcon className="h-4 w-4 text-[#C5A059]" />
                                 <h4 className="text-xs font-bold uppercase tracking-wider text-stone-900">
                                     Los colores {weddingOrEventLabel}
                                 </h4>
