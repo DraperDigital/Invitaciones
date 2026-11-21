@@ -41,6 +41,7 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'whimsical-kids': ['Fredoka:wght@400;500;600;700', 'Quicksand:wght@400;500;600;700'],
     'rainbow-pop': ['Fredoka:wght@400;500;600;700', 'Quicksand:wght@400;500;600;700'],
     'gamer-party': ['Press+Start+2P', 'VT323'],
+    'bodegon-nocturno': ['Monsieur+La+Doulaise', 'Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500', 'Cinzel:wght@600'],
     'anturio-vino': ['Italiana', 'Pinyon+Script', 'Libre+Caslon+Text:ital,wght@0,400;0,700;1,400', 'La+Belle+Aurore'],
     'lirio-vainilla': ['Pinyon+Script', 'Marcellus', 'Josefin+Sans:wght@300;400;600', 'Cormorant+Garamond:ital@1'],
     'pixel-craft': ['Press+Start+2P', 'VT323'],

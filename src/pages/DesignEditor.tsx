@@ -976,6 +976,7 @@ export default function DesignEditor() {
                             { id: 'gamer-party', label: 'Gamer Party', desc: 'Nivel arcade retro con control neón, luces RGB, fuentes 8-bit y atmósfera de videojuego', icon: '🎮' },
                             { id: 'pixel-craft', label: 'Mundo Píxel (Minecraft)', desc: 'Aventura de bloques cúbicos con Creeper, pastel con velas, banderines y estética voxel', icon: '🟩' },
                             { id: 'rainbow-pop', label: 'Rainbow Pop', desc: 'Letras burbuja multicolor, confetti pastel, tarjetas festivas con bordes celestes', icon: '🌈' },
+                            { id: 'bodegon-nocturno', label: 'Bodegón Nocturno', desc: 'Lujo clásico: papel de algodón sobre pintura floral oscura, caligrafía y sello dorado', icon: '🥀' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },
                             { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
