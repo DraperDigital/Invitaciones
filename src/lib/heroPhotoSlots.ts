@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'bodegon-nocturno': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto Principal de la Portada',
+        heroHelpText: 'Foto vertical enmarcada bajo los nombres y la fecha.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
