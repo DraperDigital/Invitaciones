@@ -287,6 +287,7 @@ export default function EnvelopeIntro({
     const SEAL_COLOR_BY_THEME: Record<string, string> = {
         'bodegon-nocturno': '#C7A85A', // oro
         'lacre-rojo': '#7B1420',       // lacre rojo
+        'gotico-suave': '#9E2140',     // carmesí
     };
     if (SEAL_COLOR_BY_THEME[activeThemeId]) {
         finalAccent = SEAL_COLOR_BY_THEME[activeThemeId];

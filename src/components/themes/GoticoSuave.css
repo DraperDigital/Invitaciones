@@ -1,0 +1,345 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Gótico Suave — piel collage "flat lay" gótica: damasco gris, tinta negra,
+   marfil, gris plata y carmesí.
+   Todo va bajo .theme-gotico-suave (clase que pone InvitationPage en la raíz).
+   No cambia la estructura de los módulos: solo su apariencia.
+   Paleta 60/30/10: gris damasco y marfil (60) · negro (30) · carmesí (10).
+   Adornos propios en /images/themes/gotico-*.svg
+   ────────────────────────────────────────────────────────────────────── */
+
+.theme-gotico-suave {
+  --gs-ink: #141414;
+  --gs-ivory: #f7f3ea;
+  --gs-silver: #c9c7c4;
+  --gs-crimson: #9e2140;
+  --gs-cream: #fbf1ec;
+  --gs-tex: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .2  0 0 0 0 .2  0 0 0 0 .2  0 0 0 .1 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  --gs-corners:
+    url('/images/themes/gotico-esquina-tl.svg') left 8px top 8px / 64px no-repeat,
+    url('/images/themes/gotico-esquina-tr.svg') right 8px top 8px / 64px no-repeat,
+    url('/images/themes/gotico-esquina-bl.svg') left 8px bottom 8px / 64px no-repeat,
+    url('/images/themes/gotico-esquina-br.svg') right 8px bottom 8px / 64px no-repeat;
+  background: #e9e6e6 url('/images/themes/gotico-damasco.svg') center top / 96px auto repeat !important;
+  color: var(--gs-ink) !important;
+  font-family: 'Montserrat', system-ui, sans-serif !important;
+  overflow-x: hidden;
+}
+.theme-gotico-suave .invitation-content section,
+.theme-gotico-suave .invitation-content footer,
+.theme-gotico-suave #gallery > * {
+  background: transparent !important;
+}
+
+/* ── Tipografía ─────────────────────────────────────────────────────── */
+.theme-gotico-suave .font-serif { font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif !important; }
+.theme-gotico-suave .font-sans  { font-family: 'Montserrat', system-ui, sans-serif !important; }
+
+/* Títulos de módulo → caligrafía itálica */
+.theme-gotico-suave section h3[class*="text-4xl"],
+.theme-gotico-suave section h3[class*="text-3xl"],
+.theme-gotico-suave #gallery h2,
+.theme-gotico-suave #rsvp h2,
+.theme-gotico-suave #guest_welcome h2 {
+  font-family: 'Pinyon Script', cursive !important;
+  font-weight: 400 !important;
+  font-size: clamp(2.6rem, 11vw, 3.4rem) !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--gs-ink) !important;
+}
+.theme-gotico-suave section:not(#hero) h4,
+.theme-gotico-suave section:not(#hero) [class*="text-2xl"][class*="uppercase"] {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: .12em !important;
+}
+.theme-gotico-suave section:not(#hero) p {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ── Tarjetas por defecto → marfil con esquinas barrocas ────────────── */
+.theme-gotico-suave :is(#location, #hotels, #chambelanes, #itinerary) [class*="bg-[var(--card-bg)]"] {
+  background: var(--gs-corners), var(--gs-ivory) var(--gs-tex) !important;
+  border: 1px solid #141414 !important;
+  outline: 1px solid #141414;
+  outline-offset: -7px;
+  border-radius: 0 !important;
+  box-shadow: 0 14px 22px -10px rgba(0, 0, 0, .35) !important;
+  padding-top: 56px !important;
+  padding-bottom: 56px !important;
+}
+.theme-gotico-suave section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"] {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.theme-gotico-suave :is(#location, #hotels, #chambelanes, #itinerary) [class*="bg-[var(--card-bg)]"]:nth-child(odd)  { transform: rotate(-1deg); }
+.theme-gotico-suave :is(#location, #hotels, #chambelanes, #itinerary) [class*="bg-[var(--card-bg)]"]:nth-child(even) { transform: rotate(1deg); }
+/* En galería y regalos las tarjetas internas no llevan marco */
+.theme-gotico-suave :is(#gallery, #gifts, #guest_welcome, #message) [class*="bg-[var(--card-bg)]"] {
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+}
+.theme-gotico-suave #gifts > div [class*="bg-[var(--card-bg)]"] {
+  border: 1px solid rgba(251, 241, 236, .55) !important;
+  border-radius: 0 !important;
+}
+
+/* ── Dedicatoria (Nuestra historia) → tarjeta gris plata enmarcada ──── */
+.theme-gotico-suave #message > div {
+  background: var(--gs-corners), var(--gs-silver) var(--gs-tex) !important;
+  border: 1px solid #141414;
+  outline: 1px solid #141414;
+  outline-offset: -7px;
+  box-shadow: 0 16px 26px -10px rgba(0, 0, 0, .4);
+  padding: 64px 34px !important;
+  margin-left: 16px !important;
+  margin-right: 16px !important;
+}
+@media (min-width: 800px) { .theme-gotico-suave #message > div { margin-left: auto !important; margin-right: auto !important; } }
+
+/* ── Ubicación: 1ª tarjeta = cartucho gris festoneado, 2ª = óvalo negro ─ */
+.theme-gotico-suave #location .invitation-locations-wrapper > * {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  padding: 92px 44px !important;
+  filter: drop-shadow(0 14px 16px rgba(0, 0, 0, .3));
+}
+.theme-gotico-suave #location .invitation-locations-wrapper > :nth-child(1) {
+  background: url('/images/themes/gotico-cartucho.svg') center / 100% 100% no-repeat !important;
+}
+.theme-gotico-suave #location .invitation-locations-wrapper > :nth-child(2) {
+  background: url('/images/themes/gotico-ovalo.svg') center / 100% 100% no-repeat !important;
+  padding: 110px 48px !important;
+}
+.theme-gotico-suave #location .invitation-locations-wrapper > * * {
+  color: #f2f0ee !important;
+}
+.theme-gotico-suave #location .invitation-locations-wrapper h4,
+.theme-gotico-suave #location .invitation-locations-wrapper [class*="text-2xl"] {
+  font-family: 'Pinyon Script', cursive !important;
+  font-weight: 400 !important;
+  font-size: 2.4rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.theme-gotico-suave #location .invitation-locations-wrapper .rounded-full:not(a):not(button) { background: transparent !important; }
+.theme-gotico-suave #location .invitation-locations-wrapper svg { color: #f2f0ee !important; stroke: #f2f0ee !important; }
+.theme-gotico-suave #location .invitation-locations-wrapper a[class*="rounded"] {
+  background: transparent !important;
+  border: 0 !important;
+  color: #f2f0ee !important;
+  font-weight: 700 !important;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+/* ── Vestimenta y Regalos → tarjeta carmesí con letra crema ─────────── */
+.theme-gotico-suave #dress_code [class*="bg-[var(--card-bg)]"],
+.theme-gotico-suave #gifts > div {
+  background: var(--gs-crimson) var(--gs-tex) !important;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: 0 16px 26px -10px rgba(60, 0, 15, .45) !important;
+}
+.theme-gotico-suave #gifts > div {
+  padding: 56px 28px !important;
+  margin-left: 16px !important;
+  margin-right: 16px !important;
+  transform: rotate(-1deg);
+}
+@media (min-width: 800px) { .theme-gotico-suave #gifts > div { margin-left: auto !important; margin-right: auto !important; } }
+.theme-gotico-suave #dress_code [class*="bg-[var(--card-bg)]"] *,
+.theme-gotico-suave #gifts > div * { color: var(--gs-cream) !important; }
+.theme-gotico-suave #dress_code h3,
+.theme-gotico-suave #gifts h3 { color: var(--gs-ink) !important; }
+.theme-gotico-suave #gifts > div h3 { color: var(--gs-cream) !important; }
+.theme-gotico-suave #gifts a[class*="rounded"],
+.theme-gotico-suave #gifts button[class*="rounded"] {
+  background: transparent !important;
+  border: 1px solid var(--gs-cream) !important;
+  border-radius: 0 !important;
+  color: var(--gs-cream) !important;
+  box-shadow: none !important;
+}
+
+/* ── RSVP → tarjeta marfil con marco y esquinas ─────────────────────── */
+.theme-gotico-suave .invitation-rsvp-grid {
+  background: var(--gs-corners), var(--gs-ivory) var(--gs-tex);
+  border: 1px solid #141414;
+  outline: 1px solid #141414;
+  outline-offset: -7px;
+  box-shadow: 0 18px 30px -12px rgba(0, 0, 0, .45);
+  padding: 64px 26px;
+}
+.theme-gotico-suave #rsvp h2 { color: var(--gs-ink) !important; }
+
+/* ── Botones generales → rectángulo negro de línea ──────────────────── */
+.theme-gotico-suave section:not(#hero) a[class*="rounded-full"],
+.theme-gotico-suave section:not(#hero) button[class*="rounded-2xl"],
+.theme-gotico-suave section:not(#hero) button[class*="rounded-full"] {
+  border-radius: 0 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: .1em !important;
+  box-shadow: none !important;
+}
+.theme-gotico-suave section input,
+.theme-gotico-suave section textarea,
+.theme-gotico-suave section select {
+  border-radius: 0 !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+.theme-gotico-suave section:not(#hero) .rounded-full:not(a):not(button) { background: transparent !important; }
+.theme-gotico-suave .text-accent { color: var(--gs-crimson) !important; }
+
+/* ── Galería → polaroids ────────────────────────────────────────────── */
+.theme-gotico-suave #gallery img {
+  border: 10px solid #f3f1ec;
+  border-bottom-width: 34px;
+  border-radius: 0 !important;
+  box-shadow: 0 14px 22px -10px rgba(0, 0, 0, .35);
+}
+.theme-gotico-suave #gallery [class*="rounded"] { border-radius: 0 !important; }
+
+/* ── Pie: cierre en negro sólido con caligrafía marfil ──────────────── */
+.theme-gotico-suave .invitation-closing {
+  background: #141414 var(--gs-tex) !important;
+  color: var(--gs-ivory) !important;
+}
+.theme-gotico-suave .invitation-closing .invitation-closing-title {
+  font-family: 'Pinyon Script', cursive !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  color: var(--gs-ivory) !important;
+}
+.theme-gotico-suave .invitation-closing-ornament span:nth-child(2) { background: var(--gs-crimson) !important; opacity: 1 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   PORTADA
+   ══════════════════════════════════════════════════════════════════════ */
+.gs-hero { position: relative; padding: 56px 16px 40px; color: #141414; }
+.gs-hero-inner { position: relative; max-width: 460px; margin: 0 auto; }
+
+/* sobre negro */
+.gs-env {
+  position: relative; width: 72%; aspect-ratio: 1 / 1.05; margin-left: 2%;
+  transform: rotate(-3deg);
+  opacity: 0; transition: opacity .9s ease, transform 1s cubic-bezier(.2, .7, .2, 1);
+}
+.gs-hero.is-shown .gs-env { opacity: 1; }
+.gs-env-liner {
+  position: absolute; inset: 0;
+  clip-path: polygon(0 34%, 50% 0, 100% 34%, 100% 100%, 0 100%);
+  background:
+    linear-gradient(rgba(10, 10, 10, .15), rgba(10, 10, 10, .15)),
+    url('/images/themes/bodegon-fondo.jpg') center / cover no-repeat;
+  filter: grayscale(.75) sepia(.25) brightness(.8) contrast(1.1);
+  border: 10px solid #1a1a1a;
+  border-radius: 40% 40% 4px 4px / 22% 22% 4px 4px;
+}
+.gs-env-front {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 46%;
+  background: #1b1b1b var(--gs-tex);
+  clip-path: polygon(0 0, 50% 38%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 16px 24px rgba(0, 0, 0, .35);
+}
+
+/* polaroid */
+.gs-polaroid {
+  position: absolute; right: 0; top: 34px; width: 52%; z-index: 3;
+  background: #f3f1ec var(--gs-tex); padding: 9px 9px 30px;
+  transform: rotate(4deg);
+  box-shadow: 0 14px 22px -8px rgba(0, 0, 0, .4);
+  opacity: 0; transition: opacity .9s ease .35s;
+}
+.gs-hero.is-shown .gs-polaroid { opacity: 1; }
+.gs-polaroid.is-editable { cursor: pointer; }
+.gs-polaroid-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #3a1018; }
+.gs-polaroid-photo img { width: 100%; height: 100%; object-fit: cover; }
+.gs-edit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, .4); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.gs-polaroid:hover .gs-edit { opacity: 1; }
+
+/* tarjeta marfil */
+.gs-card.gs-ivory {
+  position: relative; z-index: 4;
+  width: 90%; margin: -34% auto 0; padding: 58px 22px 40px;
+  text-align: center;
+  background: var(--gs-corners), var(--gs-ivory) var(--gs-tex);
+  border: 1px solid #141414; outline: 1px solid #141414; outline-offset: -7px;
+  box-shadow: 0 20px 34px -12px rgba(0, 0, 0, .45);
+  transform: translateY(40px) rotate(-1deg);
+  opacity: 0; transition: opacity 1s ease .6s, transform 1.1s cubic-bezier(.2, .7, .2, 1) .6s;
+}
+.gs-hero.is-shown .gs-card.gs-ivory { opacity: 1; transform: rotate(-1deg); }
+.theme-gotico-suave .gs-hero .gs-names {
+  margin: 0; line-height: 1;
+  font-weight: 400 !important; text-transform: none !important; letter-spacing: 0 !important;
+}
+.gs-name-a { display: block; font-family: 'Pinyon Script', cursive; font-size: clamp(3rem, 14vw, 4.2rem); line-height: 1.05; }
+.gs-name-b {
+  display: block; margin-top: -4px;
+  font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif; font-weight: 500;
+  font-size: clamp(2.4rem, 11vw, 3.4rem); text-transform: uppercase; letter-spacing: -.01em;
+}
+.gs-name-b i { font-family: 'Pinyon Script', cursive; font-style: normal; font-size: .62em; text-transform: none; margin-right: 4px; }
+.gs-sub { font-family: 'Pinyon Script', cursive; font-size: 2rem; margin-top: 6px; }
+.gs-date {
+  margin-top: 18px;
+  font-family: 'Montserrat', sans-serif; font-weight: 700;
+  font-size: clamp(1.8rem, 8vw, 2.4rem); text-transform: uppercase; letter-spacing: -.01em;
+}
+.gs-city { margin-top: 4px; font-family: 'Montserrat', sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+.gs-count { margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(20, 20, 20, .25); }
+.gs-count-label { font-family: 'Pinyon Script', cursive; font-size: 1.9rem; }
+.gs-count-grid { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
+.gs-count-grid b { display: block; font-family: 'Bodoni Moda', Georgia, serif; font-weight: 500; font-size: clamp(1.8rem, 8vw, 2.4rem); line-height: 1; }
+.gs-count-grid small { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+.gs-btn {
+  margin-top: 22px; padding: 12px 22px;
+  background: #141414; color: #f7f3ea; border: 0;
+  font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* tarjeta carmesí con sello */
+.gs-crimson-card {
+  position: relative; z-index: 5;
+  width: 62%; margin: -10px 0 0 auto; padding: 26px 16px 34px;
+  background: var(--gs-crimson) var(--gs-tex);
+  text-align: center;
+  transform: rotate(3deg);
+  box-shadow: 0 14px 22px -10px rgba(60, 0, 15, .5);
+  opacity: 0; transition: opacity .9s ease 1.1s;
+}
+.gs-hero.is-shown .gs-crimson-card { opacity: 1; }
+.gs-emboss { color: #b52a4c; text-shadow: 0 -1px 0 rgba(0, 0, 0, .35), 0 1px 0 rgba(255, 180, 200, .25); line-height: 1; }
+.gs-emboss span { display: block; font-family: 'Pinyon Script', cursive; font-size: 2.2rem; }
+.gs-emboss .gs-emboss-b { font-family: 'Bodoni Moda', Georgia, serif; text-transform: uppercase; font-size: 1.7rem; }
+.gs-emboss .gs-emboss-b i { font-family: 'Pinyon Script', cursive; font-style: normal; font-size: .7em; text-transform: none; }
+.gs-seal {
+  position: absolute; left: 50%; bottom: -30px; width: 62px; height: 62px; margin-left: -31px;
+  background: url('/images/themes/lacre-sello.svg') center / contain no-repeat;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .35));
+}
+
+.gs-scroll { text-align: center; margin-top: 52px; font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #4a4a4a; }
+.gs-scroll i { display: block; width: 1px; height: 26px; background: #4a4a4a; margin: 6px auto 0; animation: gs-drip 1.8s infinite; }
+@keyframes gs-drip {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-env, .gs-polaroid, .gs-card.gs-ivory, .gs-crimson-card { transition: none !important; opacity: 1 !important; }
+  .gs-scroll i { animation: none; }
+}
