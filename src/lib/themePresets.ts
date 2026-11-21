@@ -294,6 +294,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
     },
+    'gotico-suave': {
+        label: 'Gótico Suave',
+        desc: 'Collage gótico: damasco gris, sobre negro con flores oscuras, marcos barrocos y tarjetas carmesí',
+        icon: '🖤',
+        primaryColor: '#141414',
+        accentColor: '#141414',
+        cardBgColor: '#F7F3EA',
+        sectionBgColor: '#E9E6E6',
+        textPrimary: '#141414',
+        textSecondary: '#3A3A3A',
+        heroTextColor: '#141414',
+        heroBgColor: '#E9E6E6',
+        typographyPreset: 'elegante'
+    },
     'lacre-rojo': {
         label: 'Lacre Rojo',
         desc: 'Editorial en blanco y negro con un solo acento: el sello de lacre rojo',
@@ -405,6 +419,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categories: ['boda', 'xv', 'corporate', 'graduacion', 'cumpleanos'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categories: ['boda', 'graduacion', 'cumpleanos', 'xv'], categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/gotico-suave.jpg' },
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },

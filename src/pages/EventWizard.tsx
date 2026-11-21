@@ -690,6 +690,7 @@ export default function EventWizard() {
                                         { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
+                                        { id: 'gotico-suave', name: 'Gótico Suave', category: 'Boda / Flat lay', image: '/images/templates/gotico-suave.jpg' },
                                         { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'Boda / Editorial', image: '/images/templates/lacre-rojo.jpg' },
                                         { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'Boda / Lujo', image: '/images/templates/bodegon-nocturno.jpg' },
                                         { id: 'anturio-vino', name: 'Anturio Vino', category: 'Boda / Flat lay', image: '/images/templates/anturio-vino.jpg' },
