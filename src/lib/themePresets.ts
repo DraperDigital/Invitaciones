@@ -294,6 +294,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
     },
+    'lacre-rojo': {
+        label: 'Lacre Rojo',
+        desc: 'Editorial en blanco y negro con un solo acento: el sello de lacre rojo',
+        icon: '❤️',
+        primaryColor: '#111111',
+        accentColor: '#111111',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFFFF',
+        textPrimary: '#111111',
+        textSecondary: '#3A3A3A',
+        heroTextColor: '#111111',
+        heroBgColor: '#FFFFFF',
+        typographyPreset: 'moderna'
+    },
     'bodegon-nocturno': {
         label: 'Bodegón Nocturno',
         desc: 'Lujo clásico: papel de algodón sobre pintura floral oscura, caligrafía con florituras y sello dorado',
@@ -391,6 +405,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categories: ['boda', 'xv', 'corporate', 'graduacion', 'cumpleanos'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categories: ['boda', 'graduacion', 'cumpleanos', 'xv'], categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo'], categoryLabel: 'Boda / Flat lay', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/lirio-vainilla.jpg' },
