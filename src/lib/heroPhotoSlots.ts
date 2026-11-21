@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'lacre-rojo': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto Principal de la Portada',
+        heroHelpText: 'Foto vertical grande bajo "Nuestra boda", con el sello de lacre al pie.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'bodegon-nocturno': {
         type: 'single',
         photoCount: 1,

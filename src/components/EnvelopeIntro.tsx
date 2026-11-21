@@ -284,9 +284,12 @@ export default function EnvelopeIntro({
         finalAccent = (activeThemeId === 'luxury-gold' || activeThemeId === 'classic-elegance-pro') ? '#D4AF37' : '#F5D76E';
     }
     // Plantillas cuyo sello del sobre va en oro aunque su acento sea tinta (combina con el sello de su portada)
-    const GOLD_SEAL_THEMES = ['bodegon-nocturno'];
-    if (GOLD_SEAL_THEMES.includes(activeThemeId)) {
-        finalAccent = '#C7A85A';
+    const SEAL_COLOR_BY_THEME: Record<string, string> = {
+        'bodegon-nocturno': '#C7A85A', // oro
+        'lacre-rojo': '#7B1420',       // lacre rojo
+    };
+    if (SEAL_COLOR_BY_THEME[activeThemeId]) {
+        finalAccent = SEAL_COLOR_BY_THEME[activeThemeId];
     }
     const accentDark = darkenHex(finalAccent, 28);
 
