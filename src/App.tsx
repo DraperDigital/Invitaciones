@@ -25,6 +25,7 @@ if (typeof window !== 'undefined') {
 
 // Lazy-loaded pages — each page gets its own chunk (split at route level)
 const HomePage            = React.lazy(() => import('./pages/HomePage'));
+const SaveTheDatePage     = React.lazy(() => import('./pages/SaveTheDatePage'));
 const LoginPage           = React.lazy(() => import('./pages/LoginPage'));
 const Dashboard           = React.lazy(() => import('./pages/Dashboard'));
 const EventWizard         = React.lazy(() => import('./pages/EventWizard'));
@@ -122,6 +123,7 @@ function AppRoutes() {
         <Route path="/checkout"      element={<CheckoutPage />} />
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/i/:slug"          element={<InvitationPage />} />
+        <Route path="/std/:slug"        element={<SaveTheDatePage />} />
         <Route path="/preview/:slug"    element={<InvitationPage />} />
         <Route path="/invitacion/:slug" element={<InvitationPage />} />
         <Route path="/i/cecilia-70"     element={<Navigate to="/i/cumplea%C3%B1os-cecilia-h2657" replace />} />

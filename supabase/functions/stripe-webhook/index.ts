@@ -44,6 +44,27 @@ serve(async (req) => {
       
       const eventId = session.metadata?.eventId
       const planId = session.metadata?.planId
+
+      // EXTRA: Save the Date pagado → solo se marca en el evento (no cambia el plan)
+      if (eventId && session.metadata?.addon === 'save_the_date') {
+        const { data: stdEv, error: stdErr } = await supabase
+          .from('events')
+          .select('theme_config')
+          .eq('id', eventId)
+          .single();
+        if (stdErr || !stdEv) {
+          console.error(`Save the Date: no se encontró el evento ${eventId}`, stdErr);
+        } else {
+          let tc: any = stdEv.theme_config || {};
+          if (typeof tc === 'string') { try { tc = JSON.parse(tc); } catch { tc = {}; } }
+          const { error: stdUpdErr } = await supabase
+            .from('events')
+            .update({ theme_config: { ...tc, save_the_date_paid: true, save_the_date_paid_at: new Date().toISOString() } })
+            .eq('id', eventId);
+          if (stdUpdErr) console.error(`Save the Date: error al activar ${eventId}`, stdUpdErr);
+          else console.log(`Save the Date activado para el evento ${eventId}`);
+        }
+      }
       
       if (eventId && planId) {
         // 1. Get the exact plan UUID from our plans table
@@ -214,7 +235,7 @@ serve(async (req) => {
                 custom_data: {
                   value: (session.amount_total || 0) / 100,
                   currency: 'MXN',
-                  content_name: session.metadata?.planId,
+                  content_name: session.metadata?.planId || session.metadata?.addon,
                 },
               },
             ],

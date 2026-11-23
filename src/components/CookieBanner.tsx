@@ -12,6 +12,7 @@ export default function CookieBanner() {
     // No mostrar el banner a invitados que están viendo una invitación
     const isInvitationPage = 
         location.pathname.startsWith('/i/') || 
+        location.pathname.startsWith('/std/') || 
         location.pathname.startsWith('/preview/') || 
         location.pathname.startsWith('/invitacion/') ||
         location.pathname === '/carlos-y-frida' ||

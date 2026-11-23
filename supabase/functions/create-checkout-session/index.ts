@@ -55,7 +55,7 @@ serve(async (req) => {
 
     const body = await req.json()
     // NUNCA aceptamos 'amount' desde el cliente; se calcula estrictamente en el servidor
-    const { sessionId, planId, eventId, origin, email, fbp, fbc, coupon, utm, name, phone, waOk } = body
+    const { sessionId, planId, eventId, origin, email, fbp, fbc, coupon, utm, name, phone, waOk, addon } = body
     // Datos para Vendora (mide ventas por anuncio y manda a quien acepte al CRM de WhatsApp)
     const corto = (v: unknown, n = 100) => (typeof v === 'string' ? v.trim().slice(0, n) : '')
     const utmIn = utm && typeof utm === 'object' ? utm as Record<string, unknown> : {}
@@ -85,6 +85,66 @@ serve(async (req) => {
           status: 200,
         }
       )
+    }
+
+    // EXTRA: Save the Date ($299, pago único sobre un evento Clásica o Pro ya pagado)
+    if (addon === 'save_the_date') {
+      if (!eventId || !origin) throw new Error('Missing required parameters')
+      const { data: ev, error: evErr } = await supabase
+        .from('events')
+        .select('id, theme_config')
+        .eq('id', eventId)
+        .single()
+      if (evErr || !ev) throw new Error('No encontramos el evento.')
+      let tc: any = ev.theme_config || {}
+      if (typeof tc === 'string') { try { tc = JSON.parse(tc) } catch { tc = {} } }
+      let tier = String(tc.plan_tier || '').toLowerCase()
+      if (!tier) {
+        // Eventos activados con cupón: el plan vive en event_subscriptions
+        const { data: sub } = await supabase
+          .from('event_subscriptions')
+          .select('status, plans(code)')
+          .eq('event_id', eventId)
+          .eq('status', 'active')
+          .maybeSingle()
+        tier = String((sub as any)?.plans?.code || '').toLowerCase()
+      }
+      if (tc.isPremium === true || tier === 'premium' || tier === 'concierge') {
+        throw new Error('Tu plan ya incluye el Save the Date.')
+      }
+      if (tc.save_the_date_paid === true) {
+        throw new Error('Tu Save the Date ya está activo.')
+      }
+      if (!tier) {
+        throw new Error('Primero activa tu invitación con un plan; después puedes agregar el Save the Date.')
+      }
+      const STD_PRICE = 299
+      const stdSession = await stripe.checkout.sessions.create({
+        payment_method_types: ['card', 'oxxo'],
+        payment_method_options: { oxxo: { expires_after_days: 3 } },
+        customer_creation: 'always',
+        ...(email ? { customer_email: email } : {}),
+        line_items: [{
+          price_data: { currency: 'mxn', product_data: { name: 'Save the Date Invitto' }, unit_amount: STD_PRICE * 100 },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `${origin}/dashboard/design/${eventId}?std=success`,
+        cancel_url: `${origin}/dashboard/design/${eventId}?std=canceled`,
+        client_reference_id: eventId,
+        metadata: {
+          addon: 'save_the_date',
+          eventId: eventId,
+          producto: 'Save the Date',
+          ...vendora,
+          ...(fbp ? { fbp: String(fbp) } : {}),
+          ...(fbc ? { fbc: String(fbc) } : {}),
+        },
+      })
+      return new Response(JSON.stringify({ url: stdSession.url }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      })
     }
 
     if (!planId || !eventId || !origin) {

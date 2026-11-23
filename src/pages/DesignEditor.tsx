@@ -10,6 +10,7 @@ import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { STD_TEMPLATES, SAVE_THE_DATE_PRICE, DEFAULT_STD_TEMPLATE } from '../lib/saveTheDate';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
 import { syncHeroPhotoForNewTheme } from '../lib/heroPhotoSlots';
@@ -99,6 +100,12 @@ type DesignConfig = {
     plan: 'clasico' | 'pro' | 'premium' | 'concierge';
     hotels: { name: string; distance: string; description: string; price: string; link: string; isRecommended: boolean }[];
     customCss: string;
+    // Save the Date (enlace propio /std/<slug>)
+    saveTheDateTheme: string;
+    saveTheDateCity: string;
+    saveTheDatePhoto: string;
+    saveTheDateNote: string;
+    saveTheDatePaid: boolean;
 };
 
 const DEFAULT_CONFIG: DesignConfig = {
@@ -161,6 +168,11 @@ const DEFAULT_CONFIG: DesignConfig = {
     plan: 'clasico',
     hotels: [],
     customCss: '',
+    saveTheDateTheme: '',
+    saveTheDateCity: '',
+    saveTheDatePhoto: '',
+    saveTheDateNote: 'Invitación formal próximamente',
+    saveTheDatePaid: false,
 };
 
 const TYPOGRAPHY_PRESETS = {
@@ -523,6 +535,11 @@ export default function DesignEditor() {
                     plan:           c.plan_tier || (c.isPremium ? 'premium' : c.isPro ? 'pro' : 'clasico'),
                     hotels:         c.hotels ?? [],
                     customCss:      c.custom_css ?? '',
+                    saveTheDateTheme: c.save_the_date_theme ?? '',
+                    saveTheDateCity:  c.save_the_date_city ?? '',
+                    saveTheDatePhoto: c.save_the_date_photo ?? '',
+                    saveTheDateNote:  c.save_the_date_note ?? 'Invitación formal próximamente',
+                    saveTheDatePaid:  c.save_the_date_paid === true,
                 });
             }
             setLoading(false);
@@ -661,6 +678,12 @@ export default function DesignEditor() {
 
                 // EXPERT CSS
                 custom_css:           config.customCss,
+
+                // SAVE THE DATE (save_the_date_paid lo pone solo el webhook de Stripe)
+                save_the_date_theme:  config.saveTheDateTheme || null,
+                save_the_date_city:   config.saveTheDateCity || null,
+                save_the_date_photo:  config.saveTheDatePhoto || null,
+                save_the_date_note:   config.saveTheDateNote,
             };
 
             const { error } = await supabase
@@ -701,6 +724,29 @@ export default function DesignEditor() {
             setUploading(false);
         }
     };
+
+    // Save the Date: comprar el extra de $299 (Clásica y Pro)
+    const [buyingStd, setBuyingStd] = useState(false);
+    const handleBuySaveTheDate = async () => {
+        if (!id) return;
+        setBuyingStd(true);
+        try {
+            const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+                body: { addon: 'save_the_date', eventId: id, origin: window.location.origin, email: user?.email || undefined },
+            });
+            if (error || !data?.url) throw new Error(data?.error || error?.message || 'Sin enlace de pago');
+            window.location.href = data.url;
+        } catch (err: any) {
+            toast.error(err?.message?.includes('activa') || err?.message?.includes('incluye') ? err.message : 'No pudimos abrir el pago. Intenta de nuevo o escríbenos por WhatsApp.');
+            setBuyingStd(false);
+        }
+    };
+    useEffect(() => {
+        const s = searchParams.get('std');
+        if (s === 'success') toast.success('¡Pago recibido! Tu Save the Date se activa en unos segundos.');
+        if (s === 'canceled') toast.info('No se completó el pago del Save the Date.');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleLogoUpload = async (file: File) => {
         if (!id || !file) return;
@@ -2397,6 +2443,78 @@ export default function DesignEditor() {
                         </div>
                     </div>
                 </CollapsibleCard>
+
+                {(() => {
+                    const stdIncluded = config.plan === 'premium' || config.plan === 'concierge';
+                    const stdActive = stdIncluded || config.saveTheDatePaid;
+                    const stdTheme = config.saveTheDateTheme || DEFAULT_STD_TEMPLATE;
+                    const stdUrl = event?.slug ? `${window.location.origin}/std/${event.slug}` : '';
+                    return (
+                        <CollapsibleCard
+                            id="save-the-date"
+                            title="Save the Date"
+                            subtitle={stdIncluded ? 'Incluido en tu plan' : stdActive ? 'Activo' : `Extra · $${SAVE_THE_DATE_PRICE}`}
+                            icon="📅"
+                            activeSection={activeSection}
+                            setActiveSection={setActiveSection}
+                        >
+                            <div className="space-y-5">
+                                <p className="text-xs text-stone-500 leading-relaxed">
+                                    Una sola pantalla con nombres, fecha, ciudad, cuenta regresiva y botón para agregar al calendario. Tiene su propio enlace para mandarlo antes de la invitación formal.
+                                </p>
+
+                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                    {STD_TEMPLATES.map(t => (
+                                        <button
+                                            key={t.id}
+                                            type="button"
+                                            onClick={() => setConfig({ ...config, saveTheDateTheme: t.id })}
+                                            className={`p-2.5 rounded-xl border text-left transition-all ${stdTheme === t.id ? 'border-[#DF3B94] bg-[#DF3B94]/5 ring-2 ring-[#DF3B94]/20' : 'border-stone-200 hover:border-stone-300 bg-white'}`}
+                                        >
+                                            <p className="text-[11px] font-bold text-stone-900 leading-tight">{t.name}</p>
+                                            <p className="text-[9px] text-stone-400 mt-0.5 leading-tight">{t.bestFor}</p>
+                                        </button>
+                                    ))}
+                                </div>
+                                <a href={event?.slug ? `/std/${event.slug}?t=${stdTheme}` : `/std/demo-${stdTheme}`} target="_blank" rel="noopener noreferrer" className="inline-block text-[11px] font-bold uppercase tracking-[0.2em] text-[#DF3B94]">Ver vista previa →</a>
+
+                                <div className="grid sm:grid-cols-2 gap-3">
+                                    <label className="space-y-1 block">
+                                        <span className="text-[11px] font-bold text-stone-600">Ciudad</span>
+                                        <input type="text" value={config.saveTheDateCity} onChange={(e) => setConfig({ ...config, saveTheDateCity: e.target.value })} placeholder="Se toma de la dirección del evento" className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200" />
+                                    </label>
+                                    <label className="space-y-1 block">
+                                        <span className="text-[11px] font-bold text-stone-600">Nota al pie</span>
+                                        <input type="text" value={config.saveTheDateNote} onChange={(e) => setConfig({ ...config, saveTheDateNote: e.target.value })} className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200" />
+                                    </label>
+                                    <label className="space-y-1 block sm:col-span-2">
+                                        <span className="text-[11px] font-bold text-stone-600">Foto (URL; si la dejas vacía se usa la foto de portada)</span>
+                                        <input type="text" value={config.saveTheDatePhoto} onChange={(e) => setConfig({ ...config, saveTheDatePhoto: e.target.value })} placeholder="https://…" className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200" />
+                                    </label>
+                                </div>
+
+                                {stdActive ? (
+                                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-100 space-y-2">
+                                        <p className="text-xs font-bold text-emerald-800">Tu enlace del Save the Date</p>
+                                        <div className="flex gap-2">
+                                            <input readOnly value={stdUrl} className="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl border border-emerald-200 bg-white" />
+                                            <button type="button" onClick={() => { navigator.clipboard?.writeText(stdUrl); toast.success('Enlace copiado'); }} className="px-3 py-2 text-xs font-bold rounded-xl bg-emerald-700 text-white">Copiar</button>
+                                        </div>
+                                        <p className="text-[11px] text-emerald-700">Guarda el diseño para que los cambios se vean en el enlace.</p>
+                                    </div>
+                                ) : (
+                                    <div className="p-4 rounded-2xl bg-stone-900 text-white space-y-3">
+                                        <p className="text-sm font-bold">Agrega tu Save the Date por ${SAVE_THE_DATE_PRICE}</p>
+                                        <p className="text-xs text-stone-300">Pago único. Viene incluido en Diseño Pro y Concierge.</p>
+                                        <button type="button" disabled={buyingStd} onClick={handleBuySaveTheDate} className="px-4 py-2.5 text-xs font-bold rounded-xl bg-[#DF3B94] disabled:opacity-60">
+                                            {buyingStd ? 'Abriendo pago…' : `Comprar por $${SAVE_THE_DATE_PRICE}`}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </CollapsibleCard>
+                    );
+                })()}
 
                 {config.plan === 'concierge' && (
 <CollapsibleCard
