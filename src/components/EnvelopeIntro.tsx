@@ -283,12 +283,18 @@ export default function EnvelopeIntro({
     if (paperIsDark && isDarkColor(finalAccent)) {
         finalAccent = (activeThemeId === 'luxury-gold' || activeThemeId === 'classic-elegance-pro') ? '#D4AF37' : '#F5D76E';
     }
-    // Plantillas cuyo sello del sobre va en oro aunque su acento sea tinta (combina con el sello de su portada)
+    // Plantillas cuyo sello del sobre va con tono de lacre artesanal armónico
     const SEAL_COLOR_BY_THEME: Record<string, string> = {
-        'bodegon-nocturno': '#C7A85A', // oro
-        'lacre-rojo': '#7B1420',       // lacre rojo
-        'gotico-suave': '#9E2140',     // carmesí
-        'nube-de-miel': '#C79A3B',     // miel
+        'bodegon-nocturno': '#C7A85A', // oro envejecido
+        'lacre-rojo': '#8A1A28',       // lacre rojo imperial
+        'gotico-suave': '#9E2140',     // carmesí terciopelo
+        'nube-de-miel': '#C79A3B',     // miel dorada
+        'anturio-vino': '#7D2536',     // vino tinto noble
+        'lirio-vainilla': '#7F9446',   // salvia botánico
+        'modern-minimalist': '#18181B', // lacre negro mate editorial
+        'luxury-gold': '#C5A059',      // oro puro
+        'classic-elegance-pro': '#C5A059', // oro clásico
+        'classic': '#C5A059',          // oro clásico
     };
     if (SEAL_COLOR_BY_THEME[activeThemeId]) {
         finalAccent = SEAL_COLOR_BY_THEME[activeThemeId];
@@ -397,8 +403,9 @@ export default function EnvelopeIntro({
     };
 
     return (
-        <section
+        <div
             className={`env-stage ${isBusy ? 'busy' : ''} ${isGone ? 'gone' : ''}`}
+            role="region"
             aria-label="Sobre de invitación digital"
             style={{
                 '--env-bg': rawBg,
@@ -419,6 +426,28 @@ export default function EnvelopeIntro({
             } as React.CSSProperties}
         >
             <style>{`
+                .env-stage, .env-stage * {
+                    box-sizing: border-box;
+                }
+                .env-stage svg {
+                    color: inherit;
+                }
+                .env-stage svg path,
+                .env-stage svg text,
+                .env-stage svg use {
+                    stroke: none;
+                }
+                .env-stage .env-seal svg path {
+                    stroke: none !important;
+                }
+                .env-stage .env-seal svg text {
+                    stroke: none !important;
+                    fill: #ffffff !important;
+                }
+                .env-stage .env-letter svg path.env-line {
+                    stroke: var(--env-ink-soft) !important;
+                    stroke-width: 0.8px !important;
+                }
                 .env-stage {
                     position: fixed;
                     inset: 0;
@@ -656,30 +685,52 @@ export default function EnvelopeIntro({
                     border: 0;
                     background: none;
                     outline: none;
-                    transition: transform .25s ease;
                     padding: 0;
                     touch-action: manipulation;
+                    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.22));
+                    transition: transform .25s ease;
                 }
-                .env-seal:focus-visible .half {
+                .env-seal:focus-visible {
                     outline: 2px solid var(--env-ink);
-                    outline-offset: 3px;
+                    outline-offset: 4px;
                 }
                 .env-seal:active {
-                    transform: scale(.94);
+                    transform: scale(.95);
                 }
                 .env-seal .ring {
                     position: absolute;
-                    inset: -10px;
+                    inset: -8px;
                     border-radius: 50%;
-                    border: 1.5px solid var(--env-accent);
+                    background: radial-gradient(circle, var(--env-accent) 0%, transparent 72%);
                     opacity: 0;
-                    animation: envPulse 2.2s 1.4s ease-out infinite;
+                    animation: envGlowPulse 2.8s 1.2s ease-out infinite;
                     pointer-events: none;
+                }
+                @keyframes envGlowPulse {
+                    0% { transform: scale(0.85); opacity: 0; }
+                    40% { opacity: 0.45; }
+                    100% { transform: scale(1.35); opacity: 0; }
+                }
+                .env-seal .intact {
+                    position: absolute;
+                    inset: 0;
+                    transition: transform .25s ease;
+                }
+                .env-seal:hover .intact {
+                    transform: scale(1.04);
                 }
                 .env-seal .half {
                     position: absolute;
                     inset: 0;
+                    opacity: 0;
+                    pointer-events: none;
                     transition: transform .55s cubic-bezier(.3,.7,.4,1), opacity .5s ease;
+                }
+                .env-envelope.cracked .env-seal .intact {
+                    display: none;
+                }
+                .env-envelope.cracked .env-seal .half {
+                    opacity: 1;
                 }
                 .env-seal .half.a {
                     -webkit-clip-path: polygon(0 0, 54% 0, 46% 45%, 58% 62%, 48% 100%, 0 100%);
@@ -792,7 +843,6 @@ export default function EnvelopeIntro({
                     }
                     .env-seal .ring {
                         inset: -14px;
-                        border-width: 2px;
                     }
                     .env-envelope.cracked .env-seal .half.a {
                         transform: translate(-38px, 44px) rotate(-38deg);
@@ -830,22 +880,24 @@ export default function EnvelopeIntro({
             {/* Símbolos SVG compartidos para el Sello de Cera */}
             <svg width="0" height="0" style={{ position: 'absolute' }}>
                 <defs>
-                    <radialGradient id="invitto-wax-gradient" cx="38%" cy="32%" r="75%">
+                    <radialGradient id="invitto-wax-gradient" cx="35%" cy="30%" r="72%">
                         <stop offset="0%" stopColor={finalAccent} stopOpacity="1" />
-                        <stop offset="65%" stopColor={accentDark} />
-                        <stop offset="100%" stopColor={accentDark} />
+                        <stop offset="58%" stopColor={accentDark} />
+                        <stop offset="100%" stopColor={darkenHex(accentDark, 18)} />
                     </radialGradient>
                     <filter id="invitto-seal-emboss" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="1" stdDeviation="0.4" floodColor="rgba(0,0,0,0.38)" />
+                        <feDropShadow dx="0" dy="1.2" stdDeviation="0.4" floodColor="rgba(0,0,0,0.52)" />
+                        <feDropShadow dx="0" dy="-0.6" stdDeviation="0.2" floodColor="rgba(255,255,255,0.22)" />
                     </filter>
                     <symbol id="invitto-waxseal-symbol" viewBox="0 0 66 66">
                         <path
                             d="M33 3c5 0 7 3 11 4s8 0 10 4 1 7 3 11 6 6 6 11-4 7-5 11-1 8-5 10-7 1-11 3-6 6-9 6-6-4-10-5-8 1-10-3-1-7-3-11-6-6-6-11 4-7 5-11 1-8 5-10 7-1 11-3 3-6 8-6z"
                             fill="url(#invitto-wax-gradient)"
+                            style={{ stroke: 'none' }}
                         />
-                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="1.8" />
-                        <circle cx="33" cy="33" r="19" fill="none" stroke="rgba(255,255,255,.2)" strokeWidth="0.8" transform="translate(-.5 -.5)" />
-                        <ellipse cx="24" cy="20" rx="8" ry="4" fill="rgba(255,255,255,.22)" transform="rotate(-25 24 20)" />
+                        {/* Círculo cóncavo del estampado del sello */}
+                        <circle cx="33" cy="33" r="19" fill="rgba(0,0,0,0.08)" stroke="rgba(0,0,0,0.22)" strokeWidth="1.4" />
+                        <circle cx="33" cy="33" r="18.2" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" />
                         {decorativeImage ? (
                             <image
                                 href={decorativeImage}
@@ -859,16 +911,20 @@ export default function EnvelopeIntro({
                         ) : (
                             <text
                                 x="33"
-                                y="33"
+                                y="33.5"
                                 textAnchor="middle"
                                 dominantBaseline="central"
-                                alignmentBaseline="central"
                                 fontFamily="'Cinzel', 'Playfair Display', 'Cormorant Garamond', Georgia, serif"
                                 fontWeight="700"
                                 fontSize={sealFontSize}
                                 letterSpacing={sealLetterSpacing}
-                                fill="rgba(255,255,255,.95)"
+                                fill="#FFFFFF"
                                 filter="url(#invitto-seal-emboss)"
+                                style={{
+                                    fill: '#FFFFFF',
+                                    stroke: 'none',
+                                    userSelect: 'none',
+                                }}
                             >
                                 {displayInitials}
                             </text>
@@ -903,7 +959,7 @@ export default function EnvelopeIntro({
                         <div className="n">{event.title}</div>
                         {formattedDate && <div className="d">{formattedDate}</div>}
                         <svg viewBox="0 0 70 18" fill="none">
-                            <path d="M2 9h66" stroke={finalInkSoft} strokeWidth=".8" />
+                            <path className="env-line" d="M2 9h66" stroke={finalInkSoft} strokeWidth=".8" />
                             <path d="M35 3c-3 3-3 9 0 12 3-3 3-9 0-12z" fill={finalAccent} stroke="none" opacity=".85" />
                         </svg>
                     </div>
@@ -929,6 +985,11 @@ export default function EnvelopeIntro({
                         aria-label="Abrir invitación"
                     >
                         <span className="ring" />
+                        <span className="intact">
+                            <svg viewBox="0 0 66 66">
+                                <use href="#invitto-waxseal-symbol" />
+                            </svg>
+                        </span>
                         <span className="half a">
                             <svg viewBox="0 0 66 66">
                                 <use href="#invitto-waxseal-symbol" />
@@ -945,6 +1006,6 @@ export default function EnvelopeIntro({
 
             {/* Indicador de acción */}
             <div className="env-hint">Toca el sello para abrir</div>
-        </section>
+        </div>
     );
 }

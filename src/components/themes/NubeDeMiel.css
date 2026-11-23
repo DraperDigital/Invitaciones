@@ -101,8 +101,10 @@
 }
 
 /* Íconos → azul cielo */
-.theme-nube-de-miel section:not(#hero) .rounded-full:not(a):not(button) { background: var(--nm-sky) !important; }
-.theme-nube-de-miel section:not(#hero) svg { color: var(--nm-navy2) !important; stroke: var(--nm-navy2) !important; }
+.theme-nube-de-miel section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) { background: var(--nm-sky) !important; }
+.theme-nube-de-miel section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) svg,
+.theme-nube-de-miel section:not(#hero):not(.env-stage) .invitation-locations-wrapper svg,
+.theme-nube-de-miel section:not(#hero):not(.env-stage) .invitation-content svg { color: var(--nm-navy2) !important; stroke: var(--nm-navy2) !important; }
 .theme-nube-de-miel .text-accent { color: var(--nm-honey) !important; }
 
 /* ── Botones → píldora azul marino con flecha ───────────────────────── */

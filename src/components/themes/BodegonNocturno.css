@@ -111,11 +111,13 @@
 }
 
 /* Íconos → tinta, sin círculo de color */
-.theme-bodegon-nocturno section .rounded-full:not(a):not(button) {
+.theme-bodegon-nocturno section:not(.env-stage) .rounded-full:not(a):not(button) {
   background: transparent !important;
   box-shadow: none !important;
 }
-.theme-bodegon-nocturno section svg { color: var(--bn-ink) !important; stroke: var(--bn-ink) !important; }
+.theme-bodegon-nocturno section:not(.env-stage) .rounded-full:not(a):not(button) svg,
+.theme-bodegon-nocturno section:not(.env-stage) .invitation-locations-wrapper svg,
+.theme-bodegon-nocturno section:not(.env-stage) .invitation-content svg { color: var(--bn-ink) !important; stroke: var(--bn-ink) !important; }
 .theme-bodegon-nocturno .text-accent { color: var(--bn-ink) !important; }
 
 /* ── Botones → enlace en negritas subrayado (VER UBICACIÓN) ─────────── */

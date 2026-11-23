@@ -74,11 +74,13 @@
 }
 
 /* Íconos → negro de línea fina, sin círculo */
-.theme-lacre-rojo section .rounded-full:not(a):not(button) {
+.theme-lacre-rojo section:not(.env-stage) .rounded-full:not(a):not(button) {
   background: transparent !important;
   box-shadow: none !important;
 }
-.theme-lacre-rojo section:not(#hero) svg { color: var(--lr-ink) !important; stroke: var(--lr-ink) !important; }
+.theme-lacre-rojo section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) svg,
+.theme-lacre-rojo section:not(#hero):not(.env-stage) .invitation-locations-wrapper svg,
+.theme-lacre-rojo section:not(#hero):not(.env-stage) .invitation-content svg { color: var(--lr-ink) !important; stroke: var(--lr-ink) !important; }
 .theme-lacre-rojo .text-accent { color: var(--lr-red) !important; }
 
 /* ── Botones → rectángulo de línea fina, texto normal ───────────────── */
