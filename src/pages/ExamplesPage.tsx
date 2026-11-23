@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Droplet, HelpCircle } from 'lucide-react';
 import Seo from '../components/Seo';
 import { CANONICAL_TEMPLATES } from '../lib/themePresets';
+import { STD_TEMPLATES, SAVE_THE_DATE_PRICE } from '../lib/saveTheDate';
 
 const categories = [
     { id: 'todas', name: 'Todas', icon: LayoutGrid },
@@ -195,6 +196,29 @@ export default function ExamplesPage() {
                                 </Link>
                             );
                         })}
+                    </div>
+                </div>
+            </section>
+
+            {/* Save the Date — 10 diseños de una sola pantalla */}
+            <section className="py-14 px-6 bg-[#F7F2EA] border-t border-slate-100">
+                <div className="mx-auto max-w-7xl">
+                    <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
+                        <div>
+                            <p className="text-xs font-bold uppercase tracking-wider text-[#DF3B94]">Nuevo · Save the Date</p>
+                            <h2 className="mt-2 text-3xl sm:text-4xl font-display font-extrabold text-[#222B38]">Aparta la fecha antes de la invitación</h2>
+                            <p className="mt-2 text-slate-500 text-sm max-w-xl">Una sola pantalla con nombres, fecha, ciudad, cuenta regresiva y botón para el calendario. Incluido en Diseño Pro y Concierge; en Clásica y Pro, ${SAVE_THE_DATE_PRICE}.</p>
+                        </div>
+                        <Link to="/std/demo-editorial" className="self-start md:self-auto inline-flex items-center gap-2 rounded-full bg-[#222B38] px-5 py-3 text-sm font-bold text-white">Ver los 10 diseños <ArrowRight className="h-4 w-4" /></Link>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                        {STD_TEMPLATES.map(t => (
+                            <Link key={t.id} to={`/std/demo-${t.id}`} className="rounded-2xl bg-white border border-slate-200 p-4 hover:shadow-md transition-all">
+                                <p className="text-sm font-bold text-[#222B38]">{t.name}</p>
+                                <p className="mt-1 text-[11px] text-slate-500 leading-snug">{t.desc}</p>
+                                <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-[#DF3B94]">{t.bestFor}</p>
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </section>

@@ -27,6 +27,7 @@ export default function FloatingWhatsAppButton() {
     const hidden = (
         pathname.startsWith('/dashboard') ||
         pathname.startsWith('/i/') ||
+        pathname.startsWith('/std/') ||
         pathname.startsWith('/preview/') ||
         pathname.startsWith('/invitacion/') ||
         EVENT_LANDING_ROUTES.includes(pathname) ||
