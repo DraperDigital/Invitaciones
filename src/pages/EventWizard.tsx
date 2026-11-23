@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES, isConciergeTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
 import WizardAiAssistant from '../components/wizard/WizardAiAssistant';
 
@@ -743,17 +743,23 @@ export default function EventWizard() {
                                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                                                 {displayedTemplates.map(tpl => {
                                                     const isSelected = data.theme === tpl.id;
+                                                    const conciergeOnly = isConciergeTemplate(tpl.id);
                                                     return (
                                                         <button
                                                             type="button"
                                                             key={tpl.id}
-                                                            onClick={() => updateData({ theme: tpl.id })}
+                                                            onClick={() => conciergeOnly ? navigate(CONCIERGE_PLAN_URL) : updateData({ theme: tpl.id })}
                                                             className={`relative flex flex-col overflow-hidden rounded-xl border text-left transition-all ${
                                                                 isSelected ? 'border-[#DF3B94] ring-2 ring-[#DF3B94]/30 shadow-md scale-[1.02]' : 'border-stone-200 hover:border-stone-300 opacity-80 hover:opacity-100'
                                                             }`}
                                                         >
                                                             <div className="h-20 w-full relative">
                                                                 <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
+                                                                {conciergeOnly && (
+                                                                    <div className="absolute top-1.5 left-1.5 bg-stone-900/85 text-amber-200 px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wide">
+                                                                        🔒 CONCIERGE
+                                                                    </div>
+                                                                )}
                                                                 {isSelected && (
                                                                     <div className="absolute top-1.5 right-1.5 bg-[#DF3B94] text-white p-1 rounded-full text-[10px] font-bold shadow-sm">
                                                                         ✓

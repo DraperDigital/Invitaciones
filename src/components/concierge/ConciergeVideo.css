@@ -1,0 +1,169 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Concierge · Portada en video y sobre en video
+   Videos verticales (9:16). En celular llenan la pantalla; en escritorio se
+   muestran como una columna del ancho de un celular, centrada, con el fondo
+   desenfocado a los lados (no se estira el video).
+   ────────────────────────────────────────────────────────────────────── */
+
+/* Fondo de escritorio compartido */
+.cv-hero-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #1a1612;
+  z-index: 0;
+}
+.cv-hero-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(28px) brightness(.55) saturate(1.1);
+  transform: scale(1.15);
+}
+
+/* ── Portada ────────────────────────────────────────────────────────── */
+.cv-hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.cv-hero-column {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100svh;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 0, 0, .35);
+}
+.cv-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cv-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .28) 0%, rgba(0, 0, 0, 0) 30%),
+    linear-gradient(0deg, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0) 38%);
+  pointer-events: none;
+}
+.cv-hero-text {
+  position: relative;
+  z-index: 2;
+  padding: 14vh 24px 0;
+  text-align: center;
+  color: #fffaf0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .35);
+}
+.cv-hero-kicker {
+  font-size: 11px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  opacity: .9;
+}
+.cv-hero-date {
+  margin-top: 8px;
+  font-size: 15px;
+  letter-spacing: .24em;
+  opacity: .95;
+}
+.cv-hero .cv-hero-names {
+  margin-top: 18px;
+  font-weight: 400 !important;
+  font-size: clamp(3rem, 15vw, 4.4rem) !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #fffaf0 !important;
+}
+.cv-hero-names span { display: block; }
+.cv-hero-names i { display: block; font-style: italic; font-size: .5em; margin: 4px 0; opacity: .9; }
+
+.cv-hero-bottom {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  padding: 0 20px 28px;
+  text-align: center;
+  color: #fffaf0;
+}
+.cv-hero-count {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 340px;
+  margin: 0 auto 18px;
+  padding: 12px 6px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, .22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.cv-hero-count b { display: block; font-size: 1.7rem; font-weight: 400; line-height: 1; }
+.cv-hero-count small { display: block; margin-top: 4px; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; opacity: .85; }
+.cv-hero-scroll {
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.cv-hero-scroll i { display: block; width: 1px; height: 26px; margin: 8px auto 0; background: currentColor; animation: cv-drip 1.8s infinite; }
+@keyframes cv-drip {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ── Sobre ──────────────────────────────────────────────────────────── */
+.cv-env {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cv-env-column {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 0, 0, .35);
+}
+.cv-env-video { width: 100%; height: 100%; object-fit: cover; display: block; background: #1a1612; }
+.cv-env-hint {
+  position: absolute;
+  left: 0; right: 0; bottom: 9vh;
+  text-align: center;
+  color: #fffaf0;
+  font-size: 11px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+  animation: cv-pulse 2.2s ease-in-out infinite;
+}
+.cv-env-hint i {
+  display: block;
+  width: 9px; height: 9px;
+  margin: 0 auto 10px;
+  border-left: 1.5px solid currentColor;
+  border-top: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+@keyframes cv-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-hero-scroll i, .cv-env-hint { animation: none; }
+}
