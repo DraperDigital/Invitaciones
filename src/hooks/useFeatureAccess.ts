@@ -73,6 +73,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                                     { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' }
                                 ] 
@@ -113,7 +114,8 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
             'guest_dashboard', 
             'reminders_automatic', 
             'guest_import_excel',
-            'table_management'
+            'table_management',
+            'event_planning'
         ];
         if (isPro && proFeatures.includes(featureCode)) return true;
 

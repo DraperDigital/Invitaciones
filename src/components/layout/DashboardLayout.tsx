@@ -1,5 +1,5 @@
 import { useAuth } from '../../context/AuthContext';
-import { LogOut, Home, Users, Settings, Layout, Menu, X, QrCode } from 'lucide-react';
+import { LogOut, Home, Users, Settings, Layout, Menu, X, QrCode, ClipboardList } from 'lucide-react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { supabase } from '../../lib/supabase';
@@ -68,6 +68,7 @@ export default function DashboardLayout() {
         { name: isCorporate ? 'Eventos & Cumbres' : 'Mis Invitaciones', href: '/dashboard/events', icon: Layout },
         { name: isCorporate ? 'Asistentes & Acreditación' : 'Lista de Invitados', href: '/dashboard/rsvps', icon: Users },
         { name: isCorporate ? 'Check-in QR Puerta' : 'Escanear QR', href: '/dashboard/checkin', icon: QrCode },
+        { name: 'Planeación', href: '/dashboard/planeacion', icon: ClipboardList },
         { name: 'Configuración', href: '/dashboard/settings', icon: Settings },
     ];
 

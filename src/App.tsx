@@ -40,6 +40,7 @@ const CarlosYFrida        = React.lazy(() => import('./pages/carlos-y-frida'));
 const DashboardHome       = React.lazy(() => import('./pages/dashboard/DashboardHome'));
 const EventRSVPs          = React.lazy(() => import('./pages/dashboard/EventRSVPs'));
 const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn'));
+const Planning            = React.lazy(() => import('./pages/dashboard/Planning'));
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
 const AvisoPrivacidadPage  = React.lazy(() => import('./pages/AvisoPrivacidadPage'));
 const Terms               = React.lazy(() => import('./pages/Terms'));
@@ -194,6 +195,8 @@ function AppRoutes() {
           <Route path="rsvps"                 element={<EventRSVPs />} />
           <Route path="checkin"               element={<CheckIn />} />
           <Route path="checkin/:eventId"      element={<CheckIn />} />
+          <Route path="planeacion"            element={<Planning />} />
+          <Route path="planeacion/:id"        element={<Planning />} />
           <Route path="new"                   element={<EventWizard />} />
           <Route path="edit/:id"              element={<EventWizard />} />
           <Route path="design/:id"            element={<DesignEditor />} />

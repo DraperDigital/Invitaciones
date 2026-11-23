@@ -7,7 +7,7 @@ import {
     Check, X, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
     Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown,
-    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette, Crown, Calendar
+    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette, Crown, Calendar, Sparkles
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
@@ -454,6 +454,57 @@ const EventRSVPs: React.FC = () => {
             setNewTable({ name: '', capacity: 10 });
             setIsAddingTable(false);
         } catch (e) {}
+    };
+
+    // Auto-sentar: acomoda a los confirmados SIN mesa, llenando los lugares libres.
+    // Mantiene juntos a los del mismo grupo cuando caben, respeta la capacidad,
+    // y no mueve a quien ya tiene mesa.
+    const handleAutoSeat = async () => {
+        if (tables.length === 0) { toast.error('Primero crea al menos una mesa.'); return; }
+        const cap: Record<string, number> = {};
+        tables.forEach(t => { cap[t.id] = t.capacity - getTableOccupiedPax(t.id); });
+        const pending = guests.filter(g => getGuestStatus(g) === 'yes' && !g.table_id);
+        if (pending.length === 0) { toast.success('Todos los confirmados ya tienen mesa.'); return; }
+        if (!window.confirm(`¿Acomodar a ${pending.length} invitado(s) confirmado(s) sin mesa en los lugares libres?`)) return;
+
+        const groupsMap: Record<string, any[]> = {};
+        pending.forEach(g => { const k = g.group_name || 'General'; (groupsMap[k] ||= []).push(g); });
+        const groups = Object.values(groupsMap)
+            .sort((a, b) => b.reduce((s, g) => s + getGuestPax(g), 0) - a.reduce((s, g) => s + getGuestPax(g), 0));
+
+        const byRoom = () => tables.map(t => t.id).sort((a, b) => cap[b] - cap[a]);
+        const assigns: { id: string; table_id: string }[] = [];
+        const notFit: string[] = [];
+
+        for (const grp of groups) {
+            const grpPax = grp.reduce((s, g) => s + getGuestPax(g), 0);
+            const whole = byRoom().find(id => cap[id] >= grpPax);
+            if (whole) { grp.forEach(g => { assigns.push({ id: g.id, table_id: whole }); cap[whole] -= getGuestPax(g); }); continue; }
+            for (const g of grp) {
+                const pax = getGuestPax(g);
+                const fit = byRoom().find(id => cap[id] >= pax);
+                if (fit) { assigns.push({ id: g.id, table_id: fit }); cap[fit] -= pax; }
+                else notFit.push(g.name);
+            }
+        }
+
+        if (assigns.length === 0) { toast.error('No hay cupo en las mesas para los confirmados.'); return; }
+
+        const prev = [...guests];
+        const map = new Map(assigns.map(a => [a.id, a.table_id]));
+        setGuests(gs => gs.map(g => map.has(g.id) ? { ...g, table_id: map.get(g.id) || null } : g));
+        try {
+            for (let i = 0; i < assigns.length; i += 5) {
+                const batch = assigns.slice(i, i + 5);
+                const results = await Promise.all(batch.map(a => supabase.from('guests').update({ table_id: a.table_id }).eq('id', a.id)));
+                const failed = results.find(r => r.error);
+                if (failed?.error) throw failed.error;
+            }
+            toast.success(`${assigns.length} invitado(s) sentado(s)${notFit.length ? `, ${notFit.length} sin cupo` : ''}.`);
+        } catch (e: any) {
+            setGuests(prev);
+            toast.error('Error al guardar el acomodo.');
+        }
     };
 
     const handleDeleteTable = async (tableId: string) => {
@@ -1860,7 +1911,13 @@ const EventRSVPs: React.FC = () => {
                     <div className="bg-white p-8 rounded-[2rem] border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
                         <h3 className="font-display font-extrabold text-xl text-stone-900">Distribución de Mesas</h3>
                         <div className="flex gap-3 w-full sm:w-auto">
-                            <button 
+                            <button
+                                onClick={handleAutoSeat}
+                                className="flex-1 sm:flex-none px-6 py-3 bg-[#222B38] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:opacity-90 transition-all"
+                            >
+                                <Sparkles className="h-4 w-4" /> Auto-sentar
+                            </button>
+                            <button
                                 onClick={handleExportTablesPDF}
                                 className="flex-1 sm:flex-none px-6 py-3 bg-white border border-stone-300 text-stone-700 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all"
                             >
