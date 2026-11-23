@@ -515,6 +515,19 @@ export function getTemplatesForCategory(categoryOrType?: string, currentTheme?: 
 }
 
 /**
+ * ¿La plantilla es exclusiva del plan Concierge? (las de portada/sobre en video)
+ * Se muestran en Ejemplos como escaparate, pero solo se pueden usar con Concierge.
+ */
+export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
+    if (!themeIdOrSlug) return false;
+    const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
+    return (tpl?.plan || '').toLowerCase() === 'concierge';
+}
+
+/** Página de venta del plan Concierge (destino de las plantillas Concierge) */
+export const CONCIERGE_PLAN_URL = '/planes/concierge';
+
+/**
  * Devuelve el plan mínimo requerido por una plantilla.
  * Las plantillas avanzadas del catálogo corresponden al plan Pro (o Diseño Pro / Premium si así está marcado).
  */

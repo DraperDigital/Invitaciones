@@ -42,7 +42,8 @@ export type PlanTier = 'clasico' | 'pro' | 'premium';
 /** Normaliza strings de plan (ej. 'CLASSIC' -> 'clasico') */
 export function normalizePlan(plan: string | null | undefined): PlanTier {
   const p = (plan || '').toLowerCase();
-  if (p === 'premium') return 'premium';
+  // Concierge es el plan más alto: para módulos tiene todo lo de Premium
+  if (p === 'premium' || p === 'concierge') return 'premium';
   if (p === 'pro') return 'pro';
   return 'clasico';
 }
@@ -475,4 +476,9 @@ export function getDefaultClosingMessage(eventType?: string): string {
         case 'corporate': return 'Le esperamos';
         default: return 'Te esperamos';
     }
+}
+
+/** ¿El plan es Concierge? (plantillas y funciones exclusivas: portada y sobre en video) */
+export function isConciergePlan(plan: string | null | undefined): boolean {
+  return (plan || '').toLowerCase() === 'concierge';
 }

@@ -9,7 +9,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate } from '../lib/themePresets';
 import { STD_TEMPLATES, SAVE_THE_DATE_PRICE, DEFAULT_STD_TEMPLATE } from '../lib/saveTheDate';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
@@ -106,6 +106,9 @@ type DesignConfig = {
     saveTheDatePhoto: string;
     saveTheDateNote: string;
     saveTheDatePaid: boolean;
+    // Concierge: portada y sobre en video
+    heroVideoUrl: string;
+    envelopeVideoUrl: string;
 };
 
 const DEFAULT_CONFIG: DesignConfig = {
@@ -173,6 +176,8 @@ const DEFAULT_CONFIG: DesignConfig = {
     saveTheDatePhoto: '',
     saveTheDateNote: 'Invitación formal próximamente',
     saveTheDatePaid: false,
+    heroVideoUrl: '',
+    envelopeVideoUrl: '',
 };
 
 const TYPOGRAPHY_PRESETS = {
@@ -540,6 +545,8 @@ export default function DesignEditor() {
                     saveTheDatePhoto: c.save_the_date_photo ?? '',
                     saveTheDateNote:  c.save_the_date_note ?? 'Invitación formal próximamente',
                     saveTheDatePaid:  c.save_the_date_paid === true,
+                    heroVideoUrl:     c.hero_video_url ?? '',
+                    envelopeVideoUrl: c.envelope_video_url ?? '',
                 });
             }
             setLoading(false);
@@ -658,7 +665,8 @@ export default function DesignEditor() {
                 
                 // Plan tier
                 isPro:     config.plan === 'pro',
-                isPremium: config.plan === 'premium',
+                isPremium: config.plan === 'premium' || config.plan === 'concierge',
+                isConcierge: config.plan === 'concierge',
 
                 // Layout order (Hero siempre primero, Footer siempre último)
                 sectionOrder: [
@@ -684,6 +692,10 @@ export default function DesignEditor() {
                 save_the_date_city:   config.saveTheDateCity || null,
                 save_the_date_photo:  config.saveTheDatePhoto || null,
                 save_the_date_note:   config.saveTheDateNote,
+
+                // CONCIERGE: portada y sobre en video
+                hero_video_url:       config.heroVideoUrl || null,
+                envelope_video_url:   config.envelopeVideoUrl || null,
             };
 
             const { error } = await supabase
@@ -747,6 +759,32 @@ export default function DesignEditor() {
         if (s === 'canceled') toast.info('No se completó el pago del Save the Date.');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Concierge: subir video de portada o de sobre (MP4 vertical, ideal ≤ 3 MB)
+    const handleVideoUpload = async (file: File, kind: 'hero' | 'envelope') => {
+        if (!id || !file) return;
+        if (file.size > 15 * 1024 * 1024) {
+            toast.error('El video pesa más de 15 MB. Comprímelo (ideal 2–3 MB) para que cargue rápido en celular.');
+            return;
+        }
+        setUploading(true);
+        try {
+            const ext = (file.name.split('.').pop() || 'mp4').toLowerCase();
+            const path = `events/${id}/${kind}-video.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type || 'video/mp4' });
+            if (uploadError) throw uploadError;
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setConfig(prev => ({ ...prev, [kind === 'hero' ? 'heroVideoUrl' : 'envelopeVideoUrl']: publicUrl }));
+            toast.success('¡Video subido! Guarda el diseño para publicarlo.');
+        } catch (err: any) {
+            toast.error('Error al subir el video. Alternativa: pega la URL del video en el campo de texto.');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const handleLogoUpload = async (file: File) => {
         if (!id || !file) return;
@@ -1075,6 +1113,11 @@ export default function DesignEditor() {
                                         <button
                                             key={item.id}
                                             onClick={() => {
+                                                // Plantillas Concierge: solo con plan Concierge
+                                                if (isConciergeTemplate(item.id) && (config.plan || '').toLowerCase() !== 'concierge') {
+                                                    toast.error('Esta plantilla es exclusiva del plan Concierge. Escríbenos para activarlo.');
+                                                    return;
+                                                }
                                                 const profile = THEME_PRESET_PROFILES[item.id] || THEME_PRESET_PROFILES.classic;
                                                 const syncedPhotos = syncHeroPhotoForNewTheme(config, item.id);
                                                 setConfig({
@@ -2282,7 +2325,9 @@ export default function DesignEditor() {
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                                     {(module.features as readonly { id: string; label: string; desc: string; icon: string; plans: readonly string[] }[]).map((feat) => {
-                                        const planCode = currentPlan?.code?.toLowerCase() || 'clasico';
+                                        // Concierge tiene acceso a todo lo de Premium
+                                        const rawPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
+                                        const planCode = rawPlanCode === 'concierge' ? 'premium' : rawPlanCode;
                                         const isLocked = !feat.plans.includes(planCode);
                                         const isEnabled = !isLocked && !!config[feat.id as keyof DesignConfig];
                                         const minPlan = feat.plans[0];
@@ -2515,6 +2560,50 @@ export default function DesignEditor() {
                         </CollapsibleCard>
                     );
                 })()}
+
+                {config.plan === 'concierge' && (
+                    <CollapsibleCard
+                        id="concierge-video"
+                        title="Portada y sobre en video"
+                        subtitle="Exclusivo Concierge"
+                        icon="🎬"
+                        activeSection={activeSection}
+                        setActiveSection={setActiveSection}
+                    >
+                        <div className="space-y-5">
+                            <p className="text-xs text-stone-500 leading-relaxed">
+                                Videos verticales (9:16) en MP4, ideal de 2 a 3 MB. La portada se repite en bucle sin sonido; el sobre se reproduce una vez cuando el invitado lo toca. En computadora se ven en una columna centrada con el fondo desenfocado.
+                            </p>
+                            {([
+                                { kind: 'hero' as const, key: 'heroVideoUrl' as const, label: 'Video de portada (bucle de 6–10 s)' },
+                                { kind: 'envelope' as const, key: 'envelopeVideoUrl' as const, label: 'Video del sobre (se abre, 4–6 s)' },
+                            ]).map(v => (
+                                <div key={v.kind} className="space-y-2">
+                                    <label className="text-[11px] font-black uppercase tracking-[0.15em] text-stone-600">{v.label}</label>
+                                    {config[v.key] && (
+                                        <video src={config[v.key]} muted playsInline loop autoPlay className="w-24 aspect-[9/16] object-cover rounded-xl border border-stone-200" />
+                                    )}
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={config[v.key]}
+                                            onChange={(e) => setConfig({ ...config, [v.key]: e.target.value })}
+                                            placeholder="https://… .mp4"
+                                            className="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl border border-stone-200"
+                                        />
+                                        <label className="px-3 py-2 text-xs font-bold rounded-xl bg-stone-900 text-white cursor-pointer whitespace-nowrap">
+                                            {uploading ? 'Subiendo…' : 'Subir'}
+                                            <input type="file" accept="video/mp4,video/webm,video/quicktime" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleVideoUpload(f, v.kind); e.target.value = ''; }} />
+                                        </label>
+                                        {config[v.key] && (
+                                            <button type="button" onClick={() => setConfig({ ...config, [v.key]: '' })} className="px-3 py-2 text-xs rounded-xl border border-stone-200 text-stone-500">Quitar</button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CollapsibleCard>
+                )}
 
                 {config.plan === 'concierge' && (
 <CollapsibleCard

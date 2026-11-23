@@ -11,7 +11,9 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY, getDefaultClosingMessage } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY, getDefaultClosingMessage, isConciergePlan } from '../lib/sectionRegistry';
+import VideoCoverHero from '../components/concierge/VideoCoverHero';
+import VideoEnvelopeIntro from '../components/concierge/VideoEnvelopeIntro';
 import type { SectionId } from '../lib/sectionRegistry';
 import { trackEvent } from '../lib/analytics';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
@@ -52,7 +54,7 @@ import {
     COLOR_OVERRIDE_KEYS,
     type ColorPalette
 } from '../lib/colorPalettes';
-import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, CANONICAL_TEMPLATES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
 import { loadGoogleFonts, TYPOGRAPHY_PRESET_FONTS, THEME_DECORATIVE_FONTS } from '../lib/loadFonts';
 import { getHeroImageStyle } from '../lib/heroImagePosition';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -136,6 +138,8 @@ export default function InvitationPage() {
     const publishCta = event ? getPublishCta(checkoutIntent, event.id, themeName) : null;
 
     const buildCreateUrl = (themeId: string, eventType?: string) => {
+        // Las plantillas Concierge no se crean solas: llevan a la página del plan Concierge
+        if (isConciergeTemplate(themeId)) return CONCIERGE_PLAN_URL;
         const params = new URLSearchParams();
         for (const [k, v] of searchParams.entries()) {
             if (k.startsWith('utm_') || k === 'fbclid') {
@@ -2628,6 +2632,8 @@ END:VCALENDAR`;
                    || normalizePlan(event.plan) === 'premium'
                    || (isDemo && currentVersion === 'premium');
     const planTier = isPremium ? 'premium' : isPro ? 'pro' : ('clasico' as const);
+    // Portada y sobre en video: solo plan Concierge (y en los ejemplos públicos, como escaparate)
+    const conciergeVideoAllowed = cfg.isConcierge === true || isConciergePlan(event?.plan) || isConciergePlan(cfg.plan) || isDemo;
 
     const rawSavedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
     const cleanSavedOrder = rawSavedOrder.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
@@ -2672,6 +2678,10 @@ END:VCALENDAR`;
 
     // ── Section Renderers ───────────────────────────────────────────
     const renderHero = () => {
+        // CONCIERGE: portada en video (prioridad sobre la portada de la plantilla)
+        if (conciergeVideoAllowed && (cfg.hero_video_url || cfg.heroVideoUrl)) {
+            return <VideoCoverHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} />;
+        }
         // FULL-PAGE THEMES (Highest priority - override default hero)
         if (cfg.theme === 'cinematic-motion') {
             return <CinematicMotionHero key="hero" event={event} guest={guest} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
@@ -4204,6 +4214,9 @@ END:VCALENDAR`;
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
             {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
+                conciergeVideoAllowed && (cfg.envelope_video_url || cfg.envelopeVideoUrl) ? (
+                    <VideoEnvelopeIntro key="envelope-screen" cfg={cfg} onOpen={() => setEnvelopeOpened(true)} />
+                ) :
                 <EnvelopeIntro
                     key="envelope-screen"
                     event={event}
