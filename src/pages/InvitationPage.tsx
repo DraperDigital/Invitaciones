@@ -4021,13 +4021,13 @@ END:VCALENDAR`;
                                 <ChevronRight className="h-4 w-4 shrink-0" />
                             </Link>
 
-                            <div className="hidden sm:block h-4 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
+                            <div className="h-4 w-px bg-white/20 mx-0.5 sm:mx-1 shrink-0" />
 
-                            {/* Botón Galería de Ejemplos (Desktop & Tablet) */}
+                            {/* Botón Galería de Ejemplos */}
                             <Link 
                                 to={`/ejemplos${activeCategory !== 'todas' ? `?category=${activeCategory}` : ''}`} 
                                 title="Ver galería completa de ejemplos" 
-                                className="no-underline hidden sm:flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                                className="no-underline flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
                             >
                                 <LayoutGrid className="h-4 w-4" />
                             </Link>
@@ -4036,7 +4036,7 @@ END:VCALENDAR`;
                             <Link 
                                 to="/" 
                                 title="Ir a inicio" 
-                                className="no-underline hidden md:flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
+                                className="no-underline flex items-center justify-center p-2 rounded-full text-stone-300 hover:text-white hover:bg-white/10 transition-all shrink-0"
                             >
                                 <Home className="h-4 w-4" />
                             </Link>
@@ -4174,14 +4174,27 @@ END:VCALENDAR`;
 
                                 {/* Footer del Drawer */}
                                 <div className="p-4 border-t border-white/10 bg-stone-950/70 flex items-center justify-between gap-3">
-                                    <Link 
-                                        to="/ejemplos" 
-                                        onClick={() => setShowTemplateMenu(false)}
-                                        className="text-xs text-stone-400 hover:text-white transition-colors flex items-center gap-1.5 no-underline"
-                                    >
-                                        <LayoutGrid className="h-3.5 w-3.5" />
-                                        <span>Ver Galería</span>
-                                    </Link>
+                                    <div className="flex items-center gap-3">
+                                        <Link 
+                                            to="/" 
+                                            onClick={() => setShowTemplateMenu(false)}
+                                            className="text-xs text-stone-400 hover:text-white transition-colors flex items-center gap-1.5 no-underline"
+                                            title="Ir al inicio"
+                                        >
+                                            <Home className="h-3.5 w-3.5" />
+                                            <span>Inicio</span>
+                                        </Link>
+                                        <span className="text-stone-600">•</span>
+                                        <Link 
+                                            to="/ejemplos" 
+                                            onClick={() => setShowTemplateMenu(false)}
+                                            className="text-xs text-stone-400 hover:text-white transition-colors flex items-center gap-1.5 no-underline"
+                                            title="Ver galería completa"
+                                        >
+                                            <LayoutGrid className="h-3.5 w-3.5" />
+                                            <span>Ver Galería</span>
+                                        </Link>
+                                    </div>
                                     <Link
                                         to={buildCreateUrl(cfg.theme || currentDemo.id || 'classic', event?.event_type || currentDemo.category || (activeCategory !== 'todas' ? activeCategory : '') || 'wedding')}
                                         onClick={() => {

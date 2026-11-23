@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Home, LayoutGrid } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { MOCK_EVENTS } from '../lib/mockData';
 import { loadGoogleFonts } from '../lib/loadFonts';
@@ -82,11 +83,27 @@ export default function SaveTheDatePage() {
 
     return (
         <>
+            {isDemo && (
+                <div className="std-demo-top-bar" role="navigation" aria-label="Navegación del demo">
+                    <Link to="/" className="std-demo-top-link" title="Volver al inicio de Invitto">
+                        <ArrowLeft size={14} />
+                        <span>Inicio</span>
+                    </Link>
+                    <Link to="/ejemplos#save-the-date" className="std-demo-top-link" title="Ver catálogo de Save the Date">
+                        <LayoutGrid size={14} />
+                        <span>Catálogo</span>
+                    </Link>
+                </div>
+            )}
             <div className={isDemo ? 'std-demo-wrap' : undefined}>
                 <Tpl data={data} event={event} />
             </div>
             {isDemo && (
-                <div className="std-demo-bar">
+                <div className="std-demo-bar" role="toolbar" aria-label="Selector de diseño Save the Date">
+                    <Link to="/" className="std-demo-home-btn" aria-label="Ir al inicio de Invitto" title="Ir al inicio">
+                        <Home size={15} />
+                    </Link>
+                    <div className="std-demo-divider" />
                     <Link to={`/std/demo-${prev.id}`} aria-label={`Anterior: ${prev.name}`}>‹</Link>
                     <span>{STD_TEMPLATES[idx]?.name} <small>{idx + 1}/{STD_TEMPLATES.length}</small></span>
                     <Link to={`/std/demo-${next.id}`} aria-label={`Siguiente: ${next.name}`}>›</Link>

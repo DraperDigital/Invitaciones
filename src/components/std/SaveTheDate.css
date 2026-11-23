@@ -342,19 +342,64 @@
   .std-spark, .std-cloud, .std-nube-star, .std-nube-lamb { animation: none; }
 }
 
-/* ── Barra de ejemplos (/std/demo-…) ───────────────────────────────── */
+/* ── Barra superior y barra de ejemplos (/std/demo-…) ───────────────────────────────── */
+.std-demo-top-bar {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.std-demo-top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff !important;
+  font: 600 12px/1 'Inter', system-ui, sans-serif;
+  text-decoration: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+  transition: all 0.2s ease;
+}
+.std-demo-top-link:hover {
+  background: rgba(17, 17, 17, 0.98);
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+.std-demo-top-link:active {
+  transform: scale(0.96);
+}
+
 .std-demo-wrap .std { padding-bottom: 84px; }
 .std-demo-bar {
   position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 50;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 5px;
   padding: 6px; border-radius: 18px; background: rgba(17,17,17,.92); color: #fff;
   font: 600 13px/1 'Inter', system-ui, sans-serif; white-space: nowrap;
   box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.1);
 }
 .std-demo-bar a { color: #fff; text-decoration: none; }
-.std-demo-bar > a:not(.std-demo-cta) { width: 36px; height: 36px; display: grid; place-items: center; font-size: 22px; border-radius: 12px; }
-.std-demo-bar > a:not(.std-demo-cta):hover { background: rgba(255,255,255,.12); }
-.std-demo-bar span { padding: 0 6px; }
+.std-demo-home-btn {
+  width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px;
+  color: #fff; transition: background 0.2s ease;
+}
+.std-demo-home-btn:hover { background: rgba(255,255,255,.14); }
+.std-demo-divider {
+  width: 1px; height: 18px; background: rgba(255,255,255,.18); margin: 0 2px;
+}
+.std-demo-bar > a:not(.std-demo-cta):not(.std-demo-home-btn) { width: 36px; height: 36px; display: grid; place-items: center; font-size: 22px; border-radius: 12px; }
+.std-demo-bar > a:not(.std-demo-cta):not(.std-demo-home-btn):hover { background: rgba(255,255,255,.12); }
+.std-demo-bar span { padding: 0 4px; }
 .std-demo-bar small { color: rgba(255,255,255,.55); font-weight: 500; margin-left: 4px; }
 .std-demo-cta { padding: 11px 16px; border-radius: 12px; background: #DF3B94; }
 
