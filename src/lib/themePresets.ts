@@ -294,6 +294,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#332C27',
         typographyPreset: 'romantica'
     },
+    'nube-de-miel': {
+        label: 'Nube de Miel',
+        desc: 'Editorial tierno en azul marino, cielo y miel, con capítulos e ilustraciones propias',
+        icon: '🐑',
+        primaryColor: '#0F2A4A',
+        accentColor: '#0F2A4A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FAF7F1',
+        textPrimary: '#13243A',
+        textSecondary: '#5A6B80',
+        heroTextColor: '#FFFFFF',
+        heroBgColor: '#0F2A4A',
+        typographyPreset: 'elegante'
+    },
     'gotico-suave': {
         label: 'Gótico Suave',
         desc: 'Collage gótico: damasco gris, sobre negro con flores oscuras, marcos barrocos y tarjetas carmesí',
@@ -419,6 +433,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'boda', categories: ['boda', 'xv', 'corporate', 'graduacion', 'cumpleanos'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categories: ['boda', 'graduacion', 'cumpleanos', 'xv'], categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
+    { id: 'nube-de-miel', name: 'Nube de Miel', category: 'infantil', categories: ['infantil', 'baby_shower', 'bautizo'], categoryLabel: 'Baby Shower / Bautizo', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Premium', thumbnail: '/images/templates/nube-de-miel.jpg' },
     { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/gotico-suave.jpg' },
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },

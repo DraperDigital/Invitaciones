@@ -288,6 +288,7 @@ export default function EnvelopeIntro({
         'bodegon-nocturno': '#C7A85A', // oro
         'lacre-rojo': '#7B1420',       // lacre rojo
         'gotico-suave': '#9E2140',     // carmesí
+        'nube-de-miel': '#C79A3B',     // miel
     };
     if (SEAL_COLOR_BY_THEME[activeThemeId]) {
         finalAccent = SEAL_COLOR_BY_THEME[activeThemeId];

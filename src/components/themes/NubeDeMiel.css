@@ -1,0 +1,276 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Nube de Miel — piel editorial tierna (baby shower, bautizo, infantil)
+   Todo va bajo .theme-nube-de-miel (clase que pone InvitationPage en la raíz).
+   No cambia la estructura de los módulos: solo su apariencia.
+   Paleta 60/30/10: crema y azul cielo (60) · azul marino (30) · miel (10).
+   Tipos: Playfair Display (títulos, acento en itálica) · DM Sans (texto)
+          · Pinyon Script (firmas).
+   ────────────────────────────────────────────────────────────────────── */
+
+.theme-nube-de-miel {
+  --nm-navy: #0f2a4a;
+  --nm-navy2: #1c3d63;
+  --nm-sky: #dbe8f5;
+  --nm-sky2: #c4d8ee;
+  --nm-cream: #faf7f1;
+  --nm-honey: #c79a3b;
+  --nm-ink: #13243a;
+  --nm-soft: #5a6b80;
+  --nm-italic: #6f95bf;
+  --nm-star: url('/images/themes/nube-estrella.svg');
+  background: var(--nm-cream) !important;
+  color: var(--nm-ink) !important;
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  overflow-x: hidden;
+}
+
+/* Fondos alternos crema / degradado cielo, con curva entre secciones */
+.theme-nube-de-miel .invitation-content section { background: var(--nm-cream) !important; position: relative; }
+.theme-nube-de-miel :is(#message, #dress_code, #gallery, #hotels) {
+  background: linear-gradient(180deg, var(--nm-sky) 0%, #eaf1f9 100%) !important;
+}
+
+/* ── Tipografía ─────────────────────────────────────────────────────── */
+.theme-nube-de-miel .font-serif { font-family: 'Playfair Display', Georgia, serif !important; }
+.theme-nube-de-miel .font-sans  { font-family: 'DM Sans', system-ui, sans-serif !important; }
+
+/* Títulos de módulo → serif en itálica azul, con etiqueta de capítulo encima */
+.theme-nube-de-miel section:not(#hero) h3[class*="text-4xl"],
+.theme-nube-de-miel section:not(#hero) h3[class*="text-3xl"],
+.theme-nube-de-miel #gallery h2,
+.theme-nube-de-miel #rsvp h2,
+.theme-nube-de-miel #guest_welcome h2 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  font-size: clamp(2.2rem, 9vw, 2.9rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.01em !important;
+  text-transform: none !important;
+  color: var(--nm-italic) !important;
+}
+/* Etiqueta tipo "capítulo" sobre cada título */
+.theme-nube-de-miel section:not(#hero) h3[class*="text-4xl"]::before,
+.theme-nube-de-miel section:not(#hero) h3[class*="text-3xl"]::before,
+.theme-nube-de-miel #gallery h2::before,
+.theme-nube-de-miel #rsvp h2::before {
+  content: 'Capítulo';
+  display: block;
+  margin-bottom: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--nm-honey);
+}
+.theme-nube-de-miel section:not(#hero) h4,
+.theme-nube-de-miel section:not(#hero) [class*="text-2xl"][class*="uppercase"] {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: var(--nm-navy) !important;
+}
+.theme-nube-de-miel section:not(#hero) p {
+  font-family: 'DM Sans', sans-serif !important;
+  color: var(--nm-soft) !important;
+  line-height: 1.65;
+}
+
+/* ── Tarjetas → blancas, muy redondeadas, sombra azul suave ─────────── */
+.theme-nube-de-miel section [class*="bg-[var(--card-bg)]"] {
+  background: #ffffff !important;
+  border: 1px solid #e3ecf6 !important;
+  border-radius: 26px !important;
+  box-shadow: 0 18px 40px -22px rgba(15, 42, 74, .35) !important;
+}
+.theme-nube-de-miel section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"] {
+  box-shadow: none !important;
+  border-radius: 18px !important;
+}
+
+/* Ubicación → tarjeta con marco ondulado tipo estampilla */
+.theme-nube-de-miel #location .invitation-locations-wrapper > * {
+  background:
+    radial-gradient(circle at 10px 10px, transparent 9px, #ffffff 9.5px) -10px -10px / 20px 20px,
+    #ffffff !important;
+  outline: 2px dashed var(--nm-sky2);
+  outline-offset: -12px;
+}
+
+/* Íconos → azul cielo */
+.theme-nube-de-miel section:not(#hero) .rounded-full:not(a):not(button) { background: var(--nm-sky) !important; }
+.theme-nube-de-miel section:not(#hero) svg { color: var(--nm-navy2) !important; stroke: var(--nm-navy2) !important; }
+.theme-nube-de-miel .text-accent { color: var(--nm-honey) !important; }
+
+/* ── Botones → píldora azul marino con flecha ───────────────────────── */
+.theme-nube-de-miel section:not(#hero) a[class*="rounded-full"],
+.theme-nube-de-miel section:not(#hero) button[class*="rounded-2xl"],
+.theme-nube-de-miel section:not(#hero) button[class*="rounded-full"] {
+  background: var(--nm-navy) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: .14em !important;
+  box-shadow: 0 10px 22px -12px rgba(15, 42, 74, .7) !important;
+}
+.theme-nube-de-miel section input,
+.theme-nube-de-miel section textarea,
+.theme-nube-de-miel section select {
+  border-radius: 14px !important;
+  border: 1px solid #d9e4f0 !important;
+  background: #ffffff !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── RSVP → bloque azul marino con tarjeta clara ────────────────────── */
+.theme-nube-de-miel #rsvp {
+  background: linear-gradient(180deg, var(--nm-navy) 0%, var(--nm-navy2) 100%) !important;
+  border-radius: 36px 36px 0 0;
+}
+.theme-nube-de-miel #rsvp h2 { color: #ffffff !important; }
+.theme-nube-de-miel #rsvp h2 em, .theme-nube-de-miel #rsvp h2 { color: #f0d38e !important; }
+.theme-nube-de-miel #rsvp > div > div > div:first-child p { color: #c9d7e7 !important; }
+.theme-nube-de-miel #rsvp label,
+.theme-nube-de-miel #rsvp label *,
+.theme-nube-de-miel #rsvp [class*="tracking-widest"] { color: #c9d7e7 !important; }
+.theme-nube-de-miel section#rsvp button[class*="rounded-2xl"],
+.theme-nube-de-miel section#rsvp button[type="submit"] {
+  background: #e8c46a !important;
+  color: #0f2a4a !important;
+}
+.theme-nube-de-miel #rsvp button:not([class*="rounded-2xl"]):not([type="submit"]) { color: #dce6f2 !important; }
+.theme-nube-de-miel #rsvp input { color: #13243a !important; }
+
+/* ── Galería → fotos tipo polaroid inclinadas ───────────────────────── */
+.theme-nube-de-miel #gallery img {
+  border: 10px solid #ffffff;
+  border-bottom-width: 30px;
+  border-radius: 6px !important;
+  box-shadow: 0 16px 30px -18px rgba(15, 42, 74, .5);
+}
+
+/* ── Pie: cierre en azul marino con firma ───────────────────────────── */
+.theme-nube-de-miel .invitation-closing {
+  background: var(--nm-navy) !important;
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-nube-de-miel .invitation-closing .invitation-closing-title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: -.01em !important;
+  color: #f0d38e !important;
+}
+.theme-nube-de-miel .invitation-closing-ornament span:nth-child(2) { background: var(--nm-honey) !important; opacity: 1 !important; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   PORTADA
+   ══════════════════════════════════════════════════════════════════════ */
+.nm-hero { position: relative; background: var(--nm-cream); color: #ffffff; }
+.nm-hero-top {
+  position: relative;
+  padding: 64px 26px 40px;
+  background:
+    radial-gradient(120% 70% at 80% 0%, rgba(111, 149, 191, .35), transparent 60%),
+    linear-gradient(180deg, #0f2a4a 0%, #16365c 100%);
+  overflow: hidden;
+}
+.nm-chapter {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #9fb6d1;
+}
+.nm-italic-gold {
+  margin-top: 18px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 19px;
+  color: #e8c46a;
+}
+.theme-nube-de-miel .nm-hero .nm-name {
+  margin-top: 6px;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 400 !important;
+  font-size: clamp(3.2rem, 15vw, 4.6rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -.02em !important;
+  text-transform: none !important;
+  color: #ffffff !important;
+}
+.nm-name em { display: block; font-style: italic; color: #c9dcf0; }
+.nm-when {
+  margin-top: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #dce6f2;
+  text-transform: capitalize;
+}
+.nm-city { margin-top: 2px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #9fb6d1; letter-spacing: .06em; }
+.nm-lamb {
+  display: block; width: 100%; max-width: 360px; margin: 18px auto 0;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 1s ease .3s, transform 1.2s cubic-bezier(.2, .7, .2, 1) .3s;
+}
+.nm-hero.is-shown .nm-lamb { opacity: 1; transform: none; }
+.nm-bee { position: absolute; width: 38px; animation: nm-float 5s ease-in-out infinite; }
+.nm-bee-1 { right: 22px; top: 150px; }
+.nm-bee-2 { left: 18px; top: 320px; width: 28px; animation-delay: -2.5s; transform: scaleX(-1); }
+@keyframes nm-float { 0%, 100% { translate: 0 0; } 50% { translate: 6px -10px; } }
+.nm-btn-light {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 22px; padding: 13px 22px;
+  border: 1px solid rgba(255, 255, 255, .45); border-radius: 999px; background: transparent;
+  color: #ffffff; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer;
+}
+.nm-wave { display: block; width: 100%; height: 40px; margin-top: -1px; }
+
+.nm-hero-bottom { padding: 10px 22px 50px; color: var(--nm-ink); text-align: center; }
+.nm-photo {
+  position: relative; max-width: 340px; margin: 0 auto;
+  background: #ffffff; padding: 10px 10px 42px; border-radius: 6px;
+  transform: rotate(-2deg);
+  box-shadow: 0 22px 40px -22px rgba(15, 42, 74, .55);
+}
+.nm-photo.is-editable { cursor: pointer; }
+.nm-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; }
+.nm-photo-caption {
+  position: absolute; left: 0; right: 0; bottom: 12px;
+  font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 13px; color: #6a7a8e;
+}
+.nm-edit { position: absolute; inset: 10px 10px 42px; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, .4); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.nm-photo:hover .nm-edit { opacity: 1; }
+
+.nm-count-wrap {
+  margin: 44px auto 0; max-width: 380px; padding: 30px 18px 26px;
+  background: linear-gradient(180deg, #e8f0f9, #dbe8f5);
+  border-radius: 28px;
+}
+.nm-chapter-dark { color: var(--nm-honey); }
+.nm-title {
+  margin-top: 10px;
+  font-family: 'Playfair Display', Georgia, serif; font-weight: 400;
+  font-size: clamp(2rem, 8.5vw, 2.6rem); line-height: 1.05; letter-spacing: -.01em; color: var(--nm-navy);
+}
+.nm-title em { display: block; font-style: italic; color: var(--nm-italic); }
+.nm-count {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  margin-top: 20px; padding: 16px 6px; background: #ffffff; border-radius: 18px;
+  box-shadow: 0 14px 30px -20px rgba(15, 42, 74, .45);
+}
+.nm-count b { display: block; font-family: 'Playfair Display', Georgia, serif; font-weight: 400; font-size: clamp(1.7rem, 7.5vw, 2.2rem); line-height: 1; color: var(--nm-navy); }
+.nm-count small { display: block; margin-top: 6px; font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #7a8aa0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-lamb { transition: none !important; opacity: 1; transform: none; }
+  .nm-bee { animation: none; }
+}

@@ -36,6 +36,7 @@ import AnturioVinoHero from '../components/themes/AnturioVinoHero';
 import BodegonNocturnoHero from '../components/themes/BodegonNocturnoHero';
 import LacreRojoHero from '../components/themes/LacreRojoHero';
 import GoticoSuaveHero from '../components/themes/GoticoSuaveHero';
+import NubeDeMielHero from '../components/themes/NubeDeMielHero';
 import FloralSymmetryHero from '../components/themes/FloralSymmetryHero';
 import PixelCraftHero from '../components/themes/PixelCraftHero';
 import { syncHeroPhotoForNewTheme } from '../lib/heroPhotoSlots';
@@ -232,6 +233,13 @@ export default function InvitationPage() {
             borderColor: '#CBD5E1', cardBorder: '#38BDF833',
             accentOverride: '#38BDF8', fontPreset: 'moderna',
             heroRadius: '0px', cardRadius: '12px',
+        },
+        'nube-de-miel': {
+            sectionBg: '#FAF7F1', sectionBgAlt: '#DBE8F5', cardBg: '#FFFFFF',
+            textPrimary: '#13243A', textSecondary: '#5A6B80',
+            borderColor: '#D9E4F0', cardBorder: '#E3ECF6',
+            accentOverride: '#0F2A4A', fontPreset: 'elegante',
+            heroRadius: '26px', cardRadius: '26px',
         },
         'gotico-suave': {
             sectionBg: '#E9E6E6', sectionBgAlt: '#E9E6E6', cardBg: '#F7F3EA',
@@ -2676,6 +2684,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'floral-symmetry') {
             return <FloralSymmetryHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'nube-de-miel') {
+            return <NubeDeMielHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'gotico-suave') {
             return <GoticoSuaveHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
