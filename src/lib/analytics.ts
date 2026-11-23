@@ -18,7 +18,7 @@ declare global {
 }
 
 // Env vars override these if set (see .env.example), otherwise fall back to
-// the site's production IDs so analytics keeps working even if Netlify's
+// the site's production IDs so analytics keeps working even if the host's
 // env vars were never configured.
 const CLARITY_ID = (import.meta.env.VITE_CLARITY_ID as string | undefined) || 'zfve0nyeei';
 const GA4_ID = (import.meta.env.VITE_GA4_ID as string | undefined) || 'G-Q3JRN12SSX';

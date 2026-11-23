@@ -2,38 +2,11 @@
 
 Una plataforma SaaS moderna para crear y gestionar invitaciones digitales elegantes para eventos en México.
 
-## 🚀 Deploy en Netlify
+## 🚀 Deploy en Hostinger
 
-### Configuración Rápida
-
-1. **Push a GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin <tu-repo-url>
-   git push -u origin main
-   ```
-
-2. **Conectar con Netlify:**
-   - Ve a [Netlify](https://netlify.com)
-   - Click en "Add new site" → "Import an existing project"
-   - Selecciona GitHub y autoriza
-   - Selecciona tu repositorio
-   - Netlify detectará automáticamente la configuración de `netlify.toml`
-
-3. **Variables de Entorno:**
-   En Netlify Dashboard → Site settings → Environment variables, agrega:
-   - `VITE_SUPABASE_URL`: Tu URL de Supabase
-   - `VITE_SUPABASE_ANON_KEY`: Tu clave anónima de Supabase
-
-4. **Deploy:**
-   - Click en "Deploy site"
-   - Netlify construirá y desplegará automáticamente
-
-### Deploy Automático
-Cada push a la rama `main` desplegará automáticamente a producción.
+El sitio está en Hostinger y se publica solo desde GitHub: cada push a `main` despliega a producción.
+Variables de entorno (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, etc.) se configuran en hPanel.
+Las funciones de `supabase/functions` se despliegan aparte con `npx supabase functions deploy <nombre>`.
 
 ## 🛠️ Desarrollo Local
 
@@ -58,7 +31,7 @@ npm run preview
 - **Styling:** Tailwind CSS
 - **Backend:** Supabase (Auth, Database, Storage)
 - **Build:** Vite
-- **Deploy:** Netlify
+- **Deploy:** Hostinger (auto-deploy desde GitHub)
 
 ## 📋 Características
 
