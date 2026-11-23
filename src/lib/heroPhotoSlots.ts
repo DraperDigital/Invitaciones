@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'nube-de-miel': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto de la Portada',
+        heroHelpText: 'Foto tipo polaroid bajo la portada azul (puede ser el ultrasonido o los papás).',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'gotico-suave': {
         type: 'single',
         photoCount: 1,
