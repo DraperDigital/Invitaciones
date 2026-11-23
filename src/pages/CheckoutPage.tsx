@@ -145,7 +145,8 @@ export default function CheckoutPage() {
                 'Cuenta regresiva',
                 'Ubicación con mapa',
                 'Galería de fotos',
-                'Confirmación WhatsApp simple'
+                'Confirmación WhatsApp simple',
+                'Save the Date (+$299 opcional)'
             ]
         },
         pro: {
@@ -160,7 +161,8 @@ export default function CheckoutPage() {
                 'Recordatorios automáticos',
                 'Control de pases y acompañantes',
                 'Importación masiva (Excel)',
-                'Métricas de visualización'
+                'Métricas de visualización',
+                'Save the Date (+$299 opcional)'
             ]
         },
         premium: {
@@ -172,6 +174,7 @@ export default function CheckoutPage() {
             features: [
                 'Todo lo del plan Pro',
                 'Diseño desde cero por expertos',
+                'Save the Date digital incluido',
                 'Código QR para invitados',
                 'Control de acceso (Check-in)',
                 'Dominio personalizado (.com)',
@@ -187,6 +190,7 @@ export default function CheckoutPage() {
             features: [
                 'Todo lo del plan Diseño Pro',
                 'Incluye Invitto Confirma',
+                'Save the Date digital incluido',
                 '3 rondas + llamada + reconfirmación',
                 'Lista final 15 días antes o 100% reembolso',
                 'Atención a dudas de tus invitados',

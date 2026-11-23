@@ -7,7 +7,7 @@ import {
     Check, X, MessageSquare, Download, 
     Trash2, Edit2, Save, QrCode, Send as SendIcon, Users,
     Search, LayoutDashboard, Copy, ArrowLeft, ChevronDown,
-    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette, Crown
+    Clock, MapPin, Eye, AlertTriangle, UserPlus, Upload, Loader2, Palette, Crown, Calendar
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
@@ -999,6 +999,18 @@ const EventRSVPs: React.FC = () => {
                             >
                                 <Eye className="h-3.5 w-3.5 shrink-0" />
                                 <span>Ver</span>
+                            </Link>
+
+                            <Link 
+                                to={event.slug ? `/std/${event.slug}` : `/dashboard/design/${event.id}`} 
+                                target={event.slug ? "_blank" : undefined}
+                                rel={event.slug ? "noopener noreferrer" : undefined}
+                                className="h-11 min-h-[44px] px-2.5 sm:px-3 bg-white hover:bg-stone-50 border border-stone-200 hover:border-amber-600 hover:text-amber-700 text-stone-700 rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 transition-all whitespace-nowrap"
+                                title="Save the Date digital"
+                                aria-label="Save the Date"
+                            >
+                                <Calendar className="h-3.5 w-3.5 shrink-0 text-amber-600" />
+                                <span>Save the Date</span>
                             </Link>
                         </div>
 

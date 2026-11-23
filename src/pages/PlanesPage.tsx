@@ -44,6 +44,7 @@ export default function PlanesPage() {
                 'Ubicación con mapa',
                 'Galería de fotos',
                 'Confirmación simple por WhatsApp',
+                'Save the Date digital (+$299 opcional)',
             ],
             cta: 'Solo mi invitación',
             demoUrl: '/i/bautizo-victoria'
@@ -65,6 +66,7 @@ export default function PlanesPage() {
                 'Control de pases y acompañantes',
                 'Importación masiva (Excel)',
                 'Métricas de visualización',
+                'Save the Date digital (+$299 opcional)',
             ],
             cta: 'Quiero control total',
             demoUrl: '/i/boda-isabel-rodrigo-pro'
@@ -81,6 +83,7 @@ export default function PlanesPage() {
             features: [
                 'Todo lo del plan Pro',
                 'Diseño desde cero por expertos',
+                'Save the Date digital incluido',
                 'Código QR para invitados',
                 'Control de acceso (Check-in)',
                 'Dominio personalizado (.com)',
@@ -101,6 +104,7 @@ export default function PlanesPage() {
             features: [
                 'Todo lo del plan Diseño Pro (diseño a medida)',
                 'Incluye Invitto Confirma: confirmamos a cada invitado por ti',
+                'Save the Date digital incluido',
                 'Lista final confirmada 15 días antes, o te devolvemos tu dinero',
                 'Cargamos y depuramos tu lista de invitados',
                 'Línea de atención para dudas de tus invitados',

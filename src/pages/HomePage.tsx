@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
     Check, ChevronDown, ArrowRight,
-    X, Users, Gem, Menu
+    X, Users, Gem, Menu, Calendar
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -93,6 +93,10 @@ export default function HomePage() {
                         <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Ejemplos
                         </Link>
+                        <Link to="/save-the-date" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors flex items-center gap-1.5">
+                            Save the Date
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
+                        </Link>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Planes
                         </Link>
@@ -148,6 +152,14 @@ export default function HomePage() {
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             Ejemplos
+                        </Link>
+                        <Link
+                            to="/save-the-date"
+                            className="flex items-center justify-between text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            <span>Save the Date</span>
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
                         <Link
                             to="/planes"
@@ -560,6 +572,84 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* --- 4.5. SAVE THE DATE (10 Diseños de una sola pantalla) --- */}
+            <section id="save-the-date" className="py-20 md:py-28 bg-[#F7F2EA] px-6 border-b border-stone-200/60 relative overflow-hidden">
+                <div className="mx-auto max-w-7xl">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+                        <div className="space-y-6 max-w-2xl text-center lg:text-left">
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                                <Calendar className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                <span>Nuevo · Save the Date Digital</span>
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight leading-tight">
+                                Aparta la fecha meses antes de enviar la invitación
+                            </h2>
+                            <p className="text-slate-600 text-base md:text-lg leading-relaxed">
+                                Una sola pantalla ultra rápida con nombres, fecha, ciudad, cuenta regresiva y botón directo para agregar a Google Calendar y Apple Calendar. Perfecto para bodas en destino, XV años y aniversarios.
+                            </p>
+                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-700 pt-2">
+                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
+                                    <Check className="h-4 w-4 text-[#4E7B55]" /> 10 estilos tipográficos
+                                </span>
+                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
+                                    <Check className="h-4 w-4 text-[#4E7B55]" /> Enlace propio (/std/tu-evento)
+                                </span>
+                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
+                                    <Check className="h-4 w-4 text-[#4E7B55]" /> Incluido en Diseño Pro y Concierge
+                                </span>
+                            </div>
+                            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+                                <Link
+                                    to="/std/demo-editorial"
+                                    className="min-h-[44px] px-6 py-3.5 bg-[#222B38] hover:bg-[#111827] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2"
+                                >
+                                    <span>Ver los 10 diseños de Save the Date</span>
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                                <Link
+                                    to="/planes"
+                                    className="min-h-[44px] px-6 py-3.5 bg-white hover:bg-stone-50 border border-stone-300 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center"
+                                >
+                                    Ver en los Planes (+$299 o incluido)
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Interactive Preview Mockup Card */}
+                        <div className="w-full max-w-sm sm:max-w-md lg:max-w-sm flex-shrink-0">
+                            <div className="bg-white rounded-3xl p-5 shadow-2xl border border-stone-200/80 transform hover:-translate-y-1 transition-all">
+                                <div className="rounded-2xl overflow-hidden aspect-[9/16] max-h-[480px] bg-stone-900 relative flex flex-col justify-between p-6 text-white text-center">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"
+                                        alt="Save the Date Preview"
+                                        className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                    />
+                                    <div className="relative z-10">
+                                        <p className="text-[10px] uppercase tracking-widest font-mono text-stone-200">Save the Date</p>
+                                    </div>
+                                    <div className="relative z-10 space-y-2">
+                                        <h3 className="font-serif text-3xl md:text-4xl font-normal tracking-wide italic">Isabel & Rodrigo</h3>
+                                        <p className="text-xs uppercase tracking-widest text-stone-200">24 · OCTUBRE · 2026</p>
+                                        <p className="text-[11px] text-stone-300">San Miguel de Allende, Gto.</p>
+                                    </div>
+                                    <div className="relative z-10 pt-2">
+                                        <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/40 rounded-full text-[11px] font-bold text-white tracking-wider uppercase">
+                                            + Agendar en Calendario
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+                                    <span className="font-bold text-[#222B38]">Diseño Editorial</span>
+                                    <Link to="/std/demo-editorial" className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
+                                        Probar en vivo <ArrowRight className="h-3.5 w-3.5" />
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- 5. ¿QUÉ CELEBRAS? (8 Event Types) --- */}
             <section className="py-20 md:py-28 bg-[#F8F9FA] px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl">
@@ -664,6 +754,10 @@ export default function HomePage() {
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                         <span>Confirmación de asistencia por WhatsApp</span>
                                     </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span>Save the Date digital (+$299 MXN opcional)</span>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -720,6 +814,10 @@ export default function HomePage() {
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                         <span>Recordatorios de RSVP para tus invitados</span>
                                     </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span>Save the Date digital (+$299 MXN opcional)</span>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -763,6 +861,10 @@ export default function HomePage() {
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                         <span>Ajuste de tipografía y paleta por diseñador</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span><strong>Save the Date digital incluido</strong></span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
@@ -811,6 +913,10 @@ export default function HomePage() {
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                         <span><strong>Incluye Invitto Confirma:</strong> confirmamos por ti</span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                        <span><strong>Save the Date digital incluido</strong></span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
@@ -1087,6 +1193,7 @@ export default function HomePage() {
                             <ul className="space-y-2 text-xs text-slate-400">
                                 <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
                                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
+                                <li><Link to="/save-the-date" className="hover:text-white transition-colors">Save the Date</Link></li>
                                 <li><Link to="/confirma" className="hover:text-white transition-colors">Invitto Confirma</Link></li>
                                 <li><Link to="/comparativas" className="hover:text-white transition-colors">Comparativas</Link></li>
                                 <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>

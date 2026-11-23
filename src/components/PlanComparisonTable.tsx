@@ -33,6 +33,14 @@ const COMPARISON_CATEGORIES: FeatureCategory[] = [
         icon: '🎨',
         features: [
             {
+                name: 'Save the Date digital (enlace propio /std/)',
+                description: 'Pantalla previa para apartar la fecha con cuenta regresiva, ciudad y botón para el calendario Google y Apple',
+                clasico: '+ $299 MXN',
+                pro: '+ $299 MXN',
+                premium: true,
+                concierge: true,
+            },
+            {
                 name: 'Página web responsive (móviles y PC)',
                 description: 'Diseño adaptativo que luce impecable en cualquier pantalla',
                 clasico: true,

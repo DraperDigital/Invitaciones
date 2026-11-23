@@ -7,6 +7,7 @@ export const RAW_FAQ_ITEMS = [
     { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjeta (Visa, Mastercard, Amex), pagos en efectivo en OXXO y meses sin intereses de forma segura a través de Stripe.' },
     { q: '¿Necesito tarjeta de crédito para empezar a crear?', a: 'No, para registrarte y empezar a diseñar tu invitación en borrador no necesitas ingresar ninguna tarjeta de crédito ni método de pago.' },
     { q: '¿Sirve para XV años y eventos en México?', a: 'Sí, está diseñada especialmente para el mercado mexicano y latinoamericano. Funciona perfecto para bodas, XV años, cumpleaños, bautizos, graduaciones y cualquier evento que requiera control de asistencia.' },
+    { q: '¿Tienen la opción de Save the Date antes de la invitación formal?', a: 'Sí. Contamos con Save the Date digital de una sola pantalla con 10 estilos exclusivos, cuenta regresiva, ciudad y botón para que tus invitados agenden la fecha directo en su calendario de Google o Apple. Viene incluido sin costo adicional en los planes Diseño Pro y Concierge, o puedes agregarlo a tu evento Clásica o Pro por solo $299 MXN.' },
     { q: '¿Cómo comparto la invitación por WhatsApp o redes?', a: 'Una vez que publiques tu invitación, obtendrás un enlace personalizado (ej. invitto.com.mx/i/mi-evento). Puedes copiar y pegar este enlace en chats de WhatsApp, grupos o redes sociales. Al compartirlo, generará una vista previa automática y elegante de tu evento.' }
 ];
 

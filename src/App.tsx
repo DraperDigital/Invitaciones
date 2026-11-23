@@ -124,6 +124,9 @@ function AppRoutes() {
         <Route path="/login"         element={<LoginPage />} />
         <Route path="/i/:slug"          element={<InvitationPage />} />
         <Route path="/std/:slug"        element={<SaveTheDatePage />} />
+        <Route path="/std"              element={<Navigate to="/std/demo-editorial" replace />} />
+        <Route path="/save-the-date"    element={<Navigate to="/std/demo-editorial" replace />} />
+        <Route path="/save-the-dates"   element={<Navigate to="/std/demo-editorial" replace />} />
         <Route path="/preview/:slug"    element={<InvitationPage />} />
         <Route path="/invitacion/:slug" element={<InvitationPage />} />
         <Route path="/i/cecilia-70"     element={<Navigate to="/i/cumplea%C3%B1os-cecilia-h2657" replace />} />

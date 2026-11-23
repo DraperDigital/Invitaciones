@@ -2544,6 +2544,7 @@ export default function DesignEditor() {
                                         <div className="flex gap-2">
                                             <input readOnly value={stdUrl} className="flex-1 min-w-0 px-3 py-2 text-xs rounded-xl border border-emerald-200 bg-white" />
                                             <button type="button" onClick={() => { navigator.clipboard?.writeText(stdUrl); toast.success('Enlace copiado'); }} className="px-3 py-2 text-xs font-bold rounded-xl bg-emerald-700 text-white">Copiar</button>
+                                            <a href={stdUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-2 text-xs font-bold rounded-xl bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100 flex items-center justify-center">Abrir</a>
                                         </div>
                                         <p className="text-[11px] text-emerald-700">Guarda el diseño para que los cambios se vean en el enlace.</p>
                                     </div>
@@ -2551,9 +2552,19 @@ export default function DesignEditor() {
                                     <div className="p-4 rounded-2xl bg-stone-900 text-white space-y-3">
                                         <p className="text-sm font-bold">Agrega tu Save the Date por ${SAVE_THE_DATE_PRICE}</p>
                                         <p className="text-xs text-stone-300">Pago único. Viene incluido en Diseño Pro y Concierge.</p>
-                                        <button type="button" disabled={buyingStd} onClick={handleBuySaveTheDate} className="px-4 py-2.5 text-xs font-bold rounded-xl bg-[#DF3B94] disabled:opacity-60">
-                                            {buyingStd ? 'Abriendo pago…' : `Comprar por $${SAVE_THE_DATE_PRICE}`}
-                                        </button>
+                                        <div className="flex flex-wrap gap-2 pt-1">
+                                            <button type="button" disabled={buyingStd} onClick={handleBuySaveTheDate} className="px-4 py-2.5 text-xs font-bold rounded-xl bg-[#DF3B94] hover:bg-[#c52a7c] text-white disabled:opacity-60 transition-colors">
+                                                {buyingStd ? 'Abriendo pago…' : `Comprar por $${SAVE_THE_DATE_PRICE}`}
+                                            </button>
+                                            <a
+                                                href={`/std/${event?.slug || 'demo-editorial'}?t=${stdTheme}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="px-4 py-2.5 text-xs font-bold rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 inline-flex items-center justify-center transition-colors"
+                                            >
+                                                Ver vista previa
+                                            </a>
+                                        </div>
                                     </div>
                                 )}
                             </div>

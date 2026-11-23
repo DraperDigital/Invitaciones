@@ -3059,7 +3059,7 @@ END:VCALENDAR`;
                                     target="_blank" 
                                     rel="noreferrer" 
                                     className="mt-auto pt-4 inline-flex items-center justify-center min-h-[44px] px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline" 
-                                    style={{ background: buttonColor }}
+                                    style={{ background: buttonColor, color: buttonContrast }}
                                 >
                                     ¿Cómo llegar?
                                 </a>
@@ -3092,7 +3092,7 @@ END:VCALENDAR`;
                                 target="_blank" 
                                 rel="noreferrer" 
                                 className="mt-auto pt-4 inline-flex items-center justify-center min-h-[44px] px-8 py-3 rounded-full text-[var(--button-contrast)] font-sans font-medium text-[11px] uppercase tracking-[0.2em] hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 no-underline" 
-                                style={{ background: buttonColor }}
+                                style={{ background: buttonColor, color: buttonContrast }}
                             >
                                 ¿Cómo llegar?
                             </a>
@@ -3350,7 +3350,7 @@ END:VCALENDAR`;
                                 <div className="space-y-8">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Nombre Completo</label>
-                                        <input required type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Tu nombre" disabled={submitting} className="w-full bg-transparent border-b border-[var(--card-border)] py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-[var(--text-primary)] placeholder:text-stone-200" readOnly={!!guest && !!guestToken} />
+                                        <input required type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Tu nombre" disabled={submitting} className="w-full bg-transparent border-b border-[var(--card-border)] py-3 focus:border-stone-400 outline-none transition-colors font-light text-xl text-[var(--text-primary)] placeholder:text-stone-500 placeholder:opacity-75" readOnly={!!guest && !!guestToken} />
                                     </div>
 
                                     {(!guest || guest.max_plus_ones > 0) && (
@@ -3377,7 +3377,7 @@ END:VCALENDAR`;
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
                                     <div className="space-y-4 pt-4">
-                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] uppercase tracking-[0.4em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center subtle-shimmer cursor-pointer" style={{ background: buttonColor }}>
+                                        <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] md:text-xs uppercase tracking-[0.35em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center subtle-shimmer cursor-pointer" style={{ background: buttonColor, color: buttonContrast }}>
                                             {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}
                                         </button>
                                         <button onClick={() => handleRsvp('no')} disabled={submitting} className="w-full h-12 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
@@ -3676,7 +3676,7 @@ END:VCALENDAR`;
                                         target="_blank" 
                                         rel="noopener noreferrer" 
                                         className="mt-4 flex items-center justify-center min-h-[44px] w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-[var(--button-contrast)] hover:opacity-90 transition-opacity shadow-md no-underline"
-                                        style={{ background: buttonColor }}
+                                        style={{ background: buttonColor, color: buttonContrast }}
                                     >
                                         Ver Hotel / Reservar
                                     </a>

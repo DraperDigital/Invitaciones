@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Layout, Users, Zap, ArrowUpRight, Plus, Palette, PartyPopper, ArrowRight } from 'lucide-react';
+import { Layout, Users, Zap, ArrowUpRight, Plus, Palette, PartyPopper, ArrowRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getPlatformContext } from '../../utils/context';
 import { getEventPlanBadge } from '../../utils/planBadges';
@@ -259,9 +259,14 @@ const DashboardHome: React.FC = () => {
 
                                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                                         <span>Confirmados: <strong className="text-[#222B38]">{event.metrics?.confirmed || 0}</strong></span>
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-2.5">
+                                            {event.slug && (
+                                                <Link to={`/std/${event.slug}`} target="_blank" rel="noopener noreferrer" className="text-slate-500 font-bold hover:text-amber-600 flex items-center gap-1 text-[10px] uppercase tracking-wider" title="Ver Save the Date">
+                                                    <Calendar className="h-3.5 w-3.5 text-amber-600" /> STD
+                                                </Link>
+                                            )}
                                             <Link to={`/i/${event.slug || event.id}?t=admin`} className="text-slate-500 font-bold hover:text-[#DF3B94] flex items-center gap-1 text-[10px] uppercase tracking-wider" title="Editar diseño en vivo">
-                                                <Palette className="h-3.5 w-3.5 text-[#DF3B94]" /> Editar Diseño
+                                                <Palette className="h-3.5 w-3.5 text-[#DF3B94]" /> Diseño
                                             </Link>
                                             <Link to={`/dashboard/events/${event.id}`} className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
                                                 Gestionar <ArrowRight className="h-3.5 w-3.5" />

@@ -1,19 +1,20 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Droplet, HelpCircle } from 'lucide-react';
+import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Droplet, HelpCircle, Calendar } from 'lucide-react';
 import Seo from '../components/Seo';
 import { CANONICAL_TEMPLATES } from '../lib/themePresets';
 import { STD_TEMPLATES, SAVE_THE_DATE_PRICE } from '../lib/saveTheDate';
 
 const categories = [
     { id: 'todas', name: 'Todas', icon: LayoutGrid },
-    { id: 'gender_reveal', name: 'Revelación', icon: HelpCircle },
-    { id: 'infantil', name: 'Infantiles', icon: Baby },
+    { id: 'save_the_date', name: 'Save the Date (10)', icon: Calendar },
     { id: 'boda', name: 'Bodas', icon: HeartHandshake },
     { id: 'xv', name: 'XV Años', icon: PartyPopper },
     { id: 'cumpleanos', name: 'Cumpleaños', icon: Cake },
     { id: 'bautizo', name: 'Bautizos', icon: Droplet },
+    { id: 'infantil', name: 'Infantiles', icon: Baby },
+    { id: 'gender_reveal', name: 'Revelación', icon: HelpCircle },
     { id: 'graduacion', name: 'Graduaciones', icon: GraduationCap },
     { id: 'comunion', name: 'Primera Comunión', icon: Church },
 ];
@@ -62,6 +63,10 @@ export default function ExamplesPage() {
                     <nav className="hidden md:flex items-center gap-8">
                         <Link to="/ejemplos" className="text-xs uppercase font-bold tracking-widest text-[#DF3B94]">
                             Ejemplos
+                        </Link>
+                        <Link to="/save-the-date" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors flex items-center gap-1.5">
+                            Save the Date
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Planes
@@ -128,80 +133,137 @@ export default function ExamplesPage() {
             {/* Examples Grid */}
             <section className="py-12 px-6">
                 <div className="mx-auto max-w-7xl">
+                    {/* Banner destacado de Save the Date cuando se ven todas */}
+                    {activeCategory === 'todas' && (
+                        <div className="mb-10 bg-gradient-to-r from-[#F7F2EA] via-[#fdf8f4] to-[#fcf0f5] border border-amber-200/60 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
+                            <div className="space-y-2 text-center md:text-left">
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#DF3B94]/10 text-[#DF3B94] rounded-full text-xs font-bold uppercase tracking-wider">
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    <span>Nuevo · Save the Date Digital</span>
+                                </div>
+                                <h3 className="text-xl sm:text-2xl font-display font-extrabold text-[#222B38]">
+                                    ¿Quieres apartar la fecha antes de tu invitación formal?
+                                </h3>
+                                <p className="text-sm text-slate-600 max-w-xl">
+                                    10 diseños de una sola pantalla con cuenta regresiva, ciudad y botón para el calendario de Google y Apple. Incluido en Diseño Pro y Concierge, o por $299 MXN en Clásica y Pro.
+                                </p>
+                            </div>
+                            <Link
+                                to="/std/demo-editorial"
+                                className="min-h-[44px] px-6 py-3.5 bg-[#222B38] hover:bg-[#111827] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 whitespace-nowrap active:scale-95 flex-shrink-0"
+                            >
+                                <span>Ver los 10 Save the Dates</span>
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        </div>
+                    )}
+
                     <div className="mb-6 flex items-center justify-between">
                         <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">
-                            {filteredExamples.length} {filteredExamples.length === 1 ? 'plantilla disponible' : 'plantillas disponibles'}
+                            {activeCategory === 'save_the_date'
+                                ? `${STD_TEMPLATES.length} diseños de Save the Date disponibles`
+                                : `${filteredExamples.length} ${filteredExamples.length === 1 ? 'plantilla disponible' : 'plantillas disponibles'}`}
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {filteredExamples.map((tpl) => {
-                            const categoryInfo = categories.find(c => c.id === tpl.category) || categories[1];
-
-                            return (
-                                <Link
-                                    key={tpl.id}
-                                    to={`/i/${tpl.slug}?t=token-preview&category=${activeCategory !== 'todas' ? activeCategory : (tpl.category || 'todas')}`}
-                                    className="group"
-                                >
-                                    <div className="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-[#DF3B94]/10 transition-all duration-300 relative flex flex-col h-full">
-                                        
-                                        {/* Thumbnail Area */}
-                                        <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
-                                            <img 
-                                                src={tpl.thumbnail} 
-                                                alt={tpl.name} 
-                                                onError={(e) => {
-                                                    const target = e.currentTarget as HTMLImageElement;
-                                                    if (!target.dataset.fallbackTried) {
-                                                        target.dataset.fallbackTried = 'true';
-                                                        target.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop';
-                                                    }
-                                                }}
-                                                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                            />
-                                            
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                                            
-                                            {/* Plan Badge */}
-                                            <div className="absolute top-4 right-4 z-10">
-                                                <span className="px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold bg-slate-900/90 text-[#F5B837] border border-[#F5B837]/30 backdrop-blur-md">
-                                                    {tpl.plan}
-                                                </span>
-                                            </div>
-
-                                            {/* Hover Button */}
-                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                                                <div className="px-6 py-3 bg-[#DF3B94] text-white rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl">
-                                                    Ver Previa <ArrowRight className="h-4 w-4" />
-                                                </div>
-                                            </div>
+                    {activeCategory === 'save_the_date' ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                            {STD_TEMPLATES.map((t, idx) => (
+                                <div key={t.id} className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-mono">
+                                                Diseño #{idx + 1}
+                                            </span>
+                                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">
+                                                {t.bestFor}
+                                            </span>
                                         </div>
+                                        <h4 className="text-xl font-display font-extrabold text-[#222B38] mt-2">{t.name}</h4>
+                                        <p className="text-xs text-slate-500 leading-relaxed">{t.desc}</p>
+                                    </div>
+                                    <div className="pt-5 mt-5 border-t border-slate-100">
+                                        <Link
+                                            to={`/std/demo-${t.id}`}
+                                            className="w-full min-h-[44px] px-4 py-2.5 bg-[#222B38] hover:bg-[#DF3B94] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center justify-center gap-2 shadow-xs active:scale-95"
+                                        >
+                                            <span>Ver Demo en vivo</span>
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {filteredExamples.map((tpl) => {
+                                const categoryInfo = categories.find(c => c.id === tpl.category) || categories[1];
 
-                                        {/* Card Footer */}
-                                        <div className="p-6 bg-white flex flex-col justify-between flex-grow">
-                                            <div>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <categoryInfo.icon className="h-3.5 w-3.5 text-[#DF3B94]" />
-                                                    <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
-                                                        {tpl.categoryLabel || categoryInfo.name}
+                                return (
+                                    <Link
+                                        key={tpl.id}
+                                        to={`/i/${tpl.slug}?t=token-preview&category=${activeCategory !== 'todas' ? activeCategory : (tpl.category || 'todas')}`}
+                                        className="group"
+                                    >
+                                        <div className="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-[#DF3B94]/10 transition-all duration-300 relative flex flex-col h-full">
+                                            
+                                            {/* Thumbnail Area */}
+                                            <div className="relative aspect-[3/4] w-full overflow-hidden bg-slate-100">
+                                                <img 
+                                                    src={tpl.thumbnail} 
+                                                    alt={tpl.name} 
+                                                    onError={(e) => {
+                                                        const target = e.currentTarget as HTMLImageElement;
+                                                        if (!target.dataset.fallbackTried) {
+                                                            target.dataset.fallbackTried = 'true';
+                                                            target.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop';
+                                                        }
+                                                    }}
+                                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                                                
+                                                {/* Plan Badge */}
+                                                <div className="absolute top-4 right-4 z-10">
+                                                    <span className="px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold bg-slate-900/90 text-[#F5B837] border border-[#F5B837]/30 backdrop-blur-md">
+                                                        {tpl.plan}
                                                     </span>
                                                 </div>
-                                                <h3 className="text-lg font-display font-bold text-[#222B38] group-hover:text-[#DF3B94] transition-colors">
-                                                    {tpl.name}
-                                                </h3>
+
+                                                {/* Hover Button */}
+                                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                                                    <div className="px-6 py-3 bg-[#DF3B94] text-white rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xl">
+                                                        Ver Previa <ArrowRight className="h-4 w-4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Card Footer */}
+                                            <div className="p-6 bg-white flex flex-col justify-between flex-grow">
+                                                <div>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <categoryInfo.icon className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                                        <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">
+                                                            {tpl.categoryLabel || categoryInfo.name}
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="text-lg font-display font-bold text-[#222B38] group-hover:text-[#DF3B94] transition-colors">
+                                                        {tpl.name}
+                                                    </h3>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </section>
 
             {/* Save the Date — 10 diseños de una sola pantalla */}
-            <section className="py-14 px-6 bg-[#F7F2EA] border-t border-slate-100">
+            <section id="save-the-date" className="py-14 px-6 bg-[#F7F2EA] border-t border-slate-100">
                 <div className="mx-auto max-w-7xl">
                     <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
                         <div>
