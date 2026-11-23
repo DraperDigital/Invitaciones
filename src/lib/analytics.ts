@@ -89,6 +89,20 @@ function loadMetaPixel(id: string) {
     }
 }
 
+// Vendora: registra visitas con sus UTM (para saber qué anuncio vendió) y deja window.vendora.utm() para el checkout.
+const VENDORA_URL = (import.meta.env.VITE_VENDORA_URL as string | undefined) || 'https://vendora.drapersystems.online';
+const VENDORA_TIENDA = (import.meta.env.VITE_VENDORA_TIENDA as string | undefined) || 'kids-lumina';
+
+function loadVendora() {
+    if (!VENDORA_URL || !VENDORA_TIENDA || document.querySelector('script[data-vendora]')) return;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `${VENDORA_URL.replace(/\/$/, '')}/v.js`;
+    s.setAttribute('data-tienda', VENDORA_TIENDA);
+    s.setAttribute('data-vendora', '1');
+    document.head.appendChild(s);
+}
+
 let hasLoadedThirdParty = false;
 
 export function initAnalytics() {
@@ -99,6 +113,7 @@ export function initAnalytics() {
 
     // Meta Pixel respeta la elección del usuario ('necessary' / 'essential')
     if (META_PIXEL_ID) loadMetaPixel(META_PIXEL_ID);
+    loadVendora();
 
     if (CLARITY_ID) loadClarity(CLARITY_ID);
     if (GA4_ID) loadGA4(GA4_ID);
@@ -121,6 +136,7 @@ export function setupDeferredAnalytics() {
         if (hasAnalyticsConsent() && META_PIXEL_ID) {
             loadMetaPixel(META_PIXEL_ID);
         }
+        if (hasAnalyticsConsent()) loadVendora();
 
         // 2. gtag (Google Analytics / Ads) y Clarity se difieren con requestIdleCallback
         const loadGtagAndClarity = () => {

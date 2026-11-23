@@ -55,7 +55,18 @@ serve(async (req) => {
 
     const body = await req.json()
     // NUNCA aceptamos 'amount' desde el cliente; se calcula estrictamente en el servidor
-    const { sessionId, planId, eventId, origin, email, fbp, fbc, coupon } = body
+    const { sessionId, planId, eventId, origin, email, fbp, fbc, coupon, utm, name, phone, waOk } = body
+    // Datos para Vendora (mide ventas por anuncio y manda a quien acepte al CRM de WhatsApp)
+    const corto = (v: unknown, n = 100) => (typeof v === 'string' ? v.trim().slice(0, n) : '')
+    const utmIn = utm && typeof utm === 'object' ? utm as Record<string, unknown> : {}
+    const vendora: Record<string, string> = {}
+    for (const k of ['utm_source', 'utm_campaign', 'utm_content']) {
+      const v = corto(utmIn[k])
+      if (v) vendora[k] = v
+    }
+    if (corto(name, 80)) vendora.nombre = corto(name, 80)
+    if (corto(phone, 30)) vendora.telefono = corto(phone, 30)
+    if (waOk === true) vendora.wa_ok = '1'
 
     // Consultar el estado de una sesión de Stripe
     if (sessionId) {
@@ -183,6 +194,8 @@ serve(async (req) => {
       metadata: {
         planId: planId,
         eventId: eventId,
+        producto: planConfig.name,
+        ...vendora,
         ...(cleanCoupon ? { coupon: cleanCoupon } : {}),
         ...(cleanCoupon ? { amount: String(finalPrice) } : {}),
         ...(fbp ? { fbp: String(fbp) } : {}),

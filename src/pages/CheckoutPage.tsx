@@ -46,6 +46,7 @@ export default function CheckoutPage() {
         name: initialName,
         email: user?.email || '',
         phone: initialPhone,
+        waOk: false,
         cardNumber: '',
         expiry: '',
         cvv: '',
@@ -372,7 +373,12 @@ export default function CheckoutPage() {
                     email: effectiveEmail,
                     fbp: fbp || undefined,
                     fbc: fbc || undefined,
-                    coupon: appliedCoupon ? appliedCoupon.code : undefined
+                    coupon: appliedCoupon ? appliedCoupon.code : undefined,
+                    // Para Vendora: de qué anuncio vino, su WhatsApp y si aceptó que le escriban
+                    utm: (window as any).vendora?.utm?.() || undefined,
+                    name: formData.name || undefined,
+                    phone: formData.phone || undefined,
+                    waOk: formData.waOk || undefined
                 }
             });
 
@@ -566,6 +572,15 @@ export default function CheckoutPage() {
                                                 }}
                                             />
                                         </div>
+                                        <label className="md:col-span-2 flex items-start gap-3 text-sm text-slate-600 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                className="mt-1 h-4 w-4 accent-[#DF3B94]"
+                                                checked={formData.waOk}
+                                                onChange={(e) => setFormData(prev => ({ ...prev, waOk: e.target.checked }))}
+                                            />
+                                            <span>Quiero que me escriban por WhatsApp para ayudarme con mi invitación</span>
+                                        </label>
                                         <div className="md:col-span-2 space-y-2">
                                             <label className="text-xs uppercase font-bold tracking-wider text-slate-400 ml-1">Correo Electrónico</label>
                                             <input 
