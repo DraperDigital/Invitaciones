@@ -168,17 +168,25 @@ create table if not exists gifts (
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 7. FEATURE GATING — Planeación como feature del plan Pro
 -- ─────────────────────────────────────────────────────────────────────────────
-insert into features (code, name, description, category, ui_group) values
-  ('event_planning',
-   'Planeación del Evento',
-   'Presupuesto por rubros, cotizaciones y contratos, pagos y carpeta del día, conectados a tu evento.',
-   'management', 'pro')
-on conflict (code) do nothing;
+-- Envuelto en un DO con manejo de excepción: si las tablas features/plans no
+-- existen o tienen otras columnas, se OMITE el gating con un aviso en vez de
+-- revertir toda la migración. Así las tablas y la función siempre se crean.
+do $$
+begin
+  insert into features (code, name, description, category, ui_group) values
+    ('event_planning',
+     'Planeación del Evento',
+     'Presupuesto por rubros, cotizaciones y contratos, pagos y carpeta del día, conectados a tu evento.',
+     'management', 'pro')
+  on conflict (code) do nothing;
 
-insert into plan_features (plan_id, feature_id)
-select p.id, f.id from plans p, features f
-where  p.code = 'pro' and f.code = 'event_planning'
-on conflict do nothing;
+  insert into plan_features (plan_id, feature_id)
+  select p.id, f.id from plans p, features f
+  where  p.code = 'pro' and f.code = 'event_planning'
+  on conflict do nothing;
+exception when others then
+  raise notice 'Gating de event_planning omitido (features/plans no disponibles): %', sqlerrm;
+end $$;
 
 
 -- ─────────────────────────────────────────────────────────────────────────────

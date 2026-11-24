@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
     Compass, Wallet, Store, ListChecks, CalendarHeart, Crown, ChevronDown, ChevronRight, ChevronLeft,
@@ -201,6 +201,20 @@ const PlanningPage: React.FC = () => {
         supabase.from('events').select('title,date_time,venue_name').eq('id', eventId).maybeSingle()
             .then(({ data }) => setActiveEvent(data));
     }, [eventId, isDemo]);
+
+    // Auto-carga: al entrar a un evento real vacío, siembra el plan una sola vez
+    // (rubros + pendientes + proveedores sugeridos + carpeta del día). Sin botones.
+    const seededRef = useRef<string | null>(null);
+    useEffect(() => {
+        if (isDemo || planning.loading || !eventId || eventId === 'demo') return;
+        if (seededRef.current === eventId) return;
+        if (planning.rubros.length === 0 && planning.tasks.length === 0) {
+            seededRef.current = eventId;
+            planning.seedDefaults().then((err: any) => {
+                if (err) toast.error(typeof err === 'string' ? err : 'No se pudo cargar tu plan');
+            });
+        }
+    }, [isDemo, planning.loading, eventId, planning.rubros.length, planning.tasks.length]);
 
     const handleEventChange = (id: string) => {
         if (!id) return;
@@ -1197,7 +1211,7 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
     }, [tasks]);
 
     const submit = async () => { if (!title.trim()) return; await addTask(title.trim(), phase); setTitle(''); toast.success('Pendiente agregado'); };
-    const seed = async () => { const err = await seedDefaults(); if (err) return toast.error('No se pudo sembrar'); await reload(); toast.success('Checklist base creado'); };
+    const seed = async () => { const err = await seedDefaults(); if (err) return toast.error(typeof err === 'string' ? err : 'No se pudo cargar tu plan'); await reload(); toast.success('¡Tu plan está listo!'); };
 
     return (
         <div className="space-y-6">
@@ -1228,9 +1242,9 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
             {tasks.length === 0 ? (
                 <div className="rounded-3xl border border-dashed border-stone-300 bg-white p-10 text-center">
                     <Sparkles className="mx-auto mb-3 h-8 w-8" style={{ color: PINK }} />
-                    <p className="font-display font-extrabold text-lg" style={{ color: DARK }}>Empieza con todo precargado</p>
-                    <p className="mt-1 text-sm text-stone-500">El asistente siembra rubros, checklist por fase (anillos, menú, canciones…) y la carpeta del día.</p>
-                    <button onClick={seed} className="mt-5 rounded-2xl px-6 py-3 text-[11px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: DARK }}>Sembrar todo</button>
+                    <p className="font-display font-extrabold text-lg" style={{ color: DARK }}>Carga tu plan en un clic</p>
+                    <p className="mt-1 text-sm text-stone-500">Te dejamos listo el presupuesto por rubros, el checklist por fases (anillos, menú, canciones…), una lista de proveedores sugeridos y la carpeta del día. Luego solo ajustas.</p>
+                    <button onClick={seed} className="mt-5 rounded-2xl px-6 py-3 text-[11px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: DARK }}>Cargar mi plan</button>
                 </div>
             ) : (
                 PHASES.filter(p => grouped[p.key]?.length).map(p => {
@@ -1664,7 +1678,7 @@ const DespuesBoda: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
             <div className="rounded-3xl border border-stone-200 bg-white p-6">
                 <h3 className="mb-4 font-display font-extrabold" style={{ color: DARK }}>Pendientes después de la boda</h3>
                 <div className="space-y-2">
-                    {afterTasks.length === 0 && <p className="text-sm text-stone-400">Aparecen al sembrar el checklist: devolver materiales, pagar saldos, agradecer, compartir fotos, reseñas.</p>}
+                    {afterTasks.length === 0 && <p className="text-sm text-stone-400">Aparecen al cargar tu plan: devolver materiales, pagar saldos, agradecer, compartir fotos, reseñas.</p>}
                     {afterTasks.map(t => (
                         <button key={t.id} onClick={() => toggleTask(t.id, !t.is_done)}
                             className="flex w-full items-center gap-3 rounded-2xl border border-stone-100 p-3 text-left hover:bg-stone-50">
@@ -1750,7 +1764,7 @@ const DiaB: React.FC<{ planning: Planning; event: any }> = ({ planning, event })
                 <div key={s.key} className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-6 min-w-0">
                     <h3 className="mb-4 text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>{s.label}</h3>
                     <div className="space-y-2">
-                        {!(grouped[s.key]?.length) && <p className="text-sm text-stone-400">Sin elementos. Se siembran al activar el módulo.</p>}
+                        {!(grouped[s.key]?.length) && <p className="text-sm text-stone-400">Sin elementos. Se cargan solos al abrir tu plan.</p>}
                         {(grouped[s.key] || []).map(d => (
                             <button key={d.id} onClick={() => toggleDayOf(d.id, !d.is_done)}
                                 className="flex w-full items-center gap-3 sm:gap-4 rounded-2xl border border-stone-100 p-2.5 sm:p-3 text-left hover:bg-stone-50 min-w-0 cursor-pointer">

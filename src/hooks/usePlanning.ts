@@ -100,6 +100,86 @@ function mockSeed() {
     return { rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, appointments, confirmed: 112, countdownDays: 86 };
 }
 
+// ── Datos de arranque (se siembran al entrar por primera vez) ─────────────────
+// off = días respecto a la fecha del evento (negativo = antes, positivo = después).
+const PLANNING_SEED = {
+    rubros: [
+        { name: 'Banquete', location: null, benchmark_pct: 30, is_external: false, sort_order: 1 },
+        { name: 'Venue — Salón', location: 'recepcion', benchmark_pct: 12, is_external: false, sort_order: 2 },
+        { name: 'Fotografía y video', location: null, benchmark_pct: 9, is_external: false, sort_order: 3 },
+        { name: 'Música', location: 'ambos', benchmark_pct: 8, is_external: false, sort_order: 4 },
+        { name: 'Bebidas', location: null, benchmark_pct: 6, is_external: false, sort_order: 5 },
+        { name: 'Flores', location: 'ambos', benchmark_pct: 6, is_external: false, sort_order: 6 },
+        { name: 'Decoración', location: null, benchmark_pct: 6, is_external: false, sort_order: 7 },
+        { name: 'Imprevistos', location: null, benchmark_pct: 5, is_external: false, sort_order: 8 },
+        { name: 'Barras', location: null, benchmark_pct: 4, is_external: false, sort_order: 9 },
+        { name: 'Mobiliario', location: null, benchmark_pct: 4, is_external: false, sort_order: 10 },
+        { name: 'Venue — Iglesia', location: 'iglesia', benchmark_pct: 3, is_external: false, sort_order: 11 },
+        { name: 'Iluminación', location: null, benchmark_pct: 3, is_external: false, sort_order: 12 },
+        { name: 'Souvenirs', location: null, benchmark_pct: 2, is_external: false, sort_order: 13 },
+        { name: 'Extras / servicios', location: null, benchmark_pct: 2, is_external: false, sort_order: 14 },
+        { name: 'Invitaciones', location: null, benchmark_pct: 0, is_external: true, sort_order: 15 },
+    ],
+    tasks: [
+        { title: 'Definir presupuesto total y lista de invitados', phase: '3_months', off: -365, sort_order: 1 },
+        { title: 'Reservar iglesia y salón (fechas)', phase: '3_months', off: -365, sort_order: 2 },
+        { title: 'Pedir cotizaciones de banquete y foto', phase: '3_months', off: -335, sort_order: 3 },
+        { title: 'Contratar música para ceremonia y fiesta', phase: '3_months', off: -305, sort_order: 4 },
+        { title: 'Comprar los anillos', phase: '3_months', off: -275, sort_order: 5 },
+        { title: 'Planear la luna de miel y revisar pasaportes', phase: '3_months', off: -245, sort_order: 6 },
+        { title: 'Prueba de menú con el banquete', phase: '1_month', off: -90, sort_order: 7 },
+        { title: 'Enviar invitaciones digitales', phase: '1_month', off: -60, sort_order: 8 },
+        { title: 'Prueba de peluquería y maquillaje', phase: '1_month', off: -45, sort_order: 9 },
+        { title: 'Cerrar acomodo de mesas', phase: '1_month', off: -30, sort_order: 10 },
+        { title: 'Liquidar anticipos pendientes', phase: '1_month', off: -30, sort_order: 11 },
+        { title: 'Elegir las canciones clave', phase: 'week_of', off: -10, sort_order: 12 },
+        { title: 'Confirmar conteo final y menús con banquete', phase: 'week_of', off: -7, sort_order: 13 },
+        { title: 'Enviar horario de montaje a proveedores', phase: 'week_of', off: -5, sort_order: 14 },
+        { title: 'Preparar sobres de pagos finales', phase: 'week_of', off: -3, sort_order: 15 },
+        { title: 'Entregar itinerario a staff el día del evento', phase: 'day_of', off: 0, sort_order: 16 },
+        { title: 'Devolver materiales y mobiliario rentado', phase: 'after', off: 2, sort_order: 17 },
+        { title: 'Pagar saldos finales a proveedores', phase: 'after', off: 3, sort_order: 18 },
+        { title: 'Enviar agradecimientos a los invitados', phase: 'after', off: 14, sort_order: 19 },
+        { title: 'Compartir fotos con proveedores y familia', phase: 'after', off: 21, sort_order: 20 },
+        { title: 'Dejar reseñas a tus proveedores', phase: 'after', off: 30, sort_order: 21 },
+    ],
+    dayOf: [
+        { section: 'preparativos', title: 'Despertar y desayunar', time: '08:00', sort_order: 1 },
+        { section: 'preparativos', title: 'Peluquería y maquillaje', time: '09:30', sort_order: 2 },
+        { section: 'preparativos', title: 'Vestirse', time: '12:00', sort_order: 3 },
+        { section: 'preparativos', title: 'Llega el fotógrafo (getting ready)', time: '13:00', sort_order: 4 },
+        { section: 'preparativos', title: 'Fotos previas y con la familia', time: '13:30', sort_order: 5 },
+        { section: 'montaje', title: 'Llegada de flores a iglesia', time: '09:00', sort_order: 1 },
+        { section: 'montaje', title: 'Montaje de salón y mobiliario', time: '11:00', sort_order: 2 },
+        { section: 'montaje', title: 'Prueba de sonido e iluminación', time: '15:00', sort_order: 3 },
+        { section: 'ceremonia', title: 'Llegan los invitados', time: '16:30', sort_order: 1 },
+        { section: 'ceremonia', title: 'Entrada del cortejo', time: '17:00', sort_order: 2 },
+        { section: 'ceremonia', title: 'Ceremonia religiosa', time: '17:15', sort_order: 3 },
+        { section: 'ceremonia', title: 'Salida, felicitaciones y cóctel', time: '18:00', sort_order: 4 },
+        { section: 'general', title: 'Entrada triunfal a la recepción', time: '19:15', sort_order: 1 },
+        { section: 'general', title: 'Primer baile', time: '19:35', sort_order: 2 },
+        { section: 'general', title: 'Banquete', time: '20:00', sort_order: 3 },
+        { section: 'general', title: 'Brindis', time: '20:40', sort_order: 4 },
+        { section: 'general', title: 'Fiesta', time: '21:20', sort_order: 5 },
+        { section: 'general', title: 'Partir el pastel', time: '22:30', sort_order: 6 },
+        { section: 'general', title: 'Cierre y gran salida', time: '23:30', sort_order: 7 },
+    ],
+    // Proveedores sugeridos: orientan qué hay que contratar. La pareja los edita o borra.
+    vendors: [
+        { name: 'Banquete', category: 'Banquete' },
+        { name: 'Fotografía y video', category: 'Fotografía y video' },
+        { name: 'Música / DJ', category: 'Música' },
+        { name: 'Flores y decoración', category: 'Flores' },
+        { name: 'Pastel y mesa de dulces', category: 'Pastel' },
+        { name: 'Venue / Salón', category: 'Venue' },
+        { name: 'Maquillaje y peinado', category: 'Belleza' },
+        { name: 'Vestido y traje', category: 'Vestuario' },
+        { name: 'Barra de bebidas', category: 'Bebidas' },
+        { name: 'Transporte', category: 'Transporte' },
+    ],
+};
+const SEED_VENDOR_NOTE = 'Sugerido — edítalo con los datos de tu proveedor real (o bórralo si no aplica).';
+
 export function usePlanning(eventId: string | undefined) {
     const isMock = isMockEvent(eventId);
     const [loading, setLoading] = useState(true);
@@ -116,6 +196,7 @@ export function usePlanning(eventId: string | undefined) {
     const [confirmed, setConfirmed] = useState(0);
     const [countdownDays, setCountdownDays] = useState(0);
     const [budgetGoal, setBudgetGoalState] = useState<number>(0);
+    const [eventDate, setEventDate] = useState<Date | null>(null);
 
     const load = useCallback(async () => {
         if (!eventId) return;
@@ -156,6 +237,7 @@ export function usePlanning(eventId: string | undefined) {
             const conf = (rs.data || []).reduce((n: number, r: any) => n + 1 + (r.plus_ones_confirmed || 0), 0);
             setConfirmed(conf);
             const date = ev.data?.date_time ? new Date(ev.data.date_time) : null;
+            setEventDate(date);
             setCountdownDays(date ? Math.max(0, Math.ceil((date.getTime() - Date.now()) / 86400000)) : 0);
         } catch (err) {
             console.error('[usePlanning] load error:', err);
@@ -227,11 +309,32 @@ export function usePlanning(eventId: string | undefined) {
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
             return;
         }
-        if (!eventId) return;
-        const { error } = await supabase.rpc('seed_planning_defaults', { p_event_id: eventId });
-        if (!error) await load();
-        return error;
-    }, [eventId, isMock, load]);
+        if (!eventId) return 'Sin evento seleccionado';
+        // Idempotente: si ya hay rubros, no re-sembramos.
+        const chk = await supabase.from('budget_rubros').select('id').eq('event_id', eventId).limit(1);
+        if (chk.error) return chk.error.message || 'No se pudo leer el presupuesto';
+        if (chk.data && chk.data.length) { await load(); return; }
+
+        const base = eventDate;
+        const dd = (off: number) => {
+            if (!base) return null;
+            const x = new Date(base); x.setDate(x.getDate() + off);
+            return x.toISOString().slice(0, 10);
+        };
+        const rubros = PLANNING_SEED.rubros.map(r => ({ event_id: eventId, name: r.name, location: r.location, benchmark_pct: r.benchmark_pct, is_external: r.is_external, sort_order: r.sort_order }));
+        const tasksSeed = PLANNING_SEED.tasks.map(t => ({ event_id: eventId, title: t.title, phase: t.phase, due_date: dd(t.off), source: 'template', sort_order: t.sort_order }));
+        const dayOfSeed = PLANNING_SEED.dayOf.map(d => ({ event_id: eventId, section: d.section, title: d.title, time: d.time, sort_order: d.sort_order }));
+        const vendorsSeed = PLANNING_SEED.vendors.map(v => ({ event_id: eventId, name: v.name, category: v.category, notes: SEED_VENDOR_NOTE }));
+
+        // El presupuesto es lo imprescindible; si falla, devolvemos el error real.
+        const r1 = await supabase.from('budget_rubros').insert(rubros);
+        if (r1.error) return r1.error.message || 'No se pudieron crear los rubros';
+        // El resto es best-effort (no bloquea si una tabla específica faltara).
+        await supabase.from('tasks').insert(tasksSeed);
+        await supabase.from('day_of_items').insert(dayOfSeed);
+        await supabase.from('vendors').insert(vendorsSeed);
+        await load();
+    }, [eventId, isMock, load, eventDate]);
 
     const addRubro = useCallback((name: string, estimated_amount: number, location: string | null) => {
         const row = { id: uid(), event_id: eventId, name, estimated_amount, location, is_external: false, sort_order: rubros.length + 1 };
