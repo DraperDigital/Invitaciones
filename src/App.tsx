@@ -94,7 +94,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { session, loading } = useAuth();
   const location = useLocation();
   if (loading) return <PageFallback />;
-  if (!session) {
+
+  // Rutas públicas dentro de /dashboard (el demo del planeador debe ser accesible para cualquiera sin login)
+  const isPublicDashboardRoute =
+    location.pathname === '/dashboard/planeacion' ||
+    location.pathname.startsWith('/dashboard/planeacion/') ||
+    location.pathname === '/dashboard/planeador' ||
+    location.pathname.startsWith('/dashboard/planeador/');
+
+  if (!session && !isPublicDashboardRoute) {
     const redirect = location.pathname + location.search;
     return <Navigate to={`/login?redirect=${encodeURIComponent(redirect)}`} replace />;
   }
@@ -181,7 +189,12 @@ function AppRoutes() {
         <Route path="/blog"                                element={<BlogIndex />} />
         <Route path="/blog/:slug"                          element={<BlogPost />} />
 
-        {/* Protected Dashboard Routes */}
+        {/* Public Planner Routes (direct access) */}
+        <Route path="/planeador"                           element={<Navigate to="/dashboard/planeacion/demo" replace />} />
+        <Route path="/planeacion"                          element={<Navigate to="/dashboard/planeacion/demo" replace />} />
+        <Route path="/planeador/:id"                       element={<Navigate to="/dashboard/planeacion/demo" replace />} />
+
+        {/* Protected Dashboard Routes (planeacion/demo is publicly allowed via ProtectedRoute) */}
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashboardLayout />
@@ -197,6 +210,8 @@ function AppRoutes() {
           <Route path="checkin/:eventId"      element={<CheckIn />} />
           <Route path="planeacion"            element={<Planning />} />
           <Route path="planeacion/:id"        element={<Planning />} />
+          <Route path="planeador"             element={<Navigate to="/dashboard/planeacion/demo" replace />} />
+          <Route path="planeador/:id"         element={<Navigate to="/dashboard/planeacion/demo" replace />} />
           <Route path="new"                   element={<EventWizard />} />
           <Route path="edit/:id"              element={<EventWizard />} />
           <Route path="design/:id"            element={<DesignEditor />} />

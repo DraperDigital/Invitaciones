@@ -88,11 +88,11 @@ const PlanningPage: React.FC = () => {
     const [userEvents, setUserEvents] = useState<any[]>([]);
     const [activeEvent, setActiveEvent] = useState<any>(null);
     const [eventId, setEventId] = useState<string | undefined>(
-        routeEventId || searchParams.get('event') || (isExplicitDemo ? 'demo' : undefined)
+        routeEventId || searchParams.get('event') || (isExplicitDemo || !user ? 'demo' : undefined)
     );
     const [tab, setTab] = useState<SubTab>('copiloto');
 
-    const isDemo = eventId === 'demo' || eventId === 'mock-event-id' || isExplicitDemo || isMockBackend || (!user && !routeEventId);
+    const isDemo = !user || eventId === 'demo' || eventId === 'mock-event-id' || isExplicitDemo || isMockBackend;
     const { hasFeature, currentPlan, isLoading: accessLoading } = useFeatureAccess(isDemo ? undefined : eventId, isDemo ? 'pro' : undefined);
     const planning = usePlanning(eventId || (isDemo ? 'demo' : undefined));
 

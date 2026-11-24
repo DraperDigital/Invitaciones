@@ -117,23 +117,46 @@ export default function DashboardLayout() {
                 </nav>
 
                 <div className="p-6 mt-auto border-t border-slate-800">
-                    <div className="flex items-center gap-3 mb-6 p-3 bg-white/5 rounded-2xl border border-white/5">
-                        <div className={`h-10 w-10 rounded-xl ${isCorporate ? 'bg-[#2563EB]' : 'bg-[#DF3B94]'} text-white flex items-center justify-center text-xs font-bold uppercase`}>
-                            {user?.email?.[0]}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                            <p className="text-xs font-bold truncate text-slate-200">{user?.email?.split('@')[0]}</p>
-                            <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
-                        </div>
-                    </div>
+                    {user ? (
+                        <>
+                            <div className="flex items-center gap-3 mb-6 p-3 bg-white/5 rounded-2xl border border-white/5">
+                                <div className={`h-10 w-10 rounded-xl ${isCorporate ? 'bg-[#2563EB]' : 'bg-[#DF3B94]'} text-white flex items-center justify-center text-xs font-bold uppercase`}>
+                                    {user?.email?.[0]}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-bold truncate text-slate-200">{user?.email?.split('@')[0]}</p>
+                                    <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
+                                </div>
+                            </div>
 
-                    <button
-                        onClick={handleSignOut}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl text-xs uppercase font-bold tracking-wider transition-all"
-                    >
-                        <LogOut className="h-4 w-4" />
-                        Cerrar Sesión
-                    </button>
+                            <button
+                                onClick={handleSignOut}
+                                className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl text-xs uppercase font-bold tracking-wider transition-all cursor-pointer"
+                            >
+                                <LogOut className="h-4 w-4" />
+                                Cerrar Sesión
+                            </button>
+                        </>
+                    ) : (
+                        <div className="space-y-3">
+                            <div className="p-3 bg-white/5 rounded-xl border border-white/10 text-center">
+                                <p className="text-xs font-semibold text-white">Modo Demo Invitto</p>
+                                <p className="text-[11px] text-slate-400 mt-0.5">Explorando el Planeador</p>
+                            </div>
+                            <Link
+                                to="/login"
+                                className={`w-full flex items-center justify-center gap-2 px-4 py-3 ${isCorporate ? 'bg-[#2563EB] hover:bg-[#1D4ED8]' : 'bg-[#DF3B94] hover:bg-[#C22D7F]'} text-white rounded-xl text-xs uppercase font-bold tracking-wider transition-all shadow-md`}
+                            >
+                                Iniciar Sesión / Registro
+                            </Link>
+                            <Link
+                                to="/"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-1.5 text-slate-400 hover:text-white text-xs transition-colors"
+                            >
+                                ← Volver al inicio
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </aside>
 
@@ -188,13 +211,32 @@ export default function DashboardLayout() {
                                 );
                             })}
                             <div className="pt-4 border-t border-slate-800">
-                                <button
-                                    onClick={handleSignOut}
-                                    className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 hover:text-rose-300 text-xs uppercase font-bold tracking-wider rounded-xl hover:bg-rose-500/10 transition-all cursor-pointer"
-                                >
-                                    <LogOut className="h-4 w-4" />
-                                    Cerrar Sesión
-                                </button>
+                                {user ? (
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="w-full flex items-center gap-3 px-4 py-3 text-rose-400 hover:text-rose-300 text-xs uppercase font-bold tracking-wider rounded-xl hover:bg-rose-500/10 transition-all cursor-pointer"
+                                    >
+                                        <LogOut className="h-4 w-4" />
+                                        Cerrar Sesión
+                                    </button>
+                                ) : (
+                                    <div className="space-y-2">
+                                        <Link
+                                            to="/login"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className={`w-full flex items-center justify-center gap-2 px-4 py-3 ${isCorporate ? 'bg-[#2563EB]' : 'bg-[#DF3B94]'} text-white rounded-xl text-xs uppercase font-bold tracking-wider`}
+                                        >
+                                            Iniciar Sesión / Registro
+                                        </Link>
+                                        <Link
+                                            to="/"
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-slate-400 text-xs"
+                                        >
+                                            ← Volver al inicio
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
