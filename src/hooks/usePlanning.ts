@@ -10,7 +10,12 @@ import { supabase } from '../lib/supabase';
 export const QUOTE_STATES = ['contactado', 'cotizado', 'contratado', 'descartado'] as const;
 export type QuoteState = typeof QUOTE_STATES[number];
 
-const isMock = !import.meta.env.VITE_SUPABASE_URL;
+export function isMockEvent(eventId: string | undefined): boolean {
+    if (!eventId) return true;
+    if (eventId === 'demo' || eventId === 'mock-event-id' || eventId.startsWith('demo-')) return true;
+    return !import.meta.env.VITE_SUPABASE_URL;
+}
+
 const uid = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()));
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -85,6 +90,7 @@ function mockSeed() {
 }
 
 export function usePlanning(eventId: string | undefined) {
+    const isMock = isMockEvent(eventId);
     const [loading, setLoading] = useState(true);
     const [rubros, setRubros] = useState<any[]>([]);
     const [vendors, setVendors] = useState<any[]>([]);
@@ -191,12 +197,19 @@ export function usePlanning(eventId: string | undefined) {
     }
 
     const seedDefaults = useCallback(async () => {
-        if (isMock) { const s = mockSeed(); setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes); setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf); return; }
+        if (isMock) {
+            const s = mockSeed();
+            setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes);
+            setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf);
+            setNotes(s.notes); setGifts(s.gifts);
+            setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
+            return;
+        }
         if (!eventId) return;
         const { error } = await supabase.rpc('seed_planning_defaults', { p_event_id: eventId });
         if (!error) await load();
         return error;
-    }, [eventId, load]);
+    }, [eventId, isMock, load]);
 
     const addRubro = useCallback((name: string, estimated_amount: number, location: string | null) => {
         const row = { id: uid(), event_id: eventId, name, estimated_amount, location, is_external: false, sort_order: rubros.length + 1 };
@@ -298,6 +311,7 @@ export function usePlanning(eventId: string | undefined) {
             () => supabase.from('gifts').delete().eq('id', id)), []);
 
     return {
+        isMock,
         loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, confirmed, countdownDays,
         chosenByRubro, minQuoteByRubro, totals, upcomingPayments, nextPayment, overdueCount, openTasks,
         reload: load,

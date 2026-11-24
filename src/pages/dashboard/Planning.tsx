@@ -82,38 +82,47 @@ const PlanningPage: React.FC = () => {
     const { user } = useAuth();
     const toast = useToast();
 
+    const isExplicitDemo = routeEventId === 'demo' || searchParams.get('demo') === 'true' || searchParams.get('event') === 'demo';
+    const isMockBackend = !import.meta.env.VITE_SUPABASE_URL;
+
     const [userEvents, setUserEvents] = useState<any[]>([]);
     const [activeEvent, setActiveEvent] = useState<any>(null);
-    const [eventId, setEventId] = useState<string | undefined>(routeEventId || searchParams.get('event') || undefined);
+    const [eventId, setEventId] = useState<string | undefined>(
+        routeEventId || searchParams.get('event') || (isExplicitDemo ? 'demo' : undefined)
+    );
     const [tab, setTab] = useState<SubTab>('copiloto');
 
-    const mockMode = !import.meta.env.VITE_SUPABASE_URL;
-    const { hasFeature, currentPlan, isLoading: accessLoading } = useFeatureAccess(eventId, mockMode ? 'pro' : undefined);
-    const planning = usePlanning(eventId);
+    const isDemo = eventId === 'demo' || eventId === 'mock-event-id' || isExplicitDemo || isMockBackend || (!user && !routeEventId);
+    const { hasFeature, currentPlan, isLoading: accessLoading } = useFeatureAccess(isDemo ? undefined : eventId, isDemo ? 'pro' : undefined);
+    const planning = usePlanning(eventId || (isDemo ? 'demo' : undefined));
 
     useEffect(() => {
-        if (!user) return;
-        if (mockMode) {
-            setUserEvents([{ id: 'mock-event-id', title: 'Boda Ana & Luis (demo)' }]);
-            if (!eventId) setEventId('mock-event-id');
+        const demoOption = { id: 'demo', title: '🎯 Boda Demo (Datos de prueba · Mock)' };
+        if (!user || isMockBackend) {
+            setUserEvents([demoOption]);
+            if (!eventId) setEventId('demo');
             return;
         }
         (async () => {
             const { data } = await supabase.from('events').select('id,title')
                 .eq('user_id', user.id).order('created_at', { ascending: false });
-            setUserEvents(data || []);
+            const list = [...(data || []), demoOption];
+            setUserEvents(list);
             if (!eventId) {
                 const stored = localStorage.getItem(`last_managed_event_id_${user.id}`);
-                const next = stored || data?.[0]?.id;
-                if (next) setEventId(next);
+                const next = stored || data?.[0]?.id || 'demo';
+                setEventId(next);
             }
         })();
-    }, [user]);
+    }, [user, isMockBackend]);
 
     useEffect(() => {
-        if (!eventId) return;
-        if (mockMode) {
-            setActiveEvent({ title: 'Boda Ana & Luis', date_time: new Date(Date.now() + 86 * 86400000).toISOString(), venue_name: 'Jardín Los Encinos' });
+        if (!eventId || eventId === 'demo' || eventId === 'mock-event-id') {
+            setActiveEvent({
+                title: 'Boda Ana & Luis',
+                date_time: new Date(Date.now() + 86 * 86400000).toISOString(),
+                venue_name: 'Hacienda Los Encinos, Cuernavaca'
+            });
             return;
         }
         supabase.from('events').select('title,date_time,venue_name').eq('id', eventId).maybeSingle()
@@ -123,13 +132,27 @@ const PlanningPage: React.FC = () => {
     const handleEventChange = (id: string) => {
         if (!id) return;
         setEventId(id);
-        if (user) localStorage.setItem(`last_managed_event_id_${user.id}`, id);
-        navigate(`/dashboard/planeacion/${id}`);
+        if (user && id !== 'demo') localStorage.setItem(`last_managed_event_id_${user.id}`, id);
+        navigate(id === 'demo' ? `/dashboard/planeacion/demo` : `/dashboard/planeacion/${id}`);
     };
 
-    const locked = !accessLoading && !hasFeature('event_planning');
+    const locked = !isDemo && !accessLoading && !hasFeature('event_planning');
 
-    if (!user) return <div className="py-20 text-center text-stone-500">Inicia sesión para ver tu planeación.</div>;
+    if (!user && !isDemo) {
+        return (
+            <div className="py-20 text-center text-stone-500 space-y-4">
+                <p>Inicia sesión para ver tu planeación o explora el demo con datos de prueba.</p>
+                <div className="flex items-center justify-center gap-3">
+                    <Link to="/login" className="px-5 py-2.5 bg-[#DF3B94] text-white rounded-xl text-xs font-bold uppercase tracking-wider no-underline">
+                        Iniciar sesión
+                    </Link>
+                    <Link to="/dashboard/planeacion/demo" className="px-5 py-2.5 bg-stone-100 text-stone-800 rounded-xl text-xs font-bold uppercase tracking-wider no-underline">
+                        Ver Demo con Datos Mock
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     if (!eventId) {
         return (
@@ -148,7 +171,14 @@ const PlanningPage: React.FC = () => {
         <div className="space-y-6 sm:space-y-8">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                    <p className="text-[10px] uppercase font-bold tracking-widest" style={{ color: PINK }}>Planeación · Premium</p>
+                    <p className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-2" style={{ color: PINK }}>
+                        <span>Planeación · Premium</span>
+                        {isDemo && (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[9px] font-mono font-bold tracking-normal border border-amber-200">
+                                Datos de prueba · Mock
+                            </span>
+                        )}
+                    </p>
                     <div className="relative inline-block">
                         <select value={eventId} onChange={(e) => handleEventChange(e.target.value)}
                             className="pr-8 text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
@@ -159,6 +189,41 @@ const PlanningPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Banner de aviso: Datos Mock / Prueba */}
+            {isDemo && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3.5 bg-amber-500/10 border border-amber-500/25 rounded-2xl text-amber-900 text-xs">
+                    <div className="flex items-start sm:items-center gap-2.5">
+                        <span className="flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse mt-0.5 sm:mt-0 shrink-0" />
+                        <div>
+                            <span className="font-bold uppercase tracking-wider text-[11px] block sm:inline mr-2 text-amber-950">
+                                Modo Demostración · Datos de prueba (mock):
+                            </span>
+                            <span className="text-stone-700 font-normal">
+                                Todos los presupuestos, proveedores, cotizaciones, pagos e itinerarios mostrados son ficticios. Puedes probar añadir, editar o marcar pagos libremente.
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                        <button
+                            type="button"
+                            onClick={() => { planning.seedDefaults(); toast.success('Datos de prueba reiniciados'); }}
+                            className="px-3 py-1.5 bg-white hover:bg-stone-50 border border-amber-300 text-amber-900 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-2xs cursor-pointer"
+                            title="Restaurar datos de prueba originales"
+                        >
+                            Reiniciar datos demo
+                        </button>
+                        {!user && (
+                            <Link
+                                to="/login"
+                                className="px-3 py-1.5 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-2xs no-underline"
+                            >
+                                Iniciar sesión
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {locked ? (
                 <UpgradeState planName={currentPlan?.name} />

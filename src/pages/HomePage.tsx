@@ -775,7 +775,7 @@ export default function HomePage() {
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                             <Link
-                                to="/dashboard/planeacion"
+                                to="/dashboard/planeacion/demo"
                                 className="min-h-[44px] px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
                             >
                                 <span>Ver Demo del Planeador</span>
