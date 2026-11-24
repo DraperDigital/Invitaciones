@@ -55,6 +55,7 @@
   },
   "overrides": {
     "esbuild": "^0.28.2",
-    "ts-deepmerge": "^8.0.0"
+    "ts-deepmerge": "^8.0.0",
+    "dompurify": "^3.5.0"
   }
 }
