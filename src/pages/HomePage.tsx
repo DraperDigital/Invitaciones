@@ -676,8 +676,10 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                {/* 2. Top-Right Floating Card: Live RSVP Counter */}
-                                <div className="absolute -top-4 -right-2 lg:-right-10 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] xs:w-[260px] animate-fade-in pointer-events-none sm:pointer-events-auto">
+                                {/* --- Tarjetas Flotantes en Desktop (Ubicadas a los costados para no tapar la invitación) --- */}
+
+                                {/* 1. Desktop: Top-Right Floating Card (RSVP en Vivo) */}
+                                <div className="hidden lg:block lg:absolute lg:-right-14 xl:-right-20 lg:top-6 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] animate-fade-in">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
                                             <span className="h-2.5 w-2.5 rounded-full bg-[#4E7B55] animate-pulse" />
@@ -702,8 +704,8 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                {/* 3. Bottom-Left Floating Card: QR Digital Pass */}
-                                <div className="absolute bottom-12 -left-4 lg:-left-12 z-30 p-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[230px] xs:w-[250px] pointer-events-none sm:pointer-events-auto">
+                                {/* 2. Desktop: Bottom-Left Floating Card (Pase QR) */}
+                                <div className="hidden lg:block lg:absolute lg:-left-14 xl:-left-20 lg:bottom-14 z-30 p-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[230px]">
                                     <div className="flex items-center gap-3">
                                         <div className="h-12 w-12 rounded-2xl bg-slate-900 p-2 flex flex-wrap gap-1 items-center justify-center shrink-0">
                                             <div className="w-3 h-3 bg-white rounded-sm" />
@@ -719,9 +721,22 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                {/* 4. Bottom-Right GPS Pill */}
-                                <div className="absolute bottom-4 right-4 z-30 px-4 py-2 bg-[#222B38] text-white rounded-full shadow-xl border border-white/10 text-xs font-bold flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
+                                {/* 3. Desktop: Bottom-Right GPS Pill */}
+                                <div className="hidden lg:flex lg:absolute lg:-bottom-2 lg:right-2 z-30 px-4 py-2 bg-[#222B38] text-white rounded-full shadow-xl border border-white/10 text-xs font-bold items-center gap-2">
                                     <span className="text-[#F5B837]">📍</span> Waze & Maps integrado
+                                </div>
+
+                                {/* --- Badges sutiles en Móvil (en los bordes del marco sin tapar foto ni textos) --- */}
+                                <div className="lg:hidden absolute -top-3 right-2 z-30 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-md border border-slate-200/80 flex items-center gap-1.5 text-[10px] font-bold text-slate-800">
+                                    <span className="h-2 w-2 rounded-full bg-[#4E7B55] animate-pulse" />
+                                    <span>RSVP 84%</span>
+                                    <span className="text-slate-400 font-normal">· 142 van</span>
+                                </div>
+
+                                <div className="lg:hidden absolute -bottom-3 left-2 z-30 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-md border border-slate-200/80 flex items-center gap-1.5 text-[10px] font-bold text-slate-800">
+                                    <span className="text-xs">🎟️</span>
+                                    <span>Pase QR</span>
+                                    <span className="text-slate-400 font-normal">· Mesa 12</span>
                                 </div>
 
                                 {/* Slider Controls: Dots + Prev/Next Buttons */}
@@ -755,6 +770,19 @@ export default function HomePage() {
                                     >
                                         <ArrowRight className="h-4 w-4" />
                                     </button>
+                                </div>
+
+                                {/* Resumen de funciones en móvil (debajo de los controles, limpio y ordenado) */}
+                                <div className="lg:hidden mt-3 flex flex-wrap items-center justify-center gap-2 text-[11px]">
+                                    <span className="px-3 py-1 bg-white rounded-full border border-slate-200 shadow-2xs text-slate-700 font-medium flex items-center gap-1.5">
+                                        <span className="h-2 w-2 rounded-full bg-[#4E7B55]" /> 84% confirmados en vivo
+                                    </span>
+                                    <span className="px-3 py-1 bg-white rounded-full border border-slate-200 shadow-2xs text-slate-700 font-medium flex items-center gap-1.5">
+                                        <span>🎟️</span> Pases QR
+                                    </span>
+                                    <span className="px-3 py-1 bg-white rounded-full border border-slate-200 shadow-2xs text-slate-700 font-medium flex items-center gap-1.5">
+                                        <span>📍</span> Waze & Maps
+                                    </span>
                                 </div>
 
                             </div>
