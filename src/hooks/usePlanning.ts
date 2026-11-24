@@ -86,7 +86,13 @@ function mockSeed() {
         { id: 'n1', title: 'Pendiente con el banquete', body: 'Preguntar si el menú infantil entra sin costo y confirmar opción vegetariana.', created_at: '2026-11-10' },
         { id: 'n2', title: 'Idea de decoración', body: 'Centros de mesa con eucalipto y velas; cotizar con Flores Primavera.', created_at: '2026-11-12' },
     ];
-    return { rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, confirmed: 112, countdownDays: 86 };
+    const rentalItems = [
+        { id: 'm1', name: 'Sillas Tiffany', qty: 120, vendor_id: 'v1', status: 'pending', notes: 'Doradas', sort_order: 1 },
+        { id: 'm2', name: 'Mantelería larga', qty: 15, vendor_id: null, status: 'pending', notes: 'Color hueso', sort_order: 2 },
+        { id: 'm3', name: 'Vajilla y cristalería', qty: 120, vendor_id: 'v1', status: 'pending', notes: '', sort_order: 3 },
+        { id: 'm4', name: 'Pista de baile', qty: 1, vendor_id: null, status: 'returned', notes: '5x5 m', sort_order: 4 },
+    ];
+    return { rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed: 112, countdownDays: 86 };
 }
 
 export function usePlanning(eventId: string | undefined) {
@@ -100,6 +106,7 @@ export function usePlanning(eventId: string | undefined) {
     const [dayOf, setDayOf] = useState<any[]>([]);
     const [notes, setNotes] = useState<any[]>([]);
     const [gifts, setGifts] = useState<any[]>([]);
+    const [rentalItems, setRentalItems] = useState<any[]>([]);
     const [confirmed, setConfirmed] = useState(0);
     const [countdownDays, setCountdownDays] = useState(0);
 
@@ -111,13 +118,14 @@ export function usePlanning(eventId: string | undefined) {
             const s = mockSeed();
             setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes);
             setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf); setNotes(s.notes); setGifts(s.gifts);
+            setRentalItems(s.rentalItems);
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
             setLoading(false);
             return;
         }
 
         try {
-            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi] = await Promise.all([
+            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi, mi] = await Promise.all([
                 supabase.from('budget_rubros').select('*').eq('event_id', eventId).order('sort_order'),
                 supabase.from('vendors').select('*').eq('event_id', eventId).order('created_at'),
                 supabase.from('quotes').select('*').eq('event_id', eventId).order('created_at'),
@@ -128,9 +136,11 @@ export function usePlanning(eventId: string | undefined) {
                 supabase.from('rsvps').select('status, plus_ones_confirmed').eq('event_id', eventId).eq('status', 'yes'),
                 supabase.from('notes').select('*').eq('event_id', eventId).order('created_at', { ascending: false }),
                 supabase.from('gifts').select('*').eq('event_id', eventId).order('created_at', { ascending: false }),
+                supabase.from('rental_items').select('*').eq('event_id', eventId).order('sort_order'),
             ]);
             setRubros(ru.data || []); setVendors(ve.data || []); setQuotes(qu.data || []);
             setPayments(pa.data || []); setTasks(ta.data || []); setDayOf(dy.data || []); setNotes(no.data || []); setGifts(gi.data || []);
+            setRentalItems(mi.data || []);
             const conf = (rs.data || []).reduce((n: number, r: any) => n + 1 + (r.plus_ones_confirmed || 0), 0);
             setConfirmed(conf);
             const date = ev.data?.date_time ? new Date(ev.data.date_time) : null;
@@ -201,7 +211,7 @@ export function usePlanning(eventId: string | undefined) {
             const s = mockSeed();
             setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes);
             setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf);
-            setNotes(s.notes); setGifts(s.gifts);
+            setNotes(s.notes); setGifts(s.gifts); setRentalItems(s.rentalItems);
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
             return;
         }
@@ -310,15 +320,76 @@ export function usePlanning(eventId: string | undefined) {
         run(() => setGifts(p => p.filter(g => g.id !== id)),
             () => supabase.from('gifts').delete().eq('id', id)), []);
 
+    // ── Reordenar (persiste sort_order = posición) ────────────────────────────
+    const persistOrder = async (table: string, orderedIds: string[]) => {
+        if (isMock) return;
+        // Una actualización por fila movida; sort_order = índice (1-based).
+        await Promise.all(orderedIds.map((id, i) =>
+            supabase.from(table).update({ sort_order: i + 1 }).eq('id', id)));
+    };
+    const reorderRubros = useCallback((ordered: any[]) => {
+        setRubros(ordered.map((r, i) => ({ ...r, sort_order: i + 1 })));
+        persistOrder('budget_rubros', ordered.map(r => r.id));
+    }, [isMock]);
+    const reorderTasks = useCallback((phase: string, ordered: any[]) => {
+        // Reordena solo dentro de una fase; el resto queda igual.
+        setTasks(p => {
+            const others = p.filter(t => (t.phase || 'sin_fase') !== phase);
+            const reordered = ordered.map((t, i) => ({ ...t, sort_order: i + 1 }));
+            return [...others, ...reordered];
+        });
+        persistOrder('tasks', ordered.map(t => t.id));
+    }, [isMock]);
+
+    // ── Materiales / inventario de alquiler ───────────────────────────────────
+    const addRentalItem = useCallback((item: { name: string; qty?: number; vendor_id?: string | null; notes?: string }) => {
+        const row = { id: uid(), event_id: eventId, status: 'pending', notes: '', qty: 1, vendor_id: null, sort_order: rentalItems.length + 1, ...item };
+        return run(() => setRentalItems(p => [...p, row]),
+            () => supabase.from('rental_items').insert([{ event_id: eventId, name: item.name, qty: item.qty ?? 1, vendor_id: item.vendor_id ?? null, notes: item.notes ?? '', sort_order: rentalItems.length + 1 }]));
+    }, [eventId, rentalItems]);
+
+    const updateRentalItem = useCallback((id: string, patch: Record<string, any>) =>
+        run(() => setRentalItems(p => p.map(m => m.id === id ? { ...m, ...patch } : m)),
+            () => supabase.from('rental_items').update(patch).eq('id', id)), []);
+
+    const toggleReturned = useCallback((id: string, returned: boolean) =>
+        run(() => setRentalItems(p => p.map(m => m.id === id ? { ...m, status: returned ? 'returned' : 'pending' } : m)),
+            () => supabase.from('rental_items').update({ status: returned ? 'returned' : 'pending' }).eq('id', id)), []);
+
+    const deleteRentalItem = useCallback((id: string) =>
+        run(() => setRentalItems(p => p.filter(m => m.id !== id)),
+            () => supabase.from('rental_items').delete().eq('id', id)), []);
+
+    // ── Compartir el plan (enlace de solo lectura) ────────────────────────────
+    const getOrCreateShare = useCallback(async (): Promise<string | null> => {
+        if (isMock) return 'demo-token-ejemplo';
+        if (!eventId) return null;
+        const { data: existing } = await supabase.from('planning_shares')
+            .select('token').eq('event_id', eventId).eq('revoked', false).limit(1).maybeSingle();
+        if (existing?.token) return existing.token;
+        const { data, error } = await supabase.from('planning_shares')
+            .insert([{ event_id: eventId }]).select('token').single();
+        if (error) { console.error('[usePlanning] share error:', error); return null; }
+        return data?.token ?? null;
+    }, [eventId, isMock]);
+
+    const revokeShare = useCallback(async () => {
+        if (isMock || !eventId) return;
+        await supabase.from('planning_shares').update({ revoked: true })
+            .eq('event_id', eventId).eq('revoked', false);
+    }, [eventId, isMock]);
+
     return {
         isMock,
-        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, confirmed, countdownDays,
+        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed, countdownDays,
         chosenByRubro, minQuoteByRubro, totals, upcomingPayments, nextPayment, overdueCount, openTasks,
         reload: load,
         seedDefaults, addRubro, updateRubroEstimate, addVendor, updateVendor, deleteVendor,
         addQuote, setQuoteStatus, chooseQuote, addPayment, markPaymentPaid,
-        addTask, toggleTask, toggleDayOf,
+        addTask, toggleTask, toggleDayOf, reorderRubros, reorderTasks,
         addNote, updateNote, deleteNote,
         addGift, toggleThanked, deleteGift,
+        addRentalItem, updateRentalItem, toggleReturned, deleteRentalItem,
+        getOrCreateShare, revokeShare,
     };
 }

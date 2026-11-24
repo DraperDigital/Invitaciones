@@ -3,8 +3,10 @@ import { useParams, useSearchParams, useNavigate, Link } from 'react-router-dom'
 import {
     Compass, Wallet, Store, ListChecks, CalendarHeart, Crown, ChevronDown, ChevronRight,
     CalendarClock, AlertTriangle, CheckCircle2, Circle, Plus, Sparkles, Phone, Check,
-    MapPin, Trash2, Pencil, CalendarDays, Download, StickyNote, Gift,
+    MapPin, Trash2, Pencil, CalendarDays, Download, StickyNote, Gift, Boxes, GripVertical,
+    Share2, Link2, X,
 } from 'lucide-react';
+import { Reorder, useDragControls } from 'framer-motion';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { supabase } from '../../lib/supabase';
@@ -72,8 +74,76 @@ const QUOTE_CHIP: Record<QuoteState, { bg: string; fg: string; label: string }> 
     descartado: { bg: '#fafaf9', fg: '#a8a29e', label: 'Descartado' },
 };
 
-type SubTab = 'copiloto' | 'presupuesto' | 'proveedores' | 'pendientes' | 'dia' | 'notas' | 'despues';
+type SubTab = 'copiloto' | 'presupuesto' | 'proveedores' | 'pendientes' | 'materiales' | 'dia' | 'notas' | 'despues';
 type Planning = ReturnType<typeof usePlanning>;
+
+// ── Compartir el plan (enlace de solo lectura) ─────────────────────────────────
+const ShareButton: React.FC<{ planning: Planning; isDemo: boolean; toast: any }> = ({ planning, isDemo, toast }) => {
+    const [open, setOpen] = useState(false);
+    const [url, setUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [copied, setCopied] = useState(false);
+
+    const openPanel = async () => {
+        const next = !open;
+        setOpen(next);
+        if (!next || url || loading) return;
+        setLoading(true);
+        const token = await planning.getOrCreateShare();
+        setLoading(false);
+        if (token) setUrl(`${window.location.origin}/plan/${token}`);
+        else toast.error('No se pudo crear el enlace');
+    };
+    const copy = async () => {
+        if (!url) return;
+        try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2000); toast.success('Enlace copiado'); }
+        catch { toast.error('No se pudo copiar'); }
+    };
+    const revoke = async () => {
+        if (isDemo) { setUrl(null); setOpen(false); return; }
+        if (!window.confirm('¿Desactivar el enlace? Dejará de funcionar para quien lo tenga.')) return;
+        await planning.revokeShare();
+        setUrl(null); setOpen(false); toast.success('Enlace desactivado');
+    };
+
+    return (
+        <div className="relative shrink-0 self-start">
+            <button onClick={openPanel}
+                className="flex items-center gap-2 rounded-2xl border border-stone-200 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-stone-600 hover:border-[#DF3B94] hover:text-[#DF3B94] cursor-pointer">
+                <Share2 className="h-4 w-4" /> Compartir
+            </button>
+            {open && (
+                <div className="absolute right-0 z-30 mt-2 w-[min(20rem,88vw)] rounded-2xl border border-stone-200 bg-white p-4 shadow-xl">
+                    <div className="mb-2 flex items-center justify-between">
+                        <p className="text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>Compartir plan</p>
+                        <button onClick={() => setOpen(false)} className="text-stone-400 hover:text-stone-600" aria-label="Cerrar"><X className="h-4 w-4" /></button>
+                    </div>
+                    <p className="mb-3 text-xs text-stone-500">
+                        Cualquiera con este enlace ve el plan en <span className="font-bold">solo lectura</span>, sin iniciar sesión.
+                        {isDemo ? ' En el demo el enlace es de ejemplo.' : ''}
+                    </p>
+                    {loading ? (
+                        <p className="py-3 text-center text-sm text-stone-400">Generando enlace…</p>
+                    ) : url ? (
+                        <>
+                            <div className="flex items-center gap-2 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2">
+                                <Link2 className="h-4 w-4 shrink-0 text-stone-400" />
+                                <input readOnly value={url} onFocus={e => e.currentTarget.select()}
+                                    className="min-w-0 flex-1 bg-transparent text-xs text-stone-600 outline-none" />
+                                <button onClick={copy} className="shrink-0 rounded-lg px-2.5 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: PINK }}>
+                                    {copied ? 'Copiado' : 'Copiar'}
+                                </button>
+                            </div>
+                            <button onClick={revoke} className="mt-2 text-[11px] font-bold text-rose-500 hover:text-rose-700 cursor-pointer">Desactivar enlace</button>
+                        </>
+                    ) : (
+                        <p className="py-3 text-center text-sm text-stone-400">No se pudo generar el enlace.</p>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const PlanningPage: React.FC = () => {
     const { id: routeEventId } = useParams<{ id: string }>();
@@ -195,6 +265,7 @@ const PlanningPage: React.FC = () => {
                         </div>
                     )}
                 </div>
+                {!locked && <ShareButton planning={planning} isDemo={isDemo} toast={toast} />}
             </div>
 
             {/* Banner de aviso: Datos Mock / Prueba */}
@@ -245,6 +316,7 @@ const PlanningPage: React.FC = () => {
                             {tab === 'presupuesto' && <Presupuesto planning={planning} toast={toast} />}
                             {tab === 'proveedores' && <Proveedores planning={planning} toast={toast} />}
                             {tab === 'pendientes' && <Pendientes planning={planning} toast={toast} />}
+                            {tab === 'materiales' && <Materiales planning={planning} toast={toast} />}
                             {tab === 'dia' && <DiaB planning={planning} event={activeEvent} />}
                             {tab === 'notas' && <Notas planning={planning} toast={toast} />}
                             {tab === 'despues' && <DespuesBoda planning={planning} toast={toast} />}
@@ -281,6 +353,7 @@ const SubTabs: React.FC<{ tab: SubTab; setTab: (t: SubTab) => void; planning: Pl
         { key: 'presupuesto', label: 'Presupuesto', icon: Wallet },
         { key: 'proveedores', label: 'Proveedores', icon: Store },
         { key: 'pendientes', label: 'Pendientes', icon: ListChecks, badge: planning.openTasks || undefined },
+        { key: 'materiales', label: 'Materiales', icon: Boxes },
         { key: 'dia', label: 'Día B', icon: CalendarHeart },
         { key: 'notas', label: 'Notas', icon: StickyNote },
         { key: 'despues', label: 'Después', icon: Gift },
@@ -313,6 +386,77 @@ const StatCard: React.FC<{ label: string; value: string; hint?: string; accent?:
         {hint && <p className="mt-1 text-[11px] sm:text-xs text-stone-400 truncate">{hint}</p>}
     </div>
 );
+
+// Roadmap visual: línea de tiempo de las fases con avance por fase.
+const ROADMAP_PHASES = PHASES.filter(p => p.key !== 'sin_fase');
+const Roadmap: React.FC<{ planning: Planning; setTab: (t: SubTab) => void }> = ({ planning, setTab }) => {
+    const { tasks } = planning;
+    const stats = ROADMAP_PHASES.map(p => {
+        const items = tasks.filter(t => (t.phase || 'sin_fase') === p.key);
+        const done = items.filter(t => t.is_done).length;
+        const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+        const nextDue = items.filter(t => !t.is_done && t.due_date).sort((a, b) => (a.due_date < b.due_date ? -1 : 1))[0]?.due_date;
+        return { ...p, total: items.length, done, pct, nextDue, complete: items.length > 0 && done === items.length };
+    });
+    // La fase "actual" = la primera con tareas que aún no está completa.
+    const currentIdx = stats.findIndex(s => s.total > 0 && !s.complete);
+
+    if (!tasks.length) return null;
+
+    return (
+        <div className="rounded-3xl border border-stone-200 bg-white p-5 sm:p-6">
+            <div className="mb-5 flex items-center justify-between">
+                <h3 className="font-display font-extrabold" style={{ color: DARK }}>Ruta de planeación</h3>
+                <button onClick={() => setTab('pendientes')} className="text-xs font-bold" style={{ color: PINK }}>Ver todo →</button>
+            </div>
+            {/* Desktop: stepper horizontal */}
+            <div className="hidden sm:flex items-start justify-between gap-1">
+                {stats.map((s, i) => {
+                    const active = i === currentIdx;
+                    const past = currentIdx === -1 || i < currentIdx || s.complete;
+                    return (
+                        <React.Fragment key={s.key}>
+                            <button onClick={() => setTab('pendientes')} className="group flex flex-1 flex-col items-center gap-2 min-w-0 cursor-pointer">
+                                <span className="flex h-10 w-10 items-center justify-center rounded-2xl text-sm font-display font-black transition-all"
+                                    style={past ? { background: '#dcfce7', color: '#166534' } : active ? { background: PINK, color: '#fff' } : { background: '#f5f5f4', color: '#a8a29e' }}>
+                                    {s.complete ? <Check className="h-5 w-5" /> : s.total || '·'}
+                                </span>
+                                <span className="text-center text-[10px] uppercase font-bold tracking-wider leading-tight" style={{ color: active ? PINK : past ? DARK : '#a8a29e' }}>{s.label}</span>
+                                <span className="text-[9px] text-stone-400">{s.total ? `${s.done}/${s.total}` : '—'}</span>
+                                {active && s.nextDue && <span className="text-[9px] text-stone-400">prox. {fmtShort(s.nextDue)}</span>}
+                            </button>
+                            {i < stats.length - 1 && <span className="mt-5 h-0.5 flex-1 rounded-full" style={{ background: i < currentIdx || currentIdx === -1 ? '#86efac' : '#e7e5e4' }} />}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+            {/* Mobile: lista vertical compacta */}
+            <div className="sm:hidden space-y-2.5">
+                {stats.map((s, i) => {
+                    const active = i === currentIdx;
+                    const past = s.complete;
+                    return (
+                        <button key={s.key} onClick={() => setTab('pendientes')}
+                            className="flex w-full items-center gap-3 rounded-2xl border p-2.5 text-left cursor-pointer"
+                            style={{ borderColor: active ? `${PINK}55` : '#f5f5f4', background: active ? `${PINK}0d` : '#fff' }}>
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-display font-black"
+                                style={past ? { background: '#dcfce7', color: '#166534' } : active ? { background: PINK, color: '#fff' } : { background: '#f5f5f4', color: '#a8a29e' }}>
+                                {s.complete ? <Check className="h-4 w-4" /> : s.total || '·'}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                                <span className="block text-xs font-bold uppercase tracking-wider" style={{ color: active ? PINK : DARK }}>{s.label}</span>
+                                <span className="block text-[10px] text-stone-400">{s.total ? `${s.done} de ${s.total} hechas` : 'Sin tareas'}{active && s.nextDue ? ` · prox. ${fmtShort(s.nextDue)}` : ''}</span>
+                            </span>
+                            <div className="h-1.5 w-14 shrink-0 overflow-hidden rounded-full bg-stone-100">
+                                <div className="h-full rounded-full" style={{ width: `${s.pct}%`, background: past ? '#22c55e' : PINK }} />
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
 
 const Copiloto: React.FC<{ planning: Planning; setTab: (t: SubTab) => void; event: any }> = ({ planning, setTab, event }) => {
     const { totals, confirmed, countdownDays, nextPayment, overdueCount, tasks, vendors } = planning;
@@ -375,6 +519,8 @@ const Copiloto: React.FC<{ planning: Planning; setTab: (t: SubTab) => void; even
                 </div>
                 <p className="mt-2 text-xs text-stone-400">{doneTasks} de {tasks.length} hechas</p>
             </div>
+
+            <Roadmap planning={planning} setTab={setTab} />
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard label="Confirmados (RSVP)" value={`${confirmed}`} hint="En vivo" />
@@ -441,12 +587,13 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                             <Plus className="h-4 w-4" /> Agregar
                         </button>
                     </div>
-                    <div className="space-y-2">
+                    {rubros.length > 1 && <p className="px-1 text-[10px] uppercase tracking-wider text-stone-300">Arrastra <GripVertical className="inline h-3 w-3" /> para reordenar</p>}
+                    <Reorder.Group as="div" axis="y" values={rubros} onReorder={planning.reorderRubros} className="space-y-2">
                         {rubros.map(r => (
                             <RubroRow key={r.id} rubro={r} planning={planning} toast={toast}
                                 expanded={open === r.id} onToggle={() => setOpen(open === r.id ? null : r.id)} />
                         ))}
-                    </div>
+                    </Reorder.Group>
                 </>
             ) : (
                 <PagosCalendar planning={planning} toast={toast} />
@@ -518,6 +665,7 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
 
     const [qv, setQv] = useState(''); const [qa, setQa] = useState(''); const [qs, setQs] = useState<QuoteState>('cotizado');
     const [pl, setPl] = useState(''); const [pa, setPa] = useState(''); const [pd, setPd] = useState('');
+    const dragControls = useDragControls();
 
     const vendorName = (id: string) => vendors.find(v => v.id === id)?.name || '—';
     const myPayments = chosen ? payments.filter(p => p.quote_id === chosen.id) : [];
@@ -534,8 +682,15 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
     };
 
     return (
-        <div className="rounded-2xl border border-stone-200 bg-white min-w-0 overflow-hidden shadow-2xs">
-            <button onClick={onToggle} className="w-full text-left p-3.5 sm:px-5 sm:py-4 transition-colors hover:bg-stone-50/50 cursor-pointer">
+        <Reorder.Item value={rubro} dragListener={false} dragControls={dragControls}
+            className="rounded-2xl border border-stone-200 bg-white min-w-0 overflow-hidden shadow-2xs list-none">
+          <div className="flex items-stretch">
+            <span onPointerDown={e => dragControls.start(e)}
+                className="flex shrink-0 cursor-grab touch-none items-center px-1 sm:px-1.5 text-stone-300 hover:text-stone-500 active:cursor-grabbing"
+                title="Arrastra para reordenar" aria-label="Reordenar rubro">
+                <GripVertical className="h-4 w-4" />
+            </span>
+            <button onClick={onToggle} className="flex-1 min-w-0 text-left p-3.5 pl-1 sm:px-5 sm:py-4 sm:pl-2 transition-colors hover:bg-stone-50/50 cursor-pointer">
                 {/* Vista Mobile (< sm) */}
                 <div className="sm:hidden space-y-2.5">
                     <div className="flex items-center justify-between gap-2">
@@ -599,6 +754,7 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
                     </div>
                 </div>
             </button>
+          </div>
 
             {expanded && (
                 <div className="border-t border-stone-100 px-4 sm:px-5 py-4 space-y-4">
@@ -690,7 +846,7 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
                     )}
                 </div>
             )}
-        </div>
+        </Reorder.Item>
     );
 };
 
@@ -820,9 +976,31 @@ const Proveedores: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
     );
 };
 
+// Fila de pendiente reordenable (asa de arrastre separada del toggle).
+const TaskRow: React.FC<{ task: any; onToggle: () => void }> = ({ task, onToggle }) => {
+    const controls = useDragControls();
+    return (
+        <Reorder.Item value={task} dragListener={false} dragControls={controls}
+            className="flex items-center gap-1 rounded-2xl border border-stone-100 bg-white list-none min-w-0">
+            <span onPointerDown={e => controls.start(e)}
+                className="flex shrink-0 cursor-grab touch-none items-center pl-1.5 text-stone-300 hover:text-stone-500 active:cursor-grabbing"
+                aria-label="Reordenar pendiente"><GripVertical className="h-4 w-4" /></span>
+            <button onClick={onToggle}
+                className="flex flex-1 items-center gap-2.5 sm:gap-3 rounded-2xl p-2.5 pl-1 sm:p-3 text-left hover:bg-stone-50 min-w-0 cursor-pointer">
+                {task.is_done ? <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: PINK }} /> : <Circle className="h-5 w-5 shrink-0 text-stone-300" />}
+                <span className={`font-medium text-sm flex-1 min-w-0 ${task.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: task.is_done ? undefined : DARK }}>{task.title}</span>
+                <span className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+                    {task.due_date && <span className="text-[10px] sm:text-[11px] text-stone-400">{fmtShort(task.due_date)}</span>}
+                    {task.source === 'template' && <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-stone-300">base</span>}
+                </span>
+            </button>
+        </Reorder.Item>
+    );
+};
+
 // ── Pendientes ────────────────────────────────────────────────────────────────
 const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
-    const { tasks, toggleTask, addTask, seedDefaults, reload } = planning;
+    const { tasks, toggleTask, addTask, seedDefaults, reload, reorderTasks } = planning;
     const [title, setTitle] = useState(''); const [phase, setPhase] = useState('1_month');
 
     const done = tasks.filter(t => t.is_done).length;
@@ -871,7 +1049,8 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                 </div>
             ) : (
                 PHASES.filter(p => grouped[p.key]?.length).map(p => {
-                    const items = [...(grouped[p.key] || [])].sort((a, b) => ((a.due_date || '9999') < (b.due_date || '9999') ? -1 : 1));
+                    const items = [...(grouped[p.key] || [])].sort((a, b) =>
+                        ((a.sort_order ?? 9999) - (b.sort_order ?? 9999)) || ((a.due_date || '9999') < (b.due_date || '9999') ? -1 : 1));
                     const d = items.filter(t => t.is_done).length;
                     return (
                         <div key={p.key} className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-6 min-w-0">
@@ -879,23 +1058,99 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                                 <h3 className="text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>{p.label}</h3>
                                 <span className="text-[11px] font-bold text-stone-400">{d}/{items.length}</span>
                             </div>
-                            <div className="space-y-2">
+                            <Reorder.Group as="div" axis="y" values={items} onReorder={(arr) => reorderTasks(p.key, arr)} className="space-y-2">
                                 {items.map(t => (
-                                    <button key={t.id} onClick={() => toggleTask(t.id, !t.is_done)}
-                                        className="flex w-full items-center gap-2.5 sm:gap-3 rounded-2xl border border-stone-100 p-2.5 sm:p-3 text-left hover:bg-stone-50 min-w-0 cursor-pointer">
-                                        {t.is_done ? <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: PINK }} /> : <Circle className="h-5 w-5 shrink-0 text-stone-300" />}
-                                        <span className={`font-medium text-sm flex-1 min-w-0 ${t.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: t.is_done ? undefined : DARK }}>{t.title}</span>
-                                        <span className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
-                                            {t.due_date && <span className="text-[10px] sm:text-[11px] text-stone-400">{fmtShort(t.due_date)}</span>}
-                                            {t.source === 'template' && <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-stone-300">base</span>}
-                                        </span>
-                                    </button>
+                                    <TaskRow key={t.id} task={t} onToggle={() => toggleTask(t.id, !t.is_done)} />
                                 ))}
-                            </div>
+                            </Reorder.Group>
                         </div>
                     );
                 })
             )}
+        </div>
+    );
+};
+
+// ── Materiales / inventario de alquiler ───────────────────────────────────────
+const Materiales: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
+    const { rentalItems, vendors, addRentalItem, toggleReturned, deleteRentalItem } = planning;
+    const [name, setName] = useState(''); const [qty, setQty] = useState(''); const [vendor, setVendor] = useState('');
+    const vendorName = (id: string | null) => (id ? vendors.find(v => v.id === id)?.name : '') || '';
+    const returned = rentalItems.filter(m => m.status === 'returned').length;
+    const totalUnits = rentalItems.reduce((n, m) => n + (Number(m.qty) || 0), 0);
+
+    const submit = async () => {
+        if (!name.trim()) return toast.error('Pon el nombre del material');
+        await addRentalItem({ name: name.trim(), qty: Number(qty) || 1, vendor_id: vendor || null });
+        setName(''); setQty(''); setVendor(''); toast.success('Material agregado');
+    };
+
+    return (
+        <div className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-stone-200 bg-[#F8F9FA] p-5">
+                <p className="text-sm text-stone-500">
+                    <span className="font-bold" style={{ color: DARK }}>Inventario de alquiler.</span> Lleva la cuenta de lo rentado
+                    (sillas, mantelería, vajilla, pista…) y marca lo que ya devolviste tras el evento.
+                </p>
+                <div className="flex gap-2.5">
+                    <TotalPill label="Materiales" value={`${rentalItems.length}`} />
+                    <TotalPill label="Piezas" value={`${totalUnits}`} />
+                    <TotalPill label="Devueltos" value={`${returned}/${rentalItems.length}`} accent />
+                </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-4">
+                <input value={name} onChange={e => setName(e.target.value)} placeholder="Material (ej. Sillas Tiffany)"
+                    className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
+                <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                    <input value={qty} onChange={e => setQty(e.target.value)} type="number" placeholder="Cant."
+                        className="w-full sm:w-24 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
+                    <select value={vendor} onChange={e => setVendor(e.target.value)}
+                        className="w-full sm:w-auto rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0">
+                        <option value="">Proveedor (opc.)</option>
+                        {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                    </select>
+                </div>
+                <button onClick={submit} className="flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white cursor-pointer" style={{ background: PINK }}>
+                    <Plus className="h-4 w-4" /> Agregar
+                </button>
+            </div>
+
+            <div className="space-y-2">
+                {rentalItems.length === 0 && (
+                    <div className="rounded-3xl border border-dashed border-stone-300 bg-white p-10 text-center">
+                        <Boxes className="mx-auto mb-3 h-8 w-8" style={{ color: PINK }} />
+                        <p className="font-display font-extrabold text-lg" style={{ color: DARK }}>Aún no hay materiales</p>
+                        <p className="mt-1 text-sm text-stone-500">Agrega lo que vas a rentar para no perder la cuenta de las devoluciones.</p>
+                    </div>
+                )}
+                {rentalItems.map(m => {
+                    const done = m.status === 'returned';
+                    return (
+                        <div key={m.id} className="flex items-center justify-between gap-2 rounded-2xl border border-stone-100 bg-white p-3">
+                            <button onClick={() => toggleReturned(m.id, !done)} className="flex min-w-0 flex-1 items-center gap-3 text-left cursor-pointer">
+                                {done ? <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: PINK }} /> : <Circle className="h-5 w-5 shrink-0 text-stone-300" />}
+                                <span className="min-w-0">
+                                    <span className={`block truncate font-bold ${done ? 'text-stone-400 line-through' : ''}`} style={{ color: done ? undefined : DARK }}>
+                                        {m.name} <span className="font-normal text-stone-400">× {m.qty}</span>
+                                    </span>
+                                    <span className="block truncate text-xs text-stone-500">
+                                        {vendorName(m.vendor_id) ? `${vendorName(m.vendor_id)} · ` : ''}{done ? 'devuelto' : 'pendiente de devolver'}{m.notes ? ` · ${m.notes}` : ''}
+                                    </span>
+                                </span>
+                            </button>
+                            <div className="flex shrink-0 items-center gap-2">
+                                <span className="rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider"
+                                    style={done ? { background: '#dcfce7', color: '#166534' } : { background: '#fef3c7', color: '#92400e' }}>
+                                    {done ? 'Devuelto' : 'Pendiente'}
+                                </span>
+                                <button onClick={async () => { if (window.confirm(`¿Eliminar "${m.name}"?`)) { await deleteRentalItem(m.id); toast.success('Eliminado'); } }}
+                                    className="rounded-lg p-2 text-stone-400 hover:bg-rose-50 hover:text-rose-600" aria-label="Eliminar material"><Trash2 className="h-4 w-4" /></button>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 };

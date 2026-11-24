@@ -41,6 +41,7 @@ const DashboardHome       = React.lazy(() => import('./pages/dashboard/Dashboard
 const EventRSVPs          = React.lazy(() => import('./pages/dashboard/EventRSVPs'));
 const CheckIn             = React.lazy(() => import('./pages/dashboard/CheckIn'));
 const Planning            = React.lazy(() => import('./pages/dashboard/Planning'));
+const SharedPlan          = React.lazy(() => import('./pages/SharedPlan'));
 const SettingsPage        = React.lazy(() => import('./pages/dashboard/SettingsPage'));
 const AvisoPrivacidadPage  = React.lazy(() => import('./pages/AvisoPrivacidadPage'));
 const Terms               = React.lazy(() => import('./pages/Terms'));
@@ -188,6 +189,9 @@ function AppRoutes() {
         {/* Blog Routes */}
         <Route path="/blog"                                element={<BlogIndex />} />
         <Route path="/blog/:slug"                          element={<BlogPost />} />
+
+        {/* Plan compartido (solo lectura, público por token) */}
+        <Route path="/plan/:token"                         element={<SharedPlan />} />
 
         {/* Public Planner Routes (direct access) */}
         <Route path="/planeador"                           element={<Navigate to="/dashboard/planeacion/demo" replace />} />
