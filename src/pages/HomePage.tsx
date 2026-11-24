@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import {
     Check, ChevronDown, ArrowRight,
-    X, Users, Gem, Menu, Calendar
+    X, Users, Gem, Menu, Calendar,
+    Crown, Wallet, Store, ListChecks, CalendarHeart
 } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -97,6 +98,10 @@ export default function HomePage() {
                             Save the Date
                             <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
+                        <a href="#planeador" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors flex items-center gap-1.5">
+                            Planeador
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#111827] text-white">Pro +</span>
+                        </a>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Planes
                         </Link>
@@ -161,6 +166,14 @@ export default function HomePage() {
                             <span>Save the Date</span>
                             <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
+                        <a
+                            href="#planeador"
+                            className="flex items-center justify-between text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            <span>Planeador de Eventos</span>
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#111827] text-white">Plan Pro +</span>
+                        </a>
                         <Link
                             to="/planes"
                             className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
@@ -650,6 +663,128 @@ export default function HomePage() {
                 </div>
             </section>
 
+            {/* --- 4.7. PLANEADOR DE EVENTOS (Exclusivo Plan Pro en adelante) --- */}
+            <section id="planeador" className="py-20 md:py-28 bg-[#111827] text-white px-6 relative overflow-hidden border-b border-stone-800">
+                {/* Luces decorativas sutiles de fondo */}
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#DF3B94]/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FAC345]/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="mx-auto max-w-7xl relative z-10">
+                    <div className="text-center max-w-3xl mx-auto space-y-5">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#DF3B94]/20 border border-[#DF3B94]/40 rounded-full text-xs font-bold text-[#FF85C0]">
+                            <Crown className="h-4 w-4 text-[#FAC345]" />
+                            <span>Módulo Exclusivo · Plan Pro en adelante</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
+                            Planeador de Eventos: Presupuesto, Proveedores y el Día B
+                        </h2>
+                        <p className="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
+                            Tu boda o festejo no solo necesita una invitación bonita, necesita orden. Centraliza pagos, cotizaciones, contratos y el itinerario minuto a minuto directamente dentro de tu panel de Invitto.
+                        </p>
+                        
+                        {/* Callout de gating claro y permanente */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                            <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
+                            <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Diseño Pro y Concierge. <em>(No disponible en Plan Clásica).</em></span>
+                        </div>
+                    </div>
+
+                    {/* Grid de 4 pilares de Planeación */}
+                    <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* 1. Presupuesto */}
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-4">
+                                <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/20 border border-[#DF3B94]/30 flex items-center justify-center text-[#FF85C0]">
+                                    <Wallet className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-xl font-display font-extrabold text-white">Presupuesto y Pagos</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Desglosa por rubros (salón, música, flores, foto). Monitorea anticipos, liquidaciones y alertas de fechas de vencimiento con medias de referencia del mercado.
+                                </p>
+                            </div>
+                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-[#FAC345] flex items-center justify-between">
+                                <span>Control de saldos</span>
+                                <span>Exporta a CSV</span>
+                            </div>
+                        </div>
+
+                        {/* 2. Directorio Proveedores */}
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-4">
+                                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                    <Store className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-xl font-display font-extrabold text-white">Directorio de Proveedores</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Guarda fichas de cada proveedor con contacto directo a WhatsApp, cotizaciones comparativas, notas y contratos asignados.
+                                </p>
+                            </div>
+                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+                                <span>WhatsApp directo</span>
+                                <span>Compara ofertas</span>
+                            </div>
+                        </div>
+
+                        {/* 3. Pendientes Auto-fechados */}
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-4">
+                                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                    <ListChecks className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-xl font-display font-extrabold text-white">Pendientes por Fases</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Checklist inteligente calculado automáticamente según la fecha de tu evento: 12 meses antes, 6 meses, 1 mes, última semana y después de la boda.
+                                </p>
+                            </div>
+                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
+                                <span>Cronograma vivo</span>
+                                <span>Avance en %</span>
+                            </div>
+                        </div>
+
+                        {/* 4. Carpeta Día B */}
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-4">
+                                <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                    <CalendarHeart className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-xl font-display font-extrabold text-white">Carpeta del Día B en PDF</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Genera con un solo clic el itinerario minuto a minuto con cortejo, fotógrafo y teléfonos de emergencia, listo para imprimir para tu wedding planner.
+                                </p>
+                            </div>
+                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+                                <span>Descarga PDF</span>
+                                <span>Minuto a minuto</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Barra de acción inferior */}
+                    <div className="mt-12 p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="space-y-1 text-center md:text-left">
+                            <p className="text-lg font-bold text-white">¿Listo para organizar tu evento sin estrés?</p>
+                            <p className="text-xs text-slate-400">Elige el Plan Pro al crear tu evento y desbloquea el Planeador inmediatamente.</p>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <Link
+                                to="/planes"
+                                className="min-h-[44px] px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-[#DF3B94]/25 inline-flex items-center gap-2 no-underline"
+                            >
+                                <span>Ver Planes con Planeador (desde $1,699)</span>
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                            <Link
+                                to="/dashboard/planeacion"
+                                className="min-h-[44px] px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
+                            >
+                                <span>Ver Demo del Planeador</span>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- 5. ¿QUÉ CELEBRAS? (8 Event Types) --- */}
             <section className="py-20 md:py-28 bg-[#F8F9FA] px-6 border-b border-slate-100">
                 <div className="mx-auto max-w-7xl">
@@ -758,6 +893,10 @@ export default function HomePage() {
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                         <span>Save the Date digital (+$299 MXN opcional)</span>
                                     </li>
+                                    <li className="flex items-center gap-2.5 text-slate-400">
+                                        <X className="h-4 w-4 text-slate-300 flex-shrink-0" />
+                                        <span>Planeador de eventos (requiere Plan Pro)</span>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -797,6 +936,10 @@ export default function HomePage() {
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                         <span><strong>Todo lo del plan Clásica</strong></span>
+                                    </li>
+                                    <li className="flex items-center gap-2.5">
+                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                        <span><strong>Planeador de Eventos Premium</strong> (presupuesto, proveedores, pagos y Día B)</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
@@ -852,7 +995,7 @@ export default function HomePage() {
                                 <ul className="space-y-3 text-xs text-slate-700 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Pro</strong></span>
+                                        <span><strong>Todo lo del plan Pro</strong> (incluye Planeador)</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
@@ -908,7 +1051,7 @@ export default function HomePage() {
                                 <ul className="space-y-3 text-xs text-slate-700 font-medium">
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Diseño Pro</strong></span>
+                                        <span><strong>Todo lo del plan Diseño Pro</strong> (incluye Planeador)</span>
                                     </li>
                                     <li className="flex items-center gap-2.5">
                                         <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />

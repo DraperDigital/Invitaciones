@@ -214,12 +214,12 @@ const SubTabs: React.FC<{ tab: SubTab; setTab: (t: SubTab) => void; planning: Pl
         { key: 'despues', label: 'Después', icon: Gift },
     ];
     return (
-        <div className="flex flex-wrap gap-2 rounded-2xl border border-stone-200 bg-white p-1.5">
+        <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap rounded-2xl border border-stone-200 bg-white p-1.5 no-scrollbar">
             {items.map(({ key, label, icon: Icon, badge }) => {
                 const active = tab === key;
                 return (
                     <button key={key} onClick={() => setTab(key)}
-                        className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all ${active ? 'text-white shadow-md' : 'text-stone-500 hover:bg-stone-50'}`}
+                        className={`flex items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0 ${active ? 'text-white shadow-md' : 'text-stone-500 hover:bg-stone-50'}`}
                         style={active ? { background: DARK } : undefined}>
                         <Icon className="h-4 w-4" style={active ? { color: PINK } : undefined} />
                         {label}
@@ -604,16 +604,16 @@ const Proveedores: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="rounded-3xl border border-stone-200 bg-white p-6">
+            <div className="rounded-3xl border border-stone-200 bg-white p-5 sm:p-6">
                 <h3 className="mb-4 font-display font-extrabold" style={{ color: DARK }}>Directorio</h3>
                 <div className="mb-4 space-y-2">
                     <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Nombre del proveedor"
                         className="w-full rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                    <div className="flex gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <input value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} placeholder="Categoría"
-                            className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                        <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="WhatsApp"
-                            className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
+                            className="w-full rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94] min-w-0" />
+                        <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="WhatsApp (teléfono)"
+                            className="w-full rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94] min-w-0" />
                     </div>
                     <button onClick={submit} className="flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-xs font-bold uppercase tracking-widest text-white" style={{ background: DARK }}>
                         <Plus className="h-4 w-4" /> Agregar proveedor

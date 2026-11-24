@@ -60,6 +60,7 @@ export default function PlanesPage() {
             color: 'rose',
             popular: true,
             features: [
+                'Planeador de Eventos (presupuesto, proveedores y Día B)',
                 'Dashboard en tiempo real',
                 'Pases digitales con código QR',
                 'Recordatorios automáticos',
@@ -81,7 +82,7 @@ export default function PlanesPage() {
             icon: Crown,
             color: 'emerald',
             features: [
-                'Todo lo del plan Pro',
+                'Todo lo del plan Pro (incluye Planeador)',
                 'Diseño desde cero por expertos',
                 'Save the Date digital incluido',
                 'Código QR para invitados',
@@ -102,7 +103,7 @@ export default function PlanesPage() {
             icon: Crown,
             color: 'gold',
             features: [
-                'Todo lo del plan Diseño Pro (diseño a medida)',
+                'Todo lo del plan Diseño Pro (incluye Planeador)',
                 'Incluye Invitto Confirma: confirmamos a cada invitado por ti',
                 'Save the Date digital incluido',
                 'Lista final confirmada 15 días antes, o te devolvemos tu dinero',
