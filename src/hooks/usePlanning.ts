@@ -92,7 +92,12 @@ function mockSeed() {
         { id: 'm3', name: 'Vajilla y cristalería', qty: 120, vendor_id: 'v1', status: 'pending', notes: '', sort_order: 3 },
         { id: 'm4', name: 'Pista de baile', qty: 1, vendor_id: null, status: 'returned', notes: '5x5 m', sort_order: 4 },
     ];
-    return { rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed: 112, countdownDays: 86 };
+    const appointments = [
+        { id: 'a1', title: 'Prueba de menú con el banquete', date: dd(88), time: '12:00', vendor_id: 'v1', location: 'Hacienda Los Encinos', notes: '' },
+        { id: 'a2', title: 'Sesión de fotos pre-boda', date: dd(60), time: '17:00', vendor_id: 'v3', location: 'Centro histórico', notes: 'Llevar 2 cambios' },
+        { id: 'a3', title: 'Prueba de vestido', date: dd(45), time: '11:30', vendor_id: null, location: 'Boutique Novias', notes: '' },
+    ];
+    return { rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, appointments, confirmed: 112, countdownDays: 86 };
 }
 
 export function usePlanning(eventId: string | undefined) {
@@ -107,6 +112,7 @@ export function usePlanning(eventId: string | undefined) {
     const [notes, setNotes] = useState<any[]>([]);
     const [gifts, setGifts] = useState<any[]>([]);
     const [rentalItems, setRentalItems] = useState<any[]>([]);
+    const [appointments, setAppointments] = useState<any[]>([]);
     const [confirmed, setConfirmed] = useState(0);
     const [countdownDays, setCountdownDays] = useState(0);
     const [budgetGoal, setBudgetGoalState] = useState<number>(0);
@@ -119,7 +125,7 @@ export function usePlanning(eventId: string | undefined) {
             const s = mockSeed();
             setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes);
             setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf); setNotes(s.notes); setGifts(s.gifts);
-            setRentalItems(s.rentalItems);
+            setRentalItems(s.rentalItems); setAppointments(s.appointments);
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
             setBudgetGoalState(500000);
             setLoading(false);
@@ -127,7 +133,7 @@ export function usePlanning(eventId: string | undefined) {
         }
 
         try {
-            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi, mi, se] = await Promise.all([
+            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi, mi, se, ap] = await Promise.all([
                 supabase.from('budget_rubros').select('*').eq('event_id', eventId).order('sort_order'),
                 supabase.from('vendors').select('*').eq('event_id', eventId).order('created_at'),
                 supabase.from('quotes').select('*').eq('event_id', eventId).order('created_at'),
@@ -140,11 +146,13 @@ export function usePlanning(eventId: string | undefined) {
                 supabase.from('gifts').select('*').eq('event_id', eventId).order('created_at', { ascending: false }),
                 supabase.from('rental_items').select('*').eq('event_id', eventId).order('sort_order'),
                 supabase.from('planning_settings').select('budget_goal').eq('event_id', eventId).maybeSingle(),
+                supabase.from('appointments').select('*').eq('event_id', eventId).order('date'),
             ]);
             setRubros(ru.data || []); setVendors(ve.data || []); setQuotes(qu.data || []);
             setPayments(pa.data || []); setTasks(ta.data || []); setDayOf(dy.data || []); setNotes(no.data || []); setGifts(gi.data || []);
             setRentalItems(mi.data || []);
             setBudgetGoalState(Number(se.data?.budget_goal) || 0);
+            setAppointments(ap.data || []);
             const conf = (rs.data || []).reduce((n: number, r: any) => n + 1 + (r.plus_ones_confirmed || 0), 0);
             setConfirmed(conf);
             const date = ev.data?.date_time ? new Date(ev.data.date_time) : null;
@@ -215,7 +223,7 @@ export function usePlanning(eventId: string | undefined) {
             const s = mockSeed();
             setRubros(s.rubros); setVendors(s.vendors); setQuotes(s.quotes);
             setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf);
-            setNotes(s.notes); setGifts(s.gifts); setRentalItems(s.rentalItems);
+            setNotes(s.notes); setGifts(s.gifts); setRentalItems(s.rentalItems); setAppointments(s.appointments);
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
             return;
         }
@@ -383,6 +391,21 @@ export function usePlanning(eventId: string | undefined) {
             .eq('event_id', eventId).eq('revoked', false);
     }, [eventId, isMock]);
 
+    // ── Citas / agenda (appointments) ─────────────────────────────────────────
+    const addAppointment = useCallback((a: { title: string; date: string; time?: string; vendor_id?: string | null; location?: string; notes?: string }) => {
+        const row = { id: uid(), event_id: eventId, time: '', vendor_id: null, location: '', notes: '', ...a };
+        return run(() => setAppointments(p => [...p, row]),
+            () => supabase.from('appointments').insert([{ event_id: eventId, title: a.title, date: a.date, time: a.time ?? '', vendor_id: a.vendor_id ?? null, location: a.location ?? '', notes: a.notes ?? '' }]));
+    }, [eventId]);
+
+    const updateAppointment = useCallback((id: string, patch: Record<string, any>) =>
+        run(() => setAppointments(p => p.map(a => a.id === id ? { ...a, ...patch } : a)),
+            () => supabase.from('appointments').update(patch).eq('id', id)), []);
+
+    const deleteAppointment = useCallback((id: string) =>
+        run(() => setAppointments(p => p.filter(a => a.id !== id)),
+            () => supabase.from('appointments').delete().eq('id', id)), []);
+
     // ── Meta global de presupuesto (planning_settings) ────────────────────────
     const setBudgetGoal = useCallback((goal: number) => {
         setBudgetGoalState(goal);
@@ -394,7 +417,7 @@ export function usePlanning(eventId: string | undefined) {
 
     return {
         isMock,
-        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed, countdownDays, budgetGoal,
+        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, appointments, confirmed, countdownDays, budgetGoal,
         chosenByRubro, minQuoteByRubro, totals, upcomingPayments, nextPayment, overdueCount, openTasks,
         reload: load,
         seedDefaults, addRubro, updateRubroEstimate, addVendor, updateVendor, deleteVendor,
@@ -404,5 +427,6 @@ export function usePlanning(eventId: string | undefined) {
         addGift, toggleThanked, deleteGift,
         addRentalItem, updateRentalItem, toggleReturned, deleteRentalItem,
         getOrCreateShare, revokeShare, setBudgetGoal,
+        addAppointment, updateAppointment, deleteAppointment,
     };
 }

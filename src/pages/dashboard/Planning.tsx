@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams, useNavigate, Link } from 'react-router-dom';
 import {
-    Compass, Wallet, Store, ListChecks, CalendarHeart, Crown, ChevronDown, ChevronRight,
+    Compass, Wallet, Store, ListChecks, CalendarHeart, Crown, ChevronDown, ChevronRight, ChevronLeft,
     CalendarClock, AlertTriangle, CheckCircle2, Circle, Plus, Sparkles, Phone, Check,
     MapPin, Trash2, Pencil, CalendarDays, Download, StickyNote, Gift, Boxes, GripVertical,
     Share2, Link2, X, Star, Scale, Target,
@@ -76,7 +76,7 @@ const QUOTE_CHIP: Record<QuoteState, { bg: string; fg: string; label: string }> 
     descartado: { bg: '#fafaf9', fg: '#a8a29e', label: 'Descartado' },
 };
 
-type SubTab = 'copiloto' | 'presupuesto' | 'proveedores' | 'pendientes' | 'materiales' | 'dia' | 'notas' | 'despues';
+type SubTab = 'copiloto' | 'presupuesto' | 'proveedores' | 'pendientes' | 'agenda' | 'materiales' | 'dia' | 'notas' | 'despues';
 type Planning = ReturnType<typeof usePlanning>;
 
 // ── Compartir el plan (enlace de solo lectura) ─────────────────────────────────
@@ -318,6 +318,7 @@ const PlanningPage: React.FC = () => {
                             {tab === 'presupuesto' && <Presupuesto planning={planning} toast={toast} />}
                             {tab === 'proveedores' && <Proveedores planning={planning} toast={toast} />}
                             {tab === 'pendientes' && <Pendientes planning={planning} toast={toast} />}
+                            {tab === 'agenda' && <Agenda planning={planning} toast={toast} />}
                             {tab === 'materiales' && <Materiales planning={planning} toast={toast} />}
                             {tab === 'dia' && <DiaB planning={planning} event={activeEvent} />}
                             {tab === 'notas' && <Notas planning={planning} toast={toast} />}
@@ -355,6 +356,7 @@ const SubTabs: React.FC<{ tab: SubTab; setTab: (t: SubTab) => void; planning: Pl
         { key: 'presupuesto', label: 'Presupuesto', icon: Wallet },
         { key: 'proveedores', label: 'Proveedores', icon: Store },
         { key: 'pendientes', label: 'Pendientes', icon: ListChecks, badge: planning.openTasks || undefined },
+        { key: 'agenda', label: 'Agenda', icon: CalendarClock },
         { key: 'materiales', label: 'Materiales', icon: Boxes },
         { key: 'dia', label: 'Día B', icon: CalendarHeart },
         { key: 'notas', label: 'Notas', icon: StickyNote },
@@ -1250,6 +1252,224 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                     );
                 })
             )}
+        </div>
+    );
+};
+
+// ── Agenda / calendario (pagos + tareas + citas) ──────────────────────────────
+const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const EVENT_META: Record<string, { color: string; label: string }> = {
+    pago: { color: '#DF3B94', label: 'Pago' },
+    tarea: { color: '#f59e0b', label: 'Tarea' },
+    cita: { color: '#6366f1', label: 'Cita' },
+};
+const WEEK_DAYS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+
+const Agenda: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
+    const { payments, tasks, appointments, vendors, markPaymentPaid, addAppointment, deleteAppointment } = planning;
+    const today = new Date();
+    const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+    const [mode, setMode] = useState<'mes' | 'semana'>('mes');
+    const [selected, setSelected] = useState<string>(ymd(today));
+    const [showForm, setShowForm] = useState(false);
+    const [f, setF] = useState({ title: '', date: ymd(today), time: '', vendor_id: '', location: '' });
+    const vendorName = (id: string | null) => (id ? vendors.find(v => v.id === id)?.name : '') || '';
+
+    const items = useMemo(() => {
+        const out: { date: string; type: 'pago' | 'tarea' | 'cita'; title: string; time?: string; raw: any }[] = [];
+        for (const p of payments) if (p.due_date && p.status !== 'paid') out.push({ date: p.due_date, type: 'pago', title: `${p.label || 'Pago'} · ${money(Number(p.amount))}`, raw: p });
+        for (const t of tasks) if (t.due_date && !t.is_done) out.push({ date: t.due_date, type: 'tarea', title: t.title, raw: t });
+        for (const a of appointments) if (a.date) out.push({ date: a.date, type: 'cita', title: a.title, time: a.time, raw: a });
+        return out;
+    }, [payments, tasks, appointments]);
+
+    const byDate = useMemo(() => {
+        const m: Record<string, typeof items> = {};
+        for (const it of items) (m[it.date] ||= []).push(it);
+        return m;
+    }, [items]);
+
+    const upcoming = useMemo(() => {
+        const ts = ymd(today);
+        return [...items].filter(i => i.date >= ts).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)).slice(0, 6);
+    }, [items]);
+
+    // Grid del mes (lunes a domingo)
+    const grid = useMemo(() => {
+        const y = cursor.getFullYear(), mo = cursor.getMonth();
+        const startDay = (new Date(y, mo, 1).getDay() + 6) % 7;
+        const days = new Date(y, mo + 1, 0).getDate();
+        const cells: (Date | null)[] = [];
+        for (let i = 0; i < startDay; i++) cells.push(null);
+        for (let d = 1; d <= days; d++) cells.push(new Date(y, mo, d));
+        while (cells.length % 7 !== 0) cells.push(null);
+        return cells;
+    }, [cursor]);
+
+    // Días de la semana que contiene `selected`
+    const weekDays = useMemo(() => {
+        const base = new Date(selected + 'T00:00:00');
+        const monday = new Date(base); monday.setDate(base.getDate() - ((base.getDay() + 6) % 7));
+        return Array.from({ length: 7 }, (_, i) => { const d = new Date(monday); d.setDate(monday.getDate() + i); return d; });
+    }, [selected]);
+
+    const moveMonth = (delta: number) => setCursor(c => new Date(c.getFullYear(), c.getMonth() + delta, 1));
+    const selItems = byDate[selected] || [];
+
+    const submit = async () => {
+        if (!f.title.trim() || !f.date) return toast.error('Pon título y fecha');
+        await addAppointment({ title: f.title.trim(), date: f.date, time: f.time, vendor_id: f.vendor_id || null, location: f.location });
+        setF({ title: '', date: selected, time: '', vendor_id: '', location: '' }); setShowForm(false); toast.success('Cita agregada');
+    };
+
+    const remindWhatsApp = (p: any) => {
+        const ph = (vendors.find(v => v.id === p.vendor_id)?.phone || '').replace(/[^0-9]/g, '');
+        if (!ph) return toast.error('Ese proveedor no tiene WhatsApp');
+        const msg = `Hola, te escribo sobre el pago "${p.label || 'Pago'}" de ${money(Number(p.amount))}${p.due_date ? ` con fecha ${p.due_date}` : ''}. ¿Lo confirmamos?`;
+        window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`, '_blank');
+    };
+
+    const dayLabel = (iso: string) => new Date(iso + 'T00:00:00').toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    return (
+        <div className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                    <button onClick={() => moveMonth(-1)} className="rounded-xl border border-stone-200 p-2 text-stone-500 hover:bg-stone-50 cursor-pointer"><ChevronLeft className="h-4 w-4" /></button>
+                    <h3 className="min-w-[160px] text-center font-display font-extrabold capitalize" style={{ color: DARK }}>{cursor.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}</h3>
+                    <button onClick={() => moveMonth(1)} className="rounded-xl border border-stone-200 p-2 text-stone-500 hover:bg-stone-50 cursor-pointer"><ChevronRight className="h-4 w-4" /></button>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="inline-flex gap-1 rounded-xl border border-stone-200 bg-white p-1">
+                        {(['mes', 'semana'] as const).map(m => (
+                            <button key={m} onClick={() => setMode(m)} className={`rounded-lg px-3 py-1.5 text-[11px] uppercase font-bold tracking-wider cursor-pointer ${mode === m ? 'text-white' : 'text-stone-500'}`} style={mode === m ? { background: DARK } : undefined}>{m}</button>
+                        ))}
+                    </div>
+                    <button onClick={() => { setF(s => ({ ...s, date: selected })); setShowForm(v => !v); }} className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-[11px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: PINK }}><Plus className="h-3.5 w-3.5" /> Cita</button>
+                </div>
+            </div>
+
+            {showForm && (
+                <div className="flex flex-col sm:flex-row flex-wrap gap-2 rounded-2xl border border-stone-200 bg-white p-3">
+                    <input value={f.title} onChange={e => setF({ ...f, title: e.target.value })} placeholder="Título (ej. Prueba de menú)" className="flex-1 min-w-0 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                    <div className="grid grid-cols-2 sm:flex gap-2">
+                        <input value={f.date} onChange={e => setF({ ...f, date: e.target.value })} type="date" className="rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                        <input value={f.time} onChange={e => setF({ ...f, time: e.target.value })} type="time" className="rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                    </div>
+                    <select value={f.vendor_id} onChange={e => setF({ ...f, vendor_id: e.target.value })} className="rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
+                        <option value="">Proveedor (opc.)</option>
+                        {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                    </select>
+                    <button onClick={submit} className="rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: DARK }}>Guardar</button>
+                </div>
+            )}
+
+            {/* Leyenda */}
+            <div className="flex flex-wrap gap-3 px-1">
+                {Object.entries(EVENT_META).map(([k, v]) => (
+                    <span key={k} className="flex items-center gap-1.5 text-[11px] text-stone-500"><span className="h-2.5 w-2.5 rounded-full" style={{ background: v.color }} /> {v.label}</span>
+                ))}
+            </div>
+
+            {mode === 'mes' ? (
+                <div className="rounded-3xl border border-stone-200 bg-white p-3 sm:p-4">
+                    <div className="grid grid-cols-7 gap-1">
+                        {WEEK_DAYS.map((d, i) => <div key={i} className="pb-1 text-center text-[10px] uppercase font-bold tracking-wider text-stone-400">{d}</div>)}
+                        {grid.map((d, i) => {
+                            if (!d) return <div key={i} />;
+                            const iso = ymd(d);
+                            const dayItems = byDate[iso] || [];
+                            const isToday = iso === ymd(today);
+                            const isSel = iso === selected;
+                            return (
+                                <button key={i} onClick={() => setSelected(iso)}
+                                    className={`flex min-h-[48px] sm:min-h-[60px] flex-col items-center gap-1 rounded-xl border p-1 text-left transition-colors cursor-pointer ${isSel ? 'border-[#DF3B94] bg-[#DF3B94]/5' : 'border-transparent hover:bg-stone-50'}`}>
+                                    <span className={`text-xs font-bold ${isToday ? 'flex h-5 w-5 items-center justify-center rounded-full text-white' : 'text-stone-600'}`} style={isToday ? { background: PINK } : undefined}>{d.getDate()}</span>
+                                    <span className="flex flex-wrap justify-center gap-0.5">
+                                        {dayItems.slice(0, 3).map((it, j) => <span key={j} className="h-1.5 w-1.5 rounded-full" style={{ background: EVENT_META[it.type].color }} />)}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            ) : (
+                <div className="rounded-3xl border border-stone-200 bg-white p-3 sm:p-4 space-y-1.5">
+                    {weekDays.map(d => {
+                        const iso = ymd(d);
+                        const dayItems = byDate[iso] || [];
+                        return (
+                            <button key={iso} onClick={() => setSelected(iso)} className={`flex w-full items-center gap-3 rounded-xl border p-2.5 text-left cursor-pointer ${iso === selected ? 'border-[#DF3B94] bg-[#DF3B94]/5' : 'border-stone-100 hover:bg-stone-50'}`}>
+                                <span className="w-14 shrink-0 text-xs font-bold capitalize" style={{ color: iso === ymd(today) ? PINK : DARK }}>{d.toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric' })}</span>
+                                <span className="flex flex-1 flex-wrap gap-1">
+                                    {dayItems.length === 0 ? <span className="text-xs text-stone-300">—</span> : dayItems.map((it, j) => (
+                                        <span key={j} className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ background: `${EVENT_META[it.type].color}1a`, color: EVENT_META[it.type].color }}>{it.title.length > 22 ? it.title.slice(0, 22) + '…' : it.title}</span>
+                                    ))}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
+            {/* Detalle del día seleccionado */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-5">
+                <h3 className="mb-3 text-[11px] uppercase font-bold tracking-widest capitalize" style={{ color: PINK }}>{dayLabel(selected)}</h3>
+                {selItems.length === 0 ? (
+                    <p className="text-sm text-stone-400">Sin pagos, tareas ni citas este día.</p>
+                ) : (
+                    <div className="space-y-2">
+                        {selItems.map((it, j) => (
+                            <div key={j} className="flex items-center justify-between gap-2 rounded-2xl border border-stone-100 p-3">
+                                <div className="flex min-w-0 items-center gap-2.5">
+                                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: EVENT_META[it.type].color }} />
+                                    <div className="min-w-0">
+                                        <p className="truncate font-bold text-sm" style={{ color: DARK }}>{it.title}</p>
+                                        <p className="text-xs text-stone-500">
+                                            {EVENT_META[it.type].label}
+                                            {it.type === 'cita' && it.time ? ` · ${it.time}` : ''}
+                                            {it.type === 'cita' && vendorName(it.raw.vendor_id) ? ` · ${vendorName(it.raw.vendor_id)}` : ''}
+                                            {it.type === 'cita' && it.raw.location ? ` · ${it.raw.location}` : ''}
+                                            {it.type === 'pago' && vendorName(it.raw.vendor_id) ? ` · ${vendorName(it.raw.vendor_id)}` : ''}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex shrink-0 items-center gap-1.5">
+                                    {it.type === 'pago' && (
+                                        <>
+                                            <button onClick={() => remindWhatsApp(it.raw)} className="flex items-center gap-1 rounded-lg bg-[#25D366] px-2.5 py-1.5 text-[10px] font-bold text-white cursor-pointer" title="Recordar por WhatsApp"><Phone className="h-3 w-3" /> Recordar</button>
+                                            <button onClick={async () => { await markPaymentPaid(it.raw.id); toast.success('Marcado como pagado'); }} className="rounded-lg px-2.5 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: PINK }}>Pagar</button>
+                                        </>
+                                    )}
+                                    {it.type === 'cita' && (
+                                        <button onClick={async () => { if (window.confirm('¿Eliminar esta cita?')) { await deleteAppointment(it.raw.id); toast.success('Cita eliminada'); } }} className="rounded-lg p-2 text-stone-400 hover:bg-rose-50 hover:text-rose-600" aria-label="Eliminar cita"><Trash2 className="h-4 w-4" /></button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Próximos eventos */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-5">
+                <h3 className="mb-3 text-[11px] uppercase font-bold tracking-widest text-stone-500">Próximos eventos</h3>
+                {upcoming.length === 0 ? (
+                    <p className="text-sm text-stone-400">Nada próximo en la agenda.</p>
+                ) : (
+                    <div className="space-y-2">
+                        {upcoming.map((it, j) => (
+                            <button key={j} onClick={() => { setSelected(it.date); setCursor(new Date(it.date + 'T00:00:00')); }} className="flex w-full items-center gap-3 rounded-2xl border border-stone-100 p-2.5 text-left hover:bg-stone-50 cursor-pointer">
+                                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: EVENT_META[it.type].color }} />
+                                <span className="min-w-0 flex-1 truncate text-sm" style={{ color: DARK }}>{it.title}</span>
+                                <span className="shrink-0 text-[11px] text-stone-400">{fmtShort(it.date)}{it.type === 'cita' && it.time ? ` · ${it.time}` : ''}</span>
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <p className="px-2 text-xs text-stone-400">Los recordatorios automáticos por WhatsApp/correo se activan desde el servidor (requiere tu API conectada). Aquí puedes recordar manualmente con el botón verde.</p>
         </div>
     );
 };
