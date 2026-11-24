@@ -97,27 +97,28 @@ const PlanningPage: React.FC = () => {
     const planning = usePlanning(eventId || (isDemo ? 'demo' : undefined));
 
     useEffect(() => {
-        const demoOption = { id: 'demo', title: '🎯 Boda Demo (Datos de prueba · Mock)' };
-        if (!user || isMockBackend) {
-            setUserEvents([demoOption]);
+        if (isDemo) {
+            setUserEvents([]);
             if (!eventId) setEventId('demo');
+            return;
+        }
+        if (!user || isMockBackend) {
             return;
         }
         (async () => {
             const { data } = await supabase.from('events').select('id,title')
                 .eq('user_id', user.id).order('created_at', { ascending: false });
-            const list = [...(data || []), demoOption];
-            setUserEvents(list);
+            setUserEvents(data || []);
             if (!eventId) {
                 const stored = localStorage.getItem(`last_managed_event_id_${user.id}`);
-                const next = stored || data?.[0]?.id || 'demo';
-                setEventId(next);
+                const next = stored || data?.[0]?.id;
+                if (next) setEventId(next);
             }
         })();
-    }, [user, isMockBackend]);
+    }, [user, isDemo, isMockBackend, eventId]);
 
     useEffect(() => {
-        if (!eventId || eventId === 'demo' || eventId === 'mock-event-id') {
+        if (isDemo || !eventId || eventId === 'demo' || eventId === 'mock-event-id') {
             setActiveEvent({
                 title: 'Boda Ana & Luis',
                 date_time: new Date(Date.now() + 86 * 86400000).toISOString(),
@@ -127,7 +128,7 @@ const PlanningPage: React.FC = () => {
         }
         supabase.from('events').select('title,date_time,venue_name').eq('id', eventId).maybeSingle()
             .then(({ data }) => setActiveEvent(data));
-    }, [eventId]);
+    }, [eventId, isDemo]);
 
     const handleEventChange = (id: string) => {
         if (!id) return;
@@ -179,14 +180,20 @@ const PlanningPage: React.FC = () => {
                             </span>
                         )}
                     </p>
-                    <div className="relative w-full max-w-full min-w-0">
-                        <select value={eventId} onChange={(e) => handleEventChange(e.target.value)}
-                            className="w-full max-w-full truncate pr-8 text-lg sm:text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
-                            style={{ color: DARK }}>
-                            {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
-                        </select>
-                        <ChevronDown className="h-4 w-4 text-stone-400 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    </div>
+                    {isDemo ? (
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-black text-stone-900 tracking-tight">
+                            Boda Demo · Ana & Luis
+                        </h1>
+                    ) : (
+                        <div className="relative w-full max-w-full min-w-0">
+                            <select value={eventId} onChange={(e) => handleEventChange(e.target.value)}
+                                className="w-full max-w-full truncate pr-8 text-lg sm:text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
+                                style={{ color: DARK }}>
+                                {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
+                            </select>
+                            <ChevronDown className="h-4 w-4 text-stone-400 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        </div>
+                    )}
                 </div>
             </div>
 
