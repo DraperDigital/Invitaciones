@@ -1238,7 +1238,7 @@ export const MOCK_EVENTS: Event[] = [
         plan: 'clasico',
         theme_config: {
             isPremium: true,
-            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80',
+            theme: 'romantic-botanical', hero_image_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1600&q=80',
             message: 'Con la ilusión de una princesa que cumple un sueño, te invito a celebrar conmigo el día que tanto he esperado.',
             ceremony: {
                 name: 'Ceremonia Religiosa',
@@ -2113,7 +2113,7 @@ export const MOCK_EVENTS: Event[] = [
         rsvp_deadline: createMockDate(15, 23, 59),
         created_at: new Date().toISOString(),
         theme_config: {
-            theme: 'magazine', hero_image_url: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1600&q=80',
+            theme: 'magazine', hero_image_url: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1600&q=80',
             typography_preset: 'editorial',
             primary_color: '#000000',
             accent_color: '#E63946',
@@ -2524,7 +2524,7 @@ export const MOCK_EVENTS: Event[] = [
             boy_name: 'Mateo',
             girl_name: 'Valentina',
             hero_tagline: 'TOP SECRET · REVELACIÓN DE GÉNERO',
-            hero_image_url: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+            hero_image_url: 'https://images.unsplash.com/photo-1510154221590-ff63e90a136f?auto=format&fit=crop&w=800&q=80',
             message: 'Un nuevo capítulo comienza en el más absoluto misterio. Ni una sola pista antes de tiempo. Ven a descubrir con nosotros si nuestra vida se pintará de él o de ella.',
             parents: {
                 father: 'Santiago Navarro',
@@ -2549,7 +2549,7 @@ export const MOCK_EVENTS: Event[] = [
                 enabled: true,
                 uploadEnabled: false,
                 images: [
-                    'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1510154221590-ff63e90a136f?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80'
                 ]
