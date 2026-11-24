@@ -75,7 +75,8 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                                     { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                                     { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' }
+                                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                                    { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' }
                                 ] 
                             } as any);
                             return;
@@ -115,7 +116,8 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
             'reminders_automatic', 
             'guest_import_excel',
             'table_management',
-            'event_planning'
+            'event_planning',
+            'confirma_whatsapp'
         ];
         if (isPro && proFeatures.includes(featureCode)) return true;
 

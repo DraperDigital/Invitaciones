@@ -16,6 +16,7 @@ import { useFeatureAccess } from '../../hooks/useFeatureAccess';
 import { EVENT_TYPE_OPTIONS } from '../EventWizard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import type { ConfirmaSettings, WhatsAppMessage } from '../../types/database.types';
 
 // Helper: Formatear tipo de evento a etiqueta en español
 function formatEventType(type?: string): string {
@@ -55,11 +56,17 @@ const EventRSVPs: React.FC = () => {
     const [event, setEvent] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [isManageMode] = useState(true);
-    const [activeTab, setActiveTab] = useState<'list' | 'messages' | 'tables' | 'reminders' | 'statistics'>('list');
+    const [activeTab, setActiveTab] = useState<'list' | 'messages' | 'tables' | 'reminders' | 'statistics' | 'confirma'>('list');
     const [userEvents, setUserEvents] = useState<any[]>([]);
     const [reminderTemplate] = useState('¡Hola {nombre}! 🌟 Te escribimos para recordarte la invitación a "{evento}". \n\nPuedes ver todos los detalles y confirmar aquí: {link} \n\n¡Te esperamos!');
     const [tables, setTables] = useState<any[]>([]);
     const [proModalFeature, setProModalFeature] = useState<string | null>(null);
+
+    // Confirma State
+    const [confirmaSettings, setConfirmaSettings] = useState<ConfirmaSettings | null>(null);
+    const [whatsappMessages, setWhatsappMessages] = useState<WhatsAppMessage[]>([]);
+    const [savingConfirma, setSavingConfirma] = useState(false);
+    const [confirmaNumberInput, setConfirmaNumberInput] = useState('');
 
     // Se muestra el dashboard de evento y sus botones de acción siempre que haya un evento seleccionado
     const isEventDashboard = Boolean(event);
@@ -148,7 +155,7 @@ const EventRSVPs: React.FC = () => {
                     localStorage.setItem(`last_managed_event_id_${user.id}`, activeId);
                     setEvent(activeEvent);
 
-                    const [tablesResult, guestsResult] = await Promise.all([
+                    const [tablesResult, guestsResult, confirmaResult, messagesResult] = await Promise.all([
                         supabase
                             .from('event_tables')
                             .select('*')
@@ -158,16 +165,47 @@ const EventRSVPs: React.FC = () => {
                             .select('*, rsvps(*), event:events(title, slug)')
                             .eq('event_id', activeId)
                             .order('created_at', { ascending: false }),
+                        supabase
+                            .from('confirma_settings')
+                            .select('*')
+                            .eq('event_id', activeId)
+                            .maybeSingle(),
+                        supabase
+                            .from('whatsapp_messages')
+                            .select('*')
+                            .eq('event_id', activeId)
+                            .order('created_at', { ascending: false })
+                            .limit(30)
                     ]);
 
                     if (guestsResult.error) throw guestsResult.error;
                     setTables(tablesResult.data || []);
                     setGuests(guestsResult.data || []);
+
+                    if (confirmaResult && confirmaResult.data) {
+                        setConfirmaSettings(confirmaResult.data as ConfirmaSettings);
+                        setConfirmaNumberInput(confirmaResult.data.business_number || '');
+                    } else {
+                        setConfirmaSettings({
+                            event_id: activeId,
+                            enabled: false,
+                            business_number: '',
+                            quota_contacts: 200,
+                            used_conversations: 0,
+                            activated_at: new Date().toISOString(),
+                            expires_at: null
+                        });
+                        setConfirmaNumberInput('');
+                    }
+                    setWhatsappMessages((messagesResult?.data as WhatsAppMessage[]) || []);
                 } else {
                     setEventId(null);
                     setEvent(null);
                     setTables([]);
                     setGuests([]);
+                    setConfirmaSettings(null);
+                    setWhatsappMessages([]);
+                    setConfirmaNumberInput('');
                 }
             } catch (err) {
                 console.error('Error fetching RSVPs:', err);
@@ -186,6 +224,66 @@ const EventRSVPs: React.FC = () => {
             localStorage.setItem(`last_managed_event_id_${user.id}`, id);
         }
         navigate(`/dashboard/events/${id}`);
+    };
+
+    const handleToggleConfirma = async (enabled: boolean) => {
+        if (!eventId) return;
+        try {
+            setSavingConfirma(true);
+            const current = confirmaSettings || {
+                event_id: eventId,
+                enabled: false,
+                business_number: confirmaNumberInput,
+                quota_contacts: 200,
+                used_conversations: 0,
+                activated_at: new Date().toISOString(),
+                expires_at: null
+            };
+            const updated: ConfirmaSettings = {
+                ...current,
+                enabled
+            };
+            const { error } = await supabase
+                .from('confirma_settings')
+                .upsert(updated);
+            if (error) throw error;
+            setConfirmaSettings(updated);
+            toast.success(enabled ? 'Invitto Confirma activado' : 'Invitto Confirma pausado');
+        } catch (e: any) {
+            toast.error('Error al actualizar Confirma: ' + (e.message || 'Error'));
+        } finally {
+            setSavingConfirma(false);
+        }
+    };
+
+    const handleSaveConfirmaNumber = async () => {
+        if (!eventId) return;
+        try {
+            setSavingConfirma(true);
+            const current = confirmaSettings || {
+                event_id: eventId,
+                enabled: false,
+                business_number: '',
+                quota_contacts: 200,
+                used_conversations: 0,
+                activated_at: new Date().toISOString(),
+                expires_at: null
+            };
+            const updated: ConfirmaSettings = {
+                ...current,
+                business_number: confirmaNumberInput.trim()
+            };
+            const { error } = await supabase
+                .from('confirma_settings')
+                .upsert(updated);
+            if (error) throw error;
+            setConfirmaSettings(updated);
+            toast.success('Número de WhatsApp de Confirma guardado');
+        } catch (e: any) {
+            toast.error('Error al guardar número: ' + (e.message || 'Error'));
+        } finally {
+            setSavingConfirma(false);
+        }
     };
 
     // Helper: leer estado desde guests.status (fuente confiable) y mapear a formato rsvp
@@ -1240,7 +1338,8 @@ const EventRSVPs: React.FC = () => {
                         { id: 'statistics', label: 'Estadísticas', feature: 'metrics_dashboard' },
                         { id: 'messages', label: 'Mensajes', feature: 'guest_dashboard' },
                         { id: 'tables', label: 'Mesas', feature: 'table_management' },
-                        { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' }
+                        { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' },
+                        { id: 'confirma', label: 'Confirma WhatsApp', feature: 'confirma_whatsapp' }
                     ].map(t => {
                         const isLocked = t.feature ? !hasFeature(t.feature as any) : false;
                         
@@ -1992,6 +2091,190 @@ const EventRSVPs: React.FC = () => {
                 </div>
             )}
 
+            {activeTab === 'confirma' && (
+                <div className="space-y-8 animate-in fade-in duration-300">
+                    {/* Header Banner */}
+                    <div className="bg-white p-6 sm:p-8 rounded-[2rem] border border-stone-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-3">
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    Módulo WhatsApp
+                                </span>
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#DF3B94]/10 text-[#DF3B94]">
+                                    Pro+ Add-on
+                                </span>
+                            </div>
+                            <h3 className="text-2xl sm:text-3xl font-display font-black text-[#222B38]">
+                                Invitto Confirma
+                            </h3>
+                            <p className="text-sm text-stone-600 max-w-2xl leading-relaxed">
+                                Asistente conversacional de WhatsApp para recepción de confirmaciones. 
+                                Tus invitados responden por chat y sus respuestas se sincronizan automáticamente con tu lista de invitados en tiempo real.
+                            </p>
+                        </div>
+
+                        {/* State & Toggle */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Estado del Asistente</p>
+                                <p className="text-sm font-extrabold text-stone-900">
+                                    {confirmaSettings?.enabled 
+                                        ? (confirmaSettings.used_conversations >= confirmaSettings.quota_contacts ? 'Cuota Agotada' : 'Activo y escuchando') 
+                                        : 'Pausado'}
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                disabled={savingConfirma}
+                                onClick={() => handleToggleConfirma(!confirmaSettings?.enabled)}
+                                className={`relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                                    confirmaSettings?.enabled ? 'bg-[#25D366]' : 'bg-stone-300'
+                                }`}
+                            >
+                                <span
+                                    className={`pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                                        confirmaSettings?.enabled ? 'translate-x-6' : 'translate-x-0'
+                                    }`}
+                                />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Stats & Quota Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Quota Card */}
+                        <div className="bg-white p-6 rounded-[2rem] border border-stone-200 shadow-sm space-y-4">
+                            <div className="flex items-center justify-between">
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Consumo de Cuota</p>
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                    (confirmaSettings?.used_conversations || 0) >= (confirmaSettings?.quota_contacts || 200)
+                                        ? 'bg-rose-100 text-rose-700'
+                                        : 'bg-emerald-100 text-emerald-700'
+                                }`}>
+                                    {Math.min(100, Math.round(((confirmaSettings?.used_conversations || 0) / (confirmaSettings?.quota_contacts || 200)) * 100))}% Usado
+                                </span>
+                            </div>
+                            <div>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-3xl font-display font-black text-stone-900">
+                                        {confirmaSettings?.used_conversations || 0}
+                                    </span>
+                                    <span className="text-sm font-bold text-stone-500">
+                                        / {confirmaSettings?.quota_contacts || 200} contactos
+                                    </span>
+                                </div>
+                                <p className="text-xs text-stone-500 mt-1">
+                                    Disponibles: {Math.max(0, (confirmaSettings?.quota_contacts || 200) - (confirmaSettings?.used_conversations || 0))} confirmaciones
+                                </p>
+                            </div>
+                            {/* Progress bar */}
+                            <div className="w-full bg-stone-100 rounded-full h-2.5 overflow-hidden">
+                                <div 
+                                    className="bg-gradient-to-r from-[#25D366] to-emerald-600 h-2.5 rounded-full transition-all duration-500" 
+                                    style={{ width: `${Math.min(100, Math.round(((confirmaSettings?.used_conversations || 0) / (confirmaSettings?.quota_contacts || 200)) * 100))}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* WhatsApp Number Config Card */}
+                        <div className="bg-white p-6 rounded-[2rem] border border-stone-200 shadow-sm space-y-4 md:col-span-2">
+                            <div>
+                                <p className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Línea de WhatsApp del Servicio</p>
+                                <p className="text-xs text-stone-500 mt-0.5">
+                                    Número que recibirán tus invitados en el botón "Confirmar por WhatsApp".
+                                </p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <input
+                                    type="text"
+                                    value={confirmaNumberInput}
+                                    onChange={(e) => setConfirmaNumberInput(e.target.value)}
+                                    placeholder="+52 55 1234 5678 (o deja en blanco para línea Invitto oficial)"
+                                    className="flex-1 bg-stone-50 border border-stone-200 rounded-xl px-4 py-2.5 text-sm font-medium text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#DF3B94]"
+                                />
+                                <button
+                                    type="button"
+                                    disabled={savingConfirma}
+                                    onClick={handleSaveConfirmaNumber}
+                                    className="px-5 py-2.5 bg-[#222B38] hover:bg-stone-900 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer shrink-0 disabled:opacity-50"
+                                >
+                                    Guardar Número
+                                </button>
+                            </div>
+                            <p className="text-[11px] text-stone-500">
+                                💡 Tip: Un solo número de WhatsApp puede atender múltiples eventos sin cruzarse, gracias al token único <code>[ref:token]</code> que identifica a cada invitado.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* 3 Puertas -> 1 Verdad Diagram Card */}
+                    <div className="bg-stone-50 p-6 sm:p-8 rounded-[2rem] border border-stone-200">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700 mb-4">
+                            Principio de Sincronización: 3 Puertas → 1 Fuente de Verdad
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div className="bg-white p-4 rounded-xl border border-stone-200 text-center space-y-1">
+                                <span className="text-xl">📝</span>
+                                <h5 className="text-xs font-bold text-stone-900">Formulario Web</h5>
+                                <p className="text-[11px] text-stone-500">El invitado llena el formulario en la invitación digital</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-xl border border-stone-200 text-center space-y-1">
+                                <span className="text-xl">🎛️</span>
+                                <h5 className="text-xs font-bold text-stone-900">Toggle Manual</h5>
+                                <p className="text-[11px] text-stone-500">Tú o tu wedding planner confirman desde esta tabla de invitados</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-xl border border-emerald-200 bg-emerald-50/20 text-center space-y-1">
+                                <span className="text-xl">🤖</span>
+                                <h5 className="text-xs font-bold text-emerald-900">Invitto Confirma Bot</h5>
+                                <p className="text-[11px] text-stone-500">El bot de WhatsApp traduce el chat a la misma base de datos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Messages Activity Log */}
+                    <div className="bg-white p-6 sm:p-8 rounded-[2rem] border border-stone-200 shadow-sm space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h4 className="text-base font-bold text-stone-900">Actividad Reciente de WhatsApp</h4>
+                                <p className="text-xs text-stone-500">Últimos mensajes procesados por el bot para este evento</p>
+                            </div>
+                            <span className="text-xs font-bold text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
+                                {whatsappMessages.length} mensaje(s)
+                            </span>
+                        </div>
+
+                        {whatsappMessages.length === 0 ? (
+                            <div className="py-12 text-center space-y-2">
+                                <MessageSquare className="h-10 w-10 text-stone-300 mx-auto" />
+                                <p className="text-sm font-medium text-stone-600">Aún no hay mensajes de WhatsApp registrados.</p>
+                                <p className="text-xs text-stone-400 max-w-sm mx-auto">
+                                    Cuando tus invitados den clic en "Confirmar por WhatsApp" y envíen su mensaje, el registro aparecerá aquí.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="divide-y divide-stone-100 max-h-96 overflow-y-auto">
+                                {whatsappMessages.map(msg => (
+                                    <div key={msg.id} className="py-3 flex items-start justify-between gap-4 text-xs">
+                                        <div className="flex items-start gap-3">
+                                            <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] ${
+                                                msg.direction === 'in' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'
+                                            }`}>
+                                                {msg.direction === 'in' ? 'Entrante' : 'Saliente'}
+                                            </span>
+                                            <p className="text-stone-800 font-medium whitespace-pre-wrap">{msg.body}</p>
+                                        </div>
+                                        <span className="text-stone-400 text-[10px] whitespace-nowrap">
+                                            {new Date(msg.created_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* QR Modal */}
             {selectedGuestForQR && (
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-stone-900/60 backdrop-blur-sm">
@@ -2026,7 +2309,8 @@ const EventRSVPs: React.FC = () => {
                                 {proModalFeature === 'reminders_automatic' && 'Envía recordatorios masivos y automáticos por WhatsApp con el plan Pro.'}
                                 {proModalFeature === 'guest_import_excel' && 'Importa cientos de invitados en segundos desde un archivo Excel o CSV con el plan Pro.'}
                                 {proModalFeature === 'access_control' && 'Controla el acceso en puerta con escáner de códigos QR y pases individuales con el plan Pro.'}
-                                {!['metrics_dashboard', 'guest_dashboard', 'table_management', 'reminders_automatic', 'guest_import_excel', 'access_control'].includes(proModalFeature) &&
+                                {proModalFeature === 'confirma_whatsapp' && 'Confirma la asistencia de tus invitados de forma conversacional con el asistente de WhatsApp Invitto Confirma. Disponible en Pro+, Concierge o como Add-on.'}
+                                {!['metrics_dashboard', 'guest_dashboard', 'table_management', 'reminders_automatic', 'guest_import_excel', 'access_control', 'confirma_whatsapp'].includes(proModalFeature) &&
                                     'Mejora tu evento al plan Pro para desbloquear todas las herramientas avanzadas de gestión.'}
                             </p>
                         </div>

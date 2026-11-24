@@ -57,6 +57,26 @@ export type RSVP = {
     plus_ones_confirmed: number;
     dietary_restrictions: string | null;
     message: string | null;
+    source?: 'form' | 'whatsapp' | 'manual';
+    created_at: string;
+};
+
+export type ConfirmaSettings = {
+    event_id: string;
+    enabled: boolean;
+    business_number: string;
+    quota_contacts: number;
+    used_conversations: number;
+    activated_at: string;
+    expires_at: string | null;
+};
+
+export type WhatsAppMessage = {
+    id: string;
+    event_id: string;
+    guest_id: string | null;
+    direction: 'in' | 'out';
+    body: string;
     created_at: string;
 };
 

@@ -40,6 +40,14 @@ export interface PlanLandingData {
   jsonLd: any;
 }
 
+export const CONFIRMA_PRICING = {
+  addon: 2000,
+  standalone: 3499,
+  currency: 'MXN',
+  formattedAddon: '$2,000 MXN',
+  formattedStandalone: '$3,499 MXN',
+};
+
 export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
   clasica: {
     id: 'clasico',
@@ -343,7 +351,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
       },
       {
         question: '¿Qué diferencia hay entre el Plan Concierge e Invitto Confirma?',
-        answer: 'Invitto Confirma ($3,499) es únicamente el servicio de confirmación para cuando tú mismo creas tu invitación digital. El Plan Concierge ($4,499) incluye el Plan Diseño Pro completo (diseño hecho por diseñador y dominio .com) + Invitto Confirma + atención personalizada a las dudas de tus invitados.',
+        answer: 'Invitto Confirma tiene dos modalidades: como add-on sumado a cualquier plan Invitto ($2,000 MXN) o standalone si ya traes tu invitación de fuera ($3,499 MXN). El Plan Concierge ($4,499 MXN) incluye todo integrado: Diseño Pro ($2,499 MXN) + Invitto Confirma add-on ($2,000 MXN) + atención personalizada a las dudas de tus invitados.',
       },
       {
         question: '¿Los mensajes se envían de forma automática?',
