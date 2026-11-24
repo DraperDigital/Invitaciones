@@ -80,7 +80,7 @@ export default function DashboardLayout() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F9FA] flex font-sans text-[#222B38]">
+        <div className="min-h-screen bg-[#F8F9FA] flex font-sans text-[#222B38] w-full overflow-x-hidden">
             {/* Desktop Sidebar */}
             <aside className={`hidden lg:flex flex-col w-72 ${isCorporate ? 'bg-[#0F172A]' : 'bg-[#222B38]'} text-white fixed h-full z-50 transition-all duration-300 border-r border-slate-800`}>
                 <div className="p-6 md:p-8">
@@ -161,7 +161,7 @@ export default function DashboardLayout() {
             </aside>
 
             {/* Main Content Area */}
-            <div className="flex-1 lg:ml-72 flex flex-col min-w-0">
+            <div className="flex-1 lg:ml-72 flex flex-col min-w-0 w-full overflow-x-hidden">
                 {/* Mobile Header */}
                 <header className="lg:hidden bg-[#222B38] text-white px-4 h-16 flex items-center justify-between sticky top-0 z-[60] border-b border-slate-800">
                     <Link to="/" className="flex items-center gap-2">
@@ -243,7 +243,7 @@ export default function DashboardLayout() {
                 )}
 
                 {/* Main Page Slot */}
-                <main className="flex-1 p-6 md:p-10 max-w-7xl w-full mx-auto">
+                <main className="flex-1 p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto min-w-0">
                     {/* Onboarding Tour Banner */}
                     {showOnboarding && hasEvents !== null && (
                         <Suspense fallback={null}>

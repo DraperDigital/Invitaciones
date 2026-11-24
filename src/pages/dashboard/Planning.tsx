@@ -168,9 +168,9 @@ const PlanningPage: React.FC = () => {
     }
 
     return (
-        <div className="space-y-6 sm:space-y-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex flex-col gap-1">
+        <div className="space-y-6 sm:space-y-8 w-full max-w-full min-w-0">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 min-w-0">
+                <div className="flex flex-col gap-1 min-w-0 w-full max-w-full">
                     <p className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-2" style={{ color: PINK }}>
                         <span>Planeación · Premium</span>
                         {isDemo && (
@@ -179,9 +179,9 @@ const PlanningPage: React.FC = () => {
                             </span>
                         )}
                     </p>
-                    <div className="relative inline-block">
+                    <div className="relative w-full max-w-full min-w-0">
                         <select value={eventId} onChange={(e) => handleEventChange(e.target.value)}
-                            className="pr-8 text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
+                            className="w-full max-w-full truncate pr-8 text-lg sm:text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
                             style={{ color: DARK }}>
                             {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
                         </select>
@@ -192,10 +192,10 @@ const PlanningPage: React.FC = () => {
 
             {/* Banner de aviso: Datos Mock / Prueba */}
             {isDemo && (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3.5 bg-amber-500/10 border border-amber-500/25 rounded-2xl text-amber-900 text-xs">
-                    <div className="flex items-start sm:items-center gap-2.5">
-                        <span className="flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse mt-0.5 sm:mt-0 shrink-0" />
-                        <div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3.5 bg-amber-500/10 border border-amber-500/25 rounded-2xl text-amber-900 text-xs w-full max-w-full min-w-0">
+                    <div className="flex items-start sm:items-center gap-2.5 min-w-0 flex-1">
+                        <span className="flex h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse mt-1 sm:mt-0 shrink-0" />
+                        <div className="min-w-0">
                             <span className="font-bold uppercase tracking-wider text-[11px] block sm:inline mr-2 text-amber-950">
                                 Modo Demostración · Datos de prueba (mock):
                             </span>
@@ -204,7 +204,7 @@ const PlanningPage: React.FC = () => {
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto pt-1 sm:pt-0">
                         <button
                             type="button"
                             onClick={() => { planning.seedDefaults(); toast.success('Datos de prueba reiniciados'); }}
@@ -279,29 +279,31 @@ const SubTabs: React.FC<{ tab: SubTab; setTab: (t: SubTab) => void; planning: Pl
         { key: 'despues', label: 'Después', icon: Gift },
     ];
     return (
-        <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap rounded-2xl border border-stone-200 bg-white p-1.5 no-scrollbar">
-            {items.map(({ key, label, icon: Icon, badge }) => {
-                const active = tab === key;
-                return (
-                    <button key={key} onClick={() => setTab(key)}
-                        className={`flex items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0 ${active ? 'text-white shadow-md' : 'text-stone-500 hover:bg-stone-50'}`}
-                        style={active ? { background: DARK } : undefined}>
-                        <Icon className="h-4 w-4" style={active ? { color: PINK } : undefined} />
-                        {label}
-                        {badge ? <span className="ml-1 rounded-full px-1.5 py-0.5 text-[10px]" style={{ background: PINK, color: '#fff' }}>{badge}</span> : null}
-                    </button>
-                );
-            })}
+        <div className="w-full max-w-full min-w-0 overflow-x-auto pb-1 sm:pb-0 rounded-2xl border border-stone-200 bg-white p-1.5 no-scrollbar">
+            <div className="flex gap-1.5 min-w-max sm:min-w-0 sm:flex-wrap">
+                {items.map(({ key, label, icon: Icon, badge }) => {
+                    const active = tab === key;
+                    return (
+                        <button key={key} onClick={() => setTab(key)}
+                            className={`flex items-center gap-2 rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0 cursor-pointer ${active ? 'text-white shadow-md' : 'text-stone-500 hover:bg-stone-50'}`}
+                            style={active ? { background: DARK } : undefined}>
+                            <Icon className="h-4 w-4" style={active ? { color: PINK } : undefined} />
+                            {label}
+                            {badge ? <span className="ml-1 rounded-full px-1.5 py-0.5 text-[10px]" style={{ background: PINK, color: '#fff' }}>{badge}</span> : null}
+                        </button>
+                    );
+                })}
+            </div>
         </div>
     );
 };
 
 // ── Resumen (Copiloto) ────────────────────────────────────────────────────────
 const StatCard: React.FC<{ label: string; value: string; hint?: string; accent?: boolean }> = ({ label, value, hint, accent }) => (
-    <div className="rounded-3xl border border-stone-200 bg-white p-5 shadow-sm">
-        <p className="text-[10px] uppercase font-bold tracking-widest text-stone-500">{label}</p>
-        <p className="mt-1.5 text-2xl font-display font-black" style={{ color: accent ? PINK : DARK }}>{value}</p>
-        {hint && <p className="mt-1 text-xs text-stone-400">{hint}</p>}
+    <div className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-5 shadow-sm min-w-0">
+        <p className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-stone-500 truncate">{label}</p>
+        <p className="mt-1 sm:mt-1.5 text-lg sm:text-2xl font-display font-black truncate" style={{ color: accent ? PINK : DARK }}>{value}</p>
+        {hint && <p className="mt-1 text-[11px] sm:text-xs text-stone-400 truncate">{hint}</p>}
     </div>
 );
 
@@ -312,18 +314,18 @@ const Copiloto: React.FC<{ planning: Planning; setTab: (t: SubTab) => void; even
     const taskPct = tasks.length ? Math.round((doneTasks / tasks.length) * 100) : 0;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
             {/* Hero: cuenta regresiva grande + datos del evento */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-[2rem] p-8 text-white" style={{ background: DARK }}>
-                <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 rounded-[2rem] p-5 sm:p-8 text-white min-w-0" style={{ background: DARK }}>
+                <div className="space-y-2 min-w-0">
                     <p className="text-[11px] uppercase font-bold tracking-[0.2em]" style={{ color: PINK }}>Cuenta regresiva</p>
-                    <h2 className="text-2xl font-display font-black">{event?.title || 'Tu evento'}</h2>
+                    <h2 className="text-xl sm:text-2xl font-display font-black truncate">{event?.title || 'Tu evento'}</h2>
                     <p className="text-sm text-slate-300">{fmtDate(event?.date_time) || 'Fecha por definir'}</p>
-                    {event?.venue_name && <p className="flex items-center gap-1.5 text-sm text-slate-400"><MapPin className="h-4 w-4" /> {event.venue_name}</p>}
+                    {event?.venue_name && <p className="flex items-center gap-1.5 text-sm text-slate-400 truncate"><MapPin className="h-4 w-4 shrink-0" /> {event.venue_name}</p>}
                 </div>
-                <div className="text-center sm:text-right">
-                    <p className="font-display font-black leading-none" style={{ fontSize: '4.5rem', color: '#fff' }}>{countdownDays}</p>
-                    <p className="text-sm uppercase tracking-[0.3em] text-slate-400">días</p>
+                <div className="text-left sm:text-right shrink-0">
+                    <p className="font-display font-black leading-none text-5xl sm:text-7xl" style={{ color: '#fff' }}>{countdownDays}</p>
+                    <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-slate-400 mt-1">días</p>
                 </div>
             </div>
 
@@ -379,9 +381,9 @@ const Copiloto: React.FC<{ planning: Planning; setTab: (t: SubTab) => void; even
 
 // ── Presupuesto ───────────────────────────────────────────────────────────────
 const TotalPill: React.FC<{ label: string; value: string; accent?: boolean }> = ({ label, value, accent }) => (
-    <div className="flex-1 min-w-[130px] rounded-2xl border border-stone-200 bg-white px-4 py-3">
-        <p className="text-[10px] uppercase font-bold tracking-widest text-stone-400">{label}</p>
-        <p className="text-xl font-display font-black" style={{ color: accent ? PINK : DARK }}>{value}</p>
+    <div className="flex-1 min-w-[120px] rounded-2xl border border-stone-200 bg-white p-3 sm:px-4 sm:py-3 min-w-0">
+        <p className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-stone-400 truncate">{label}</p>
+        <p className="text-base sm:text-xl font-display font-black truncate" style={{ color: accent ? PINK : DARK }}>{value}</p>
     </div>
 );
 
@@ -398,8 +400,8 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
     };
 
     return (
-        <div className="space-y-4">
-            <div className="flex flex-wrap gap-3">
+        <div className="space-y-4 min-w-0 w-full">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2.5 sm:gap-3">
                 <TotalPill label="Estimado" value={money(totals.estimado)} />
                 <TotalPill label="Cotizado" value={money(totals.cotizado)} />
                 <TotalPill label="Contratado" value={money(totals.contratado)} />
@@ -411,24 +413,24 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                 <div className="inline-flex gap-1 rounded-2xl border border-stone-200 bg-white p-1">
                     {([['partidas', 'Partidas'], ['pagos', 'Calendario de pagos']] as const).map(([k, label]) => (
                         <button key={k} onClick={() => setView(k)}
-                            className={`rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wider ${view === k ? 'text-white' : 'text-stone-500'}`}
+                            className={`rounded-xl px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer ${view === k ? 'text-white' : 'text-stone-500'}`}
                             style={view === k ? { background: DARK } : undefined}>{label}</button>
                     ))}
                 </div>
                 <button onClick={() => downloadBudgetCSV(rubros, planning.chosenByRubro, totals)}
-                    className="flex items-center gap-2 rounded-2xl border border-stone-200 bg-white px-4 py-2 text-xs font-bold uppercase tracking-wider text-stone-600 hover:border-[#DF3B94] hover:text-[#DF3B94]">
+                    className="flex items-center gap-2 rounded-2xl border border-stone-200 bg-white px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-wider text-stone-600 hover:border-[#DF3B94] hover:text-[#DF3B94] cursor-pointer">
                     <Download className="h-4 w-4" /> Excel (CSV)
                 </button>
             </div>
 
             {view === 'partidas' ? (
                 <>
-                    <div className="flex flex-col sm:flex-row gap-3 rounded-3xl border border-stone-200 bg-white p-4">
+                    <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-4 min-w-0">
                         <input value={nn} onChange={e => setNn(e.target.value)} placeholder="Nuevo rubro (ej. Pastel)"
-                            className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
+                            className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
                         <input value={na} onChange={e => setNa(e.target.value)} placeholder="Estimado MXN" type="number"
-                            className="w-full sm:w-44 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                        <button onClick={submit} className="flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white" style={{ background: PINK }}>
+                            className="w-full sm:w-44 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
+                        <button onClick={submit} className="flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white cursor-pointer" style={{ background: PINK }}>
                             <Plus className="h-4 w-4" /> Agregar
                         </button>
                     </div>
@@ -525,34 +527,75 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
     };
 
     return (
-        <div className="rounded-2xl border border-stone-200 bg-white">
-            <button onClick={onToggle} className="grid w-full grid-cols-12 items-center gap-2 px-5 py-4 text-left">
-                <div className="col-span-5 flex items-center gap-2">
-                    {expanded ? <ChevronDown className="h-4 w-4 text-stone-400" /> : <ChevronRight className="h-4 w-4 text-stone-400" />}
-                    <span className="font-display font-bold" style={{ color: DARK }}>{rubro.name}</span>
-                    {rubro.location && <span className="rounded-full bg-stone-100 px-2 py-0.5 text-[9px] uppercase tracking-wider text-stone-500">{LOC_LABEL[rubro.location] || rubro.location}</span>}
-                    {rubro.is_external && <span className="rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wider" style={{ background: `${PINK}1a`, color: PINK }}>Invitto</span>}
+        <div className="rounded-2xl border border-stone-200 bg-white min-w-0 overflow-hidden shadow-2xs">
+            <button onClick={onToggle} className="w-full text-left p-3.5 sm:px-5 sm:py-4 transition-colors hover:bg-stone-50/50 cursor-pointer">
+                {/* Vista Mobile (< sm) */}
+                <div className="sm:hidden space-y-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                            {expanded ? <ChevronDown className="h-4 w-4 text-stone-400 shrink-0" /> : <ChevronRight className="h-4 w-4 text-stone-400 shrink-0" />}
+                            <span className="font-display font-bold text-sm text-stone-900 truncate">{rubro.name}</span>
+                            {rubro.location && <span className="shrink-0 rounded-full bg-stone-100 px-1.5 py-0.5 text-[8px] uppercase tracking-wider text-stone-500">{LOC_LABEL[rubro.location] || rubro.location}</span>}
+                            {rubro.is_external && <span className="shrink-0 rounded-full px-1.5 py-0.5 text-[8px] uppercase tracking-wider" style={{ background: `${PINK}1a`, color: PINK }}>Invitto</span>}
+                        </div>
+                        <div className="shrink-0 text-right">
+                            {chosen ? (
+                                <span className="font-bold text-xs" style={{ color: '#166534' }}>{money(Number(chosen.amount))}</span>
+                            ) : (
+                                <span className="text-[10px] font-medium text-stone-400">{myQuotes.length} cot.</span>
+                            )}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-100 text-left bg-stone-50/80 p-2 rounded-xl">
+                        <div className="min-w-0">
+                            <span className="block text-[8px] uppercase font-bold tracking-wider text-stone-400">Estimado</span>
+                            <span className="font-bold text-stone-700 text-xs truncate block">{money(est)}</span>
+                            {guia > 0 && <span className="block text-[8px] text-stone-400 truncate leading-tight">guía {money(guia)}</span>}
+                        </div>
+                        <div className="min-w-0">
+                            <span className="block text-[8px] uppercase font-bold tracking-wider text-stone-400">Cotizado</span>
+                            <span className="font-bold text-stone-700 text-xs truncate block">{cotizado ? money(cotizado) : '—'}</span>
+                        </div>
+                        <div className="min-w-0 text-right">
+                            <span className="block text-[8px] uppercase font-bold tracking-wider text-stone-400">Contratado</span>
+                            {chosen ? (
+                                <span className="font-bold text-xs truncate block" style={{ color: '#166534' }}>{money(Number(chosen.amount))}</span>
+                            ) : (
+                                <span className="text-stone-400 text-xs truncate block">—</span>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                <div className="col-span-2 text-right text-xs text-stone-400">
-                    <span className="block text-[9px] uppercase tracking-wider">Estimado</span>
-                    <span className="font-bold text-stone-700">{money(est)}</span>
-                    {guia > 0 && <span className="block text-[9px] text-stone-400">guía {money(guia)}</span>}
-                </div>
-                <div className="col-span-2 text-right text-xs text-stone-400">
-                    <span className="block text-[9px] uppercase tracking-wider">Cotizado</span>
-                    <span className="font-bold text-stone-700">{cotizado ? money(cotizado) : '—'}</span>
-                </div>
-                <div className="col-span-3 text-right text-xs">
-                    <span className="block text-[9px] uppercase tracking-wider text-stone-400">Contratado</span>
-                    {chosen
-                        ? <span className="font-bold" style={{ color: '#166534' }}>{money(Number(chosen.amount))}</span>
-                        : <span className="text-stone-400">{myQuotes.length} cotización(es)</span>}
+
+                {/* Vista Desktop (>= sm) */}
+                <div className="hidden sm:grid sm:grid-cols-12 sm:items-center sm:gap-2">
+                    <div className="col-span-5 flex items-center gap-2 min-w-0">
+                        {expanded ? <ChevronDown className="h-4 w-4 text-stone-400 shrink-0" /> : <ChevronRight className="h-4 w-4 text-stone-400 shrink-0" />}
+                        <span className="font-display font-bold truncate" style={{ color: DARK }}>{rubro.name}</span>
+                        {rubro.location && <span className="shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-[9px] uppercase tracking-wider text-stone-500">{LOC_LABEL[rubro.location] || rubro.location}</span>}
+                        {rubro.is_external && <span className="shrink-0 rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wider" style={{ background: `${PINK}1a`, color: PINK }}>Invitto</span>}
+                    </div>
+                    <div className="col-span-2 text-right text-xs text-stone-400 min-w-0">
+                        <span className="block text-[9px] uppercase tracking-wider">Estimado</span>
+                        <span className="font-bold text-stone-700 truncate block">{money(est)}</span>
+                        {guia > 0 && <span className="block text-[9px] text-stone-400 truncate">guía {money(guia)}</span>}
+                    </div>
+                    <div className="col-span-2 text-right text-xs text-stone-400 min-w-0">
+                        <span className="block text-[9px] uppercase tracking-wider">Cotizado</span>
+                        <span className="font-bold text-stone-700 truncate block">{cotizado ? money(cotizado) : '—'}</span>
+                    </div>
+                    <div className="col-span-3 text-right text-xs min-w-0">
+                        <span className="block text-[9px] uppercase tracking-wider text-stone-400">Contratado</span>
+                        {chosen
+                            ? <span className="font-bold truncate block" style={{ color: '#166534' }}>{money(Number(chosen.amount))}</span>
+                            : <span className="text-stone-400 truncate block">{myQuotes.length} cotización(es)</span>}
+                    </div>
                 </div>
             </button>
 
             {expanded && (
-                <div className="border-t border-stone-100 px-5 py-4 space-y-4">
-                    <div className="flex items-center gap-3">
+                <div className="border-t border-stone-100 px-4 sm:px-5 py-4 space-y-4">
+                    <div className="flex flex-wrap items-center gap-3">
                         <label className="text-[10px] uppercase font-bold tracking-widest text-stone-400">Presupuesto estimado</label>
                         <input type="number" defaultValue={Number(rubro.estimated_amount)}
                             onBlur={e => { const v = Number(e.target.value); if (v !== Number(rubro.estimated_amount)) updateRubroEstimate(rubro.id, v); }}
@@ -585,23 +628,25 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
                                             <span className="rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider" style={{ background: chip.bg, color: chip.fg }}>{chip.label}</span>
                                             {q.is_chosen
                                                 ? <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: '#166534' }}><Check className="h-3.5 w-3.5" /> Contrato</span>
-                                                : <button onClick={() => chooseQuote(q)} className="rounded-lg px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white" style={{ background: DARK }}>Elegir</button>}
+                                                : <button onClick={() => chooseQuote(q)} className="rounded-lg px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: DARK }}>Elegir</button>}
                                         </div>
                                     </div>
                                 );
                             })}
                         </div>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                            <select value={qv} onChange={e => setQv(e.target.value)} className="min-w-[160px] flex-1 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
+                        <div className="mt-3 flex flex-col sm:flex-row flex-wrap gap-2">
+                            <select value={qv} onChange={e => setQv(e.target.value)} className="w-full sm:w-auto sm:min-w-[160px] sm:flex-1 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
                                 <option value="">Proveedor…</option>
                                 {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                             </select>
-                            <input value={qa} onChange={e => setQa(e.target.value)} type="number" placeholder="Monto"
-                                className="w-28 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
-                            <select value={qs} onChange={e => setQs(e.target.value as QuoteState)} className="rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
-                                {QUOTE_STATES.filter(s => s !== 'descartado').map(s => <option key={s} value={s}>{QUOTE_CHIP[s].label}</option>)}
-                            </select>
-                            <button onClick={submitQuote} className="rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white" style={{ background: PINK }}>Añadir</button>
+                            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                                <input value={qa} onChange={e => setQa(e.target.value)} type="number" placeholder="Monto"
+                                    className="w-full sm:w-28 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                                <select value={qs} onChange={e => setQs(e.target.value as QuoteState)} className="w-full sm:w-auto rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
+                                    {QUOTE_STATES.filter(s => s !== 'descartado').map(s => <option key={s} value={s}>{QUOTE_CHIP[s].label}</option>)}
+                                </select>
+                            </div>
+                            <button onClick={submitQuote} className="w-full sm:w-auto rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: PINK }}>Añadir</button>
                         </div>
                         {vendors.length === 0 && <p className="mt-2 text-xs text-stone-400">Agrega proveedores en la pestaña Proveedores para cotizar.</p>}
                     </div>
@@ -619,18 +664,20 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
                                         </div>
                                         {p.status === 'paid'
                                             ? <span className="rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider" style={{ background: '#dcfce7', color: '#166534' }}>Pagado</span>
-                                            : <button onClick={() => markPaymentPaid(p.id)} className="rounded-lg px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white" style={{ background: PINK }}>Pagar</button>}
+                                            : <button onClick={() => markPaymentPaid(p.id)} className="rounded-lg px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: PINK }}>Pagar</button>}
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-3 flex flex-wrap gap-2">
+                            <div className="mt-3 flex flex-col sm:flex-row flex-wrap gap-2">
                                 <input value={pl} onChange={e => setPl(e.target.value)} placeholder="Concepto (Anticipo…)"
-                                    className="min-w-[150px] flex-1 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
-                                <input value={pa} onChange={e => setPa(e.target.value)} type="number" placeholder="Monto"
-                                    className="w-28 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
-                                <input value={pd} onChange={e => setPd(e.target.value)} type="date"
-                                    className="rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
-                                <button onClick={submitPayment} className="rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white" style={{ background: DARK }}>Añadir pago</button>
+                                    className="w-full sm:w-auto sm:min-w-[150px] sm:flex-1 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                                <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                                    <input value={pa} onChange={e => setPa(e.target.value)} type="number" placeholder="Monto"
+                                        className="w-full sm:w-28 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                                    <input value={pd} onChange={e => setPd(e.target.value)} type="date"
+                                        className="w-full sm:w-auto rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                                </div>
+                                <button onClick={submitPayment} className="w-full sm:w-auto rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: DARK }}>Añadir pago</button>
                             </div>
                         </div>
                     )}
@@ -797,13 +844,13 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                 </div>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3 rounded-3xl border border-stone-200 bg-white p-4">
+            <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-4 min-w-0">
                 <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Nuevo pendiente"
-                    className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                <select value={phase} onChange={e => setPhase(e.target.value)} className="rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]">
+                    className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
+                <select value={phase} onChange={e => setPhase(e.target.value)} className="w-full sm:w-auto rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0">
                     {PHASES.filter(p => p.key !== 'sin_fase').map(p => <option key={p.key} value={p.key}>{p.label}</option>)}
                 </select>
-                <button onClick={submit} className="flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white" style={{ background: PINK }}>
+                <button onClick={submit} className="flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white cursor-pointer" style={{ background: PINK }}>
                     <Plus className="h-4 w-4" /> Agregar
                 </button>
             </div>
@@ -813,14 +860,14 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                     <Sparkles className="mx-auto mb-3 h-8 w-8" style={{ color: PINK }} />
                     <p className="font-display font-extrabold text-lg" style={{ color: DARK }}>Empieza con todo precargado</p>
                     <p className="mt-1 text-sm text-stone-500">El asistente siembra rubros, checklist por fase (anillos, menú, canciones…) y la carpeta del día.</p>
-                    <button onClick={seed} className="mt-5 rounded-2xl px-6 py-3 text-[11px] uppercase font-bold tracking-widest text-white" style={{ background: DARK }}>Sembrar todo</button>
+                    <button onClick={seed} className="mt-5 rounded-2xl px-6 py-3 text-[11px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: DARK }}>Sembrar todo</button>
                 </div>
             ) : (
                 PHASES.filter(p => grouped[p.key]?.length).map(p => {
                     const items = [...(grouped[p.key] || [])].sort((a, b) => ((a.due_date || '9999') < (b.due_date || '9999') ? -1 : 1));
                     const d = items.filter(t => t.is_done).length;
                     return (
-                        <div key={p.key} className="rounded-3xl border border-stone-200 bg-white p-6">
+                        <div key={p.key} className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-6 min-w-0">
                             <div className="mb-4 flex items-center justify-between">
                                 <h3 className="text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>{p.label}</h3>
                                 <span className="text-[11px] font-bold text-stone-400">{d}/{items.length}</span>
@@ -828,12 +875,12 @@ const Pendientes: React.FC<{ planning: Planning; toast: any }> = ({ planning, to
                             <div className="space-y-2">
                                 {items.map(t => (
                                     <button key={t.id} onClick={() => toggleTask(t.id, !t.is_done)}
-                                        className="flex w-full items-center gap-3 rounded-2xl border border-stone-100 p-3 text-left hover:bg-stone-50">
+                                        className="flex w-full items-center gap-2.5 sm:gap-3 rounded-2xl border border-stone-100 p-2.5 sm:p-3 text-left hover:bg-stone-50 min-w-0 cursor-pointer">
                                         {t.is_done ? <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: PINK }} /> : <Circle className="h-5 w-5 shrink-0 text-stone-300" />}
-                                        <span className={`font-medium ${t.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: t.is_done ? undefined : DARK }}>{t.title}</span>
-                                        <span className="ml-auto flex shrink-0 items-center gap-2">
-                                            {t.due_date && <span className="text-[11px] text-stone-400">{fmtShort(t.due_date)}</span>}
-                                            {t.source === 'template' && <span className="text-[9px] uppercase tracking-wider text-stone-300">base</span>}
+                                        <span className={`font-medium text-sm flex-1 min-w-0 ${t.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: t.is_done ? undefined : DARK }}>{t.title}</span>
+                                        <span className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+                                            {t.due_date && <span className="text-[10px] sm:text-[11px] text-stone-400">{fmtShort(t.due_date)}</span>}
+                                            {t.source === 'template' && <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-stone-300">base</span>}
                                         </span>
                                     </button>
                                 ))}
@@ -919,14 +966,16 @@ const DespuesBoda: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                     <h3 className="font-display font-extrabold" style={{ color: DARK }}>Agradecimientos</h3>
                     <span className="text-sm font-bold" style={{ color: PINK }}>{thanked} de {gifts.length} agradecidos</span>
                 </div>
-                <div className="mb-4 flex flex-wrap gap-2">
+                <div className="mb-4 flex flex-col sm:flex-row flex-wrap gap-2">
                     <input value={gn} onChange={e => setGn(e.target.value)} placeholder="Quién regaló"
-                        className="min-w-[140px] flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
+                        className="w-full sm:w-auto sm:min-w-[140px] sm:flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94]" />
                     <input value={gg} onChange={e => setGg(e.target.value)} placeholder="Regalo"
-                        className="min-w-[140px] flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                    <input value={ga} onChange={e => setGa(e.target.value)} type="number" placeholder="Valor (opc.)"
-                        className="w-28 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 outline-none focus:border-[#DF3B94]" />
-                    <button onClick={submit} className="rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white" style={{ background: PINK }}>Agregar</button>
+                        className="w-full sm:w-auto sm:min-w-[140px] sm:flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94]" />
+                    <div className="flex gap-2">
+                        <input value={ga} onChange={e => setGa(e.target.value)} type="number" placeholder="Valor (opc.)"
+                            className="w-28 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94]" />
+                        <button onClick={submit} className="flex-1 sm:flex-none rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest text-white cursor-pointer" style={{ background: PINK }}>Agregar</button>
+                    </div>
                 </div>
                 <div className="space-y-2">
                     {gifts.length === 0 && <p className="text-sm text-stone-400">Sin regalos registrados. Toca uno para marcar que ya diste las gracias.</p>}
@@ -1033,35 +1082,35 @@ const DiaB: React.FC<{ planning: Planning; event: any }> = ({ planning, event })
                 </button>
             </div>
             {DAYOF_SECTIONS.map(s => (
-                <div key={s.key} className="rounded-3xl border border-stone-200 bg-white p-6">
+                <div key={s.key} className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-6 min-w-0">
                     <h3 className="mb-4 text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>{s.label}</h3>
                     <div className="space-y-2">
                         {!(grouped[s.key]?.length) && <p className="text-sm text-stone-400">Sin elementos. Se siembran al activar el módulo.</p>}
                         {(grouped[s.key] || []).map(d => (
                             <button key={d.id} onClick={() => toggleDayOf(d.id, !d.is_done)}
-                                className="flex w-full items-center gap-4 rounded-2xl border border-stone-100 p-3 text-left hover:bg-stone-50">
-                                <span className="w-14 shrink-0 font-display font-black" style={{ color: PINK }}>{d.time || '--:--'}</span>
+                                className="flex w-full items-center gap-3 sm:gap-4 rounded-2xl border border-stone-100 p-2.5 sm:p-3 text-left hover:bg-stone-50 min-w-0 cursor-pointer">
+                                <span className="w-12 sm:w-14 shrink-0 font-display font-black text-sm sm:text-base" style={{ color: PINK }}>{d.time || '--:--'}</span>
                                 {d.is_done ? <CheckCircle2 className="h-5 w-5 shrink-0" style={{ color: PINK }} /> : <Circle className="h-5 w-5 shrink-0 text-stone-300" />}
-                                <span className={`font-medium ${d.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: d.is_done ? undefined : DARK }}>{d.title}</span>
+                                <span className={`font-medium text-sm flex-1 min-w-0 ${d.is_done ? 'text-stone-400 line-through' : ''}`} style={{ color: d.is_done ? undefined : DARK }}>{d.title}</span>
                             </button>
                         ))}
                     </div>
                 </div>
             ))}
 
-            <div className="rounded-3xl border border-stone-200 bg-white p-6">
+            <div className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-6 min-w-0">
                 <h3 className="mb-1 text-[11px] uppercase font-bold tracking-widest" style={{ color: PINK }}>A quién llamar</h3>
                 <p className="mb-4 text-xs text-stone-400">Se arma solo con los proveedores que tienen WhatsApp.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {contactos.length === 0 && <p className="text-sm text-stone-400">Agrega teléfonos a tus proveedores.</p>}
                     {contactos.map(v => (
                         <a key={v.id} href={`https://wa.me/${v.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer"
-                            className="flex items-center justify-between rounded-2xl border border-stone-100 p-3 hover:bg-stone-50">
-                            <div>
-                                <p className="font-bold" style={{ color: DARK }}>{v.name}</p>
-                                <p className="text-xs text-stone-500">{v.category || ''}</p>
+                            className="flex items-center justify-between rounded-2xl border border-stone-100 p-3 hover:bg-stone-50 min-w-0">
+                            <div className="min-w-0 flex-1 mr-2">
+                                <p className="font-bold truncate text-sm" style={{ color: DARK }}>{v.name}</p>
+                                <p className="text-xs text-stone-500 truncate">{v.category || ''}</p>
                             </div>
-                            <span className="flex items-center gap-1.5 rounded-xl bg-[#25D366] px-3 py-1.5 text-[10px] font-bold text-white"><Phone className="h-3 w-3" /> {v.phone}</span>
+                            <span className="shrink-0 flex items-center gap-1.5 rounded-xl bg-[#25D366] px-2.5 sm:px-3 py-1.5 text-[10px] font-bold text-white"><Phone className="h-3 w-3" /> {v.phone}</span>
                         </a>
                     ))}
                 </div>
