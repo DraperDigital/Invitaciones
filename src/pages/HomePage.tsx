@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import {
-    Check, ChevronDown, ArrowRight,
+    Check, ChevronDown, ArrowRight, ChevronLeft,
     X, Users, Gem, Menu, Calendar,
-    Crown, Wallet, Store, ListChecks, CalendarHeart
+    Crown, Wallet, Store, ListChecks, CalendarHeart,
+    MessageCircle, Sparkles, Clock, QrCode
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import Seo from '../components/Seo';
-import { FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
+import { RAW_FAQ_ITEMS, FAQ_JSONLD } from '../data/faq';
 import { WHATSAPP_SUPPORT_URL } from '../lib/constants';
 
 const HOMEPAGE_JSONLD = [
@@ -45,7 +46,7 @@ const HOMEPAGE_JSONLD = [
     FAQ_JSONLD,
 ];
 
-// Fecha calculada dinámicamente a 45 días en el futuro para que el contador "45 DÍAS 12 HORAS" siempre sea exacto
+// Fecha calculada dinámicamente a 45 días en el futuro para que el contador sea exacto
 const MOCK_HERO_DATE = (() => {
     const d = new Date();
     d.setDate(d.getDate() + 45);
@@ -56,14 +57,276 @@ const MOCK_HERO_DATE = (() => {
     return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 })();
 
+interface HeroSlide {
+    tag: string;
+    names: string;
+    event: string;
+    date: string;
+    days: number;
+    hours: number;
+    image: string;
+    avif?: string;
+    webp?: string;
+    srcset?: string;
+    alt: string;
+    accentColor: string;
+    buttonColor: string;
+    demoUrl: string;
+}
+
+const HERO_SLIDES: HeroSlide[] = [
+    {
+        tag: 'Nuestra Boda',
+        names: 'Isabel & Rodrigo',
+        event: 'Boda de Ensueño',
+        date: MOCK_HERO_DATE,
+        days: 45,
+        hours: 12,
+        image: '/assets/hero-wedding.webp',
+        avif: '/assets/hero-wedding.avif',
+        webp: '/assets/hero-wedding.webp',
+        srcset: '/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w',
+        alt: 'Boda Isabel & Rodrigo',
+        accentColor: '#DF3B94',
+        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
+        demoUrl: '/i/boda-isabel-rodrigo-premium',
+    },
+    {
+        tag: 'Mis XV Años',
+        names: 'Valeria',
+        event: 'Gala XV Años',
+        date: '20 Noviembre',
+        days: 18,
+        hours: 6,
+        image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
+        alt: 'XV Años Valeria',
+        accentColor: '#FAC345',
+        buttonColor: 'bg-[#C2287B] hover:bg-[#A81B65]',
+        demoUrl: '/i/xv-valeria-premium',
+    },
+    {
+        tag: 'Festejo Especial',
+        names: 'Cecilia',
+        event: 'Mi Cumpleaños 30',
+        date: '12 Diciembre',
+        days: 10,
+        hours: 8,
+        image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80',
+        alt: 'Cumpleaños Cecilia',
+        accentColor: '#DF3B94',
+        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
+        demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657',
+    },
+    {
+        tag: 'Mi Bautizo',
+        names: 'Victoria',
+        event: 'Bautizo & Bendición',
+        date: '15 Enero',
+        days: 28,
+        hours: 14,
+        image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80',
+        alt: 'Bautizo Victoria',
+        accentColor: '#4E7B55',
+        buttonColor: 'bg-[#4E7B55] hover:bg-[#3D6343]',
+        demoUrl: '/i/bautizo-victoria',
+    },
+    {
+        tag: 'Baby Shower',
+        names: 'Sofía',
+        event: 'Esperando a la Bebé',
+        date: '5 Febrero',
+        days: 35,
+        hours: 4,
+        image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=600&q=80',
+        alt: 'Baby Shower Sofía',
+        accentColor: '#FF85C0',
+        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
+        demoUrl: '/i/baby-shower-sofia',
+    },
+];
+
+const FEATURE_CHIPS = [
+    'Confirmación WhatsApp',
+    'Pases con Código QR',
+    'Mesa de Regalos',
+    'Música de Fondo',
+    'Cuenta Regresiva',
+    'Mapa Waze & Maps',
+    'Código de Vestimenta',
+    'Libro de Firmas',
+    'Itinerario Minuto a Minuto',
+    'Save the Date Digital',
+    'Galería de Fotos',
+    'Recordatorios Automáticos',
+];
+
+const OCCASIONS = [
+    {
+        id: 'boda',
+        name: 'Boda',
+        icon: '💍',
+        slug: 'invitaciones-digitales-boda',
+        badge: 'Boda Elegante',
+        title: 'Boda Elegante Clásica',
+        names: 'Isabel & Rodrigo',
+        event: 'Boda de Ensueño',
+        description: 'Tipografía serif sofisticada, sobre digital interactivo y confirmación por pases familiares.',
+        demoUrl: '/i/boda-isabel-rodrigo-premium',
+        features: ['Sobre interactivo', 'Pases familiares', 'Mesa Liverpool / Amazon'],
+    },
+    {
+        id: 'xv-anos',
+        name: 'XV Años',
+        icon: '👑',
+        slug: 'invitaciones-digitales-xv-anos',
+        badge: 'Gala XV',
+        title: 'XV Años Glamour',
+        names: 'Valeria',
+        event: 'Mis XV Años',
+        description: 'Diseño moderno con cuenta regresiva, código de vestimenta, vals, padrinos y pase QR.',
+        demoUrl: '/i/xv-valeria-premium',
+        features: ['Pases QR individuales', 'Vals y padrinos', 'Música de fondo'],
+    },
+    {
+        id: 'cumpleanos',
+        name: 'Cumpleaños',
+        icon: '🎂',
+        slug: 'invitaciones-digitales-cumpleanos',
+        badge: 'Festejo Especial',
+        title: 'Cumpleaños & Fiesta',
+        names: 'Cecilia',
+        event: 'Mi Festejo 30',
+        description: 'Música de fondo, mapa interactivo para salón y confirmación ágil vía WhatsApp.',
+        demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657',
+        features: ['Mapa Waze & Maps', 'Confirmación 1 clic', 'Galería de fotos'],
+    },
+    {
+        id: 'bautizo',
+        name: 'Bautizo',
+        icon: '🕊️',
+        slug: 'invitaciones-digitales-bautizo',
+        badge: 'Bendición',
+        title: 'Bautizo Angelical',
+        names: 'Victoria',
+        event: 'Mi Bautizo',
+        description: 'Diseños tiernos y solemnes con sección de padrinos, iglesia, comida familiar y recordatorios.',
+        demoUrl: '/i/bautizo-victoria',
+        features: ['Sección de padrinos', 'Misa y recepción', 'Guía de regalos'],
+    },
+    {
+        id: 'primera-comunion',
+        name: 'Primera Comunión',
+        icon: '⛪',
+        slug: 'invitaciones-digitales-primera-comunion',
+        badge: 'Ceremonia Sacra',
+        title: 'Comunión Sacra',
+        names: 'Mateo',
+        event: 'Primera Comunión',
+        description: 'Ceremonia solemne, horarios puntuales, mapas de llegada y confirmación ordenada.',
+        demoUrl: '/i/comunion-mateo',
+        features: ['Ceremonia y banquete', 'Itinerario de misa', 'Confirmación familiar'],
+    },
+    {
+        id: 'baby-shower',
+        name: 'Baby Shower',
+        icon: '🍼',
+        slug: 'invitaciones-digitales-baby-shower',
+        badge: 'Dulce Espera',
+        title: 'Baby Shower Pastel',
+        names: 'Sofía',
+        event: 'Esperando a la Bebé',
+        description: 'Mesa de regalos Liverpool/Amazon, sugerencias de pañales y confirmación tierna.',
+        demoUrl: '/i/baby-shower-sofia',
+        features: ['Mesa de regalos', 'Guía de pañales', 'Confirmación ágil'],
+    },
+    {
+        id: 'revelacion-de-genero',
+        name: 'Revelación',
+        icon: '🎈',
+        slug: 'invitaciones-digitales-revelacion-de-genero',
+        badge: '¿Niño o Niña?',
+        title: 'Revelación de Género',
+        names: 'Baby Reveal',
+        event: 'Gran Secreto',
+        description: '¿Team Rosa o Azul? Dinámicas interactivas de votación y cuenta regresiva al gran secreto.',
+        demoUrl: '/i/revelacion-secreto',
+        features: ['Votación Team Rosa/Azul', 'Cuenta regresiva', 'Dinámicas en vivo'],
+    },
+    {
+        id: 'graduacion',
+        name: 'Graduación',
+        icon: '🎓',
+        slug: 'invitaciones-digitales-graduacion',
+        badge: 'Gala de Generación',
+        title: 'Gala de Graduación',
+        names: 'Generación 2026',
+        event: 'Noche de Gala',
+        description: 'Pases de gala individuales, check-in con código QR, código de etiqueta y fotos grupales.',
+        demoUrl: '/i/graduacion-generacion',
+        features: ['Check-in QR en puerta', 'Código de etiqueta', 'Itinerario de gala'],
+    },
+];
+
+const FAQ_GROUPS = [
+    {
+        category: 'Invitaciones y RSVP',
+        indices: [0, 2, 3, 7, 9, 10],
+    },
+    {
+        category: 'Planes, Pagos y Garantía',
+        indices: [1, 4, 5, 6, 8],
+    },
+];
+
 export default function HomePage() {
     const { user } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+    // Hero Slider state
+    const [heroSlide, setHeroSlide] = useState(0);
+    const [isHeroHovered, setIsHeroHovered] = useState(false);
+    const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+    // Gallery Tabs state
+    const [activeOccasion, setActiveOccasion] = useState(0);
+
+    // Dark Band (Planeador + Confirma) Tabs state
+    const [darkTab, setDarkTab] = useState<'planeador' | 'confirma'>('planeador');
+
+    // Autoplay hero slider
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+        if (isHeroHovered) return;
+        const timer = setInterval(() => {
+            setHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+        }, 3500);
+        return () => clearInterval(timer);
+    }, [isHeroHovered]);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStartX(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStartX === null) return;
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (diff > 40) {
+            setHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+        } else if (diff < -40) {
+            setHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+        }
+        setTouchStartX(null);
+    };
+
     const toggleFaq = (index: number) => {
         setOpenFaq(openFaq === index ? null : index);
     };
+
+    const currentSlide = HERO_SLIDES[heroSlide];
+    const currentOccasion = OCCASIONS[activeOccasion];
 
     return (
         <div className="min-h-screen bg-[#FFFFFF] font-sans text-[#222B38]">
@@ -74,6 +337,30 @@ export default function HomePage() {
                 image="https://invitto.com.mx/logo.png"
                 jsonLd={HOMEPAGE_JSONLD}
             />
+
+            {/* Custom Keyframes for Marquee */}
+            <style>{`
+                @keyframes marqueeScroll {
+                    0% { transform: translateX(0); }
+                    100% { transform: translateX(-50%); }
+                }
+                .animate-marquee-smooth {
+                    display: flex;
+                    width: max-content;
+                    animation: marqueeScroll 30s linear infinite;
+                }
+                .animate-marquee-smooth:hover {
+                    animation-play-state: paused;
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .animate-marquee-smooth {
+                        animation: none;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        width: auto;
+                    }
+                }
+            `}</style>
 
             {/* --- 1. HEADER --- */}
             <header className="fixed top-0 w-full z-50 bg-white border-b border-slate-100 px-4 md:px-6">
@@ -226,7 +513,7 @@ export default function HomePage() {
 
             {/* --- MAIN CONTENT LANDMARK --- */}
             <main id="main-content">
-                {/* Barra de aviso arriba del hero */}
+                {/* 1. Barra de aviso arriba del hero */}
                 <div className="mt-16 md:mt-20 bg-[#C2287B] text-white py-3.5 sm:py-4 px-4 text-center border-b border-[#A81B65] relative z-40 shadow-xs">
                     <Link to="/confirma" className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wide hover:opacity-95 transition-opacity max-w-4xl mx-auto flex-wrap leading-snug">
                         <span className="bg-emerald-400 text-stone-950 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 shadow-sm">
@@ -236,10 +523,12 @@ export default function HomePage() {
                     </Link>
                 </div>
 
-                {/* --- 1. HERO SECTION (Optimizado para pliegue en escritorio 1366x800 y móvil) --- */}
-                <section className="relative pt-6 pb-10 md:pt-10 md:pb-14 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
+                {/* --- 2. HERO SECTION CON SLIDER DE INVITACIONES (TAREA A) --- */}
+                <section className="relative pt-6 pb-12 md:pt-10 md:pb-16 overflow-hidden px-6 bg-gradient-to-b from-[#fdf2f8]/50 via-white to-[#F8F9FA]">
                     <div className="mx-auto max-w-7xl">
                         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                            
+                            {/* Left Column: Value Proposition & CTAs */}
                             <div className="space-y-4 md:space-y-5 text-center lg:text-left">
                                 <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C2287B]">
                                     <span className="h-2 w-2 rounded-full bg-[#C2287B] animate-pulse" />
@@ -255,7 +544,7 @@ export default function HomePage() {
                                 </h1>
 
                                 <p className="text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
-                                    Tus invitados confirman con un clic. Tú ves en tiempo real quién va, quién no y cuántos acompañantes traen. Sin WhatsApp saturado, sin Excel.
+                                    Tus invitados confirman con un toque. Tú ves en tiempo real quién asiste, quién no y sus acompañantes. Sin saturar tu WhatsApp ni hojas de cálculo.
                                 </p>
 
                                 <div className="space-y-3 pt-1">
@@ -266,8 +555,8 @@ export default function HomePage() {
                                         >
                                             {user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'} <ArrowRight className="h-4 w-4" />
                                         </Link>
-                                        <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#C2287B] hover:border-[#C2287B]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
-                                            VER EJEMPLO DEMO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#C2287B]">→</span>
+                                        <Link to={currentSlide.demoUrl} className="w-full xs:w-auto px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-xs md:text-sm font-bold tracking-wider text-slate-700 hover:text-[#C2287B] hover:border-[#C2287B]/30 transition-all flex items-center justify-center gap-2 group shadow-sm">
+                                            VER DEMO EN VIVO <span className="text-lg group-hover:translate-x-1 transition-transform text-[#C2287B]">→</span>
                                         </Link>
                                     </div>
 
@@ -288,46 +577,67 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            {/* Right Column: Layered Product Collage (Smartphone + Live RSVP + QR Pass) */}
-                            <div className="relative mt-12 lg:mt-0 flex items-center justify-center">
-                                
+                            {/* Right Column: Interactive Phone Slider with Floating Cards */}
+                            <div 
+                                className="relative mt-8 lg:mt-0 flex flex-col items-center justify-center"
+                                onMouseEnter={() => setIsHeroHovered(true)}
+                                onMouseLeave={() => setIsHeroHovered(false)}
+                                onTouchStart={handleTouchStart}
+                                onTouchEnd={handleTouchEnd}
+                            >
                                 {/* Ambient Glows */}
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#DF3B94]/10 rounded-full blur-[100px] pointer-events-none" />
                                 <div className="absolute top-1/3 left-10 w-72 h-72 bg-[#F5B837]/15 rounded-full blur-[80px] pointer-events-none" />
 
                                 {/* 1. Main Smartphone Frame */}
-                                <div className="relative z-20 mx-auto w-full max-w-[290px] xs:max-w-[320px] lg:max-w-[340px] aspect-[9/18] bg-slate-900 rounded-[2.8rem] p-3 shadow-2xl shadow-[#222B38]/20 ring-1 ring-slate-800">
+                                <div className="relative z-20 mx-auto w-full max-w-[290px] xs:max-w-[320px] lg:max-w-[340px] aspect-[9/18] bg-slate-900 rounded-[2.8rem] p-3 shadow-2xl shadow-[#222B38]/20 ring-1 ring-slate-800 select-none">
                                     {/* Speaker notch */}
                                     <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-slate-950 rounded-full z-30 flex items-center justify-center">
                                         <div className="w-3 h-1 bg-slate-800 rounded-full" />
                                     </div>
 
                                     {/* Phone Screen Content */}
-                                    <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white">
-                                        {/* Event Hero Cover */}
-                                        <div className="relative h-2/3 w-full">
-                                            <picture>
-                                                <source srcSet="/assets/hero-wedding.avif" type="image/avif" />
-                                                <source srcSet="/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w" type="image/webp" sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px" />
+                                    <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white transition-opacity duration-300">
+                                        
+                                        {/* Event Cover Image */}
+                                        <div className="relative h-2/3 w-full overflow-hidden">
+                                            {heroSlide === 0 ? (
+                                                <picture>
+                                                    <source srcSet="/assets/hero-wedding.avif" type="image/avif" />
+                                                    <source srcSet="/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w" type="image/webp" sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px" />
+                                                    <img
+                                                        src="/assets/hero-wedding.webp"
+                                                        width={340}
+                                                        height={450}
+                                                        fetchPriority="high"
+                                                        loading="eager"
+                                                        decoding="async"
+                                                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                                        alt={currentSlide.alt}
+                                                    />
+                                                </picture>
+                                            ) : (
                                                 <img
-                                                    src="/assets/hero-wedding.webp"
+                                                    src={currentSlide.image}
                                                     width={340}
                                                     height={450}
-                                                    fetchPriority="high"
-                                                    loading="eager"
+                                                    loading="lazy"
                                                     decoding="async"
-                                                    className="w-full h-full object-cover"
-                                                    alt="Boda Isabel & Rodrigo"
+                                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                                    alt={currentSlide.alt}
                                                 />
-                                            </picture>
+                                            )}
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                                             
                                             <div className="absolute bottom-4 left-0 w-full px-5 z-10 text-center">
-                                                <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] uppercase font-bold tracking-widest text-[#F5B837] border border-white/10 inline-block mb-2">
-                                                    Nuestra Boda
+                                                <span 
+                                                    className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] uppercase font-bold tracking-widest border border-white/10 inline-block mb-2"
+                                                    style={{ color: currentSlide.accentColor }}
+                                                >
+                                                    {currentSlide.tag}
                                                 </span>
-                                                <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">Isabel & Rodrigo</p>
-                                                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{MOCK_HERO_DATE}</p>
+                                                <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">{currentSlide.names}</p>
+                                                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{currentSlide.date}</p>
                                             </div>
                                         </div>
 
@@ -335,24 +645,27 @@ export default function HomePage() {
                                         <div className="p-4 space-y-2 bg-slate-950 z-10">
                                             <div className="flex justify-center gap-3 text-center text-[10px] font-bold">
                                                 <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                    <p className="text-sm font-display text-[#DF3B94]">45</p>
+                                                    <p className="text-sm font-display text-[#DF3B94]">{currentSlide.days}</p>
                                                     <p className="text-[8px] text-slate-400">DÍAS</p>
                                                 </div>
                                                 <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                    <p className="text-sm font-display text-[#F5B837]">12</p>
+                                                    <p className="text-sm font-display text-[#FAC345]">{currentSlide.hours}</p>
                                                     <p className="text-[8px] text-slate-400">HORAS</p>
                                                 </div>
                                             </div>
 
-                                            <button className="w-full py-3 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md">
+                                            <Link 
+                                                to={currentSlide.demoUrl} 
+                                                className={`w-full py-3 ${currentSlide.buttonColor} text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md text-center block transition-colors`}
+                                            >
                                                 Confirmar Asistencia
-                                            </button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* 2. Top-Right Floating Card: Live RSVP Counter */}
-                                <div className="absolute -top-4 -right-2 lg:-right-10 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] xs:w-[260px] animate-fade-in">
+                                <div className="absolute -top-4 -right-2 lg:-right-10 z-30 p-5 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[240px] xs:w-[260px] animate-fade-in pointer-events-none sm:pointer-events-auto">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center gap-2">
                                             <span className="h-2.5 w-2.5 rounded-full bg-[#4E7B55] animate-pulse" />
@@ -377,894 +690,984 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                            {/* 3. Bottom-Left Floating Card: QR Digital Pass */}
-                            <div className="absolute bottom-6 -left-4 lg:-left-12 z-30 p-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[230px] xs:w-[250px]">
-                                <div className="flex items-center gap-3">
-                                    {/* Simulación QR Code */}
-                                    <div className="h-12 w-12 rounded-2xl bg-slate-900 p-2 flex flex-wrap gap-1 items-center justify-center shrink-0">
-                                        <div className="w-3 h-3 bg-white rounded-sm" />
-                                        <div className="w-3 h-3 bg-[#DF3B94] rounded-sm" />
-                                        <div className="w-3 h-3 bg-[#F5B837] rounded-sm" />
-                                        <div className="w-3 h-3 bg-white rounded-sm" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[9px] font-bold rounded-md uppercase tracking-wider">Pase QR</span>
-                                        <p className="text-xs font-bold text-slate-900 truncate mt-0.5">Roberto Nieto</p>
-                                        <p className="text-[10px] text-[#DF3B94] font-semibold">Mesa 12 · 4 Pax</p>
+                                {/* 3. Bottom-Left Floating Card: QR Digital Pass */}
+                                <div className="absolute bottom-12 -left-4 lg:-left-12 z-30 p-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-slate-100 w-[230px] xs:w-[250px] pointer-events-none sm:pointer-events-auto">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-12 w-12 rounded-2xl bg-slate-900 p-2 flex flex-wrap gap-1 items-center justify-center shrink-0">
+                                            <div className="w-3 h-3 bg-white rounded-sm" />
+                                            <div className="w-3 h-3 bg-[#DF3B94] rounded-sm" />
+                                            <div className="w-3 h-3 bg-[#F5B837] rounded-sm" />
+                                            <div className="w-3 h-3 bg-white rounded-sm" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <span className="px-2 py-0.5 bg-slate-100 text-slate-700 text-[9px] font-bold rounded-md uppercase tracking-wider">Pase QR</span>
+                                            <p className="text-xs font-bold text-slate-900 truncate mt-0.5">Roberto Nieto</p>
+                                            <p className="text-[10px] text-[#DF3B94] font-semibold">Mesa 12 · 4 Pax</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* 4. Bottom-Right GPS Pill */}
-                            <div className="absolute -bottom-4 right-4 z-30 px-4 py-2 bg-[#222B38] text-white rounded-full shadow-xl border border-white/10 text-xs font-bold flex items-center gap-2">
-                                <span className="text-[#F5B837]">📍</span> Waze & Maps integrado
-                            </div>
+                                {/* 4. Bottom-Right GPS Pill */}
+                                <div className="absolute bottom-4 right-4 z-30 px-4 py-2 bg-[#222B38] text-white rounded-full shadow-xl border border-white/10 text-xs font-bold flex items-center gap-2 pointer-events-none sm:pointer-events-auto">
+                                    <span className="text-[#F5B837]">📍</span> Waze & Maps integrado
+                                </div>
 
+                                {/* Slider Controls: Dots + Prev/Next Buttons */}
+                                <div className="mt-5 flex items-center justify-center gap-4 z-20">
+                                    <button
+                                        onClick={() => setHeroSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
+                                        className="p-1.5 rounded-full bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 transition-colors shadow-2xs"
+                                        aria-label="Invitación anterior"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" />
+                                    </button>
+
+                                    <div className="flex items-center gap-2">
+                                        {HERO_SLIDES.map((slide, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={() => setHeroSlide(idx)}
+                                                className={`h-2.5 rounded-full transition-all duration-300 ${
+                                                    heroSlide === idx ? 'w-7 bg-[#C2287B]' : 'w-2.5 bg-slate-300 hover:bg-slate-400'
+                                                }`}
+                                                aria-label={`Ver ejemplo de ${slide.tag}`}
+                                                aria-selected={heroSlide === idx}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        onClick={() => setHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length)}
+                                        className="p-1.5 rounded-full bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 transition-colors shadow-2xs"
+                                        aria-label="Siguiente invitación"
+                                    >
+                                        <ArrowRight className="h-4 w-4" />
+                                    </button>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* --- 2. DEMO INTERACTIVA ("Así verán tus invitados tu invitación") --- */}
-            <section className="py-16 md:py-24 bg-[#F8F9FA] px-6 border-b border-slate-100">
-                <div className="mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 md:gap-20 items-center">
-                    <div className="space-y-6 md:space-y-8 text-center lg:text-left">
-                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C2287B]">
-                            <span>Experiencia del Invitado</span>
+                {/* --- 3. CÓMO FUNCIONA (COMPACTO) --- */}
+                <section className="py-16 md:py-20 bg-[#222B38] text-white relative overflow-hidden px-6">
+                    <div className="mx-auto max-w-5xl relative z-10">
+                        <div className="text-center mb-12 space-y-2">
+                            <h2 className="text-2xl md:text-4xl font-display font-extrabold leading-tight">
+                                Así de fácil funciona Invitto
+                            </h2>
+                            <p className="text-slate-300 text-sm">Cuatro pasos simples para tener el control total de tu evento</p>
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] leading-tight">
-                            Así verán tus invitados tu invitación
-                        </h2>
-                        <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                            Una experiencia simple, elegante y fácil de usar desde cualquier celular. Sin aplicaciones que descargar, solo un clic y listo.
-                        </p>
-                        <ul className="space-y-4 max-w-xs mx-auto lg:mx-0 pt-2 text-left">
-                            {['Botón de confirmación con 1 toque', 'Flujo simple sin contraseñas', 'Detalles de ceremonia y recepción'].map((item, i) => (
-                                <li key={i} className="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-700">
-                                    <Check className="h-5 w-5 text-[#4E7B55] flex-shrink-0" />
-                                    {item}
-                                </li>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                                { title: 'Crea tu invitación', step: '01', desc: 'Elige tu plantilla y llena los detalles de tu evento.' },
+                                { title: 'Comparte el enlace', step: '02', desc: 'Envía por WhatsApp a contactos individuales o grupos.' },
+                                { title: 'Confirman con un clic', step: '03', desc: 'Sin descargar apps, tus invitados responden al instante.' },
+                                { title: 'Todo en tu panel', step: '04', desc: 'Monitorea confirmados, declinados, mesas y pases QR.' }
+                            ].map((item, i) => (
+                                <div key={i} className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-3 hover:border-[#DF3B94]/50 transition-all">
+                                    <span className="text-2xl font-display font-extrabold text-[#DF3B94]">{item.step}</span>
+                                    <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                                    <p className="text-xs text-slate-400 font-normal leading-relaxed">{item.desc}</p>
+                                </div>
                             ))}
-                        </ul>
-                        <div className="pt-4 flex justify-center lg:justify-start">
-                            <Link to="/i/cumplea%C3%B1os-cecilia-h2657" className="inline-flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group">
-                                PROBAR DEMO INTERACTIVA <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- 4. MARQUEE DE FUNCIONES (SCROLL INFINITO) (TAREA B) --- */}
+                <section className="py-3 bg-gradient-to-r from-[#fdf2f8]/80 via-white to-[#fdf2f8]/80 border-y border-[#fbcfe8]/60 overflow-hidden relative group" aria-label="Funciones destacadas">
+                    <div className="animate-marquee-smooth flex items-center gap-3 whitespace-nowrap">
+                        {[...FEATURE_CHIPS, ...FEATURE_CHIPS].map((chip, i) => (
+                            <span 
+                                key={i} 
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#fbcfe8] text-[#C2287B] shadow-2xs hover:bg-[#fdf2f8] transition-colors"
+                            >
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#DF3B94]" />
+                                {chip}
+                            </span>
+                        ))}
+                    </div>
+                </section>
+
+                {/* --- 5. GALERÍA CON TABS POR OCASIÓN (FUSIÓN: "ASÍ SE VE" + "¿QUÉ CELEBRAS?") (TAREA C) --- */}
+                <section className="py-16 md:py-24 bg-white border-b border-slate-100">
+                    <div className="mx-auto max-w-7xl px-6">
+                        
+                        {/* Compact Header */}
+                        <div className="text-center mb-10 space-y-3">
+                            <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                                <Sparkles className="h-3.5 w-3.5 mr-1 text-[#C52A7C]" />
+                                <span>Galería Interactiva por Ocasión</span>
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
+                                Diseños reales para cada celebración
+                            </h2>
+                            <p className="text-slate-600 max-w-xl mx-auto text-sm md:text-base">
+                                Explora cómo se ve y funciona cada diseño según tu tipo de festejo.
+                            </p>
+                        </div>
+
+                        {/* Occasion Filter Tabs (Horizontal Scrollable on Mobile) */}
+                        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-4 no-scrollbar">
+                            {OCCASIONS.map((occ, idx) => (
+                                <button
+                                    key={occ.id}
+                                    onClick={() => setActiveOccasion(idx)}
+                                    className={`px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border ${
+                                        activeOccasion === idx
+                                            ? 'bg-[#222B38] text-white border-[#222B38] shadow-md'
+                                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-[#C2287B]'
+                                    }`}
+                                >
+                                    <span>{occ.icon}</span>
+                                    <span>{occ.name}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Interactive Showcase Card for Selected Occasion */}
+                        <div className="mt-8 bg-gradient-to-br from-[#F8F9FA] to-white p-6 md:p-10 rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-100">
+                            <div className="grid lg:grid-cols-12 gap-8 items-center">
+                                
+                                {/* Left Info Column */}
+                                <div className="lg:col-span-7 space-y-5">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200/60 font-mono">
+                                            Ejemplo en Vivo
+                                        </span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-200">
+                                            {currentOccasion.badge}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="font-display font-extrabold text-[#222B38] text-2xl md:text-3xl leading-tight">
+                                            {currentOccasion.title}
+                                        </h3>
+                                        <p className="text-sm font-semibold text-[#C2287B] mt-1">{currentOccasion.names} · {currentOccasion.event}</p>
+                                    </div>
+
+                                    <p className="text-sm md:text-base font-normal text-slate-600 leading-relaxed max-w-xl">
+                                        {currentOccasion.description}
+                                    </p>
+
+                                    {/* Features Chips */}
+                                    <div className="flex flex-wrap gap-2 pt-1">
+                                        {currentOccasion.features.map((feat, fIdx) => (
+                                            <span key={fIdx} className="inline-flex items-center gap-1.5 px-3 py-1 bg-white rounded-lg border border-slate-200 text-xs font-medium text-slate-700 shadow-2xs">
+                                                <Check className="h-3.5 w-3.5 text-[#4E7B55]" />
+                                                {feat}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {/* CTAs */}
+                                    <div className="pt-4 flex flex-wrap items-center gap-4">
+                                        <Link
+                                            to={currentOccasion.demoUrl}
+                                            className="px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-2 shadow-lg shadow-[#C2287B]/20"
+                                        >
+                                            <span>Probar Demo en Vivo</span>
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                        <Link
+                                            to={`/${currentOccasion.slug}`}
+                                            className="px-5 py-3 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#C2287B] border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shadow-2xs"
+                                        >
+                                            <span>Ver detalles de {currentOccasion.name}</span>
+                                            <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                {/* Right Mini Preview / Highlights Container */}
+                                <div className="lg:col-span-5 flex justify-center">
+                                    <div className="w-full max-w-sm bg-white p-6 rounded-2xl border border-slate-200 shadow-md space-y-4">
+                                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xl">{currentOccasion.icon}</span>
+                                                <span className="text-xs font-bold text-slate-800">{currentOccasion.name}</span>
+                                            </div>
+                                            <span className="text-[10px] font-bold text-[#4E7B55] bg-emerald-50 px-2 py-0.5 rounded-full">Activa</span>
+                                        </div>
+
+                                        <div className="space-y-2 text-xs text-slate-600">
+                                            <div className="flex justify-between py-1 border-b border-slate-50">
+                                                <span className="font-medium text-slate-500">Mesa de regalos:</span>
+                                                <span className="font-bold text-slate-800">Integrada</span>
+                                            </div>
+                                            <div className="flex justify-between py-1 border-b border-slate-50">
+                                                <span className="font-medium text-slate-500">Confirmación WhatsApp:</span>
+                                                <span className="font-bold text-[#4E7B55]">Habilitada</span>
+                                            </div>
+                                            <div className="flex justify-between py-1 border-b border-slate-50">
+                                                <span className="font-medium text-slate-500">Pase QR individual:</span>
+                                                <span className="font-bold text-slate-800">Incluido en Pro</span>
+                                            </div>
+                                            <div className="flex justify-between py-1">
+                                                <span className="font-medium text-slate-500">GPS Waze & Maps:</span>
+                                                <span className="font-bold text-[#B45309]">1 clic</span>
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            to={currentOccasion.demoUrl}
+                                            className="w-full py-2.5 bg-slate-900 hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider text-center block transition-colors shadow-xs"
+                                        >
+                                            Ver Invitación de Muestra →
+                                        </Link>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {/* Critical SEO Internal Links Bar (Guarantees Googlebot indexes all 8 event-type landings) */}
+                        <div className="mt-10 p-5 bg-[#F8F9FA] rounded-2xl border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+                            <span className="font-bold text-slate-700 uppercase tracking-wider">
+                                Explorar por evento:
+                            </span>
+                            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-slate-600 font-medium">
+                                {OCCASIONS.map((occ) => (
+                                    <Link 
+                                        key={occ.slug} 
+                                        to={`/${occ.slug}`} 
+                                        className="hover:text-[#C2287B] transition-colors underline-offset-4 hover:underline"
+                                    >
+                                        {occ.name}
+                                    </Link>
+                                ))}
+                            </div>
+                            <Link 
+                                to="/ejemplos" 
+                                className="font-bold text-[#C2287B] hover:text-[#A81B65] uppercase tracking-wider inline-flex items-center gap-1 shrink-0"
+                            >
+                                <span>Ver todas las plantillas</span>
+                                <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
                         </div>
+
                     </div>
+                </section>
 
-                    <div className="relative h-[400px] md:h-[480px] w-full flex items-center justify-center">
-                        <div className="absolute inset-0 bg-[#C2287B]/5 rounded-full blur-[80px]" />
-                        
-                        {/* RSVP Card */}
-                        <div className="absolute top-4 left-0 z-20 w-56 md:w-64 p-5 bg-white rounded-3xl shadow-xl border border-slate-100 transform -rotate-3 hover:rotate-0 transition-all duration-300">
-                            <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-full bg-emerald-50 text-[#4E7B55] flex items-center justify-center flex-shrink-0 font-bold">
-                                    ✓
+                {/* --- 6. SAVE THE DATE (COMPACTO) --- */}
+                <section id="save-the-date" className="py-16 md:py-20 bg-[#F7F2EA] px-6 border-b border-stone-200/60 relative overflow-hidden">
+                    <div className="mx-auto max-w-7xl">
+                        <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+                            
+                            <div className="space-y-4 max-w-2xl text-center lg:text-left">
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
+                                    <Calendar className="h-3.5 w-3.5 text-[#DF3B94]" />
+                                    <span>Save the Date Digital</span>
                                 </div>
-                                <div>
-                                    <p className="font-bold text-slate-900 text-sm">¡Asistencia Confirmada!</p>
-                                    <p className="text-xs text-slate-600">Mesa 12 • 4 pax</p>
+
+                                <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight leading-tight">
+                                    Aparta la fecha meses antes de la invitación
+                                </h2>
+
+                                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                    Una sola pantalla ultra rápida con nombres, fecha, ciudad, cuenta regresiva y botón directo para agregar a Google y Apple Calendar. Perfecto para bodas en destino, XV años y aniversarios.
+                                </p>
+
+                                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs font-bold text-slate-700 pt-1">
+                                    <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-xs border border-stone-200/80">
+                                        <Check className="h-4 w-4 text-[#4E7B55]" /> 10 estilos tipográficos
+                                    </span>
+                                    <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-xs border border-stone-200/80">
+                                        <Check className="h-4 w-4 text-[#4E7B55]" /> Enlace propio (/std/evento)
+                                    </span>
+                                    <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-xs border border-stone-200/80">
+                                        <Check className="h-4 w-4 text-[#4E7B55]" /> Incluido en Diseño Pro y Concierge
+                                    </span>
                                 </div>
-                            </div>
-                        </div>
 
-                        {/* Event Date Card */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-64 md:w-72 p-6 bg-[#222B38] text-white rounded-3xl shadow-2xl">
-                            <p className="text-xs font-bold uppercase tracking-widest text-[#FF80BF] mb-1 text-center">Boda Isabel & Rodrigo</p>
-                            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 text-center mb-4">{MOCK_HERO_DATE}</p>
-                            <div className="flex justify-center gap-6 mb-6">
-                                <div className="text-center">
-                                    <p className="text-3xl font-display font-extrabold">45</p>
-                                    <p className="text-[10px] uppercase font-bold text-white/50">Días</p>
-                                </div>
-                                <div className="w-px bg-white/10" />
-                                <div className="text-center">
-                                    <p className="text-3xl font-display font-extrabold">12</p>
-                                    <p className="text-[10px] uppercase font-bold text-white/50">Hrs</p>
-                                </div>
-                            </div>
-                            <button className="w-full py-3 bg-[#C2287B] hover:bg-[#A81B65] rounded-xl text-xs font-bold uppercase tracking-wider text-white shadow-md transition-colors">
-                                Confirmar Asistencia
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 3. CÓMO FUNCIONA (PASO A PASO) --- */}
-            <section className="py-20 md:py-28 bg-[#222B38] text-white relative overflow-hidden px-6">
-                <div className="mx-auto max-w-5xl relative z-10">
-                    <h2 className="text-3xl md:text-5xl font-display font-extrabold text-center mb-16 leading-tight">
-                        Así de fácil funciona Invitto
-                    </h2>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            { title: 'Crea tu invitación en minutos', step: '01', desc: 'Escoge tu plantilla y llena los datos de tu fiesta.' },
-                            { title: 'Comparte por WhatsApp', step: '02', desc: 'Envía el link directo a tus contactos o grupos.' },
-                            { title: 'Ellos confirman con 1 clic', step: '03', desc: 'Sin instalar nada, tus invitados responden al momento.' },
-                            { title: 'Tú ves todo organizado', step: '04', desc: 'Tu panel te muestra la lista limpia de pases y mesas.' }
-                        ].map((item, i) => (
-                            <div key={i} className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10 space-y-4 hover:border-[#DF3B94]/50 transition-all">
-                                <span className="text-3xl font-display font-extrabold text-[#DF3B94]">{item.step}</span>
-                                <h3 className="text-base font-bold text-white">{item.title}</h3>
-                                <p className="text-xs text-slate-400 font-normal leading-relaxed">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 4. ASÍ SE VE UNA INVITACIÓN INVITTO --- */}
-            <section className="py-20 md:py-32 bg-white border-y border-slate-100">
-                <div className="mx-auto max-w-7xl px-6">
-                    <div className="text-center mb-16 space-y-4">
-                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <span>Diseños Reales</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38]">
-                            Así se ve una invitación Invitto
-                        </h2>
-                        <p className="text-slate-600 max-w-xl mx-auto text-base">
-                            Explora nuestras plantillas interactivas y prueba la experiencia tal como la recibirán tus invitados.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                title: 'Boda Elegante Clásica',
-                                names: 'Isabel & Rodrigo',
-                                event: 'Boda de Ensueño',
-                                description: 'Tipografía serif sofisticada, sobre digital interactivo y confirmación por pases familiares.',
-                                tag: 'Boda',
-                                demoUrl: '/i/boda-isabel-rodrigo-premium'
-                            },
-                            {
-                                title: 'XV Años Glamour',
-                                names: 'Valeria',
-                                event: 'Mis XV Años',
-                                description: 'Diseño moderno con cuenta regresiva, código de vestimenta, mesa de regalos y pase QR.',
-                                tag: 'XV Años',
-                                demoUrl: '/i/xv-valeria-premium'
-                            },
-                            {
-                                title: 'Cumpleaños & Fiesta',
-                                names: 'Emilia',
-                                event: 'Festejo Especial',
-                                description: 'Música de fondo, mapa interactivo para salón y confirmación ágil vía WhatsApp.',
-                                tag: 'Cumpleaños',
-                                demoUrl: '/i/cumple-emilia-premium'
-                            }
-                        ].map((card, i) => (
-                            <div key={i} className="bg-[#F8F9FA] p-8 rounded-3xl border border-slate-100 flex flex-col justify-between space-y-6 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all">
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200/60 font-mono">
-                                            Ejemplo
-                                        </span>
-                                        <span className="text-[10px] font-bold uppercase tracking-wider px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-100">
-                                            {card.tag}
-                                        </span>
-                                    </div>
-                                    <h3 className="font-display font-extrabold text-[#222B38] text-xl leading-tight">
-                                        {card.title}
-                                    </h3>
-                                    <p className="text-sm font-normal text-slate-600 leading-relaxed">
-                                        {card.description}
-                                    </p>
-                                </div>
-                                <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                                    <div>
-                                        <p className="font-display font-bold text-[#222B38] text-sm leading-tight">{card.names}</p>
-                                        <p className="text-xs text-slate-500 font-medium mt-0.5">{card.event}</p>
-                                    </div>
+                                <div className="pt-3 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                                     <Link
-                                        to={card.demoUrl}
-                                        className="px-4 py-2 bg-white hover:bg-slate-50 text-[#C2287B] border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shadow-2xs hover:-translate-y-0.5"
-                                        title={`Ver demo de ${card.title}`}
+                                        to="/std/demo-editorial"
+                                        className="min-h-[44px] px-6 py-3 bg-[#222B38] hover:bg-[#111827] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2"
                                     >
-                                        <span>Ver Demo</span>
-                                        <ArrowRight className="h-3.5 w-3.5" />
+                                        <span>Ver los 10 diseños Save the Date</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Link>
+                                    <Link
+                                        to="/planes"
+                                        className="min-h-[44px] px-6 py-3 bg-white hover:bg-stone-50 border border-stone-300 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center"
+                                    >
+                                        Ver en los Planes (+$299 o incluido)
                                     </Link>
                                 </div>
                             </div>
-                        ))}
-                    </div>
 
-                    <div className="mt-12 text-center">
-                        <Link
-                            to="/ejemplos"
-                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#222B38] hover:text-[#C2287B] transition-colors group"
-                        >
-                            <span>VER TODOS LOS EJEMPLOS Y PLANTILLAS</span>
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-[#C2287B]" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 4.5. SAVE THE DATE (10 Diseños de una sola pantalla) --- */}
-            <section id="save-the-date" className="py-20 md:py-28 bg-[#F7F2EA] px-6 border-b border-stone-200/60 relative overflow-hidden">
-                <div className="mx-auto max-w-7xl">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-                        <div className="space-y-6 max-w-2xl text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#DF3B94]">
-                                <Calendar className="h-3.5 w-3.5 text-[#DF3B94]" />
-                                <span>Nuevo · Save the Date Digital</span>
-                            </div>
-                            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight leading-tight">
-                                Aparta la fecha meses antes de enviar la invitación
-                            </h2>
-                            <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                                Una sola pantalla ultra rápida con nombres, fecha, ciudad, cuenta regresiva y botón directo para agregar a Google Calendar y Apple Calendar. Perfecto para bodas en destino, XV años y aniversarios.
-                            </p>
-                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-bold text-slate-700 pt-2">
-                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
-                                    <Check className="h-4 w-4 text-[#4E7B55]" /> 10 estilos tipográficos
-                                </span>
-                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
-                                    <Check className="h-4 w-4 text-[#4E7B55]" /> Enlace propio (/std/tu-evento)
-                                </span>
-                                <span className="flex items-center gap-1.5 bg-white px-3.5 py-2 rounded-xl shadow-xs border border-stone-200/80">
-                                    <Check className="h-4 w-4 text-[#4E7B55]" /> Incluido en Diseño Pro y Concierge
-                                </span>
-                            </div>
-                            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                                <Link
-                                    to="/std/demo-editorial"
-                                    className="min-h-[44px] px-6 py-3.5 bg-[#222B38] hover:bg-[#111827] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2"
-                                >
-                                    <span>Ver los 10 diseños de Save the Date</span>
-                                    <ArrowRight className="h-4 w-4" />
-                                </Link>
-                                <Link
-                                    to="/planes"
-                                    className="min-h-[44px] px-6 py-3.5 bg-white hover:bg-stone-50 border border-stone-300 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center"
-                                >
-                                    Ver en los Planes (+$299 o incluido)
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Interactive Preview Mockup Card */}
-                        <div className="w-full max-w-sm sm:max-w-md lg:max-w-sm flex-shrink-0">
-                            <div className="bg-white rounded-3xl p-5 shadow-2xl border border-stone-200/80 transform hover:-translate-y-1 transition-all">
-                                <div className="rounded-2xl overflow-hidden aspect-[9/16] max-h-[480px] bg-stone-900 relative flex flex-col justify-between p-6 text-white text-center">
-                                    <img
-                                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"
-                                        alt="Save the Date Preview"
-                                        className="absolute inset-0 w-full h-full object-cover opacity-60"
-                                    />
-                                    <div className="relative z-10">
-                                        <p className="text-[10px] uppercase tracking-widest font-mono text-stone-200">Save the Date</p>
+                            {/* Preview Mockup Card */}
+                            <div className="w-full max-w-sm flex-shrink-0">
+                                <div className="bg-white rounded-3xl p-4 shadow-xl border border-stone-200/80 transform hover:-translate-y-1 transition-all">
+                                    <div className="rounded-2xl overflow-hidden aspect-[9/15] max-h-[420px] bg-stone-900 relative flex flex-col justify-between p-6 text-white text-center">
+                                        <img
+                                            src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"
+                                            alt="Save the Date Preview"
+                                            className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                            loading="lazy"
+                                        />
+                                        <div className="relative z-10">
+                                            <p className="text-[10px] uppercase tracking-widest font-mono text-stone-200">Save the Date</p>
+                                        </div>
+                                        <div className="relative z-10 space-y-2">
+                                            <h3 className="font-serif text-3xl font-normal tracking-wide italic">Isabel & Rodrigo</h3>
+                                            <p className="text-xs uppercase tracking-widest text-stone-200">24 · OCTUBRE · 2026</p>
+                                            <p className="text-[11px] text-stone-300">San Miguel de Allende, Gto.</p>
+                                        </div>
+                                        <div className="relative z-10 pt-2">
+                                            <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/40 rounded-full text-[11px] font-bold text-white tracking-wider uppercase">
+                                                + Agendar en Calendario
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="relative z-10 space-y-2">
-                                        <h3 className="font-serif text-3xl md:text-4xl font-normal tracking-wide italic">Isabel & Rodrigo</h3>
-                                        <p className="text-xs uppercase tracking-widest text-stone-200">24 · OCTUBRE · 2026</p>
-                                        <p className="text-[11px] text-stone-300">San Miguel de Allende, Gto.</p>
-                                    </div>
-                                    <div className="relative z-10 pt-2">
-                                        <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/40 rounded-full text-[11px] font-bold text-white tracking-wider uppercase">
-                                            + Agendar en Calendario
-                                        </span>
+                                    <div className="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs">
+                                        <span className="font-bold text-[#222B38]">Diseño Editorial</span>
+                                        <Link to="/std/demo-editorial" className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
+                                            Probar en vivo <ArrowRight className="h-3.5 w-3.5" />
+                                        </Link>
                                     </div>
                                 </div>
-                                <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
-                                    <span className="font-bold text-[#222B38]">Diseño Editorial</span>
-                                    <Link to="/std/demo-editorial" className="text-[#DF3B94] font-bold hover:underline flex items-center gap-1">
-                                        Probar en vivo <ArrowRight className="h-3.5 w-3.5" />
-                                    </Link>
-                                </div>
                             </div>
+
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* --- 4.7. PLANEADOR DE EVENTOS (Exclusivo Plan Pro en adelante) --- */}
-            <section id="planeador" className="py-20 md:py-28 bg-[#111827] text-white px-6 relative overflow-hidden border-b border-stone-800">
-                {/* Luces decorativas sutiles de fondo */}
-                <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#DF3B94]/15 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FAC345]/10 rounded-full blur-3xl pointer-events-none" />
+                {/* --- 7. PLANEADOR + INVITTO CONFIRMA (TABS EN BANDA OSCURA) (TAREA D) --- */}
+                <section id="planeador" className="py-16 md:py-24 bg-[#111827] text-white px-6 relative overflow-hidden border-b border-stone-800">
+                    {/* Decorative Ambient Background */}
+                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#DF3B94]/15 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FAC345]/10 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="mx-auto max-w-7xl relative z-10">
-                    <div className="text-center max-w-3xl mx-auto space-y-5">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#DF3B94]/20 border border-[#DF3B94]/40 rounded-full text-xs font-bold text-[#FF85C0]">
-                            <Crown className="h-4 w-4 text-[#FAC345]" />
-                            <span>Módulo Exclusivo · Plan Pro en adelante</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
-                            Planeador de Eventos: Presupuesto, Proveedores y el Día B
-                        </h2>
-                        <p className="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
-                            Tu boda o festejo no solo necesita una invitación bonita, necesita orden. Centraliza pagos, cotizaciones, contratos y el itinerario minuto a minuto directamente dentro de tu panel de Invitto.
-                        </p>
+                    <div className="mx-auto max-w-7xl relative z-10">
                         
-                        {/* Callout de gating claro y permanente */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
-                            <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
-                            <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Diseño Pro y Concierge. <em>(No disponible en Plan Clásica).</em></span>
+                        {/* Selector Tabs: Planeador vs Invitto Confirma */}
+                        <div className="flex justify-center mb-10">
+                            <div className="inline-flex p-1.5 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
+                                <button
+                                    onClick={() => setDarkTab('planeador')}
+                                    className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                                        darkTab === 'planeador'
+                                            ? 'bg-[#DF3B94] text-white shadow-lg shadow-[#DF3B94]/30'
+                                            : 'text-slate-300 hover:text-white'
+                                    }`}
+                                >
+                                    <Crown className="h-4 w-4 text-[#FAC345]" />
+                                    <span>Planeador de Eventos</span>
+                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-black/20 text-white ml-1">Pro +</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setDarkTab('confirma')}
+                                    className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                                        darkTab === 'confirma'
+                                            ? 'bg-[#C2287B] text-white shadow-lg shadow-[#C2287B]/30'
+                                            : 'text-slate-300 hover:text-white'
+                                    }`}
+                                >
+                                    <Gem className="h-4 w-4 text-[#FF80BF]" />
+                                    <span>Invitto Confirma</span>
+                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-400 text-stone-950 ml-1">VIP</span>
+                                </button>
+                            </div>
                         </div>
+
+                        {/* TAB 1: PLANEADOR DE EVENTOS */}
+                        {darkTab === 'planeador' && (
+                            <div className="animate-in fade-in duration-300">
+                                <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                                    <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
+                                        Planeador de Eventos: Presupuesto, Proveedores y Día B
+                                    </h2>
+                                    <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
+                                        Tu evento no solo necesita una invitación hermosa, necesita orden. Centraliza pagos, cotizaciones, contratos y el itinerario minuto a minuto directamente dentro de tu panel de Invitto.
+                                    </p>
+                                    
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                                        <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
+                                        <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Diseño Pro y Concierge. <em>(No disponible en Clásica).</em></span>
+                                    </div>
+                                </div>
+
+                                {/* 4 Pillars Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/20 border border-[#DF3B94]/30 flex items-center justify-center text-[#FF85C0]">
+                                                <Wallet className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Presupuesto y Pagos</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Desglosa rubros (salón, música, foto). Monitorea anticipos y fechas límite con alertas automáticas.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FAC345] flex items-center justify-between">
+                                            <span>Control de saldos</span>
+                                            <span>Exporta a CSV</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                                <Store className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Directorio de Proveedores</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Fichas de cada proveedor con contacto directo a WhatsApp, cotizaciones comparativas y contratos.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+                                            <span>WhatsApp directo</span>
+                                            <span>Compara ofertas</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                                <ListChecks className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Pendientes por Fases</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Checklist cronológico calculado según la fecha de tu evento: 12 meses, 6 meses, 1 mes y última semana.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
+                                            <span>Cronograma vivo</span>
+                                            <span>Avance en %</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                                <CalendarHeart className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Carpeta Día B en PDF</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Genera en 1 clic el itinerario minuto a minuto con cortejo, teléfonos clave y detalles para tu wedding planner.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+                                            <span>Descarga PDF</span>
+                                            <span>Minuto a minuto</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bottom Action Bar */}
+                                <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                                    <div className="space-y-0.5 text-center md:text-left">
+                                        <p className="text-base font-bold text-white">¿Quieres organizar tu evento sin estrés?</p>
+                                        <p className="text-xs text-slate-400">Elige Plan Pro al crear tu evento y desbloquea el Planeador de inmediato.</p>
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-center gap-3">
+                                        <Link
+                                            to="/planes"
+                                            className="min-h-[44px] px-6 py-3 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
+                                        >
+                                            <span>Ver Planes con Planeador (desde $1,699)</span>
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                        <Link
+                                            to="/dashboard/planeacion/demo"
+                                            className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
+                                        >
+                                            <span>Ver Demo Planeador</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* TAB 2: INVITTO CONFIRMA */}
+                        {darkTab === 'confirma' && (
+                            <div className="animate-in fade-in duration-300">
+                                <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                                    <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
+                                        ¿No tienes tiempo? Confirmamos a tus invitados por ti
+                                    </h2>
+                                    <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
+                                        Servicio VIP con asistente WhatsApp y equipo humano: cargamos tus invitados, enviamos cada invitación personalizada, hacemos 3 rondas de seguimiento y cerramos tu lista.
+                                    </p>
+                                    
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                                        <span><strong>Garantía:</strong> Lista final cerrada 15 días antes del evento o devolución 100% · Add-on $2,000 MXN o incluido en Concierge.</span>
+                                    </div>
+                                </div>
+
+                                {/* 4 Features Grid for Confirma */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-[#C2287B]/20 border border-[#C2287B]/30 flex items-center justify-center text-[#FF80BF]">
+                                                <Users className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Carga y Envío Individual</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Nos das tu lista y nosotros enviamos cada invitación con su enlace y token individual directamente por WhatsApp.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FF80BF] flex items-center justify-between">
+                                            <span>Tokens únicos</span>
+                                            <span>Cero fricción</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                                <Clock className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">3 Rondas de Seguimiento</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Recordatorios amables en cadencia inteligente más 1 llamada de cortesía a los invitados con dudas o pendientes.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
+                                            <span>Cadencia automática</span>
+                                            <span>Llamada de cortesía</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                                <QrCode className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Pases QR y Reconfirmación</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Envío del pase digital individual con código QR y ubicación GPS 48-72 horas antes del gran día.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+                                            <span>Acceso rápido</span>
+                                            <span>Mapa GPS</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                        <div className="space-y-3">
+                                            <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                                <Check className="h-6 w-6" />
+                                            </div>
+                                            <h3 className="text-lg font-display font-extrabold text-white">Lista Lista para Banquete</h3>
+                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                                Reporte final ordenado por mesas, confirmados y dietas especiales entregado 15 días antes para que no pagues platillos de más.
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+                                            <span>Cero desperdicio</span>
+                                            <span>Garantía 100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Bottom Action Bar for Confirma */}
+                                <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                                    <div className="space-y-0.5 text-center md:text-left">
+                                        <p className="text-base font-bold text-white">¿Prefieres delegar completamente el seguimiento de invitados?</p>
+                                        <p className="text-xs text-slate-400">Disponible como add-on para cualquier plan por $2,000 MXN o incluido en Concierge.</p>
+                                    </div>
+                                    <div className="flex flex-wrap items-center justify-center gap-3">
+                                        <Link
+                                            to="/confirma"
+                                            className="min-h-[44px] px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
+                                        >
+                                            <span>Saber más sobre Invitto Confirma</span>
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                        <Link
+                                            to="/planes"
+                                            className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
+                                        >
+                                            <span>Ver en los Planes</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
+                </section>
 
-                    {/* Grid de 4 pilares de Planeación */}
-                    <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {/* 1. Presupuesto */}
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                            <div className="space-y-4">
-                                <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/20 border border-[#DF3B94]/30 flex items-center justify-center text-[#FF85C0]">
-                                    <Wallet className="h-6 w-6" />
+                {/* --- 8. PLANES Y PRECIOS (COMPACTO CON PATRÓN PRECIO TACHADO EN ADD-ONS) (TAREA E) --- */}
+                <section className="py-16 md:py-24 bg-white px-6 border-b border-slate-100">
+                    <div className="mx-auto max-w-7xl">
+                        
+                        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+                            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
+                                <Check className="h-3.5 w-3.5 text-[#C52A7C]" />
+                                <span>Precios Claros · Un Solo Pago</span>
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
+                                Planes diseñados para tu evento
+                            </h2>
+                            <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                                Sin suscripciones mensuales ni sorpresas. Diseña tu borrador gratis y paga únicamente al publicar.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
+                            
+                            {/* Plan Clásica */}
+                            <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                                <div className="space-y-5">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">PLAN BÁSICO</span>
+                                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Clásica</h3>
+                                        <p className="text-xs text-slate-600 mt-1">Para celebraciones íntimas que buscan una invitación hermosa y funcional.</p>
+                                    </div>
+
+                                    <div className="py-2 border-y border-slate-200/60">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-4xl font-serif font-extrabold text-[#222B38]">$499</span>
+                                            <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días post-evento</p>
+                                    </div>
+
+                                    <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Información del evento y cuenta regresiva</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Ubicación interactiva con Google Maps & Waze</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Galería de fotos y mesa de regalos</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Confirmación de asistencia por WhatsApp</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5 text-slate-600">
+                                            <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                                            <span>Save the Date digital (+ $299 MXN opcional)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5 text-slate-600">
+                                            <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <h3 className="text-xl font-display font-extrabold text-white">Presupuesto y Pagos</h3>
-                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                    Desglosa por rubros (salón, música, flores, foto). Monitorea anticipos, liquidaciones y alertas de fechas de vencimiento con medias de referencia del mercado.
-                                </p>
-                            </div>
-                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-[#FAC345] flex items-center justify-between">
-                                <span>Control de saldos</span>
-                                <span>Exporta a CSV</span>
-                            </div>
-                        </div>
 
-                        {/* 2. Directorio Proveedores */}
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                            <div className="space-y-4">
-                                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                                    <Store className="h-6 w-6" />
+                                <div className="pt-6">
+                                    <Link 
+                                        to="/dashboard/new?plan=clasico"
+                                        className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
+                                    >
+                                        Diseñar Gratis
+                                    </Link>
+                                    <p className="text-[11px] text-slate-600 text-center mt-2 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
                                 </div>
-                                <h3 className="text-xl font-display font-extrabold text-white">Directorio de Proveedores</h3>
-                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                    Guarda fichas de cada proveedor con contacto directo a WhatsApp, cotizaciones comparativas, notas y contratos asignados.
-                                </p>
                             </div>
-                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
-                                <span>WhatsApp directo</span>
-                                <span>Compara ofertas</span>
-                            </div>
-                        </div>
 
-                        {/* 3. Pendientes Auto-fechados */}
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                            <div className="space-y-4">
-                                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                                    <ListChecks className="h-6 w-6" />
+                            {/* Plan Pro (Destacado) */}
+                            <div className="relative bg-slate-900 text-white rounded-3xl p-7 border-2 border-[#C2287B] shadow-2xl shadow-[#C2287B]/20 flex flex-col justify-between lg:-translate-y-2">
+                                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C2287B] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                                    <Gem className="h-3 w-3" /> MÁS ELEGIDO
                                 </div>
-                                <h3 className="text-xl font-display font-extrabold text-white">Pendientes por Fases</h3>
-                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                    Checklist inteligente calculado automáticamente según la fecha de tu evento: 12 meses antes, 6 meses, 1 mes, última semana y después de la boda.
-                                </p>
-                            </div>
-                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
-                                <span>Cronograma vivo</span>
-                                <span>Avance en %</span>
-                            </div>
-                        </div>
 
-                        {/* 4. Carpeta Día B */}
-                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                            <div className="space-y-4">
-                                <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                                    <CalendarHeart className="h-6 w-6" />
+                                <div className="space-y-5">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAC345]">CONTROL TOTAL</span>
+                                        <h3 className="text-2xl font-display font-extrabold text-white mt-1">Pro</h3>
+                                        <p className="text-xs text-slate-300 mt-1">Control total: para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
+                                    </div>
+
+                                    <div className="py-2 border-y border-white/10">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-4xl font-serif font-extrabold text-white">$1,699</span>
+                                            <span className="text-xs font-bold text-[#FAC345] uppercase">MXN</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-300 font-medium mt-1">Un solo pago · Activa hasta 30 días post-evento</p>
+                                    </div>
+
+                                    <ul className="space-y-2.5 text-xs text-slate-200 font-medium">
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span><strong>Todo lo del plan Clásica</strong></span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span><strong>Planeador de Eventos Premium</strong> (pagos, proveedores, Día B)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span><strong>Pases digitales con código QR individual</strong></span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span>Dashboard de confirmaciones en tiempo real</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span>Límite de pases y acompañantes por familia</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5 text-slate-300">
+                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
+                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <h3 className="text-xl font-display font-extrabold text-white">Carpeta del Día B en PDF</h3>
-                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                    Genera con un solo clic el itinerario minuto a minuto con cortejo, fotógrafo y teléfonos de emergencia, listo para imprimir para tu wedding planner.
-                                </p>
-                            </div>
-                            <div className="mt-6 pt-4 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
-                                <span>Descarga PDF</span>
-                                <span>Minuto a minuto</span>
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Barra de acción inferior */}
-                    <div className="mt-12 p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div className="space-y-1 text-center md:text-left">
-                            <p className="text-lg font-bold text-white">¿Listo para organizar tu evento sin estrés?</p>
-                            <p className="text-xs text-slate-400">Elige el Plan Pro al crear tu evento y desbloquea el Planeador inmediatamente.</p>
+                                <div className="pt-6">
+                                    <Link 
+                                        to="/dashboard/new?plan=pro"
+                                        className="w-full min-h-[44px] py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center text-center no-underline"
+                                    >
+                                        Probar Plan Pro Gratis
+                                    </Link>
+                                    <p className="text-[11px] text-slate-300 text-center mt-2 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
+                                </div>
+                            </div>
+
+                            {/* Plan Diseño Pro */}
+                            <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                                <div className="space-y-5">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">PERSONALIZADO</span>
+                                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Diseño Pro</h3>
+                                        <p className="text-xs text-slate-600 mt-1">Plantillas exclusivas, paleta y tipografía adaptadas a tu concepto por diseñador.</p>
+                                    </div>
+
+                                    <div className="py-2 border-y border-slate-200/60">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-4xl font-serif font-extrabold text-[#222B38]">$2,499</span>
+                                            <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días post-evento</p>
+                                    </div>
+
+                                    <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Todo lo del plan Pro</strong> (incluye Planeador)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Plantillas exclusivas de alta gama</strong></span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Ajuste de tipografía y paleta por diseñador</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Save the Date digital incluido</strong></span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Música de fondo personalizada</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5 text-slate-600">
+                                            <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-6">
+                                    <Link 
+                                        to="/dashboard/new?plan=premium"
+                                        className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
+                                    >
+                                        Elegir Diseño Pro
+                                    </Link>
+                                    <p className="text-[11px] text-slate-600 text-center mt-2 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
+                                </div>
+                            </div>
+
+                            {/* Plan Concierge */}
+                            <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
+                                <div className="space-y-5">
+                                    <div>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
+                                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
+                                        <p className="text-xs text-slate-600 mt-1">Diseño Pro + Invitto Confirma (llamamos y confirmamos a tus invitados por ti).</p>
+                                    </div>
+
+                                    <div className="py-2 border-y border-slate-200/60">
+                                        <div className="flex items-baseline gap-1.5">
+                                            <span className="text-4xl font-serif font-extrabold text-[#222B38]">$4,499</span>
+                                            <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días post-evento</p>
+                                    </div>
+
+                                    <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Todo lo del plan Diseño Pro</strong> (incluye Planeador)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Invitto Confirma INCLUIDO</strong> (confirmamos por ti)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span><strong>Save the Date digital INCLUIDO</strong></span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>3 rondas + llamada a pendientes + reconfirmación</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Lista final cerrada 15 días antes (Garantía 100%)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2.5">
+                                            <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
+                                            <span>Atención dedicada a dudas de tus invitados</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-6">
+                                    <Link 
+                                        to="/planes/concierge"
+                                        className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#C2287B] hover:text-[#C2287B] transition-all flex items-center justify-center text-center no-underline"
+                                    >
+                                        Conocer Plan Concierge
+                                    </Link>
+                                    <p className="text-[11px] text-slate-600 text-center mt-2 font-medium">Servicio completo · Garantía de entrega</p>
+                                </div>
+                            </div>
+
                         </div>
-                        <div className="flex flex-wrap items-center justify-center gap-3">
-                            <Link
-                                to="/planes"
-                                className="min-h-[44px] px-6 py-3.5 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-[#DF3B94]/25 inline-flex items-center gap-2 no-underline"
+
+                        <div className="mt-10 text-center">
+                            <Link 
+                                to="/planes" 
+                                className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#C2287B] hover:text-[#A81B65] transition-colors"
                             >
-                                <span>Ver Planes con Planeador (desde $1,699)</span>
+                                <span>¿Quieres ver la comparativa completa de 29 características?</span>
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
-                            <Link
-                                to="/dashboard/planeacion/demo"
-                                className="min-h-[44px] px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
-                            >
-                                <span>Ver Demo del Planeador</span>
-                            </Link>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* --- 5. ¿QUÉ CELEBRAS? (8 Event Types) --- */}
-            <section className="py-20 md:py-28 bg-[#F8F9FA] px-6 border-b border-slate-100">
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-                        <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <span>Invitaciones por Categoría</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
-                            ¿Qué celebras?
-                        </h2>
-                        <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                            Cada evento tiene su propia magia y necesidades especiales. Elige tu tipo de fiesta para ver funciones diseñadas para ti.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                        {[
-                            { title: 'Boda', slug: 'invitaciones-digitales-boda', icon: '💍', desc: 'Diseños románticos, confirmación por familia, pases y mesa de regalos.' },
-                            { title: 'XV Años', slug: 'invitaciones-digitales-xv-anos', icon: '👑', desc: 'Vals, música, padrinos, cuenta regresiva y pase de acceso con QR.' },
-                            { title: 'Cumpleaños', slug: 'invitaciones-digitales-cumpleanos', icon: '🎂', desc: 'Festejos para todas las edades sin el caos de los grupos de WhatsApp.' },
-                            { title: 'Bautizo', slug: 'invitaciones-digitales-bautizo', icon: '🕊️', desc: 'Diseños angelicales con sección de padrinos, iglesia y comida familiar.' },
-                            { title: 'Primera Comunión', slug: 'invitaciones-digitales-primera-comunion', icon: '⛪', desc: 'Ceremonia solemne, horarios puntuales, mapas y confirmación rápida.' },
-                            { title: 'Baby Shower', slug: 'invitaciones-digitales-baby-shower', icon: '🍼', desc: 'Mesa de regalos Liverpool/Amazon, guía de pañales y confirmación tierna.' },
-                            { title: 'Revelación de Género', slug: 'invitaciones-digitales-revelacion-de-genero', icon: '🎈', desc: '¿Team Rosa o Azul? Dinámicas interactivas y cuenta regresiva al gran secreto.' },
-                            { title: 'Graduación', slug: 'invitaciones-digitales-graduacion', icon: '🎓', desc: 'Pases de gala individuales, check-in con QR y fotos de generación.' }
-                        ].map((event, idx) => (
-                            <Link
-                                key={idx}
-                                to={`/${event.slug}`}
-                                className="bg-white rounded-3xl p-6 border border-slate-200/80 hover:border-[#DF3B94]/40 hover:shadow-xl hover:shadow-[#DF3B94]/5 transition-all group flex flex-col justify-between"
-                            >
-                                <div className="space-y-3">
-                                    <div className="w-12 h-12 rounded-2xl bg-[#fdf2f8] text-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        {event.icon}
-                                    </div>
-                                    <h3 className="text-xl font-display font-extrabold text-[#222B38] group-hover:text-[#C2287B] transition-colors">
-                                        {event.title}
-                                    </h3>
-                                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                                        {event.desc}
-                                    </p>
-                                </div>
-                                <div className="pt-4 mt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#C2287B]">
-                                    <span>Ver invitación</span>
-                                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 6. RESUMEN DE PLANES Y PRECIOS --- */}
-            <section className="py-20 md:py-32 bg-white px-6 border-b border-slate-100">
-                <div className="mx-auto max-w-7xl">
-                    <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                            <Check className="h-3.5 w-3.5 text-[#C52A7C]" />
-                            <span>Precios Claros · Un Solo Pago</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
-                            Planes diseñados para tu evento
-                        </h2>
-                        <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-                            Sin suscripciones mensuales ni sorpresas. Diseña tu invitación gratis y paga únicamente cuando decidas publicarla.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
-                        
-                        {/* Plan Clásica */}
-                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
-                            <div className="space-y-6">
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">PLAN BÁSICO</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Clásica</h3>
-                                    <p className="text-xs text-slate-600 mt-1">Solo lo básico: para celebraciones íntimas que buscan una invitación hermosa.</p>
-                                </div>
-
-                                <div className="py-2 border-y border-slate-200/60">
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$499</span>
-                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
-                                    </div>
-                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
-                                </div>
-
-                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Información del evento y cuenta regresiva</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Ubicación interactiva con Google Maps & Waze</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Galería de fotos y mesa de regalos</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Confirmación de asistencia por WhatsApp</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Save the Date digital (+$299 MXN opcional)</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5 text-slate-400">
-                                        <X className="h-4 w-4 text-slate-300 flex-shrink-0" />
-                                        <span>Planeador de eventos (requiere Plan Pro)</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="pt-8">
-                                <Link 
-                                    to="/dashboard/new?plan=clasico"
-                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
-                                >
-                                    Diseñar Gratis
-                                </Link>
-                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Borrador gratis · Sin ingresar tarjeta</p>
-                            </div>
-                        </div>
-
-                        {/* Plan Pro (Destacado) */}
-                        <div className="relative bg-slate-900 text-white rounded-3xl p-7 border-2 border-[#C2287B] shadow-2xl shadow-[#C2287B]/20 flex flex-col justify-between lg:-translate-y-2">
-                            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#C2287B] text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5 whitespace-nowrap">
-                                <Gem className="h-3 w-3" /> MÁS ELEGIDO
-                            </div>
-
-                            <div className="space-y-6">
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAC345]">CONTROL TOTAL</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-white mt-1">Pro</h3>
-                                    <p className="text-xs text-slate-300 mt-1">Control total: para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
-                                </div>
-
-                                <div className="py-2 border-y border-white/10">
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl font-serif font-extrabold text-white">$1,699</span>
-                                        <span className="text-xs font-bold text-[#FAC345] uppercase">MXN</span>
-                                    </div>
-                                    <p className="text-[11px] text-slate-300 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
-                                </div>
-
-                                <ul className="space-y-3 text-xs text-slate-200 font-medium">
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Clásica</strong></span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span><strong>Planeador de Eventos Premium</strong> (presupuesto, proveedores, pagos y Día B)</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span><strong>Pases digitales con código QR individual</strong></span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span>Dashboard de confirmaciones en tiempo real</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span>Límite de pases y acompañantes por familia</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span>Recordatorios de RSVP para tus invitados</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                        <span>Save the Date digital (+$299 MXN opcional)</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="pt-8">
-                                <Link 
-                                    to="/dashboard/new?plan=pro"
-                                    className="w-full min-h-[44px] py-4 px-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-[#C2287B]/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center text-center no-underline"
-                                >
-                                    Probar Plan Pro Gratis
-                                </Link>
-                                <p className="text-[11px] text-slate-300 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
-                            </div>
-                        </div>
-
-                        {/* Plan Diseño Pro */}
-                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
-                            <div className="space-y-6">
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">PERSONALIZADO</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Diseño Pro</h3>
-                                    <p className="text-xs text-slate-600 mt-1">Diseño a tu medida: plantillas exclusivas, paleta y tipografía adaptadas a tu concepto.</p>
-                                </div>
-
-                                <div className="py-2 border-y border-slate-200/60">
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$2,499</span>
-                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
-                                    </div>
-                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
-                                </div>
-
-                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Pro</strong> (incluye Planeador)</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Plantillas exclusivas de alta gama</strong></span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Ajuste de tipografía y paleta por diseñador</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Save the Date digital incluido</strong></span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Música de fondo personalizada</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Soporte prioritario por WhatsApp</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="pt-8">
-                                <Link 
-                                    to="/dashboard/new?plan=premium"
-                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
-                                >
-                                    Elegir Diseño Pro
-                                </Link>
-                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
-                            </div>
-                        </div>
-
-                        {/* Plan Concierge */}
-                        <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
-                            <div className="space-y-6">
-                                <div>
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
-                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
-                                    <p className="text-xs text-slate-600 mt-1">Nosotros hacemos todo: Diseño Pro + Invitto Confirma (llamamos y confirmamos a tus invitados).</p>
-                                </div>
-
-                                <div className="py-2 border-y border-slate-200/60">
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className="text-4xl font-serif font-extrabold text-[#222B38]">$4,499</span>
-                                        <span className="text-xs font-bold text-slate-600 uppercase">MXN</span>
-                                    </div>
-                                    <p className="text-[11px] text-slate-600 font-medium mt-1">Un solo pago · Activa hasta 30 días después de tu evento</p>
-                                </div>
-
-                                <ul className="space-y-3 text-xs text-slate-700 font-medium">
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Todo lo del plan Diseño Pro</strong> (incluye Planeador)</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Incluye Invitto Confirma:</strong> confirmamos por ti</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span><strong>Save the Date digital incluido</strong></span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>3 rondas + llamada a pendientes + reconfirmación</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Lista final cerrada 15 días antes del evento</span>
-                                    </li>
-                                    <li className="flex items-center gap-2.5">
-                                        <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                        <span>Atención dedicada a dudas de tus invitados</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="pt-8">
-                                <Link 
-                                    to="/planes/concierge"
-                                    className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#C2287B] hover:text-[#C2287B] transition-all flex items-center justify-center text-center no-underline"
-                                >
-                                    Conocer Plan Concierge
-                                </Link>
-                                <p className="text-[11px] text-slate-600 text-center mt-2.5 font-medium">Servicio completo · Garantía de entrega</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div className="mt-12 text-center">
-                        <Link 
-                            to="/planes" 
-                            className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#C2287B] hover:text-[#A81B65] transition-colors"
-                        >
-                            <span>¿Quieres ver la comparativa completa de 29 características?</span>
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* --- INVITTO CONFIRMA / SERVICIO VIP BANNER (Inmediatamente debajo de Precios) --- */}
-            <section className="py-20 md:py-28 bg-[#171E28] text-white px-6 overflow-hidden border-t border-white/5">
-                <div className="mx-auto max-w-7xl">
-                    <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                        
-                        {/* Left Copy */}
-                        <div className="lg:col-span-7 space-y-6 md:space-y-8 text-center lg:text-left">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold tracking-widest text-[#FF80BF]">
-                                <Gem className="h-4 w-4 text-[#FF80BF]" />
-                                <span>SERVICIO VIP · INVITTO CONFIRMA</span>
-                            </div>
-
-                            <h2 className="text-4xl xs:text-5xl md:text-6xl font-display font-extrabold tracking-tight leading-tight text-white">
-                                ¿No tienes tiempo? <br />
-                                <span className="italic font-light text-[#FF80BF]">Confirmamos a tus invitados por ti.</span>
+                {/* --- 9. PREGUNTAS FRECUENTES (AGRUPADAS POR TEMA EN ACORDEÓN) (TAREA E) --- */}
+                <section className="py-16 md:py-24 bg-white">
+                    <div className="mx-auto max-w-3xl px-6">
+                        <div className="text-center mb-10 space-y-2">
+                            <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">
+                                Preguntas Frecuentes
                             </h2>
-
-                            <p className="text-base md:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                                Con el servicio <strong>Invitto Confirma</strong> tú solo disfrutas: cargamos tus invitados, enviamos cada invitación por WhatsApp, hacemos 3 rondas de seguimiento + 1 llamada a pendientes + reconfirmación 7 días antes, y te entregamos la lista final confirmada 15 días antes del evento (o te devolvemos el 100%).
-                            </p>
-
-                            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                                <Link to="/confirma" className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs md:text-sm font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#C2287B]/20 group">
-                                    <span>SABER MÁS SOBRE INVITTO CONFIRMA</span>
-                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform text-white" />
-                                </Link>
-                                <span className="text-xs text-[#FAC345] font-semibold bg-[#FAC345]/10 px-3.5 py-2 rounded-xl border border-[#FAC345]/20">
-                                    Servicio disponible para cualquier plan
-                                </span>
-                            </div>
+                            <p className="text-slate-600 text-sm">Todo lo que necesitas saber antes de crear tu invitación</p>
                         </div>
 
-                        {/* Right Card (Dark Glass Container) */}
-                        <div className="lg:col-span-5 flex justify-center">
-                            <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 space-y-6 backdrop-blur-md shadow-2xl">
-                                <div className="flex items-center gap-4 pb-6 border-b border-white/10">
-                                    <div className="h-12 w-12 rounded-2xl bg-[#C2287B]/20 text-[#FF80BF] flex items-center justify-center flex-shrink-0">
-                                        <Users className="h-6 w-6" />
+                        <div className="space-y-8">
+                            {FAQ_GROUPS.map((group, gIdx) => (
+                                <div key={gIdx} className="space-y-3">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg text-xs font-bold uppercase tracking-wider text-slate-700">
+                                        <MessageCircle className="h-3.5 w-3.5 text-[#C2287B]" />
+                                        <span>{group.category}</span>
                                     </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#FF80BF]">GESTIÓN HUMANA</p>
-                                        <p className="text-lg font-display font-bold text-white italic">Tu equipo dedicado</p>
+
+                                    <div className="space-y-3">
+                                        {group.indices.map((idx) => {
+                                            const item = RAW_FAQ_ITEMS[idx];
+                                            return (
+                                                <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
+                                                    <button
+                                                        onClick={() => toggleFaq(idx)}
+                                                        aria-expanded={openFaq === idx}
+                                                        aria-controls={`faq-answer-${idx}`}
+                                                        id={`faq-question-${idx}`}
+                                                        className="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
+                                                    >
+                                                        <span className="text-sm md:text-base">{item.q}</span>
+                                                        <ChevronDown className={`h-4 w-4 text-[#DF3B94] shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
+                                                    </button>
+                                                    <div 
+                                                        id={`faq-answer-${idx}`}
+                                                        role="region"
+                                                        aria-labelledby={`faq-question-${idx}`}
+                                                        className={`px-5 pb-5 text-xs md:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3.5 bg-slate-50/50 ${openFaq === idx ? 'block' : 'hidden'}`}
+                                                    >
+                                                        {item.a}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
-
-                                <ul className="space-y-4">
-                                    {[
-                                        "Cargamos tus invitados por ti",
-                                        "Envío individual por WhatsApp",
-                                        "3 rondas de seguimiento + llamada a pendientes",
-                                        "Garantía: lista final 15 días antes o devolución 100%",
-                                        "Reporte final de asistencia impreso y digital"
-                                    ].map((item, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-sm font-medium text-slate-200">
-                                            <Check className="h-4 w-4 text-[#DF3B94] flex-shrink-0" />
-                                            <span>{item}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            ))}
                         </div>
-
                     </div>
-                </div>
-            </section>
+                </section>
 
+                {/* --- 10. CTA BANNER ("Organiza tu evento sin estrés") --- */}
+                <section className="relative py-20 md:py-28 bg-[#222B38] text-white text-center px-6 overflow-hidden">
+                    <div className="absolute inset-0 z-0">
+                        <img
+                            src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=75&fm=webp&auto=format&fit=crop"
+                            alt=""
+                            role="presentation"
+                            aria-hidden="true"
+                            width={1200}
+                            height={600}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover opacity-20 pointer-events-none select-none"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#222B38]/90 via-[#222B38]/85 to-[#222B38]" />
+                    </div>
 
-
-            {/* --- 6. PREGUNTAS FRECUENTES --- */}
-            <section className="py-20 md:py-28 bg-white">
-                <div className="mx-auto max-w-3xl px-6">
-                    <div className="text-center mb-14">
-                        <h2 className="text-3xl md:text-4xl font-display font-extrabold text-[#222B38]">
-                            Preguntas Frecuentes
+                    <div className="relative z-10 mx-auto max-w-4xl space-y-5">
+                        <h2 className="text-3xl xs:text-4xl md:text-6xl font-display font-extrabold tracking-tight leading-tight">
+                            Organiza tu evento <br />
+                            <span className="italic font-light text-[#DF3B94]">sin estrés</span>
                         </h2>
-                        <p className="text-slate-600 text-sm mt-2">Todo lo que necesitas saber antes de empezar</p>
-                    </div>
 
-                    <div className="space-y-4">
-                        {FAQ_ITEMS.map((item, idx) => (
-                            <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
-                                <button
-                                    onClick={() => toggleFaq(idx)}
-                                    aria-expanded={openFaq === idx}
-                                    aria-controls={`faq-answer-${idx}`}
-                                    id={`faq-question-${idx}`}
-                                    className="w-full p-6 text-left font-bold text-slate-800 flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
-                                >
-                                    <span>{item.question || item.q}</span>
-                                    <ChevronDown className={`h-5 w-5 text-[#DF3B94] transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
-                                </button>
-                                <div 
-                                    id={`faq-answer-${idx}`}
-                                    role="region"
-                                    aria-labelledby={`faq-question-${idx}`}
-                                    className={`px-6 pb-6 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4 bg-slate-50/50 ${openFaq === idx ? 'block' : 'hidden'}`}
-                                >
-                                    {item.answer || item.a}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* --- 7. CTA BANNER ("Organiza tu evento sin estrés") --- */}
-            <section className="relative py-28 md:py-36 bg-[#222B38] text-white text-center px-6 overflow-hidden">
-                {/* Background image overlay (decorative with empty alt) */}
-                <div className="absolute inset-0 z-0">
-                    <img
-                        src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=75&fm=webp&auto=format&fit=crop"
-                        alt=""
-                        role="presentation"
-                        aria-hidden="true"
-                        width={1200}
-                        height={600}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover opacity-20 pointer-events-none select-none"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#222B38]/90 via-[#222B38]/85 to-[#222B38]" />
-                </div>
-
-                <div className="relative z-10 mx-auto max-w-4xl space-y-6">
-                    <h2 className="text-4xl xs:text-5xl md:text-7xl font-display font-extrabold tracking-tight leading-tight">
-                        Organiza tu evento <br />
-                        <span className="italic font-light text-[#DF3B94]">sin estrés</span>
-                    </h2>
-
-                    <p className="text-xl md:text-2xl font-display text-white font-medium max-w-2xl mx-auto pt-1">
-                        La invitación digital que merece tu historia
-                    </p>
-
-                    <p className="text-sm md:text-base text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
-                        Crea tu borrador gratis y publica cuando estés listo. RSVP inteligente, pases con código QR y confirmaciones por WhatsApp en un solo enlace.
-                    </p>
-
-                    <div className="pt-4 space-y-4">
-                        <Link 
-                            to={user ? "/dashboard" : "/dashboard/new"}
-                            className="min-h-[44px] px-10 py-5 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center justify-center gap-2 no-underline"
-                        >
-                            <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                        <p className="text-xs text-slate-400 font-medium">
-                            Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta de crédito requerida
+                        <p className="text-lg md:text-xl font-display text-white font-medium max-w-2xl mx-auto pt-1">
+                            La invitación digital que merece tu historia
                         </p>
-                        <p className="text-xs text-slate-400 pt-1">
-                            ¿Dudas o necesitas asesoría personalizada? Escríbenos a{' '}
-                            <a href="mailto:soporte@invitto.com.mx" className="text-white hover:underline font-bold">
-                                soporte@invitto.com.mx
-                            </a>
-                            {' '}o por{' '}
-                            <a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-bold">
-                                WhatsApp
-                            </a>
+
+                        <p className="text-xs md:text-sm text-slate-300 font-normal max-w-xl mx-auto leading-relaxed">
+                            Crea tu borrador gratis y publica cuando estés listo. RSVP inteligente, pases con código QR y confirmaciones por WhatsApp en un solo enlace.
                         </p>
+
+                        <div className="pt-2 space-y-3">
+                            <Link 
+                                to={user ? "/dashboard" : "/dashboard/new"}
+                                className="min-h-[44px] px-8 py-4 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-full text-xs md:text-sm font-bold tracking-widest uppercase hover:-translate-y-0.5 transition-all shadow-2xl active:scale-95 inline-flex items-center justify-center gap-2 no-underline"
+                            >
+                                <span>{user ? 'IR AL PANEL' : 'CREAR MI INVITACIÓN'}</span>
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                            <p className="text-xs text-slate-400 font-medium">
+                                Diseña gratis tu borrador · Planes desde $499 MXN pago único · Sin tarjeta requerida
+                            </p>
+                            <p className="text-xs text-slate-400 pt-1">
+                                ¿Dudas o necesitas asesoría? Escríbenos a{' '}
+                                <a href="mailto:soporte@invitto.com.mx" className="text-white hover:underline font-bold">
+                                    soporte@invitto.com.mx
+                                </a>
+                                {' '}o por{' '}
+                                <a href={WHATSAPP_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-bold">
+                                    WhatsApp
+                                </a>
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
             </main>
 
-            {/* --- 12. COMPREHENSIVE FOOTER --- */}
+            {/* --- 11. FOOTER --- */}
             <footer className="bg-[#222B38] text-white pt-16 pb-12 px-6 border-t border-white/10">
                 <div className="mx-auto max-w-7xl space-y-12">
                     
@@ -1276,7 +1679,7 @@ export default function HomePage() {
                         </div>
                         <div className="text-center md:text-right text-slate-400">
                             <p>¿Dudas o algo no cuadra? Escríbenos a <a href="mailto:soporte@invitto.com.mx" className="text-white hover:underline font-bold">soporte@invitto.com.mx</a></p>
-                            <p className="text-[11px] text-slate-400 mt-0.5">— Atención prioritaria para los primeros clientes</p>
+                            <p className="text-[11px] text-slate-400 mt-0.5">— Atención prioritaria para nuestros clientes</p>
                         </div>
                     </div>
 
