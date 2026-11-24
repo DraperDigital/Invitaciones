@@ -270,18 +270,30 @@ const OCCASIONS = [
 const FAQ_GROUPS = [
     {
         category: 'Invitaciones y RSVP',
-        indices: [0, 2, 3, 7, 9, 10],
+        items: [
+            RAW_FAQ_ITEMS[0], // descargar app
+            RAW_FAQ_ITEMS[2], // editar información
+            RAW_FAQ_ITEMS[3], // rsvp inteligente
+            RAW_FAQ_ITEMS[7], // xv años y méxico
+            RAW_FAQ_ITEMS[8], // save the date
+            RAW_FAQ_ITEMS[9], // compartir por whatsapp
+        ].filter(Boolean),
     },
     {
         category: 'Planes, Pagos y Garantía',
-        indices: [1, 4, 5, 6, 8],
+        items: [
+            RAW_FAQ_ITEMS[1], // tiempo disponible
+            RAW_FAQ_ITEMS[4], // crear sin pagar
+            RAW_FAQ_ITEMS[5], // métodos de pago
+            RAW_FAQ_ITEMS[6], // tarjeta para empezar
+        ].filter(Boolean),
     },
 ];
 
 export default function HomePage() {
     const { user } = useAuth();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const [openFaq, setOpenFaq] = useState<string | null>(null);
 
     // Hero Slider state
     const [heroSlide, setHeroSlide] = useState(0);
@@ -321,12 +333,12 @@ export default function HomePage() {
         setTouchStartX(null);
     };
 
-    const toggleFaq = (index: number) => {
-        setOpenFaq(openFaq === index ? null : index);
+    const toggleFaq = (key: string) => {
+        setOpenFaq(openFaq === key ? null : key);
     };
 
-    const currentSlide = HERO_SLIDES[heroSlide];
-    const currentOccasion = OCCASIONS[activeOccasion];
+    const currentSlide = HERO_SLIDES[heroSlide] || HERO_SLIDES[0];
+    const currentOccasion = OCCASIONS[activeOccasion] || OCCASIONS[0];
 
     return (
         <div className="min-h-screen bg-[#FFFFFF] font-sans text-[#222B38]">
@@ -1578,25 +1590,25 @@ export default function HomePage() {
                                     </div>
 
                                     <div className="space-y-3">
-                                        {group.indices.map((idx) => {
-                                            const item = RAW_FAQ_ITEMS[idx];
+                                        {group.items.map((item, i) => {
+                                            const key = `faq-${gIdx}-${i}`;
                                             return (
-                                                <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
+                                                <div key={key} className="border border-slate-200 rounded-2xl overflow-hidden transition-all">
                                                     <button
-                                                        onClick={() => toggleFaq(idx)}
-                                                        aria-expanded={openFaq === idx}
-                                                        aria-controls={`faq-answer-${idx}`}
-                                                        id={`faq-question-${idx}`}
+                                                        onClick={() => toggleFaq(key)}
+                                                        aria-expanded={openFaq === key}
+                                                        aria-controls={`faq-answer-${key}`}
+                                                        id={`faq-question-${key}`}
                                                         className="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
                                                     >
                                                         <span className="text-sm md:text-base">{item.q}</span>
-                                                        <ChevronDown className={`h-4 w-4 text-[#DF3B94] shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
+                                                        <ChevronDown className={`h-4 w-4 text-[#DF3B94] shrink-0 transition-transform duration-300 ${openFaq === key ? 'rotate-180' : ''}`} />
                                                     </button>
                                                     <div 
-                                                        id={`faq-answer-${idx}`}
+                                                        id={`faq-answer-${key}`}
                                                         role="region"
-                                                        aria-labelledby={`faq-question-${idx}`}
-                                                        className={`px-5 pb-5 text-xs md:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3.5 bg-slate-50/50 ${openFaq === idx ? 'block' : 'hidden'}`}
+                                                        aria-labelledby={`faq-question-${key}`}
+                                                        className={`px-5 pb-5 text-xs md:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3.5 bg-slate-50/50 ${openFaq === key ? 'block' : 'hidden'}`}
                                                     >
                                                         {item.a}
                                                     </div>
