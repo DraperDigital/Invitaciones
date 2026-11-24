@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase';
 // JS. Degrada a datos de ejemplo INTERACTIVOS cuando no hay Supabase (mock).
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const QUOTE_STATES = ['contactado', 'cotizado', 'contratado', 'descartado'] as const;
+export const QUOTE_STATES = ['contactado', 'cotizado', 'favorito', 'contratado', 'descartado'] as const;
 export type QuoteState = typeof QUOTE_STATES[number];
 
 export function isMockEvent(eventId: string | undefined): boolean {
@@ -109,6 +109,7 @@ export function usePlanning(eventId: string | undefined) {
     const [rentalItems, setRentalItems] = useState<any[]>([]);
     const [confirmed, setConfirmed] = useState(0);
     const [countdownDays, setCountdownDays] = useState(0);
+    const [budgetGoal, setBudgetGoalState] = useState<number>(0);
 
     const load = useCallback(async () => {
         if (!eventId) return;
@@ -120,12 +121,13 @@ export function usePlanning(eventId: string | undefined) {
             setPayments(s.payments); setTasks(s.tasks); setDayOf(s.dayOf); setNotes(s.notes); setGifts(s.gifts);
             setRentalItems(s.rentalItems);
             setConfirmed(s.confirmed); setCountdownDays(s.countdownDays);
+            setBudgetGoalState(500000);
             setLoading(false);
             return;
         }
 
         try {
-            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi, mi] = await Promise.all([
+            const [ru, ve, qu, pa, ta, dy, ev, rs, no, gi, mi, se] = await Promise.all([
                 supabase.from('budget_rubros').select('*').eq('event_id', eventId).order('sort_order'),
                 supabase.from('vendors').select('*').eq('event_id', eventId).order('created_at'),
                 supabase.from('quotes').select('*').eq('event_id', eventId).order('created_at'),
@@ -137,10 +139,12 @@ export function usePlanning(eventId: string | undefined) {
                 supabase.from('notes').select('*').eq('event_id', eventId).order('created_at', { ascending: false }),
                 supabase.from('gifts').select('*').eq('event_id', eventId).order('created_at', { ascending: false }),
                 supabase.from('rental_items').select('*').eq('event_id', eventId).order('sort_order'),
+                supabase.from('planning_settings').select('budget_goal').eq('event_id', eventId).maybeSingle(),
             ]);
             setRubros(ru.data || []); setVendors(ve.data || []); setQuotes(qu.data || []);
             setPayments(pa.data || []); setTasks(ta.data || []); setDayOf(dy.data || []); setNotes(no.data || []); setGifts(gi.data || []);
             setRentalItems(mi.data || []);
+            setBudgetGoalState(Number(se.data?.budget_goal) || 0);
             const conf = (rs.data || []).reduce((n: number, r: any) => n + 1 + (r.plus_ones_confirmed || 0), 0);
             setConfirmed(conf);
             const date = ev.data?.date_time ? new Date(ev.data.date_time) : null;
@@ -379,9 +383,18 @@ export function usePlanning(eventId: string | undefined) {
             .eq('event_id', eventId).eq('revoked', false);
     }, [eventId, isMock]);
 
+    // ── Meta global de presupuesto (planning_settings) ────────────────────────
+    const setBudgetGoal = useCallback((goal: number) => {
+        setBudgetGoalState(goal);
+        if (isMock || !eventId) return;
+        supabase.from('planning_settings')
+            .upsert({ event_id: eventId, budget_goal: goal, updated_at: new Date().toISOString() }, { onConflict: 'event_id' })
+            .then(({ error }) => { if (error) console.error('[usePlanning] budget goal error:', error); });
+    }, [eventId, isMock]);
+
     return {
         isMock,
-        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed, countdownDays,
+        loading, rubros, vendors, quotes, payments, tasks, dayOf, notes, gifts, rentalItems, confirmed, countdownDays, budgetGoal,
         chosenByRubro, minQuoteByRubro, totals, upcomingPayments, nextPayment, overdueCount, openTasks,
         reload: load,
         seedDefaults, addRubro, updateRubroEstimate, addVendor, updateVendor, deleteVendor,
@@ -390,6 +403,6 @@ export function usePlanning(eventId: string | undefined) {
         addNote, updateNote, deleteNote,
         addGift, toggleThanked, deleteGift,
         addRentalItem, updateRentalItem, toggleReturned, deleteRentalItem,
-        getOrCreateShare, revokeShare,
+        getOrCreateShare, revokeShare, setBudgetGoal,
     };
 }

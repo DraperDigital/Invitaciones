@@ -4,16 +4,17 @@ import {
     Compass, Wallet, Store, ListChecks, CalendarHeart, Crown, ChevronDown, ChevronRight,
     CalendarClock, AlertTriangle, CheckCircle2, Circle, Plus, Sparkles, Phone, Check,
     MapPin, Trash2, Pencil, CalendarDays, Download, StickyNote, Gift, Boxes, GripVertical,
-    Share2, Link2, X,
+    Share2, Link2, X, Star, Scale, Target,
 } from 'lucide-react';
 import { Reorder, useDragControls } from 'framer-motion';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RTooltip } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { useFeatureAccess } from '../../hooks/useFeatureAccess';
-import { usePlanning, QUOTE_STATES, type QuoteState } from '../../hooks/usePlanning';
+import { usePlanning, type QuoteState } from '../../hooks/usePlanning';
 
 const PINK = '#DF3B94';
 const DARK = '#222B38';
@@ -70,6 +71,7 @@ const LOC_LABEL: Record<string, string> = { iglesia: 'Iglesia', recepcion: 'Sal�
 const QUOTE_CHIP: Record<QuoteState, { bg: string; fg: string; label: string }> = {
     contactado: { bg: '#f5f5f4', fg: '#78716c', label: 'Contactado' },
     cotizado: { bg: '#fef3c7', fg: '#92400e', label: 'Cotizado' },
+    favorito: { bg: '#fce7f3', fg: '#9d174d', label: 'Favorito' },
     contratado: { bg: '#dcfce7', fg: '#166534', label: 'Contratado' },
     descartado: { bg: '#fafaf9', fg: '#a8a29e', label: 'Descartado' },
 };
@@ -542,7 +544,7 @@ const TotalPill: React.FC<{ label: string; value: string; accent?: boolean }> = 
 
 const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
     const { rubros, totals, addRubro } = planning;
-    const [view, setView] = useState<'partidas' | 'pagos'>('partidas');
+    const [view, setView] = useState<'partidas' | 'comparar' | 'pagos'>('partidas');
     const [open, setOpen] = useState<string | null>(null);
     const [nn, setNn] = useState(''); const [na, setNa] = useState('');
 
@@ -564,7 +566,7 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
             {/* Sub-vistas + export */}
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="inline-flex gap-1 rounded-2xl border border-stone-200 bg-white p-1">
-                    {([['partidas', 'Partidas'], ['pagos', 'Calendario de pagos']] as const).map(([k, label]) => (
+                    {([['partidas', 'Partidas'], ['comparar', 'Comparar'], ['pagos', 'Calendario de pagos']] as const).map(([k, label]) => (
                         <button key={k} onClick={() => setView(k)}
                             className={`rounded-xl px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer ${view === k ? 'text-white' : 'text-stone-500'}`}
                             style={view === k ? { background: DARK } : undefined}>{label}</button>
@@ -576,8 +578,9 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                 </button>
             </div>
 
-            {view === 'partidas' ? (
+            {view === 'partidas' && (
                 <>
+                    <BudgetPanel planning={planning} toast={toast} />
                     <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 rounded-3xl border border-stone-200 bg-white p-3.5 sm:p-4 min-w-0">
                         <input value={nn} onChange={e => setNn(e.target.value)} placeholder="Nuevo rubro (ej. Pastel)"
                             className="flex-1 rounded-2xl border border-stone-200 bg-[#F8F9FA] p-3 text-sm outline-none focus:border-[#DF3B94] min-w-0" />
@@ -595,9 +598,178 @@ const Presupuesto: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                         ))}
                     </Reorder.Group>
                 </>
-            ) : (
-                <PagosCalendar planning={planning} toast={toast} />
             )}
+            {view === 'comparar' && <Comparador planning={planning} toast={toast} />}
+            {view === 'pagos' && <PagosCalendar planning={planning} toast={toast} />}
+        </div>
+    );
+};
+
+// Panel de meta de presupuesto: meta global, disponible, sugerido y distribución (pie).
+const BudgetPanel: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
+    const { rubros, totals, chosenByRubro, budgetGoal, setBudgetGoal, confirmed } = planning;
+    const [goalInput, setGoalInput] = useState('');
+    const [guests, setGuests] = useState(String(confirmed || ''));
+
+    // Costo por invitado de referencia en MX (rango medio) para el sugerido.
+    const SUGG_PER_GUEST = 1800;
+    const g = Number(guests) || confirmed || 0;
+    const suggested = g * SUGG_PER_GUEST;
+
+    const goal = Number(budgetGoal) || 0;
+    const disponible = goal > 0 ? goal - totals.contratado : 0;
+    const usedPct = goal > 0 ? Math.min(100, Math.round((totals.contratado / goal) * 100)) : 0;
+
+    // Distribución por rubro (usa contratado si existe, si no el estimado).
+    const COLORS = ['#DF3B94', '#222B38', '#f59e0b', '#10b981', '#6366f1', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6', '#0ea5e9'];
+    const pieData = useMemo(() => rubros
+        .map(r => ({ name: r.name, value: chosenByRubro[r.id] ? Number(chosenByRubro[r.id].amount) : Number(r.estimated_amount || 0) }))
+        .filter(d => d.value > 0)
+        .sort((a, b) => b.value - a.value), [rubros, chosenByRubro]);
+
+    const saveGoal = () => {
+        const v = Number(goalInput);
+        if (!v || v <= 0) return toast.error('Pon una meta válida');
+        setBudgetGoal(v); setGoalInput(''); toast.success('Meta de presupuesto guardada');
+    };
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {/* Meta global + sugerido */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-5 space-y-4">
+                <div className="flex items-center gap-2">
+                    <Target className="h-4 w-4" style={{ color: PINK }} />
+                    <h3 className="text-[11px] uppercase font-bold tracking-widest text-stone-500">Meta de presupuesto</h3>
+                </div>
+                {goal > 0 ? (
+                    <>
+                        <div className="flex items-end justify-between gap-2">
+                            <div>
+                                <p className="text-2xl font-display font-black" style={{ color: DARK }}>{money(goal)}</p>
+                                <p className="text-xs text-stone-400">Contratado {money(totals.contratado)}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm font-bold" style={{ color: disponible < 0 ? '#e11d48' : '#166534' }}>{money(disponible)}</p>
+                                <p className="text-[10px] uppercase tracking-wider text-stone-400">{disponible < 0 ? 'te pasaste' : 'disponible'}</p>
+                            </div>
+                        </div>
+                        <div className="h-2.5 overflow-hidden rounded-full bg-stone-100">
+                            <div className="h-full rounded-full transition-all" style={{ width: `${usedPct}%`, background: disponible < 0 ? '#e11d48' : PINK }} />
+                        </div>
+                        <button onClick={() => setBudgetGoal(0)} className="text-[11px] font-bold text-stone-400 hover:text-stone-600 cursor-pointer">Cambiar meta</button>
+                    </>
+                ) : (
+                    <div className="space-y-3">
+                        <div className="rounded-2xl bg-[#F8F9FA] p-3">
+                            <p className="text-xs text-stone-500">Sugerido para <span className="font-bold" style={{ color: DARK }}>{g || '—'}</span> invitados</p>
+                            <p className="text-xl font-display font-black" style={{ color: PINK }}>{suggested ? money(suggested) : '—'}</p>
+                            <p className="text-[10px] text-stone-400">≈ {money(SUGG_PER_GUEST)} por invitado (rango medio MX). Ajusta abajo.</p>
+                            <div className="mt-2 flex items-center gap-2">
+                                <input value={guests} onChange={e => setGuests(e.target.value)} type="number" placeholder="# invitados"
+                                    className="w-28 rounded-xl border border-stone-200 bg-white p-2 text-sm outline-none focus:border-[#DF3B94]" />
+                                {suggested > 0 && <button onClick={() => setBudgetGoal(suggested)} className="rounded-xl px-3 py-2 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: DARK }}>Usar sugerido</button>}
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input value={goalInput} onChange={e => setGoalInput(e.target.value)} type="number" placeholder="O fija tu meta (MXN)"
+                                className="flex-1 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
+                            <button onClick={saveGoal} className="rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: PINK }}>Guardar</button>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Distribución (pie) */}
+            <div className="rounded-3xl border border-stone-200 bg-white p-5">
+                <h3 className="mb-2 text-[11px] uppercase font-bold tracking-widest text-stone-500">Distribución del gasto</h3>
+                {pieData.length === 0 ? (
+                    <p className="py-8 text-center text-sm text-stone-400">Agrega montos para ver la distribución.</p>
+                ) : (
+                    <div className="flex items-center gap-3">
+                        <div className="h-36 w-36 shrink-0">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={34} outerRadius={64} paddingAngle={2}>
+                                        {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                                    </Pie>
+                                    <RTooltip formatter={(v: any) => money(Number(v))} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div className="min-w-0 flex-1 space-y-1">
+                            {pieData.slice(0, 6).map((d, i) => (
+                                <div key={d.name} className="flex items-center gap-2 text-xs">
+                                    <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
+                                    <span className="min-w-0 flex-1 truncate text-stone-600">{d.name}</span>
+                                    <span className="shrink-0 font-bold" style={{ color: DARK }}>{money(d.value)}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+// Comparador de cotizaciones: por rubro, todas las cotizaciones lado a lado.
+const Comparador: React.FC<{ planning: Planning; toast: any }> = ({ planning, toast }) => {
+    const { rubros, quotes, vendors, chosenByRubro, setQuoteStatus, chooseQuote } = planning;
+    const vendorName = (id: string) => vendors.find(v => v.id === id)?.name || '—';
+    const rubrosConQuotes = rubros.filter(r => quotes.some(q => q.rubro_id === r.id));
+
+    if (rubrosConQuotes.length === 0) {
+        return (
+            <div className="rounded-3xl border border-dashed border-stone-300 bg-white p-10 text-center">
+                <Scale className="mx-auto mb-3 h-8 w-8" style={{ color: PINK }} />
+                <p className="font-display font-extrabold text-lg" style={{ color: DARK }}>Nada que comparar todavía</p>
+                <p className="mt-1 text-sm text-stone-500">Agrega cotizaciones a tus rubros (en Partidas) y aquí las verás lado a lado para decidir.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-4">
+            <p className="px-1 text-xs text-stone-400">Compara las cotizaciones de cada rubro. Marca una <Star className="inline h-3 w-3" style={{ color: PINK }} /> favorita o elige el contrato. La más barata se resalta.</p>
+            {rubrosConQuotes.map(r => {
+                const qs = quotes.filter(q => q.rubro_id === r.id && q.status !== 'descartado');
+                const min = Math.min(...qs.map(q => Number(q.amount || 0)));
+                const chosen = chosenByRubro[r.id];
+                return (
+                    <div key={r.id} className="rounded-3xl border border-stone-200 bg-white p-4 sm:p-5">
+                        <div className="mb-3 flex items-center justify-between gap-2">
+                            <h3 className="font-display font-extrabold truncate" style={{ color: DARK }}>{r.name}</h3>
+                            <span className="shrink-0 text-[11px] text-stone-400">{qs.length} opción(es)</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                            {qs.sort((a, b) => Number(a.amount) - Number(b.amount)).map(q => {
+                                const isMin = Number(q.amount) === min && qs.length > 1;
+                                const chip = QUOTE_CHIP[q.status as QuoteState] || QUOTE_CHIP.cotizado;
+                                return (
+                                    <div key={q.id} className={`rounded-2xl border p-3 ${q.is_chosen ? 'border-emerald-300 bg-emerald-50/40' : 'border-stone-200'}`}>
+                                        <div className="flex items-start justify-between gap-2">
+                                            <p className="min-w-0 flex-1 truncate font-bold text-sm" style={{ color: DARK }}>{vendorName(q.vendor_id)}</p>
+                                            {isMin && <span className="shrink-0 rounded-full bg-sky-50 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-sky-700">+ barata</span>}
+                                        </div>
+                                        <p className="mt-1 text-xl font-display font-black" style={{ color: DARK }}>{money(Number(q.amount))}</p>
+                                        <span className="mt-1 inline-block rounded-full px-2 py-0.5 text-[9px] uppercase font-bold tracking-wider" style={{ background: chip.bg, color: chip.fg }}>{chip.label}</span>
+                                        <div className="mt-2.5 flex items-center gap-1.5">
+                                            <button onClick={() => setQuoteStatus(q.id, q.status === 'favorito' ? 'cotizado' : 'favorito')}
+                                                className={`flex items-center gap-1 rounded-lg border px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider cursor-pointer ${q.status === 'favorito' ? 'border-pink-200 bg-pink-50 text-pink-700' : 'border-stone-200 text-stone-500 hover:bg-stone-50'}`}>
+                                                <Star className="h-3 w-3" fill={q.status === 'favorito' ? '#DF3B94' : 'none'} /> Favorito
+                                            </button>
+                                            {q.is_chosen
+                                                ? <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: '#166534' }}><Check className="h-3.5 w-3.5" /> Contrato</span>
+                                                : <button onClick={async () => { await chooseQuote(q); toast.success('Contrato elegido'); }} className="rounded-lg px-2.5 py-1.5 text-[10px] uppercase font-bold tracking-wider text-white cursor-pointer" style={{ background: DARK }}>Elegir</button>}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        {chosen && <p className="mt-2 text-[11px] text-stone-400">Contrato actual: <span className="font-bold" style={{ color: '#166534' }}>{vendorName(chosen.vendor_id)} · {money(Number(chosen.amount))}</span></p>}
+                    </div>
+                );
+            })}
         </div>
     );
 };
@@ -806,7 +978,7 @@ const RubroRow: React.FC<{ rubro: any; planning: Planning; toast: any; expanded:
                                 <input value={qa} onChange={e => setQa(e.target.value)} type="number" placeholder="Monto"
                                     className="w-full sm:w-28 rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]" />
                                 <select value={qs} onChange={e => setQs(e.target.value as QuoteState)} className="w-full sm:w-auto rounded-xl border border-stone-200 bg-[#F8F9FA] p-2.5 text-sm outline-none focus:border-[#DF3B94]">
-                                    {QUOTE_STATES.filter(s => s !== 'descartado').map(s => <option key={s} value={s}>{QUOTE_CHIP[s].label}</option>)}
+                                    {(['contactado', 'cotizado'] as QuoteState[]).map(s => <option key={s} value={s}>{QUOTE_CHIP[s].label}</option>)}
                                 </select>
                             </div>
                             <button onClick={submitQuote} className="w-full sm:w-auto rounded-xl px-4 py-2.5 text-[10px] uppercase font-bold tracking-widest text-white cursor-pointer" style={{ background: PINK }}>Añadir</button>
@@ -857,7 +1029,10 @@ const Proveedores: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
     const [editing, setEditing] = useState(false);
     const [form, setForm] = useState({ name: '', category: '', phone: '', contact_name: '' });
     const [edit, setEdit] = useState({ name: '', category: '', phone: '', contact_name: '', notes: '' });
+    const [catFilter, setCatFilter] = useState('');
 
+    const categories = useMemo(() => Array.from(new Set(vendors.map(v => v.category).filter(Boolean))).sort(), [vendors]);
+    const visibleVendors = catFilter ? vendors.filter(v => v.category === catFilter) : vendors;
     const rubroName = (id: string) => rubros.find(r => r.id === id)?.name || '—';
     const selected = vendors.find(v => v.id === sel) || null;
     const selectedQuotes = selected ? quotes.filter(q => q.vendor_id === selected.id) : [];
@@ -894,9 +1069,17 @@ const Proveedores: React.FC<{ planning: Planning; toast: any }> = ({ planning, t
                         <Plus className="h-4 w-4" /> Agregar proveedor
                     </button>
                 </div>
+                {categories.length > 0 && (
+                    <div className="mb-3 flex flex-wrap gap-1.5">
+                        <button onClick={() => setCatFilter('')} className={`rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider cursor-pointer ${!catFilter ? 'text-white' : 'bg-stone-100 text-stone-500'}`} style={!catFilter ? { background: DARK } : undefined}>Todas</button>
+                        {categories.map(c => (
+                            <button key={c} onClick={() => setCatFilter(c)} className={`rounded-full px-2.5 py-1 text-[10px] uppercase font-bold tracking-wider cursor-pointer ${catFilter === c ? 'text-white' : 'bg-stone-100 text-stone-500'}`} style={catFilter === c ? { background: DARK } : undefined}>{c}</button>
+                        ))}
+                    </div>
+                )}
                 <div className="space-y-2">
-                    {vendors.length === 0 && <p className="text-sm text-stone-400">Sin proveedores aún.</p>}
-                    {vendors.map(v => (
+                    {visibleVendors.length === 0 && <p className="text-sm text-stone-400">{vendors.length === 0 ? 'Sin proveedores aún.' : 'Sin proveedores en esta categoría.'}</p>}
+                    {visibleVendors.map(v => (
                         <div key={v.id} className={`flex items-center justify-between rounded-2xl border p-3 ${sel === v.id ? 'border-[#DF3B94] bg-[#DF3B94]/5' : 'border-stone-100'}`}>
                             <button onClick={() => { setSel(v.id); setEditing(false); }} className="min-w-0 flex-1 text-left">
                                 <p className="truncate font-bold" style={{ color: DARK }}>{v.name}</p>
