@@ -46,31 +46,12 @@ const HOMEPAGE_JSONLD = [
     FAQ_JSONLD,
 ];
 
-// Fecha calculada dinámicamente a 45 días en el futuro para que el contador sea exacto
-const MOCK_HERO_DATE = (() => {
-    const d = new Date();
-    d.setDate(d.getDate() + 45);
-    const months = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-})();
-
 interface HeroSlide {
     tag: string;
     names: string;
     event: string;
-    date: string;
-    days: number;
-    hours: number;
     image: string;
-    avif?: string;
-    webp?: string;
-    srcset?: string;
     alt: string;
-    accentColor: string;
-    buttonColor: string;
     demoUrl: string;
 }
 
@@ -78,69 +59,41 @@ const HERO_SLIDES: HeroSlide[] = [
     {
         tag: 'Nuestra Boda',
         names: 'Isabel & Rodrigo',
-        event: 'Boda de Ensueño',
-        date: MOCK_HERO_DATE,
-        days: 45,
-        hours: 12,
-        image: '/assets/hero-wedding.webp',
-        avif: '/assets/hero-wedding.avif',
-        webp: '/assets/hero-wedding.webp',
-        srcset: '/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w',
-        alt: 'Boda Isabel & Rodrigo',
-        accentColor: '#DF3B94',
-        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
+        event: 'Clásica Atemporal',
+        image: '/screenshots_plantillas/01_classic.jpg',
+        alt: 'Invitación digital de boda Clásica Atemporal - Isabel & Rodrigo',
         demoUrl: '/i/boda-isabel-rodrigo-premium',
     },
     {
         tag: 'Mis XV Años',
         names: 'Valeria',
-        event: 'Mis XV Años',
-        date: '20 Noviembre',
-        days: 18,
-        hours: 6,
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80',
-        alt: 'XV Años Valeria',
-        accentColor: '#FAC345',
-        buttonColor: 'bg-[#C2287B] hover:bg-[#A81B65]',
+        event: 'Estilo Editorial',
+        image: '/screenshots_plantillas/05_magazine.jpg',
+        alt: 'Invitación digital de XV años estilo revista - Valeria',
         demoUrl: '/i/xv-valeria-premium',
     },
     {
         tag: 'Cumpleaños',
-        names: 'Cecilia Cardona',
-        event: 'Celebrando 70 Años',
-        date: '12 Diciembre',
-        days: 10,
-        hours: 8,
-        image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-        alt: 'Cumpleaños Cecilia Cardona',
-        accentColor: '#DF3B94',
-        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
-        demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657',
+        names: 'Emilia',
+        event: 'Fiesta Neón',
+        image: '/screenshots_plantillas/09_neon-glow.jpg',
+        alt: 'Invitación digital de cumpleaños Fiesta Neón - Emilia',
+        demoUrl: '/i/cumple-emilia-premium',
     },
     {
         tag: 'Mi Bautizo',
         names: 'Victoria',
-        event: 'Bautizo de Victoria',
-        date: '15 Enero',
-        days: 28,
-        hours: 14,
-        image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80',
-        alt: 'Bautizo Victoria',
-        accentColor: '#4E7B55',
-        buttonColor: 'bg-[#4E7B55] hover:bg-[#3D6343]',
+        event: 'Fantasía Infantil',
+        image: '/screenshots_plantillas/20_whimsical-kids.jpg',
+        alt: 'Invitación digital de bautizo Fantasía Infantil - Victoria',
         demoUrl: '/i/bautizo-victoria-premium',
     },
     {
         tag: 'Baby Shower',
         names: 'Mateo Emiliano',
         event: 'Nube de Miel',
-        date: '5 Febrero',
-        days: 35,
-        hours: 4,
-        image: '/images/templates/nube-de-miel.jpg',
-        alt: 'Baby Shower Mateo Emiliano',
-        accentColor: '#FF85C0',
-        buttonColor: 'bg-[#DF3B94] hover:bg-[#C2287B]',
+        image: '/screenshots_plantillas/13_nube-de-miel.jpg',
+        alt: 'Invitación digital de baby shower Nube de Miel - Mateo Emiliano',
         demoUrl: '/i/baby-nube-de-miel',
     },
 ];
@@ -170,8 +123,9 @@ const OCCASIONS = [
         title: 'Boda Isabel & Rodrigo',
         names: 'Isabel & Rodrigo',
         event: 'Boda de Ensueño',
-        description: 'Sobre digital interactivo con sello de lacre, confirmación por pases familiares y mesa de regalos Liverpool y Amazon.',
+        description: 'Sobre digital interactivo con sello de lacre, tipografía serif de lujo, confirmación por pases familiares y mesa de regalos Liverpool/Amazon.',
         demoUrl: '/i/boda-isabel-rodrigo-premium',
+        previewImage: '/screenshots_plantillas/01_classic.jpg',
         features: ['Sobre interactivo con lacre', 'Pases familiares y niños', 'Mesa de regalos en línea'],
     },
     {
@@ -183,8 +137,9 @@ const OCCASIONS = [
         title: 'XV Años Valeria',
         names: 'Valeria',
         event: 'Mis XV Años',
-        description: 'Portada estilo revista editorial de moda, música de vals, sección de chambelanes y pase QR para control de acceso al salón.',
+        description: 'Portada estilo revista editorial de moda, música de vals, sección de chambelanes y padrinos, y pase QR para control de acceso al salón.',
         demoUrl: '/i/xv-valeria-premium',
+        previewImage: '/screenshots_plantillas/05_magazine.jpg',
         features: ['Portada estilo revista', 'Vals, chambelanes y padrinos', 'Pase QR para acceso al salón'],
     },
     {
@@ -192,13 +147,14 @@ const OCCASIONS = [
         name: 'Cumpleaños',
         icon: '🎂',
         slug: 'invitaciones-digitales-cumpleanos',
-        badge: 'Celebrando 70 Años',
-        title: 'Cumpleaños Cecilia Cardona',
-        names: 'Cecilia Cardona Nieto',
-        event: 'Celebrando 70 Años de Vida',
-        description: 'Festejo en Hacienda La Escondida con música de mariachi, mapa con GPS Waze/Maps, galería fotográfica y confirmación ágil.',
-        demoUrl: '/i/cumplea%C3%B1os-cecilia-h2657',
-        features: ['Mapa con GPS Waze & Maps', 'Confirmación 1 toque vía WhatsApp', 'Galería fotográfica de vida'],
+        badge: 'Fiesta Neón',
+        title: 'Cumpleaños Emilia',
+        names: 'Emilia',
+        event: 'Fiesta Neón & Party',
+        description: 'Diseño vibrante para festejar a lo grande con música de fondo, mapa con GPS Waze/Maps integrado y confirmación ágil con un clic.',
+        demoUrl: '/i/cumple-emilia-premium',
+        previewImage: '/screenshots_plantillas/09_neon-glow.jpg',
+        features: ['Mapa con GPS Waze & Maps', 'Confirmación 1 toque vía WhatsApp', 'Música de fondo activa'],
     },
     {
         id: 'bautizo',
@@ -209,22 +165,10 @@ const OCCASIONS = [
         title: 'Bautizo de Victoria',
         names: 'Victoria',
         event: 'Mi Bautizo',
-        description: 'Diseño angelical con sección de padrinos y bendición, misa en templo parroquial, mapa al salón y confirmación familiar.',
+        description: 'Diseño angelical con foto circular, sección dedicada a padrinos y bendición, misa en templo parroquial, mapa al salón y confirmación familiar.',
         demoUrl: '/i/bautizo-victoria-premium',
+        previewImage: '/screenshots_plantillas/20_whimsical-kids.jpg',
         features: ['Sección de padrinos y bendición', 'Misa y recepción con mapa', 'Confirmación familiar sencilla'],
-    },
-    {
-        id: 'primera-comunion',
-        name: 'Primera Comunión',
-        icon: '⛪',
-        slug: 'invitaciones-digitales-primera-comunion',
-        badge: 'Ceremonia Solemne',
-        title: 'Primera Comunión de Gael',
-        names: 'Gael',
-        event: 'Mi Primera Comunión',
-        description: 'Misa en Templo de San Jerónimo y recepción en Jardín San Ángel. Cronograma de ceremonia, código de vestimenta y mapa.',
-        demoUrl: '/i/comunion-gael-premium',
-        features: ['Ceremonia y banquete', 'Itinerario de misa solemne', 'Confirmación sin aplicaciones'],
     },
     {
         id: 'baby-shower',
@@ -235,8 +179,9 @@ const OCCASIONS = [
         title: 'Baby Shower Mateo Emiliano',
         names: 'Mateo Emiliano',
         event: 'Esperando a Mateo Emiliano',
-        description: 'Sobre digital con apertura suave, mesa de regalos Liverpool, guía de pañales por etapa y confirmación con un toque.',
+        description: 'Sobre digital con apertura suave, diseño tierno Nube de Miel, mesa de regalos Liverpool, guía de pañales por etapa y confirmación con un toque.',
         demoUrl: '/i/baby-nube-de-miel',
+        previewImage: '/screenshots_plantillas/13_nube-de-miel.jpg',
         features: ['Mesa de regalos Liverpool', 'Guía de tallas y pañales', 'Sobre digital interactivo'],
     },
     {
@@ -248,8 +193,9 @@ const OCCASIONS = [
         title: '¿Mateo o Sofía? Revelación',
         names: '¿Mateo o Sofía?',
         event: 'Gran Revelación de Género',
-        description: 'Votación interactiva Team Niño vs Team Niña, cuenta regresiva al momento de la revelación y confirmación en tiempo real.',
+        description: 'Dinámica interactiva Team Niño vs Team Niña con votación en tiempo real, cuenta regresiva al momento de la revelación y confirmación.',
         demoUrl: '/i/gender-reveal-mateo-o-sofia-premium',
+        previewImage: '/screenshots_plantillas/26_reveal-duo.jpg',
         features: ['Votación Team Niño vs Team Niña', 'Cuenta regresiva al gran secreto', 'Mesa de regalos Amazon'],
     },
     {
@@ -261,9 +207,24 @@ const OCCASIONS = [
         title: 'Graduación Ana - Lic. en Psicología',
         names: 'Ana',
         event: 'Licenciada en Psicología',
-        description: 'Plantilla tipo Polaroid con recuerdos de generación, pase de acceso QR para la fiesta de gala y código de vestimenta formal.',
+        description: 'Plantilla tipo Polaroid con recuerdos de generación, itinerario de acto académico y fiesta de gala con código QR para control en puerta.',
         demoUrl: '/i/graduacion-ana-psicologia-premium',
+        previewImage: '/screenshots_plantillas/12_polaroid-vintage.jpg',
         features: ['Estilo Polaroid vintage', 'Acto académico y fiesta de gala', 'Pases individuales con QR'],
+    },
+    {
+        id: 'aniversario',
+        name: 'Gala / Aniversario',
+        icon: '💎',
+        slug: 'invitaciones-digitales-boda',
+        badge: 'Lujo Metálico',
+        title: 'Gala de Aniversario',
+        names: 'Gala de Aniversario',
+        event: 'Noche de Distinción',
+        description: 'Elegancia de etiqueta rigurosa con acentos dorados sobre fondo oscuro, código de vestimenta, confirmación y pases de gala.',
+        demoUrl: '/i/gala-aniversario-premium',
+        previewImage: '/screenshots_plantillas/10_luxury-gold.jpg',
+        features: ['Acentos dorados metálicos', 'Pases de gala con QR', 'Código de etiqueta rigurosa'],
     },
 ];
 
@@ -608,71 +569,29 @@ export default function HomePage() {
                                         <div className="w-3 h-1 bg-slate-800 rounded-full" />
                                     </div>
 
-                                    {/* Phone Screen Content */}
-                                    <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative flex flex-col justify-between text-white transition-opacity duration-300">
-                                        
-                                        {/* Event Cover Image */}
-                                        <div className="relative h-2/3 w-full overflow-hidden">
-                                            {heroSlide === 0 ? (
-                                                <picture>
-                                                    <source srcSet="/assets/hero-wedding.avif" type="image/avif" />
-                                                    <source srcSet="/assets/hero-wedding-400.webp 400w, /assets/hero-wedding.webp 800w" type="image/webp" sizes="(max-width: 640px) 290px, (max-width: 1024px) 320px, 340px" />
-                                                    <img
-                                                        src="/assets/hero-wedding.webp"
-                                                        width={340}
-                                                        height={450}
-                                                        fetchPriority="high"
-                                                        loading="eager"
-                                                        decoding="async"
-                                                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                                        alt={currentSlide.alt}
-                                                    />
-                                                </picture>
-                                            ) : (
-                                                <img
-                                                    src={currentSlide.image}
-                                                    width={340}
-                                                    height={450}
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                                                    alt={currentSlide.alt}
-                                                />
-                                            )}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                                            
-                                            <div className="absolute bottom-4 left-0 w-full px-5 z-10 text-center">
-                                                <span 
-                                                    className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] uppercase font-bold tracking-widest border border-white/10 inline-block mb-2"
-                                                    style={{ color: currentSlide.accentColor }}
-                                                >
-                                                    {currentSlide.tag}
-                                                </span>
-                                                <p className="font-display font-extrabold text-2xl drop-shadow-sm text-white">{currentSlide.names}</p>
-                                                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-300 mt-0.5">{currentSlide.date}</p>
+                                    {/* Phone Screen: Muestra la captura y diseño real de cada invitación */}
+                                    <div className="w-full h-full bg-slate-950 rounded-[2.2rem] overflow-hidden relative shadow-inner select-none">
+                                        <Link 
+                                            to={currentSlide.demoUrl} 
+                                            className="block w-full h-full relative group"
+                                            title={`Probar demo interactiva de ${currentSlide.names}`}
+                                        >
+                                            <img
+                                                src={currentSlide.image}
+                                                alt={currentSlide.alt}
+                                                width={340}
+                                                height={680}
+                                                fetchPriority={heroSlide === 0 ? "high" : "auto"}
+                                                loading={heroSlide === 0 ? "eager" : "lazy"}
+                                                decoding="async"
+                                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                                            />
+                                            {/* Barra flotante inferior para probar demo en vivo */}
+                                            <div className="absolute bottom-3 left-3 right-3 z-10 py-2.5 px-3 bg-black/75 backdrop-blur-md rounded-xl text-center border border-white/20 text-white text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg group-hover:bg-[#C2287B] group-hover:border-[#C2287B] transition-all">
+                                                <span>{currentSlide.names} · Probar Demo</span>
+                                                <ArrowRight className="h-3.5 w-3.5" />
                                             </div>
-                                        </div>
-
-                                        {/* Action Buttons inside Phone */}
-                                        <div className="p-4 space-y-2 bg-slate-950 z-10">
-                                            <div className="flex justify-center gap-3 text-center text-[10px] font-bold">
-                                                <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                    <p className="text-sm font-display text-[#DF3B94]">{currentSlide.days}</p>
-                                                    <p className="text-[8px] text-slate-400">DÍAS</p>
-                                                </div>
-                                                <div className="flex-1 bg-white/10 backdrop-blur-md p-2 rounded-xl border border-white/10">
-                                                    <p className="text-sm font-display text-[#FAC345]">{currentSlide.hours}</p>
-                                                    <p className="text-[8px] text-slate-400">HORAS</p>
-                                                </div>
-                                            </div>
-
-                                            <Link 
-                                                to={currentSlide.demoUrl} 
-                                                className={`w-full py-3 ${currentSlide.buttonColor} text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md text-center block transition-colors`}
-                                            >
-                                                Confirmar Asistencia
-                                            </Link>
-                                        </div>
+                                        </Link>
                                     </div>
                                 </div>
 
@@ -923,43 +842,26 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                {/* Right Mini Preview / Highlights Container */}
+                                {/* Right Preview: Tarjeta con captura real de la plantilla */}
                                 <div className="lg:col-span-5 flex justify-center">
-                                    <div className="w-full max-w-sm bg-white p-6 rounded-2xl border border-slate-200 shadow-md space-y-4">
-                                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-xl">{currentOccasion.icon}</span>
-                                                <span className="text-xs font-bold text-slate-800">{currentOccasion.name}</span>
-                                            </div>
-                                            <span className="text-[10px] font-bold text-[#4E7B55] bg-emerald-50 px-2 py-0.5 rounded-full">Activa</span>
+                                    <Link 
+                                        to={currentOccasion.demoUrl}
+                                        className="w-full max-w-[270px] xs:max-w-[290px] aspect-[9/16] rounded-3xl overflow-hidden border border-slate-200/80 shadow-xl group block relative bg-slate-900 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#C2287B]/10"
+                                        title={`Probar demo de ${currentOccasion.title}`}
+                                    >
+                                        <img
+                                            src={currentOccasion.previewImage}
+                                            alt={currentOccasion.title}
+                                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                            loading="lazy"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4 justify-center">
+                                            <span className="w-full py-2.5 bg-white text-slate-900 group-hover:bg-[#C2287B] group-hover:text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg flex items-center justify-center gap-1.5 transition-colors">
+                                                <span>Ver Demo en Vivo</span>
+                                                <ArrowRight className="h-3.5 w-3.5" />
+                                            </span>
                                         </div>
-
-                                        <div className="space-y-2 text-xs text-slate-600">
-                                            <div className="flex justify-between py-1 border-b border-slate-50">
-                                                <span className="font-medium text-slate-500">Mesa de regalos:</span>
-                                                <span className="font-bold text-slate-800">Integrada</span>
-                                            </div>
-                                            <div className="flex justify-between py-1 border-b border-slate-50">
-                                                <span className="font-medium text-slate-500">Confirmación WhatsApp:</span>
-                                                <span className="font-bold text-[#4E7B55]">Habilitada</span>
-                                            </div>
-                                            <div className="flex justify-between py-1 border-b border-slate-50">
-                                                <span className="font-medium text-slate-500">Pase QR individual:</span>
-                                                <span className="font-bold text-slate-800">Incluido en Pro</span>
-                                            </div>
-                                            <div className="flex justify-between py-1">
-                                                <span className="font-medium text-slate-500">GPS Waze & Maps:</span>
-                                                <span className="font-bold text-[#B45309]">1 clic</span>
-                                            </div>
-                                        </div>
-
-                                        <Link
-                                            to={currentOccasion.demoUrl}
-                                            className="w-full py-2.5 bg-slate-900 hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider text-center block transition-colors shadow-xs"
-                                        >
-                                            Ver Invitación de Muestra →
-                                        </Link>
-                                    </div>
+                                    </Link>
                                 </div>
 
                             </div>
