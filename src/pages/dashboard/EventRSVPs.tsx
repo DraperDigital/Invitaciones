@@ -286,6 +286,93 @@ const EventRSVPs: React.FC = () => {
         }
     };
 
+    const [runningCadence, setRunningCadence] = useState(false);
+
+    const handleRunCadenceRound = async () => {
+        if (!eventId) return;
+        const pendingGuests = guests.filter(g => getGuestStatus(g) === 'pending');
+        if (pendingGuests.length === 0) {
+            toast.success('¡Excelente! No hay invitados pendientes de confirmación.');
+            return;
+        }
+
+        try {
+            setRunningCadence(true);
+            const nowIso = new Date().toISOString();
+
+            const logEntries = pendingGuests.map(g => ({
+                event_id: eventId,
+                guest_id: g.id,
+                round_number: (confirmaSettings?.used_conversations || 0) + 1,
+                channel: 'whatsapp',
+                recipient: g.phone || g.name,
+                status: 'queued',
+                sent_at: nowIso
+            }));
+
+            await supabase
+                .from('confirma_reminders_log')
+                .insert(logEntries);
+
+            const updatedSettings: ConfirmaSettings = {
+                ...(confirmaSettings || {
+                    event_id: eventId,
+                    enabled: true,
+                    business_number: confirmaNumberInput,
+                    quota_contacts: 200,
+                    used_conversations: 0,
+                    activated_at: nowIso,
+                    expires_at: null
+                }),
+                last_cadence_run_at: nowIso
+            };
+
+            await supabase
+                .from('confirma_settings')
+                .upsert(updatedSettings);
+
+            setConfirmaSettings(updatedSettings);
+            toast.success(`Ronda de seguimiento despachada para ${pendingGuests.length} invitado(s) pendiente(s).`);
+        } catch (e: any) {
+            toast.error('Error al despachar ronda: ' + (e.message || 'Error'));
+        } finally {
+            setRunningCadence(false);
+        }
+    };
+
+    const handleUpdateCadenceSettings = async (cadenceDays: number, autoEnabled: boolean, finalHours: number = 48) => {
+        if (!eventId) return;
+        try {
+            setSavingConfirma(true);
+            const updatedSettings: ConfirmaSettings = {
+                ...(confirmaSettings || {
+                    event_id: eventId,
+                    enabled: true,
+                    business_number: confirmaNumberInput,
+                    quota_contacts: 200,
+                    used_conversations: 0,
+                    activated_at: new Date().toISOString(),
+                    expires_at: null
+                }),
+                auto_reminders_enabled: autoEnabled,
+                reminder_cadence_days: cadenceDays,
+                final_reminder_hours: finalHours
+            };
+
+            const { error } = await supabase
+                .from('confirma_settings')
+                .upsert(updatedSettings);
+
+            if (error) throw error;
+            setConfirmaSettings(updatedSettings);
+            toast.success('Configuración de cadencia guardada');
+        } catch (e: any) {
+            toast.error('Error al guardar cadencia: ' + (e.message || 'Error'));
+        } finally {
+            setSavingConfirma(false);
+        }
+    };
+
     // Helper: leer estado desde guests.status (fuente confiable) y mapear a formato rsvp
     const getGuestStatus = (g: any): string => {
         // Primero intentar rsvps (si RLS los carga), si no, usar guests.status
@@ -1588,6 +1675,11 @@ const EventRSVPs: React.FC = () => {
                                                 <div className="pl-8">
                                                     <h4 className="font-display font-extrabold text-base sm:text-lg text-[#222B38] leading-tight mb-1">{g.name}</h4>
                                                     <p className="text-[8px] sm:text-[9px] uppercase font-bold text-stone-500 tracking-widest">{g.group_name || 'Individual'}</p>
+                                                    {status === 'no' && (g.decline_reason || rsvp?.message) && (
+                                                        <p className="text-[10px] text-rose-700 bg-rose-50 border border-rose-200/60 rounded-lg p-1.5 mt-2 leading-relaxed">
+                                                            <span className="font-bold">Motivo:</span> "{g.decline_reason || (rsvp?.message?.startsWith('[Declinó]') ? rsvp.message.replace('[Declinó]', '').trim() : rsvp?.message)}"
+                                                        </p>
+                                                    )}
                                                 </div>
                                                 <div className="relative inline-flex items-center group">
                                                     <select
@@ -1719,7 +1811,18 @@ const EventRSVPs: React.FC = () => {
                                                     </button>
                                                 </td>
                                                 <td className="px-8 py-6 font-semibold text-stone-900">
-                                                    {editingGuestId === g.id ? <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-300 px-3 py-1.5 rounded-lg w-full text-stone-900 bg-white" /> : g.name}
+                                                    {editingGuestId === g.id ? (
+                                                        <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} className="border border-stone-300 px-3 py-1.5 rounded-lg w-full text-stone-900 bg-white" />
+                                                    ) : (
+                                                        <div>
+                                                            <span>{g.name}</span>
+                                                            {getGuestStatus(g) === 'no' && (g.decline_reason || g.rsvps?.[0]?.message) && (
+                                                                <p className="text-[10px] text-rose-700 font-normal italic mt-0.5 max-w-xs truncate" title={g.decline_reason || g.rsvps?.[0]?.message}>
+                                                                    Motivo: "{g.decline_reason || (g.rsvps?.[0]?.message?.startsWith('[Declinó]') ? g.rsvps[0].message.replace('[Declinó]', '').trim() : g.rsvps?.[0]?.message)}"
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 <td className="px-8 py-6 text-stone-600 font-medium">
                                                     {editingGuestId === g.id ? <input value={editData.group_name} onChange={e => setEditData({...editData, group_name: e.target.value})} className="border border-stone-300 px-3 py-1.5 rounded-lg w-full text-stone-900 bg-white" /> : g.group_name || 'Individual'}
@@ -1996,12 +2099,24 @@ const EventRSVPs: React.FC = () => {
 
             {activeTab === 'messages' && (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {guests.filter(g => g.rsvps?.[0]?.message).map(g => (
-                        <div key={g.id} className="bg-white p-6 rounded-[2rem] border border-stone-200 shadow-sm space-y-4">
-                            <h4 className="font-display font-extrabold text-lg text-stone-900">{g.name}</h4>
-                            <p className="text-stone-700 italic text-sm font-medium">"{g.rsvps[0].message}"</p>
-                        </div>
-                    ))}
+                    {guests.filter(g => g.rsvps?.[0]?.message || g.decline_reason).map(g => {
+                        const isDecline = getGuestStatus(g) === 'no' || Boolean(g.decline_reason);
+                        const rawMsg = g.decline_reason || g.rsvps?.[0]?.message || '';
+                        const cleanMsg = rawMsg.replace(/^\[Declinó\]\s*/, '');
+                        return (
+                            <div key={g.id} className={`bg-white p-6 rounded-[2rem] border shadow-sm space-y-3 ${isDecline ? 'border-rose-200 bg-rose-50/20' : 'border-stone-200'}`}>
+                                <div className="flex items-center justify-between">
+                                    <h4 className="font-display font-extrabold text-base text-stone-900">{g.name}</h4>
+                                    <span className={`text-[9px] font-bold uppercase px-2.5 py-0.5 rounded-full ${isDecline ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                                        {isDecline ? 'No asistirá' : 'Confirmado'}
+                                    </span>
+                                </div>
+                                <p className="text-stone-700 italic text-sm font-medium leading-relaxed">
+                                    "{cleanMsg}"
+                                </p>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
 
@@ -2228,6 +2343,112 @@ const EventRSVPs: React.FC = () => {
                                 <span className="text-xl">🤖</span>
                                 <h5 className="text-xs font-bold text-emerald-900">Invitto Confirma Bot</h5>
                                 <p className="text-[11px] text-stone-500">El bot de WhatsApp traduce el chat a la misma base de datos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Cadencia y Despachador Outbound */}
+                    <div className="bg-white p-6 sm:p-8 rounded-[2rem] border border-stone-200 shadow-sm space-y-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-5">
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <Sparkles className="h-4 w-4 text-[#DF3B94]" />
+                                    <h4 className="text-base font-bold text-stone-900">
+                                        Cadencia de Seguimiento Automático (Outbound)
+                                    </h4>
+                                </div>
+                                <p className="text-xs text-stone-500 mt-1 max-w-xl">
+                                    No dependas solo de que el invitado visite la web. El motor ejecuta barridos periódicos sobre los que siguen en estatus <strong>Pendiente</strong> y les envía recordatorios con su ref único.
+                                </p>
+                            </div>
+                            <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                                {guests.filter(g => getGuestStatus(g) === 'pending').length} pendientes de confirmar
+                            </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Controls */}
+                            <div className="space-y-4 bg-stone-50 p-5 rounded-2xl border border-stone-200">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-xs font-bold text-stone-800">Barridos Periódicos</p>
+                                        <p className="text-[11px] text-stone-500">Enviar recordatorios automáticos</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        disabled={savingConfirma}
+                                        onClick={() => handleUpdateCadenceSettings(
+                                            confirmaSettings?.reminder_cadence_days || 7,
+                                            !confirmaSettings?.auto_reminders_enabled
+                                        )}
+                                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                                            confirmaSettings?.auto_reminders_enabled ? 'bg-[#DF3B94]' : 'bg-stone-300'
+                                        }`}
+                                    >
+                                        <span
+                                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                                confirmaSettings?.auto_reminders_enabled ? 'translate-x-5' : 'translate-x-0'
+                                            }`}
+                                        />
+                                    </button>
+                                </div>
+
+                                <div className="flex flex-col gap-2 pt-2 border-t border-stone-200/60">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-stone-500">Frecuencia de Barrido</label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleUpdateCadenceSettings(7, confirmaSettings?.auto_reminders_enabled || false)}
+                                            className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                                                (confirmaSettings?.reminder_cadence_days || 7) === 7
+                                                    ? 'bg-[#222B38] text-white border-[#222B38] shadow-xs'
+                                                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'
+                                            }`}
+                                        >
+                                            Cada 7 días
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleUpdateCadenceSettings(15, confirmaSettings?.auto_reminders_enabled || false)}
+                                            className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                                                confirmaSettings?.reminder_cadence_days === 15
+                                                    ? 'bg-[#222B38] text-white border-[#222B38] shadow-xs'
+                                                    : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-100'
+                                            }`}
+                                        >
+                                            Cada 15 días
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 pt-1 text-[11px] text-stone-600">
+                                    <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+                                    <span>Incluye reconfirmación final 48 horas antes del evento.</span>
+                                </div>
+                            </div>
+
+                            {/* Dispatcher Actions */}
+                            <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200 flex flex-col justify-between gap-4">
+                                <div>
+                                    <p className="text-xs font-bold text-stone-800">Despacho Manual de Ronda</p>
+                                    <p className="text-[11px] text-stone-500 mt-1">
+                                        Última ejecución: {confirmaSettings?.last_cadence_run_at 
+                                            ? new Date(confirmaSettings.last_cadence_run_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) 
+                                            : 'Ninguna aún'}
+                                    </p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    disabled={runningCadence || guests.filter(g => getGuestStatus(g) === 'pending').length === 0}
+                                    onClick={handleRunCadenceRound}
+                                    className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#DF3B94] to-[#C52A7C] hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer"
+                                >
+                                    <SendIcon className="h-4 w-4" />
+                                    {runningCadence 
+                                        ? 'Procesando ronda...' 
+                                        : `Ejecutar ronda ahora (${guests.filter(g => getGuestStatus(g) === 'pending').length} pendientes)`}
+                                </button>
                             </div>
                         </div>
                     </div>

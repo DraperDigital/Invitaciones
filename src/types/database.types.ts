@@ -38,6 +38,8 @@ export type Guest = {
     last_reminder_at: string | null;
     invitation_sent_at?: string | null;
     checked_in_at: string | null;
+    whatsapp_opt_in?: boolean;
+    decline_reason?: string | null;
     created_at: string;
 };
 
@@ -67,8 +69,23 @@ export type ConfirmaSettings = {
     business_number: string;
     quota_contacts: number;
     used_conversations: number;
+    auto_reminders_enabled?: boolean;
+    reminder_cadence_days?: number;
+    final_reminder_hours?: number;
+    last_cadence_run_at?: string | null;
     activated_at: string;
     expires_at: string | null;
+};
+
+export type ConfirmaReminderLog = {
+    id: string;
+    event_id: string;
+    guest_id: string;
+    round_number: number;
+    channel: 'whatsapp' | 'email';
+    recipient: string;
+    status: 'queued' | 'sent' | 'failed';
+    sent_at: string;
 };
 
 export type WhatsAppMessage = {
