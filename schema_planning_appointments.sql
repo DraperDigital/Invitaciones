@@ -23,6 +23,7 @@ create table if not exists appointments (
 
 alter table appointments enable row level security;
 
+drop policy if exists "Owner crud appointments" on appointments;
 create policy "Owner crud appointments" on appointments for all using (
   exists (select 1 from events e where e.id = appointments.event_id and e.user_id = auth.uid()));
 

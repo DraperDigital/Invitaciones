@@ -24,6 +24,7 @@ create table if not exists rental_items (
 
 alter table rental_items enable row level security;
 
+drop policy if exists "Owner crud rental_items" on rental_items;
 create policy "Owner crud rental_items" on rental_items for all using (
   exists (select 1 from events e where e.id = rental_items.event_id and e.user_id = auth.uid()));
 

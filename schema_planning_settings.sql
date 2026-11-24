@@ -17,5 +17,6 @@ create table if not exists planning_settings (
 
 alter table planning_settings enable row level security;
 
+drop policy if exists "Owner crud planning_settings" on planning_settings;
 create policy "Owner crud planning_settings" on planning_settings for all using (
   exists (select 1 from events e where e.id = planning_settings.event_id and e.user_id = auth.uid()));

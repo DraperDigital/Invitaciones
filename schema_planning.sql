@@ -201,20 +201,29 @@ alter table day_of_items    enable row level security;
 alter table notes           enable row level security;
 alter table gifts           enable row level security;
 
+-- drop policy if exists antes de cada create → el script se puede re-correr sin error.
+drop policy if exists "Owner crud budget_rubros" on budget_rubros;
 create policy "Owner crud budget_rubros" on budget_rubros for all using (
   exists (select 1 from events e where e.id = budget_rubros.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud vendors" on vendors;
 create policy "Owner crud vendors" on vendors for all using (
   exists (select 1 from events e where e.id = vendors.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud quotes" on quotes;
 create policy "Owner crud quotes" on quotes for all using (
   exists (select 1 from events e where e.id = quotes.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud vendor_payments" on vendor_payments;
 create policy "Owner crud vendor_payments" on vendor_payments for all using (
   exists (select 1 from events e where e.id = vendor_payments.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud tasks" on tasks;
 create policy "Owner crud tasks" on tasks for all using (
   exists (select 1 from events e where e.id = tasks.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud day_of_items" on day_of_items;
 create policy "Owner crud day_of_items" on day_of_items for all using (
   exists (select 1 from events e where e.id = day_of_items.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud notes" on notes;
 create policy "Owner crud notes" on notes for all using (
   exists (select 1 from events e where e.id = notes.event_id and e.user_id = auth.uid()));
+drop policy if exists "Owner crud gifts" on gifts;
 create policy "Owner crud gifts" on gifts for all using (
   exists (select 1 from events e where e.id = gifts.event_id and e.user_id = auth.uid()));
 

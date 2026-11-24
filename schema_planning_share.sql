@@ -23,6 +23,7 @@ create table if not exists planning_shares (
 alter table planning_shares enable row level security;
 
 -- Solo el dueño del evento gestiona (crea / revoca / ve) sus enlaces.
+drop policy if exists "Owner crud planning_shares" on planning_shares;
 create policy "Owner crud planning_shares" on planning_shares for all using (
   exists (select 1 from events e where e.id = planning_shares.event_id and e.user_id = auth.uid()));
 
