@@ -420,6 +420,90 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#ECE4FB',
         typographyPreset: 'divertida'
     },
+    'convivio': {
+        label: 'Convivio Pastel',
+        desc: 'Cumpleaños pastel: banderines, pastel con velitas, cupcake y regalos, con parallax',
+        icon: '🎂',
+        primaryColor: '#D9628F',
+        accentColor: '#EF7FA6',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFAF3',
+        textPrimary: '#5C4A52',
+        textSecondary: '#8B7880',
+        heroTextColor: '#D9628F',
+        heroBgColor: '#FDF0F4',
+        typographyPreset: 'divertida'
+    },
+    'juguetes': {
+        label: 'Mis Primeros Juguetes',
+        desc: 'Cumpleaños de colores primarios: jirafa, cubos ABC, crayolas, globos y pelotas, con parallax',
+        icon: '🧸',
+        primaryColor: '#2F7FD6',
+        accentColor: '#E5483E',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF6EC',
+        textPrimary: '#2B3A52',
+        textSecondary: '#5C6B80',
+        heroTextColor: '#2F7FD6',
+        heroBgColor: '#EAF3FC',
+        typographyPreset: 'divertida'
+    },
+    'capibaras': {
+        label: 'Capibaras',
+        desc: 'Cumpleaños kawaii con capibaras, arcoíris, banderines dorados y diamantina, con parallax',
+        icon: '🐹',
+        primaryColor: '#B8754A',
+        accentColor: '#C9895E',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FDF6F4',
+        textPrimary: '#5B4537',
+        textSecondary: '#8A7263',
+        heroTextColor: '#B8754A',
+        heroBgColor: '#FBEEEE',
+        typographyPreset: 'divertida'
+    },
+    'perritos': {
+        label: 'Perritos Salchicha',
+        desc: 'Cumpleaños con perritos salchicha en acuarela, cuadros amarillos, huesitos y huellitas, con parallax',
+        icon: '🐶',
+        primaryColor: '#9A6236',
+        accentColor: '#D39B2A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFBEF',
+        textPrimary: '#5A4230',
+        textSecondary: '#87715E',
+        heroTextColor: '#9A6236',
+        heroBgColor: '#FFF6DC',
+        typographyPreset: 'divertida'
+    },
+    'mariposas': {
+        label: 'Mariposas y Flores',
+        desc: 'Cumpleaños de niña con marco de flores, mariposas brillantes y pastel de dulces, con parallax',
+        icon: '🦋',
+        primaryColor: '#B061A8',
+        accentColor: '#B97AD6',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FDF9FC',
+        textPrimary: '#5C4468',
+        textSecondary: '#87739A',
+        heroTextColor: '#B061A8',
+        heroBgColor: '#F8EEF7',
+        typographyPreset: 'romantica'
+    },
+    'globos3d': {
+        label: 'Globos 3D',
+        desc: 'Globos y nubes 3D en azul y rosa, pastel y pedestal; ideal para cumpleaños o revelación de sexo, con parallax',
+        icon: '🎈',
+        primaryColor: '#6D8FCF',
+        accentColor: '#EC96B4',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F7F9FD',
+        textPrimary: '#44506A',
+        textSecondary: '#73809A',
+        heroTextColor: '#6D8FCF',
+        heroBgColor: '#EEF4FB',
+        typographyPreset: 'divertida'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -536,6 +620,12 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Unicornio', slug: 'cumple-unicornio', icon: '🦄', plan: 'Pro', thumbnail: '/images/templates/unicornio.jpg' },
     { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Castillo', slug: 'cumple-castillo', icon: '🏰', plan: 'Pro', thumbnail: '/images/templates/castillo.jpg' },
     { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Arcoíris', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/arcoiris.jpg' },
+    { id: 'convivio', name: 'Convivio Pastel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Convivio', slug: 'cumple-convivio', icon: '🎂', plan: 'Pro', thumbnail: '/images/templates/convivio.jpg' },
+    { id: 'juguetes', name: 'Mis Primeros Juguetes', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Juguetes', slug: 'cumple-juguetes', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/juguetes.jpg' },
+    { id: 'capibaras', name: 'Capibaras', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Capibaras', slug: 'cumple-capibaras', icon: '🐹', plan: 'Pro', thumbnail: '/images/templates/capibaras.jpg' },
+    { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Perritos', slug: 'cumple-perritos', icon: '🐶', plan: 'Pro', thumbnail: '/images/templates/perritos.jpg' },
+    { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Mariposas', slug: 'cumple-mariposas', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/mariposas.jpg' },
+    { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Globos 3D', slug: 'cumple-globos3d', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/globos3d.jpg' },
     { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
@@ -627,6 +717,18 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;
     const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
     return (tpl?.plan || '').toLowerCase() === 'concierge';
+}
+
+/**
+ * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
+ * El plan Clásica no las incluye.
+ */
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d'];
+
+export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
+    if (!themeIdOrSlug) return false;
+    const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
+    return PRO_ONLY_TEMPLATES.includes(tpl?.id || themeIdOrSlug);
 }
 
 /** Página de venta del plan Concierge (destino de las plantillas Concierge) */

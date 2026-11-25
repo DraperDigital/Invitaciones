@@ -294,6 +294,12 @@ export default function EnvelopeIntro({
         'unicornio': '#C9A3E0',
         'castillo': '#D4A640',
         'arcoiris': '#F27AA8',
+        'convivio': '#EF7FA6',
+        'juguetes': '#E5483E',
+        'capibaras': '#E8A0AD',
+        'perritos': '#D39B2A',
+        'mariposas': '#E890B8',
+        'globos3d': '#EC96B4',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

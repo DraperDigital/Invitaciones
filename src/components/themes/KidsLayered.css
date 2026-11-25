@@ -1,0 +1,338 @@
+/* ══════════════════════════════════════════════════════════════════════
+   Portadas infantiles por capas (KidsLayeredHero) + variables de módulos
+   Plantillas: convivio, juguetes, capibaras, perritos, mariposas, globos3d.
+   Los módulos usan KidsPastel.css con las variables --kp-* de cada tema.
+   Las capas (.kh-l) se mueven con parallax: no usar `transform` en ellas,
+   solo translate / rotate / scale.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Base de la portada ─────────────────────────────────────────────── */
+.invitation-content section#hero.kh-hero,
+.kh-hero {
+  position: relative;
+  overflow: hidden;
+  padding: var(--kh-pad, 40px 18px 60px);
+  text-align: center;
+  color: var(--kh-ink);
+  font-family: var(--kh-text);
+  background: var(--kh-bg-color) var(--kh-bg-img) center var(--py-bg, 0px) / cover !important;
+}
+.kh-l { position: absolute; z-index: 1; pointer-events: none; }
+.kh-grid { position: relative; z-index: 2; }
+.kh-main { display: flex; flex-direction: column; align-items: center; }
+.kh-card {
+  position: relative;
+  width: min(100%, 390px);
+  padding: 26px 18px 24px;
+  background: var(--kh-card-bg);
+  border-radius: 30px;
+  box-shadow: var(--kh-card-shadow, 0 24px 46px -30px rgba(0, 0, 0, .35));
+  opacity: 0; translate: 0 20px;
+  transition: opacity .8s ease .1s, translate 1s cubic-bezier(.2, .7, .2, 1) .1s;
+}
+.kh-hero.is-shown .kh-card { opacity: 1; translate: 0 0; }
+.kh-top { display: block; width: var(--kh-top-w, 170px); margin: var(--kh-top-m, -110px auto 0); filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .12)); }
+.kh-kicker { font-weight: 700; font-size: 1.05rem; line-height: 1.25; color: var(--kh-kicker); }
+.kh-hero .kh-name {
+  margin-top: 6px;
+  font-family: var(--kh-title) !important;
+  font-weight: var(--kh-title-weight, 700) !important;
+  font-size: var(--kh-name-size, clamp(2.8rem, 14vw, 4rem)) !important;
+  line-height: 1.02 !important;
+  letter-spacing: var(--kh-name-ls, 0) !important;
+  text-transform: var(--kh-name-case, none) !important;
+  color: var(--kh-name) !important;
+  overflow-wrap: anywhere;
+}
+.kh-name.is-letters span { display: inline-block; -webkit-text-stroke: 6px #fff; paint-order: stroke fill; }
+.kh-name.is-letters span:nth-child(odd) { rotate: -3deg; }
+.kh-name.is-letters span:nth-child(even) { rotate: 3deg; }
+.kh-space { width: .3em; }
+
+.kh-age { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+.kh-age img { width: var(--kh-age-art-w, 120px); }
+.kh-age p { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.kh-age span { font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: .12em; color: var(--kh-soft); }
+.kh-age b { font-family: var(--kh-title); font-weight: 800; font-size: 4.6rem; line-height: .95; color: var(--kh-accent); -webkit-text-stroke: 3px #fff; paint-order: stroke fill; }
+
+.kh-chips { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: fit-content; margin: 14px auto 0; text-align: left; }
+.kh-chips > div { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.02rem; color: var(--kh-ink); }
+.kh-chips span::first-letter { text-transform: uppercase; }
+.kh-chips svg { width: 20px; height: 20px; flex: 0 0 auto; color: var(--kh-accent); }
+
+.kh-side { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: 28px; }
+.kh-photo {
+  position: relative; width: min(56vw, 220px); aspect-ratio: 1; border-radius: var(--kh-photo-radius, 50%); overflow: hidden;
+  border: 7px solid #fff; box-shadow: 0 0 0 4px var(--kh-photo-ring), 0 22px 40px -18px rgba(0, 0, 0, .35);
+}
+.kh-photo img { width: 100%; height: 100%; object-fit: cover; }
+.kh-photo.is-editable { cursor: pointer; }
+.kh-edit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0,0,0,.4); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.kh-photo:hover .kh-edit { opacity: 1; }
+.kh-countbox { width: min(100%, 360px); padding: 14px 12px; border-radius: 24px; background: var(--kh-count-bg); box-shadow: var(--kh-count-shadow, none); }
+.kh-count-title { font-family: var(--kh-title); font-weight: var(--kh-title-weight, 700); font-size: 1.25rem; color: var(--kh-name); }
+.kh-count { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 8px; }
+.kh-count b { display: block; font-family: var(--kh-title); font-weight: 800; font-size: 1.8rem; line-height: 1; color: var(--kh-ink); }
+.kh-count small { display: block; margin-top: 4px; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--kh-soft); }
+.kh-btn {
+  padding: 13px 26px; border: 0; border-radius: 999px;
+  background: var(--kh-btn); color: var(--kh-btn-ink, #fff);
+  font-family: var(--kh-text); font-weight: 800; font-size: 16px;
+  box-shadow: 0 12px 22px -12px var(--kh-btn); cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .invitation-content section#hero.kh-hero, .kh-hero { padding: var(--kh-pad-d, 70px 48px 90px); }
+  .kh-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; max-width: 1060px; margin: 0 auto; }
+  .kh-card { width: 440px; }
+  .kh-hero .kh-name { font-size: var(--kh-name-size-d, 4.6rem) !important; }
+  .kh-side { margin-top: 0; }
+  .kh-photo { width: 240px; }
+}
+@keyframes kh-sway { 0%, 100% { rotate: -4deg; } 50% { rotate: 4deg; } }
+@keyframes kh-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+@keyframes kh-flutter { 0%, 100% { scale: 1 1; } 50% { scale: .82 1; } }
+@media (prefers-reduced-motion: reduce) { .kh-hero * { animation: none !important; transition: none !important; } .kh-card { opacity: 1; translate: 0 0; } }
+
+/* ══════════════════════ 1 · CONVIVIO PASTEL ══════════════════════ */
+.theme-convivio {
+  --kp-bg: #fffaf3;
+  --kp-alt: #fffaf3 url('/images/themes/convivio/fondo.webp') center top / 100% auto repeat-y;
+  --kp-title-font: 'Fredoka', sans-serif; --kp-title-weight: 600; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #d9628f; --kp-ink: #5c4a52; --kp-soft: #8b7880; --kp-accent: #a58be0;
+  --kp-btn: #ef7fa6; --kp-btn-ink: #fff; --kp-card-border: #f6dce6; --kp-icon-bg: #fdeaf1; --kp-icon: #d9628f;
+  --kp-shadow: rgba(217, 98, 143, .4);
+  --kp-title-deco: url('/images/themes/convivio/cupcake.webp');
+  --kp-art-message: url('/images/themes/convivio/banderines.webp'); --kp-art-message-w: 220px; --kp-art-message-h: 70px;
+  --kp-art-location: url('/images/themes/convivio/cupcake.webp'); --kp-art-location-w: 100px; --kp-art-location-h: 150px;
+  --kp-art-gifts: url('/images/themes/convivio/regalos.webp'); --kp-art-gifts-w: 130px; --kp-art-gifts-h: 142px;
+  --kp-art-rsvp: url('/images/themes/convivio/pastel.webp'); --kp-art-rsvp-w: 150px; --kp-art-rsvp-h: 158px;
+  --kp-rsvp-bg: #fdf0f4 url('/images/themes/convivio/fondo.webp') center / cover;
+  --kp-closing-bg: #fdeef3 url('/images/themes/convivio/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/convivio/regalos.webp'); --kp-closing-title: #d9628f;
+}
+.kh--convivio {
+  --kh-bg-color: #fffaf3; --kh-bg-img: url('/images/themes/convivio/fondo.webp');
+  --kh-title: 'Fredoka', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 700;
+  --kh-ink: #5c4a52; --kh-soft: #8b7880; --kh-kicker: #a58be0; --kh-name: #d9628f; --kh-accent: #ef7fa6;
+  --kh-card-bg: #fff; --kh-photo-ring: #f9c9da; --kh-count-bg: #fff; --kh-btn: #ef7fa6;
+  --kh-name-case: uppercase; --kh-pad: 100px 18px 140px; --kh-age-art-w: 140px;
+}
+/* Marco festoneado */
+.kh--convivio .kh-card {
+  border: 14px solid transparent; border-radius: 40px;
+  background: linear-gradient(#fff, #fff) padding-box, radial-gradient(circle at 7px 7px, #f7bfd3 6px, #fff 6.5px) 0 0 / 14px 14px border-box;
+  box-shadow: 0 26px 46px -30px rgba(217,98,143,.6);
+}
+.kh--convivio .kh-countbox { box-shadow: 0 0 0 2px #f6dce6; }
+.kh-l--flags { top: 14px; left: 50%; width: min(108vw, 520px); translate: -50% 0; }
+.kh-l--gifts { bottom: 8px; left: -10px; width: min(34vw, 150px); }
+.kh-l--cupcake { bottom: 16px; right: -4px; width: min(26vw, 110px); animation: kh-bob 4s ease-in-out infinite; }
+@media (min-width: 900px) {
+  .kh--convivio { --kh-pad-d: 140px 48px 110px; }
+  .kh--convivio .kh-l--flags { width: 900px; }
+  .kh--convivio .kh-l--gifts { width: 200px; left: 3%; }
+  .kh--convivio .kh-l--cupcake { width: 150px; right: 4%; }
+}
+
+/* ══════════════════════ 2 · MIS PRIMEROS JUGUETES ══════════════════════ */
+.theme-juguetes {
+  --kp-bg: #fbf6ec;
+  --kp-alt: #eaf3fc;
+  --kp-title-font: 'Baloo 2', sans-serif; --kp-title-weight: 800; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #2f7fd6; --kp-ink: #2b3a52; --kp-soft: #5c6b80; --kp-accent: #e5483e;
+  --kp-btn: #e5483e; --kp-btn-ink: #fff; --kp-card-border: #d7e6f6; --kp-icon-bg: #fff2cc; --kp-icon: #2f7fd6;
+  --kp-shadow: rgba(47, 127, 214, .4);
+  --kp-title-deco: url('/images/themes/juguetes/sol-guino.webp');
+  --kp-art-message: url('/images/themes/juguetes/cubos.webp'); --kp-art-message-w: 80px; --kp-art-message-h: 160px;
+  --kp-art-location: url('/images/themes/juguetes/crayolas.webp'); --kp-art-location-w: 180px; --kp-art-location-h: 98px;
+  --kp-art-gifts: url('/images/themes/juguetes/globos.webp'); --kp-art-gifts-w: 96px; --kp-art-gifts-h: 170px;
+  --kp-art-rsvp: url('/images/themes/juguetes/pelotas.webp'); --kp-art-rsvp-w: 180px; --kp-art-rsvp-h: 124px;
+  --kp-rsvp-bg: #fbf6ec url('/images/themes/juguetes/fondo.webp') center / cover;
+  --kp-closing-bg: #fbf6ec url('/images/themes/juguetes/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/juguetes/jirafa.webp'); --kp-closing-title: #2f7fd6;
+}
+.kh--juguetes {
+  --kh-bg-color: #fbf6ec; --kh-bg-img: url('/images/themes/juguetes/fondo.webp');
+  --kh-title: 'Baloo 2', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 800;
+  --kh-ink: #2b3a52; --kh-soft: #5c6b80; --kh-kicker: #2f7fd6; --kh-name: #2f7fd6; --kh-accent: #e5483e;
+  --kh-card-bg: #fffdf7; --kh-photo-ring: #f4b81f; --kh-count-bg: #fffdf7; --kh-btn: #e5483e;
+  --kh-name-case: uppercase; --kh-pad: 120px 18px 160px; --kh-photo-radius: 28px;
+}
+/* Costura punteada como de juguete de tela */
+.kh--juguetes .kh-card { border-radius: 26px; box-shadow: inset 0 0 0 8px #fffdf7, inset 0 0 0 10px #2f7fd6, 0 26px 46px -30px rgba(47,127,214,.6); }
+.kh--juguetes .kh-card::after { content: ''; position: absolute; inset: 15px; border: 2px dashed #f4b81f; border-radius: 18px; pointer-events: none; }
+.kh--juguetes .kh-countbox { box-shadow: inset 0 0 0 2px #d7e6f6; }
+.kh--juguetes .kh-count b:nth-child(1) { color: #e5483e; }
+.kh-l--sun { top: 12px; left: -16px; width: min(34vw, 140px); animation: kh-sway 6s ease-in-out infinite; }
+.kh-l--giraffe { top: 30px; right: -6px; width: min(32vw, 140px); }
+.kh-l--balloons { top: 46%; left: -18px; width: min(22vw, 96px); animation: kh-bob 5s ease-in-out infinite; }
+.kh-l--blocks { bottom: 14px; left: 6px; width: min(18vw, 78px); }
+.kh-l--crayons { bottom: 22px; left: 26%; width: min(34vw, 150px); rotate: -6deg; }
+.kh-l--balls { bottom: -8px; right: -8px; width: min(36vw, 160px); }
+@media (min-width: 900px) {
+  .kh--juguetes { --kh-pad-d: 70px 48px 130px; }
+  .kh--juguetes .kh-l--sun { width: 180px; left: 2%; }
+  .kh--juguetes .kh-l--giraffe { width: 200px; top: 40px; }
+  .kh--juguetes .kh-l--balloons { width: 130px; left: 1%; }
+  .kh--juguetes .kh-l--blocks { width: 110px; left: 8%; }
+  .kh--juguetes .kh-l--crayons { width: 210px; left: 40%; }
+  .kh--juguetes .kh-l--balls { width: 230px; right: 3%; }
+}
+
+/* ══════════════════════ 3 · CAPIBARAS ══════════════════════ */
+.theme-capibaras {
+  --kp-bg: #fdf6f4;
+  --kp-alt: #fbeeee url('/images/themes/capibaras/fondo.webp') center top / 100% auto repeat-y;
+  --kp-title-font: 'Fredoka', sans-serif; --kp-title-weight: 600; --kp-text: 'Quicksand', sans-serif;
+  --kp-title: #b8754a; --kp-ink: #5b4537; --kp-soft: #8a7263; --kp-accent: #e8a0ad;
+  --kp-btn: #c9895e; --kp-btn-ink: #fff; --kp-card-border: #f2dfd6; --kp-icon-bg: #fbe8e6; --kp-icon: #b8754a;
+  --kp-shadow: rgba(184, 117, 74, .4);
+  --kp-title-deco: url('/images/themes/capibaras/arcoiris.webp');
+  --kp-art-message: url('/images/themes/capibaras/boba.webp'); --kp-art-message-w: 130px; --kp-art-message-h: 150px;
+  --kp-art-location: url('/images/themes/capibaras/arcoiris.webp'); --kp-art-location-w: 190px; --kp-art-location-h: 112px;
+  --kp-art-gifts: url('/images/themes/capibaras/tres.webp'); --kp-art-gifts-w: 230px; --kp-art-gifts-h: 136px;
+  --kp-art-rsvp: url('/images/themes/capibaras/banderines.webp'); --kp-art-rsvp-w: 230px; --kp-art-rsvp-h: 76px;
+  --kp-rsvp-bg: #fbeeee url('/images/themes/capibaras/fondo.webp') center / cover;
+  --kp-closing-bg: #fbeeee url('/images/themes/capibaras/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/capibaras/duerme.webp'); --kp-closing-title: #b8754a;
+}
+.kh--capibaras {
+  --kh-bg-color: #fbeeee; --kh-bg-img: url('/images/themes/capibaras/fondo.webp');
+  --kh-title: 'Fredoka', sans-serif; --kh-text: 'Quicksand', sans-serif; --kh-title-weight: 600;
+  --kh-ink: #5b4537; --kh-soft: #8a7263; --kh-kicker: #c9895e; --kh-name: #b8754a; --kh-accent: #e58fa0;
+  --kh-card-bg: rgba(255, 252, 250, .92); --kh-photo-ring: #f4cbd2; --kh-count-bg: rgba(255,252,250,.9); --kh-btn: #c9895e;
+  --kh-pad: 160px 18px 190px; --kh-top-w: 160px; --kh-top-m: -128px auto 0;
+}
+.kh--capibaras .kh-card { box-shadow: 0 0 0 2px #f2dfd6, 0 26px 46px -30px rgba(184,117,74,.55); }
+.kh--capibaras .kh-countbox { box-shadow: 0 0 0 2px #f2dfd6; }
+.kh-l--flags { top: 12px; }
+.kh--capibaras .kh-l--flags { width: min(100vw, 480px); }
+.kh-l--rainbow { top: 40px; left: 50%; width: min(74vw, 330px); translate: -50% 0; opacity: .95; }
+.kh-l--trio { bottom: 0; left: 50%; width: min(96vw, 440px); translate: -50% 0; }
+@media (min-width: 900px) {
+  .kh--capibaras { --kh-pad-d: 190px 48px 300px; }
+  .kh--capibaras .kh-l--flags { width: 860px; }
+  .kh--capibaras .kh-l--rainbow { width: 460px; left: 30%; }
+  .kh--capibaras .kh-l--trio { width: 460px; }
+}
+
+/* ══════════════════════ 4 · PERRITOS SALCHICHA ══════════════════════ */
+.theme-perritos {
+  --kp-bg: #fffbef;
+  --kp-alt: #fff6dc url('/images/themes/perritos/fondo.webp') center top / 100% auto repeat-y;
+  --kp-title-font: 'Baloo 2', sans-serif; --kp-title-weight: 800; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #9a6236; --kp-ink: #5a4230; --kp-soft: #87715e; --kp-accent: #e8a0ad;
+  --kp-btn: #d39b2a; --kp-btn-ink: #fff; --kp-card-border: #f1e2b9; --kp-icon-bg: #fdf0c8; --kp-icon: #9a6236;
+  --kp-shadow: rgba(154, 98, 54, .4);
+  --kp-title-deco: url('/images/themes/perritos/deco-3.webp');
+  --kp-art-message: url('/images/themes/perritos/sentado.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 164px;
+  --kp-art-location: url('/images/themes/perritos/camina.webp'); --kp-art-location-w: 170px; --kp-art-location-h: 148px;
+  --kp-art-gifts: url('/images/themes/perritos/asoma.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 122px;
+  --kp-art-rsvp: url('/images/themes/perritos/lentes.webp'); --kp-art-rsvp-w: 210px; --kp-art-rsvp-h: 114px;
+  --kp-rsvp-bg: #fff6dc url('/images/themes/perritos/fondo.webp') center / cover;
+  --kp-closing-bg: #fff3d2 url('/images/themes/perritos/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/perritos/duerme.webp'); --kp-closing-title: #9a6236;
+}
+.kh--perritos {
+  --kh-bg-color: #fff6dc; --kh-bg-img: url('/images/themes/perritos/fondo.webp');
+  --kh-title: 'Baloo 2', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 800;
+  --kh-ink: #5a4230; --kh-soft: #87715e; --kh-kicker: #c88a2a; --kh-name: #9a6236; --kh-accent: #e58fa0;
+  --kh-card-bg: rgba(255, 253, 246, .94); --kh-photo-ring: #f1d27a; --kh-count-bg: rgba(255,253,246,.94); --kh-btn: #d39b2a;
+  --kh-pad: 170px 18px 190px; --kh-top-w: 130px; --kh-top-m: -150px auto 0;
+}
+.kh--perritos .kh-card { box-shadow: 0 0 0 3px #f1e2b9, 0 26px 46px -30px rgba(154,98,54,.55); }
+.kh--perritos .kh-countbox { box-shadow: 0 0 0 2px #f1e2b9; }
+.kh-l--lying { bottom: 10px; left: -24px; width: min(52vw, 240px); }
+.kh-l--bone1 { top: 40px; right: 10px; width: 70px; rotate: 20deg; }
+.kh-l--paw1 { top: 120px; right: 26px; width: 40px; rotate: -16deg; }
+.kh-l--heart1 { top: 18px; right: 34%; width: 30px; animation: kh-bob 3s ease-in-out infinite; }
+.kh-l--walk { bottom: 14px; right: -8px; width: min(38vw, 160px); }
+@media (min-width: 900px) {
+  .kh--perritos { --kh-pad-d: 190px 48px 140px; }
+  .kh--perritos .kh-l--lying { width: 330px; left: 3%; }
+  .kh--perritos .kh-l--walk { width: 240px; right: 4%; }
+  .kh--perritos .kh-l--bone1 { width: 100px; right: 8%; }
+  .kh--perritos .kh-l--paw1 { width: 60px; right: 12%; top: 150px; }
+}
+
+/* ══════════════════════ 5 · MARIPOSAS Y FLORES ══════════════════════ */
+.theme-mariposas {
+  --kp-bg: #fdf9fc;
+  --kp-alt: #f8eef7 url('/images/themes/mariposas/fondo.webp') center / cover;
+  --kp-title-font: 'Dancing Script', cursive; --kp-title-weight: 700; --kp-title-size: clamp(2.5rem, 11vw, 3.1rem);
+  --kp-text: 'Quicksand', sans-serif;
+  --kp-title: #b061a8; --kp-ink: #5c4468; --kp-soft: #87739a; --kp-accent: #e890b8;
+  --kp-btn: #b97ad6; --kp-btn-ink: #fff; --kp-card-border: #f0e0f2; --kp-icon-bg: #f8e8f6; --kp-icon: #b061a8;
+  --kp-shadow: rgba(176, 97, 168, .4);
+  --kp-title-deco: url('/images/themes/mariposas/mariposa-rosa.webp');
+  --kp-art-message: url('/images/themes/mariposas/mariposa-azul.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 116px;
+  --kp-art-location: url('/images/themes/mariposas/flores.webp'); --kp-art-location-w: 210px; --kp-art-location-h: 110px;
+  --kp-art-gifts: url('/images/themes/mariposas/regalos.webp'); --kp-art-gifts-w: 170px; --kp-art-gifts-h: 140px;
+  --kp-art-rsvp: url('/images/themes/mariposas/mariposa-rosa.webp'); --kp-art-rsvp-w: 120px; --kp-art-rsvp-h: 118px;
+  --kp-rsvp-bg: #f6e6f4 url('/images/themes/mariposas/fondo.webp') center / cover;
+  --kp-closing-bg: #f4e4f2 url('/images/themes/mariposas/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/mariposas/flores.webp'); --kp-closing-title: #b061a8;
+}
+.kh--mariposas {
+  --kh-bg-color: #f8eef7; --kh-bg-img: url('/images/themes/mariposas/fondo.webp');
+  --kh-title: 'Dancing Script', cursive; --kh-text: 'Quicksand', sans-serif; --kh-title-weight: 700;
+  --kh-ink: #5c4468; --kh-soft: #87739a; --kh-kicker: #9a6ab8; --kh-name: #b061a8; --kh-accent: #e07fb0;
+  --kh-card-bg: rgba(255, 255, 255, .78); --kh-photo-ring: #e9c6ec; --kh-count-bg: rgba(255,255,255,.78); --kh-btn: #b97ad6;
+  --kh-pad: 60px 54px 80px; --kh-name-size: clamp(3.2rem, 16vw, 4.6rem); --kh-age-art-w: 120px;
+}
+.kh--mariposas .kh-card { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: 0 0 0 1.5px rgba(255,255,255,.9), 0 26px 46px -30px rgba(176,97,168,.6); }
+.kh--mariposas .kh-age b { -webkit-text-stroke: 0; font-family: 'Quicksand', sans-serif; font-weight: 700; }
+.kh-l--frame-l, .kh-l--frame-r { top: 0; height: 100%; width: auto; max-width: 30vw; object-fit: cover; object-position: left; }
+.kh-l--frame-l { left: -14px; }
+.kh-l--frame-r { right: -14px; scale: -1 1; }
+.kh-l--bf1 { top: 6px; right: 4%; width: 64px; z-index: 3; animation: kh-flutter .9s ease-in-out infinite; }
+.kh-l--bf2 { top: 46%; left: 6%; width: 60px; z-index: 3; animation: kh-flutter 1.1s ease-in-out infinite; }
+.kh-l--bf3 { bottom: 70px; right: 10%; width: 52px; z-index: 3; rotate: 18deg; animation: kh-flutter 1s ease-in-out infinite; }
+@media (min-width: 900px) {
+  .kh--mariposas { --kh-pad-d: 70px 120px 90px; }
+  .kh-l--frame-l, .kh-l--frame-r { max-width: 260px; }
+  .kh--mariposas .kh-l--bf1 { width: 110px; right: 20%; }
+  .kh--mariposas .kh-l--bf2 { width: 90px; left: 21%; top: auto; bottom: 30px; }
+  .kh--mariposas .kh-l--bf3 { width: 80px; right: 21%; bottom: 24px; }
+}
+
+/* ══════════════════════ 6 · GLOBOS 3D ══════════════════════ */
+.theme-globos3d {
+  --kp-bg: #f7f9fd;
+  --kp-alt: #eef4fb;
+  --kp-title-font: 'Baloo 2', sans-serif; --kp-title-weight: 800; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #6d8fcf; --kp-ink: #44506a; --kp-soft: #73809a; --kp-accent: #ec96b4;
+  --kp-btn: #ec96b4; --kp-btn-ink: #fff; --kp-card-border: #dfe8f6; --kp-icon-bg: #fde9f0; --kp-icon: #6d8fcf;
+  --kp-shadow: rgba(109, 143, 207, .4);
+  --kp-title-deco: url('/images/themes/globos3d/globos.webp');
+  --kp-art-message: url('/images/themes/globos3d/nubes.webp'); --kp-art-message-w: 230px; --kp-art-message-h: 56px;
+  --kp-art-location: url('/images/themes/globos3d/globos.webp'); --kp-art-location-w: 100px; --kp-art-location-h: 172px;
+  --kp-art-gifts: url('/images/themes/globos3d/regalos.webp'); --kp-art-gifts-w: 160px; --kp-art-gifts-h: 142px;
+  --kp-art-rsvp: url('/images/themes/globos3d/pastel.webp'); --kp-art-rsvp-w: 130px; --kp-art-rsvp-h: 160px;
+  --kp-rsvp-bg: #e9eefa url('/images/themes/globos3d/fondo.webp') center / cover;
+  --kp-closing-bg: #eef0fa url('/images/themes/globos3d/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/globos3d/globos.webp'); --kp-closing-title: #6d8fcf;
+}
+.kh--globos3d {
+  --kh-bg-color: #cfe3f5; --kh-bg-img: url('/images/themes/globos3d/fondo.webp');
+  --kh-title: 'Baloo 2', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 800;
+  --kh-ink: #44506a; --kh-soft: #73809a; --kh-kicker: #6d8fcf; --kh-name: #ffffff; --kh-accent: #ec96b4;
+  --kh-card-bg: rgba(255, 255, 255, .42); --kh-photo-ring: #f6c9d9; --kh-count-bg: rgba(255,255,255,.7); --kh-btn: #ec96b4;
+  --kh-pad: 70px 18px 200px; --kh-age-art-w: 110px; --kh-name-case: uppercase;
+}
+.kh--globos3d .kh-card { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.8), 0 26px 46px -30px rgba(68,80,106,.5); }
+.kh--globos3d .kh-name { text-shadow: 0 4px 0 #ec96b4, 0 8px 18px rgba(68, 80, 106, .25); }
+.kh--globos3d .kh-count-title { color: #6d8fcf; }
+.kh--globos3d .kh-photo { box-shadow: 0 0 0 4px #f6c9d9, 0 18px 0 -2px #cfe0f4, 0 34px 50px -18px rgba(68,80,106,.45); }
+.kh-l--far { top: 8%; left: 50%; width: min(120vw, 560px); translate: -50% 0; opacity: .7; filter: blur(1px); }
+.kh-l--big-l { top: 30px; left: -30px; width: min(34vw, 150px); animation: kh-bob 5s ease-in-out infinite; }
+.kh-l--big-r { top: 46%; right: -34px; width: min(32vw, 140px); scale: -1 1; animation: kh-bob 6s ease-in-out infinite; animation-delay: -2s; }
+.kh-l--clouds { bottom: -10px; left: 50%; width: min(130vw, 620px); translate: -50% 0; z-index: 3; }
+@media (min-width: 900px) {
+  .kh--globos3d { --kh-pad-d: 60px 48px 260px; }
+  .kh--globos3d .kh-l--far { width: 1100px; }
+  .kh--globos3d .kh-l--big-l { width: 220px; left: 2%; }
+  .kh--globos3d .kh-l--big-r { width: 200px; right: 2%; top: 30%; }
+  .kh--globos3d .kh-l--clouds { width: 1200px; bottom: -40px; }
+}
