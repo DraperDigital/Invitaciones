@@ -175,6 +175,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto tipo polaroid bajo la portada azul (puede ser el ultrasonido o los papás).',
         fields: ['hero_image_url', 'heroImage']
     },
+    'sirenita': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en la Burbuja',
+        heroHelpText: 'Foto de la festejada; se muestra redonda, dentro de una burbuja.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'gotico-suave': {
         type: 'single',
         photoCount: 1,

@@ -43,6 +43,7 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'gamer-party': ['Press+Start+2P', 'VT323'],
     'astronauta': ['Baloo+2:wght@600;700;800', 'Nunito:wght@400;600;700'],
     'nube-de-miel': ['Playfair+Display:ital,wght@0,400;0,500;1,400', 'DM+Sans:wght@400;600', 'Pinyon+Script'],
+    'sirenita': ['Dancing+Script:wght@600;700', 'Patrick+Hand', 'Quicksand:wght@400;500;600;700'],
     'gotico-suave': ['Pinyon+Script', 'Bodoni+Moda:wght@500', 'Montserrat:wght@400;600;700'],
     'lacre-rojo': ['Bodoni+Moda:wght@500;600', 'Syncopate:wght@700', 'Jost:wght@400;500;700', 'Monsieur+La+Doulaise', 'Allison'],
     'bodegon-nocturno': ['Monsieur+La+Doulaise', 'Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500', 'Cinzel:wght@600'],

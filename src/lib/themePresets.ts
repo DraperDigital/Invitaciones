@@ -322,6 +322,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#0F2A4A',
         typographyPreset: 'elegante'
     },
+    'sirenita': {
+        label: 'Sirenita',
+        desc: 'Cumpleaños de niña bajo el mar: acuarela pastel, cola de sirena, listón lila y concha',
+        icon: '🧜‍♀️',
+        primaryColor: '#6B4E9B',
+        accentColor: '#E98A9B',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF8F4',
+        textPrimary: '#4A3D66',
+        textSecondary: '#7A6B8F',
+        heroTextColor: '#6B4E9B',
+        heroBgColor: '#FBF8F4',
+        typographyPreset: 'romantica'
+    },
     'gotico-suave': {
         label: 'Gótico Suave',
         desc: 'Collage gótico: damasco gris, sobre negro con flores oscuras, marcos barrocos y tarjetas carmesí',
@@ -450,6 +464,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'nube-de-miel', name: 'Nube de Miel', category: 'infantil', categories: ['infantil', 'baby_shower', 'bautizo'], categoryLabel: 'Baby Shower / Bautizo', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Premium', thumbnail: '/images/templates/nube-de-miel.jpg' },
     { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-astronauta', icon: '🚀', plan: 'Premium', thumbnail: '/images/templates/astronauta.jpg' },
     { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/gotico-suave.jpg' },
+    { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Premium', thumbnail: '/images/templates/sirenita.jpg' },
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },
