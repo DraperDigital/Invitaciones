@@ -292,6 +292,7 @@ export default function EnvelopeIntro({
         'astronauta': '#F2A65A',        // naranja cohete
         'nube-de-miel': '#C79A3B',     // miel dorada
         'anturio-vino': '#7D2536',     // vino tinto noble
+        'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico
         'modern-minimalist': '#18181B', // lacre negro mate editorial
         'luxury-gold': '#C5A059',      // oro puro

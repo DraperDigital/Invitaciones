@@ -697,6 +697,7 @@ export default function EventWizard() {
                                         { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'Boda / Editorial', image: '/images/templates/lacre-rojo.jpg' },
                                         { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'Boda / Lujo', image: '/images/templates/bodegon-nocturno.jpg' },
                                         { id: 'anturio-vino', name: 'Anturio Vino', category: 'Boda / Flat lay', image: '/images/templates/anturio-vino.jpg' },
+                                        { id: 'dinosaurios', name: 'Dinosaurios', category: 'Infantil / Cumpleaños', image: '/images/templates/dinosaurios.jpg' },
                                         { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'Boda / Flat lay', image: '/images/templates/lirio-vainilla.jpg' },
                                         { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' },
                                         { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'Gender Reveal / B&W', image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400&auto=format&fit=crop' },

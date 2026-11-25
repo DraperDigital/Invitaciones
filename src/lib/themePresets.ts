@@ -392,6 +392,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#D9D7D3',
         typographyPreset: 'romantica'
     },
+    'dinosaurios': {
+        label: 'Dinosaurios',
+        desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales',
+        icon: '🦖',
+        primaryColor: '#6E9A72',
+        accentColor: '#E2A845',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF8F1',
+        textPrimary: '#5B544B',
+        textSecondary: '#857C70',
+        heroTextColor: '#5B544B',
+        heroBgColor: '#FFFFFF',
+        typographyPreset: 'divertida'
+    },
     'lirio-vainilla': {
         label: 'Lirio Vainilla',
         desc: 'Estilo flat lay: tarjetas de papel, sobre con forro de lirios, sello de cera y tonos salvia',
@@ -469,6 +483,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo'], categoryLabel: 'Boda / Flat lay', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/lirio-vainilla.jpg' },
+    { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Premium', thumbnail: '/images/templates/dinosaurios.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
     // ── Plantillas Infantiles Exclusivas ──
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },

@@ -1067,6 +1067,7 @@ export default function DesignEditor() {
                             { id: 'lacre-rojo', label: 'Lacre Rojo', desc: 'Editorial en blanco y negro con un solo acento: el sello de lacre rojo', icon: '❤️' },
                             { id: 'bodegon-nocturno', label: 'Bodegón Nocturno', desc: 'Lujo clásico: papel de algodón sobre pintura floral oscura, caligrafía y sello dorado', icon: '🥀' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
+                            { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },
                             { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
                         ];
