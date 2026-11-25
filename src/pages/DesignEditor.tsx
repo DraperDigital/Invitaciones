@@ -1060,6 +1060,7 @@ export default function DesignEditor() {
                             { id: 'gamer-party', label: 'Gamer Party', desc: 'Nivel arcade retro con control neón, luces RGB, fuentes 8-bit y atmósfera de videojuego', icon: '🎮' },
                             { id: 'pixel-craft', label: 'Mundo Píxel (Minecraft)', desc: 'Aventura de bloques cúbicos con Creeper, pastel con velas, banderines y estética voxel', icon: '🟩' },
                             { id: 'rainbow-pop', label: 'Rainbow Pop', desc: 'Letras burbuja multicolor, confetti pastel, tarjetas festivas con bordes celestes', icon: '🌈' },
+                            { id: 'astronauta', label: 'Astronauta', desc: 'Cumpleaños espacial en acuarela: cielo nocturno, cohete, luna y arcos con línea punteada', icon: '🚀' },
                             { id: 'nube-de-miel', label: 'Nube de Miel', desc: 'Editorial tierno en azul marino, cielo y miel, con capítulos e ilustraciones propias', icon: '🐑' },
                             { id: 'gotico-suave', label: 'Gótico Suave', desc: 'Collage gótico: damasco, sobre negro con flores oscuras, marcos barrocos y carmesí', icon: '🖤' },
                             { id: 'lacre-rojo', label: 'Lacre Rojo', desc: 'Editorial en blanco y negro con un solo acento: el sello de lacre rojo', icon: '❤️' },

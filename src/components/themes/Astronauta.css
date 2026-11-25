@@ -1,0 +1,354 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Astronauta — piel infantil espacial en acuarela (cumpleaños)
+   Todo va bajo .theme-astronauta (clase que pone InvitationPage en la raíz).
+   No cambia la estructura de los módulos: solo su apariencia.
+   Paleta 60/30/10: blanco hueso y azul cielo (60) · azul noche (30)
+                    · naranja (10, botones y datos clave).
+   Tipos: Baloo 2 (títulos y nombre) · Nunito (texto).
+   Ilustraciones: /images/themes/astronauta/*.webp
+   ────────────────────────────────────────────────────────────────────── */
+
+.theme-astronauta {
+  --as-night: #22324a;
+  --as-night2: #1a2639;
+  --as-blue: #5b82b5;
+  --as-blue-dk: #4a6fa5;
+  --as-sky: #dce6f2;
+  --as-ivory: #f3f0ea;
+  --as-orange: #f2a65a;
+  --as-star: #f5cb5c;
+  --as-ink: #22324a;
+  --as-soft: #55627a;
+  --as-dash: #9db5d6;
+  --as-title: 'Baloo 2', 'Fredoka', system-ui, sans-serif;
+  --as-text: 'Nunito', system-ui, sans-serif;
+  background: var(--as-ivory) !important;
+  color: var(--as-ink) !important;
+  font-family: var(--as-text) !important;
+  overflow-x: hidden;
+}
+
+/* Fondos alternos: blanco hueso / azul cielo */
+.theme-astronauta .invitation-content section { background: var(--as-ivory) !important; position: relative; }
+.theme-astronauta .invitation-content section:is(#message, #dress_code, #gallery, #hotels) { background: var(--as-sky) !important; }
+
+/* ── Tipografía ─────────────────────────────────────────────────────── */
+.theme-astronauta .font-serif { font-family: var(--as-title) !important; }
+.theme-astronauta .font-sans  { font-family: var(--as-text) !important; }
+
+.theme-astronauta section:not(#hero) h3[class*="text-4xl"],
+.theme-astronauta section:not(#hero) h3[class*="text-3xl"],
+.theme-astronauta #gallery h2,
+.theme-astronauta #rsvp h2,
+.theme-astronauta #guest_welcome h2 {
+  font-family: var(--as-title) !important;
+  font-weight: 800 !important;
+  font-style: normal !important;
+  font-size: clamp(2.1rem, 9vw, 2.8rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -.01em !important;
+  text-transform: none !important;
+  color: var(--as-blue-dk) !important;
+}
+/* Estrellita sobre cada título */
+.theme-astronauta section:not(#hero) h3[class*="text-4xl"]::before,
+.theme-astronauta section:not(#hero) h3[class*="text-3xl"]::before,
+.theme-astronauta #gallery h2::before,
+.theme-astronauta #rsvp h2::before {
+  content: '';
+  display: block;
+  width: 34px; height: 34px;
+  margin: 0 auto 10px;
+  background: url('/images/themes/astronauta/estrella-1.webp') center / contain no-repeat;
+}
+.theme-astronauta section:not(#hero) h4,
+.theme-astronauta section:not(#hero) [class*="text-2xl"][class*="uppercase"] {
+  font-family: var(--as-title) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  color: var(--as-ink) !important;
+}
+.theme-astronauta section:not(#hero) p {
+  font-family: var(--as-text) !important;
+  color: var(--as-soft) !important;
+  line-height: 1.65;
+}
+
+/* ── Tarjetas → blancas, redondeadas, con línea punteada interior ──── */
+.theme-astronauta section [class*="bg-[var(--card-bg)]"] {
+  background: #ffffff !important;
+  border: 0 !important;
+  border-radius: 30px !important;
+  outline: 2px dashed var(--as-dash);
+  outline-offset: -11px;
+  box-shadow: 0 18px 40px -24px rgba(34, 50, 74, .45) !important;
+}
+.theme-astronauta section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"] {
+  outline: 0;
+  box-shadow: none !important;
+  border-radius: 20px !important;
+}
+
+/* Íconos → círculo azul cielo */
+.theme-astronauta section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) { background: var(--as-sky) !important; }
+.theme-astronauta section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) svg,
+.theme-astronauta section:not(#hero):not(.env-stage) .invitation-locations-wrapper svg,
+.theme-astronauta section:not(#hero):not(.env-stage) .invitation-content svg { color: var(--as-blue-dk) !important; stroke: var(--as-blue-dk) !important; }
+.theme-astronauta .text-accent { color: var(--as-orange) !important; }
+
+/* ── Botones → píldora naranja ──────────────────────────────────────── */
+.theme-astronauta section:not(#hero) a[class*="rounded-full"],
+.theme-astronauta section:not(#hero) button[class*="rounded-2xl"],
+.theme-astronauta section:not(#hero) button[class*="rounded-full"] {
+  background: var(--as-orange) !important;
+  color: var(--as-night) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-family: var(--as-title) !important;
+  font-weight: 700 !important;
+  letter-spacing: .02em !important;
+  box-shadow: 0 10px 20px -12px rgba(242, 166, 90, .9) !important;
+}
+.theme-astronauta section input,
+.theme-astronauta section textarea,
+.theme-astronauta section select {
+  border-radius: 14px !important;
+  border: 1px solid #d3deeb !important;
+  background: #ffffff !important;
+  font-family: var(--as-text) !important;
+}
+
+/* ── Galería → fotos con marco blanco redondeado ───────────────────── */
+.theme-astronauta #gallery img {
+  border: 8px solid #ffffff;
+  border-radius: 26px !important;
+  box-shadow: 0 16px 30px -18px rgba(34, 50, 74, .5);
+}
+
+/* ── Ilustraciones por módulo ───────────────────────────────────────── */
+.theme-astronauta #message .relative.inline-block { display: none !important; }
+.theme-astronauta #message > div::before,
+.theme-astronauta #location > div::before,
+.theme-astronauta #gifts > div::before,
+.theme-astronauta section#rsvp > div::before {
+  content: '';
+  display: block;
+  margin: 0 auto 14px;
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 12px 16px rgba(34, 50, 74, .14));
+}
+.theme-astronauta #message > div::before  { width: 200px; height: 126px; background-image: url('/images/themes/astronauta/planeta-1.webp'); animation: as-float 7s ease-in-out infinite; }
+.theme-astronauta #location > div::before { width: 130px; height: 130px; background-image: url('/images/themes/astronauta/luna.webp'); }
+.theme-astronauta #gifts > div::before    { width: 96px; height: 96px; background-image: url('/images/themes/astronauta/planeta-2.webp'); animation: as-float 6s ease-in-out infinite; }
+
+/* ── RSVP → cielo nocturno con el astronauta ───────────────────────── */
+.theme-astronauta .invitation-content section#rsvp {
+  background:
+    linear-gradient(180deg, rgba(26, 38, 57, .35), rgba(26, 38, 57, .55)),
+    url('/images/themes/astronauta/fondo.webp') center / cover,
+    var(--as-night) !important;
+  border-radius: 40px 40px 0 0;
+}
+.theme-astronauta section#rsvp > div::before {
+  width: 150px; height: 218px;
+  background-image: url('/images/themes/astronauta/astronauta.webp');
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, .35));
+}
+.theme-astronauta #rsvp h2 { color: #ffffff !important; }
+.theme-astronauta #rsvp > div > div > div:first-child p { color: #c9d6e8 !important; }
+.theme-astronauta #rsvp label,
+.theme-astronauta #rsvp label *,
+.theme-astronauta #rsvp [class*="tracking-widest"] { color: #c9d6e8 !important; }
+.theme-astronauta section#rsvp button[class*="rounded-2xl"],
+.theme-astronauta section#rsvp button[type="submit"] {
+  background: var(--as-orange) !important;
+  color: var(--as-night) !important;
+}
+.theme-astronauta #rsvp button:not([class*="rounded-2xl"]):not([type="submit"]) { color: #dce6f2 !important; }
+.theme-astronauta #rsvp input { color: var(--as-ink) !important; }
+
+/* ── Pie: cierre en cielo nocturno con cohete ──────────────────────── */
+.theme-astronauta .invitation-closing {
+  background:
+    linear-gradient(180deg, rgba(26, 38, 57, .4), rgba(26, 38, 57, .65)),
+    url('/images/themes/astronauta/fondo.webp') center / cover,
+    var(--as-night) !important;
+  color: #ffffff !important;
+  position: relative;
+  padding-top: 190px !important;
+}
+.theme-astronauta .invitation-closing::before {
+  content: '';
+  position: absolute;
+  top: 28px; left: 50%;
+  width: 104px; height: 140px; margin-left: -52px;
+  background: url('/images/themes/astronauta/cohete.webp') center / contain no-repeat;
+  animation: as-float 5s ease-in-out infinite;
+}
+.theme-astronauta .invitation-closing .invitation-closing-title {
+  font-family: var(--as-title) !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  color: #ffffff !important;
+}
+.theme-astronauta .invitation-closing-ornament span:nth-child(2) { background: var(--as-orange) !important; opacity: 1 !important; }
+
+@keyframes as-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes as-twinkle { 0%, 100% { opacity: .35; transform: scale(.8) rotate(0); } 50% { opacity: 1; transform: scale(1.08) rotate(12deg); } }
+@keyframes as-ride { 0%, 100% { translate: 0 0; rotate: -2deg; } 50% { translate: 6px -10px; rotate: 2deg; } }
+@keyframes as-lift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+
+/* ══════════════════════════════════════════════════════════════════════
+   PORTADA
+   ══════════════════════════════════════════════════════════════════════ */
+.theme-astronauta .invitation-content section#hero.as-hero,
+.as-hero {
+  background: var(--as-night) url('/images/themes/astronauta/fondo.webp') center top / cover !important;
+  position: relative;
+  overflow: hidden;
+  padding: 150px 18px 56px;
+  background: var(--as-night) url("/images/themes/astronauta/fondo.webp") center top / cover;
+  color: #ffffff;
+  font-family: var(--as-text);
+}
+.as-twinkle { position: absolute; z-index: 1; animation: as-twinkle 3.2s ease-in-out infinite; pointer-events: none; }
+.as-earth {
+  position: absolute; z-index: 0;
+  left: -30%; top: -70px; width: 78%; max-width: 440px;
+  filter: drop-shadow(0 0 40px rgba(120, 170, 230, .25));
+}
+.as-hero-grid { position: relative; z-index: 2; }
+
+/* Arcos con línea punteada */
+.as-arch { position: relative; border-radius: 999px 999px 30px 30px; padding: 10px; }
+.as-arch-inner {
+  border: 2px dashed rgba(255, 255, 255, .75);
+  border-radius: 999px 999px 22px 22px;
+  text-align: center;
+}
+.as-arch--blue {
+  width: 84%; margin-left: auto;
+  background: var(--as-blue);
+  box-shadow: 0 30px 50px -30px rgba(0, 0, 0, .6);
+}
+.as-arch--blue .as-arch-inner { padding: 96px 16px 34px; }
+.as-rider {
+  position: absolute; z-index: 3;
+  left: -26%; top: -92px; width: 62%; max-width: 300px;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, .3));
+  opacity: 0; transform: translate(-30px, 30px);
+  transition: opacity .9s ease .2s, transform 1.2s cubic-bezier(.2, .7, .2, 1) .2s;
+}
+.as-hero.is-shown .as-rider { opacity: 1; transform: none; animation: as-ride 5s ease-in-out 1.4s infinite; }
+.as-kicker {
+  font-family: var(--as-title); font-weight: 600;
+  font-size: 15px; letter-spacing: .02em;
+  color: #ffffff;
+}
+.as-kicker--orange { color: var(--as-orange); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
+.as-hero .as-name {
+  margin-top: 4px;
+  font-family: var(--as-title) !important;
+  font-weight: 800 !important;
+  font-size: clamp(3.1rem, 16vw, 4.6rem) !important;
+  line-height: .95 !important;
+  letter-spacing: -.01em !important;
+  text-transform: none !important;
+  color: #ffffff !important;
+  overflow-wrap: anywhere;
+}
+.as-age { margin-top: 6px; font-family: var(--as-title); font-weight: 600; font-size: 1.6rem; color: #ffffff; }
+
+/* Ventanilla de nave con la foto */
+.as-hero-side { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 34px; }
+.as-porthole {
+  position: relative;
+  width: min(66vw, 250px); aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #cfd8e4;
+  box-shadow:
+    0 0 0 10px #dfe5ee,
+    0 0 0 14px #8f9db1,
+    0 24px 40px 10px rgba(0, 0, 0, .45);
+}
+.as-porthole img { width: 100%; height: 100%; object-fit: cover; }
+.as-porthole::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, .35), transparent 40%); pointer-events: none; }
+.as-porthole.is-editable { cursor: pointer; }
+.as-edit { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, .45); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.as-porthole:hover .as-edit { opacity: 1; }
+
+/* Arco blanco con la fecha */
+.as-arch--ivory {
+  width: 86%; max-width: 360px;
+  background: var(--as-ivory);
+  color: var(--as-ink);
+  box-shadow: 0 30px 50px -30px rgba(0, 0, 0, .6);
+}
+.as-arch--ivory .as-arch-inner { border-color: var(--as-dash); padding: 56px 16px 28px; }
+.as-month { font-family: var(--as-title); font-weight: 700; font-size: 1.9rem; line-height: 1; color: var(--as-blue-dk); text-transform: capitalize; }
+.as-day { font-family: var(--as-title); font-weight: 800; font-size: 5.6rem; line-height: .9; color: var(--as-blue-dk); }
+.as-time { margin-top: 6px; font-family: var(--as-title); font-weight: 600; font-size: 1.15rem; color: var(--as-ink); text-transform: capitalize; }
+.as-place { margin-top: 8px; font-size: 14px; line-height: 1.35; color: var(--as-soft); }
+.as-btn {
+  margin-top: 18px; padding: 12px 22px;
+  border: 0; border-radius: 999px;
+  background: var(--as-orange); color: var(--as-night);
+  font-family: var(--as-title); font-weight: 700; font-size: 15px;
+  box-shadow: 0 10px 20px -10px rgba(242, 166, 90, .9);
+  cursor: pointer;
+}
+
+/* Cuenta regresiva "Despegamos en…" */
+.as-launch {
+  position: relative; z-index: 2;
+  display: flex; align-items: flex-end; gap: 6px;
+  max-width: 420px; margin: 46px auto 0; padding: 22px 18px 22px 0;
+  background: rgba(243, 240, 234, .96);
+  border-radius: 32px;
+  outline: 2px dashed var(--as-dash); outline-offset: -10px;
+  color: var(--as-ink);
+}
+.as-rocket { flex: 0 0 34%; width: 34%; margin: -70px -4px 0 -6px; animation: as-lift 4s ease-in-out infinite; filter: drop-shadow(0 12px 14px rgba(34, 50, 74, .25)); }
+.as-launch-text { flex: 1; text-align: center; }
+.theme-astronauta .as-launch-title { margin-top: 4px; font-family: var(--as-title) !important; font-weight: 800; font-size: clamp(1.5rem, 7vw, 1.9rem); line-height: 1.05; color: var(--as-blue-dk); }
+.as-count { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 12px; }
+.as-count b { display: block; font-family: var(--as-title); font-weight: 800; font-size: clamp(1.5rem, 7vw, 2rem); line-height: 1; color: var(--as-ink); }
+.as-count small { display: block; margin-top: 4px; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--as-soft); }
+
+/* ── Escritorio ─────────────────────────────────────────────────────── */
+@media (min-width: 900px) {
+  .theme-astronauta .invitation-content section#hero.as-hero,
+  .as-hero { padding: 90px 48px 80px; }
+  .as-earth { left: -4%; top: -130px; width: 32%; max-width: 500px; }
+  .as-hero-grid { display: flex; justify-content: center; align-items: flex-end; gap: 70px; max-width: 1100px; margin: 0 auto; }
+  .as-arch--blue { flex: 0 0 470px; width: 470px; margin: 150px 0 0; }
+  .as-arch--blue .as-arch-inner { padding: 150px 30px 60px; }
+  .as-rider { left: -30%; top: -150px; width: 64%; max-width: 330px; }
+  .as-hero .as-name { font-size: clamp(4rem, 6vw, 5.4rem) !important; }
+  .as-kicker { font-size: 18px; }
+  .as-age { font-size: 2rem; }
+  .as-hero-side { flex: 0 0 360px; margin-top: 0; gap: 0; }
+  .as-porthole { width: 210px; margin-bottom: -70px; z-index: 3; }
+  .as-arch--ivory { width: 360px; }
+  .as-arch--ivory .as-arch-inner { padding-top: 92px; }
+  .as-launch { max-width: 640px; margin-top: 80px; padding: 26px 30px 26px 0; }
+  .as-rocket { flex-basis: 24%; width: 24%; margin-top: -90px; }
+  .as-count b { font-size: 2.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .as-rider { transition: none !important; opacity: 1; transform: none; animation: none !important; }
+  .as-twinkle, .as-rocket, .theme-astronauta .invitation-closing::before,
+  .theme-astronauta #message > div::before, .theme-astronauta #gifts > div::before { animation: none !important; }
+}
+
+/* RSVP sobre cielo nocturno: título blanco y casilla de WhatsApp translúcida */
+.theme-astronauta section#rsvp h3[class*="text-3xl"],
+.theme-astronauta section#rsvp h2 { color: #ffffff !important; }
+.theme-astronauta section#rsvp label:has(input[type="checkbox"]) {
+  background: rgba(255, 255, 255, .08) !important;
+  border-color: rgba(255, 255, 255, .22) !important;
+}

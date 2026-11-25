@@ -41,6 +41,7 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'whimsical-kids': ['Fredoka:wght@400;500;600;700', 'Quicksand:wght@400;500;600;700'],
     'rainbow-pop': ['Fredoka:wght@400;500;600;700', 'Quicksand:wght@400;500;600;700'],
     'gamer-party': ['Press+Start+2P', 'VT323'],
+    'astronauta': ['Baloo+2:wght@600;700;800', 'Nunito:wght@400;600;700'],
     'nube-de-miel': ['Playfair+Display:ital,wght@0,400;0,500;1,400', 'DM+Sans:wght@400;600', 'Pinyon+Script'],
     'gotico-suave': ['Pinyon+Script', 'Bodoni+Moda:wght@500', 'Montserrat:wght@400;600;700'],
     'lacre-rojo': ['Bodoni+Moda:wght@500;600', 'Syncopate:wght@700', 'Jost:wght@400;500;700', 'Monsieur+La+Doulaise', 'Allison'],
