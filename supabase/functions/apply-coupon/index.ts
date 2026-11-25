@@ -90,6 +90,12 @@ serve(async (req) => {
       }
     }
 
+    if (coupon.code === 'SOPHIAHUETT') {
+      if (planId !== 'clasico' && planId !== 'pro') {
+        throw new Error('Este cupón solo es válido para los planes Clásica y Pro.')
+      }
+    }
+
     const hasOverride = coupon.override_price !== null && coupon.override_price !== undefined && coupon.override_price !== ''
     const discountPercent = (coupon.discount_percent !== null && coupon.discount_percent !== undefined && coupon.discount_percent !== '')
       ? Number(coupon.discount_percent)
