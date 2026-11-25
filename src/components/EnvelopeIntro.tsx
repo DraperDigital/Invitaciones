@@ -287,6 +287,7 @@ export default function EnvelopeIntro({
     const SEAL_COLOR_BY_THEME: Record<string, string> = {
         'bodegon-nocturno': '#C7A85A', // oro envejecido
         'lacre-rojo': '#8A1A28',       // lacre rojo imperial
+        'sirenita': '#B9A4D8',         // lila sirena
         'gotico-suave': '#9E2140',     // carmesí terciopelo
         'nube-de-miel': '#C79A3B',     // miel dorada
         'anturio-vino': '#7D2536',     // vino tinto noble

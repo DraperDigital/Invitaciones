@@ -1061,6 +1061,7 @@ export default function DesignEditor() {
                             { id: 'pixel-craft', label: 'Mundo Píxel (Minecraft)', desc: 'Aventura de bloques cúbicos con Creeper, pastel con velas, banderines y estética voxel', icon: '🟩' },
                             { id: 'rainbow-pop', label: 'Rainbow Pop', desc: 'Letras burbuja multicolor, confetti pastel, tarjetas festivas con bordes celestes', icon: '🌈' },
                             { id: 'nube-de-miel', label: 'Nube de Miel', desc: 'Editorial tierno en azul marino, cielo y miel, con capítulos e ilustraciones propias', icon: '🐑' },
+                            { id: 'sirenita', label: 'Sirenita', desc: 'Cumpleaños de niña bajo el mar: acuarela pastel, cola de sirena, listón lila y concha', icon: '🧜‍♀️' },
                             { id: 'gotico-suave', label: 'Gótico Suave', desc: 'Collage gótico: damasco, sobre negro con flores oscuras, marcos barrocos y carmesí', icon: '🖤' },
                             { id: 'lacre-rojo', label: 'Lacre Rojo', desc: 'Editorial en blanco y negro con un solo acento: el sello de lacre rojo', icon: '❤️' },
                             { id: 'bodegon-nocturno', label: 'Bodegón Nocturno', desc: 'Lujo clásico: papel de algodón sobre pintura floral oscura, caligrafía y sello dorado', icon: '🥀' },
