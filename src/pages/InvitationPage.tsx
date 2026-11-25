@@ -37,6 +37,9 @@ import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
+import ArcoirisHero from '../components/themes/ArcoirisHero';
+import CastilloHero from '../components/themes/CastilloHero';
+import UnicornioHero from '../components/themes/UnicornioHero';
 import BodegonNocturnoHero from '../components/themes/BodegonNocturnoHero';
 import LacreRojoHero from '../components/themes/LacreRojoHero';
 import GoticoSuaveHero from '../components/themes/GoticoSuaveHero';
@@ -287,6 +290,27 @@ export default function InvitationPage() {
             borderColor: '#14121033', cardBorder: '#14121022',
             accentOverride: '#141210', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '0px',
+        },
+        'unicornio': {
+            sectionBg: '#FDFBFB', sectionBgAlt: '#FBF0F6', cardBg: '#FFFFFF',
+            textPrimary: '#5E4A72', textSecondary: '#8A7A9C',
+            borderColor: '#EFE3F5', cardBorder: '#EFE3F5',
+            accentOverride: '#B58BD1', fontPreset: 'divertida',
+            heroRadius: '32px', cardRadius: '32px',
+        },
+        'castillo': {
+            sectionBg: '#FFF8FB', sectionBgAlt: '#F6EEFB', cardBg: '#FFFFFF',
+            textPrimary: '#5B3D82', textSecondary: '#806A9C',
+            borderColor: '#ECDCAE', cardBorder: '#ECDCAE',
+            accentOverride: '#8A5BC4', fontPreset: 'romantica',
+            heroRadius: '32px', cardRadius: '32px',
+        },
+        'arcoiris': {
+            sectionBg: '#FBF6FF', sectionBgAlt: '#F3ECFF', cardBg: '#FFFFFF',
+            textPrimary: '#5A4880', textSecondary: '#84759F',
+            borderColor: '#EADFF9', cardBorder: '#EADFF9',
+            accentOverride: '#8F62D6', fontPreset: 'divertida',
+            heroRadius: '32px', cardRadius: '32px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -2772,6 +2796,15 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'bodegon-nocturno') {
             return <BodegonNocturnoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'unicornio') {
+            return <UnicornioHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'castillo') {
+            return <CastilloHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'arcoiris') {
+            return <ArcoirisHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {
             return <AnturioVinoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;

@@ -14,7 +14,7 @@ interface Target {
     applied: number;
 }
 
-const clamp = (v: number) => Math.max(-PARALLAX_MAX_PX, Math.min(PARALLAX_MAX_PX, v));
+const clamp = (v: number, max = PARALLAX_MAX_PX) => Math.max(-max, Math.min(max, v));
 
 export default function ParallaxLayers({ theme }: { theme?: string | null }) {
     useEffect(() => {
@@ -45,12 +45,13 @@ export default function ParallaxLayers({ theme }: { theme?: string | null }) {
                 if (!t.el.isConnected) continue;
                 const r = t.el.getBoundingClientRect();
                 // Posición "natural" (sin el desplazamiento que ya le aplicamos)
-                const center = r.top + r.height / 2 - (t.layer.varOnly ? 0 : t.applied);
+                const anchor = t.layer.fromTop ? r.top + Math.min(r.height / 2, vh * 0.35) : r.top + r.height / 2;
+                const center = anchor - (t.layer.varOnly ? 0 : t.applied);
                 if (center < -vh || center > vh * 2) continue; // fuera de pantalla: no gastar
                 const naturalAbs = center + sy;
                 // Lo que está en la primera pantalla parte de 0 al cargar
                 const raw = naturalAbs < vh ? sy * t.layer.speed : -(center - vh / 2) * t.layer.speed;
-                const py = Math.round(clamp(raw) * 10) / 10;
+                const py = Math.round(clamp(raw, t.layer.max) * 10) / 10;
                 if (py !== t.applied) {
                     t.applied = py;
                     t.el.style.setProperty(t.layer.cssVar || '--py', `${py}px`);
