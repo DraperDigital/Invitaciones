@@ -11,9 +11,10 @@ const categories = [
     { id: 'save_the_date', name: 'Save the Date (10)', icon: Calendar },
     { id: 'boda', name: 'Bodas', icon: HeartHandshake },
     { id: 'xv', name: 'XV Años', icon: PartyPopper },
+    { id: 'infantil', name: 'Cumpleaños Infantiles', icon: Baby },
     { id: 'cumpleanos', name: 'Cumpleaños', icon: Cake },
     { id: 'bautizo', name: 'Bautizos', icon: Droplet },
-    { id: 'infantil', name: 'Infantiles', icon: Baby },
+    { id: 'baby_shower', name: 'Baby Shower', icon: Baby },
     { id: 'gender_reveal', name: 'Revelación', icon: HelpCircle },
     { id: 'graduacion', name: 'Graduaciones', icon: GraduationCap },
     { id: 'comunion', name: 'Primera Comunión', icon: Church },
@@ -227,7 +228,7 @@ export default function ExamplesPage() {
                                                 {/* Plan Badge */}
                                                 <div className="absolute top-4 right-4 z-10">
                                                     <span className="px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold bg-slate-900/90 text-[#F5B837] border border-[#F5B837]/30 backdrop-blur-md">
-                                                        {tpl.plan}
+                                                        {tpl.plan.toLowerCase().includes('plan') ? tpl.plan : `Plan ${tpl.plan}`}
                                                     </span>
                                                 </div>
 

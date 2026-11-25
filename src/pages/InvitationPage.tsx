@@ -2786,6 +2786,7 @@ END:VCALENDAR`;
         boda:             { ceremony: 'Misa', reception: 'Celebración', tagline: 'Nos Casamos', welcome: 'Nuestra Boda' },
         birthday:         { ceremony: 'Celebración', reception: 'Fiesta', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
         cumpleanos:       { ceremony: 'Celebración', reception: 'Fiesta', tagline: 'Cumpleaños', welcome: 'Mi Cumpleaños' },
+        infantil:         { ceremony: 'Festejo', reception: 'Fiesta Infantil', tagline: 'Mi Cumpleaños', welcome: '¡Mi Fiesta!' },
         xv:               { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
         xv_anos:          { ceremony: 'Misa de XV', reception: 'Fiesta de XV', tagline: 'Mis XV Años', welcome: 'Mis XV Años' },
         bautizo:          { ceremony: 'Misa de Bautizo', reception: 'Recepción Familiar', tagline: 'Mi Bautizo', welcome: 'Mi Bautizo' },
