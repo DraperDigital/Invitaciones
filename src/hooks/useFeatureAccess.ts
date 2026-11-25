@@ -8,89 +8,168 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
     const [error, setError] = useState<any>(null);
 
     useEffect(() => {
-        if (!eventId) return;
+        // Handle case where eventId is undefined but eventPlan was provided (e.g. demo mode)
+        if (!eventId) {
+            if (eventPlan) {
+                const planCode = eventPlan.toLowerCase();
+                const isPro = planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado';
+                const isPremiumOrPro = isPro || planCode === 'premium' || planCode === 'concierge';
+                const planName = planCode === 'concierge' ? 'Concierge' : planCode === 'premium' ? 'Diseño Pro' : isPro ? 'Pro' : 'Clásica';
+                setAccess({
+                    plan: { code: planCode, name: planName },
+                    features: [
+                        { code: 'show_details', status: 'enabled' },
+                        { code: 'show_countdown', status: 'enabled' },
+                        { code: 'show_map', status: 'enabled' },
+                        { code: 'show_gallery', status: 'enabled' },
+                        { code: 'show_whatsapp_rsvp', status: 'enabled' },
+                        { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                        { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' }
+                    ]
+                } as any);
+            }
+            setIsLoading(false);
+            return;
+        }
 
         // MOCK MODE: use the actual plan passed in (from theme_config)
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            const plan = eventPlan || 'free';
-            setAccess({ plan: { code: plan, name: plan === 'premium' ? 'Premium' : plan === 'pro' ? 'Pro' : plan === 'clasico' ? 'Clásica' : 'Gratis' }, features: [] } as any);
+            const plan = (eventPlan || 'clasico').toLowerCase();
+            const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
+            const isPremiumOrPro = isPro || plan === 'premium' || plan === 'concierge';
+            const planName = plan === 'concierge' ? 'Concierge' : plan === 'premium' ? 'Diseño Pro' : isPro ? 'Pro' : 'Clásica';
+            setAccess({
+                plan: { code: plan, name: planName },
+                features: [
+                    { code: 'show_details', status: 'enabled' },
+                    { code: 'show_countdown', status: 'enabled' },
+                    { code: 'show_map', status: 'enabled' },
+                    { code: 'show_gallery', status: 'enabled' },
+                    { code: 'show_whatsapp_rsvp', status: 'enabled' },
+                    { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                    { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' }
+                ]
+            } as any);
             setIsLoading(false);
             return;
         }
 
         const fetchAccess = async () => {
             setIsLoading(true);
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
             try {
-                // Ensure eventId is a valid UUID before calling RPC to avoid 'text = uuid' errors
-                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
                 if (!uuidRegex.test(eventId)) {
-                    // If it's not a UUID (e.g. it's a slug or empty), skip RPC and use basic fallback
                     throw new Error('Invalid UUID format');
                 }
 
-                // Call the Postgres RPC
+                // Call the Postgres RPC (primary source of truth per event)
                 const { data, error: rpcError } = await supabase
                     .rpc('get_event_feature_access', { p_event_id: eventId });
 
                 if (rpcError) {
                     throw rpcError;
                 }
-                setAccess(data as FeatureAccessResponse);
+                if (data && (data as any).plan) {
+                    setAccess(data as FeatureAccessResponse);
+                    return;
+                }
+                throw new Error('Empty feature access response');
             } catch (err: any) {
-                // FALLBACK LOGIC
+                // FALLBACK LOGIC — STRICTLY PER EVENT (NEVER FROM profiles.plan_tier)
                 if (err.message !== 'Invalid UUID format') {
-                    console.warn('Feature access RPC failed, trying profile fallback...', err.message || err);
+                    console.warn('get_event_feature_access RPC failed, using event-based fallback:', err.message || err);
                 }
 
                 try {
-                    // Get current user session safely
-                    const { data: { user } } = await supabase.auth.getUser();
-                    
-                    if (user) {
-                        const { data: profileData, error: profileError } = await supabase
-                            .from('profiles')
-                            .select('plan_tier')
-                            .eq('id', user.id)
+                    let resolvedPlan: string | null = eventPlan || null;
+
+                    // 1. Check the event's own plan column and theme_config
+                    if (!resolvedPlan) {
+                        const { data: eventData, error: eventError } = await supabase
+                            .from('events')
+                            .select('plan, theme_config')
+                            .eq('id', eventId)
                             .maybeSingle();
 
-                        if (!profileError && profileData) {
-                            const planTier = profileData.plan_tier || 'free';
-                            const isPremiumOrPro = planTier === 'premium' || planTier === 'pro' || planTier === 'concierge';
-
-                            setAccess({ 
-                                plan: { 
-                                    code: planTier, 
-                                    name: planTier === 'concierge' ? 'Concierge' : planTier === 'premium' ? 'Diseño Pro' : planTier === 'pro' ? 'Pro' : planTier === 'clasico' ? 'Clásica' : 'Gratuita' 
-                                }, 
-                                features: [
-                                    { code: 'show_details', status: 'enabled' },
-                                    { code: 'show_countdown', status: 'enabled' },
-                                    { code: 'show_map', status: 'enabled' },
-                                    { code: 'show_gallery', status: 'enabled' },
-                                    { code: 'show_whatsapp_rsvp', status: 'enabled' },
-                                    { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                                    { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' }
-                                ] 
-                            } as any);
-                            return;
+                        if (!eventError && eventData) {
+                            resolvedPlan = eventData.plan || eventData.theme_config?.plan || null;
                         }
                     }
+
+                    // 2. Check active subscription for this specific event
+                    if (!resolvedPlan && uuidRegex.test(eventId)) {
+                        const { data: subData } = await supabase
+                            .from('event_subscriptions')
+                            .select('plan_id, plans(code)')
+                            .eq('event_id', eventId)
+                            .eq('status', 'active')
+                            .maybeSingle();
+
+                        if (subData?.plans) {
+                            resolvedPlan = (Array.isArray(subData.plans) ? subData.plans[0]?.code : (subData.plans as any)?.code) || null;
+                        }
+                    }
+
+                    // Default to most restrictive: 'clasico'
+                    const planCode = (resolvedPlan || 'clasico').toLowerCase();
+                    const isPro = planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado';
+                    const isPremiumOrPro = isPro || planCode === 'premium' || planCode === 'concierge';
+                    const planName = planCode === 'concierge'
+                        ? 'Concierge'
+                        : planCode === 'premium'
+                            ? 'Diseño Pro'
+                            : isPro
+                                ? 'Pro'
+                                : 'Clásica';
+
+                    setAccess({
+                        plan: {
+                            code: planCode,
+                            name: planName
+                        },
+                        features: [
+                            { code: 'show_details', status: 'enabled' },
+                            { code: 'show_countdown', status: 'enabled' },
+                            { code: 'show_map', status: 'enabled' },
+                            { code: 'show_gallery', status: 'enabled' },
+                            { code: 'show_whatsapp_rsvp', status: 'enabled' },
+                            { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
+                            { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' }
+                        ]
+                    } as any);
                 } catch (fallbackErr) {
                     console.error('Fallback also failed:', fallbackErr);
+                    // Absolute safe default: clasico (disabled)
+                    setAccess({
+                        plan: { code: 'clasico', name: 'Clásica' },
+                        features: [
+                            { code: 'event_planning', status: 'disabled' }
+                        ]
+                    } as any);
+                    setError(err);
                 }
-
-                // Global default if everything else fails
-                const finalPlan = eventPlan || 'clasico';
-                const finalName = finalPlan === 'premium' ? 'Premium' : finalPlan === 'pro' ? 'Pro' : finalPlan === 'concierge' ? 'Concierge' : 'Clásica';
-                setAccess({ plan: { code: finalPlan, name: finalName }, features: [] } as any);
-                setError(err);
             } finally {
                 setIsLoading(false);
             }
@@ -121,7 +200,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         ];
         if (isPro && proFeatures.includes(featureCode)) return true;
 
-        const feature = access.features.find(f => f.code === featureCode);
+        const feature = access.features?.find(f => f.code === featureCode);
         return feature?.status === 'enabled';
     };
 
@@ -129,14 +208,14 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         if (!access) return 'not_found';
         if (hasFeature(featureCode)) return 'enabled';
         
-        const feature = access.features.find(f => f.code === featureCode);
+        const feature = access.features?.find(f => f.code === featureCode);
         if (!feature) return 'not_found';
         return feature.status === 'enabled' ? 'enabled' : 'locked';
     };
 
     const getUpgradePlan = (featureCode: string): string | undefined => {
         if (!access) return undefined;
-        const feature = access.features.find(f => f.code === featureCode);
+        const feature = access.features?.find(f => f.code === featureCode);
         return feature?.upgrade_plan;
     };
 

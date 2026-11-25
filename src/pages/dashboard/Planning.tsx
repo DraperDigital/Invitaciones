@@ -147,6 +147,18 @@ const ShareButton: React.FC<{ planning: Planning; isDemo: boolean; toast: any }>
     );
 };
 
+interface PlanningUserEvent {
+    id: string;
+    title: string;
+    plan?: string | null;
+    theme_config?: any;
+}
+
+const isEligibleForPlanning = (ev: { plan?: string | null; theme_config?: any }) => {
+    const p = (ev.plan || ev.theme_config?.plan || '').toLowerCase();
+    return p === 'pro' || p === 'personalized' || p === 'personalizado' || p === 'premium' || p === 'concierge';
+};
+
 const PlanningPage: React.FC = () => {
     const { id: routeEventId } = useParams<{ id: string }>();
     const [searchParams] = useSearchParams();
@@ -157,7 +169,7 @@ const PlanningPage: React.FC = () => {
     const isExplicitDemo = routeEventId === 'demo' || searchParams.get('demo') === 'true' || searchParams.get('event') === 'demo';
     const isMockBackend = !import.meta.env.VITE_SUPABASE_URL;
 
-    const [userEvents, setUserEvents] = useState<any[]>([]);
+    const [userEvents, setUserEvents] = useState<PlanningUserEvent[]>([]);
     const [activeEvent, setActiveEvent] = useState<any>(null);
     const [eventId, setEventId] = useState<string | undefined>(
         routeEventId || searchParams.get('event') || (isExplicitDemo || !user ? 'demo' : undefined)
@@ -167,6 +179,9 @@ const PlanningPage: React.FC = () => {
     const isDemo = !user || eventId === 'demo' || eventId === 'mock-event-id' || isExplicitDemo || isMockBackend;
     const { hasFeature, currentPlan, isLoading: accessLoading } = useFeatureAccess(isDemo ? undefined : eventId, isDemo ? 'pro' : undefined);
     const planning = usePlanning(eventId || (isDemo ? 'demo' : undefined));
+
+    const locked = !isDemo && !accessLoading && !hasFeature('event_planning');
+    const eligibleEvents = userEvents.filter(isEligibleForPlanning);
 
     useEffect(() => {
         if (isDemo) {
@@ -178,16 +193,46 @@ const PlanningPage: React.FC = () => {
             return;
         }
         (async () => {
-            const { data } = await supabase.from('events').select('id,title')
-                .eq('user_id', user.id).order('created_at', { ascending: false });
-            setUserEvents(data || []);
+            const { data, error } = await supabase
+                .from('events')
+                .select('id, title, plan, theme_config')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('[Planning] error fetching user events:', error);
+            }
+            const owned = (data || []) as PlanningUserEvent[];
+            setUserEvents(owned);
+
+            const eligible = owned.filter(isEligibleForPlanning);
+            const stored = localStorage.getItem(`last_managed_event_id_${user.id}`);
+
             if (!eventId) {
-                const stored = localStorage.getItem(`last_managed_event_id_${user.id}`);
-                const next = stored || data?.[0]?.id;
-                if (next) setEventId(next);
+                let next: string | undefined;
+                if (stored && eligible.some(e => e.id === stored)) {
+                    next = stored;
+                } else if (eligible.length > 0) {
+                    next = eligible[0].id;
+                } else if (stored && owned.some(e => e.id === stored)) {
+                    next = stored;
+                } else {
+                    next = owned[0]?.id;
+                }
+                if (next) {
+                    setEventId(next);
+                    navigate(`/dashboard/planeacion/${next}`, { replace: true });
+                }
+            } else if (eventId !== 'demo' && owned.length > 0 && !owned.some(e => e.id === eventId)) {
+                // Si el id en la URL no le pertenece al usuario actual, corregir al propio elegible
+                const next = eligible[0]?.id || owned[0]?.id;
+                if (next) {
+                    setEventId(next);
+                    navigate(`/dashboard/planeacion/${next}`, { replace: true });
+                }
             }
         })();
-    }, [user, isDemo, isMockBackend, eventId]);
+    }, [user, isDemo, isMockBackend, eventId, navigate]);
 
     useEffect(() => {
         if (isDemo || !eventId || eventId === 'demo' || eventId === 'mock-event-id') {
@@ -206,7 +251,7 @@ const PlanningPage: React.FC = () => {
     // (rubros + pendientes + proveedores sugeridos + carpeta del día). Sin botones.
     const seededRef = useRef<string | null>(null);
     useEffect(() => {
-        if (isDemo || planning.loading || !eventId || eventId === 'demo') return;
+        if (isDemo || planning.loading || accessLoading || locked || !eventId || eventId === 'demo') return;
         if (seededRef.current === eventId) return;
         if (planning.rubros.length === 0 && planning.tasks.length === 0) {
             seededRef.current = eventId;
@@ -214,7 +259,7 @@ const PlanningPage: React.FC = () => {
                 if (err) toast.error(typeof err === 'string' ? err : 'No se pudo cargar tu plan');
             });
         }
-    }, [isDemo, planning.loading, eventId, planning.rubros.length, planning.tasks.length]);
+    }, [isDemo, planning.loading, accessLoading, locked, eventId, planning.rubros.length, planning.tasks.length, toast]);
 
     const handleEventChange = (id: string) => {
         if (!id) return;
@@ -222,8 +267,6 @@ const PlanningPage: React.FC = () => {
         if (user && id !== 'demo') localStorage.setItem(`last_managed_event_id_${user.id}`, id);
         navigate(id === 'demo' ? `/dashboard/planeacion/demo` : `/dashboard/planeacion/${id}`);
     };
-
-    const locked = !isDemo && !accessLoading && !hasFeature('event_planning');
 
     if (!user && !isDemo) {
         return (
@@ -242,14 +285,45 @@ const PlanningPage: React.FC = () => {
     }
 
     if (!eventId) {
+        if (userEvents.length === 0) {
+            return (
+                <div className="rounded-[2.5rem] border border-stone-200 bg-white p-12 text-center shadow-xs">
+                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-stone-100 text-stone-600">
+                        <Compass className="h-8 w-8" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-[#222B38]">Aún no tienes invitaciones</h3>
+                    <p className="mx-auto mt-3 max-w-md text-stone-600 text-sm sm:text-base">
+                        Crea una invitación con el plan Pro para desbloquear el módulo de planeación o explora el demo interactivo.
+                    </p>
+                    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                        <Link to="/planes" className="inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-[11px] uppercase font-bold tracking-[0.2em] text-white shadow-xl hover:opacity-90 no-underline transition-all"
+                            style={{ background: PINK }}>
+                            <Crown className="h-4 w-4" /> Ver Planes
+                        </Link>
+                        <Link to="/dashboard/planeacion/demo" className="inline-flex items-center gap-2 rounded-2xl px-6 py-4 text-[11px] uppercase font-bold tracking-[0.2em] bg-stone-100 hover:bg-stone-200 text-stone-800 no-underline transition-all">
+                            Ver Demo con Datos Mock
+                        </Link>
+                    </div>
+                </div>
+            );
+        }
+
+        const eligible = userEvents.filter(isEligibleForPlanning);
+        if (eligible.length === 0) {
+            return <UpgradeState planName={userEvents[0]?.plan || 'Clásica'} />;
+        }
+
         return (
-            <div className="text-center py-20">
-                <h2 className="text-2xl font-display font-extrabold mb-4">Elige un evento para planear</h2>
-                <select onChange={(e) => handleEventChange(e.target.value)} defaultValue=""
-                    className="p-3 border border-stone-200 rounded-xl outline-none">
-                    <option value="">Seleccionar...</option>
-                    {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
-                </select>
+            <div className="text-center py-20 max-w-md mx-auto">
+                <h2 className="text-2xl font-display font-extrabold mb-4 text-[#222B38]">Elige un evento para planear</h2>
+                <div className="relative">
+                    <select onChange={(e) => handleEventChange(e.target.value)} defaultValue=""
+                        className="w-full appearance-none bg-white border-2 border-stone-200 hover:border-[#DF3B94] focus:border-[#DF3B94] rounded-2xl p-3.5 pr-10 outline-none text-stone-900 font-semibold cursor-pointer shadow-xs transition-colors">
+                        <option value="" disabled>Seleccionar evento...</option>
+                        {eligible.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
+                    </select>
+                    <ChevronDown className="h-4 w-4 text-[#C2287B] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
             </div>
         );
     }
@@ -257,9 +331,9 @@ const PlanningPage: React.FC = () => {
     return (
         <div className="space-y-6 sm:space-y-8 w-full max-w-full min-w-0">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 min-w-0">
-                <div className="flex flex-col gap-1 min-w-0 w-full max-w-full">
+                <div className="flex flex-col gap-1.5 min-w-0 w-full max-w-full">
                     <p className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-2" style={{ color: PINK }}>
-                        <span>Planeación · Premium</span>
+                        <span>Planeación · {isDemo ? 'Demo' : (currentPlan?.name || 'Pro')}</span>
                         {isDemo && (
                             <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[9px] font-mono font-bold tracking-normal border border-amber-200">
                                 Datos de prueba · Mock
@@ -270,15 +344,31 @@ const PlanningPage: React.FC = () => {
                         <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-black text-stone-900 tracking-tight">
                             Boda Demo · Ana & Luis
                         </h1>
-                    ) : (
-                        <div className="relative w-full max-w-full min-w-0">
-                            <select value={eventId} onChange={(e) => handleEventChange(e.target.value)}
-                                className="w-full max-w-full truncate pr-8 text-lg sm:text-2xl md:text-3xl font-display font-black bg-transparent outline-none border-b border-stone-200 focus:border-[#DF3B94] py-1 cursor-pointer"
-                                style={{ color: DARK }}>
-                                {userEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
-                            </select>
-                            <ChevronDown className="h-4 w-4 text-stone-400 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    ) : eligibleEvents.length > 1 ? (
+                        <div className="relative inline-block w-full sm:w-auto min-w-[260px] max-w-md mt-1">
+                            <label htmlFor="planning-event-selector" className="sr-only">Seleccionar evento</label>
+                            <div className="relative">
+                                <select
+                                    id="planning-event-selector"
+                                    value={eventId}
+                                    onChange={(e) => handleEventChange(e.target.value)}
+                                    className="w-full appearance-none bg-white hover:bg-stone-50 border-2 border-stone-200 hover:border-[#DF3B94] focus:border-[#DF3B94] focus:ring-4 focus:ring-[#DF3B94]/15 rounded-2xl py-2.5 sm:py-3 pl-4 pr-11 text-base sm:text-xl md:text-2xl font-display font-extrabold text-[#222B38] outline-none cursor-pointer transition-all shadow-xs"
+                                >
+                                    {eligibleEvents.map(ev => (
+                                        <option key={ev.id} value={ev.id} className="font-sans text-sm font-medium text-stone-900 py-1">
+                                            {ev.title}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
+                                    <ChevronDown className="h-5 w-5 text-[#C2287B]" />
+                                </div>
+                            </div>
                         </div>
+                    ) : (
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-black text-[#222B38] tracking-tight">
+                            {activeEvent?.title || userEvents.find(e => e.id === eventId)?.title || 'Mi Invitación'}
+                        </h1>
                     )}
                 </div>
                 {!locked && <ShareButton planning={planning} isDemo={isDemo} toast={toast} />}
@@ -347,19 +437,24 @@ const PlanningPage: React.FC = () => {
 
 // ── Upgrade ───────────────────────────────────────────────────────────────────
 const UpgradeState: React.FC<{ planName?: string }> = ({ planName }) => (
-    <div className="rounded-[2.5rem] border border-stone-200 bg-white p-12 text-center shadow-sm">
+    <div className="rounded-[2.5rem] border border-stone-200 bg-white p-8 sm:p-12 text-center shadow-xs">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl" style={{ background: `${PINK}1a`, color: PINK }}>
             <Crown className="h-8 w-8" />
         </div>
-        <h3 className="text-3xl font-display font-extrabold" style={{ color: DARK }}>Planeación es parte del plan Pro</h3>
-        <p className="mx-auto mt-3 max-w-md text-stone-600">
-            Tu plan actual{planName ? ` (${planName})` : ''} incluye la invitación y las confirmaciones. Planeación suma
-            presupuesto por rubros, cotizaciones, contratos, pagos y la carpeta del día.
+        <h3 className="text-2xl sm:text-3xl font-display font-extrabold" style={{ color: DARK }}>Planeación es parte del plan Pro</h3>
+        <p className="mx-auto mt-3 max-w-md text-stone-600 text-sm sm:text-base leading-relaxed">
+            Tu evento actual{planName ? ` (${planName})` : ''} incluye la invitación y las confirmaciones. El plan Pro suma
+            presupuesto por rubros, cotizaciones, contratos, pagos, pendientes y la carpeta del día.
         </p>
-        <Link to="/planes" className="mt-8 inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-[11px] uppercase font-bold tracking-[0.2em] text-white shadow-xl hover:opacity-90"
-            style={{ background: PINK }}>
-            <Crown className="h-4 w-4" /> Mejorar a Pro
-        </Link>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Link to="/planes" className="inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-[11px] uppercase font-bold tracking-[0.2em] text-white shadow-xl hover:opacity-90 no-underline transition-all"
+                style={{ background: PINK }}>
+                <Crown className="h-4 w-4" /> Mejorar a Pro
+            </Link>
+            <Link to="/dashboard/planeacion/demo" className="inline-flex items-center gap-2 rounded-2xl px-6 py-4 text-[11px] uppercase font-bold tracking-[0.2em] bg-stone-100 hover:bg-stone-200 text-stone-800 no-underline transition-all">
+                Ver Demo Mock
+            </Link>
+        </div>
     </div>
 );
 
