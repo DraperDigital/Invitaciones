@@ -4502,7 +4502,7 @@ END:VCALENDAR`;
             )}
 
             {/* Parallax de la plantilla (solo plantillas que lo declaran en lib/parallax.ts) */}
-            <ParallaxLayers theme={cfg.theme} />
+            <ParallaxLayers theme={planTier !== 'clasico' || isDemo || isAdminMode || event?.is_published === false ? cfg.theme : null} />
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">

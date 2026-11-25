@@ -602,21 +602,21 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop' },
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'graduacion', categories: ['boda', 'graduacion', 'cumpleanos', 'xv'], categoryLabel: 'Graduación / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
     { id: 'nube-de-miel', name: 'Nube de Miel', category: 'infantil', categories: ['infantil', 'baby_shower', 'bautizo'], categoryLabel: 'Baby Shower / Bautizo', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Premium', thumbnail: '/images/templates/nube-de-miel.jpg' },
-    { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-astronauta', icon: '🚀', plan: 'Premium', thumbnail: '/images/templates/astronauta.jpg' },
+    { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-astronauta', icon: '🚀', plan: 'Pro', thumbnail: '/images/templates/astronauta.jpg' },
     { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/gotico-suave.jpg' },
     { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Premium', thumbnail: '/images/templates/sirenita.jpg' },
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },
-    { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-globos3d', icon: '🎈', plan: 'Premium', thumbnail: '/images/templates/globos3d.jpg' },
-    { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-mariposas', icon: '🦋', plan: 'Premium', thumbnail: '/images/templates/mariposas.jpg' },
-    { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-perritos', icon: '🐶', plan: 'Premium', thumbnail: '/images/templates/perritos.jpg' },
-    { id: 'capibaras', name: 'Capibaras', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-capibaras', icon: '🐹', plan: 'Premium', thumbnail: '/images/templates/capibaras.jpg' },
-    { id: 'juguetes', name: 'Mis Primeros Juguetes', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-juguetes', icon: '🧸', plan: 'Premium', thumbnail: '/images/templates/juguetes.jpg' },
-    { id: 'convivio', name: 'Convivio Pastel', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-convivio', icon: '🎂', plan: 'Premium', thumbnail: '/images/templates/convivio.jpg' },
-    { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Premium', thumbnail: '/images/templates/arcoiris.jpg' },
-    { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-castillo', icon: '🏰', plan: 'Premium', thumbnail: '/images/templates/castillo.jpg' },
-    { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-unicornio', icon: '🦄', plan: 'Premium', thumbnail: '/images/templates/unicornio.jpg' },
+    { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-globos3d', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/globos3d.jpg' },
+    { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-mariposas', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/mariposas.jpg' },
+    { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-perritos', icon: '🐶', plan: 'Pro', thumbnail: '/images/templates/perritos.jpg' },
+    { id: 'capibaras', name: 'Capibaras', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-capibaras', icon: '🐹', plan: 'Pro', thumbnail: '/images/templates/capibaras.jpg' },
+    { id: 'juguetes', name: 'Mis Primeros Juguetes', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-juguetes', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/juguetes.jpg' },
+    { id: 'convivio', name: 'Convivio Pastel', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-convivio', icon: '🎂', plan: 'Pro', thumbnail: '/images/templates/convivio.jpg' },
+    { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/arcoiris.jpg' },
+    { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-castillo', icon: '🏰', plan: 'Pro', thumbnail: '/images/templates/castillo.jpg' },
+    { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-unicornio', icon: '🦄', plan: 'Pro', thumbnail: '/images/templates/unicornio.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo'], categoryLabel: 'Boda / Flat lay', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Cumpleaños', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Premium', thumbnail: '/images/templates/dinosaurios.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
@@ -702,6 +702,18 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;
     const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
     return (tpl?.plan || '').toLowerCase() === 'concierge';
+}
+
+/**
+ * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
+ * El plan Clásica no las incluye.
+ */
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d'];
+
+export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
+    if (!themeIdOrSlug) return false;
+    const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
+    return PRO_ONLY_TEMPLATES.includes(tpl?.id || themeIdOrSlug);
 }
 
 /** Página de venta del plan Concierge (destino de las plantillas Concierge) */

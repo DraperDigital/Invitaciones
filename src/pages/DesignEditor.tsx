@@ -9,7 +9,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate, isProOnlyTemplate } from '../lib/themePresets';
 import { STD_TEMPLATES, SAVE_THE_DATE_PRICE, DEFAULT_STD_TEMPLATE } from '../lib/saveTheDate';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
@@ -1126,6 +1126,10 @@ export default function DesignEditor() {
                                             key={item.id}
                                             onClick={() => {
                                                 // Plantillas Concierge: solo con plan Concierge
+                                                if (isProOnlyTemplate(item.id) && (config.plan || 'clasico').toLowerCase() === 'clasico') {
+                                                    toast.error('Esta plantilla tiene efectos animados y requiere plan Pro o superior.');
+                                                    return;
+                                                }
                                                 if (isConciergeTemplate(item.id) && (config.plan || '').toLowerCase() !== 'concierge') {
                                                     toast.error('Esta plantilla es exclusiva del plan Concierge. Escríbenos para activarlo.');
                                                     return;

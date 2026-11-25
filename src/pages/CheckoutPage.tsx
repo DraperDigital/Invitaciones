@@ -2,6 +2,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Check, ArrowLeft, ArrowRight, Heart, Crown, Loader2, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { isProOnlyTemplate } from '../lib/themePresets';
 import { useAuth } from '../context/AuthContext';
 import { trackEvent } from '../lib/analytics';
 
@@ -78,6 +79,13 @@ export default function CheckoutPage() {
         (async () => {
             const { data } = await supabase.from('events').select('title, theme_config').eq('id', eventId).maybeSingle();
             if (cancelled || !data) return;
+            // Las plantillas con parallax no entran en Clásica: se cobra como Pro
+            if (planId === 'clasico' && isProOnlyTemplate(data.theme_config?.theme)) {
+                const next = new URLSearchParams(searchParams);
+                next.set('plan', 'pro');
+                next.set('upgraded', 'template');
+                setSearchParams(next, { replace: true });
+            }
             const eventHost = data.title || data.theme_config?.title;
             if (eventHost) {
                 setFormData(prev => ({
@@ -87,7 +95,8 @@ export default function CheckoutPage() {
             }
         })();
         return () => { cancelled = true; };
-    }, [eventId]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [eventId, planId]);
 
     useEffect(() => {
         if (!user) {
