@@ -1,0 +1,147 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Piel compartida de los MÓDULOS para las plantillas infantiles pastel
+   (Unicornio, Castillo, Arcoíris). Cada plantilla define sus variables
+   --kp-* en su propio CSS; aquí solo se aplican. No cambia la estructura.
+   Las ilustraciones de sección van en ::before y se mueven con el parallax
+   (variable --py-art, ver src/lib/parallax.ts).
+   ────────────────────────────────────────────────────────────────────── */
+
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) {
+  background: var(--kp-bg) !important;
+  color: var(--kp-ink) !important;
+  font-family: var(--kp-text) !important;
+  overflow-x: hidden;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-content section { background: var(--kp-bg) !important; position: relative; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-content section:is(#message, #dress_code, #gallery, #hotels) { background: var(--kp-alt) !important; }
+
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .font-serif { font-family: var(--kp-title-font) !important; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .font-sans { font-family: var(--kp-text) !important; }
+
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) {
+  font-family: var(--kp-title-font) !important;
+  font-weight: var(--kp-title-weight, 700) !important;
+  font-style: normal !important;
+  font-size: var(--kp-title-size, clamp(2.2rem, 9.5vw, 2.8rem)) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--kp-title) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before {
+  content: '';
+  display: block;
+  width: 34px; height: 34px;
+  margin: 0 auto 8px;
+  background: var(--kp-title-deco) center / contain no-repeat;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) :is(section:not(#hero) h4, section:not(#hero) [class*="text-2xl"][class*="uppercase"]) {
+  font-family: var(--kp-text) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: .01em !important;
+  color: var(--kp-ink) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section:not(#hero) p {
+  font-family: var(--kp-text) !important;
+  color: var(--kp-soft) !important;
+  line-height: 1.65;
+}
+
+/* Tarjetas */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section [class*="bg-[var(--card-bg)]"] {
+  background: #ffffff !important;
+  border: 2px solid var(--kp-card-border) !important;
+  border-radius: 32px !important;
+  box-shadow: 0 18px 40px -26px var(--kp-shadow) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section [class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"] {
+  border: 0 !important; box-shadow: none !important; border-radius: 22px !important;
+}
+
+/* Íconos */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section:not(#hero):not(.env-stage) .rounded-full:not(a):not(button) { background: var(--kp-icon-bg) !important; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section:not(#hero):not(.env-stage) :is(.rounded-full:not(a):not(button) svg, .invitation-locations-wrapper svg, .invitation-content svg) { color: var(--kp-icon) !important; stroke: var(--kp-icon) !important; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .text-accent { color: var(--kp-accent) !important; }
+
+/* Botones */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) {
+  background: var(--kp-btn) !important;
+  color: var(--kp-btn-ink) !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  font-family: var(--kp-text) !important;
+  font-weight: 700 !important;
+  letter-spacing: .03em !important;
+  box-shadow: 0 10px 20px -12px var(--kp-shadow) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section :is(input, textarea, select) {
+  border-radius: 16px !important;
+  border: 1px solid var(--kp-card-border) !important;
+  background: #ffffff !important;
+  font-family: var(--kp-text) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) #gallery img {
+  border: 7px solid #ffffff;
+  border-radius: 28px !important;
+  box-shadow: 0 16px 30px -18px var(--kp-shadow);
+}
+
+/* Ilustraciones de sección (con parallax) */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) #message .relative.inline-block { display: none !important; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) :is(#message, #location, #gifts) > div::before,
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section#rsvp > div::before {
+  content: '';
+  display: block;
+  margin: 0 auto 14px;
+  background: center / contain no-repeat;
+  transform: translate3d(0, var(--py-art, 0px), 0);
+  animation: kp-float 6s ease-in-out infinite;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) #message > div::before  { width: var(--kp-art-message-w, 150px); height: var(--kp-art-message-h, 130px); background-image: var(--kp-art-message); }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) #location > div::before { width: var(--kp-art-location-w, 170px); height: var(--kp-art-location-h, 140px); background-image: var(--kp-art-location); }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) #gifts > div::before    { width: var(--kp-art-gifts-w, 140px); height: var(--kp-art-gifts-h, 140px); background-image: var(--kp-art-gifts); }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) section#rsvp > div::before { width: var(--kp-art-rsvp-w, 180px); height: var(--kp-art-rsvp-h, 120px); background-image: var(--kp-art-rsvp); }
+
+/* Confirmación */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-content section#rsvp {
+  background: var(--kp-rsvp-bg) !important;
+  background-position: center calc(50% + var(--py-bg, 0px)) !important;
+  border-radius: 40px 40px 0 0;
+}
+
+/* Pie */
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing {
+  background: var(--kp-closing-bg) !important;
+  background-position: center calc(50% + var(--py-bg, 0px)) !important;
+  position: relative;
+  padding-top: 200px !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing::before {
+  content: '';
+  position: absolute;
+  top: 24px; left: 50%;
+  width: 190px; height: 160px; margin-left: -95px;
+  background: var(--kp-art-closing) center / contain no-repeat;
+  transform: translate3d(0, var(--py-art, 0px), 0);
+  animation: kp-float 5s ease-in-out infinite;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing .invitation-closing-title {
+  font-family: var(--kp-title-font) !important;
+  font-style: normal !important;
+  font-weight: var(--kp-title-weight, 700) !important;
+  letter-spacing: 0 !important;
+  color: var(--kp-closing-title) !important;
+}
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing p { color: var(--kp-closing-text, var(--kp-soft)) !important; }
+:is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing-ornament span:nth-child(2) { background: var(--kp-accent) !important; opacity: 1 !important; }
+
+@keyframes kp-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes kp-twinkle { 0%, 100% { scale: .85; opacity: .7; } 50% { scale: 1.1; opacity: 1; } }
+@keyframes kp-sway { 0%, 100% { rotate: -3deg; } 50% { rotate: 3deg; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.theme-unicornio, .theme-castillo, .theme-arcoiris) :is(#message, #location, #gifts, #rsvp) > div::before,
+  :is(.theme-unicornio, .theme-castillo, .theme-arcoiris) .invitation-closing::before,
+  :is(.un-hero, .cs-hero, .ar-hero) * { animation: none !important; }
+}
