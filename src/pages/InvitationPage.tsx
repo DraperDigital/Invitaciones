@@ -13,6 +13,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY, getDefaultClosingMessage, isConciergePlan } from '../lib/sectionRegistry';
 import VideoCoverHero from '../components/concierge/VideoCoverHero';
+import ParallaxLayers from '../components/ParallaxLayers';
 import VideoEnvelopeIntro from '../components/concierge/VideoEnvelopeIntro';
 import type { SectionId } from '../lib/sectionRegistry';
 import { trackEvent } from '../lib/analytics';
@@ -4420,6 +4421,9 @@ END:VCALENDAR`;
                     )}
                 </>
             )}
+
+            {/* Parallax de la plantilla (solo plantillas que lo declaran en lib/parallax.ts) */}
+            <ParallaxLayers theme={cfg.theme} />
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
