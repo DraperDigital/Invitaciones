@@ -37,6 +37,7 @@ import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
+import KidsLayeredHero from '../components/themes/KidsLayeredHero';
 import ArcoirisHero from '../components/themes/ArcoirisHero';
 import CastilloHero from '../components/themes/CastilloHero';
 import UnicornioHero from '../components/themes/UnicornioHero';
@@ -311,6 +312,48 @@ export default function InvitationPage() {
             borderColor: '#EADFF9', cardBorder: '#EADFF9',
             accentOverride: '#8F62D6', fontPreset: 'divertida',
             heroRadius: '32px', cardRadius: '32px',
+        },
+        'convivio': {
+            sectionBg: '#FFFAF3', sectionBgAlt: '#FDF0F4', cardBg: '#FFFFFF',
+            textPrimary: '#5C4A52', textSecondary: '#8B7880',
+            borderColor: '#F6DCE6', cardBorder: '#F6DCE6',
+            accentOverride: '#EF7FA6', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'juguetes': {
+            sectionBg: '#FBF6EC', sectionBgAlt: '#EAF3FC', cardBg: '#FFFFFF',
+            textPrimary: '#2B3A52', textSecondary: '#5C6B80',
+            borderColor: '#D7E6F6', cardBorder: '#D7E6F6',
+            accentOverride: '#E5483E', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'capibaras': {
+            sectionBg: '#FDF6F4', sectionBgAlt: '#FBEEEE', cardBg: '#FFFFFF',
+            textPrimary: '#5B4537', textSecondary: '#8A7263',
+            borderColor: '#F2DFD6', cardBorder: '#F2DFD6',
+            accentOverride: '#C9895E', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'perritos': {
+            sectionBg: '#FFFBEF', sectionBgAlt: '#FFF6DC', cardBg: '#FFFFFF',
+            textPrimary: '#5A4230', textSecondary: '#87715E',
+            borderColor: '#F1E2B9', cardBorder: '#F1E2B9',
+            accentOverride: '#D39B2A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'mariposas': {
+            sectionBg: '#FDF9FC', sectionBgAlt: '#F8EEF7', cardBg: '#FFFFFF',
+            textPrimary: '#5C4468', textSecondary: '#87739A',
+            borderColor: '#F0E0F2', cardBorder: '#F0E0F2',
+            accentOverride: '#B97AD6', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'globos3d': {
+            sectionBg: '#F7F9FD', sectionBgAlt: '#EEF4FB', cardBg: '#FFFFFF',
+            textPrimary: '#44506A', textSecondary: '#73809A',
+            borderColor: '#DFE8F6', cardBorder: '#DFE8F6',
+            accentOverride: '#EC96B4', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -2805,6 +2848,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'arcoiris') {
             return <ArcoirisHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
+            return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {
             return <AnturioVinoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;

@@ -238,6 +238,60 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto del festejado; se muestra redonda con borde blanco.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'convivio': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'juguetes': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en el Marco',
+        heroHelpText: 'Foto del festejado; se muestra en cuadro redondeado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'capibaras': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'perritos': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'mariposas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la festejada; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'globos3d': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
