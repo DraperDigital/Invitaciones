@@ -221,11 +221,11 @@
   },
   {
     "id": "kids-farm",
-    "name": "Granja Festiva",
+    "name": "Zoológico Aventura",
     "category": "infantil",
-    "categoryLabel": "Infantil / Granja",
-    "slug": "cumpleanos-granja-zair",
-    "icon": "🚜",
+    "categoryLabel": "Infantil / Zoológico",
+    "slug": "cumpleanos-zoologico-zair",
+    "icon": "🦁",
     "filename": "21_kids-farm.jpg",
     "fullPath": "C:\\Users\\drape\\.gemini\\antigravity\\brain\\0c2fbf60-b927-42cb-ba82-061eef5b2767\\screenshots_plantillas\\21_kids-farm.jpg",
     "success": true

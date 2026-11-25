@@ -1056,7 +1056,7 @@ export default function DesignEditor() {
                             { id: 'passport', label: 'Pase de Abordaje', desc: 'Temática de pasaporte y viaje para bodas destino y escapadas', icon: '✈️' },
                             { id: 'polaroid-vintage', label: 'Retro Fotográfico', desc: 'Fotografías de estilo instantáneo y nostálgico con marcos sepia', icon: '📸' },
                             { id: 'whimsical-kids', label: 'Fantasía Infantil', desc: 'Colores alegres, pasteles brillantes e ilustraciones para peques', icon: '🎈' },
-                            { id: 'kids-farm', label: 'Granja Festiva', desc: 'Aventura campestre con cielo azul, granero, animalitos tiernos y cercas de madera', icon: '🚜' },
+                            { id: 'kids-farm', label: 'Zoológico Aventura', desc: 'Expedición salvaje con león, jirafa, monito travieso, hojas de la selva y estilo safari para peques', icon: '🦁' },
                             { id: 'gamer-party', label: 'Gamer Party', desc: 'Nivel arcade retro con control neón, luces RGB, fuentes 8-bit y atmósfera de videojuego', icon: '🎮' },
                             { id: 'pixel-craft', label: 'Mundo Píxel (Minecraft)', desc: 'Aventura de bloques cúbicos con Creeper, pastel con velas, banderines y estética voxel', icon: '🟩' },
                             { id: 'rainbow-pop', label: 'Rainbow Pop', desc: 'Letras burbuja multicolor, confetti pastel, tarjetas festivas con bordes celestes', icon: '🌈' },

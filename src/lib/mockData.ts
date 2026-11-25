@@ -2257,16 +2257,16 @@ export const MOCK_EVENTS: Event[] = [
         }
     },
     {
-        id: 'mock-granja-zair',
-        slug: 'cumpleanos-granja-zair',
+        id: 'mock-zoologico-zair',
+        slug: 'cumpleanos-zoologico-zair',
         user_id: 'mock-user-1',
-        title: 'Mi Cumpleaños ZAIR',
+        title: '¡Aventura en el Zoológico! ZAIR',
         event_type: 'birthday',
         date_time: '2026-02-10T15:00:00Z',
-        venue_name: 'Salón Infantil Manitas Felices',
-        venue_address: 'A lado de Smart Trampoline, Ciudad de México',
-        maps_link: 'https://maps.google.com/?q=Salon+Infantil+Manitas+Felices',
-        dress_code: 'Casual / Ropa cómoda para jugar',
+        venue_name: 'Salón Safari Aventura Kids',
+        venue_address: 'Av. Las Palmas #240, Col. San Jerónimo, Ciudad de México',
+        maps_link: 'https://maps.google.com/?q=Salon+Safari+Aventura+Kids',
+        dress_code: 'Exploradores Safari / Ropa cómoda para jugar',
         is_published: true,
         plan: 'clasico',
         rsvp_deadline: createMockDate(20, 23, 59),
@@ -2278,22 +2278,22 @@ export const MOCK_EVENTS: Event[] = [
             age: 5,
             isPremium: true,
             hero_image_url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
-            message: '¡Hola! 🌤️🌈 Estoy muy emocionado porque ¡voy a cumplir 5 años! y quiero celebrar este día tan especial contigo, así que ven a jugar y divertirnos.',
+            message: '¡Prepárense para una aventura salvaje! 🦁🦒 Estoy muy emocionado porque voy a cumplir 5 años y quiero celebrar mi gran fiesta del zoológico contigo. ¡Ven a explorar, jugar y rugir de diversión con todos los animalitos!',
             reception: {
-                name: 'Salón Infantil Manitas Felices',
-                location: 'A lado de Smart Trampoline',
+                name: 'Salón Safari Aventura Kids',
+                location: 'Área de Expedición y Jardín Salvaje',
                 time: '15:00'
             },
             schedule: [
-                { time: '15:00', event: 'Llegada y Juegos en Trampolines', location: 'Área de Juegos' },
-                { time: '16:30', event: 'Show de Granja y Concursos', location: 'Salón Principal' },
-                { time: '17:30', event: '¡La Gran Piñata! 🪅', location: 'Patio de Festejos' },
-                { time: '18:15', event: 'Pastel y Mañanitas 🎂', location: 'Mesa Principal' }
+                { time: '15:00', event: 'Llegada de Exploradores y Bienvenida al Zoo 🦁', location: 'Puerta Principal' },
+                { time: '16:15', event: 'Safari de Juegos, Búsqueda del Tesoro y Concursos 🐾', location: 'Jardín Salvaje' },
+                { time: '17:30', event: '¡La Gran Piñata de la Selva! 🪅', location: 'Patio de Festejos' },
+                { time: '18:15', event: 'Pastel Safari y Mañanitas con Rugidos 🎂🦒', location: 'Mesa Principal' }
             ],
             gift_table: {
                 enabled: true,
-                description: 'Si quieres consentir-meeee aquí abajo te dejo mi mesita de regalos',
-                liverpool_code: 'GRANJA-ZAIR-5',
+                description: 'Si deseas consentirme con un detalle para mi expedición, aquí está mi mesa de regalos:',
+                liverpool_code: 'ZOO-ZAIR-5',
                 amazon_url: 'https://amazon.com.mx'
             },
             photoGallery: {
@@ -2301,15 +2301,71 @@ export const MOCK_EVENTS: Event[] = [
                 uploadEnabled: false,
                 images: [
                     'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
-                    'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80',
                     'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'
                 ]
             },
             countdown: true,
             typography_preset: 'divertida',
-            primary_color: '#DC2626',
+            primary_color: '#15803D',
             accent_color: '#D97706',
-            button_color: '#DC2626'
+            button_color: '#EA580C'
+        }
+    },
+    {
+        id: 'mock-granja-zair',
+        slug: 'cumpleanos-granja-zair',
+        user_id: 'mock-user-1',
+        title: '¡Aventura en el Zoológico! ZAIR',
+        event_type: 'birthday',
+        date_time: '2026-02-10T15:00:00Z',
+        venue_name: 'Salón Safari Aventura Kids',
+        venue_address: 'Av. Las Palmas #240, Col. San Jerónimo, Ciudad de México',
+        maps_link: 'https://maps.google.com/?q=Salon+Safari+Aventura+Kids',
+        dress_code: 'Exploradores Safari / Ropa cómoda para jugar',
+        is_published: true,
+        plan: 'clasico',
+        rsvp_deadline: createMockDate(20, 23, 59),
+        created_at: new Date().toISOString(),
+        theme_config: {
+            theme: 'kids-farm',
+            child_name: 'ZAIR',
+            turning_age: 5,
+            age: 5,
+            isPremium: true,
+            hero_image_url: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
+            message: '¡Prepárense para una aventura salvaje! 🦁🦒 Estoy muy emocionado porque voy a cumplir 5 años y quiero celebrar mi gran fiesta del zoológico contigo. ¡Ven a explorar, jugar y rugir de diversión con todos los animalitos!',
+            reception: {
+                name: 'Salón Safari Aventura Kids',
+                location: 'Área de Expedición y Jardín Salvaje',
+                time: '15:00'
+            },
+            schedule: [
+                { time: '15:00', event: 'Llegada de Exploradores y Bienvenida al Zoo 🦁', location: 'Puerta Principal' },
+                { time: '16:15', event: 'Safari de Juegos, Búsqueda del Tesoro y Concursos 🐾', location: 'Jardín Salvaje' },
+                { time: '17:30', event: '¡La Gran Piñata de la Selva! 🪅', location: 'Patio de Festejos' },
+                { time: '18:15', event: 'Pastel Safari y Mañanitas con Rugidos 🎂🦒', location: 'Mesa Principal' }
+            ],
+            gift_table: {
+                enabled: true,
+                description: 'Si deseas consentirme con un detalle para mi expedición, aquí está mi mesa de regalos:',
+                liverpool_code: 'ZOO-ZAIR-5',
+                amazon_url: 'https://amazon.com.mx'
+            },
+            photoGallery: {
+                enabled: true,
+                uploadEnabled: false,
+                images: [
+                    'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80'
+                ]
+            },
+            countdown: true,
+            typography_preset: 'divertida',
+            primary_color: '#15803D',
+            accent_color: '#D97706',
+            button_color: '#EA580C'
         }
     },
     {

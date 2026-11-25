@@ -320,10 +320,10 @@ export default function InvitationPage() {
             heroRadius: '16px', cardRadius: '24px',
         },
         'kids-farm': {
-            sectionBg: '#F0F9FF', sectionBgAlt: '#ECFDF5', cardBg: '#FFFFFF',
+            sectionBg: '#F0FDF4', sectionBgAlt: '#FEFCE8', cardBg: '#FFFFFF',
             textPrimary: '#1E293B', textSecondary: '#475569',
-            borderColor: '#BAE6FD', cardBorder: '#F59E0B66',
-            accentOverride: '#D97706', fontPreset: 'divertida',
+            borderColor: '#BBF7D0', cardBorder: '#F59E0B66',
+            accentOverride: '#15803D', fontPreset: 'divertida',
             heroRadius: '24px', cardRadius: '28px',
         },
         'gamer-party': {
@@ -1685,7 +1685,7 @@ END:VCALENDAR`;
             letter-spacing: 0.05em;
         }
     ` : isKidsFarmTheme ? `
-        /* ── Granja Festiva (kids-farm) overrides ── */
+        /* ── Zoológico Aventura (kids-farm) overrides ── */
         .invitation-content h1,
         .invitation-content h2,
         .invitation-content h3,
@@ -1712,35 +1712,35 @@ END:VCALENDAR`;
             border-radius: 2rem !important;
             border-width: 3px !important;
             border-color: #FEF08A !important;
-            box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+            box-shadow: 0 10px 25px -5px rgba(21, 128, 61, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
         }
-        /* Wooden fence repeating accent divider between sections */
+        /* Safari wooden timber accent divider between sections */
         .invitation-content section::after {
             content: '';
             display: block;
             width: 100%;
-            height: 24px;
+            height: 20px;
             margin-top: 2rem;
             background-image: repeating-linear-gradient(90deg, #D97706 0, #D97706 14px, #B45309 14px, #B45309 18px);
-            border-radius: 4px;
+            border-radius: 6px;
             opacity: 0.85;
             box-shadow: 0 2px 4px rgba(0,0,0,0.08);
         }
         .invitation-content #footer::after {
             display: none !important;
         }
-        /* Buttons with warm farm styling */
+        /* Buttons with warm safari styling */
         .invitation-content button[style*="background"],
         .invitation-content a > button[style*="background"] {
             font-family: 'Fredoka', 'Quicksand', sans-serif !important;
             font-weight: 700 !important;
             border-radius: 9999px !important;
             border: 2px solid #FFF !important;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
+            box-shadow: 0 4px 12px rgba(21, 128, 61, 0.25) !important;
         }
-        /* RSVP Section in cheerful barn red */
+        /* RSVP Section in cheerful safari green */
         .invitation-content #rsvp {
-            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+            background: linear-gradient(135deg, #15803D 0%, #166534 100%) !important;
             border-radius: 2.5rem !important;
             color: #FFFFFF !important;
             border: 4px solid #FEF08A !important;
@@ -2584,7 +2584,7 @@ END:VCALENDAR`;
         'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
         'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
         'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'cumpleanos-granja-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'cumple-lucas-rainbow-pop', 'bautizo-victoria', 'bautizo-camila',
+        'cumple-emilia', 'cumpleanos-granja-zair', 'cumpleanos-zoologico-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'cumple-lucas-rainbow-pop', 'bautizo-victoria', 'bautizo-camila',
         'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
         'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
     ];

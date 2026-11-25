@@ -225,17 +225,17 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'divertida'
     },
     'kids-farm': {
-        label: 'Granja Festiva',
-        desc: 'Aventura campestre con cielo azul, granero, animalitos tiernos y cercas de madera',
-        icon: '🚜',
-        primaryColor: '#B91C1C',
+        label: 'Zoológico Aventura',
+        desc: 'Expedición salvaje con león, jirafa, monito travieso, hojas de la selva y estilo safari para peques',
+        icon: '🦁',
+        primaryColor: '#15803D',
         accentColor: '#D97706',
         cardBgColor: '#FFFFFF',
-        sectionBgColor: '#F0F9FF',
+        sectionBgColor: '#F0FDF4',
         textPrimary: '#1E293B',
-        textSecondary: '#64748B',
+        textSecondary: '#475569',
         heroTextColor: '#0F172A',
-        heroBgColor: '#BAE6FD',
+        heroBgColor: '#DCFCE7',
         typographyPreset: 'divertida'
     },
     'gamer-party': {
@@ -442,7 +442,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
     // ── Plantillas Infantiles Exclusivas ──
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Bautizo', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=800&auto=format&fit=crop' },
-    { id: 'kids-farm', name: 'Granja Festiva', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Granja', slug: 'cumpleanos-granja-zair', icon: '🚜', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=800&auto=format&fit=crop' },
+    { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
     { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower'], categoryLabel: 'Infantil / Color Pop', slug: 'cumple-lucas-rainbow-pop', icon: '🌈', plan: 'Premium', thumbnail: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=800&auto=format&fit=crop' },

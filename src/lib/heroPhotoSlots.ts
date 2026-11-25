@@ -234,8 +234,8 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         photoCount: 1,
         hasDecorativeImage: false,
         isCircular: false,
-        heroLabel: 'Foto Granja Festiva',
-        heroHelpText: 'Foto del cumpleañero en el granero campestre.',
+        heroLabel: 'Foto Zoológico Aventura',
+        heroHelpText: 'Foto del festejado en su expedición de safari.',
         fields: ['hero_image_url', 'heroImage']
     },
     'gamer-party': {
