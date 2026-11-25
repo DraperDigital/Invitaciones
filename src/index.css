@@ -262,3 +262,6 @@
 .invitation-closing .invitation-closing-sub {
   line-height: 1.9;
 }
+
+/* Parallax por plantilla (ver src/lib/parallax.ts y ParallaxLayers.tsx) */
+[data-parallax] { transform: translate3d(0, var(--py, 0px), 0); will-change: transform; }

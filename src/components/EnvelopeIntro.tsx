@@ -291,6 +291,9 @@ export default function EnvelopeIntro({
         'gotico-suave': '#9E2140',     // carmesí terciopelo
         'astronauta': '#F2A65A',        // naranja cohete
         'nube-de-miel': '#C79A3B',     // miel dorada
+        'unicornio': '#C9A3E0',
+        'castillo': '#D4A640',
+        'arcoiris': '#F27AA8',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

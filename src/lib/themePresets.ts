@@ -378,6 +378,48 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F3F0EA',
         typographyPreset: 'elegante'
     },
+    'unicornio': {
+        label: 'Unicornio',
+        desc: 'Cumpleaños de niña en acuarela pastel: unicornio, pastel arcoíris y estrellas, con parallax',
+        icon: '🦄',
+        primaryColor: '#B58BD1',
+        accentColor: '#E98FB3',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FDFBFB',
+        textPrimary: '#5E4A72',
+        textSecondary: '#8A7A9C',
+        heroTextColor: '#A97CC4',
+        heroBgColor: '#FDFBFB',
+        typographyPreset: 'divertida'
+    },
+    'castillo': {
+        label: 'Castillo de Princesa',
+        desc: 'Cumpleaños de princesa: castillo rosa, marco dorado, corona y carroza, con parallax',
+        icon: '🏰',
+        primaryColor: '#8A5BC4',
+        accentColor: '#D4A640',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFF8FB',
+        textPrimary: '#5B3D82',
+        textSecondary: '#806A9C',
+        heroTextColor: '#E04F96',
+        heroBgColor: '#E9D6F0',
+        typographyPreset: 'romantica'
+    },
+    'arcoiris': {
+        label: 'Arcoíris Kawaii',
+        desc: 'Cumpleaños kawaii: arcoíris acolchado, nubes con carita, globos y flores, con parallax',
+        icon: '🌈',
+        primaryColor: '#8F62D6',
+        accentColor: '#F27AA8',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF6FF',
+        textPrimary: '#5A4880',
+        textSecondary: '#84759F',
+        heroTextColor: '#8F62D6',
+        heroBgColor: '#ECE4FB',
+        typographyPreset: 'divertida'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -487,10 +529,13 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'cumpleanos', categories: ['cumpleanos', 'graduacion'], categoryLabel: 'Cumpleaños / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=800&auto=format&fit=crop' },
     { id: 'luxury-gold', name: 'Lujo Metálico', category: 'cumpleanos', categories: ['cumpleanos', 'boda', 'corporate'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop' },
 
-    // ── Cumpleaños Infantiles / Fiestas Infantiles ──
+    // ── Cumpleaños Infantiles / Fiestas Infantiles (Todos a partir de Plan Pro) ──
     { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dinosaurios', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Pro', thumbnail: '/images/templates/dinosaurios.jpg' },
     { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Sirenita', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Pro', thumbnail: '/images/templates/sirenita.jpg' },
     { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Astronauta', slug: 'cumple-astronauta', icon: '🚀', plan: 'Pro', thumbnail: '/images/templates/astronauta.jpg' },
+    { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Unicornio', slug: 'cumple-unicornio', icon: '🦄', plan: 'Pro', thumbnail: '/images/templates/unicornio.jpg' },
+    { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Castillo', slug: 'cumple-castillo', icon: '🏰', plan: 'Pro', thumbnail: '/images/templates/castillo.jpg' },
+    { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Arcoíris', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/arcoiris.jpg' },
     { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
@@ -532,7 +577,8 @@ export function normalizeEventCategory(eventTypeOrCategory?: string, currentThem
     if (['birthday', 'cumpleanos', 'cumple'].includes(lower)) {
         if (currentTheme && [
             'whimsical-kids', 'kids-farm', 'gamer-party', 'pixel-craft', 
-            'rainbow-pop', 'astronauta', 'sirenita', 'dinosaurios', 'nube-de-miel'
+            'rainbow-pop', 'astronauta', 'sirenita', 'dinosaurios', 'nube-de-miel',
+            'unicornio', 'castillo', 'arcoiris'
         ].includes(currentTheme)) {
             return 'infantil';
         }

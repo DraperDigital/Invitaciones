@@ -211,6 +211,33 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto vertical enmarcada bajo los nombres y la fecha.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'unicornio': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la festejada; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'castillo': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en el Marco Dorado',
+        heroHelpText: 'Foto de la festejada; se muestra en óvalo con marco dorado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'arcoiris': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda con borde blanco.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
