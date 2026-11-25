@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES, isConciergeTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
@@ -64,12 +64,13 @@ const INITIAL_DATA: WizardData = {
 export const EVENT_TYPE_OPTIONS = [
     { id: 'wedding', label: 'Boda', icon: Heart, color: 'text-rose-500 bg-rose-50 border-rose-100', defaultTheme: 'classic' },
     { id: 'xv', label: 'XV Años', icon: Crown, color: 'text-purple-500 bg-purple-50 border-purple-100', defaultTheme: 'romantic-botanical' },
+    { id: 'infantil', label: 'Cumpleaños Infantil', icon: Sparkles, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'dinosaurios' },
+    { id: 'birthday', label: 'Cumpleaños', icon: Cake, color: 'text-pink-500 bg-pink-50 border-pink-100', defaultTheme: 'neon-glow' },
     { id: 'bautizo', label: 'Bautizo', icon: Droplet, color: 'text-sky-500 bg-sky-50 border-sky-100', defaultTheme: 'whimsical-kids' },
-    { id: 'primera_comunion', label: 'Primera Comunión', icon: Wine, color: 'text-emerald-500 bg-emerald-50 border-emerald-100', defaultTheme: 'classic' },
-    { id: 'confirmacion', label: 'Confirmación', icon: Church, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'classic' },
-    { id: 'baby_shower', label: 'Baby Shower', icon: Baby, color: 'text-pink-500 bg-pink-50 border-pink-100', defaultTheme: 'whimsical-kids' },
+    { id: 'baby_shower', label: 'Baby Shower', icon: Baby, color: 'text-pink-500 bg-pink-50 border-pink-100', defaultTheme: 'nube-de-miel' },
     { id: 'gender_reveal', label: 'Gender Reveal', icon: PartyPopper, color: 'text-indigo-500 bg-indigo-50 border-indigo-100', defaultTheme: 'reveal-duo' },
-    { id: 'birthday', label: 'Cumpleaños', icon: Cake, color: 'text-amber-500 bg-amber-50 border-amber-100', defaultTheme: 'neon-glow' },
+    { id: 'primera_comunion', label: 'Primera Comunión', icon: Wine, color: 'text-emerald-500 bg-emerald-50 border-emerald-100', defaultTheme: 'lirio-vainilla' },
+    { id: 'confirmacion', label: 'Confirmación', icon: Church, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
     { id: 'graduacion', label: 'Graduación', icon: GraduationCap, color: 'text-blue-500 bg-blue-50 border-blue-100', defaultTheme: 'polaroid-vintage' },
     { id: 'corporate', label: 'Corporativo', icon: Building2, color: 'text-slate-600 bg-slate-100 border-slate-200', defaultTheme: 'split-screen' },
     { id: 'other', label: 'Otro', icon: Calendar, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
@@ -77,6 +78,15 @@ export const EVENT_TYPE_OPTIONS = [
 
 // ── Presets por tipo de evento ────────────────────────────────────────────
 const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
+    infantil: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      true,
+        showItinerary:    false,
+        showGallery:      false,
+        showGifts:        false,
+    },
     xv: {
         showDetails:      true,
         showItinerary:    true,
@@ -673,36 +683,12 @@ export default function EventWizard() {
                                     const categoryTemplates = getTemplatesForCategory(effectiveCategory, data.theme);
                                     const categoryLabel = EVENT_CATEGORY_LABELS[effectiveCategory] || 'Evento';
 
-                                    const allTemplates = [
-                                        { id: 'classic', name: 'Clásica Atemporal', category: 'Boda / Elegante', image: 'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'Boda / Lujo', image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'split-screen', name: 'Vanguardia Dividida', category: 'Boda / Vanguardia', image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'magazine', name: 'Estilo Editorial', category: 'XV / Gala', image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'XV / Primavera', image: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'floral-symmetry', name: 'Simetría Floral', category: 'Boda / Jardín', image: 'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'neon-glow', name: 'Fiesta Neón', category: 'Cumpleaños / Party', image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'luxury-gold', name: 'Lujo Metálico', category: 'Gala / Aniversario', image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'passport', name: 'Pase de Abordaje', category: 'Boda Destino', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'Graduación / Retro', image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'Infantil / Bautizo', image: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'kids-farm', name: 'Zoológico Aventura', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'gamer-party', name: 'Gamer Party', category: 'Cumpleaños / Gamer', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'pixel-craft', name: 'Mundo Píxel', category: 'Cumpleaños / Minecraft', image: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'Cumpleaños / Infantil', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'astronauta', name: 'Astronauta', category: 'Infantil / Cumpleaños', image: '/images/templates/astronauta.jpg' },
-                                        { id: 'nube-de-miel', name: 'Nube de Miel', category: 'Baby Shower / Bautizo', image: '/images/templates/nube-de-miel.jpg' },
-                                        { id: 'sirenita', name: 'Sirenita', category: 'Infantil / Cumpleaños', image: '/images/templates/sirenita.jpg' },
-                                        { id: 'gotico-suave', name: 'Gótico Suave', category: 'Boda / Flat lay', image: '/images/templates/gotico-suave.jpg' },
-                                        { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'Boda / Editorial', image: '/images/templates/lacre-rojo.jpg' },
-                                        { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'Boda / Lujo', image: '/images/templates/bodegon-nocturno.jpg' },
-                                        { id: 'anturio-vino', name: 'Anturio Vino', category: 'Boda / Flat lay', image: '/images/templates/anturio-vino.jpg' },
-                                        { id: 'dinosaurios', name: 'Dinosaurios', category: 'Infantil / Cumpleaños', image: '/images/templates/dinosaurios.jpg' },
-                                        { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'Boda / Flat lay', image: '/images/templates/lirio-vainilla.jpg' },
-                                        { id: 'collage', name: 'Collage Elegante', category: 'Boda / Álbum', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'Gender Reveal / B&W', image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=400&auto=format&fit=crop' },
-                                        { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'Gender Reveal / Dúo', image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=400&auto=format&fit=crop' }
-                                    ];
+                                    const allTemplates = CANONICAL_TEMPLATES.map(t => ({
+                                        id: t.id,
+                                        name: t.name,
+                                        category: t.categoryLabel,
+                                        image: t.thumbnail
+                                    }));
 
                                     const displayedTemplates = wizardTemplateFilter === 'all'
                                         ? allTemplates
@@ -793,7 +779,7 @@ export default function EventWizard() {
                         </div>
                         
                         {/* Sección Misa / Ceremonia (solo para eventos religiosos/formales) */}
-                        {!['gender_reveal', 'birthday', 'corporate'].includes(data.event_type) && (
+                        {!['gender_reveal', 'birthday', 'infantil', 'corporate'].includes(data.event_type) && (
                             <div className="p-5 md:p-8 border border-stone-200 bg-stone-50/60 rounded-[1.5rem] md:rounded-[2rem] space-y-6">
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-xs font-black uppercase tracking-[0.25em] text-[#DF3B94] flex items-center gap-2">
