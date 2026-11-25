@@ -157,6 +157,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Fotografía tamaño pasaporte de los anfitriones.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'astronauta': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en la Ventanilla',
+        heroHelpText: 'Foto del festejado; se muestra redonda, como ventanilla de nave.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'nube-de-miel': {
         type: 'single',
         photoCount: 1,

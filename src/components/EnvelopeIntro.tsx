@@ -288,6 +288,7 @@ export default function EnvelopeIntro({
         'bodegon-nocturno': '#C7A85A', // oro envejecido
         'lacre-rojo': '#8A1A28',       // lacre rojo imperial
         'gotico-suave': '#9E2140',     // carmesí terciopelo
+        'astronauta': '#F2A65A',        // naranja cohete
         'nube-de-miel': '#C79A3B',     // miel dorada
         'anturio-vino': '#7D2536',     // vino tinto noble
         'lirio-vainilla': '#7F9446',   // salvia botánico
