@@ -34,6 +34,7 @@ import KidsFarmHero from '../components/themes/KidsFarmHero';
 import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
+import DinosauriosHero from '../components/themes/DinosauriosHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
 import BodegonNocturnoHero from '../components/themes/BodegonNocturnoHero';
 import LacreRojoHero from '../components/themes/LacreRojoHero';
@@ -276,6 +277,13 @@ export default function InvitationPage() {
             borderColor: '#CDBFAE', cardBorder: '#5C1A2622',
             accentOverride: '#5C1A26', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '2px',
+        },
+        'dinosaurios': {
+            sectionBg: '#FBF8F1', sectionBgAlt: '#EEF4EC', cardBg: '#FFFFFF',
+            textPrimary: '#5B544B', textSecondary: '#857C70',
+            borderColor: '#DFE9DC', cardBorder: '#DFE9DC',
+            accentOverride: '#E2A845', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
         },
         'lirio-vainilla': {
             sectionBg: '#DCDCD2', sectionBgAlt: '#E6E5DD', cardBg: '#FBFAF6',
@@ -2744,6 +2752,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'anturio-vino') {
             return <AnturioVinoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'dinosaurios') {
+            return <DinosauriosHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'lirio-vainilla') {
             return <LirioVainillaHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;

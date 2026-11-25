@@ -202,6 +202,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto enmarcada en el arco vino con filo dorado.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'dinosaurios': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en el Huevo',
+        heroHelpText: 'Foto del festejado; se muestra con forma de huevo de dinosaurio.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'lirio-vainilla': {
         type: 'single',
         photoCount: 1,
