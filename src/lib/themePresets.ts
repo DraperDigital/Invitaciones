@@ -658,6 +658,48 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#0C0C0C',
         typographyPreset: 'elegante'
     },
+    'rosas-noche': {
+        label: 'Rosas Blancas de Noche',
+        desc: 'Boda de noche en jardín: rosas blancas, marco ornamentado marfil con calendario y guirnalda, con parallax',
+        icon: '🤍',
+        primaryColor: '#1D241F',
+        accentColor: '#1D241F',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F7F1E6',
+        textPrimary: '#1D241F',
+        textSecondary: '#4B514B',
+        heroTextColor: '#1D241F',
+        heroBgColor: '#EFE7D8',
+        typographyPreset: 'romantica'
+    },
+    'salvia-eucalipto': {
+        label: 'Verde Salvia',
+        desc: 'Boda en acuarela verde salvia: eucalipto, monograma con iniciales, foto con borde rasgado y nombres en caligrafía, con parallax',
+        icon: '🌿',
+        primaryColor: '#6F7F62',
+        accentColor: '#6F7F62',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F5EE',
+        textPrimary: '#2F3A2C',
+        textSecondary: '#56614F',
+        heroTextColor: '#2F3A2C',
+        heroBgColor: '#F5F1E8',
+        typographyPreset: 'romantica'
+    },
+    'malva-empolvado': {
+        label: 'Rosa Empolvado',
+        desc: 'Boda en rosa empolvado: flores en acuarela malva, foto con ola dorada y cuenta regresiva en cajitas, con parallax',
+        icon: '🌸',
+        primaryColor: '#8E5F71',
+        accentColor: '#8E5F71',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F6EFEE',
+        textPrimary: '#3D2C35',
+        textSecondary: '#6B5560',
+        heroTextColor: '#3D2C35',
+        heroBgColor: '#F0E6E4',
+        typographyPreset: 'romantica'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -760,6 +802,9 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'terciopelo-vino', name: 'Terciopelo Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-terciopelo-vino', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/terciopelo-vino.jpg' },
     { id: 'azul-acuarela', name: 'Azul Acuarela', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Acuarela', slug: 'boda-azul-acuarela', icon: '💙', plan: 'Pro', thumbnail: '/images/templates/azul-acuarela.jpg' },
     { id: 'editorial-bn', name: 'Editorial B&N', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Editorial', slug: 'boda-editorial-bn', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/editorial-bn.jpg' },
+    { id: 'rosas-noche', name: 'Rosas Blancas de Noche', category: 'boda', categories: ['boda'], categoryLabel: '#1D241F', slug: 'boda-rosas-noche', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/rosas-noche.jpg' },
+    { id: 'salvia-eucalipto', name: 'Verde Salvia', category: 'boda', categories: ['boda'], categoryLabel: '#6F7F62', slug: 'boda-salvia-eucalipto', icon: '🌿', plan: 'Pro', thumbnail: '/images/templates/salvia-eucalipto.jpg' },
+    { id: 'malva-empolvado', name: 'Rosa Empolvado', category: 'boda', categories: ['boda'], categoryLabel: '#8E5F71', slug: 'boda-malva-empolvado', icon: '🌸', plan: 'Pro', thumbnail: '/images/templates/malva-empolvado.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
 
@@ -888,7 +933,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

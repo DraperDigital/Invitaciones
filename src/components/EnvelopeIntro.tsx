@@ -311,6 +311,9 @@ export default function EnvelopeIntro({
         'terciopelo-vino': '#6B1626',
         'azul-acuarela': '#6F88AA',
         'editorial-bn': '#1A1A1A',
+        'rosas-noche': '#1D241F',
+        'salvia-eucalipto': '#6F7F62',
+        'malva-empolvado': '#8E5F71',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

@@ -391,6 +391,33 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto vertical de la pareja; se muestra en blanco y negro a toda la pantalla.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'rosas-noche': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en arco',
+        heroHelpText: 'Foto de la pareja en un marco de arco.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'salvia-eucalipto': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto con borde rasgado',
+        heroHelpText: 'Foto de la pareja con bordes de papel rasgado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'malva-empolvado': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto con ola dorada',
+        heroHelpText: 'Foto de la pareja con un borde ondulado dorado abajo.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
