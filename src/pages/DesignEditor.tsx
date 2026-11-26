@@ -9,7 +9,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
 import FeedbackRatingWidget from '../components/FeedbackRatingWidget';
 import { trackEvent } from '../lib/analytics';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, isConciergeTemplate, isProOnlyTemplate } from '../lib/themePresets';
 import { STD_TEMPLATES, SAVE_THE_DATE_PRICE, DEFAULT_STD_TEMPLATE } from '../lib/saveTheDate';
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
@@ -1069,6 +1069,26 @@ export default function DesignEditor() {
                             { id: 'unicornio', label: 'Unicornio', desc: 'Cumpleaños de niña en acuarela pastel: unicornio, pastel arcoíris y estrellas, con parallax', icon: '🦄' },
                             { id: 'castillo', label: 'Castillo de Princesa', desc: 'Cumpleaños de princesa: castillo rosa, marco dorado, corona y carroza, con parallax', icon: '🏰' },
                             { id: 'arcoiris', label: 'Arcoíris Kawaii', desc: 'Cumpleaños kawaii: arcoíris acolchado, nubes con carita, globos y flores, con parallax', icon: '🌈' },
+                            { id: 'convivio', label: 'Convivio Pastel', desc: 'Cumpleaños pastel: banderines, pastel con velitas, cupcake y regalos, con parallax', icon: '🎂' },
+                            { id: 'juguetes', label: 'Mis Primeros Juguetes', desc: 'Cumpleaños de colores primarios: jirafa, cubos ABC, crayolas, globos y pelotas, con parallax', icon: '🧸' },
+                            { id: 'capibaras', label: 'Capibaras', desc: 'Cumpleaños kawaii con capibaras, arcoíris, banderines dorados y diamantina, con parallax', icon: '🐹' },
+                            { id: 'perritos', label: 'Perritos Salchicha', desc: 'Cumpleaños con perritos salchicha en acuarela, cuadros amarillos, huesitos y huellitas, con parallax', icon: '🐶' },
+                            { id: 'mariposas', label: 'Mariposas y Flores', desc: 'Cumpleaños de niña con marco de flores, mariposas brillantes y pastel de dulces, con parallax', icon: '🦋' },
+                            { id: 'globos3d', label: 'Globos 3D', desc: 'Globos y nubes 3D en azul y rosa, pastel y pedestal; ideal para cumpleaños o revelación de sexo, con parallax', icon: '🎈' },
+                            { id: 'piloto', label: 'Pequeño Piloto', desc: 'Cumpleaños de aviador vintage: avión, globos aerostáticos y cielo nocturno dorado, con parallax', icon: '✈️' },
+                            { id: 'babyshower', label: 'Baby Shower Nubes', desc: 'Baby shower 3D tierno: osito, elefantito, luna dormida y nubes en azul y crema, con parallax', icon: '🧸' },
+                            { id: 'bomberos', label: 'Bomberos', desc: 'Cumpleaños de bomberos: camión rojo, escudo con la edad, escalera y pared de ladrillo, con parallax', icon: '🚒' },
+                            { id: 'policias', label: 'Policías', desc: 'Cumpleaños de policías en acuarela: patrulla, helicóptero, estación y perrito, con parallax', icon: '🚓' },
+                            { id: 'hadas', label: 'Jardín de Hadas', desc: 'Cumpleaños de hadas en acuarela: casita de pétalos, hadas, hongos y mariposas, con parallax', icon: '🧚' },
+                            { id: 'hadita', label: 'Hadita Mágica 3D', desc: 'Primer añito de niña en 3D con diamantina: bebé hada, corona con la edad y mariposas de cristal, con parallax', icon: '🦋' },
+                            { id: 'pase-abordar', label: 'Pase de Abordar', desc: 'Boda destino: boleto de avión en navy y marfil, globo terráqueo, matasellos y avión que vuela con el parallax', icon: '✈️' },
+                            { id: 'sobre-marino', label: 'Sobre Azul Marino', desc: 'Sobre azul marino con sello de cera dorado, flores de papel navy y blancas y aro dorado, con parallax', icon: '💌' },
+                            { id: 'terciopelo-vino', label: 'Terciopelo Vino', desc: 'Boda en vino: cortinas de terciopelo, rosas vino y blancas, papel rasgado y foto a sangre, con parallax', icon: '🥀' },
+                            { id: 'azul-acuarela', label: 'Azul Acuarela', desc: 'Boda en acuarela azul polvo: flores pintadas, sello de cera azul y accesos rápidos con íconos, con parallax', icon: '💙' },
+                            { id: 'editorial-bn', label: 'Editorial B&N', desc: 'Boda editorial en blanco y negro: foto a sangre, tipografía de revista y secciones negras y blancas, con parallax', icon: '🖤' },
+                            { id: 'rosas-noche', label: 'Rosas Blancas de Noche', desc: 'Boda de noche en jardín: rosas blancas, marco ornamentado marfil con calendario y guirnalda, con parallax', icon: '🤍' },
+                            { id: 'salvia-eucalipto', label: 'Verde Salvia', desc: 'Boda en acuarela verde salvia: eucalipto, monograma con iniciales, foto con borde rasgado y nombres en caligrafía, con parallax', icon: '🌿' },
+                            { id: 'malva-empolvado', label: 'Rosa Empolvado', desc: 'Boda en rosa empolvado: flores en acuarela malva, foto con ola dorada y cuenta regresiva en cajitas, con parallax', icon: '🌸' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },
@@ -1120,6 +1140,10 @@ export default function DesignEditor() {
                                             key={item.id}
                                             onClick={() => {
                                                 // Plantillas Concierge: solo con plan Concierge
+                                                if (isProOnlyTemplate(item.id) && (config.plan || 'clasico').toLowerCase() === 'clasico') {
+                                                    toast.error('Esta plantilla tiene efectos animados y requiere plan Pro o superior.');
+                                                    return;
+                                                }
                                                 if (isConciergeTemplate(item.id) && (config.plan || '').toLowerCase() !== 'concierge') {
                                                     toast.error('Esta plantilla es exclusiva del plan Concierge. Escríbenos para activarlo.');
                                                     return;

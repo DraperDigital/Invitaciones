@@ -238,6 +238,186 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto del festejado; se muestra redonda con borde blanco.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'convivio': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'juguetes': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en el Marco',
+        heroHelpText: 'Foto del festejado; se muestra en cuadro redondeado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'capibaras': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'perritos': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'mariposas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la festejada; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'globos3d': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'piloto': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'babyshower': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'bomberos': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'policias': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'hadas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'hadita': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'pase-abordar': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto junto al boleto',
+        heroHelpText: 'Foto de la pareja junto al pase de abordar.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'sobre-marino': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto dentro del aro dorado',
+        heroHelpText: 'Foto de la pareja; se muestra redonda dentro del aro.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'terciopelo-vino': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto a sangre',
+        heroHelpText: 'Foto de la pareja a lo ancho; el nombre va encima.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'azul-acuarela': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto arriba de la tarjeta',
+        heroHelpText: 'Foto de la pareja con el sello de cera encima.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'editorial-bn': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto a pantalla completa',
+        heroHelpText: 'Foto vertical de la pareja; se muestra en blanco y negro a toda la pantalla.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'rosas-noche': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto en arco',
+        heroHelpText: 'Foto de la pareja en un marco de arco.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'salvia-eucalipto': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto con borde rasgado',
+        heroHelpText: 'Foto de la pareja con bordes de papel rasgado.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'malva-empolvado': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto con ola dorada',
+        heroHelpText: 'Foto de la pareja con un borde ondulado dorado abajo.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

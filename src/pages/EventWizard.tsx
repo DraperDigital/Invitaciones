@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
 import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
-import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES, isConciergeTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
+import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES, isConciergeTemplate, isProOnlyTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
 import WizardAiAssistant from '../components/wizard/WizardAiAssistant';
 
@@ -744,6 +744,11 @@ export default function EventWizard() {
                                                         >
                                                             <div className="h-20 w-full relative">
                                                                 <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
+                                                                {!conciergeOnly && isProOnlyTemplate(tpl.id) && (
+                                                                    <div className="absolute top-1.5 left-1.5 bg-[#DF3B94] text-white px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wide">
+                                                                        PRO
+                                                                    </div>
+                                                                )}
                                                                 {conciergeOnly && (
                                                                     <div className="absolute top-1.5 left-1.5 bg-stone-900/85 text-amber-200 px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wide">
                                                                         🔒 CONCIERGE

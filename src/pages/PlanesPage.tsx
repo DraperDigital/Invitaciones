@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import Seo from '../components/Seo';
 import PlanComparisonTable from '../components/PlanComparisonTable';
 import { trackEvent } from '../lib/analytics';
-import { getTemplateRequiredPlan } from '../lib/themePresets';
+import { getTemplateRequiredPlan, isProOnlyTemplate } from '../lib/themePresets';
 
 export default function PlanesPage() {
     const { user } = useAuth();
@@ -193,6 +193,7 @@ export default function PlanesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 max-w-[1600px] mx-auto gap-8 md:gap-6 items-stretch">
                     {plans.map((plan) => {
                         const isPreselectedByTemplate = requiredPlan === plan.id;
+                        const blockedByTemplate = plan.id === 'clasico' && !!eventTheme && isProOnlyTemplate(eventTheme);
                         return (
                         <div 
                             key={plan.id} 
@@ -261,6 +262,11 @@ export default function PlanesPage() {
                             </div>
 
                             <div className="mt-8 md:mt-10">
+                                {blockedByTemplate ? (
+                                    <p className="w-full min-h-[44px] py-4 px-3 rounded-xl md:rounded-2xl text-[10px] font-bold uppercase tracking-[0.15em] text-center bg-stone-100 text-stone-500">
+                                        Tu plantilla con efectos animados requiere plan Pro o superior
+                                    </p>
+                                ) : (
                                 <Link 
                                     to={eventId ? `/checkout?plan=${plan.id}&id=${eventId}` : `/dashboard/new?plan=${plan.id}${theme ? `&theme=${theme}` : ''}${tipo ? `&tipo=${tipo}` : ''}`}
                                     onClick={() => {
@@ -279,6 +285,7 @@ export default function PlanesPage() {
                                 >
                                     {plan.cta}
                                 </Link>
+                                )}
                                 {plan.id === 'concierge' ? (
                                     <div className="mt-4 text-center space-y-2">
                                         <Link 

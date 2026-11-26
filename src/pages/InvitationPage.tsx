@@ -37,7 +37,9 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
+import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
+import KidsLayeredHero from '../components/themes/KidsLayeredHero';
 import ArcoirisHero from '../components/themes/ArcoirisHero';
 import CastilloHero from '../components/themes/CastilloHero';
 import UnicornioHero from '../components/themes/UnicornioHero';
@@ -312,6 +314,146 @@ export default function InvitationPage() {
             borderColor: '#EADFF9', cardBorder: '#EADFF9',
             accentOverride: '#8F62D6', fontPreset: 'divertida',
             heroRadius: '32px', cardRadius: '32px',
+        },
+        'convivio': {
+            sectionBg: '#FFFAF3', sectionBgAlt: '#FDF0F4', cardBg: '#FFFFFF',
+            textPrimary: '#5C4A52', textSecondary: '#8B7880',
+            borderColor: '#F6DCE6', cardBorder: '#F6DCE6',
+            accentOverride: '#EF7FA6', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'juguetes': {
+            sectionBg: '#FBF6EC', sectionBgAlt: '#EAF3FC', cardBg: '#FFFFFF',
+            textPrimary: '#2B3A52', textSecondary: '#5C6B80',
+            borderColor: '#D7E6F6', cardBorder: '#D7E6F6',
+            accentOverride: '#E5483E', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'capibaras': {
+            sectionBg: '#FDF6F4', sectionBgAlt: '#FBEEEE', cardBg: '#FFFFFF',
+            textPrimary: '#5B4537', textSecondary: '#8A7263',
+            borderColor: '#F2DFD6', cardBorder: '#F2DFD6',
+            accentOverride: '#C9895E', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'perritos': {
+            sectionBg: '#FFFBEF', sectionBgAlt: '#FFF6DC', cardBg: '#FFFFFF',
+            textPrimary: '#5A4230', textSecondary: '#87715E',
+            borderColor: '#F1E2B9', cardBorder: '#F1E2B9',
+            accentOverride: '#D39B2A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'mariposas': {
+            sectionBg: '#FDF9FC', sectionBgAlt: '#F8EEF7', cardBg: '#FFFFFF',
+            textPrimary: '#5C4468', textSecondary: '#87739A',
+            borderColor: '#F0E0F2', cardBorder: '#F0E0F2',
+            accentOverride: '#B97AD6', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'globos3d': {
+            sectionBg: '#F7F9FD', sectionBgAlt: '#EEF4FB', cardBg: '#FFFFFF',
+            textPrimary: '#44506A', textSecondary: '#73809A',
+            borderColor: '#DFE8F6', cardBorder: '#DFE8F6',
+            accentOverride: '#EC96B4', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'piloto': {
+            sectionBg: '#F6EFE0', sectionBgAlt: '#EFE4CF', cardBg: '#FFFFFF',
+            textPrimary: '#1F2F52', textSecondary: '#556080',
+            borderColor: '#E6D6B2', cardBorder: '#E6D6B2',
+            accentOverride: '#C9A14A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'babyshower': {
+            sectionBg: '#FBF7EF', sectionBgAlt: '#E9F1FA', cardBg: '#FFFFFF',
+            textPrimary: '#5B5147', textSecondary: '#8A7F73',
+            borderColor: '#DFE8F4', cardBorder: '#DFE8F4',
+            accentOverride: '#8FADD8', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'bomberos': {
+            sectionBg: '#FFF8F2', sectionBgAlt: '#FFF1E3', cardBg: '#FFFFFF',
+            textPrimary: '#3A2A24', textSecondary: '#6E5A50',
+            borderColor: '#F3D7C4', cardBorder: '#F3D7C4',
+            accentOverride: '#D62B2B', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'policias': {
+            sectionBg: '#F2F5F7', sectionBgAlt: '#E9EEF2', cardBg: '#FFFFFF',
+            textPrimary: '#44597A', textSecondary: '#6B7A8F',
+            borderColor: '#DBE3EA', cardBorder: '#DBE3EA',
+            accentOverride: '#44597A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'hadas': {
+            sectionBg: '#FDF7F6', sectionBgAlt: '#FCEFEE', cardBg: '#FFFFFF',
+            textPrimary: '#7A4A4D', textSecondary: '#946A6C',
+            borderColor: '#F2DCD9', cardBorder: '#F2DCD9',
+            accentOverride: '#D9767A', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'hadita': {
+            sectionBg: '#FDF3EF', sectionBgAlt: '#F9E6DF', cardBg: '#FFFFFF',
+            textPrimary: '#7A4F5E', textSecondary: '#9A7582',
+            borderColor: '#F4DCDF', cardBorder: '#F4DCDF',
+            accentOverride: '#E08AA8', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'pase-abordar': {
+            sectionBg: '#F3EEE4', sectionBgAlt: '#EBE4D6', cardBg: '#FFFFFF',
+            textPrimary: '#1B2742', textSecondary: '#4F5A72',
+            borderColor: '#D9D0BF', cardBorder: '#D9D0BF',
+            accentOverride: '#0F1E3A', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '14px',
+        },
+        'sobre-marino': {
+            sectionBg: '#FBF8F2', sectionBgAlt: '#F2ECE0', cardBg: '#FFFFFF',
+            textPrimary: '#13213F', textSecondary: '#4B5670',
+            borderColor: '#D9D0BF', cardBorder: '#D9D0BF',
+            accentOverride: '#B8913F', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '14px',
+        },
+        'terciopelo-vino': {
+            sectionBg: '#F6EFE6', sectionBgAlt: '#EFE4D8', cardBg: '#FFFFFF',
+            textPrimary: '#3A0D17', textSecondary: '#6E4D55',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#6B1626', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
+        'azul-acuarela': {
+            sectionBg: '#FBF9F5', sectionBgAlt: '#F7F4EE', cardBg: '#FFFFFF',
+            textPrimary: '#2D3A52', textSecondary: '#56647E',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#6F88AA', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
+        'editorial-bn': {
+            sectionBg: '#0C0C0C', sectionBgAlt: '#F4F2EE', cardBg: '#151515',
+            textPrimary: '#F4F2EE', textSecondary: '#BDBAB4',
+            borderColor: '#333333', cardBorder: '#333333',
+            accentOverride: '#F4F2EE', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '0px',
+        },
+        'rosas-noche': {
+            sectionBg: '#F7F1E6', sectionBgAlt: '#EFE7D8', cardBg: '#FFFFFF',
+            textPrimary: '#1D241F', textSecondary: '#4B514B',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#1D241F', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
+        'salvia-eucalipto': {
+            sectionBg: '#F8F5EE', sectionBgAlt: '#F5F1E8', cardBg: '#FFFFFF',
+            textPrimary: '#2F3A2C', textSecondary: '#56614F',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#6F7F62', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
+        'malva-empolvado': {
+            sectionBg: '#F6EFEE', sectionBgAlt: '#F0E6E4', cardBg: '#FFFFFF',
+            textPrimary: '#3D2C35', textSecondary: '#6B5560',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#8E5F71', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -2816,6 +2958,12 @@ END:VCALENDAR`;
         if (cfg.theme === 'arcoiris') {
             return <ArcoirisHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
+        if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
+            return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn' || cfg.theme === 'rosas-noche' || cfg.theme === 'salvia-eucalipto' || cfg.theme === 'malva-empolvado') {
+            return <WeddingLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
         if (cfg.theme === 'anturio-vino') {
             return <AnturioVinoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
@@ -4466,7 +4614,7 @@ END:VCALENDAR`;
             )}
 
             {/* Parallax de la plantilla (solo plantillas que lo declaran en lib/parallax.ts) */}
-            <ParallaxLayers theme={cfg.theme} />
+            <ParallaxLayers theme={planTier !== 'clasico' || isDemo || isAdminMode || event?.is_published === false ? cfg.theme : null} />
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">

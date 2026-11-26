@@ -1,0 +1,692 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Bodas por capas (parallax): Pase de Abordar y Sobre Azul Marino.
+   Portada (.wh) + piel de módulos. Los módulos usan KidsPastel.css
+   (variables --kp-*); aquí se ajusta a un tono de boda: esquinas finas,
+   títulos serif en versalitas o caligrafía.
+   Capas con parallax: NO usar `transform` en ellas (ver parallax.ts).
+   ────────────────────────────────────────────────────────────────────── */
+
+.wh {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  background: var(--wh-bg-color);
+  font-family: var(--wh-text);
+  color: var(--wh-ink);
+  isolation: isolate;
+}
+.wh::before {
+  content: '';
+  position: absolute;
+  inset: -90px 0;
+  z-index: -1;
+  background: var(--wh-bg-img) center / cover no-repeat;
+  translate: 0 var(--py-bg, 0px);
+  opacity: var(--wh-bg-op, 1);
+}
+.wh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--wh-veil, transparent);
+  pointer-events: none;
+}
+.wh-l { position: absolute; pointer-events: none; z-index: 1; user-select: none; }
+.wh-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: var(--wh-pad, 54px 18px 150px);
+  opacity: 0;
+  translate: 0 18px;
+  transition: opacity .9s ease, translate .9s ease;
+}
+.wh.is-shown .wh-inner { opacity: 1; translate: 0 0; }
+.wh-side { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; max-width: 360px; }
+
+.wh-photo { position: relative; overflow: hidden; cursor: default; }
+.wh-photo.is-editable { cursor: pointer; }
+.wh-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wh-photo-empty { width: 100%; height: 100%; background: linear-gradient(135deg, #d9d4cb, #b9b2a6); }
+.wh-edit { position: absolute; left: 50%; bottom: 12px; translate: -50% 0; display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; white-space: nowrap; }
+
+.wh-count { width: 100%; text-align: center; padding: 14px 12px 16px; background: var(--wh-count-bg); color: var(--wh-ink); border-radius: var(--wh-radius, 14px); box-shadow: var(--wh-count-shadow, none); }
+.wh-count-title { font-family: var(--wh-title); font-size: 1.25rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; color: var(--wh-accent); }
+.wh-count-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.wh-count-grid div + div { border-left: 1px solid var(--wh-line); }
+.wh .wh-count-grid b { display: block; font-family: var(--wh-title) !important; font-weight: 500; font-size: 2rem; line-height: 1; }
+.wh-count-grid small { display: block; margin-top: 4px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.wh-btn {
+  padding: 13px 28px;
+  border-radius: var(--wh-btn-radius, 4px);
+  background: var(--wh-btn); color: var(--wh-btn-ink);
+  font-family: var(--wh-text); font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
+  box-shadow: 0 14px 26px -16px rgba(0,0,0,.6);
+}
+
+@keyframes wh-drift { 0%, 100% { translate: 0 0; rotate: -2deg; } 50% { translate: 0 -10px; rotate: 2deg; } }
+@keyframes wh-fly { 0% { translate: -6vw 0; } 50% { translate: 4vw -14px; } 100% { translate: -6vw 0; } }
+
+/* ═════════════════════════ PASE DE ABORDAR ═════════════════════════ */
+.wh--pase {
+  --wh-bg-color: #0f1e3a; --wh-bg-img: url('/images/themes/boleto/fondo.webp');
+  --wh-veil: linear-gradient(180deg, rgba(15,30,58,.55), rgba(15,30,58,.82) 70%, rgba(15,30,58,.95));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #1b2742; --wh-accent: #0f1e3a; --wh-line: rgba(15,30,58,.2);
+  --wh-count-bg: #f3eee4; --wh-btn: #f3eee4; --wh-btn-ink: #0f1e3a;
+  --wh-paper: #f3eee4;
+  --wh-pad: 40px 18px 170px;
+}
+.wh--pase::before { filter: grayscale(1); }
+.wp-path { top: 0; left: 0; width: 100%; height: 100%; color: rgba(243,238,228,.55); z-index: 1; }
+.wp-plane { top: 70px; right: -40px; width: min(44vw, 200px); opacity: .95; filter: drop-shadow(0 10px 14px rgba(0,0,0,.35)); animation: wh-fly 14s ease-in-out infinite; z-index: 3; }
+.wp-clouds { bottom: -26px; left: 50%; width: min(220vw, 1100px); margin-left: calc(min(220vw, 1100px) / -2); z-index: 3; opacity: .97; }
+
+/* Boleto con muescas a los lados y bordes troquelados */
+.wp-ticket {
+  --notch: 16px;
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 26px 24px 22px;
+  background: var(--wh-paper);
+  text-align: center;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 62%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 62%, #0000 97%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle var(--notch) at 0 62%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 62%, #0000 97%, #000) right / 51% 100% no-repeat;
+  filter: drop-shadow(0 26px 30px rgba(0,0,0,.45));
+}
+.wp-ticket::before, .wp-ticket::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 8px;
+  background: radial-gradient(circle 4px at 6px 50%, #0f1e3a 96%, transparent) 0 0 / 12px 8px repeat-x;
+}
+.wp-ticket::before { top: -4px; }
+.wp-ticket::after { bottom: -4px; }
+.wp-side { position: absolute; left: 8px; top: 140px; writing-mode: vertical-rl; rotate: 180deg; font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: #1b2742; opacity: .75; }
+.wp-kicker { font-size: 10px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px dashed rgba(15,30,58,.35); }
+.wp-globe { width: 104px; margin: 14px auto 6px; animation: wh-drift 9s ease-in-out infinite; }
+.wh .wp-names { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: #0f1e3a; line-height: 1; }
+.wp-names span { display: block; font-size: clamp(2.3rem, 11vw, 2.9rem); }
+.wh .wp-names em { display: block; font-family: 'Pinyon Script', cursive !important; text-transform: none; font-size: 1.7rem; letter-spacing: 0; margin: 2px 0 4px; color: #45506a; }
+.wp-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 18px; border: 1px solid rgba(15,30,58,.35); text-align: left; }
+.wp-grid div { padding: 8px 10px; }
+.wp-grid div:nth-child(odd) { border-right: 1px solid rgba(15,30,58,.35); }
+.wp-grid div:nth-child(-n+2) { border-bottom: 1px solid rgba(15,30,58,.35); }
+.wp-grid small { display: block; font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; opacity: .65; }
+.wp-grid b { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #0f1e3a; line-height: 1.25; }
+.wp-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+.wp-stamp img { width: 132px; opacity: .9; rotate: -8deg; }
+.wp-sign { font-family: 'Pinyon Script', cursive; font-size: 2rem; color: #34405c; padding-right: 6px; }
+.wp-boarding { margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(15,30,58,.35); font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
+.wp-photo { width: 100%; aspect-ratio: 4 / 3.4; border-radius: 16px; border: 6px solid var(--wh-paper); box-shadow: 0 24px 34px -20px rgba(0,0,0,.6); }
+.wp-photo img { filter: grayscale(.15); }
+.wh--pase .wh-count { border-radius: 14px; }
+.wh--pase .wh-count-title { font-size: 1.1rem; }
+
+/* ═════════════════════════ SOBRE AZUL MARINO ═════════════════════════ */
+.wh--sobre {
+  --wh-bg-color: #0d1730; --wh-bg-img: url('/images/themes/sobre/fondo.webp');
+  --wh-veil: radial-gradient(ellipse at 50% 40%, rgba(13,23,48,.15), rgba(9,15,32,.55));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #13213f; --wh-accent: #b8913f; --wh-line: rgba(184,145,63,.35);
+  --wh-count-bg: rgba(251,248,242,.96); --wh-btn: #b8913f; --wh-btn-ink: #fff; --wh-btn-radius: 999px;
+  --wh-pad: 70px 16px 140px;
+}
+.wh--sobre::before { background-size: 560px auto; background-repeat: repeat; }
+.ws-corner { width: min(64vw, 300px); filter: drop-shadow(0 16px 20px rgba(0,0,0,.45)); z-index: 3; }
+.ws-corner--tl { top: -26px; left: -40px; }
+.ws-corner--br { bottom: 120px; right: -44px; rotate: 180deg; }
+.ws-f { width: 46px; filter: drop-shadow(0 8px 10px rgba(0,0,0,.4)); animation: wh-drift 7s ease-in-out infinite; z-index: 3; }
+.ws-f--1 { top: 30%; right: 6px; width: 58px; }
+.ws-f--2 { top: 46%; left: 4px; animation-delay: -2s; }
+.ws-f--3 { top: 6%; right: 8%; width: 34px; animation-delay: -4s; }
+.ws-f--4 { top: 64%; left: 10%; width: 40px; animation-delay: -1s; }
+.ws-f--5 { top: 78%; right: 14%; width: 30px; animation-delay: -3s; }
+.ws-garland { bottom: 34px; left: 50%; width: min(120vw, 560px); margin-left: calc(min(120vw, 560px) / -2); filter: drop-shadow(0 14px 16px rgba(0,0,0,.45)); z-index: 3; }
+
+.ws-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 34px 22px 26px;
+  background: #fbf8f2;
+  border-radius: 180px 180px 18px 18px;
+  text-align: center;
+  box-shadow: 0 0 0 1px rgba(184,145,63,.5), 0 0 0 7px #fbf8f2, 0 0 0 8px rgba(184,145,63,.55), 0 34px 50px -26px rgba(0,0,0,.7);
+}
+.ws-kicker { margin-top: 26px; font-size: 10px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; color: #13213f; }
+.wh .ws-names { font-family: 'Pinyon Script', cursive !important; font-weight: 400; color: #13213f; line-height: 1.02; margin-top: 6px; }
+.ws-names span { display: block; font-size: clamp(2.9rem, 14vw, 3.6rem); }
+.wh .ws-names em { display: block; font-family: 'Cormorant Garamond', serif !important; font-style: italic; font-size: 2.2rem; line-height: 1.1; color: #b8913f; }
+.ws-heart { color: #b8913f; font-size: 12px; letter-spacing: 1em; margin: 6px 0 14px; }
+.ws-heart::before, .ws-heart::after { content: ''; display: inline-block; width: 46px; height: 1px; background: rgba(184,145,63,.6); vertical-align: middle; margin: 0 10px; }
+.ws-envelope { position: relative; width: 92%; margin: 0 auto; }
+.ws-envelope img { width: 100%; display: block; filter: drop-shadow(0 16px 18px rgba(13,23,48,.35)); }
+.ws-initials { position: absolute; left: 47.3%; top: 48.6%; translate: -50% -50%; font-family: 'Pinyon Script', cursive; font-size: clamp(1.3rem, 6vw, 1.7rem); color: #7a5a1c; text-shadow: 0 1px 0 rgba(255,236,180,.7); letter-spacing: -.02em; }
+.ws-env-text { position: absolute; left: 0; right: 0; top: 12%; font-family: var(--wh-title); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: #e9e2d2; line-height: 1.5; display: none; }
+.ws-date { margin-top: 18px; display: flex; flex-direction: column; align-items: center; color: #13213f; }
+.ws-date small { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; }
+.ws-date b { font-family: var(--wh-title); font-weight: 400; font-size: 4rem; line-height: 1; color: #b8913f; }
+.ws-date > span { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+.ws-date em { margin-top: 10px; font-family: 'Pinyon Script', cursive; font-style: normal; font-size: 1.6rem; }
+.ws-hoop { position: relative; width: min(78vw, 300px); aspect-ratio: 708 / 636; }
+.ws-photo { position: absolute; left: 6%; top: 2%; width: 86%; height: 95.8%; border-radius: 50%; }
+.ws-hoop-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 12px 14px rgba(0,0,0,.4)); }
+.wh--sobre .wh-count { border-radius: 16px; box-shadow: 0 0 0 1px rgba(184,145,63,.5); }
+.wh--sobre .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.8rem; margin-bottom: 4px; }
+
+/* ── Escritorio ── */
+@media (min-width: 900px) {
+  .wh-inner { flex-direction: row; justify-content: center; align-items: center; gap: 56px; padding: var(--wh-pad-d, 70px 48px 190px); min-height: 100svh; }
+  .wh-side { max-width: 380px; }
+  .wp-ticket, .ws-card { max-width: 400px; }
+  .wp-plane { width: 280px; right: 6%; top: 50px; }
+  .wp-clouds { width: 112%; left: -6%; margin-left: 0; bottom: -70px; }
+  .wh--pase { --wh-pad-d: 60px 48px 260px; }
+  .ws-corner { width: 380px; }
+  .ws-corner--br { bottom: 40px; }
+  .ws-garland { width: 560px; margin-left: -280px; bottom: 6px; }
+  .wh--sobre { --wh-pad-d: 70px 48px 210px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wh * { animation: none !important; }
+}
+
+/* ═════════════════════ MÓDULOS (sobre KidsPastel) ═════════════════════ */
+.theme-pase-abordar {
+  --kp-bg: #f3eee4; --kp-alt: #ebe4d6;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #0f1e3a; --kp-ink: #1b2742; --kp-soft: #4f5a72; --kp-accent: #0f1e3a;
+  --kp-btn: #0f1e3a; --kp-btn-ink: #f3eee4; --kp-card-border: rgba(15,30,58,.25); --kp-icon-bg: #e4ddcf; --kp-icon: #0f1e3a;
+  --kp-shadow: rgba(15, 30, 58, .35);
+  --kp-title-deco: url('/images/themes/boleto/avion.webp');
+  --kp-art-message: url('/images/themes/boleto/globo.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 150px;
+  --kp-art-location: url('/images/themes/boleto/sello.webp'); --kp-art-location-w: 160px; --kp-art-location-h: 126px;
+  --kp-art-gifts: url('/images/themes/boleto/maleta.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 124px;
+  --kp-art-rsvp: url('/images/themes/boleto/avion.webp'); --kp-art-rsvp-w: 220px; --kp-art-rsvp-h: 80px;
+  --kp-rsvp-bg: #0f1e3a;
+  --kp-closing-bg: linear-gradient(rgba(15,30,58,.82), rgba(15,30,58,.92)), url('/images/themes/boleto/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/boleto/globo.webp'); --kp-closing-title: #f3eee4; --kp-closing-text: #d8d2c4;
+}
+.theme-sobre-marino {
+  --kp-bg: #fbf8f2; --kp-alt: #f2ece0;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #13213f; --kp-ink: #13213f; --kp-soft: #4b5670; --kp-accent: #b8913f;
+  --kp-btn: #13213f; --kp-btn-ink: #fbf8f2; --kp-card-border: rgba(184,145,63,.45); --kp-icon-bg: #efe7d6; --kp-icon: #13213f;
+  --kp-shadow: rgba(19, 33, 63, .35);
+  --kp-title-deco: url('/images/themes/sobre/sello.webp');
+  --kp-art-message: url('/images/themes/sobre/guirnalda.webp'); --kp-art-message-w: 300px; --kp-art-message-h: 110px;
+  --kp-art-location: url('/images/themes/sobre/aro.webp'); --kp-art-location-w: 150px; --kp-art-location-h: 134px;
+  --kp-art-gifts: url('/images/themes/sobre/sobre.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 136px;
+  --kp-art-rsvp: url('/images/themes/sobre/sello.webp'); --kp-art-rsvp-w: 86px; --kp-art-rsvp-h: 86px;
+  --kp-rsvp-bg: linear-gradient(rgba(13,23,48,.78), rgba(13,23,48,.86)), url('/images/themes/sobre/fondo.webp') center / 560px auto;
+  --kp-closing-bg: linear-gradient(rgba(13,23,48,.7), rgba(13,23,48,.85)), url('/images/themes/sobre/fondo.webp') center / 560px auto;
+  --kp-art-closing: url('/images/themes/sobre/esquina.webp'); --kp-closing-title: #f1e6c8; --kp-closing-text: #d9d4c8;
+}
+/* Tono de boda: menos redondeo, títulos con aire */
+:is(.theme-pase-abordar, .theme-sobre-marino) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 14px !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { border-radius: 4px !important; letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section :is(input, textarea, select) { border-radius: 6px !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) #gallery img { border-radius: 10px !important; border-width: 5px; }
+:is(.theme-pase-abordar, .theme-sobre-marino) .invitation-content section#rsvp { border-radius: 0; }
+.theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .1em !important; }
+.theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 60px; height: 24px; }
+.theme-sobre-marino :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+/* Tarjetas de boleto con muescas en el Pase */
+.theme-pase-abordar section:not(#hero) [class*="bg-[var(--card-bg)]"]:not([class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"]) {
+  background: #fbf8f1 !important;
+  -webkit-mask: radial-gradient(circle 12px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle 12px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+/* Confirmación y pie oscuros */
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(h2, h3) { color: #f3eee4 !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(p, label, label *) { color: #ddd7ca !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp label:has(input[type="checkbox"]) { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.2) !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #f3eee4 !important; color: #0f1e3a !important; }
+.theme-sobre-marino section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #b8913f !important; color: #fff !important; }
+.theme-sobre-marino .invitation-closing::before { width: 170px; height: 170px; margin-left: -85px; }
+:is(.theme-pase-abordar, .theme-sobre-marino) .invitation-content section#rsvp :is(h2, h3, h2 *, h3 *) { color: #f3eee4 !important; -webkit-text-fill-color: #f3eee4 !important; background: none !important; }
+@media (max-width: 899px) { .ws-corner--br { width: 44vw; bottom: 170px; right: -30px; } }
+.theme-sobre-marino #rsvp h2::before { display: none !important; }
+
+/* ═════════════════════════ TERCIOPELO VINO ═════════════════════════ */
+.wh--vino {
+  --wh-bg-color: #2a070f; --wh-bg-img: url('/images/themes/vino/fondo.webp');
+  --wh-veil: linear-gradient(180deg, rgba(30,4,10,.2), rgba(30,4,10,.55));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #3a0d17; --wh-accent: #6b1626; --wh-line: rgba(107,22,38,.25);
+  --wh-count-bg: #fffaf3; --wh-count-shadow: 0 0 0 1px rgba(107,22,38,.18);
+  --wh-btn: #6b1626; --wh-btn-ink: #f6efe6;
+  --wh-pad: 0 0 60px;
+}
+.wh--vino .wh-inner { gap: 0; }
+.wv-curtain { top: -10px; height: 108%; width: auto; max-width: none; z-index: 4; filter: drop-shadow(10px 0 18px rgba(0,0,0,.55)); }
+.wv-curtain--l { left: -70px; }
+.wv-curtain--r { right: -70px; scale: -1 1; }
+.wv-pt { width: 40px; z-index: 5; filter: drop-shadow(0 8px 10px rgba(0,0,0,.45)); animation: wh-drift 8s ease-in-out infinite; }
+.wv-pt--1 { top: 22%; left: 8%; }
+.wv-pt--2 { top: 48%; right: 6%; width: 34px; animation-delay: -3s; }
+.wv-pt--3 { top: 72%; left: 5%; width: 30px; animation-delay: -5s; }
+.wv-pt--4 { top: 88%; right: 12%; width: 32px; animation-delay: -2s; }
+.wv-cover { position: relative; width: 100%; max-width: 420px; }
+.wv-photo { width: 100%; height: min(78svh, 640px); }
+.wv-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(42,7,15,0) 40%, rgba(42,7,15,.55) 68%, rgba(42,7,15,.95)); pointer-events: none; }
+.wv-roses { top: -30px; right: -60px; width: 230px; scale: -1 1; z-index: 3; filter: drop-shadow(0 14px 16px rgba(0,0,0,.5)); }
+.wv-cover-text { position: absolute; left: 0; right: 0; bottom: 48px; text-align: center; color: #f6efe6; z-index: 2; }
+.wv-kicker { font-size: 10px; font-weight: 600; letter-spacing: .38em; text-transform: uppercase; opacity: .85; }
+.wh .wv-names { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 400; line-height: .95; margin-top: 8px; color: #fbf4ea; }
+.wv-names span { display: block; font-size: clamp(2.8rem, 13vw, 3.6rem); }
+.wh .wv-names em { display: block; font-family: 'Pinyon Script', cursive !important; font-style: normal; font-size: 1.9rem; line-height: 1.2; color: #e9c9a6; }
+.wv-date { margin-top: 12px; font-size: 12px; letter-spacing: .42em; }
+.wv-paper {
+  position: relative; width: 100%; max-width: 420px;
+  margin-top: -26px; padding: 50px 26px 120px;
+  background: #f6efe6; text-align: center; z-index: 2;
+}
+.wv-paper::before { content: ''; position: absolute; left: 0; right: 0; top: -38px; height: 60px; background: url('/images/themes/vino/papel.webp') center top / 100% 100% no-repeat; }
+.wv-small { font-size: 10px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: #9a4152; }
+.wh .wv-title { margin-top: 12px; font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 500; font-size: 2.3rem; line-height: 1.05; color: #3a0d17; }
+.wv-venue { margin: 10px 0 18px; font-size: 12px; color: #7a5560; letter-spacing: .06em; }
+.wh--vino .wh-count { margin-bottom: 18px; }
+.wh--vino .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.8rem; margin-bottom: 4px; }
+.wv-garland { left: 50%; bottom: 10px; width: 118%; translate: -50% 0; filter: drop-shadow(0 10px 12px rgba(58,13,23,.35)); }
+@media (min-width: 900px) {
+  .wh--vino .wh-inner { flex-direction: row; align-items: stretch; gap: 0; padding: 70px 120px 90px; }
+  .wv-cover, .wv-paper { max-width: 440px; }
+  .wv-photo { height: 640px; }
+  .wv-paper { margin-top: 0; padding: 80px 40px 140px; display: flex; flex-direction: column; justify-content: center; }
+  .wv-paper::before { display: none; }
+  .wv-curtain { height: 112%; }
+  .wv-curtain--l { left: -20px; } .wv-curtain--r { right: -20px; }
+}
+
+/* ═════════════════════════ AZUL ACUARELA ═════════════════════════ */
+.wh--azul {
+  --wh-bg-color: #f7f4ee; --wh-bg-img: url('/images/themes/azul/fondo.webp');
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #2d3a52; --wh-accent: #5b7598; --wh-line: rgba(91,117,152,.3);
+  --wh-count-bg: rgba(255,255,255,.9); --wh-count-shadow: 0 0 0 1px rgba(91,117,152,.25);
+  --wh-btn: #5b7598; --wh-btn-ink: #fff;
+  --wh-pad: 40px 16px 70px;
+}
+.wa-corner { width: min(48vw, 230px); z-index: 1; opacity: .95; }
+.wa-corner--tr { top: -10px; right: -16px; scale: -1 1; }
+.wa-corner--bl { bottom: -10px; left: -16px; scale: 1 -1; }
+.wa-card { position: relative; width: 100%; max-width: 380px; background: #fffdf9; text-align: center; padding-bottom: 110px; overflow: hidden; box-shadow: 0 30px 50px -30px rgba(45,58,82,.45), 0 0 0 1px rgba(91,117,152,.12); border-radius: 4px; }
+.wa-top { position: relative; }
+.wa-photo { width: 100%; height: 330px; }
+.wa-photo-flowers { top: -14px; left: -18px; width: 150px; z-index: 2; }
+.wa-seal { position: absolute; left: 50%; bottom: -38px; translate: -50% 0; width: 84px; z-index: 3; filter: drop-shadow(0 8px 10px rgba(45,58,82,.35)); }
+.wa-seal img { width: 100%; display: block; }
+.wa-seal span { position: absolute; inset: 0; display: grid; place-items: center; font-family: 'Cormorant Garamond', serif; font-size: 19px; letter-spacing: .04em; color: #e8eef6; text-shadow: 0 1px 1px rgba(30,45,70,.5); }
+.wa-kicker { margin-top: 54px; font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: #5b7598; }
+.wh .wa-names { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 400; text-transform: uppercase; letter-spacing: .08em; color: #2d3a52; line-height: 1; margin-top: 10px; }
+.wa-names span { display: block; font-size: clamp(2.2rem, 10.5vw, 2.8rem); }
+.wh .wa-names em { display: block; font-family: 'Pinyon Script', cursive !important; text-transform: none; font-style: normal; letter-spacing: 0; font-size: 1.8rem; line-height: 1.3; color: #6f88aa; }
+.wa-invite { margin-top: 10px; font-size: 10px; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: #48577a; }
+.wa-sprig { width: 64%; margin: 8px auto 2px; display: block; }
+.wa-date small { display: block; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: #48577a; }
+.wa-date div { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 4px 0; }
+.wa-date div span { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #48577a; border-top: 1px solid rgba(91,117,152,.4); border-bottom: 1px solid rgba(91,117,152,.4); padding: 4px 0; min-width: 76px; }
+.wa-date b { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 3.4rem; line-height: 1; color: #2d3a52; }
+.wh .wa-venue { margin-top: 12px; font-family: 'Pinyon Script', cursive !important; font-size: 1.7rem; color: #4d6488; }
+.wa-city { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #48577a; }
+.wa-links { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 22px 14px 0; }
+.wa-links button { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #2d3a52; }
+.wa-links i { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #6f88aa; color: #fff; box-shadow: 0 8px 14px -8px rgba(45,58,82,.6); }
+.wh .wa-wait { position: relative; z-index: 2; margin-top: 18px; font-family: 'Pinyon Script', cursive !important; font-size: 1.5rem; color: #2d3a52; }
+.wa-wash { left: 0; bottom: 0; width: 100%; opacity: .9; }
+.wa-bouquet { width: 180px; display: none; }
+.wh--azul .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.8rem; margin-bottom: 4px; color: #4d6488; }
+@media (min-width: 900px) {
+  .wa-bouquet { display: block; width: 260px; }
+  .wa-corner { width: 340px; }
+  .wh--azul { --wh-pad-d: 50px 48px 60px; }
+}
+
+/* ═════════════════════ MÓDULOS: Vino y Azul ═════════════════════ */
+.theme-terciopelo-vino {
+  --kp-bg: #f6efe6; --kp-alt: #efe4d8;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(2rem, 9vw, 2.5rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #3a0d17; --kp-ink: #3a0d17; --kp-soft: #6e4d55; --kp-accent: #6b1626;
+  --kp-btn: #6b1626; --kp-btn-ink: #f6efe6; --kp-card-border: rgba(107,22,38,.22); --kp-icon-bg: #f1dfd9; --kp-icon: #6b1626;
+  --kp-shadow: rgba(58, 13, 23, .35);
+  --kp-title-deco: url('/images/themes/vino/p-9.webp');
+  --kp-art-message: url('/images/themes/vino/guirnalda.webp'); --kp-art-message-w: 300px; --kp-art-message-h: 80px;
+  --kp-art-location: url('/images/themes/vino/esquina.webp'); --kp-art-location-w: 130px; --kp-art-location-h: 130px;
+  --kp-art-gifts: url('/images/themes/vino/anillos.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 125px;
+  --kp-art-rsvp: url('/images/themes/vino/p-1.webp'); --kp-art-rsvp-w: 70px; --kp-art-rsvp-h: 80px;
+  --kp-rsvp-bg: linear-gradient(rgba(42,7,15,.55), rgba(42,7,15,.7)), url('/images/themes/vino/fondo.webp') center / cover;
+  --kp-closing-bg: linear-gradient(rgba(42,7,15,.5), rgba(42,7,15,.75)), url('/images/themes/vino/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/vino/guirnalda.webp'); --kp-closing-title: #f6efe6; --kp-closing-text: #e3cfcf;
+}
+.theme-azul-acuarela {
+  --kp-bg: #fbf9f5; --kp-alt: #f7f4ee url('/images/themes/azul/fondo.webp') center / cover;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #2d3a52; --kp-ink: #2d3a52; --kp-soft: #56647e; --kp-accent: #6f88aa;
+  --kp-btn: #6f88aa; --kp-btn-ink: #fff; --kp-card-border: rgba(111,136,170,.3); --kp-icon-bg: #e6edf5; --kp-icon: #5b7598;
+  --kp-shadow: rgba(45, 58, 82, .3);
+  --kp-title-deco: url('/images/themes/azul/sello.webp');
+  --kp-art-message: url('/images/themes/azul/ramita.webp'); --kp-art-message-w: 280px; --kp-art-message-h: 110px;
+  --kp-art-location: url('/images/themes/azul/sello.webp'); --kp-art-location-w: 90px; --kp-art-location-h: 90px;
+  --kp-art-gifts: url('/images/themes/azul/ramo.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 156px;
+  --kp-art-rsvp: url('/images/themes/azul/ramita.webp'); --kp-art-rsvp-w: 260px; --kp-art-rsvp-h: 100px;
+  --kp-rsvp-bg: #e9eff6 url('/images/themes/azul/fondo.webp') center / cover;
+  --kp-closing-bg: #eef2f7 url('/images/themes/azul/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/azul/ramo.webp'); --kp-closing-title: #2d3a52;
+}
+.theme-azul-acuarela .invitation-closing::before { width: 120px; height: 170px; margin-left: -60px; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 10px !important; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { border-radius: 4px !important; letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) section :is(input, textarea, select) { border-radius: 6px !important; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) #gallery img { border-radius: 8px !important; border-width: 5px; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) .invitation-content section#rsvp { border-radius: 0; }
+.theme-terciopelo-vino :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 34px; height: 34px; }
+.theme-azul-acuarela :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+/* Bordes rasgados entre secciones claras y la confirmación (Vino) */
+.theme-terciopelo-vino .invitation-content section#rsvp { position: relative; }
+.theme-terciopelo-vino .invitation-content section#rsvp::after { content: ''; position: absolute; left: 0; right: 0; top: -2px; height: 46px; background: url('/images/themes/vino/papel.webp') center bottom / 100% 100% no-repeat; scale: 1 -1; pointer-events: none; }
+.theme-terciopelo-vino .invitation-content section#rsvp :is(h2, h3, h2 *, h3 *) { color: #f6efe6 !important; -webkit-text-fill-color: #f6efe6 !important; }
+.theme-terciopelo-vino section#rsvp :is(p, label, label *) { color: #e8d6d6 !important; }
+.theme-terciopelo-vino section#rsvp label:has(input[type="checkbox"]) { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.2) !important; }
+.theme-terciopelo-vino section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #f6efe6 !important; color: #6b1626 !important; }
+.theme-terciopelo-vino #rsvp h2::before { display: none !important; }
+@media (max-width: 899px) {
+  .wv-curtain { height: 480px; top: -14px; }
+  .wv-curtain--l { left: -112px; }
+  .wv-curtain--r { right: -112px; }
+  .wv-roses { width: 170px; right: -30px; top: -20px; }
+}
+
+/* ═════════════════════════ EDITORIAL B&N ═════════════════════════ */
+.wh--edit {
+  --wh-bg-color: #0c0c0c; --wh-bg-img: none;
+  --wh-title: 'Bodoni Moda', Didot, serif; --wh-text: 'Jost', sans-serif;
+  --wh-ink: #f4f2ee;
+  color: #f4f2ee;
+}
+.we-bg { inset: -80px 0 auto 0; height: calc(100% + 80px); z-index: 0; }
+.we-photo { width: 100%; height: 100%; }
+.we-photo img { filter: grayscale(1) contrast(1.08) brightness(.92); }
+.we-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,12,12,.05) 0%, rgba(12,12,12,.15) 30%, rgba(12,12,12,.78) 62%, #0c0c0c 92%); pointer-events: none; }
+.wh--edit .wh-inner { justify-content: flex-end; min-height: 100svh; gap: 0; padding: 120px 22px 70px; text-align: center; pointer-events: none; }
+.wh--edit .wh-inner > * { pointer-events: auto; }
+.we-date { font-family: 'Jost', sans-serif; font-weight: 400; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+.wh .we-names { margin-top: 8px; font-family: 'Bodoni Moda', Didot, serif !important; font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .01em; color: #fff; }
+.we-names span { display: block; font-size: clamp(2.6rem, 12.5vw, 3.6rem); }
+.we-city { margin-top: 8px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; opacity: .85; }
+.wh .we-phrase { margin-top: 34px; font-family: 'Pinyon Script', cursive !important; font-size: 1.55rem; line-height: 1.35; color: #e9e6e0; max-width: 300px; }
+.we-line { display: block; width: 1px; height: 54px; margin: 26px auto 22px; background: rgba(244,242,238,.7); }
+.we-count { display: grid; grid-template-columns: repeat(4, 64px); justify-content: center; }
+.we-count div + div { border-left: 1px solid rgba(244,242,238,.25); }
+.we-count b { display: block; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: 1.9rem; line-height: 1; }
+.we-count small { display: block; margin-top: 6px; font-size: 9px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
+.we-btn { margin-top: 28px; padding: 10px 26px; border-bottom: 1px solid #f4f2ee; border-top: 1px solid #f4f2ee; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #f4f2ee; }
+@media (min-width: 900px) {
+  .wh--edit .wh-inner { flex-direction: column; justify-content: flex-end; align-items: center; padding: 120px 48px 80px; }
+  .we-names span { font-size: 5.4rem; }
+  .we-photo img { object-position: center 30%; }
+}
+
+/* Módulos editoriales: negro con secciones blancas */
+.theme-editorial-bn {
+  --kp-bg: #0c0c0c; --kp-alt: #f4f2ee;
+  --kp-title-font: 'Bodoni Moda', Didot, serif; --kp-title-weight: 400; --kp-title-size: clamp(2.3rem, 11vw, 3rem); --kp-text: 'Jost', sans-serif;
+  --kp-title: #f4f2ee; --kp-ink: #f4f2ee; --kp-soft: #bdbab4; --kp-accent: #f4f2ee;
+  --kp-btn: transparent; --kp-btn-ink: #f4f2ee; --kp-card-border: rgba(244,242,238,.25); --kp-icon-bg: transparent; --kp-icon: #f4f2ee;
+  --kp-shadow: rgba(0,0,0,.5);
+  --kp-title-deco: none; --kp-art-message: none; --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: none; --kp-art-closing: none;
+  --kp-rsvp-bg: #0c0c0c; --kp-closing-bg: #0c0c0c; --kp-closing-title: #f4f2ee; --kp-closing-text: #bdbab4;
+  --text-primary: #f4f2ee; --text-secondary: #bdbab4; --card-bg: #151515;
+}
+.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) {
+  --kp-title: #0c0c0c; --kp-ink: #0c0c0c; --kp-soft: #55524d; --kp-icon: #0c0c0c; --kp-btn-ink: #0c0c0c; --kp-card-border: rgba(12,12,12,.2);
+  --text-primary: #0c0c0c; --text-secondary: #55524d; --card-bg: #ffffff;
+  background: #f4f2ee !important;
+}
+.theme-editorial-bn :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .02em !important; line-height: 1 !important; }
+.theme-editorial-bn :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
+.theme-editorial-bn :is(#message, #location, #gifts, #rsvp) > div::before { display: none !important; }
+.theme-editorial-bn .invitation-closing { padding-top: 70px !important; }
+.theme-editorial-bn .invitation-closing::before { display: none; }
+.theme-editorial-bn section p[class*="italic"], .theme-editorial-bn section .italic { font-family: 'Pinyon Script', cursive !important; font-style: normal !important; font-size: 1.35rem; }
+.theme-editorial-bn section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) {
+  background: transparent !important; color: var(--kp-btn-ink) !important; border-radius: 0 !important;
+  border: 0 !important; border-top: 1px solid currentColor !important; border-bottom: 1px solid currentColor !important;
+  box-shadow: none !important; letter-spacing: .28em !important; text-transform: uppercase; font-size: 11px !important; font-weight: 500 !important;
+}
+.theme-editorial-bn section#rsvp :is(button[type="submit"], button[class*="rounded-2xl"]) { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; }
+.theme-editorial-bn section :is(input, textarea, select) { border-radius: 0 !important; background: transparent !important; color: #f4f2ee !important; border: 0 !important; border-bottom: 1px solid rgba(244,242,238,.4) !important; }
+.theme-editorial-bn section#rsvp :is(h2, h3, p, label, label *) { color: #f4f2ee !important; }
+.theme-editorial-bn section#rsvp label:has(input[type="checkbox"]) { background: transparent !important; border-color: rgba(244,242,238,.25) !important; }
+.theme-editorial-bn #gallery img { filter: grayscale(1) contrast(1.05); border: 0 !important; border-radius: 0 !important; box-shadow: none !important; outline: 1px solid rgba(12,12,12,.25); outline-offset: 6px; }
+.theme-editorial-bn section:not(#hero):not(#gallery) img:not([class*="icon"]) { filter: grayscale(1); }
+.theme-editorial-bn section:not(#hero) .rounded-full:not(a):not(button) { border: 1px solid currentColor; }
+/* Editorial: ajustes de contraste y formas (más específicos que KidsPastel) */
+.theme-editorial-bn.theme-editorial-bn { --accent: #f4f2ee; --accent-color: #f4f2ee; --button-color: #f4f2ee; }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) { --accent: #0c0c0c; --accent-color: #0c0c0c; --button-color: #0c0c0c; }
+.theme-editorial-bn.theme-editorial-bn section [class*="bg-[var(--card-bg)]"] { background: transparent !important; border: 1px solid var(--kp-card-border) !important; border-radius: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(#message, #dress_code, #gallery, #hotels, #gifts) [class*="bg-[var(--card-bg)]"],
+.theme-editorial-bn.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) [class*="bg-[var(--card-bg)]"] { background: #ffffff !important; }
+.theme-editorial-bn.theme-editorial-bn section [class*="text-accent"], .theme-editorial-bn.theme-editorial-bn section .text-accent { color: var(--kp-ink) !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(h4, h3) { color: var(--kp-title) !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(a, button) { color: var(--kp-btn-ink) !important; }
+.theme-editorial-bn.theme-editorial-bn section#rsvp :is(button[type="submit"]) { background: #f4f2ee !important; color: #0c0c0c !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(input, textarea, select) { border-radius: 0 !important; background: transparent !important; color: #f4f2ee !important; border: 0 !important; border-bottom: 1px solid rgba(244,242,238,.45) !important; padding-left: 0 !important; }
+.theme-editorial-bn.theme-editorial-bn #gallery img { border-radius: 0 !important; border: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn.theme-editorial-bn section:not(#hero) .rounded-full:not(a):not(button) { background: transparent !important; }
+@media (min-width: 900px) { .we-photo img { object-position: center 12% !important; } }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp form button:not([class*="text-xs"]):first-of-type,
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp button[type="submit"] { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; border-radius: 0 !important; }
+.theme-editorial-bn.theme-editorial-bn section:not(#hero):not(#rsvp) :is(a[class*="rounded-full"], button[class*="rounded-full"], button[class*="rounded-2xl"]) { border-top: 1px solid currentColor !important; border-bottom: 1px solid currentColor !important; }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp button[class*="h-16"] { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; border-radius: 0 !important; }
+
+/* ═════════════════════════ ROSAS BLANCAS DE NOCHE ═════════════════════════ */
+.wh--noche {
+  --wh-bg-color: #141a16; --wh-bg-img: url('/images/themes/noche/fondo.webp');
+  --wh-veil: linear-gradient(180deg, rgba(10,14,11,.35), rgba(10,14,11,.55) 45%, rgba(10,14,11,.85));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #2b2f2b; --wh-accent: #2b2f2b; --wh-line: rgba(43,47,43,.2);
+  --wh-count-bg: transparent; --wh-btn: #1d241f; --wh-btn-ink: #f7f1e6;
+  --wh-pad: 50px 16px 150px;
+}
+.wn-head { text-align: center; color: #fbf7ef; width: 100%; max-width: 380px; }
+.wh .wn-names { font-family: 'Bodoni Moda', 'Cormorant Garamond', serif !important; font-weight: 400; line-height: .9; letter-spacing: -.01em; color: #fbf7ef; text-shadow: 0 4px 18px rgba(0,0,0,.5); }
+.wn-names span { display: block; font-size: clamp(3.4rem, 17vw, 4.6rem); }
+.wn-names span + span { padding-left: 18%; }
+.wn-kicker { margin-top: 16px; font-size: 11px; letter-spacing: .4em; text-transform: uppercase; opacity: .85; }
+.wh .wn-date { font-family: 'Bodoni Moda', serif !important; font-size: 2.2rem; letter-spacing: .04em; margin-top: 2px; }
+.wn-photo { width: 72%; aspect-ratio: 3 / 4; margin: 22px auto 0; border-radius: 200px 200px 6px 6px; border: 1px solid rgba(251,247,239,.6); outline: 6px solid rgba(251,247,239,.12); }
+.wn-card {
+  position: relative; width: 100%; max-width: 380px;
+  padding: 64px 40px 70px; text-align: center; color: #2b2f2b;
+  background: url('/images/themes/noche/marco.webp') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 30px 40px rgba(0,0,0,.45));
+}
+.wn-rose { width: 160px; z-index: 3; }
+.wn-rose--tl { top: -44px; left: -40px; }
+.wn-rose--br { bottom: -40px; right: -40px; rotate: 180deg; }
+.wh .wn-title { font-family: 'Pinyon Script', cursive !important; font-size: 2.4rem; font-weight: 400; color: #1d241f; }
+.wn-text { margin-top: 8px; font-size: 13px; line-height: 1.6; color: #4b514b; }
+.wn-cal { margin: 18px auto 6px; max-width: 250px; }
+.wn-cal-m { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px; }
+.wn-cal-g { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; font-size: 12px; }
+.wn-cal-g small { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; opacity: .55; }
+.wn-cal-g span { position: relative; line-height: 26px; }
+.wn-cal-g span.is-day { color: #fff; z-index: 0; font-weight: 600; }
+.wn-cal-g span.is-day::before { content: '♥'; position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; font-size: 30px; line-height: 1; color: #1d241f; }
+.wn-venue { margin: 10px 0 6px; font-size: 12px; letter-spacing: .06em; color: #4b514b; }
+.wh--noche .wh-count { padding: 6px 0 14px; }
+.wh--noche .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.7rem; color: #1d241f; margin-bottom: 2px; }
+.wn-pt { width: 46px; z-index: 4; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); animation: wh-drift 8s ease-in-out infinite; }
+.wn-pt--1 { top: 24%; right: 5%; width: 64px; }
+.wn-pt--2 { top: 40%; left: 3%; width: 58px; animation-delay: -3s; }
+.wn-pt--3 { top: 63%; right: 4%; width: 34px; animation-delay: -5s; }
+.wn-pt--4 { top: 8%; left: 8%; width: 30px; animation-delay: -2s; }
+.wn-garland { bottom: 20px; left: 50%; width: min(130vw, 620px); margin-left: calc(min(130vw, 620px) / -2); z-index: 4; filter: drop-shadow(0 16px 18px rgba(0,0,0,.5)); }
+@media (min-width: 900px) {
+  .wh--noche { --wh-pad-d: 60px 48px 170px; }
+  .wn-names span { font-size: 6rem; }
+  .wn-photo { width: 60%; }
+  .wn-card { max-width: 420px; }
+  .wn-garland { width: 760px; margin-left: -380px; }
+}
+
+/* ═════════════════════════ VERDE SALVIA ═════════════════════════ */
+.wh--salvia {
+  --wh-bg-color: #f5f1e8; --wh-bg-img: url('/images/themes/salvia/fondo.webp');
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #3f4a3a; --wh-accent: #6f7f62; --wh-line: rgba(111,127,98,.3);
+  --wh-count-bg: rgba(255,255,255,.6); --wh-count-shadow: 0 0 0 1px rgba(111,127,98,.25);
+  --wh-btn: #3f4a3a; --wh-btn-ink: #f5f1e8; --wh-btn-radius: 6px;
+  --wh-pad: 120px 22px 90px;
+}
+.wg-col { width: 100%; max-width: 360px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.wg-corner { top: -20px; width: min(52vw, 260px); z-index: 1; }
+.wg-corner--l { left: -24px; }
+.wg-corner--r { right: -24px; scale: -1 1; }
+.wg-hang { width: min(22vw, 110px); z-index: 1; opacity: .95; }
+.wg-hang--l { top: 58%; left: -26px; }
+.wg-hang--r { top: 74%; right: -26px; scale: -1 1; }
+.wg-quote { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; line-height: 1.8; color: #56614f; max-width: 250px; }
+.wh .wg-mono { margin-top: 22px; display: flex; align-items: center; gap: 18px; font-family: 'Cormorant Garamond', serif !important; font-size: 4.6rem; font-weight: 400; line-height: 1; color: #2f3a2c; }
+.wg-mono i { width: 1px; height: 70px; background: #2f3a2c; }
+.wg-kicker { margin-top: 10px; font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: #56614f; }
+.wg-sprig { width: 160px; margin: 6px 0 18px; }
+.wg-photo { width: 100%; aspect-ratio: 4 / 4.4; -webkit-mask: url('/images/themes/salvia/banda.webp') center / 100% 100% no-repeat; mask: url('/images/themes/salvia/banda.webp') center / 100% 100%; }
+.wg-photo { -webkit-mask: none; mask: none; clip-path: polygon(0 3%, 6% 1%, 14% 3.5%, 24% 1.5%, 35% 3%, 47% .5%, 58% 3%, 70% 1%, 82% 3.5%, 92% 1.5%, 100% 3%, 100% 97%, 93% 99%, 83% 96.5%, 72% 98.5%, 60% 96%, 49% 99%, 37% 96.5%, 25% 98.5%, 14% 96%, 5% 98.5%, 0 96.5%); }
+.wh .wg-names { margin-top: 30px; font-family: 'Pinyon Script', cursive !important; font-weight: 400; line-height: 1; color: #2f3a2c; }
+.wg-names span { display: block; font-size: clamp(3.6rem, 17vw, 4.4rem); }
+.wg-names em { display: block; font-family: 'Pinyon Script', cursive; font-style: normal; font-size: 2.4rem; color: #6f7f62; }
+.wg-invite { margin-top: 14px; font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: #56614f; max-width: 240px; line-height: 1.7; }
+.wg-date { margin-top: 18px; color: #2f3a2c; }
+.wg-date small { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; }
+.wg-date div { display: flex; align-items: center; gap: 14px; }
+.wg-date div span { min-width: 82px; padding: 5px 0; border-top: 1px solid rgba(47,58,44,.45); border-bottom: 1px solid rgba(47,58,44,.45); font-size: 10px; letter-spacing: .26em; text-transform: uppercase; }
+.wg-date b { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 3.4rem; line-height: 1; }
+.wg-venue { margin: 14px 0 18px; font-size: 12px; color: #56614f; }
+.wh--salvia .wh-inner { gap: 10px; }
+.wh--salvia .wh-count { margin-bottom: 16px; }
+.wh--salvia .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.7rem; color: #3f4a3a; margin-bottom: 2px; }
+@media (min-width: 900px) {
+  .wh--salvia { --wh-pad-d: 110px 48px 80px; }
+  .wh--salvia .wh-inner { gap: 70px; }
+  .wg-corner { width: 360px; }
+  .wg-hang { width: 150px; }
+  .wg-hang--l { top: 30%; } .wg-hang--r { top: 40%; }
+}
+
+/* ═════════════════════════ ROSA EMPOLVADO ═════════════════════════ */
+.wh--malva {
+  --wh-bg-color: #efe4e3; --wh-bg-img: url('/images/themes/malva/fondo.webp');
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #4a3640; --wh-accent: #8e5f71; --wh-line: rgba(142,95,113,.3);
+  --wh-btn: #8e5f71; --wh-btn-ink: #fff; --wh-btn-radius: 999px;
+  --wh-pad: 34px 16px 70px;
+}
+.wm-hang { top: 0; width: min(24vw, 120px); z-index: 1; }
+.wm-hang--l { left: -20px; }
+.wm-hang--r { right: -20px; scale: -1 1; top: 40%; }
+.wm-card { position: relative; width: 100%; max-width: 370px; padding: 22px 0 30px; background: #f6efee; text-align: center; box-shadow: 0 30px 50px -30px rgba(74,54,64,.5); border-radius: 4px; overflow: hidden; }
+.wm-kicker { font-size: 11px; letter-spacing: .34em; text-transform: uppercase; color: #4a3640; margin-bottom: 14px; }
+.wm-top { position: relative; }
+.wm-photo { width: 100%; aspect-ratio: 4 / 4.6; }
+.wm-wave { position: absolute; left: 0; bottom: -2px; width: 100%; height: 70px; object-fit: fill; z-index: 1; }
+.wm-flowers { right: -26px; bottom: -40px; width: 200px; z-index: 2; }
+.wh .wm-names { margin-top: 30px; font-family: 'Cormorant Garamond', serif !important; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; line-height: 1; color: #3d2c35; }
+.wm-names span { display: block; font-size: clamp(2.2rem, 10vw, 2.6rem); }
+.wm-names em { display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Pinyon Script', cursive; text-transform: none; font-style: normal; font-size: 2rem; color: #8e5f71; line-height: 1.2; }
+.wm-names em::before, .wm-names em::after { content: ''; width: 70px; height: 1px; background: rgba(142,95,113,.45); }
+.wm-date { margin-top: 12px; font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; letter-spacing: .12em; color: #8e5f71; }
+.wh .wm-wait { margin-top: 8px; font-family: 'Cormorant Garamond', serif !important; font-size: 1.2rem; color: #4a3640; }
+.wm-count { margin: 18px 0; }
+.wm-count p { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #4a3640; margin-bottom: 8px; }
+.wm-count div { display: flex; justify-content: center; gap: 8px; }
+.wm-count span { width: 60px; padding: 8px 0; border: 1px solid rgba(142,95,113,.4); border-radius: 6px; background: rgba(255,255,255,.55); }
+.wm-count b { display: block; font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 500; line-height: 1; color: #3d2c35; }
+.wm-count small { font-size: 9px; letter-spacing: .1em; color: #6b5560; }
+.wm-sprig { display: block; width: 170px; margin: 22px auto 0; }
+.wm-side { display: none; }
+@media (min-width: 900px) {
+  .wm-side { display: flex; }
+  .wm-bouquet { width: 300px; }
+  .wm-hang { width: 160px; }
+  .wh--malva { --wh-pad-d: 50px 48px 60px; }
+}
+
+/* ═════════════════════ MÓDULOS: Noche, Salvia, Malva ═════════════════════ */
+.theme-rosas-noche {
+  --kp-bg: #f7f1e6; --kp-alt: #efe7d8;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #1d241f; --kp-ink: #1d241f; --kp-soft: #4b514b; --kp-accent: #1d241f;
+  --kp-btn: #1d241f; --kp-btn-ink: #f7f1e6; --kp-card-border: rgba(29,36,31,.25); --kp-icon-bg: #e8e2d4; --kp-icon: #1d241f;
+  --kp-shadow: rgba(29,36,31,.35);
+  --kp-title-deco: url('/images/themes/noche/p-3.webp');
+  --kp-art-message: url('/images/themes/noche/guirnalda.webp'); --kp-art-message-w: 280px; --kp-art-message-h: 92px;
+  --kp-art-location: url('/images/themes/noche/p-2.webp'); --kp-art-location-w: 70px; --kp-art-location-h: 100px;
+  --kp-art-gifts: url('/images/themes/noche/copas.webp'); --kp-art-gifts-w: 160px; --kp-art-gifts-h: 130px;
+  --kp-art-rsvp: url('/images/themes/noche/esquina.webp'); --kp-art-rsvp-w: 120px; --kp-art-rsvp-h: 120px;
+  --kp-rsvp-bg: linear-gradient(rgba(10,14,11,.62), rgba(10,14,11,.8)), url('/images/themes/noche/fondo.webp') center / cover;
+  --kp-closing-bg: linear-gradient(rgba(10,14,11,.55), rgba(10,14,11,.82)), url('/images/themes/noche/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/noche/guirnalda.webp'); --kp-closing-title: #fbf7ef; --kp-closing-text: #d9d4c8;
+}
+.theme-salvia-eucalipto {
+  --kp-bg: #f8f5ee; --kp-alt: #f5f1e8 url('/images/themes/salvia/fondo.webp') center / cover;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #2f3a2c; --kp-ink: #2f3a2c; --kp-soft: #56614f; --kp-accent: #6f7f62;
+  --kp-btn: #3f4a3a; --kp-btn-ink: #f5f1e8; --kp-card-border: rgba(111,127,98,.3); --kp-icon-bg: #e7ebdf; --kp-icon: #4d5b45;
+  --kp-shadow: rgba(63,74,58,.3);
+  --kp-title-deco: url('/images/themes/salvia/ramita.webp');
+  --kp-art-message: url('/images/themes/salvia/esquina.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 110px;
+  --kp-art-location: url('/images/themes/salvia/ramita.webp'); --kp-art-location-w: 200px; --kp-art-location-h: 84px;
+  --kp-art-gifts: url('/images/themes/salvia/colgante.webp'); --kp-art-gifts-w: 70px; --kp-art-gifts-h: 130px;
+  --kp-art-rsvp: url('/images/themes/salvia/ramita.webp'); --kp-art-rsvp-w: 200px; --kp-art-rsvp-h: 84px;
+  --kp-rsvp-bg: #e9ede1 url('/images/themes/salvia/banda.webp') center / cover;
+  --kp-closing-bg: #f5f1e8 url('/images/themes/salvia/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/salvia/esquina.webp'); --kp-closing-title: #2f3a2c;
+}
+.theme-malva-empolvado {
+  --kp-bg: #f6efee; --kp-alt: #f0e6e4 url('/images/themes/malva/fondo.webp') center / cover;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #3d2c35; --kp-ink: #3d2c35; --kp-soft: #6b5560; --kp-accent: #8e5f71;
+  --kp-btn: #8e5f71; --kp-btn-ink: #fff; --kp-card-border: rgba(142,95,113,.3); --kp-icon-bg: #efe2e4; --kp-icon: #8e5f71;
+  --kp-shadow: rgba(74,54,64,.3);
+  --kp-title-deco: url('/images/themes/malva/ramita.webp');
+  --kp-art-message: url('/images/themes/malva/esquina.webp'); --kp-art-message-w: 130px; --kp-art-message-h: 130px;
+  --kp-art-location: url('/images/themes/malva/ramita.webp'); --kp-art-location-w: 200px; --kp-art-location-h: 40px;
+  --kp-art-gifts: url('/images/themes/malva/ramo.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 140px;
+  --kp-art-rsvp: url('/images/themes/malva/ramita.webp'); --kp-art-rsvp-w: 200px; --kp-art-rsvp-h: 40px;
+  --kp-rsvp-bg: #f0e6e4 url('/images/themes/malva/fondo.webp') center / cover;
+  --kp-closing-bg: #efe4e3 url('/images/themes/malva/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/malva/ramo.webp'); --kp-closing-title: #3d2c35;
+}
+:is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 10px !important; }
+:is(.theme-rosas-noche, .theme-salvia-eucalipto) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { border-radius: 4px !important; letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+.theme-malva-empolvado section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .18em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) section :is(input, textarea, select) { border-radius: 6px !important; }
+:is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) #gallery img { border-radius: 8px !important; border-width: 5px; }
+:is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) .invitation-content section#rsvp { border-radius: 0; }
+:is(.theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .12em !important; }
+:is(.theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 120px; height: 26px; }
+.theme-rosas-noche :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+.theme-rosas-noche .invitation-content section#rsvp :is(h2, h3, h2 *, h3 *) { color: #fbf7ef !important; -webkit-text-fill-color: #fbf7ef !important; }
+.theme-rosas-noche section#rsvp :is(p, label, label *) { color: #ddd7ca !important; }
+.theme-rosas-noche section#rsvp label:has(input[type="checkbox"]) { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.2) !important; }
+.theme-rosas-noche section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #f7f1e6 !important; color: #1d241f !important; }
+.theme-rosas-noche #rsvp h2::before { display: none !important; }
+.theme-salvia-eucalipto .invitation-content section#rsvp { background-size: 140% 100% !important; }
+.wn-cal-g span.is-day::before { content: '' !important; inset: -2px 2px !important; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'><path d='M12 21s-9-5.6-9-12.2C3 5.2 5.6 3 8.4 3c1.6 0 2.9.8 3.6 2 .7-1.2 2-2 3.6-2C18.4 3 21 5.2 21 8.8 21 15.4 12 21 12 21z' fill='%231d241f'/></svg>") center / contain no-repeat; }
+@media (min-width: 900px) {
+  .wh--noche { --wh-pad-d: 50px 48px 230px; }
+  .wn-card { max-width: 440px; padding: 70px 50px 86px; }
+  .wn-garland { bottom: -10px; }
+}
