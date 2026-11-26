@@ -205,6 +205,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                             <p className="de-card-title">Baby<br />Posada</p>
                             <i className="de-rule" />
                             {dateLong && <p className="de-card-date">{dateLong}</p>}
+                            <p className="de-card-foot">Para ti y tu familia</p>
                             <img className="de-card-star" src={A('estrella')} alt="" />
                         </div>
                     </div>
