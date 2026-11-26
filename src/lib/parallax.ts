@@ -142,5 +142,63 @@ PARALLAX_BY_THEME.globos3d = [
     { selector: '.kh-l--clouds', speed: -0.15 },
     ...sectionLayers('globos3d'),
 ];
+PARALLAX_BY_THEME.piloto = [
+    { selector: '.kh--piloto', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--balloon-l', speed: 0.35 },
+    { selector: '.kh-l--balloon-r', speed: 0.5 },
+    { selector: '.kh-l--sign', speed: 0.1 },
+    { selector: '.kh-l--plane', speed: -0.25 },
+    { selector: '.kh-l--pclouds', speed: -0.12 },
+    ...sectionLayers('piloto'),
+];
+PARALLAX_BY_THEME.babyshower = [
+    { selector: '.kh--babyshower', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--moon', speed: 0.4 },
+    { selector: '.kh-l--bballoon', speed: 0.3 },
+    { selector: '.kh-l--bear', speed: -0.15 },
+    { selector: '.kh-l--elephant', speed: -0.2 },
+    { selector: '.kh-l--bclouds', speed: -0.1 },
+    ...sectionLayers('babyshower'),
+];
+PARALLAX_BY_THEME.bomberos = [
+    { selector: '.kh--bomberos', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--ladder', speed: 0.2 },
+    { selector: '.kh-l--flame1', speed: 0.35 },
+    { selector: '.kh-l--flame2', speed: 0.3 },
+    { selector: '.kh-l--splash1', speed: -0.3 },
+    { selector: '.kh-l--truck', speed: -0.12 },
+    { selector: '.kh-l--ff-boy', speed: -0.2 },
+    { selector: '.kh-l--ff-girl', speed: -0.22 },
+    ...sectionLayers('bomberos'),
+];
+PARALLAX_BY_THEME.policias = [
+    { selector: '.kh-l--sun', speed: 0.45 },
+    { selector: '.kh-l--heli', speed: 0.3 },
+    { selector: '.kh-l--drone', speed: -0.35 },
+    { selector: '.kh-l--tree', speed: 0.1 },
+    { selector: '.kh-l--station', speed: 0.08 },
+    { selector: '.kh-l--car', speed: -0.15 },
+    { selector: '.kh-l--dog', speed: -0.2 },
+    ...sectionLayers('policias'),
+];
+PARALLAX_BY_THEME.hadas = [
+    { selector: '.kh--hadas', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--bf-a', speed: -0.45 },
+    { selector: '.kh-l--bf-b', speed: -0.35 },
+    { selector: '.kh-l--fairy-l', speed: -0.2 },
+    { selector: '.kh-l--fairy-r', speed: -0.25 },
+    { selector: '.kh-l--grass', speed: -0.08 },
+    { selector: '.kh-l--shrooms', speed: -0.12 },
+    ...sectionLayers('hadas'),
+];
+PARALLAX_BY_THEME.hadita = [
+    { selector: '.kh--hadita', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--gbf1', speed: -0.4 },
+    { selector: '.kh-l--gbf2', speed: -0.3 },
+    { selector: '.kh-l--gbf3', speed: -0.5 },
+    { selector: '.kh-l--gflowers', speed: -0.1 },
+    { selector: '.kh-l--baby', speed: -0.15 },
+    ...sectionLayers('hadita'),
+];
 
 export const PARALLAX_MAX_PX = 160;

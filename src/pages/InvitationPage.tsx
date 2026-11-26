@@ -355,6 +355,48 @@ export default function InvitationPage() {
             accentOverride: '#EC96B4', fontPreset: 'divertida',
             heroRadius: '30px', cardRadius: '30px',
         },
+        'piloto': {
+            sectionBg: '#F6EFE0', sectionBgAlt: '#EFE4CF', cardBg: '#FFFFFF',
+            textPrimary: '#1F2F52', textSecondary: '#556080',
+            borderColor: '#E6D6B2', cardBorder: '#E6D6B2',
+            accentOverride: '#C9A14A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'babyshower': {
+            sectionBg: '#FBF7EF', sectionBgAlt: '#E9F1FA', cardBg: '#FFFFFF',
+            textPrimary: '#5B5147', textSecondary: '#8A7F73',
+            borderColor: '#DFE8F4', cardBorder: '#DFE8F4',
+            accentOverride: '#8FADD8', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'bomberos': {
+            sectionBg: '#FFF8F2', sectionBgAlt: '#FFF1E3', cardBg: '#FFFFFF',
+            textPrimary: '#3A2A24', textSecondary: '#6E5A50',
+            borderColor: '#F3D7C4', cardBorder: '#F3D7C4',
+            accentOverride: '#D62B2B', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'policias': {
+            sectionBg: '#F2F5F7', sectionBgAlt: '#E9EEF2', cardBg: '#FFFFFF',
+            textPrimary: '#44597A', textSecondary: '#6B7A8F',
+            borderColor: '#DBE3EA', cardBorder: '#DBE3EA',
+            accentOverride: '#44597A', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'hadas': {
+            sectionBg: '#FDF7F6', sectionBgAlt: '#FCEFEE', cardBg: '#FFFFFF',
+            textPrimary: '#7A4A4D', textSecondary: '#946A6C',
+            borderColor: '#F2DCD9', cardBorder: '#F2DCD9',
+            accentOverride: '#D9767A', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'hadita': {
+            sectionBg: '#FDF3EF', sectionBgAlt: '#F9E6DF', cardBg: '#FFFFFF',
+            textPrimary: '#7A4F5E', textSecondary: '#9A7582',
+            borderColor: '#F4DCDF', cardBorder: '#F4DCDF',
+            accentOverride: '#E08AA8', fontPreset: 'romantica',
+            heroRadius: '30px', cardRadius: '30px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -2850,7 +2892,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'arcoiris') {
             return <ArcoirisHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
+        if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {

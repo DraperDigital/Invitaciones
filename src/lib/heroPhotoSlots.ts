@@ -292,6 +292,60 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto del festejado; se muestra redonda.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'piloto': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'babyshower': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'bomberos': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'policias': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'hadas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'hadita': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto del festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

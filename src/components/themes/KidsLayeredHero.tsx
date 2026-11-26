@@ -18,7 +18,11 @@ import './KidsLayered.css';
 
 export interface KidsLayeredConfig {
     /** Capas decorativas (clase `kh-l--<k>`, posición en el CSS de la plantilla) */
-    layers: { k: string; src: string }[];
+    layers: { k: string; src: string; words?: string[] }[];
+    /** La edad va encima de la ilustración (escudo, corona) en vez de al lado */
+    ageInset?: boolean;
+    /** Texto en lugar de "Cumplo N años" (p. ej. baby shower sin edad) */
+    ageLabel?: string;
     /** Ilustración sobre la tarjeta del nombre */
     topArt?: string;
     /** Ilustración junto a la edad */
@@ -93,6 +97,89 @@ export const KIDS_LAYERED: Record<string, KidsLayeredConfig> = {
         kicker: 'Acompáñame a celebrar mi cumpleaños',
         countTitle: 'Faltan para mi gran día',
     },
+    piloto: {
+        layers: [
+            { k: 'balloon-l', src: P('piloto', 'globo') },
+            { k: 'balloon-r', src: P('piloto', 'globo') },
+            { k: 'sign', src: P('piloto', 'letrero'), words: ['Juegos', 'Pastel', 'Sonrisas', 'Amigos', '¡Aventuras!'] },
+            { k: 'plane', src: P('piloto', 'avion') },
+            { k: 'pclouds', src: P('piloto', 'nubes') },
+        ],
+        kicker: '¡Despegamos! Nuestro pequeño piloto',
+        countTitle: 'Despegue en…',
+        fallbackName: 'Festejado',
+    },
+    babyshower: {
+        layers: [
+            { k: 'moon', src: P('babyshower', 'luna') },
+            { k: 'bballoon', src: P('babyshower', 'globo') },
+            { k: 'bear', src: P('babyshower', 'osito') },
+            { k: 'elephant', src: P('babyshower', 'elefante') },
+            { k: 'bclouds', src: P('babyshower', 'nubes') },
+        ],
+        kicker: 'Acompáñanos a un dulce',
+        ageLabel: 'Baby Shower',
+        countTitle: 'Falta poquito para conocerte',
+        fallbackName: 'Bebé',
+    },
+    bomberos: {
+        layers: [
+            { k: 'ladder', src: P('bomberos', 'escalera') },
+            { k: 'flame1', src: P('bomberos', 'deco-3') },
+            { k: 'flame2', src: P('bomberos', 'deco-6') },
+            { k: 'splash1', src: P('bomberos', 'deco-5') },
+            { k: 'truck', src: P('bomberos', 'camion') },
+            { k: 'ff-boy', src: P('bomberos', 'nino') },
+            { k: 'ff-girl', src: P('bomberos', 'nina') },
+        ],
+        ageArt: P('bomberos', 'escudo'),
+        ageInset: true,
+        letterColors: ['#d62b2b'],
+        kicker: '¡El mejor bombero del mundo!',
+        countTitle: '¡Sirenas listas en…!',
+        fallbackName: 'Festejado',
+    },
+    policias: {
+        layers: [
+            { k: 'sun', src: P('policias', 'as-2') },
+            { k: 'heli', src: P('policias', 'helicoptero') },
+            { k: 'drone', src: P('policias', 'dron') },
+            { k: 'tree', src: P('policias', 'as-1') },
+            { k: 'station', src: P('policias', 'estacion') },
+            { k: 'car', src: P('policias', 'patrulla') },
+            { k: 'dog', src: P('policias', 'perrito') },
+        ],
+        topArt: P('policias', 'grupo'),
+        kicker: '¡Atención a todas las unidades!',
+        countTitle: 'Misión en curso',
+        fallbackName: 'Festejado',
+    },
+    hadas: {
+        layers: [
+            { k: 'bf-a', src: P('hadas', 'mariposa-1') },
+            { k: 'bf-b', src: P('hadas', 'mariposa-2') },
+            { k: 'fairy-l', src: P('hadas', 'hada-1') },
+            { k: 'fairy-r', src: P('hadas', 'hada-2') },
+            { k: 'grass', src: P('hadas', 'pasto') },
+            { k: 'shrooms', src: P('hadas', 'hongos') },
+        ],
+        topArt: P('hadas', 'casita'),
+        kicker: 'Te invito a una fiesta llena de magia',
+        countTitle: 'Faltan para la magia',
+    },
+    hadita: {
+        layers: [
+            { k: 'gbf1', src: P('hadita', 'mariposa-1') },
+            { k: 'gbf2', src: P('hadita', 'mariposa-3') },
+            { k: 'gbf3', src: P('hadita', 'mariposa-4') },
+            { k: 'gflowers', src: P('hadita', 'flores') },
+            { k: 'baby', src: P('hadita', 'bebe') },
+        ],
+        ageArt: P('hadita', 'corona'),
+        ageInset: true,
+        kicker: 'Mi primer añito',
+        countTitle: 'Faltan para mi gran día',
+    },
     globos3d: {
         layers: [
             { k: 'far', src: P('globos3d', 'lejanos') },
@@ -131,7 +218,12 @@ export default function KidsLayeredHero({ theme, event, cfg, countdown, labels, 
 
     return (
         <section id="hero" className={`kh-hero kh--${theme} ${shown ? 'is-shown' : ''}`}>
-            {conf.layers.map((l) => (
+            {conf.layers.map((l) => l.words ? (
+                <div key={l.k} className={`kh-l kh-l--${l.k}`} aria-hidden="true">
+                    <img src={l.src} alt="" />
+                    {l.words.map((w, i) => <span key={i} className={`kh-word kh-word--${i + 1}`}>{w}</span>)}
+                </div>
+            ) : (
                 <img key={l.k} className={`kh-l kh-l--${l.k}`} src={l.src} alt="" aria-hidden="true" />
             ))}
 
@@ -141,8 +233,9 @@ export default function KidsLayeredHero({ theme, event, cfg, countdown, labels, 
                         {conf.topArt && <img className="kh-top" src={conf.topArt} alt="" aria-hidden="true" />}
                         <p className="kh-kicker">{kicker}</p>
                         <h1 className={`kh-name ${conf.letterColors ? 'is-letters' : ''}`} aria-label={d.name}>{name}</h1>
+                        {conf.ageLabel && !d.age && <p className="kh-age-label">{conf.ageLabel}</p>}
                         {d.age && (
-                            <div className={`kh-age ${conf.ageArt ? 'has-art' : ''}`}>
+                            <div className={`kh-age ${conf.ageArt ? 'has-art' : ''} ${conf.ageInset ? 'is-inset' : ''}`}>
                                 {conf.ageArt && <img src={conf.ageArt} alt="" aria-hidden="true" />}
                                 <p><span>Cumplo</span><b>{d.age}</b><span>{Number(d.age) === 1 ? 'año' : 'años'}</span></p>
                             </div>
