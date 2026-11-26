@@ -29,11 +29,7 @@
   color: var(--kp-title) !important;
 }
 :is(.theme-unicornio, .theme-castillo, .theme-arcoiris, .theme-convivio, .theme-juguetes, .theme-capibaras, .theme-perritos, .theme-mariposas, .theme-globos3d, .theme-piloto, .theme-babyshower, .theme-bomberos, .theme-policias, .theme-hadas, .theme-hadita, .theme-pase-abordar, .theme-sobre-marino, .theme-terciopelo-vino, .theme-azul-acuarela, .theme-editorial-bn, .theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before {
-  content: '';
-  display: block;
-  width: 34px; height: 34px;
-  margin: 0 auto 8px;
-  background: var(--kp-title-deco) center / contain no-repeat;
+  display: none !important;
 }
 :is(.theme-unicornio, .theme-castillo, .theme-arcoiris, .theme-convivio, .theme-juguetes, .theme-capibaras, .theme-perritos, .theme-mariposas, .theme-globos3d, .theme-piloto, .theme-babyshower, .theme-bomberos, .theme-policias, .theme-hadas, .theme-hadita, .theme-pase-abordar, .theme-sobre-marino, .theme-terciopelo-vino, .theme-azul-acuarela, .theme-editorial-bn, .theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h4, section:not(#hero) [class*="text-2xl"][class*="uppercase"]) {
   font-family: var(--kp-text) !important;

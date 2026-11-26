@@ -54,12 +54,7 @@
 .theme-dinosaurios section:not(#hero) h3[class*="text-3xl"]::before,
 .theme-dinosaurios #gallery h2::before,
 .theme-dinosaurios #rsvp h2::before {
-  content: '';
-  display: block;
-  width: 54px; height: 46px;
-  margin: 0 auto 10px;
-  background: url('/images/themes/dinosaurios/huellas-paso.webp') center / contain no-repeat;
-  opacity: .9;
+  display: none !important;
 }
 .theme-dinosaurios section:not(#hero) h4,
 .theme-dinosaurios section:not(#hero) [class*="text-2xl"][class*="uppercase"] {

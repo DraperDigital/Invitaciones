@@ -328,7 +328,16 @@
 .kh-l--far { top: 8%; left: 50%; width: min(120vw, 560px); translate: -50% 0; opacity: .7; filter: blur(1px); }
 .kh-l--big-l { top: 30px; left: -30px; width: min(34vw, 150px); animation: kh-bob 5s ease-in-out infinite; }
 .kh-l--big-r { top: 46%; right: -34px; width: min(32vw, 140px); scale: -1 1; animation: kh-bob 6s ease-in-out infinite; animation-delay: -2s; }
-.kh-l--clouds { bottom: -10px; left: 50%; width: min(130vw, 620px); translate: -50% 0; z-index: 3; }
+.kh-l--clouds {
+  bottom: -10px;
+  left: 50%;
+  width: min(130vw, 620px);
+  max-width: none !important;
+  translate: -50% 0;
+  z-index: 3;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
 @media (min-width: 900px) {
   .kh--globos3d { --kh-pad-d: 60px 48px 260px; }
   .kh--globos3d .kh-l--far { width: 1100px; }
@@ -386,7 +395,16 @@
 .kh-word--4 { top: 57.5%; left: 38%; right: 5%; }
 .kh-word--5 { top: 71.5%; left: 5%; right: 38%; }
 .kh-l--plane { bottom: 26px; left: -10px; width: min(62vw, 270px); z-index: 3; animation: kh-bob 4s ease-in-out infinite; }
-.kh-l--pclouds { bottom: -12px; left: 50%; width: min(150vw, 700px); translate: -50% 0; z-index: 2; }
+.kh-l--pclouds {
+  bottom: -12px;
+  left: 50%;
+  width: min(150vw, 700px);
+  max-width: none !important;
+  translate: -50% 0;
+  z-index: 2;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
 @media (min-width: 900px) {
   .kh--piloto { --kh-pad-d: 70px 48px 200px; }
   .kh--piloto .kh-l--balloon-l { width: 200px; left: 2%; }
@@ -431,7 +449,16 @@
 .kh-l--bballoon { top: 20px; left: -6px; width: min(28vw, 120px); animation: kh-bob 6s ease-in-out infinite; animation-delay: -2s; }
 .kh-l--bear { bottom: 34px; left: -6px; width: min(34vw, 150px); z-index: 3; }
 .kh-l--elephant { bottom: 30px; right: -8px; width: min(36vw, 160px); z-index: 3; }
-.kh-l--bclouds { bottom: -16px; left: 50%; width: min(150vw, 680px); translate: -50% 0; z-index: 2; }
+.kh-l--bclouds {
+  bottom: -16px;
+  left: 50%;
+  width: min(150vw, 680px);
+  max-width: none !important;
+  translate: -50% 0;
+  z-index: 2;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
 @media (min-width: 900px) {
   .kh--babyshower { --kh-pad-d: 80px 48px 220px; }
   .kh--babyshower .kh-l--moon { width: 230px; right: 4%; }

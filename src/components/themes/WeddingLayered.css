@@ -84,7 +84,19 @@
 .wh--pase::before { filter: grayscale(1); }
 .wp-path { top: 0; left: 0; width: 100%; height: 100%; color: rgba(243,238,228,.55); z-index: 1; }
 .wp-plane { top: 70px; right: -40px; width: min(44vw, 200px); opacity: .95; filter: drop-shadow(0 10px 14px rgba(0,0,0,.35)); animation: wh-fly 14s ease-in-out infinite; z-index: 3; }
-.wp-clouds { bottom: -26px; left: 50%; width: min(220vw, 1100px); margin-left: calc(min(220vw, 1100px) / -2); z-index: 3; opacity: .97; }
+.wp-clouds {
+  bottom: -6px;
+  left: 50%;
+  width: min(160vw, 1200px);
+  min-width: 120vw;
+  max-width: none !important;
+  translate: -50% 0;
+  z-index: 3;
+  opacity: .98;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+}
 
 /* Boleto con muescas a los lados y bordes troquelados */
 .wp-ticket {
@@ -188,7 +200,17 @@
   .wh-side { max-width: 380px; }
   .wp-ticket, .ws-card { max-width: 400px; }
   .wp-plane { width: 280px; right: 6%; top: 50px; }
-  .wp-clouds { width: 112%; left: -6%; margin-left: 0; bottom: -70px; }
+  .wp-clouds {
+    width: min(140vw, 1400px);
+    min-width: 110vw;
+    max-width: none !important;
+    left: 50%;
+    translate: -50% 0;
+    margin-left: 0 !important;
+    bottom: -20px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%);
+  }
   .wh--pase { --wh-pad-d: 60px 48px 260px; }
   .ws-corner { width: 380px; }
   .ws-corner--br { bottom: 40px; }
@@ -238,8 +260,7 @@
 :is(.theme-pase-abordar, .theme-sobre-marino) #gallery img { border-radius: 10px !important; border-width: 5px; }
 :is(.theme-pase-abordar, .theme-sobre-marino) .invitation-content section#rsvp { border-radius: 0; }
 .theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .1em !important; }
-.theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 60px; height: 24px; }
-.theme-sobre-marino :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+:is(.theme-pase-abordar, .theme-sobre-marino) :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
 /* Tarjetas de boleto con muescas en el Pase */
 .theme-pase-abordar section:not(#hero) [class*="bg-[var(--card-bg)]"]:not([class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"]) {
   background: #fbf8f1 !important;
@@ -389,8 +410,7 @@
 :is(.theme-terciopelo-vino, .theme-azul-acuarela) section :is(input, textarea, select) { border-radius: 6px !important; }
 :is(.theme-terciopelo-vino, .theme-azul-acuarela) #gallery img { border-radius: 8px !important; border-width: 5px; }
 :is(.theme-terciopelo-vino, .theme-azul-acuarela) .invitation-content section#rsvp { border-radius: 0; }
-.theme-terciopelo-vino :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 34px; height: 34px; }
-.theme-azul-acuarela :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+:is(.theme-terciopelo-vino, .theme-azul-acuarela) :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
 /* Bordes rasgados entre secciones claras y la confirmación (Vino) */
 .theme-terciopelo-vino .invitation-content section#rsvp { position: relative; }
 .theme-terciopelo-vino .invitation-content section#rsvp::after { content: ''; position: absolute; left: 0; right: 0; top: -2px; height: 46px; background: url('/images/themes/vino/papel.webp') center bottom / 100% 100% no-repeat; scale: 1 -1; pointer-events: none; }
@@ -676,8 +696,7 @@
 :is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) #gallery img { border-radius: 8px !important; border-width: 5px; }
 :is(.theme-rosas-noche, .theme-salvia-eucalipto, .theme-malva-empolvado) .invitation-content section#rsvp { border-radius: 0; }
 :is(.theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .12em !important; }
-:is(.theme-salvia-eucalipto, .theme-malva-empolvado) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 120px; height: 26px; }
-.theme-rosas-noche :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+:is(.theme-salvia-eucalipto, .theme-malva-empolvado, .theme-rosas-noche) :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
 .theme-rosas-noche .invitation-content section#rsvp :is(h2, h3, h2 *, h3 *) { color: #fbf7ef !important; -webkit-text-fill-color: #fbf7ef !important; }
 .theme-rosas-noche section#rsvp :is(p, label, label *) { color: #ddd7ca !important; }
 .theme-rosas-noche section#rsvp label:has(input[type="checkbox"]) { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.2) !important; }
