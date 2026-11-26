@@ -284,7 +284,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                     <span className="de-nat-beam" aria-hidden="true" />
                     <div className="de-nat-star"><span className="de-star-glow" /><img src={A('estrella')} alt="" /><Twinkles n={5} cls="de-tw-star" /></div>
                     <img className="de-nat-angel de-l" src={A('angel')} alt="Angelito" onClick={poke} />
-                    <img className="de-nat-deer de-l" src={A('venado')} alt="Venadito" onClick={poke} />
+                    <img className="de-nat-deer de-l" src={A('venadito')} alt="Venadito" onClick={poke} />
                     <img className="de-nat-manger de-l" src={A('pesebre')} alt={`Bebé ${baby}`} onClick={poke} />
                     <img className="de-nat-straw de-l" src={A('paja')} alt="" />
                     <img className="de-nat-lamb de-l" src={A('borrego')} alt="Borreguito" onClick={poke} />
