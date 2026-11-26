@@ -254,3 +254,77 @@
 }
 .de-card-in { display: flex; flex-direction: column; overflow: hidden; }
 .de-card-foot { margin-top: auto; font-family: 'Great Vibes', cursive; font-size: 22px; color: var(--de-brown); opacity: .85; }
+
+/* ================= v4 · composición ================= */
+/* Letras script: el degradado recorta lo que sale de la caja, así que damos aire */
+.de .de-name, .de .de-card-title { padding: .28em .4em .34em; margin: -.28em -.4em -.34em; overflow: visible; }
+.de-card-in .de-card-title { margin-left: -.4em; margin-right: 0; }
+
+/* Motita se asoma por el borde inferior del marco (sección 2) */
+.de-peekbox { position: absolute; overflow: hidden; pointer-events: none; z-index: 4; }
+.de-peekbox img { position: absolute; left: 0; width: 100%; pointer-events: auto; cursor: pointer; filter: drop-shadow(0 6px 8px rgba(0,0,0,.18)); transform-origin: 50% 100%; }
+.de-s2 .de-frame { padding-bottom: 150px; }
+.de-peekbox--bottom { right: 12%; bottom: 8px; width: 112px; height: 132px; }
+.de-peekbox--bottom img { top: 100%; }
+.de-s2.is-in .de-peekbox--bottom img { animation: de-peek-up 7s ease-in-out 1s infinite; }
+@keyframes de-peek-up {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  12%, 46% { translate: 0 -88%; rotate: 0deg; }
+  20% { rotate: -9deg; } 28% { rotate: 7deg; } 36% { rotate: 0deg; }
+  56% { translate: 0 0; }
+}
+/* Motita se asoma por detrás del marco, arriba (sección 6) */
+.de-s6 { padding-top: 120px; }
+.de-peekbox--top { right: 14%; bottom: 100%; width: 104px; height: 118px; margin-bottom: -2px; }
+.de-peekbox--top img { top: 100%; }
+.de-s6.is-in .de-peekbox--top img { animation: de-peek-up2 8s ease-in-out .8s infinite; }
+@keyframes de-peek-up2 {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  12%, 48% { translate: 0 -74%; rotate: 0deg; }
+  22% { rotate: 10deg; } 32% { rotate: -6deg; } 40% { rotate: 0deg; }
+  58% { translate: 0 0; }
+}
+
+/* Sección 4: Motita convive con el borreguito y el conejito */
+.de-pair { position: relative; height: 150px; margin-top: 26px; }
+.de .de-lamb { left: 0; bottom: 0; width: 42%; }
+.de-pair-dog { position: absolute; left: 39%; bottom: 0; width: 25%; cursor: pointer; transform-origin: 50% 100%; z-index: 2; animation: de-dog-look 3.2s ease-in-out infinite; filter: drop-shadow(0 6px 6px rgba(0,0,0,.12)); }
+.de .de-bunny { right: 4%; bottom: 4px; width: 20%; animation: de-hop 3.2s ease-in-out infinite; }
+/* el conejito brinca hacia ella y Motita voltea a verlo y da un saltito */
+@keyframes de-dog-look {
+  0%, 52%, 100% { scale: 1 1; translate: 0 0; rotate: 0deg; }
+  56% { scale: -1 1; }
+  70% { scale: -1.04 .94; translate: 0 0; }
+  76% { scale: -.97 1.05; translate: 0 -12px; rotate: 4deg; }
+  82% { scale: -1 1; translate: 0 0; rotate: 0deg; }
+  92% { scale: -1 1; }
+  96% { scale: 1 1; }
+}
+
+/* Sección 5: nacimiento dentro de su marco, compuesto en torno al pesebre */
+.de-s5 { padding: 60px 16px 40px; justify-content: center; }
+.de-frame--nat { padding: 44px 10px 18px; text-align: center; }
+.de .de-nat { width: 100%; aspect-ratio: 1 / .96; margin: 14px 0 0; }
+.de .de-nat > * { top: auto; right: auto; left: auto; bottom: auto; }
+.de .de-nat-glow { left: 10%; width: 80%; bottom: 8%; height: 70%; border-radius: 50%; background: radial-gradient(ellipse at 50% 60%, rgba(255,226,160,.75), rgba(255,226,160,.25) 45%, transparent 70%); cursor: default; z-index: 0; animation: de-glow2 4s ease-in-out infinite; }
+.de .de-nat-beam { left: 50%; top: 9%; width: 34%; height: 50%; margin-left: -17%; background: linear-gradient(180deg, rgba(255,230,170,.55), rgba(255,230,170,0)); clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%); cursor: default; z-index: 1; filter: blur(2px); }
+.de .de-nat-star { left: 50%; top: 0; width: 15%; margin-left: -7.5%; z-index: 3; }
+.de .de-nat-angel { left: 3%; bottom: 23%; width: 30%; z-index: 2; }
+.de .de-nat-deer { right: 3%; bottom: 27%; width: 34%; z-index: 2; }
+.de .de-nat-manger { left: 29%; bottom: 19%; width: 42%; z-index: 3; }
+.de .de-nat-straw { left: -2%; bottom: 3%; width: 104%; z-index: 4;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 60%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 60%, transparent 100%); }
+.de .de-nat-lamb { left: 4%; bottom: 5%; width: 28%; z-index: 5; }
+.de .de-nat-dog { left: 31%; bottom: 1%; width: 17%; z-index: 6; }
+.de .de-nat-lantern { right: 29%; bottom: 5%; width: 9%; z-index: 6; }
+.de .de-nat-bunny { right: 7%; bottom: 7%; width: 12%; z-index: 5; }
+@keyframes de-glow2 { 0%,100% { opacity: .85; scale: 1; } 50% { opacity: 1; scale: 1.05; } }
+@media (min-width: 900px) { .de .de-nat { width: 100%; } .de-frame--nat { max-width: 520px; } .de-pair { height: 190px; } }
+.de-frame--nat { padding-bottom: 30px; }
+.de .de-frame--nat .de-card-title { margin-top: -.12em; margin-bottom: -.2em; }
+.de .de-nat { aspect-ratio: 1 / .88; margin-top: 6px; }
+.de .de-nat-beam { top: 12%; height: 46%; }
+.de .de-nat-manger { bottom: 14%; }
+.de .de-nat-angel { bottom: 16%; }
+.de .de-nat-deer { bottom: 18%; }
+.de .de-s3 .de-name { margin-top: -.05em; }
