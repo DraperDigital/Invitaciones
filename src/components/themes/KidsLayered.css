@@ -694,22 +694,22 @@
 
 /* ══════════════════════ 14 · TIENDA DE DULCES (Clásica, sin parallax) ══════════════════════ */
 .theme-tienda-dulces {
-  --kp-bg: #fbf7ff; --kp-alt: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
+  --kp-bg: #fbf7ff; --kp-alt: #efe6fb url('/images/themes/dulces-tienda/fondo-lila.webp') center / cover;
   --kp-title-font: 'Fredoka', sans-serif; --kp-title-weight: 600; --kp-text: 'Nunito', sans-serif;
   --kp-title: #8f6ad6; --kp-ink: #4f3f63; --kp-soft: #7f6f93; --kp-accent: #ef5d93;
   --kp-btn: #ef5d93; --kp-btn-ink: #fff; --kp-card-border: #e5d8f7; --kp-icon-bg: #f2eafd; --kp-icon: #8f6ad6;
   --kp-shadow: rgba(143, 106, 214, .35);
-  --kp-title-deco: url('/images/themes/dulces/d-2.webp');
-  --kp-art-message: url('/images/themes/dulces/d-1.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 100px;
-  --kp-art-location: url('/images/themes/dulces/maquina.webp'); --kp-art-location-w: 96px; --kp-art-location-h: 150px;
-  --kp-art-gifts: url('/images/themes/dulces/frasco.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 148px;
-  --kp-art-rsvp: url('/images/themes/dulces/cupcake.webp'); --kp-art-rsvp-w: 110px; --kp-art-rsvp-h: 156px;
-  --kp-rsvp-bg: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
-  --kp-closing-bg: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
-  --kp-art-closing: url('/images/themes/dulces/maquina.webp'); --kp-closing-title: #8f6ad6;
+  --kp-title-deco: url('/images/themes/dulces-tienda/d-2.webp');
+  --kp-art-message: url('/images/themes/dulces-tienda/d-1.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 100px;
+  --kp-art-location: url('/images/themes/dulces-tienda/maquina.webp'); --kp-art-location-w: 96px; --kp-art-location-h: 150px;
+  --kp-art-gifts: url('/images/themes/dulces-tienda/frasco.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 148px;
+  --kp-art-rsvp: url('/images/themes/dulces-tienda/cupcake.webp'); --kp-art-rsvp-w: 110px; --kp-art-rsvp-h: 156px;
+  --kp-rsvp-bg: #efe6fb url('/images/themes/dulces-tienda/fondo-lila.webp') center / cover;
+  --kp-closing-bg: #efe6fb url('/images/themes/dulces-tienda/fondo-lila.webp') center / cover;
+  --kp-art-closing: url('/images/themes/dulces-tienda/maquina.webp'); --kp-closing-title: #8f6ad6;
 }
 .kh--tienda-dulces {
-  --kh-bg-color: #c8b3ea; --kh-bg-img: url('/images/themes/dulces/fondo-lila.webp');
+  --kh-bg-color: #c8b3ea; --kh-bg-img: url('/images/themes/dulces-tienda/fondo-lila.webp');
   --kh-title: 'Fredoka', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 700;
   --kh-ink: #4f3f63; --kh-soft: #7f6f93; --kh-kicker: #8f6ad6; --kh-name: #ef5d93; --kh-accent: #36a8de;
   --kh-card-bg: #fffdfd; --kh-photo-ring: #f6a9c6; --kh-count-bg: #fffdfd; --kh-btn: #ef5d93;
@@ -748,3 +748,4 @@
 }
 @media (min-width: 900px) { .kh--dulcelandia .kh-card { padding-top: 158px; } }
 @media (max-width: 899px) { .kh--dulcelandia .kh-card { padding-top: 142px; padding-bottom: 64px; } }
+.kh-l--td-pop { z-index: 1; top: -4px; left: -8px; }
