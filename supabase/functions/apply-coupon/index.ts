@@ -76,24 +76,22 @@ serve(async (req) => {
       throw new Error('Este cupón ya ha alcanzado su límite de usos.')
     }
 
-    // Validar plan_id: si está vacío, aplica a cualquier plan
-    if (coupon.plan_id && coupon.plan_id.trim() !== '') {
-      if (coupon.plan_id.trim().toLowerCase() !== planId.trim().toLowerCase()) {
-        throw new Error('Este cupón no es válido para el plan seleccionado.')
-      }
+    // ✅ Restricción de planes data-driven (reemplaza plan_id único y los if hardcodeados).
+    // Lee coupon.allowed_plans (text[] o CSV). Vacío/nulo = válido para cualquier plan.
+    // Mantiene retrocompatibilidad con la columna vieja plan_id.
+    const PLAN_LABELS: Record<string, string> = {
+      clasico: 'Clásica', pro: 'Pro', premium: 'Premium', concierge: 'Concierge',
     }
-
-    // Check if the plan is allowed for this coupon legacy rule
-    if (coupon.code === 'INVITTO26') {
-      if (planId !== 'clasico' && planId !== 'premium') {
-        throw new Error('Este cupón solo es válido para los planes Clásica y Diseño Pro.')
-      }
+    const rawPlans = (coupon as any).allowed_plans ?? coupon.plan_id ?? null
+    let allowedPlans: string[] = []
+    if (Array.isArray(rawPlans)) {
+      allowedPlans = rawPlans.map((p) => String(p).trim().toLowerCase()).filter(Boolean)
+    } else if (typeof rawPlans === 'string') {
+      allowedPlans = rawPlans.split(',').map((p) => p.trim().toLowerCase()).filter(Boolean)
     }
-
-    if (coupon.code === 'SOPHIAHUETT') {
-      if (planId !== 'clasico' && planId !== 'pro') {
-        throw new Error('Este cupón solo es válido para los planes Clásica y Pro.')
-      }
+    if (allowedPlans.length > 0 && !allowedPlans.includes(planId.trim().toLowerCase())) {
+      const nice = allowedPlans.map((p) => PLAN_LABELS[p] || p).join(' y ')
+      throw new Error(`Este cupón solo es válido para los planes ${nice}.`)
     }
 
     const hasOverride = coupon.override_price !== null && coupon.override_price !== undefined && coupon.override_price !== ''

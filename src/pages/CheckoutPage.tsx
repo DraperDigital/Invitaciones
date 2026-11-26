@@ -251,13 +251,17 @@ export default function CheckoutPage() {
                 throw new Error("Este cupón ya alcanzó su límite máximo de usos.");
             }
 
-            // 5. Validar plan_id: si está vacío, aplica a cualquier plan
-            if (couponData.plan_id && String(couponData.plan_id).trim() !== '') {
-                const targetPlan = String(couponData.plan_id).trim().toLowerCase();
-                if (targetPlan !== planId.toLowerCase()) {
-                    const planName = plans[targetPlan as keyof typeof plans]?.name || targetPlan;
-                    throw new Error(`Este cupón solo es válido para el plan ${planName}.`);
-                }
+            // 5. Validar allowed_plans / plan_id: si está vacío, aplica a cualquier plan
+            const rawPlans = (couponData as any).allowed_plans ?? couponData.plan_id ?? null;
+            let allowedPlans: string[] = [];
+            if (Array.isArray(rawPlans)) {
+                allowedPlans = rawPlans.map((p) => String(p).trim().toLowerCase()).filter(Boolean);
+            } else if (typeof rawPlans === 'string') {
+                allowedPlans = rawPlans.split(',').map((p) => p.trim().toLowerCase()).filter(Boolean);
+            }
+            if (allowedPlans.length > 0 && !allowedPlans.includes(planId.toLowerCase())) {
+                const nice = allowedPlans.map((p) => plans[p as keyof typeof plans]?.name || p).join(' y ');
+                throw new Error(`Este cupón solo es válido para los planes ${nice}.`);
             }
 
             // 6. Calcular el precio según las reglas:

@@ -189,11 +189,20 @@ serve(async (req) => {
         throw new Error('Este cupón ya ha alcanzado su límite de usos.')
       }
 
-      // Validar plan_id: si está vacío, aplica a cualquier plan
-      if (couponData.plan_id && String(couponData.plan_id).trim() !== '') {
-        if (String(couponData.plan_id).trim().toLowerCase() !== planId.trim().toLowerCase()) {
-          throw new Error('Este cupón no es válido para el plan seleccionado.')
-        }
+      // Restricción de planes data-driven (allowed_plans text[] o CSV, con fallback a plan_id)
+      const PLAN_LABELS: Record<string, string> = {
+        clasico: 'Clásica', pro: 'Pro', premium: 'Premium', concierge: 'Concierge',
+      }
+      const rawPlans = (couponData as any).allowed_plans ?? couponData.plan_id ?? null
+      let allowedPlans: string[] = []
+      if (Array.isArray(rawPlans)) {
+        allowedPlans = rawPlans.map((p) => String(p).trim().toLowerCase()).filter(Boolean)
+      } else if (typeof rawPlans === 'string') {
+        allowedPlans = rawPlans.split(',').map((p) => p.trim().toLowerCase()).filter(Boolean)
+      }
+      if (allowedPlans.length > 0 && !allowedPlans.includes(planId.trim().toLowerCase())) {
+        const nice = allowedPlans.map((p) => PLAN_LABELS[p] || p).join(' y ')
+        throw new Error(`Este cupón solo es válido para los planes ${nice}.`)
       }
 
       // Calcular precio en el servidor:
