@@ -207,3 +207,36 @@
 .de .de-script { font-size: clamp(3.6rem, 18vw, 4.8rem) !important; line-height: .95 !important; }
 .de .de-card-title { font-size: clamp(2.6rem, 12vw, 3.4rem) !important; line-height: .95 !important; }
 .de .de-card-title--lg { font-size: clamp(3rem, 15vw, 4rem) !important; }
+
+/* ═══ Ajustes v2 (revisión en celular) ═══ */
+/* Sobre: tarjeta más angosta, dentro del sobre */
+.de-card { left: 16%; right: 16%; top: 34%; height: 56%; }
+.de.is-open .de-card { translate: 0 -40%; }
+.de-card-in { padding: 18px 14px; }
+.de-card-star { width: 52px; right: 8px; top: 10px; }
+.de .de-card-title { font-size: clamp(2.3rem, 10.5vw, 3rem) !important; }
+
+/* Gran noticia: la estrella ya no toca el nombre */
+.de-star-wrap { width: 112px; height: 128px; margin: 22px auto 34px; }
+.de .de-name { filter: drop-shadow(0 0 10px rgba(255,236,190,.85)); margin-top: 0; padding: 0 6px; }
+
+/* Nacimiento: composición compacta, todos sobre la paja */
+.de-s5 { min-height: auto; padding: 56px 0 30px; }
+.de-nat { width: min(100vw, 460px); aspect-ratio: 1 / .92; margin-top: 4px; }
+.de-nat-star { right: 6%; top: 0; width: 76px; }
+.de-nat-angel { left: 3%; top: 6%; width: 38%; }
+.de-nat-deer { right: 5%; top: 14%; width: 34%; }
+.de-nat-manger { left: 26%; top: 44%; width: 48%; }
+.de-nat-straw { left: -20%; bottom: 2%; width: 140%; }
+.de-nat-lamb { left: 0; bottom: 9%; width: 30%; }
+.de-nat-dog { left: 25%; bottom: 3%; width: 21%; }
+.de-nat-lantern { right: 23%; bottom: 7%; width: 12%; }
+.de-nat-bunny { right: 5%; bottom: 8%; width: 14%; }
+@media (min-width: 900px) { .de-nat { width: 600px; } .de-s5 { padding: 70px 0 50px; } }
+.de img { max-width: none; }
+/* Venadito de cuerpo completo: de pie sobre la paja, detrás del pesebre, mirando al bebé */
+.de-nat-deer { right: 2%; top: 26%; width: 40%; }
+.de-nat-star { right: 4%; top: 0; }
+.de-nat-star { right: auto; left: 44%; top: 2%; width: 70px; }
+.de .de-ico img { max-width: 100%; max-height: 100%; width: auto; height: auto; }
+.de .de-label { margin-top: 14px; }
