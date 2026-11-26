@@ -37,6 +37,7 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
+import NavidadLayeredHero from '../components/themes/NavidadLayeredHero';
 import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
 import KidsLayeredHero from '../components/themes/KidsLayeredHero';
@@ -468,6 +469,76 @@ export default function InvitationPage() {
             borderColor: '#F0DCE8', cardBorder: '#F0DCE8',
             accentOverride: '#EF5D93', fontPreset: 'divertida',
             heroRadius: '30px', cardRadius: '30px',
+        },
+        'pueblo-papel': {
+            sectionBg: '#F8F4EB', sectionBgAlt: '#F4EFE4', cardBg: '#FFFFFF',
+            textPrimary: '#47513F', textSecondary: '#7A816F',
+            borderColor: '#DDD3C0', cardBorder: '#DDD3C0',
+            accentOverride: '#6F7F62', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'bordado-lujo': {
+            sectionBg: '#F8F4EB', sectionBgAlt: '#F3ECDD', cardBg: '#FFFFFF',
+            textPrimary: '#3E3A30', textSecondary: '#7D7464',
+            borderColor: '#DDD3C0', cardBorder: '#DDD3C0',
+            accentOverride: '#8E2B2B', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'epoca-bonita': {
+            sectionBg: '#FBF6EE', sectionBgAlt: '#F6EFE4', cardBg: '#FFFFFF',
+            textPrimary: '#4A3A2E', textSecondary: '#8A7663',
+            borderColor: '#DDD3C0', cardBorder: '#DDD3C0',
+            accentOverride: '#9B2F2A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'noche-velas': {
+            sectionBg: '#1D1611', sectionBgAlt: '#241B15', cardBg: '#241B15',
+            textPrimary: '#EFE6D6', textSecondary: '#C8B89C',
+            borderColor: '#DDD3C0', cardBorder: '#DDD3C0',
+            accentOverride: '#D9B46A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'posada-mexicana': {
+            sectionBg: '#FFFAF0', sectionBgAlt: '#F8EFE2', cardBg: '#FFFFFF',
+            textPrimary: '#3D2A20', textSecondary: '#7A5A47',
+            borderColor: '#E3D6C3', cardBorder: '#E3D6C3',
+            accentOverride: '#B3261E', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'posada-linea': {
+            sectionBg: '#FFFAF0', sectionBgAlt: '#F8EFE2', cardBg: '#FFFFFF',
+            textPrimary: '#3D2A20', textSecondary: '#7A5A47',
+            borderColor: '#E3D6C3', cardBorder: '#E3D6C3',
+            accentOverride: '#B3261E', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'cuadros-escoceses': {
+            sectionBg: '#FFFEFB', sectionBgAlt: '#F6F1E8', cardBg: '#FFFFFF',
+            textPrimary: '#1F4A37', textSecondary: '#3F6650',
+            borderColor: '#E3D6C3', cardBorder: '#E3D6C3',
+            accentOverride: '#C8102E', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'rayas-rojas': {
+            sectionBg: '#F8F3EA', sectionBgAlt: '#F4EDE2', cardBg: '#FFFFFF',
+            textPrimary: '#3D4A3F', textSecondary: '#6E7A6E',
+            borderColor: '#E3D6C3', cardBorder: '#E3D6C3',
+            accentOverride: '#A5162A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'holly-jolly': {
+            sectionBg: '#FBF4E6', sectionBgAlt: '#F8EEDB', cardBg: '#FFFFFF',
+            textPrimary: '#2F5233', textSecondary: '#4D6B4F',
+            borderColor: '#E3D6C3', cardBorder: '#E3D6C3',
+            accentOverride: '#B03A2E', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'casita-nevada': {
+            sectionBg: '#FBF8F2', sectionBgAlt: '#F1F4F1', cardBg: '#FFFFFF',
+            textPrimary: '#3F4B44', textSecondary: '#6C7A72',
+            borderColor: '#DCE3DD', cardBorder: '#DCE3DD',
+            accentOverride: '#B02A2A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -2922,6 +2993,7 @@ END:VCALENDAR`;
         graduacion:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Mi Graduación', welcome: 'Mi Graduación' },
         graduation:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Graduación', welcome: 'Mi Graduación' },
         corporate:        { ceremony: 'Conferencia', reception: 'Recepción', tagline: 'Evento Corporativo', welcome: 'Bienvenidos' },
+        navidad:          { ceremony: 'Posada', reception: 'Cena Navideña', tagline: 'Posada Navideña', welcome: 'Nuestra Posada' },
         other:            { ceremony: 'Ceremonia', reception: 'Celebración', tagline: 'Nuestra Celebración', welcome: 'Bienvenidos' }
     };
     const labels = eventLabels[event.event_type] || eventLabels['birthday'];
@@ -2974,6 +3046,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly' || cfg.theme === 'casita-nevada') {
+            return <NavidadLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn' || cfg.theme === 'rosas-noche' || cfg.theme === 'salvia-eucalipto' || cfg.theme === 'malva-empolvado') {
             return <WeddingLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;

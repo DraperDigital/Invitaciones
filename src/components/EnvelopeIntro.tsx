@@ -85,6 +85,7 @@ function getEventLabel(eventType?: string): string {
     if (t.includes('birthday') || t.includes('cumple')) return 'Mi cumpleaños';
     if (t.includes('graduacion') || t.includes('graduación')) return 'Mi graduación';
     if (t.includes('corporate') || t.includes('corporativo')) return 'Evento Especial';
+    if (t.includes('navidad') || t.includes('posada')) return 'Nuestra posada';
     return 'Nuestra celebración';
 }
 
@@ -316,6 +317,16 @@ export default function EnvelopeIntro({
         'malva-empolvado': '#8E5F71',
         'dulcelandia': '#F0679B',
         'tienda-dulces': '#EF5D93',
+        'pueblo-papel': '#6F7F62',
+        'bordado-lujo': '#8E2B2B',
+        'epoca-bonita': '#9B2F2A',
+        'noche-velas': '#D9B46A',
+        'posada-mexicana': '#B3261E',
+        'posada-linea': '#B3261E',
+        'cuadros-escoceses': '#C8102E',
+        'rayas-rojas': '#A5162A',
+        'holly-jolly': '#B03A2E',
+        'casita-nevada': '#B02A2A',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

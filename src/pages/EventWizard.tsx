@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../context/ToastContext';
-import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, MapPin, ExternalLink, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Save, Calendar, PartyPopper, Heart, Crown, Droplet, Wine, Church, Baby, Cake, GraduationCap, Building2, TreePine, MapPin, ExternalLink, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { getLayoutForEventType } from '../lib/sectionRegistry';
 import { THEME_PRESET_PROFILES, EVENT_CATEGORY_LABELS, normalizeEventCategory, getTemplatesForCategory, CANONICAL_TEMPLATES, isConciergeTemplate, isProOnlyTemplate, CONCIERGE_PLAN_URL } from '../lib/themePresets';
 import { trackEvent } from '../lib/analytics';
@@ -73,6 +73,7 @@ export const EVENT_TYPE_OPTIONS = [
     { id: 'confirmacion', label: 'Confirmación', icon: Church, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
     { id: 'graduacion', label: 'Graduación', icon: GraduationCap, color: 'text-blue-500 bg-blue-50 border-blue-100', defaultTheme: 'polaroid-vintage' },
     { id: 'corporate', label: 'Corporativo', icon: Building2, color: 'text-slate-600 bg-slate-100 border-slate-200', defaultTheme: 'split-screen' },
+    { id: 'navidad', label: 'Posada / Navidad', icon: TreePine, color: 'text-red-600 bg-red-50 border-red-100', defaultTheme: 'pueblo-papel' },
     { id: 'other', label: 'Otro', icon: Calendar, color: 'text-stone-500 bg-stone-100 border-stone-200', defaultTheme: 'classic' },
 ];
 
@@ -141,6 +142,15 @@ const EVENT_TYPE_PRESETS: Record<string, Record<string, boolean>> = {
         showGallery:      false,
         showGifts:        false,
     },
+    navidad: {
+        showMap:          true,
+        showWhatsAppRSVP: true,
+        showCountdown:    true,
+        showDetails:      true,
+        showItinerary:    true,
+        showGallery:      true,
+        showGifts:        false,
+    },
     baby_shower: {
         showMap:          true,
         showWhatsAppRSVP: true,
@@ -207,6 +217,7 @@ export function resolvePreselectedEventType(searchParams: URLSearchParams): { ev
         else if (['baby_shower', 'baby-shower', 'babyshower'].includes(lower)) matchedId = 'baby_shower';
         else if (['gender_reveal', 'gender-reveal', 'revelacion', 'revelación'].includes(lower)) matchedId = 'gender_reveal';
         else if (['graduacion', 'graduación'].includes(lower)) matchedId = 'graduacion';
+        else if (['navidad', 'posada', 'posadas', 'christmas'].includes(lower)) matchedId = 'navidad';
         else if (['corporate', 'corporativo', 'empresa', 'gala'].includes(lower)) matchedId = 'corporate';
         else {
             const direct = EVENT_TYPE_OPTIONS.find(o => o.id === lower);
@@ -228,6 +239,7 @@ export function resolvePreselectedEventType(searchParams: URLSearchParams): { ev
             else if (cat === 'graduacion') matchedId = 'graduacion';
             else if (cat === 'infantil') matchedId = 'bautizo';
             else if (cat === 'corporate') matchedId = 'corporate';
+            else if (cat === 'navidad') matchedId = 'navidad';
         }
     }
 

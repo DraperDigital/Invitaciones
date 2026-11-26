@@ -285,5 +285,51 @@ PARALLAX_BY_THEME.dulcelandia = [
     { selector: '.kh-l--dl-bear', speed: -0.25 },
     ...sectionLayers('dulcelandia'),
 ];
+PARALLAX_BY_THEME['pueblo-papel'] = [
+    { selector: '.nv--pueblo-papel', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--star', speed: 0.45 },
+    { selector: '.nv-l--pines', speed: 0.25 },
+    { selector: '.nv-l--village', speed: 0.12 },
+    { selector: '.nv-l--hills', speed: -0.08 },
+    { selector: '.nv-l--branch', speed: -0.25 },
+    ...sectionLayers('pueblo-papel'),
+];
+PARALLAX_BY_THEME['bordado-lujo'] = [
+    { selector: '.nv-l--garland', speed: 0.2 },
+    { selector: '.nv-l--orn1', speed: 0.35 },
+    { selector: '.nv-l--orn2', speed: 0.2 },
+    { selector: '.nv-l--orn3', speed: 0.45 },
+    { selector: '.nv-l--poin1', speed: -0.2 },
+    { selector: '.nv-l--poin2', speed: -0.35 },
+    ...sectionLayers('bordado-lujo'),
+];
+PARALLAX_BY_THEME['epoca-bonita'] = [
+    { selector: '.nv-l--corner', speed: 0.3 },
+    { selector: '.nv-l--ball', speed: 0.4 },
+    { selector: '.nv-l--cookie', speed: -0.4 },
+    { selector: '.nv-l--candle', speed: -0.25 },
+    { selector: '.nv-l--gift', speed: -0.3 },
+    { selector: '.nv-l--land', speed: 0.08 },
+    { selector: '.nv-l--mug', speed: -0.2 },
+    ...sectionLayers('epoca-bonita'),
+];
+PARALLAX_BY_THEME['noche-velas'] = [
+    { selector: '.nv--noche-velas', speed: 0.35, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--pine', speed: 0.3 },
+    { selector: '.nv-l--lantern', speed: -0.2 },
+    { selector: '.nv-l--balls', speed: -0.1 },
+    ...sectionLayers('noche-velas'),
+];
+PARALLAX_BY_THEME['posada-mexicana'] = [
+    { selector: '.nv--posada-mexicana', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--pm-b1', speed: 0.4 },
+    { selector: '.nv-l--pm-b2', speed: 0.3 },
+    { selector: '.nv-l--pm-b3', speed: 0.5 },
+    { selector: '.nv-l--pm-poin', speed: 0.15 },
+    { selector: '.nv-l--pm-pinata', speed: -0.3 },
+    { selector: '.nv-l--pm-jarrito', speed: -0.2 },
+    { selector: '.nv-l--pm-gifts', speed: -0.25 },
+    ...sectionLayers('posada-mexicana'),
+];
 
 export const PARALLAX_MAX_PX = 160;

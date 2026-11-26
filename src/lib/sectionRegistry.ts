@@ -65,6 +65,7 @@ export type EventType =
   | 'gender_reveal'
   | 'graduacion'
   | 'corporate'
+  | 'navidad'
   | 'other';
 
 export type SectionDef = {
@@ -320,6 +321,18 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
     'itinerary',
     'location',
     'dress_code',
+    'footer',
+  ],
+  navidad: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'itinerary',
+    'dress_code',
+    'gallery',
+    'countdown',
     'footer',
   ],
   other: [
