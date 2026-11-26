@@ -639,3 +639,112 @@
   .kh--hadita .kh-l--gbf1 { width: 110px; right: 10%; }
   .kh--hadita .kh-l--gbf3 { width: 90px; right: 22%; bottom: 60px; }
 }
+
+/* ══════════════════════ 13 · DULCELANDIA (3D, parallax) ══════════════════════ */
+.theme-dulcelandia {
+  --kp-bg: #fff6f8; --kp-alt: #fdeef5 url('/images/themes/dulces/fondo.webp') center / cover;
+  --kp-title-font: 'Fredoka', sans-serif; --kp-title-weight: 600; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #e0528b; --kp-ink: #5b4057; --kp-soft: #8d7189; --kp-accent: #a77fe0;
+  --kp-btn: #f0679b; --kp-btn-ink: #fff; --kp-card-border: #f7d3e2; --kp-icon-bg: #ffe3ee; --kp-icon: #e0528b;
+  --kp-shadow: rgba(240, 103, 155, .4);
+  --kp-title-deco: url('/images/themes/dulces/d-6.webp');
+  --kp-art-message: url('/images/themes/dulces/osito.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 136px;
+  --kp-art-location: url('/images/themes/dulces/castillo.webp'); --kp-art-location-w: 150px; --kp-art-location-h: 175px;
+  --kp-art-gifts: url('/images/themes/dulces/frasco.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 148px;
+  --kp-art-rsvp: url('/images/themes/dulces/cupcake.webp'); --kp-art-rsvp-w: 120px; --kp-art-rsvp-h: 170px;
+  --kp-rsvp-bg: #fdeef5 url('/images/themes/dulces/fondo.webp') center / cover;
+  --kp-closing-bg: #fdeef5 url('/images/themes/dulces/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/dulces/castillo.webp'); --kp-closing-title: #e0528b;
+}
+.kh--dulcelandia {
+  --kh-bg-color: #cfe3f7; --kh-bg-img: url('/images/themes/dulces/fondo.webp');
+  --kh-title: 'Fredoka', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 700;
+  --kh-ink: #5b4057; --kh-soft: #8d7189; --kh-kicker: #e0528b; --kh-name: #f0679b; --kh-accent: #a77fe0;
+  --kh-card-bg: transparent; --kh-photo-ring: #f9b8d1; --kh-count-bg: rgba(255,246,248,.92); --kh-btn: #f0679b;
+  --kh-count-shadow: 0 0 0 3px #fff, 0 16px 30px -18px rgba(224,82,139,.6);
+  --kh-pad: 250px 14px 290px; --kh-name-size: clamp(3rem, 15vw, 4.2rem);
+}
+.kh--dulcelandia .kh-card {
+  width: min(100%, 370px); padding: 92px 34px 56px;
+  background: url('/images/themes/dulces/galleta.webp') center / 100% 100% no-repeat;
+  box-shadow: none; border-radius: 0; filter: drop-shadow(0 24px 30px rgba(158,74,120,.35));
+}
+.kh--dulcelandia .kh-age b { color: #a77fe0; }
+.kh--dulcelandia .kh-chips svg { color: #f0679b; }
+.kh-l--castle { top: 34px; left: 50%; width: min(78vw, 330px); translate: -50% 0; }
+.kh-l--dl-pop { top: 30px; left: -18px; width: min(26vw, 110px); rotate: -14deg; z-index: 3; animation: kh-sway 7s ease-in-out infinite; }
+.kh-l--dl-c1 { top: 200px; right: 2px; width: 64px; z-index: 3; animation: kh-bob 5s ease-in-out infinite; }
+.kh-l--dl-c2 { top: 40%; left: 2px; width: 50px; z-index: 3; animation: kh-sway 6s ease-in-out infinite; }
+.kh-l--dl-c3 { top: 58%; right: 4px; width: 52px; z-index: 3; animation: kh-bob 6s ease-in-out infinite; animation-delay: -2s; }
+.kh-l--dl-c4 { top: 26px; right: 10px; width: 50px; rotate: 18deg; z-index: 3; animation: kh-sway 8s ease-in-out infinite; }
+.kh-l--dl-ground { bottom: -6px; left: 50%; width: min(170vw, 900px); translate: -50% 0; z-index: 3; }
+.kh-l--dl-cupcake { bottom: 40px; left: -6px; width: min(36vw, 150px); z-index: 4; }
+.kh-l--dl-bear { bottom: 34px; right: -4px; width: min(38vw, 160px); z-index: 4; animation: kh-bob 4s ease-in-out infinite; }
+@media (min-width: 900px) {
+  .kh--dulcelandia { --kh-pad-d: 300px 48px 250px; }
+  .kh--dulcelandia .kh-card { width: 430px; padding: 108px 44px 64px; }
+  .kh-l--castle { width: 380px; top: 20px; }
+  .kh-l--dl-pop { width: 160px; left: 4%; top: 60px; }
+  .kh-l--dl-c1 { right: 8%; top: 120px; width: 80px; }
+  .kh-l--dl-c4 { right: 22%; top: 40px; width: 64px; }
+  .kh-l--dl-ground { width: 1900px; }
+  .kh-l--dl-cupcake { width: 190px; left: 6%; }
+  .kh-l--dl-bear { width: 200px; right: 6%; }
+}
+
+/* ══════════════════════ 14 · TIENDA DE DULCES (Clásica, sin parallax) ══════════════════════ */
+.theme-tienda-dulces {
+  --kp-bg: #fbf7ff; --kp-alt: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
+  --kp-title-font: 'Fredoka', sans-serif; --kp-title-weight: 600; --kp-text: 'Nunito', sans-serif;
+  --kp-title: #8f6ad6; --kp-ink: #4f3f63; --kp-soft: #7f6f93; --kp-accent: #ef5d93;
+  --kp-btn: #ef5d93; --kp-btn-ink: #fff; --kp-card-border: #e5d8f7; --kp-icon-bg: #f2eafd; --kp-icon: #8f6ad6;
+  --kp-shadow: rgba(143, 106, 214, .35);
+  --kp-title-deco: url('/images/themes/dulces/d-2.webp');
+  --kp-art-message: url('/images/themes/dulces/d-1.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 100px;
+  --kp-art-location: url('/images/themes/dulces/maquina.webp'); --kp-art-location-w: 96px; --kp-art-location-h: 150px;
+  --kp-art-gifts: url('/images/themes/dulces/frasco.webp'); --kp-art-gifts-w: 110px; --kp-art-gifts-h: 148px;
+  --kp-art-rsvp: url('/images/themes/dulces/cupcake.webp'); --kp-art-rsvp-w: 110px; --kp-art-rsvp-h: 156px;
+  --kp-rsvp-bg: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
+  --kp-closing-bg: #efe6fb url('/images/themes/dulces/fondo-lila.webp') center / cover;
+  --kp-art-closing: url('/images/themes/dulces/maquina.webp'); --kp-closing-title: #8f6ad6;
+}
+.kh--tienda-dulces {
+  --kh-bg-color: #c8b3ea; --kh-bg-img: url('/images/themes/dulces/fondo-lila.webp');
+  --kh-title: 'Fredoka', sans-serif; --kh-text: 'Nunito', sans-serif; --kh-title-weight: 700;
+  --kh-ink: #4f3f63; --kh-soft: #7f6f93; --kh-kicker: #8f6ad6; --kh-name: #ef5d93; --kh-accent: #36a8de;
+  --kh-card-bg: #fffdfd; --kh-photo-ring: #f6a9c6; --kh-count-bg: #fffdfd; --kh-btn: #ef5d93;
+  --kh-count-shadow: 0 0 0 4px #f6a9c6;
+  --kh-pad: 120px 16px 220px; --kh-name-size: clamp(3rem, 15vw, 4.2rem);
+}
+.kh--tienda-dulces .kh-card {
+  border-radius: 26px; padding: 34px 22px 30px;
+  box-shadow: 0 0 0 7px #f6a9c6, 0 0 0 9px #fff, 0 30px 46px -24px rgba(79,63,99,.55);
+}
+.kh--tienda-dulces .kh-card::before { content: ''; position: absolute; inset: 9px; border: 2px dashed #f6a9c6; border-radius: 20px; pointer-events: none; }
+.kh-l--td-pop { top: 6px; left: 6px; width: min(26vw, 110px); rotate: -12deg; z-index: 3; }
+.kh-l--td-lolly { top: 0; right: -6px; width: min(26vw, 110px); rotate: 14deg; z-index: 3; }
+.kh-l--td-wrap { top: 38%; left: -10px; width: 70px; rotate: -18deg; z-index: 3; animation: kh-bob 5s ease-in-out infinite; }
+.kh-l--td-mint { top: 33%; right: -10px; width: 58px; z-index: 3; animation: kh-bob 6s ease-in-out infinite; }
+.kh-l--td-star { top: 74px; left: 34%; width: 44px; z-index: 3; animation: kh-sway 6s ease-in-out infinite; }
+.kh-l--td-heart { top: 60%; right: 2px; width: 50px; z-index: 3; }
+.kh-l--td-machine { bottom: 8px; left: -4px; width: min(32vw, 136px); z-index: 4; }
+.kh-l--td-cupcake { bottom: 2px; left: 50%; width: min(30vw, 124px); translate: -50% 0; z-index: 4; }
+.kh-l--td-jar { bottom: 8px; right: -4px; width: min(28vw, 120px); z-index: 4; }
+@media (min-width: 900px) {
+  .kh--tienda-dulces { --kh-pad-d: 110px 48px 200px; }
+  .kh-l--td-pop, .kh-l--td-lolly { width: 150px; }
+  .kh-l--td-pop { left: 4%; } .kh-l--td-lolly { right: 4%; }
+  .kh-l--td-machine { width: 170px; left: 6%; }
+  .kh-l--td-cupcake { width: 150px; }
+  .kh-l--td-jar { width: 150px; right: 6%; }
+}
+.kh--dulcelandia .kh-card { padding-top: 118px; }
+.kh-l--dl-ground { z-index: 1; }
+.kh--dulcelandia .kh-kicker { text-shadow: 0 1px 0 #fff; }
+@media (min-width: 900px) {
+  .kh--dulcelandia { --kh-pad-d: 250px 48px 330px; }
+  .kh--dulcelandia .kh-card { padding: 136px 48px 70px; }
+  .kh-l--dl-ground { bottom: -40px; }
+}
+@media (min-width: 900px) { .kh--dulcelandia .kh-card { padding-top: 158px; } }
+@media (max-width: 899px) { .kh--dulcelandia .kh-card { padding-top: 142px; padding-bottom: 64px; } }

@@ -455,6 +455,20 @@ export default function InvitationPage() {
             accentOverride: '#8E5F71', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '10px',
         },
+        'dulcelandia': {
+            sectionBg: '#FFF6F8', sectionBgAlt: '#FDEEF5', cardBg: '#FFFFFF',
+            textPrimary: '#5B4057', textSecondary: '#8D7189',
+            borderColor: '#F0DCE8', cardBorder: '#F0DCE8',
+            accentOverride: '#F0679B', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
+        'tienda-dulces': {
+            sectionBg: '#FBF7FF', sectionBgAlt: '#EFE6FB', cardBg: '#FFFFFF',
+            textPrimary: '#4F3F63', textSecondary: '#7F6F93',
+            borderColor: '#F0DCE8', cardBorder: '#F0DCE8',
+            accentOverride: '#EF5D93', fontPreset: 'divertida',
+            heroRadius: '30px', cardRadius: '30px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -2958,7 +2972,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'arcoiris') {
             return <ArcoirisHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
+        if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn' || cfg.theme === 'rosas-noche' || cfg.theme === 'salvia-eucalipto' || cfg.theme === 'malva-empolvado') {

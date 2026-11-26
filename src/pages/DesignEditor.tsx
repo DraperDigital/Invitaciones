@@ -1089,6 +1089,8 @@ export default function DesignEditor() {
                             { id: 'rosas-noche', label: 'Rosas Blancas de Noche', desc: 'Boda de noche en jardín: rosas blancas, marco ornamentado marfil con calendario y guirnalda, con parallax', icon: '🤍' },
                             { id: 'salvia-eucalipto', label: 'Verde Salvia', desc: 'Boda en acuarela verde salvia: eucalipto, monograma con iniciales, foto con borde rasgado y nombres en caligrafía, con parallax', icon: '🌿' },
                             { id: 'malva-empolvado', label: 'Rosa Empolvado', desc: 'Boda en rosa empolvado: flores en acuarela malva, foto con ola dorada y cuenta regresiva en cajitas, con parallax', icon: '🌸' },
+                            { id: 'dulcelandia', label: 'Dulcelandia 3D', desc: 'Mundo de dulces en 3D: castillo de betún, osito de gomita, paletas y galleta con moño, con parallax', icon: '🍭' },
+                            { id: 'tienda-dulces', label: 'Tienda de Dulces', desc: 'Tienda de dulces 3D en lila: paletas, máquina de chicles, cupcake y frasco alrededor de la tarjeta', icon: '🍬' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },

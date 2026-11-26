@@ -314,6 +314,8 @@ export default function EnvelopeIntro({
         'rosas-noche': '#1D241F',
         'salvia-eucalipto': '#6F7F62',
         'malva-empolvado': '#8E5F71',
+        'dulcelandia': '#F0679B',
+        'tienda-dulces': '#EF5D93',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

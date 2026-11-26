@@ -418,6 +418,24 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la pareja con un borde ondulado dorado abajo.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'dulcelandia': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la festejada o festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'tienda-dulces': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la festejada o festejado; se muestra redonda.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
