@@ -73,8 +73,10 @@ import ScrollReveal from '../components/invitation/ScrollReveal';
 
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '📂' },
+    { id: 'navidad', name: 'Posadas / Navidad', emoji: '🎄' },
     { id: 'boda', name: 'Bodas', emoji: '💍' },
     { id: 'xv', name: 'XV Años', emoji: '👑' },
+    { id: 'baby_shower', name: 'Baby Shower', emoji: '🍼' },
     { id: 'gender_reveal', name: 'Revelación', emoji: '❓' },
     { id: 'infantil', name: 'Infantiles', emoji: '👶' },
     { id: 'cumpleanos', name: 'Cumpleaños', emoji: '🎂' },

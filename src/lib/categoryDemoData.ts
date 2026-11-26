@@ -374,6 +374,34 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
             enabled: true,
             description: '¡El mejor regalo es tu sonrisa y jugar juntos!'
         }
+    },
+    navidad: {
+        title: 'Posada Navideña',
+        subtitle: 'CELEBREMOS JUNTOS EN FAMILIA',
+        bannerTitle: 'Posada Navideña',
+        eventType: 'navidad',
+        welcomeMessage: 'Con gran alegría los invitamos a celebrar juntos esta Navidad. Habrá piñatas, ponche, cena y mucha alegría familiar.',
+        venueName: 'Casa de la familia Medina',
+        venueAddress: 'León, Guanajuato',
+        mapsLink: 'https://maps.google.com/?q=Leon+Guanajuato',
+        dressCode: 'Suéter Navideño / Casual',
+        closingMessage: '¡Que la paz y el amor de estas fechas llenen sus hogares! ¡Felices Fiestas!',
+        reception: {
+            name: 'Cena Navideña & Posada',
+            location: 'León, Guanajuato',
+            time: '18:00'
+        },
+        schedule: [
+            { time: '18:00', event: 'Llegada & Ponche Navideño ☕', location: 'Área Principal' },
+            { time: '19:30', event: 'Pedir Posada & Cantos Navideños 🕯️', location: 'Entrada' },
+            { time: '20:30', event: 'Piñatas & Aguinaldos 🪅', location: 'Patio' },
+            { time: '21:30', event: 'Cena Navideña Familiar 🍽️', location: 'Comedor' },
+            { time: '22:30', event: 'Intercambio de Regalos & Brindis 🎁🥂', location: 'Sala Principal' }
+        ],
+        giftTable: {
+            enabled: false,
+            description: '¡Tu presencia y compañía es nuestro mejor regalo navideño!'
+        }
     }
 };
 
@@ -388,7 +416,9 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         return baseEvent;
     }
 
-    const normCat = requestedCategory.toLowerCase().trim();
+    let normCat = requestedCategory.toLowerCase().trim();
+    if (['posada', 'posadas', 'christmas'].includes(normCat)) normCat = 'navidad';
+
     const profile = CATEGORY_DEMO_PROFILES[normCat];
     if (!profile) return baseEvent;
 
@@ -401,7 +431,8 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         (normCat === 'comunion' && nativeType === 'comunion') ||
         (normCat === 'graduacion' && nativeType === 'graduacion') ||
         (normCat === 'gender_reveal' && nativeType === 'gender_reveal') ||
-        (normCat === 'boda' && nativeType === 'wedding')
+        (normCat === 'boda' && nativeType === 'wedding') ||
+        (normCat === 'navidad' && nativeType === 'navidad')
     )) {
         return baseEvent;
     }
