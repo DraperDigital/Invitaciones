@@ -223,7 +223,6 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 2 · La frase */}
             <div className="de-scene de-s2 de-cream">
-                <img className="de-deco de-cloud de-cloud--c" src={A('nube-2')} alt="" />
                 <div className="de-frame de-paper de-paper--cream de-round">
                     <img className="de-deco de-bow-gold de-pop" src={A('mono-oro')} alt="" />
                     <img className="de-deco de-flor de-flor--tr de-pop" src={A('flores-der')} alt="" />
@@ -236,7 +235,6 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 3 · La gran noticia */}
             <div className="de-scene de-s3 de-blue">
-                <img className="de-deco de-cloud de-cloud--d" src={A('nube-2')} alt="" />
                 <img className="de-deco de-moon" src={A('luna')} alt="" />
                 <img className="de-deco de-hstars" src={A('estrellas-colgantes')} alt="" />
                 <div className="de-frame de-frame--gold de-paper de-paper--blue de-arch">
@@ -255,10 +253,8 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 4 · Celebremos juntos */}
             <div className="de-scene de-s4 de-cream">
-                <img className="de-deco de-cloud de-cloud--e" src={A('nube-3')} alt="" />
                 <div className="de-frame de-paper de-paper--cream de-tilt">
                     <img className="de-deco de-line" src={A('tendedero')} alt="Ropita de bebé" />
-                    <img className="de-deco de-ramito de-pop" src={A('ramito')} alt="" />
                     <h2 className="de-script">Celebremos<br />juntos</h2>
                     <div className="de-divider"><i /><span>✦</span><i /></div>
                     <p className="de-body">La magia de la Navidad<br />y la alegría de nuestra familia<br />se unen en la dulce espera<br />de una nueva vida.</p>
@@ -272,8 +268,6 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 5 · El nacimiento */}
             <div className="de-scene de-s5 de-blue">
-                <img className="de-deco de-cloud de-cloud--f" src={A('nube-1')} alt="" />
-                <img className="de-deco de-cloud de-cloud--g" src={A('nube-2')} alt="" />
                 <div className="de-frame de-frame--nat de-paper de-paper--blue">
                     <img className="de-deco de-flor de-flor--bl de-pop" src={A('flores-izq')} alt="" />
                     <img className="de-deco de-flor de-flor--br de-pop" src={A('flores-der')} alt="" />

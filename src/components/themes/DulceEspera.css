@@ -449,3 +449,47 @@
   --kp-rsvp-bg: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(250,252,255,.5), rgba(130,152,186,.26) 100%), url('/images/themes/matias/papel-azul.webp') center / 500px auto, #e8eef6;
   --kp-closing-bg: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255,251,242,.55), rgba(196,158,102,.3) 100%), url('/images/themes/matias/papel-crema.webp') center / 560px auto, #f6eedf;
 }
+
+/* ================= v8 · ritmo: Belén azul / papel crema intercalados ================= */
+/* portada: las secciones crema pasan a papel antiguo */
+.de-cream { background: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255,251,242,.5), rgba(196,158,102,.3) 100%), url('/images/themes/matias/papel-crema.webp') center / 560px auto, #f6eedf; animation: none; }
+
+/* módulos: toile azul en bienvenida, RSVP y regalos; papel crema en mensaje, ubicación y cierre */
+.theme-dulce-espera {
+  --de-toile-bg: radial-gradient(ellipse 62% 48% at 50% 50%, rgba(245,248,252,.88), rgba(245,248,252,.4) 75%, rgba(245,248,252,.15)), url('/images/themes/matias/toile-azul.webp') 0 0 / 420px repeat, #eef2f7;
+  --de-paper-bg: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255,251,242,.5), rgba(196,158,102,.3) 100%), url('/images/themes/matias/papel-crema.webp') center / 560px auto, #f6eedf;
+  --kp-rsvp-bg: var(--de-toile-bg); --kp-closing-bg: var(--de-paper-bg);
+}
+.theme-dulce-espera.theme-dulce-espera .invitation-content section:is(#guest_welcome, #gifts) { background: var(--de-toile-bg) !important; }
+.theme-dulce-espera.theme-dulce-espera .invitation-content section:is(#message, #location) { background: var(--de-paper-bg) !important; }
+.theme-dulce-espera .invitation-content section#rsvp { background-position: 0 0, 0 0, 0 0 !important; }
+.theme-dulce-espera .invitation-content section:not(#hero) > div { position: relative; z-index: 1; }
+
+/* adornos colgantes y de esquina en los módulos */
+.theme-dulce-espera .invitation-content section:is(#guest_welcome, #message, #rsvp)::before,
+.theme-dulce-espera .invitation-content section:is(#guest_welcome, #message, #rsvp)::after { content: ''; position: absolute; z-index: 0; pointer-events: none; background: center top / contain no-repeat; transform-origin: 50% 0; }
+.theme-dulce-espera #guest_welcome::before { top: 0; right: 7%; width: 84px; height: 150px; background-image: url('/images/themes/matias/luna.webp') !important; animation: de-sway 4.6s ease-in-out infinite; }
+.theme-dulce-espera #guest_welcome::after { top: 0; left: 8%; width: 44px; height: 116px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 3.8s ease-in-out infinite reverse; }
+.theme-dulce-espera #message::before { top: 10px; right: -14px; width: 120px; height: 150px; background-image: url('/images/themes/matias/flores-der.webp') !important; }
+.theme-dulce-espera #message::after { bottom: 14px; left: -6px; width: 80px; height: 90px; background-image: url('/images/themes/matias/ramito.webp') !important; background-position: center bottom !important; rotate: -12deg; }
+.theme-dulce-espera #rsvp::before { top: 0; left: 6%; width: 40px; height: 104px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 4s ease-in-out infinite; }
+.theme-dulce-espera #rsvp::after { top: 0; right: 6%; width: 40px; height: 104px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 3.6s ease-in-out infinite reverse; }
+
+/* tarjeta del formulario sobre el toile */
+.theme-dulce-espera .invitation-content #rsvp .invitation-rsvp-grid > div:first-child { position: relative; padding: 46px 20px 26px !important; border-radius: 18px; background: #fcf8ef url('/images/themes/matias/papel-crema.webp') center / 560px auto !important; box-shadow: inset 0 0 0 5px rgba(252,248,239,.9), inset 0 0 0 6px rgba(184,134,62,.4), 0 24px 40px -24px rgba(52,64,88,.5) !important; }
+.theme-dulce-espera .invitation-content #rsvp .invitation-rsvp-grid > div:first-child::before { content: ''; position: absolute; top: -44px; left: 50%; width: 104px; height: 120px; margin-left: -52px; background: url('/images/themes/matias/mono-azul.webp') center top / contain no-repeat; transform-origin: 50% 20%; animation: de-sway 5s ease-in-out infinite; pointer-events: none; }
+
+/* tarjetas de ubicación y regalos con adornos encimados */
+.theme-dulce-espera .invitation-content :is(#location, #gifts) [class*="bg-[var(--card-bg)]"] { position: relative; overflow: visible !important; }
+.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:first-of-type::after { content: ''; position: absolute; left: -22px; bottom: -30px; width: 110px; height: 130px; background: url('/images/themes/matias/flores-izq.webp') center / contain no-repeat; pointer-events: none; }
+.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:first-of-type::before { content: ''; position: absolute; top: -26px; right: 22px; width: 80px; height: 54px; background: url('/images/themes/matias/mono-oro.webp') center / contain no-repeat; rotate: 12deg; pointer-events: none; }
+.theme-dulce-espera .invitation-content #gifts [class*="bg-[var(--card-bg)]"]::after { content: ''; position: absolute; right: -16px; bottom: -34px; width: 104px; height: 104px; background: url('/images/themes/matias/regalo.webp') center / contain no-repeat; pointer-events: none; animation: de-bob 3.6s ease-in-out infinite; }
+.theme-dulce-espera .invitation-content #gifts [class*="bg-[var(--card-bg)]"]::before { content: ''; position: absolute; left: -14px; bottom: -26px; width: 96px; height: 70px; background: url('/images/themes/matias/zapatitos.webp') center / contain no-repeat; pointer-events: none; }
+
+/* cierre: el banderín de la portada como remate */
+.theme-dulce-espera .invitation-closing::after { content: ''; position: absolute; top: -4px; left: 50%; width: min(112%, 720px); aspect-ratio: 1273 / 276; translate: -50% 0; background: url('/images/themes/matias/banderin.webp') center top / contain no-repeat; transform-origin: 50% 0; animation: de-sway-s 5s ease-in-out infinite; pointer-events: none; z-index: 0; }
+.theme-dulce-espera .invitation-closing { padding-top: 250px !important; }
+.theme-dulce-espera .invitation-closing::before { top: 96px !important; }
+.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:has(iframe)::before,
+.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:has(iframe)::after { display: none; }
+@media (min-width: 900px) { .de-cloud { display: none; } }
