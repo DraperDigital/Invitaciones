@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check, Lock, MapPin } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check, Lock, MapPin, TreePine } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -1205,7 +1205,8 @@ export default function InvitationPage() {
 
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
-        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
+        const isOfficialTemplateSlug = CANONICAL_TEMPLATES.some(t => t.slug === slug || t.slug === decodedSlug);
+        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || isOfficialTemplateSlug || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-') || slug?.startsWith('navidad-') || slug?.startsWith('posada-') || slug?.startsWith('graduacion-') || slug?.startsWith('baby-') || slug?.startsWith('gender-'))) {
             setEvent(prepareDemoEvent(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
@@ -2947,6 +2948,23 @@ END:VCALENDAR`;
     const otherTemplates = CANONICAL_TEMPLATES.filter(t => !categoryTemplates.some(ct => ct.id === t.id));
     const categoryLabel = EVENT_CATEGORY_LABELS[effectiveEventCategory] || 'Evento';
 
+    // Broadcast para activar el modo/skin navideño en invitaciones de edición Navidad (Pro y Clásica)
+    useEffect(() => {
+        const isXmas = effectiveEventCategory === 'navidad' ||
+            cfg.theme?.startsWith('nav-') ||
+            ['pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'posada-linea', 'cuadros-escoceses', 'rayas-rojas', 'holly-jolly', 'casita-nevada'].includes(cfg.theme);
+        if (typeof window !== 'undefined') {
+            (window as any).__INVITTO_CHRISTMAS_EVENT__ = isXmas;
+            window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: isXmas }));
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                (window as any).__INVITTO_CHRISTMAS_EVENT__ = false;
+                window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: false }));
+            }
+        };
+    }, [effectiveEventCategory, cfg.theme]);
+
     const isPro     = cfg.isPro     === true
                    || normalizePlan(event.plan) === 'pro'
                    || (isDemo && currentVersion === 'pro');
@@ -3393,6 +3411,9 @@ END:VCALENDAR`;
             if (text.includes('gradua')) {
                 return GraduationCap;
             }
+            if (text.includes('posada') || text.includes('navidad')) {
+                return TreePine;
+            }
             return Heart;
         })();
 
@@ -3404,6 +3425,7 @@ END:VCALENDAR`;
             if (explicit === 'map' || explicit === 'location') return MapPin;
             if (explicit === 'wine') return Wine;
             if (explicit === 'cake') return Cake;
+            if (explicit === 'tree' || explicit === 'navidad') return TreePine;
             if (explicit === 'music') return Music;
             if (explicit === 'heart') return Heart;
 
@@ -3416,6 +3438,9 @@ END:VCALENDAR`;
             }
             if (text.includes('posada') || text.includes('fiesta') || text.includes('festejo') || text.includes('party')) {
                 return PartyPopper;
+            }
+            if (text.includes('navidad')) {
+                return TreePine;
             }
             if (text.includes('coctel') || text.includes('cóctel') || text.includes('brindis') || text.includes('vino')) {
                 return Wine;
