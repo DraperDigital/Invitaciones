@@ -234,3 +234,238 @@
 .theme-noche-velas.theme-noche-velas section [class*="bg-[var(--card-bg)]"] :is(p, span, h3, h4) { color: #efe6d6 !important; }
 .theme-noche-velas.theme-noche-velas section :is(input, textarea, select) { background: #2b211a !important; color: #efe6d6 !important; border-color: rgba(217,180,106,.3) !important; }
 .theme-pueblo-papel { --kp-rsvp-bg: #f4efe4; --kp-closing-bg: #efe8da; }
+
+/* ═══════════════════════ POSADA MEXICANA (parallax) ═══════════════════════ */
+.nv--posada-mexicana {
+  --nv-bg-color: #8e1d16; --nv-bg-img: url('/images/themes/nav-posada/fondo.webp');
+  --nv-ink: #3d2a20; --nv-soft: #7a5a47; --nv-title: #1f5a3a; --nv-script: #b3261e; --nv-accent: #c9a14a;
+  --nv-line: rgba(179,38,30,.25); --nv-count-bg: #fffaf0; --nv-btn: #b3261e; --nv-btn-ink: #fff; --nv-photo-ring: #fffaf0;
+  --nv-card-bg: #fffaf0; --nv-card-pad: 34px 22px 30px; --nv-card-radius: 6px;
+  --nv-card-shadow: 0 0 0 8px #1f5a3a, 0 30px 50px -24px rgba(0,0,0,.6);
+  --nv-pad: 170px 26px 250px;
+}
+.nv--posada-mexicana .nv-script { font-size: 1.5rem; line-height: 1.25; }
+.nv--posada-mexicana .nv-title span:first-child { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(3.4rem, 17vw, 4.4rem); color: #1f5a3a; }
+.nv--posada-mexicana .nv-title span + span { color: #b3261e; letter-spacing: .14em; font-size: clamp(2rem, 9vw, 2.6rem); font-weight: 600; }
+.nv-l--pm-b1, .nv-l--pm-b2, .nv-l--pm-b3 { top: -40px; transform-origin: top center; animation: nv-swing 5s ease-in-out infinite; z-index: 1; }
+.nv-l--pm-b1 { left: 8%; width: 58px; }
+.nv-l--pm-b2 { left: 30%; width: 50px; top: -70px; animation-delay: -2s; }
+.nv-l--pm-b3 { right: 34%; width: 54px; top: -20px; animation-delay: -1s; }
+.nv-l--pm-poin { top: 70px; left: -30px; width: min(48vw, 210px); z-index: 3; }
+.nv-l--pm-pinata { top: 20px; right: -14px; width: min(36vw, 150px); transform-origin: top center; animation: nv-swing 4s ease-in-out infinite; z-index: 3; }
+.nv-l--pm-jarrito { bottom: 40px; left: -6px; width: min(32vw, 136px); z-index: 3; }
+.nv-l--pm-gifts { bottom: 30px; right: -10px; width: min(38vw, 160px); z-index: 3; }
+@media (min-width: 900px) {
+  .nv--posada-mexicana { --nv-pad-d: 150px 48px 160px; }
+  .nv-l--pm-poin { width: 300px; left: 4%; } .nv-l--pm-pinata { width: 220px; right: 8%; }
+  .nv-l--pm-jarrito { width: 180px; left: 8%; } .nv-l--pm-gifts { width: 220px; right: 6%; }
+  .nv-l--pm-b1 { width: 80px; } .nv-l--pm-b2 { width: 70px; } .nv-l--pm-b3 { width: 76px; }
+}
+
+/* ═══════════════════════ CLÁSICAS (sin parallax) ═══════════════════════ */
+/* C1 · Posada de Línea */
+.nv--posada-linea {
+  --nv-bg-color: #1f4a37;
+  --nv-bg-img: radial-gradient(circle at 20% 30%, rgba(255,230,160,.12) 0 2px, transparent 3px), radial-gradient(circle at 70% 60%, rgba(255,230,160,.12) 0 2px, transparent 3px);
+  --nv-ink: #6b2a22; --nv-soft: #9a5a4c; --nv-title: #1f5a3a; --nv-script: #b3261e; --nv-accent: #b3261e;
+  --nv-line: rgba(179,38,30,.25); --nv-count-bg: #fffaf0; --nv-btn: #b3261e; --nv-btn-ink: #fff; --nv-photo-ring: #fffaf0;
+  --nv-card-bg: #fffaf0; --nv-card-pad: 40px 24px 34px; --nv-card-radius: 4px; --nv-card-shadow: 0 30px 50px -24px rgba(0,0,0,.6);
+  --nv-pad: 70px 22px 70px;
+}
+.nv--posada-linea::before { background-size: 60px 60px; }
+.nv--posada-linea .nv-script { font-size: 1.35rem; line-height: 1.3; }
+.nv--posada-linea .nv-title span:first-child { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(3.6rem, 18vw, 4.6rem); color: #1f5a3a; }
+.nv--posada-linea .nv-title span + span { color: #1f5a3a; letter-spacing: .04em; font-size: clamp(2.4rem, 11vw, 3rem); font-weight: 500; text-transform: none; }
+.nv-l--pl-poin1 { top: 40px; left: 0; width: 130px; z-index: 3; }
+.nv-l--pl-poin2 { top: 40px; right: 0; width: 130px; z-index: 3; scale: -1 1; }
+.nv-l--pl-pinata { top: 300px; right: 16px; width: 66px; z-index: 3; animation: nv-swing 5s ease-in-out infinite; transform-origin: top center; }
+.nv-l--pl-sweater { top: 520px; left: 18px; width: 64px; z-index: 3; }
+.nv-l--pl-jarrito { top: 540px; right: 18px; width: 58px; z-index: 3; }
+@media (min-width: 900px) {
+  .nv-l--pl-poin1, .nv-l--pl-poin2 { width: 200px; top: 60px; }
+  .nv-l--pl-poin1 { left: calc(50% - 470px); } .nv-l--pl-poin2 { right: calc(50% - 470px); }
+  .nv-l--pl-pinata { right: calc(50% - 330px); top: 230px; } .nv-l--pl-sweater { left: calc(50% - 420px); top: 420px; } .nv-l--pl-jarrito { right: calc(50% + 40px); top: 460px; }
+}
+
+/* C2 · Cuadros Escoceses */
+.nv--cuadros-escoceses {
+  --nv-bg-color: #1e3b2c; --nv-bg-img: url('/images/themes/nav-clasicas/tartan.webp');
+  --nv-ink: #1f4a37; --nv-soft: #3f6650; --nv-title: #c8102e; --nv-script: #1f4a37; --nv-accent: #c8102e;
+  --nv-line: rgba(31,74,55,.25); --nv-count-bg: #ffffff; --nv-btn: #c8102e; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-card-bg: #fffefb; --nv-card-pad: 44px 26px 210px; --nv-card-radius: 60px;
+  --nv-card-shadow: 0 0 0 10px #fffefb, 0 30px 50px -24px rgba(0,0,0,.6);
+  --nv-pad: 50px 24px 60px;
+}
+.nv--cuadros-escoceses::before { background-size: 520px auto; background-repeat: repeat; }
+.nv--cuadros-escoceses .nv-card { position: relative; outline: 2px dashed #6d6d6d; outline-offset: -14px; }
+.nv--cuadros-escoceses .nv-script { font-family: 'Cormorant Garamond', serif !important; font-size: 1rem; letter-spacing: .1em; text-transform: uppercase; color: #1f4a37; }
+.nv--cuadros-escoceses .nv-title span:first-child { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(3.2rem, 15vw, 4.2rem); color: #c8102e; }
+.nv--cuadros-escoceses .nv-title span + span { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(2.8rem, 13vw, 3.6rem); color: #1f4a37; }
+.nv--cuadros-escoceses .nv-date b { color: #c8102e; }
+.nv--cuadros-escoceses .nv-l { z-index: 3; }
+.nv-l--ce-santa { position: absolute; top: auto; bottom: 120px; right: 26px; width: 180px; }
+.nv--cuadros-escoceses .nv-inner { position: relative; }
+.nv-l--ce-gift1 { top: 90px; left: 30px; width: 70px; rotate: -8deg; }
+.nv-l--ce-gift2 { top: 80px; right: 30px; width: 62px; rotate: 6deg; }
+.nv-l--ce-s1 { top: 46%; left: 34px; width: 26px; }
+.nv-l--ce-s2 { top: 38%; right: 40px; width: 22px; }
+.nv-l--ce-s3 { bottom: 170px; left: 40px; width: 26px; }
+.nv-l--ce-s4 { bottom: 300px; left: 60px; width: 20px; }
+@media (min-width: 900px) {
+  .nv--cuadros-escoceses .nv-inner { padding-left: calc(50% - 420px); padding-right: calc(50% - 420px); }
+  .nv-l--ce-santa { right: calc(50% - 150px); bottom: 110px; width: 230px; }
+  .nv-l--ce-gift1 { left: calc(50% - 380px); } .nv-l--ce-gift2 { right: calc(50% + 10px); }
+}
+
+/* C3 · Rayas Rojas */
+.nv--rayas-rojas {
+  --nv-bg-color: #f4ede2;
+  --nv-bg-img: repeating-linear-gradient(90deg, #a5162a 0 22px, #f4ede2 22px 44px);
+  --nv-ink: #3d4a3f; --nv-soft: #6e7a6e; --nv-title: #a5162a; --nv-script: #6e7a6e; --nv-accent: #a5162a;
+  --nv-line: rgba(165,22,42,.2); --nv-count-bg: #fbf7f0; --nv-btn: #a5162a; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-card-bg: #f4ede2; --nv-card-pad: 50px 22px 40px 120px; --nv-card-radius: 0;
+  --nv-card-shadow: inset 0 0 0 10px #f4ede2, inset 0 0 0 11px #a5162a;
+  --nv-pad: 60px 26px 60px;
+}
+.nv--rayas-rojas::before { inset: 0; translate: none; }
+.nv--rayas-rojas .nv-script { font-family: 'Cormorant Garamond', serif !important; font-style: italic; font-size: 1.2rem; letter-spacing: .06em; }
+.nv--rayas-rojas .nv-title span { font-size: clamp(2.2rem, 10vw, 2.8rem); letter-spacing: .04em; }
+.nv--rayas-rojas .nv-title span + span { font-size: clamp(2.2rem, 10vw, 2.8rem); letter-spacing: .04em; margin-top: 0; }
+.nv--rayas-rojas .nv-date b, .nv--rayas-rojas .nv-date small { color: #3d4a3f; }
+.nv--rayas-rojas .nv-card { position: relative; }
+.nv-l--rr-tree { top: 50px; left: 12px; height: min(620px, 140vw); width: auto; z-index: 3; }
+@media (min-width: 900px) {
+  .nv--rayas-rojas { --nv-card-pad: 60px 30px 50px 200px; }
+  .nv-l--rr-tree { left: calc(50% - 560px); top: 80px; height: 640px; }
+}
+
+/* C5 · Holly Jolly Vintage */
+.nv--holly-jolly {
+  --nv-bg-color: #f8eedb;
+  --nv-bg-img: linear-gradient(#f8eedb, #f8eedb) center / calc(100% - 44px) calc(100% - 44px) no-repeat, repeating-linear-gradient(90deg, #b03a2e 0 10px, #f8eedb 10px 20px);
+  --nv-ink: #2f5233; --nv-soft: #4d6b4f; --nv-title: #b03a2e; --nv-script: #2f5233; --nv-accent: #b03a2e;
+  --nv-line: rgba(176,58,46,.25); --nv-count-bg: #fdf6e8; --nv-btn: #b03a2e; --nv-btn-ink: #fff; --nv-photo-ring: #fdf6e8;
+  --nv-pad: 160px 34px 170px;
+}
+.nv--holly-jolly::before { inset: 0; translate: none; }
+.nv--holly-jolly .nv-script { font-family: 'Cinzel', serif !important; font-size: .9rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #2f5233; }
+.nv--holly-jolly .nv-title { font-family: 'Cinzel', serif !important; font-weight: 700; letter-spacing: .02em; }
+.nv--holly-jolly .nv-title span:first-child { color: #2f5233; font-size: clamp(2.4rem, 11vw, 3.2rem); }
+.nv--holly-jolly .nv-title span + span { color: #b03a2e; font-size: clamp(2.4rem, 11vw, 3.2rem); letter-spacing: .02em; }
+.nv--holly-jolly .nv-date { border: 2px solid #b03a2e; border-radius: 14px; padding: 10px 16px; outline: 1px solid #b03a2e; outline-offset: 3px; }
+.nv--holly-jolly .nv-date b { color: #b03a2e; font-family: 'Cinzel', serif; font-weight: 700; }
+.nv-l--hj-fil1 { top: 46px; left: 50%; width: min(80vw, 360px); translate: -50% 0; }
+.nv-l--hj-fil2 { bottom: 46px; left: 50%; width: min(80vw, 360px); translate: -50% 0; }
+.nv-l--hj-h1 { top: 330px; left: 28px; width: 60px; rotate: -20deg; z-index: 3; }
+.nv-l--hj-h2 { top: 330px; right: 28px; width: 60px; scale: -1 1; rotate: 20deg; z-index: 3; }
+@media (min-width: 900px) {
+  .nv--holly-jolly { --nv-pad-d: 170px 48px 170px; }
+  .nv-l--hj-fil1, .nv-l--hj-fil2 { width: 480px; }
+  .nv-l--hj-h1 { left: calc(50% - 360px); top: 250px; } .nv-l--hj-h2 { right: calc(50% - 360px); top: 250px; }
+}
+
+/* Módulos de las nuevas */
+.theme-posada-mexicana, .theme-posada-linea {
+  --kp-bg: #fffaf0; --kp-alt: #f8efe2;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #b3261e; --kp-ink: #3d2a20; --kp-soft: #7a5a47; --kp-accent: #1f5a3a;
+  --kp-btn: #b3261e; --kp-btn-ink: #fff; --kp-card-border: rgba(179,38,30,.25); --kp-icon-bg: #fbe4dc; --kp-icon: #b3261e;
+  --kp-shadow: rgba(61,42,32,.3);
+  --kp-title-deco: url('/images/themes/nav-clasicas/ico-1.webp');
+  --kp-art-message: url('/images/themes/nav-clasicas/ico-3.webp'); --kp-art-message-w: 150px; --kp-art-message-h: 104px;
+  --kp-art-location: url('/images/themes/nav-clasicas/ico-2.webp'); --kp-art-location-w: 130px; --kp-art-location-h: 104px;
+  --kp-art-gifts: url('/images/themes/nav-clasicas/ico-4.webp'); --kp-art-gifts-w: 104px; --kp-art-gifts-h: 112px;
+  --kp-art-rsvp: url('/images/themes/nav-clasicas/ico-5.webp'); --kp-art-rsvp-w: 96px; --kp-art-rsvp-h: 112px;
+  --kp-rsvp-bg: #f8efe2; --kp-closing-bg: #1f4a37;
+  --kp-art-closing: url('/images/themes/nav-posada/nochebuena.webp'); --kp-closing-title: #fffaf0; --kp-closing-text: #e8dcc8;
+}
+.theme-posada-mexicana {
+  --kp-art-message: url('/images/themes/nav-posada/pinata.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 126px;
+  --kp-art-location: url('/images/themes/nav-posada/jarrito.webp'); --kp-art-location-w: 110px; --kp-art-location-h: 126px;
+  --kp-art-gifts: url('/images/themes/nav-posada/regalos.webp'); --kp-art-gifts-w: 130px; --kp-art-gifts-h: 126px;
+  --kp-art-rsvp: url('/images/themes/nav-posada/esfera-3.webp'); --kp-art-rsvp-w: 60px; --kp-art-rsvp-h: 116px;
+  --kp-closing-bg: #8e1d16 url('/images/themes/nav-posada/fondo.webp') center / cover;
+}
+.theme-cuadros-escoceses {
+  --kp-bg: #fffefb; --kp-alt: #f6f1e8;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #c8102e; --kp-ink: #1f4a37; --kp-soft: #3f6650; --kp-accent: #c8102e;
+  --kp-btn: #c8102e; --kp-btn-ink: #fff; --kp-card-border: rgba(31,74,55,.25); --kp-icon-bg: #fde5e8; --kp-icon: #c8102e;
+  --kp-shadow: rgba(31,74,55,.3);
+  --kp-title-deco: url('/images/themes/nav-clasicas/rl-2.webp');
+  --kp-art-message: url('/images/themes/nav-clasicas/rl-4.webp'); --kp-art-message-w: 90px; --kp-art-message-h: 96px;
+  --kp-art-location: url('/images/themes/nav-clasicas/rl-7.webp'); --kp-art-location-w: 90px; --kp-art-location-h: 96px;
+  --kp-art-gifts: url('/images/themes/nav-clasicas/rl-4.webp'); --kp-art-gifts-w: 90px; --kp-art-gifts-h: 96px;
+  --kp-art-rsvp: url('/images/themes/nav-clasicas/santa.webp'); --kp-art-rsvp-w: 120px; --kp-art-rsvp-h: 180px;
+  --kp-rsvp-bg: #f6f1e8; --kp-closing-bg: #1e3b2c url('/images/themes/nav-clasicas/tartan.webp') center / 520px auto;
+  --kp-art-closing: url('/images/themes/nav-clasicas/rl-8.webp'); --kp-closing-title: #fff; --kp-closing-text: #f3e9e9;
+}
+.theme-cuadros-escoceses .invitation-closing { box-shadow: inset 0 0 0 9999px rgba(20,40,30,.55); }
+.theme-rayas-rojas {
+  --kp-bg: #f8f3ea; --kp-alt: #f4ede2;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #a5162a; --kp-ink: #3d4a3f; --kp-soft: #6e7a6e; --kp-accent: #a5162a;
+  --kp-btn: #a5162a; --kp-btn-ink: #fff; --kp-card-border: rgba(165,22,42,.22); --kp-icon-bg: #f6e2e2; --kp-icon: #a5162a;
+  --kp-shadow: rgba(61,74,63,.3);
+  --kp-title-deco: none; --kp-art-message: none; --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: none;
+  --kp-rsvp-bg: #f4ede2;
+  --kp-closing-bg: repeating-linear-gradient(90deg, #a5162a 0 22px, #f4ede2 22px 44px);
+  --kp-art-closing: none; --kp-closing-title: #a5162a;
+}
+.theme-rayas-rojas .invitation-closing > * { background: #f4ede2; }
+.theme-rayas-rojas :is(#message, #location, #gifts, #rsvp) > div::before, .theme-rayas-rojas :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
+.theme-rayas-rojas :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2) { text-transform: uppercase !important; letter-spacing: .08em !important; }
+.theme-holly-jolly {
+  --kp-bg: #fbf4e6; --kp-alt: #f8eedb;
+  --kp-title-font: 'Cinzel', serif; --kp-title-weight: 700; --kp-title-size: clamp(1.7rem, 7.5vw, 2.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #b03a2e; --kp-ink: #2f5233; --kp-soft: #4d6b4f; --kp-accent: #b03a2e;
+  --kp-btn: #b03a2e; --kp-btn-ink: #fff; --kp-card-border: rgba(176,58,46,.3); --kp-icon-bg: #f3e0d0; --kp-icon: #b03a2e;
+  --kp-shadow: rgba(47,82,51,.3);
+  --kp-title-deco: url('/images/themes/nav-clasicas/acebo.webp');
+  --kp-art-message: url('/images/themes/nav-clasicas/filigrana.webp'); --kp-art-message-w: 240px; --kp-art-message-h: 70px;
+  --kp-art-location: url('/images/themes/nav-clasicas/acebo.webp'); --kp-art-location-w: 70px; --kp-art-location-h: 60px;
+  --kp-art-gifts: url('/images/themes/nav-clasicas/acebo.webp'); --kp-art-gifts-w: 70px; --kp-art-gifts-h: 60px;
+  --kp-art-rsvp: url('/images/themes/nav-clasicas/filigrana.webp'); --kp-art-rsvp-w: 240px; --kp-art-rsvp-h: 70px;
+  --kp-rsvp-bg: #f8eedb; --kp-closing-bg: #f8eedb;
+  --kp-art-closing: url('/images/themes/nav-clasicas/filigrana.webp'); --kp-closing-title: #b03a2e;
+}
+.theme-holly-jolly .invitation-closing::before { width: 260px; height: 80px; margin-left: -130px; }
+:is(.theme-posada-mexicana, .theme-posada-linea, .theme-cuadros-escoceses, .theme-rayas-rojas, .theme-holly-jolly) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 12px !important; }
+:is(.theme-posada-mexicana, .theme-posada-linea, .theme-cuadros-escoceses, .theme-rayas-rojas, .theme-holly-jolly) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .18em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-posada-mexicana, .theme-posada-linea, .theme-cuadros-escoceses, .theme-holly-jolly) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 40px; height: 40px; }
+/* Ajustes de acomodo */
+.nv--posada-mexicana { --nv-pad: 230px 26px 250px; }
+.nv-l--pm-poin { top: 40px; width: min(42vw, 180px); }
+.nv--cuadros-escoceses .nv-card { --nv-card-pad: 0; padding: 60px 26px 230px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-santa { top: auto; bottom: 26px; left: 50%; right: auto; width: 170px; translate: -50% 0; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-gift1 { top: -26px; left: -14px; right: auto; width: 74px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-gift2 { top: -22px; right: -12px; left: auto; width: 66px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-s1 { top: 40%; left: 16px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-s2 { top: 34%; right: 18px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-s3 { top: auto; bottom: 60px; left: 22px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-s4 { top: auto; bottom: 110px; right: 26px; left: auto; }
+.nv--cuadros-escoceses .nv-script { padding: 0 34px; }
+@media (min-width: 900px) { .nv--cuadros-escoceses .nv-inner { padding-left: 48px; padding-right: 48px; } }
+.nv--rayas-rojas .nv-card { padding: 300px 22px 40px; }
+.nv-l--rr-tree { top: 56px; left: 50%; height: 300px; translate: -50% 0; }
+@media (min-width: 900px) {
+  .nv--rayas-rojas .nv-card { padding: 60px 30px 50px 220px; }
+  .nv-l--rr-tree { left: calc(50% - 540px); top: 80px; height: 560px; translate: none; }
+}
+.nv--holly-jolly { --nv-pad: 200px 34px 200px; }
+.nv-l--hj-fil1 { top: 50px; width: min(64vw, 280px); }
+.nv-l--hj-fil2 { bottom: 50px; width: min(64vw, 280px); }
+.nv-l--hj-h1, .nv-l--hj-h2 { top: 400px; width: 50px; }
+.nv--holly-jolly .nv-script { font-size: .8rem; }
+@media (min-width: 900px) { .nv--holly-jolly { --nv-pad-d: 210px 48px 200px; } .nv-l--hj-h1, .nv-l--hj-h2 { top: 300px; } }
+.nv--cuadros-escoceses .nv-card { padding-bottom: 250px; }
+.nv--cuadros-escoceses .nv-card .nv-l--ce-santa { width: 160px; bottom: 30px; }
+@media (min-width: 900px) {
+  .nv--rayas-rojas .nv-card { max-width: 480px; padding: 60px 30px 50px 210px; }
+  .nv--rayas-rojas .nv-title span, .nv--rayas-rojas .nv-title span + span { font-size: 2.4rem; }
+  .nv-l--rr-tree { left: calc(50% - 560px); }
+}
+.theme-rayas-rojas .invitation-closing > * { background: transparent; }
+.theme-rayas-rojas .invitation-closing { position: relative; }
+.theme-rayas-rojas .invitation-closing::after { content: ''; position: absolute; inset: 28px 22px; background: #f4ede2; outline: 1px solid #a5162a; outline-offset: -10px; z-index: 0; }
+.theme-rayas-rojas .invitation-closing > * { position: relative; z-index: 1; }

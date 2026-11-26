@@ -784,6 +784,76 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#241B15',
         typographyPreset: 'elegante'
     },
+    'posada-mexicana': {
+        label: 'Posada Mexicana',
+        desc: 'Posada mexicana: piñata de picos, nochebuenas, jarrito de ponche, regalos y esferas sobre rojo con estrellas, con parallax',
+        icon: '🪅',
+        primaryColor: '#B3261E',
+        accentColor: '#1F5A3A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFAF0',
+        textPrimary: '#3D2A20',
+        textSecondary: '#7A5A47',
+        heroTextColor: '#B3261E',
+        heroBgColor: '#F8EFE2',
+        typographyPreset: 'elegante'
+    },
+    'posada-linea': {
+        label: 'Posada de Línea',
+        desc: 'Posada clásica: tarjeta marfil sobre verde, nochebuenas e íconos de línea roja (piñata, ponche, suéter)',
+        icon: '⭐',
+        primaryColor: '#B3261E',
+        accentColor: '#1F5A3A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFAF0',
+        textPrimary: '#3D2A20',
+        textSecondary: '#7A5A47',
+        heroTextColor: '#B3261E',
+        heroBgColor: '#F8EFE2',
+        typographyPreset: 'elegante'
+    },
+    'cuadros-escoceses': {
+        label: 'Cuadros Escoceses',
+        desc: 'Fiesta navideña retro: tartán rojo y verde, tarjeta con costura y Santa en línea roja dentro de una taza de chocolate',
+        icon: '🎅',
+        primaryColor: '#C8102E',
+        accentColor: '#C8102E',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFFEFB',
+        textPrimary: '#1F4A37',
+        textSecondary: '#3F6650',
+        heroTextColor: '#C8102E',
+        heroBgColor: '#F6F1E8',
+        typographyPreset: 'elegante'
+    },
+    'rayas-rojas': {
+        label: 'Rayas Rojas',
+        desc: 'Navidad elegante: marco de rayas rojas y pino en acuarela con moños',
+        icon: '🎀',
+        primaryColor: '#A5162A',
+        accentColor: '#A5162A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F3EA',
+        textPrimary: '#3D4A3F',
+        textSecondary: '#6E7A6E',
+        heroTextColor: '#A5162A',
+        heroBgColor: '#F4EDE2',
+        typographyPreset: 'elegante'
+    },
+    'holly-jolly': {
+        label: 'Holly Jolly Vintage',
+        desc: 'Fiesta navideña estilo cartel antiguo: rayas rojas, filigranas victorianas y acebo',
+        icon: '🎄',
+        primaryColor: '#B03A2E',
+        accentColor: '#B03A2E',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF4E6',
+        textPrimary: '#2F5233',
+        textSecondary: '#4D6B4F',
+        heroTextColor: '#B03A2E',
+        heroBgColor: '#F8EEDB',
+        typographyPreset: 'elegante'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -939,7 +1009,12 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'pueblo-papel', name: 'Pueblo de Papel', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Pueblo de Papel', slug: 'navidad-pueblo-papel', icon: '🏘️', plan: 'Pro', thumbnail: '/images/templates/pueblo-papel.jpg' },
     { id: 'bordado-lujo', name: 'Bordado de Lujo', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Bordado de Lujo', slug: 'navidad-bordado-lujo', icon: '🎄', plan: 'Pro', thumbnail: '/images/templates/bordado-lujo.jpg' },
     { id: 'epoca-bonita', name: 'La Época Más Bonita', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / La Época Más Bonita', slug: 'navidad-epoca-bonita', icon: '🎁', plan: 'Pro', thumbnail: '/images/templates/epoca-bonita.jpg' },
-    { id: 'noche-velas', name: 'Noche de Velas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Noche de Velas', slug: 'navidad-noche-velas', icon: '🕯️', plan: 'Pro', thumbnail: '/images/templates/noche-velas.jpg' }
+    { id: 'noche-velas', name: 'Noche de Velas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Noche de Velas', slug: 'navidad-noche-velas', icon: '🕯️', plan: 'Pro', thumbnail: '/images/templates/noche-velas.jpg' },
+    { id: 'posada-mexicana', name: 'Posada Mexicana', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada Mexicana', slug: 'navidad-posada-mexicana', icon: '🪅', plan: 'Pro', thumbnail: '/images/templates/posada-mexicana.jpg' },
+    { id: 'posada-linea', name: 'Posada de Línea', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada de Línea', slug: 'navidad-posada-linea', icon: '⭐', plan: 'Clásica', thumbnail: '/images/templates/posada-linea.jpg' },
+    { id: 'cuadros-escoceses', name: 'Cuadros Escoceses', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Cuadros Escoceses', slug: 'navidad-cuadros-escoceses', icon: '🎅', plan: 'Clásica', thumbnail: '/images/templates/cuadros-escoceses.jpg' },
+    { id: 'rayas-rojas', name: 'Rayas Rojas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Rayas Rojas', slug: 'navidad-rayas-rojas', icon: '🎀', plan: 'Clásica', thumbnail: '/images/templates/rayas-rojas.jpg' },
+    { id: 'holly-jolly', name: 'Holly Jolly Vintage', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Holly Jolly Vintage', slug: 'navidad-holly-jolly', icon: '🎄', plan: 'Clásica', thumbnail: '/images/templates/holly-jolly.jpg' }
 ];
 
 export const EVENT_CATEGORY_LABELS: Record<string, string> = {
@@ -1040,7 +1115,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

@@ -320,5 +320,16 @@ PARALLAX_BY_THEME['noche-velas'] = [
     { selector: '.nv-l--balls', speed: -0.1 },
     ...sectionLayers('noche-velas'),
 ];
+PARALLAX_BY_THEME['posada-mexicana'] = [
+    { selector: '.nv--posada-mexicana', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--pm-b1', speed: 0.4 },
+    { selector: '.nv-l--pm-b2', speed: 0.3 },
+    { selector: '.nv-l--pm-b3', speed: 0.5 },
+    { selector: '.nv-l--pm-poin', speed: 0.15 },
+    { selector: '.nv-l--pm-pinata', speed: -0.3 },
+    { selector: '.nv-l--pm-jarrito', speed: -0.2 },
+    { selector: '.nv-l--pm-gifts', speed: -0.25 },
+    ...sectionLayers('posada-mexicana'),
+];
 
 export const PARALLAX_MAX_PX = 160;

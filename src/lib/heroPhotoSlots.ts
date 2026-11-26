@@ -472,6 +472,51 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
         fields: ['hero_image_url', 'heroImage']
     },
+    'posada-mexicana': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'posada-linea': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'cuadros-escoceses': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'rayas-rojas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'holly-jolly': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

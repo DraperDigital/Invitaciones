@@ -23,7 +23,7 @@ interface Props {
 }
 
 interface NavConfig {
-    layers: { k: string; src: string }[];
+    layers: { k: string; src: string; inCard?: boolean }[];
     script: string;
     countTitle: string;
 }
@@ -76,6 +76,59 @@ export const NAVIDAD_LAYERED: Record<string, NavConfig> = {
         ],
         script: 'Te invitamos a nuestra',
         countTitle: 'Faltan',
+    },    'posada-mexicana': {
+        layers: [
+            { k: 'pm-b1', src: P('posada', 'esfera-1') },
+            { k: 'pm-b2', src: P('posada', 'esfera-2') },
+            { k: 'pm-b3', src: P('posada', 'esfera-3') },
+            { k: 'pm-poin', src: P('posada', 'nochebuena') },
+            { k: 'pm-pinata', src: P('posada', 'pinata') },
+            { k: 'pm-jarrito', src: P('posada', 'jarrito') },
+            { k: 'pm-gifts', src: P('posada', 'regalos') },
+        ],
+        script: 'Querida familia, los invitamos a nuestra',
+        countTitle: '¡La fecha se acerca!',
+    },
+    'posada-linea': {
+        layers: [
+            { k: 'pl-poin1', src: P('posada', 'nochebuena') },
+            { k: 'pl-poin2', src: P('posada', 'nochebuena') },
+            { k: 'pl-pinata', src: P('clasicas', 'ico-1') },
+            { k: 'pl-sweater', src: P('clasicas', 'ico-6') },
+            { k: 'pl-jarrito', src: P('clasicas', 'ico-5') },
+        ],
+        script: 'Querida familia, con gran alegría los invitamos a nuestra',
+        countTitle: '¡La fecha se acerca!',
+    },
+    'cuadros-escoceses': {
+        layers: [
+            { k: 'ce-santa', inCard: true, src: P('clasicas', 'santa') },
+            { k: 'ce-gift1', inCard: true, src: P('clasicas', 'rl-4') },
+            { k: 'ce-gift2', inCard: true, src: P('clasicas', 'rl-7') },
+            { k: 'ce-s1', inCard: true, src: P('clasicas', 'rl-2') },
+            { k: 'ce-s2', inCard: true, src: P('clasicas', 'rl-8') },
+            { k: 'ce-s3', inCard: true, src: P('clasicas', 'rl-10') },
+            { k: 'ce-s4', inCard: true, src: P('clasicas', 'rl-11') },
+        ],
+        script: 'Celebra con nosotros la magia de la Navidad',
+        countTitle: 'Faltan',
+    },
+    'rayas-rojas': {
+        layers: [
+            { k: 'rr-tree', src: P('clasicas', 'pino') },
+        ],
+        script: 'Estás invitado a una pequeña y alegre',
+        countTitle: 'Faltan',
+    },
+    'holly-jolly': {
+        layers: [
+            { k: 'hj-fil1', src: P('clasicas', 'filigrana') },
+            { k: 'hj-fil2', src: P('clasicas', 'filigrana') },
+            { k: 'hj-h1', src: P('clasicas', 'acebo') },
+            { k: 'hj-h2', src: P('clasicas', 'acebo') },
+        ],
+        script: 'La fiesta navideña más alegre del año',
+        countTitle: 'Faltan',
     },
 };
 
@@ -99,11 +152,14 @@ export default function NavidadLayeredHero({ theme, event, cfg, countdown, label
 
     return (
         <section id="hero" className={`nv nv--${theme} ${shown ? 'is-shown' : ''}`}>
-            {conf.layers.map((l) => (
+            {conf.layers.filter((l) => !l.inCard).map((l) => (
                 <img key={l.k} className={`nv-l nv-l--${l.k}`} src={l.src} alt="" aria-hidden="true" />
             ))}
             <div className="nv-inner">
                 <div className="nv-card">
+                    {conf.layers.filter((l) => l.inCard).map((l) => (
+                        <img key={l.k} className={`nv-l nv-l--${l.k}`} src={l.src} alt="" aria-hidden="true" />
+                    ))}
                     {kicker && <p className="nv-kicker">{kicker}</p>}
                     <p className="nv-script">{conf.script}</p>
                     <h1 className="nv-title">

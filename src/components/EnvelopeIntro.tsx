@@ -321,6 +321,11 @@ export default function EnvelopeIntro({
         'bordado-lujo': '#8E2B2B',
         'epoca-bonita': '#9B2F2A',
         'noche-velas': '#D9B46A',
+        'posada-mexicana': '#B3261E',
+        'posada-linea': '#B3261E',
+        'cuadros-escoceses': '#C8102E',
+        'rayas-rojas': '#A5162A',
+        'holly-jolly': '#B03A2E',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico
