@@ -160,7 +160,7 @@ const OCCASIONS = [
         id: 'infantil',
         name: 'Infantil',
         icon: '🎈',
-        slug: 'invitaciones-digitales-cumpleanos',
+        slug: 'invitaciones-digitales-infantiles',
         badge: 'Zoológico Aventura',
         title: 'Cumpleaños Zair',
         names: 'Zair',
@@ -1670,6 +1670,7 @@ export default function HomePage() {
                                 <li><Link to="/invitaciones-digitales-boda" className="hover:text-white transition-colors">Bodas</Link></li>
                                 <li><Link to="/invitaciones-digitales-xv-anos" className="hover:text-white transition-colors">XV Años</Link></li>
                                 <li><Link to="/invitaciones-digitales-cumpleanos" className="hover:text-white transition-colors">Cumpleaños</Link></li>
+                                <li><Link to="/invitaciones-digitales-infantiles" className="hover:text-white transition-colors">Cumpleaños Infantiles</Link></li>
                                 <li><Link to="/invitaciones-digitales-bautizo" className="hover:text-white transition-colors">Bautizos</Link></li>
                                 <li><Link to="/invitaciones-digitales-primera-comunion" className="hover:text-white transition-colors">Primera Comunión</Link></li>
                                 <li><Link to="/invitaciones-digitales-baby-shower" className="hover:text-white transition-colors">Baby Shower</Link></li>

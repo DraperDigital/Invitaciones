@@ -37,7 +37,7 @@ export interface Testimonial {
 
 // ─── Event Landing Specific Types (11-step sales structure) ───────────
 export interface EventThemeConfig {
-  key: 'boda' | 'xv' | 'cumpleanos' | 'bautizo' | 'comunion' | 'baby_shower' | 'gender_reveal' | 'graduacion';
+  key: 'boda' | 'xv' | 'cumpleanos' | 'infantil' | 'bautizo' | 'comunion' | 'baby_shower' | 'gender_reveal' | 'graduacion';
   bg: string;
   bg2: string;
   ink: string;
@@ -729,6 +729,181 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       title: 'Tu cumple se acerca: festeja sin complicaciones.',
       subtitle: 'Manda tu invitación hoy y ten la lista de confirmados lista para planear tu fiesta con calma.',
       cta: 'Crear mi invitación gratis',
+    },
+    get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
+  },
+
+  // ── 3b. Invitaciones Digitales Infantiles ──────────────────────────
+  'invitaciones-digitales-infantiles': {
+    slug: 'invitaciones-digitales-infantiles',
+    isEventLanding: true,
+    eventType: 'birthday',
+    theme: {
+      key: 'infantil',
+      bg: '#FFFDF9',
+      bg2: '#FFF5EB',
+      ink: '#1A202C',
+      muted: '#64748B',
+      line: '#FED7AA',
+      dark: '#FF5964',
+      darkInk: '#FFFFFF',
+      accent: '#FF5964',
+      accentText: '#E11D48',
+      btn: '#FF5964',
+      btnInk: '#FFFFFF',
+      btnRing: '#FBBF24',
+      fontHead: "'Inter', sans-serif",
+      fontBody: "'Inter', sans-serif",
+    },
+    eyebrow: 'Invitaciones digitales para fiestas infantiles y cumpleaños de niños',
+    h1Prefix: 'La piñata más divertida, con los ',
+    h1Highlight: 'pases de niños y papás',
+    h1Suffix: ' confirmados a tiempo.',
+    waMessage: 'Hola, quiero información sobre invitaciones digitales para fiestas infantiles',
+    phone: {
+      category: 'infantil',
+      topBadge: '¡Cumple Mágico!',
+      title: 'Lucas · Mis 5 Años',
+      dateStr: '20 · 09 · 2027',
+      targetDate: '2027-09-20T16:00:00',
+      guestName: 'Familia Morales',
+      passesText: '2 adultos + 2 niños',
+      rsvpDoneToast: 'Así le llega a tu panel: “Familia Morales confirmó 4 pases”',
+    },
+    problemTitle: 'Organizar una fiesta infantil en grupos de WhatsApp es un dolor de cabeza.',
+    problemItems: [
+      'No sabes cuántos niños vienen ni cuántos papás los acompañan para calcular piñata y comida.',
+      'Los papás se pierden buscando el salón de fiestas o te marcan en pleno evento.',
+      'Te preguntan muchas veces qué personaje es, qué talla calza o qué juguetes le gustan.',
+      'Las confirmaciones se pierden en el chat y terminas contando a mano en una libreta.',
+    ],
+    showSeatsStat: false,
+    outcomeTitle: 'Tu fiesta infantil bajo control, tus invitados felices.',
+    outcomeItems: [
+      'Control exacto de pases: confirmación diferenciada de adultos y niños en un solo toque.',
+      'Ubicación interactiva con Waze y Google Maps para que todos lleguen directo al salón.',
+      'Sugerencias de regalos, talla de ropa o wish list clara para los papás invitados.',
+      'Música temática infantil, cuenta regresiva y diseño animado que emociona a los niños.',
+    ],
+    stepsTitle: 'La invitación de tus peques lista en 3 pasos sencillos.',
+    salesSteps: [
+      {
+        title: 'Elige la temática favorita',
+        description: 'Dinosaurios, safari, princesas, astronautas, granjita y más de 25 modelos infantiles listos para personalizar.',
+      },
+      {
+        title: 'Personaliza fotos y horarios',
+        description: 'Agrega los datos de la fiesta, dirección del salón, mesa de regalos y mensaje especial en minutos.',
+      },
+      {
+        title: 'Envía por WhatsApp y recibe RSVPs',
+        description: 'Comparte el enlace con los papás y mira en tiempo real quién ya confirmó con cuántos niños.',
+      },
+    ],
+    whyTitle: 'Fácil para los papás, diversión garantizada para los niños.',
+    whyLead: 'Olvídate de las tarjetas impresas que terminan en la basura:',
+    whyCards: [
+      {
+        title: 'Sin apps que descargar',
+        description: 'Cualquier mamá o papá abre el link al instante desde WhatsApp.',
+      },
+      {
+        title: 'Conteo exacto niños + adultos',
+        description: 'Calcula con precisión las cajitas felices, piñata y bocadillos.',
+      },
+      {
+        title: 'Mapa y GPS en un clic',
+        description: 'Llegan directo con Waze o Google Maps sin dar vueltas.',
+      },
+    ],
+    recommendedPlan: {
+      badge: 'El más elegido para fiestas infantiles',
+      name: 'Plan Clásica',
+      price: '$499',
+      period: 'MXN · un solo pago',
+      note: 'Sin límite de envíos · sin cargos extra por niño o familia',
+      features: [
+        'Invitación interactiva completa para celular',
+        'Confirmación de asistencia por WhatsApp con conteo de pases',
+        'Ubicación interactiva con Google Maps y Waze directo al salón',
+        'Mesa de regalos, tallas y sugerencias de juguetes',
+        'Música temática infantil y cuenta regresiva animada',
+        'Galería de fotos del festejado(a)',
+        'Envío ilimitado sin costo extra por invitado',
+      ],
+      savingsText: '<b>Ahorro real en dulceros y comida:</b> compra solo lo necesario sabiendo con anticipación cuántos niños y adultos asistirán.',
+      ctaText: 'Crear mi invitación infantil gratis',
+      ctaMicro: 'La armas gratis y la pruebas en tu celular. Pagas solo cuando la vayas a compartir.',
+    },
+    altPlans: [
+      {
+        title: '¿Quieres pases personalizados por familia con QR?',
+        subtitle: 'Plan Pro · pases individuales, código QR y acomodo',
+        priceOrAction: '$1,699',
+        href: '/planes',
+      },
+      {
+        title: '¿Un evento con confirmación telefónica?',
+        subtitle: 'Invitto Confirma · confirmamos a cada familia por ti',
+        priceOrAction: 'Ver ($3,499)',
+        href: '/confirma',
+      },
+    ],
+    proofTitle: 'No nos creas: pruébala con la temática de tu peque.',
+    proofLead: 'Elige entre más de 25 modelos temáticos para niños y pruébala gratis antes de pagar un solo peso.',
+    demoCategory: 'infantil',
+    objectionsTitle: 'Lo que nos preguntan papás y mamás antes de empezar',
+    objections: [
+      {
+        question: '“¿Puedo saber cuántos niños y cuántos adultos asistirán?”',
+        answer: 'Sí. El formulario de confirmación permite a los invitados especificar cuántos adultos y niños vienen en su grupo, facilitando el cálculo de dulceros y menú.',
+      },
+      {
+        question: '“¿Puedo poner sugerencia de regalos o tallas de ropa?”',
+        answer: 'Sí, puedes incluir una nota con la talla de ropa, número de calzado, gustos del niño o enlace a mesa de regalos de Liverpool, Amazon, etc.',
+      },
+      {
+        question: '“¿Puedo cambiar la dirección o la hora si el salón cambia?”',
+        answer: '¡Totalmente! Puedes editar la hora, el salón o la ubicación en cualquier momento y el cambio se actualiza inmediatamente en el mismo enlace.',
+      },
+      {
+        question: '“¿Mis invitados tienen que instalar alguna aplicación?”',
+        answer: 'No. Se abre directo en cualquier navegador desde WhatsApp, Instagram o mensaje de texto.',
+      },
+      {
+        question: '“¿Y si no me gusta cómo queda?”',
+        answer: 'La armas gratis y la ves completa en tu celular. Pagas solo cuando decidas publicarla, con 7 días de garantía de reembolso.',
+      },
+    ],
+    guaranteeTitle: 'Cero riesgo.',
+    guaranteeText: 'Ármala gratis y revísala en tu celular. Si decides publicarla y no quedas 100% satisfecho(a), tienes <b>7 días de garantía de reembolso</b>.',
+    closingTitle: 'La fiesta de tu peque merece una invitación inolvidable.',
+    closingLead: 'Crea tu invitación en minutos, compártela por WhatsApp y ten tu lista de niños y papás confirmada hoy mismo.',
+    closingCta: 'Crear mi invitación infantil gratis',
+    seo: {
+      title: 'Invitaciones Digitales para Cumpleaños Infantiles — Fiestas de Niños',
+      description: 'Crea invitaciones digitales para fiestas infantiles y cumpleaños de niños. Temáticas divertidas, confirmación por WhatsApp con pases niños/adultos y mapa al salón.',
+      path: '/invitaciones-digitales-infantiles',
+    },
+    hero: {
+      badge: 'Cumpleaños Infantiles',
+      h1: 'La piñata más divertida, con los pases de niños y papás confirmados a tiempo.',
+      subtitle: 'Temáticas para niños, ubicación directa al salón con Waze/Maps, sugerencia de regalos y confirmación ágil por WhatsApp.',
+      cta: 'Crear mi invitación infantil gratis',
+    },
+    benefits: [],
+    steps: DEFAULT_STEPS,
+    testimonials: [],
+    faq: [
+      { question: '¿Qué temáticas infantiles tienen disponibles?', answer: 'Tenemos más de 25 temáticas listas: dinosaurios, safari, granjita, videojuegos, sirenas, astronautas, princesas, unicornios y fiestas de colores.' },
+      { question: '¿Cómo confirman asistencia los papás?', answer: 'Abren el enlace desde su celular, seleccionan cuántos adultos y niños asistirán y envían la confirmación en un toque directo a tu WhatsApp o panel.' },
+      { question: '¿Puedo agregar la ubicación del salón de fiestas?', answer: 'Sí, incluye botón interactivo para abrir en Google Maps o Waze con un toque para que ningún invitado se pierda.' },
+      { question: '¿Cuánto tiempo dura activa la invitación?', answer: 'Permanece activa desde su creación hasta 30 días posteriores al día de la fiesta.' },
+    ],
+    ctaFinal: {
+      title: 'La fiesta de tu peque merece una invitación inolvidable.',
+      subtitle: 'Crea tu invitación en minutos, compártela por WhatsApp y ten tu lista de niños y papás confirmada hoy mismo.',
+      cta: 'Crear mi invitación infantil gratis',
     },
     get jsonLd() { return buildJsonLd({ ...this.seo, faq: this.faq }); },
   },

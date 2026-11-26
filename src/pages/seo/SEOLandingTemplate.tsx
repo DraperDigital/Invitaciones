@@ -28,10 +28,11 @@ const ALL_EVENT_CROSS_LINKS = [
   { slug: 'invitaciones-digitales-boda', label: 'Bodas', icon: '💍', desc: 'Diseño elegante con control de pases y música' },
   { slug: 'invitaciones-digitales-xv-anos', label: 'XV Años', icon: '👑', desc: 'Vals, fotos, padrinos y pase con código QR' },
   { slug: 'invitaciones-digitales-cumpleanos', label: 'Cumpleaños', icon: '🎂', desc: 'Festejos para todas las edades sin caos de chats' },
+  { slug: 'invitaciones-digitales-infantiles', label: 'Cumpleaños Infantiles', icon: '🎈', desc: 'Temáticas para niños, pases por familia y mapa al salón' },
   { slug: 'invitaciones-digitales-bautizo', label: 'Bautizos', icon: '🕊️', desc: 'Padrinos, iglesia, recepción y confirmación fácil' },
   { slug: 'invitaciones-digitales-primera-comunion', label: 'Primera Comunión', icon: '⛪', desc: 'Ceremonia solemne, mapas y confirmación familiar' },
   { slug: 'invitaciones-digitales-baby-shower', label: 'Baby Shower', icon: '🍼', desc: 'Mesa de regalos, dinámicas y confirmación tierna' },
-  { slug: 'invitaciones-digitales-revelacion-de-genero', label: 'Revelación de Género', icon: '🎈', desc: 'Cuenta regresiva, team rosa o azul y ubicación' },
+  { slug: 'invitaciones-digitales-revelacion-de-genero', label: 'Revelación de Género', icon: '✨', desc: 'Cuenta regresiva, team rosa o azul y ubicación' },
   { slug: 'invitaciones-digitales-graduacion', label: 'Graduaciones', icon: '🎓', desc: 'Pases de gala individuales y acceso con QR en puerta' },
 ];
 
@@ -147,6 +148,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
     const th = data.theme;
     const recommended = data.recommendedPlan;
     const demos = data.demoCategory ? getTemplatesForCategory(data.demoCategory).slice(0, 3) : [];
+    const allCategoryTemplates = data.demoCategory ? getTemplatesForCategory(data.demoCategory) : [];
     const otherEvents = ALL_EVENT_CROSS_LINKS.filter(ev => ev.slug !== data.slug);
 
     return (
@@ -703,6 +705,67 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
             </p>
           </div>
         </section>
+
+        {/* ─── 7b. CATÁLOGO COMPLETO DE PLANTILLAS ──────────────────────────── */}
+        {allCategoryTemplates.length > 0 && (
+          <section className="py-16 md:py-24 px-4 md:px-6 border-t" style={{ backgroundColor: th.bg2, borderColor: th.line }}>
+            <div className="mx-auto max-w-6xl space-y-8">
+              <div className="max-w-2xl space-y-2">
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                  style={{ backgroundColor: `${th.accent}20`, color: th.accentText }}
+                >
+                  Catálogo completo · {allCategoryTemplates.length} modelos disponibles
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold" style={{ fontFamily: th.fontHead || 'inherit' }}>
+                  Catálogo completo de plantillas
+                </h2>
+                <p className="text-sm sm:text-base" style={{ color: th.muted }}>
+                  Cada diseño incluye confirmación por WhatsApp, ubicación en Google Maps y Waze, cuenta regresiva y personalización total. Toca cualquiera para probarla en vivo:
+                </p>
+              </div>
+
+              {/* Grid de todas las plantillas de la categoría */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {allCategoryTemplates.map((tpl) => (
+                  <a
+                    key={tpl.id}
+                    href={`/i/${tpl.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2"
+                    style={{ backgroundColor: th.bg, borderColor: th.line }}
+                  >
+                    <div className="relative aspect-[4/5] bg-slate-100 overflow-hidden">
+                      <img
+                        src={tpl.thumbnail}
+                        alt={`Plantilla ${tpl.name} · ${tpl.categoryLabel}`}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      {tpl.plan && tpl.plan !== 'classic' && (
+                        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-sm">
+                          {tpl.plan.toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3.5 space-y-1.5">
+                      <div className="flex items-center justify-between gap-1">
+                        <h3 className="font-bold text-xs sm:text-sm truncate group-hover:underline" style={{ color: th.ink }}>
+                          {tpl.name}
+                        </h3>
+                        <ExternalLink className="h-3 w-3 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" style={{ color: th.accentText }} />
+                      </div>
+                      <p className="text-[11px] truncate" style={{ color: th.muted }}>
+                        {tpl.categoryLabel}
+                      </p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ─── 8. OBJECIONES ──────────────────────────────────────────────── */}
         {data.objections && data.objections.length > 0 && (

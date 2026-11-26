@@ -10,6 +10,7 @@ const EVENT_LANDING_ROUTES = [
     '/invitaciones-digitales-boda',
     '/invitaciones-digitales-xv-anos',
     '/invitaciones-digitales-cumpleanos',
+    '/invitaciones-digitales-infantiles',
     '/invitaciones-digitales-bautizo',
     '/invitaciones-digitales-primera-comunion',
     '/invitaciones-digitales-baby-shower',

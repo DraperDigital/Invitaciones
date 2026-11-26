@@ -67,6 +67,7 @@ const BlogPost             = React.lazy(() => import('./pages/blog/BlogPostPage'
 const InvitacionesBoda       = React.lazy(() => import('./pages/seo/InvitacionesBodaPage'));
 const InvitacionesXV         = React.lazy(() => import('./pages/seo/InvitacionesXVPage'));
 const InvitacionesCumpleanos = React.lazy(() => import('./pages/seo/InvitacionesCumpleanosPage'));
+const InvitacionesInfantiles = React.lazy(() => import('./pages/seo/InvitacionesInfantilesPage'));
 const InvitacionesBautizo    = React.lazy(() => import('./pages/seo/InvitacionesBautizoPage'));
 const InvitacionesComunion   = React.lazy(() => import('./pages/seo/InvitacionesPrimeraComunionPage'));
 const InvitacionesBabyShower = React.lazy(() => import('./pages/seo/InvitacionesBabyShowerPage'));
@@ -160,6 +161,7 @@ function AppRoutes() {
         <Route path="/invitaciones-digitales-boda"                 element={<InvitacionesBoda />} />
         <Route path="/invitaciones-digitales-xv-anos"              element={<InvitacionesXV />} />
         <Route path="/invitaciones-digitales-cumpleanos"           element={<InvitacionesCumpleanos />} />
+        <Route path="/invitaciones-digitales-infantiles"           element={<InvitacionesInfantiles />} />
         <Route path="/invitaciones-digitales-bautizo"              element={<InvitacionesBautizo />} />
         <Route path="/invitaciones-digitales-primera-comunion"      element={<InvitacionesComunion />} />
         <Route path="/invitaciones-digitales-baby-shower"          element={<InvitacionesBabyShower />} />
