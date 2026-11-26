@@ -231,6 +231,7 @@ function AppRoutes() {
 
 import ScrollToTop from './components/ScrollToTop';
 import FloatingWhatsAppButton from './components/FloatingWhatsAppButton';
+import ChristmasOverlay from './components/seasonal/ChristmasOverlay';
 const LaunchPromoPopup = React.lazy(() => import('./components/LaunchPromoPopup'));
 
 function RoutedApp() {
@@ -251,6 +252,8 @@ function RoutedApp() {
       <FloatingWhatsAppButton />
       {/* Cookie Consent Banner */}
       <CookieBanner />
+      {/* Modo navideño estacional apagable */}
+      <ChristmasOverlay />
     </>
   );
 }
