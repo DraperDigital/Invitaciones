@@ -506,47 +506,47 @@ export interface CanonicalTemplate {
 
 export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     // ── Bodas ──
-    { id: 'classic', name: 'Clásica Atemporal', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Elegante', slug: 'boda-isabel-rodrigo-premium', icon: '🏛️', plan: 'Clásica', thumbnail: '/images/templates/classic.jpg' },
+    { id: 'classic', name: 'Clásica Atemporal', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Elegante', slug: 'boda-isabel-rodrigo-premium', icon: '🏛️', plan: 'Clásica', thumbnail: '/images/templates/classic.jpg' },
     { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Lujo', slug: 'boda-ana-y-carlos-premium', icon: '👑', plan: 'Pro', thumbnail: '/images/templates/classic-elegance-pro.jpg' },
-    { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', categories: ['boda', 'graduacion', 'corporate'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-gabriela-arturo-premium', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/modern-minimalist.jpg' },
-    { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', categories: ['boda', 'corporate'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-sofia-mateo-premium', icon: '🌓', plan: 'Pro', thumbnail: '/images/templates/split-screen.jpg' },
-    { id: 'newspaper', name: 'Primera Plana', category: 'boda', categories: ['boda', 'graduacion', 'cumpleanos'], categoryLabel: 'Boda / Editorial', slug: 'boda-primera-plana-premium', icon: '📰', plan: 'Pro', thumbnail: '/images/templates/newspaper.jpg' },
-    { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', categories: ['boda', 'xv', 'comunion'], categoryLabel: 'Boda / Jardín', slug: 'boda-simetria-floral', icon: '🌸', plan: 'Pro', thumbnail: '/images/templates/floral-symmetry.jpg' },
-    { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/passport.jpg' },
+    { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-gabriela-arturo-premium', icon: '🖤', plan: 'Clásica', thumbnail: '/images/templates/modern-minimalist.jpg' },
+    { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', categories: ['boda', 'graduacion', 'corporate', 'gender_reveal'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-sofia-mateo-premium', icon: '🌓', plan: 'Clásica', thumbnail: '/images/templates/split-screen.jpg' },
+    { id: 'newspaper', name: 'Primera Plana', category: 'boda', categories: ['boda', 'graduacion', 'cumpleanos', 'comunion'], categoryLabel: 'Boda / Editorial', slug: 'boda-primera-plana-premium', icon: '📰', plan: 'Clásica', thumbnail: '/images/templates/newspaper.jpg' },
+    { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo', 'baby_shower'], categoryLabel: 'Boda / Jardín', slug: 'boda-simetria-floral', icon: '🌸', plan: 'Clásica', thumbnail: '/images/templates/floral-symmetry.jpg' },
+    { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Clásica', thumbnail: '/images/templates/passport.jpg' },
     { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/gotico-suave.jpg' },
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Pro', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Pro', thumbnail: '/images/templates/anturio-vino.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
-    { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Pro', thumbnail: '/images/templates/collage.jpg' },
+    { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Clásica', thumbnail: '/images/templates/collage.jpg' },
 
     // ── XV Años ──
-    { id: 'magazine', name: 'Estilo Editorial', category: 'xv', categories: ['xv', 'cumpleanos'], categoryLabel: 'XV / Gala', slug: 'xv-valeria-premium', icon: '📖', plan: 'Pro', thumbnail: '/images/templates/magazine.jpg' },
-    { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'xv', categories: ['xv', 'boda'], categoryLabel: 'XV / Primavera', slug: 'xv-regina-2026-premium', icon: '🌿', plan: 'Pro', thumbnail: '/images/templates/romantic-botanical.jpg' },
+    { id: 'magazine', name: 'Estilo Editorial', category: 'xv', categories: ['xv', 'cumpleanos', 'graduacion', 'boda'], categoryLabel: 'XV / Gala', slug: 'xv-valeria-premium', icon: '📖', plan: 'Clásica', thumbnail: '/images/templates/magazine.jpg' },
+    { id: 'romantic-botanical', name: 'Elegancia Floral', category: 'xv', categories: ['xv', 'boda', 'comunion', 'bautizo', 'baby_shower'], categoryLabel: 'XV / Primavera', slug: 'xv-regina-2026-premium', icon: '🌿', plan: 'Clásica', thumbnail: '/images/templates/romantic-botanical.jpg' },
 
     // ── Cumpleaños (Adultos / Jóvenes / Fiestas) ──
-    { id: 'neon-glow', name: 'Fiesta Neón', category: 'cumpleanos', categories: ['cumpleanos', 'xv'], categoryLabel: 'Cumpleaños / Party', slug: 'cumple-emilia-premium', icon: '🪩', plan: 'Pro', thumbnail: '/images/templates/neon-glow.jpg' },
-    { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'cumpleanos', categories: ['cumpleanos', 'graduacion'], categoryLabel: 'Cumpleaños / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Pro', thumbnail: '/images/templates/polaroid-vintage.jpg' },
-    { id: 'luxury-gold', name: 'Lujo Metálico', category: 'cumpleanos', categories: ['cumpleanos', 'boda', 'corporate'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Pro', thumbnail: '/images/templates/luxury-gold.jpg' },
+    { id: 'neon-glow', name: 'Fiesta Neón', category: 'cumpleanos', categories: ['cumpleanos', 'xv'], categoryLabel: 'Cumpleaños / Party', slug: 'cumple-emilia-premium', icon: '🪩', plan: 'Clásica', thumbnail: '/images/templates/neon-glow.jpg' },
+    { id: 'polaroid-vintage', name: 'Retro Fotográfico', category: 'cumpleanos', categories: ['cumpleanos', 'graduacion'], categoryLabel: 'Cumpleaños / Retro', slug: 'graduacion-ana-psicologia-premium', icon: '📸', plan: 'Clásica', thumbnail: '/images/templates/polaroid-vintage.jpg' },
+    { id: 'luxury-gold', name: 'Lujo Metálico', category: 'cumpleanos', categories: ['cumpleanos', 'boda', 'corporate', 'graduacion'], categoryLabel: 'Gala / Aniversario', slug: 'gala-aniversario-premium', icon: '💎', plan: 'Clásica', thumbnail: '/images/templates/luxury-gold.jpg' },
 
-    // ── Cumpleaños Infantiles / Fiestas Infantiles (Todos a partir de Plan Pro) ──
-    { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dinosaurios', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Pro', thumbnail: '/images/templates/dinosaurios.jpg' },
-    { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Sirenita', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Pro', thumbnail: '/images/templates/sirenita.jpg' },
+    // ── Cumpleaños Infantiles / Fiestas Infantiles ──
+    { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dinosaurios', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Clásica', thumbnail: '/images/templates/dinosaurios.jpg' },
+    { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Sirenita', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Clásica', thumbnail: '/images/templates/sirenita.jpg' },
     { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Astronauta', slug: 'cumple-astronauta', icon: '🚀', plan: 'Pro', thumbnail: '/images/templates/astronauta.jpg' },
     { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Unicornio', slug: 'cumple-unicornio', icon: '🦄', plan: 'Pro', thumbnail: '/images/templates/unicornio.jpg' },
     { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Castillo', slug: 'cumple-castillo', icon: '🏰', plan: 'Pro', thumbnail: '/images/templates/castillo.jpg' },
     { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Arcoíris', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/arcoiris.jpg' },
-    { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Pro', thumbnail: '/images/templates/kids-farm.jpg' },
-    { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Pro', thumbnail: '/images/templates/gamer-party.jpg' },
-    { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Pro', thumbnail: '/images/templates/pixel-craft.jpg' },
-    { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Color Pop', slug: 'cumple-lucas-rainbow-pop', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/rainbow-pop.jpg' },
-    { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo'], categoryLabel: 'Infantil / Fantasía', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/whimsical-kids.jpg' },
+    { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Clásica', thumbnail: '/images/templates/kids-farm.jpg' },
+    { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Clásica', thumbnail: '/images/templates/gamer-party.jpg' },
+    { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Clásica', thumbnail: '/images/templates/pixel-craft.jpg' },
+    { id: 'rainbow-pop', name: 'Rainbow Pop', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Infantil / Color Pop', slug: 'cumple-lucas-rainbow-pop', icon: '🌈', plan: 'Clásica', thumbnail: '/images/templates/rainbow-pop.jpg' },
+    { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower', 'comunion', 'gender_reveal'], categoryLabel: 'Infantil / Fantasía', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Clásica', thumbnail: '/images/templates/whimsical-kids.jpg' },
 
     // ── Baby Shower & Bautizo ──
     { id: 'nube-de-miel', name: 'Nube de Miel', category: 'baby_shower', categories: ['baby_shower', 'bautizo', 'infantil'], categoryLabel: 'Baby Shower / Tierno', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Pro', thumbnail: '/images/templates/nube-de-miel.jpg' },
 
     // ── Revelación de Género ──
-    { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / B&W', slug: 'gender-reveal-secreto-bw-premium', icon: '❓', plan: 'Pro', thumbnail: '/images/templates/reveal-bw.jpg' },
+    { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / B&W', slug: 'gender-reveal-secreto-bw-premium', icon: '❓', plan: 'Clásica', thumbnail: '/images/templates/reveal-bw.jpg' },
     { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Pro', thumbnail: '/images/templates/reveal-duo.jpg' }
 ];
 
@@ -637,11 +637,12 @@ export const CONCIERGE_PLAN_URL = '/planes/concierge';
  * Las plantillas avanzadas del catálogo corresponden al plan Pro (o Diseño Pro / Premium si así está marcado).
  */
 export function getTemplateRequiredPlan(themeIdOrSlug?: string | null): 'clasico' | 'pro' | 'premium' {
-    if (!themeIdOrSlug || themeIdOrSlug === 'classic') return 'clasico';
+    if (!themeIdOrSlug) return 'clasico';
     const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
     if (!tpl) return 'clasico';
     const p = (tpl.plan || '').toLowerCase();
-    if (p.includes('diseño pro')) return 'premium';
+    if (p.includes('diseño pro') || p.includes('premium')) return 'premium';
+    if (p.includes('clásica') || p.includes('clasica') || p.includes('clasico')) return 'clasico';
     return 'pro';
 }
 
