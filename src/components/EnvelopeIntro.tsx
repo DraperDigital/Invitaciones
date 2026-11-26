@@ -326,6 +326,7 @@ export default function EnvelopeIntro({
         'cuadros-escoceses': '#C8102E',
         'rayas-rojas': '#A5162A',
         'holly-jolly': '#B03A2E',
+        'casita-nevada': '#B02A2A',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

@@ -469,3 +469,43 @@
 .theme-rayas-rojas .invitation-closing { position: relative; }
 .theme-rayas-rojas .invitation-closing::after { content: ''; position: absolute; inset: 28px 22px; background: #f4ede2; outline: 1px solid #a5162a; outline-offset: -10px; z-index: 0; }
 .theme-rayas-rojas .invitation-closing > * { position: relative; z-index: 1; }
+
+/* C4 · Casita Nevada */
+.nv--casita-nevada {
+  --nv-bg-color: #fbf8f2;
+  --nv-bg-img: radial-gradient(circle at 15% 20%, #fff 0 2px, transparent 3px), radial-gradient(circle at 80% 35%, #fff 0 2px, transparent 3px), linear-gradient(180deg, #e9eef0, #fbf8f2 55%);
+  --nv-ink: #3f4b44; --nv-soft: #6c7a72; --nv-title: #b02a2a; --nv-script: #2f5a46; --nv-accent: #b02a2a;
+  --nv-line: rgba(176,42,42,.2); --nv-count-bg: #fffdf9; --nv-btn: #b02a2a; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-pad: 40px 24px 200px;
+}
+.nv--casita-nevada::before { inset: 0; translate: none; background-size: 70px 70px, 90px 90px, auto; }
+.nv--casita-nevada .nv-card { padding-top: 250px; position: relative; }
+.nv--casita-nevada .nv-card .nv-l--cn-house { top: 0; left: 50%; width: min(86vw, 340px); translate: -50% 0; z-index: 1; }
+.nv--casita-nevada .nv-script { font-size: 2rem; }
+.nv--casita-nevada .nv-title span:first-child { color: #b02a2a; }
+.nv--casita-nevada .nv-title span + span { color: #2f5a46; }
+.nv-l--cn-holly { bottom: -10px; left: 50%; width: min(180vw, 900px); translate: -50% 0; z-index: 3; }
+@media (min-width: 900px) {
+  .nv--casita-nevada { --nv-pad-d: 60px 48px 200px; }
+  .nv--casita-nevada .nv-card { padding-top: 290px; }
+  .nv--casita-nevada .nv-card .nv-l--cn-house { width: 400px; }
+  .nv-l--cn-holly { width: 1900px; bottom: -60px; }
+}
+.theme-casita-nevada {
+  --kp-bg: #fbf8f2; --kp-alt: #f1f4f1;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #b02a2a; --kp-ink: #3f4b44; --kp-soft: #6c7a72; --kp-accent: #2f5a46;
+  --kp-btn: #b02a2a; --kp-btn-ink: #fff; --kp-card-border: rgba(47,90,70,.22); --kp-icon-bg: #e7efe9; --kp-icon: #2f5a46;
+  --kp-shadow: rgba(63,75,68,.3);
+  --kp-title-deco: url('/images/themes/nav-clasicas/acebo.webp');
+  --kp-art-message: url('/images/themes/nav-clasicas/casita.webp'); --kp-art-message-w: 170px; --kp-art-message-h: 124px;
+  --kp-art-location: url('/images/themes/nav-clasicas/acebo.webp'); --kp-art-location-w: 70px; --kp-art-location-h: 60px;
+  --kp-art-gifts: url('/images/themes/nav-clasicas/acebo.webp'); --kp-art-gifts-w: 70px; --kp-art-gifts-h: 60px;
+  --kp-art-rsvp: url('/images/themes/nav-clasicas/casita.webp'); --kp-art-rsvp-w: 170px; --kp-art-rsvp-h: 124px;
+  --kp-rsvp-bg: #f1f4f1; --kp-closing-bg: #f1f4f1;
+  --kp-art-closing: url('/images/themes/nav-clasicas/casita.webp'); --kp-closing-title: #b02a2a;
+}
+.theme-casita-nevada .invitation-closing::before { width: 200px; height: 146px; margin-left: -100px; }
+.theme-casita-nevada section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 12px !important; }
+.theme-casita-nevada section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .18em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+.theme-casita-nevada :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 40px; height: 34px; }

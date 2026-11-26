@@ -1100,6 +1100,7 @@ export default function DesignEditor() {
                             { id: 'cuadros-escoceses', label: 'Cuadros Escoceses', desc: 'Fiesta navideña retro: tartán rojo y verde, tarjeta con costura y Santa en línea roja dentro de una taza de chocolate', icon: '🎅' },
                             { id: 'rayas-rojas', label: 'Rayas Rojas', desc: 'Navidad elegante: marco de rayas rojas y pino en acuarela con moños', icon: '🎀' },
                             { id: 'holly-jolly', label: 'Holly Jolly Vintage', desc: 'Fiesta navideña estilo cartel antiguo: rayas rojas, filigranas victorianas y acebo', icon: '🎄' },
+                            { id: 'casita-nevada', label: 'Casita Nevada', desc: 'Navidad en acuarela: casita nevada con pinos decorados y franja de acebo con moras', icon: '🏡' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },

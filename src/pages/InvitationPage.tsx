@@ -533,6 +533,13 @@ export default function InvitationPage() {
             accentOverride: '#B03A2E', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '12px',
         },
+        'casita-nevada': {
+            sectionBg: '#FBF8F2', sectionBgAlt: '#F1F4F1', cardBg: '#FFFFFF',
+            textPrimary: '#3F4B44', textSecondary: '#6C7A72',
+            borderColor: '#DCE3DD', cardBorder: '#DCE3DD',
+            accentOverride: '#B02A2A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -3040,7 +3047,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly') {
+        if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly' || cfg.theme === 'casita-nevada') {
             return <NavidadLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn' || cfg.theme === 'rosas-noche' || cfg.theme === 'salvia-eucalipto' || cfg.theme === 'malva-empolvado') {

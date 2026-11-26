@@ -517,6 +517,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
         fields: ['hero_image_url', 'heroImage']
     },
+    'casita-nevada': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

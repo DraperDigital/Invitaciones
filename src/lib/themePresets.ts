@@ -854,6 +854,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F8EEDB',
         typographyPreset: 'elegante'
     },
+    'casita-nevada': {
+        label: 'Casita Nevada',
+        desc: 'Navidad en acuarela: casita nevada con pinos decorados y franja de acebo con moras',
+        icon: '🏡',
+        primaryColor: '#B02A2A',
+        accentColor: '#2F5A46',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF8F2',
+        textPrimary: '#3F4B44',
+        textSecondary: '#6C7A72',
+        heroTextColor: '#B02A2A',
+        heroBgColor: '#F1F4F1',
+        typographyPreset: 'elegante'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -1014,7 +1028,8 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'posada-linea', name: 'Posada de Línea', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada de Línea', slug: 'navidad-posada-linea', icon: '⭐', plan: 'Clásica', thumbnail: '/images/templates/posada-linea.jpg' },
     { id: 'cuadros-escoceses', name: 'Cuadros Escoceses', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Cuadros Escoceses', slug: 'navidad-cuadros-escoceses', icon: '🎅', plan: 'Clásica', thumbnail: '/images/templates/cuadros-escoceses.jpg' },
     { id: 'rayas-rojas', name: 'Rayas Rojas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Rayas Rojas', slug: 'navidad-rayas-rojas', icon: '🎀', plan: 'Clásica', thumbnail: '/images/templates/rayas-rojas.jpg' },
-    { id: 'holly-jolly', name: 'Holly Jolly Vintage', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Holly Jolly Vintage', slug: 'navidad-holly-jolly', icon: '🎄', plan: 'Clásica', thumbnail: '/images/templates/holly-jolly.jpg' }
+    { id: 'holly-jolly', name: 'Holly Jolly Vintage', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Holly Jolly Vintage', slug: 'navidad-holly-jolly', icon: '🎄', plan: 'Clásica', thumbnail: '/images/templates/holly-jolly.jpg' },
+    { id: 'casita-nevada', name: 'Casita Nevada', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Casita Nevada', slug: 'navidad-casita-nevada', icon: '🏡', plan: 'Clásica', thumbnail: '/images/templates/casita-nevada.jpg' }
 ];
 
 export const EVENT_CATEGORY_LABELS: Record<string, string> = {

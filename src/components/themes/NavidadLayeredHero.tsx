@@ -120,6 +120,14 @@ export const NAVIDAD_LAYERED: Record<string, NavConfig> = {
         script: 'Estás invitado a una pequeña y alegre',
         countTitle: 'Faltan',
     },
+    'casita-nevada': {
+        layers: [
+            { k: 'cn-house', inCard: true, src: P('clasicas', 'casita') },
+            { k: 'cn-holly', src: P('clasicas', 'acebo-franja') },
+        ],
+        script: 'Te invitamos a celebrar juntos',
+        countTitle: 'Faltan',
+    },
     'holly-jolly': {
         layers: [
             { k: 'hj-fil1', src: P('clasicas', 'filigrana') },
