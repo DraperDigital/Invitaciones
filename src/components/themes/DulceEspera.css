@@ -428,3 +428,16 @@
 .de-frame--details { padding-bottom: 116px; }
 @media (min-width: 900px) { .de-s4 .de-frame { padding-top: 250px; } .de-bow-blue { width: 150px; margin-left: -75px; } .de-arch { padding-top: 178px !important; } }
 .de-hint { position: relative; z-index: 3; color: #6f4a2a; text-shadow: 0 0 6px #f5f7fa, 0 0 12px #f5f7fa, 0 0 18px #f5f7fa; }
+
+/* v6 · módulos (ubicación, regalos, RSVP…) con el mismo papel y toile que la portada */
+.theme-dulce-espera {
+  --kp-bg: linear-gradient(rgba(249,243,232,.5), rgba(249,243,232,.5)), url('/images/themes/matias/toile-crema.webp') 0 0 / 420px repeat, #f7f0e3;
+  --kp-alt: linear-gradient(rgba(244,247,251,.45), rgba(244,247,251,.45)), url('/images/themes/matias/toile-azul.webp') 0 0 / 420px repeat, #eef2f7;
+  --kp-rsvp-bg: linear-gradient(rgba(244,247,251,.45), rgba(244,247,251,.45)), url('/images/themes/matias/toile-azul.webp') 0 0 / 420px repeat, #eef2f7;
+  --kp-closing-bg: linear-gradient(rgba(249,243,232,.5), rgba(249,243,232,.5)), url('/images/themes/matias/toile-crema.webp') 0 0 / 420px repeat, #f7f0e3;
+}
+.theme-dulce-espera .invitation-content section [class*="bg-[var(--card-bg)]"], .theme-dulce-espera.theme-dulce-espera section [class*="bg-[var(--card-bg)]"],
+.theme-dulce-espera #rsvp form, .theme-dulce-espera #rsvp [class*="bg-white"] {
+  background: #fcf8ef url('/images/themes/matias/papel-crema.webp') center / 560px auto !important;
+  box-shadow: inset 0 0 0 5px rgba(252,248,239,.9), inset 0 0 0 6px rgba(184,134,62,.4), 0 24px 40px -24px rgba(52,64,88,.5) !important;
+}
