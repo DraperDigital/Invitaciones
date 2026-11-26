@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check, Lock } from 'lucide-react';
+import { Gift, CheckCircle2, Clock, Heart, Music, Camera, ArrowRight, ArrowLeft, Shirt, Users as UsersIcon, Mail, Home, Calendar, Hotel, Download, Settings, Eye, EyeOff, Shield, Activity, X, Wine, Utensils, PartyPopper, Moon, GraduationCap, Crown, Cake, Baby, Church, ChevronUp, ChevronDown, Edit2, Smartphone, Monitor, Palette, ChevronLeft, ChevronRight, LayoutGrid, Check, Lock, MapPin } from 'lucide-react';
 import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -3375,7 +3375,56 @@ END:VCALENDAR`;
         </section>
     );
 
-    const renderLocation = () => (
+    const renderLocation = () => {
+        // Icono contextual para la ceremonia / misa
+        const CeremonyIcon = (() => {
+            const explicit = cfg.ceremony_icon || cfg.misa_icon;
+            if (explicit === 'church') return Church;
+            if (explicit === 'heart') return Heart;
+            if (explicit === 'graduation') return GraduationCap;
+            if (explicit === 'map') return MapPin;
+
+            const text = `${labels.ceremony || ''} ${cfg.misa_name || ''} ${event.event_type || ''}`.toLowerCase();
+            if (text.includes('misa') || text.includes('iglesia') || text.includes('parroquia') || text.includes('templo') || text.includes('bautizo') || text.includes('comunion') || text.includes('religios')) {
+                return Church;
+            }
+            if (text.includes('gradua')) {
+                return GraduationCap;
+            }
+            return Heart;
+        })();
+
+        // Icono contextual para la recepción / cena / fiesta / ubicación
+        const ReceptionIcon = (() => {
+            const explicit = cfg.reception_icon || cfg.venue_icon;
+            if (explicit === 'utensils' || explicit === 'dinner') return Utensils;
+            if (explicit === 'party') return PartyPopper;
+            if (explicit === 'map' || explicit === 'location') return MapPin;
+            if (explicit === 'wine') return Wine;
+            if (explicit === 'cake') return Cake;
+            if (explicit === 'music') return Music;
+            if (explicit === 'heart') return Heart;
+
+            const text = `${labels.reception || ''} ${event.venue_name || ''} ${event.event_type || ''}`.toLowerCase();
+            if (text.includes('cena') || text.includes('comida') || text.includes('banquete') || text.includes('brunch') || text.includes('taquiza') || text.includes('desayuno')) {
+                return Utensils;
+            }
+            if (text.includes('infantil') || text.includes('cumple') || text.includes('piñata')) {
+                return Cake;
+            }
+            if (text.includes('posada') || text.includes('fiesta') || text.includes('festejo') || text.includes('party')) {
+                return PartyPopper;
+            }
+            if (text.includes('coctel') || text.includes('cóctel') || text.includes('brindis') || text.includes('vino')) {
+                return Wine;
+            }
+            if (text.includes('gradua')) {
+                return GraduationCap;
+            }
+            return MapPin;
+        })();
+
+        return (
         <section id="location" key="location" className="py-24 bg-[var(--section-bg)]">
             <div className="max-w-6xl mx-auto px-6">
                 <div className="text-center mb-16">
@@ -3388,7 +3437,7 @@ END:VCALENDAR`;
                         <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                             <div className="inline-flex justify-center">
                                 <div className={`h-20 w-20 rounded-full flex items-center justify-center shadow-md ${isMonochromeTheme ? 'bg-gradient-to-br from-stone-200 to-stone-100' : 'bg-gradient-to-br from-rose-100 to-rose-50'}`}>
-                                    <Heart className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-rose-400'}`} />
+                                    <CeremonyIcon className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-rose-400'}`} />
                                 </div>
                             </div>
                             <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.ceremony}</h4>
@@ -3419,7 +3468,7 @@ END:VCALENDAR`;
                     <div className="flex-1 bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-10 text-center space-y-6 hover:shadow-2xl transition-all flex flex-col items-center">
                         <div className="inline-flex justify-center">
                             <div className={`h-20 w-20 rounded-full flex items-center justify-center shadow-md ${isMonochromeTheme ? 'bg-gradient-to-br from-stone-200 to-stone-100' : 'bg-gradient-to-br from-amber-100 to-amber-50'}`}>
-                                <Music className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-amber-500'}`} />
+                                <ReceptionIcon className={`h-10 w-10 ${isMonochromeTheme ? 'text-stone-600' : 'text-amber-500'}`} />
                             </div>
                         </div>
                         <h4 className="text-2xl font-serif font-medium text-[var(--text-primary)] uppercase tracking-wider">{labels.reception}</h4>
@@ -3470,7 +3519,8 @@ END:VCALENDAR`;
                 )}
             </div>
         </section>
-    );
+        );
+    };
 
     const renderDressCode = () => (
         <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
