@@ -240,3 +240,17 @@
 .de-nat-star { right: auto; left: 44%; top: 2%; width: 70px; }
 .de .de-ico img { max-width: 100%; max-height: 100%; width: auto; height: auto; }
 .de .de-label { margin-top: 14px; }
+
+/* v3 · Escena inicial: la tarjeta sale completa del sobre y se coloca al frente */
+.de-s1 { padding-top: 90px; padding-bottom: 40px; }
+.de-env { width: min(80vw, 360px); }
+.de-card { left: 15%; right: 15%; top: 33%; height: 56%; transition: none; }
+.de.is-open .de-card { animation: de-card-out 2.4s cubic-bezier(.35,.75,.25,1) .25s both; }
+@keyframes de-card-out {
+  0%   { opacity: 1; translate: 0 10%;  scale: 1;    z-index: 1; }
+  48%  { opacity: 1; translate: 0 -96%; scale: 1;    z-index: 1; }
+  49%  { z-index: 5; }
+  100% { opacity: 1; translate: 0 -12%; scale: 1.14; z-index: 5; box-shadow: 0 26px 40px -18px rgba(50,70,100,.55); }
+}
+.de-card-in { display: flex; flex-direction: column; overflow: hidden; }
+.de-card-foot { margin-top: auto; font-family: 'Great Vibes', cursive; font-size: 22px; color: var(--de-brown); opacity: .85; }
