@@ -601,18 +601,31 @@ export function getTemplatesForCategory(categoryOrType?: string, currentTheme?: 
     if (cat === 'todas') return list;
 
     const catName = EVENT_CATEGORY_LABELS[cat] || 'Evento';
+    const categoryCoverMap: Record<string, string> = {
+        xv: '/images/categories/xv.jpg',
+        bautizo: '/images/categories/bautizo.jpg',
+        baby_shower: '/images/categories/baby_shower.jpg',
+        comunion: '/images/categories/comunion.jpg',
+        graduacion: '/images/categories/graduacion.jpg',
+        cumpleanos: '/images/categories/cumpleanos.jpg',
+        gender_reveal: '/images/categories/gender_reveal.jpg',
+    };
+
     return list.map(tpl => {
         // Si la plantilla es recomendada o compatible con otra categoría (ej. boda usando plantilla de xv),
-        // adaptar la etiqueta de categoría para que no confunda al usuario con "XV / Primavera" en una boda
+        // adaptar la etiqueta de categoría y la portada representativa para no mostrar novios en XV o bautizos
         if (tpl.category !== cat && tpl.categories?.includes(cat)) {
             let style = tpl.name;
             if (tpl.id === 'romantic-botanical') style = 'Elegancia Floral';
             else if (tpl.id === 'magazine') style = 'Editorial';
             else if (tpl.categoryLabel.includes('/')) style = tpl.categoryLabel.split('/')[1].trim();
 
+            const categoryThumbnail = categoryCoverMap[cat] || tpl.thumbnail;
+
             return {
                 ...tpl,
-                categoryLabel: `${catName} / ${style}`
+                categoryLabel: `${catName} / ${style}`,
+                thumbnail: categoryThumbnail
             };
         }
         return tpl;

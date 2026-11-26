@@ -5,6 +5,7 @@ export interface CategoryDemoProfile {
     subtitle: string;
     bannerTitle: string;
     eventType: Event['event_type'];
+    heroImageUrl?: string;
     welcomeMessage: string;
     venueName: string;
     venueAddress: string;
@@ -41,6 +42,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'MIS XV AÑOS',
         bannerTitle: 'Mis XV Años',
         eventType: 'xv',
+        heroImageUrl: '/images/categories/xv.jpg',
         welcomeMessage: 'Hay momentos en la vida que son inolvidables, pero compartirlos con las personas que más quiero los hace mágicos. Te espero para celebrar juntos mis XV años.',
         venueName: 'Salón Metropolitan & Jardín',
         venueAddress: 'Av. Paseo de las Palmas #850, Col. Lomas',
@@ -80,6 +82,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'SACRAMENTO DEL BAUTISMO',
         bannerTitle: 'Mi Bautizo',
         eventType: 'bautizo',
+        heroImageUrl: '/images/categories/bautizo.jpg',
         welcomeMessage: 'Doy gracias a Dios por el don de la vida y a mis papás y padrinos por guiar mis primeros pasos en la fe.',
         venueName: 'Hacienda Los Laureles',
         venueAddress: 'Camino Real a Cholula #45',
@@ -117,6 +120,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: '¡YA CASI LLEGA NUESTRA PRINCESA!',
         bannerTitle: 'Baby Shower',
         eventType: 'baby_shower',
+        heroImageUrl: '/images/categories/baby_shower.jpg',
         welcomeMessage: 'Con mucha ilusión y el corazón lleno de amor, te invitamos a celebrar la próxima llegada de nuestra pequeña Emma.',
         venueName: 'Jardín Magnolia',
         venueAddress: 'Av. Manuel Gómez Morín #300, San Pedro',
@@ -150,6 +154,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'EN COMPAÑÍA DE DIOS Y MI FAMILIA',
         bannerTitle: 'Mi Primera Comunión',
         eventType: 'comunion',
+        heroImageUrl: '/images/categories/comunion.jpg',
         welcomeMessage: 'Señor, haz de mi corazón un sagrario digno de recibirte por primera vez. Gracias por acompañarme en este día tan sagrado.',
         venueName: 'Quinta Santa María',
         venueAddress: 'Calzada del Valle #800, Colonia del Valle',
@@ -186,6 +191,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'LICENCIATURA EN DERECHO — UNIV. IBERO',
         bannerTitle: 'Nuestra Graduación',
         eventType: 'graduacion',
+        heroImageUrl: '/images/categories/graduacion.jpg',
         welcomeMessage: 'El esfuerzo de ayer es el éxito de hoy. Llegó el momento de celebrar la culminación de nuestra etapa universitaria y brindar por el camino que comienza.',
         venueName: 'Pabellón M — Gran Salón de Eventos',
         venueAddress: 'Av. Constitución #100, Centro de Monterrey',
@@ -218,6 +224,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'A NIGHT TO REMEMBER',
         bannerTitle: 'Gran Festejo de Cumpleaños',
         eventType: 'birthday',
+        heroImageUrl: '/images/categories/cumpleanos.jpg',
         welcomeMessage: 'Los 30 solo se cumplen una vez. Acompáñame a festejar una nueva década con buena música, cena, tragos y la mejor compañía.',
         venueName: 'Terraza Rooftop 45',
         venueAddress: 'Calle Londres #210, Col. Juárez, CDMX',
@@ -248,6 +255,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: 'MATEO O SOFÍA · DESCÚBRELO CON NOSOTROS',
         bannerTitle: '¿Niño o Niña?',
         eventType: 'gender_reveal',
+        heroImageUrl: '/images/categories/gender_reveal.jpg',
         welcomeMessage: '¿Equipo azul o equipo rosa? Ven listo con tu atuendo del color de tu predicción y descubramos juntos este gran secreto.',
         venueName: 'Quinta San Mateo',
         venueAddress: 'Carretera Nacional Km 245, El Uro',
@@ -279,6 +287,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         subtitle: '¡CUMPLO 5 AÑOS!',
         bannerTitle: '¡Mi Fiesta de Cumpleaños!',
         eventType: 'birthday',
+        heroImageUrl: '/images/templates/dinosaurios.jpg',
         welcomeMessage: '¡Ven a celebrar mi cumpleaños número 5! Habrá juegos increíbles, piñata, show, pastel y muchísima diversión.',
         venueName: 'Salón de Fiestas Aventura Kids',
         venueAddress: 'Av. Eugenio Garza Sada #3200',
@@ -363,6 +372,13 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         venue_name: profile.venueName,
         venue_address: profile.venueAddress,
     };
+
+    if (profile.heroImageUrl) {
+        updatedCfg.hero_image_url = profile.heroImageUrl;
+        updatedCfg.heroImage = profile.heroImageUrl;
+        updatedCfg.coverPhoto = profile.heroImageUrl;
+        updatedCfg.photo = profile.heroImageUrl;
+    }
 
     if (profile.ceremony) {
         updatedCfg.ceremony = profile.ceremony;
