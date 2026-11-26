@@ -198,6 +198,9 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
             {/* 1 · El sobre */}
             <div className="de-scene de-s1 de-blue">
                 <Twinkles n={6} />
+                <img className="de-deco de-bunting" src={A('banderin')} alt="" />
+                <img className="de-deco de-cloud de-cloud--a" src={A('nube-1')} alt="" />
+                <img className="de-deco de-cloud de-cloud--b" src={A('nube-3')} alt="" />
                 <div className="de-env" role="button" tabIndex={0} onClick={openEnvelope} onKeyDown={(e) => e.key === 'Enter' && openEnvelope()}>
                     <div className="de-card">
                         <div className="de-card-in">
@@ -220,7 +223,11 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 2 · La frase */}
             <div className="de-scene de-s2 de-cream">
-                <div className="de-frame">
+                <img className="de-deco de-cloud de-cloud--c" src={A('nube-2')} alt="" />
+                <div className="de-frame de-paper de-paper--cream de-round">
+                    <img className="de-deco de-bow-gold de-pop" src={A('mono-oro')} alt="" />
+                    <img className="de-deco de-flor de-flor--tr de-pop" src={A('flores-der')} alt="" />
+                    <img className="de-deco de-booties de-pop" src={A('zapatitos')} alt="Zapatitos" onClick={poke} />
                     <p className="de-quote"><Letters text={'Esta Navidad,\nnuestro mejor regalo\nestá por llegar…'} /></p>
                     <svg className="de-flourish" viewBox="0 0 120 30" aria-hidden="true"><path d="M8 15c18-14 34-14 52 0s34 14 52 0M8 15c18 14 34 14 52 0s34-14 52 0" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M60 5l2 4-2 4-2-4zM60 21l2 4-2 4-2-4z" fill="currentColor" /></svg>
                     <div className="de-peekbox de-peekbox--bottom"><img src={A('motita')} alt="Motita" onClick={poke} /></div>
@@ -229,7 +236,11 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 3 · La gran noticia */}
             <div className="de-scene de-s3 de-blue">
-                <div className="de-frame de-frame--gold">
+                <img className="de-deco de-cloud de-cloud--d" src={A('nube-2')} alt="" />
+                <img className="de-deco de-moon" src={A('luna')} alt="" />
+                <img className="de-deco de-hstars" src={A('estrellas-colgantes')} alt="" />
+                <div className="de-frame de-frame--gold de-paper de-paper--blue de-arch">
+                    <img className="de-deco de-bow-blue" src={A('mono-azul')} alt="" />
                     <p className="de-eyebrow de-eyebrow--big">Nuestra gran noticia</p>
                     <div className="de-star-wrap">
                         <span className="de-star-glow" />
@@ -244,7 +255,10 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 4 · Celebremos juntos */}
             <div className="de-scene de-s4 de-cream">
-                <div className="de-frame">
+                <img className="de-deco de-cloud de-cloud--e" src={A('nube-3')} alt="" />
+                <div className="de-frame de-paper de-paper--cream de-tilt">
+                    <img className="de-deco de-line" src={A('tendedero')} alt="Ropita de bebé" />
+                    <img className="de-deco de-ramito de-pop" src={A('ramito')} alt="" />
                     <h2 className="de-script">Celebremos<br />juntos</h2>
                     <div className="de-divider"><i /><span>✦</span><i /></div>
                     <p className="de-body">La magia de la Navidad<br />y la alegría de nuestra familia<br />se unen en la dulce espera<br />de una nueva vida.</p>
@@ -258,7 +272,11 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 5 · El nacimiento */}
             <div className="de-scene de-s5 de-blue">
-                <div className="de-frame de-frame--nat">
+                <img className="de-deco de-cloud de-cloud--f" src={A('nube-1')} alt="" />
+                <img className="de-deco de-cloud de-cloud--g" src={A('nube-2')} alt="" />
+                <div className="de-frame de-frame--nat de-paper de-paper--blue">
+                    <img className="de-deco de-flor de-flor--bl de-pop" src={A('flores-izq')} alt="" />
+                    <img className="de-deco de-flor de-flor--br de-pop" src={A('flores-der')} alt="" />
                 <p className="de-eyebrow">Dulce espera</p>
                 <p className="de-card-title de-card-title--lg">Baby Posada</p>
                 <div className="de-nat">
@@ -283,7 +301,10 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
 
             {/* 6 · Los datos */}
             <div className="de-scene de-s6 de-cream">
-                <div className="de-frame de-frame--details">
+                <div className="de-frame de-frame--details de-paper de-paper--cream">
+                    <img className="de-deco de-bow-gold de-bow-gold--tl de-pop" src={A('mono-oro')} alt="" />
+                    <img className="de-deco de-teddy de-pop" src={A('osito')} alt="Osito" onClick={poke} />
+                    <img className="de-deco de-blocks de-pop" src={A('cubos')} alt="Cubitos" onClick={poke} />
                     <div className="de-peekbox de-peekbox--top"><img src={A('motita')} alt="Motita" onClick={poke} /></div>
                     <div className="de-detail">
                         <div className="de-ico de-ico--candle"><img src={A('ico-vela')} alt="" /><span className="de-flame de-flame--sm" /></div>
@@ -310,7 +331,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                             ))}
                         </div>
                     )}
-                    <button type="button" className="de-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                    <button type="button" className="de-btn de-badge" onClick={() => scrollToSection('rsvp')}><span>Confirmar</span><em>asistencia</em></button>
                     {heroImageUrl && (
                         <div className={`de-photo ${onEditHero ? 'is-editable' : ''}`} onClick={onEditHero}>
                             <img src={heroImageUrl} alt="" />

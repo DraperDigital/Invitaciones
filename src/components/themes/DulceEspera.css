@@ -329,3 +329,102 @@
 .de .de-nat-deer { bottom: 18%; }
 .de .de-s3 .de-name { margin-top: -.05em; }
 .de .de-nat-angel { transform: scaleX(-1); } /* mira hacia el pesebre */
+
+/* ================= v5 · collage: toile, tarjetas con forma y adornos ================= */
+.de-blue { background: #eef2f7 url('/images/themes/matias/toile-azul.webp') 0 0 / 420px repeat; animation: de-toile 140s linear infinite; }
+.de-cream { background: #f7f0e3 url('/images/themes/matias/toile-crema.webp') 0 0 / 420px repeat; animation: de-toile 160s linear infinite reverse; }
+@keyframes de-toile { to { background-position: 420px 420px; } }
+.de-scene::after { background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(250,248,244,.55), rgba(250,248,244,.12) 70%, rgba(250,248,244,0)); }
+@media (min-width: 900px) { .de-blue, .de-cream { background-size: 520px; } }
+
+/* tarjetas de papel */
+.de-paper { box-shadow: 0 26px 46px -26px rgba(52,64,88,.55), 0 2px 6px rgba(52,64,88,.08); }
+.de-paper--cream { background: #fcf8ef url('/images/themes/matias/papel-crema.webp') center / 560px auto; }
+.de-paper--blue { background: #f5f8fc url('/images/themes/matias/papel-azul.webp') center / 500px auto; }
+.de-round, .de-round::before, .de-round::after { border-radius: 22px; }
+.de-round::after { border-radius: 16px; }
+.de-arch { border-radius: 240px 240px 16px 16px; padding-top: 104px !important; }
+.de-arch::before { border-radius: 240px 240px 16px 16px; }
+.de-arch::after { border-radius: 233px 233px 10px 10px; }
+.de-tilt { rotate: -1.2deg; }
+.de-tilt > * { rotate: 1.2deg; }
+
+/* adornos */
+.de-deco { position: absolute; pointer-events: none; user-select: none; max-width: none; z-index: 4; }
+.de-deco[alt]:not([alt='']) { pointer-events: auto; cursor: pointer; }
+.de-pop { opacity: 0; scale: .6; transition: opacity .7s ease, scale .9s cubic-bezier(.2,1.5,.4,1); }
+.is-in .de-pop { opacity: 1; scale: 1; }
+.is-in .de-pop:nth-of-type(2) { transition-delay: .25s; } .is-in .de-pop:nth-of-type(3) { transition-delay: .45s; } .is-in .de-pop:nth-of-type(4) { transition-delay: .65s; }
+@keyframes de-sway { 0%,100% { rotate: -3deg; } 50% { rotate: 3deg; } }
+@keyframes de-sway-s { 0%,100% { rotate: -1.4deg; } 50% { rotate: 1.4deg; } }
+@keyframes de-drift { 0%,100% { translate: -18px 0; } 50% { translate: 18px -6px; } }
+@keyframes de-bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+/* nubes que pasan */
+.de-cloud { z-index: 0; opacity: .95; animation: de-drift 14s ease-in-out infinite; filter: drop-shadow(0 8px 10px rgba(90,110,140,.12)); }
+.de-cloud--a { width: 170px; left: -40px; top: 18%; }
+.de-cloud--b { width: 110px; right: -16px; top: 58%; animation-duration: 11s; animation-delay: -4s; }
+.de-cloud--c { width: 130px; left: -34px; top: 8%; animation-duration: 16s; }
+.de-cloud--d { width: 120px; right: -30px; bottom: 7%; animation-duration: 12s; animation-delay: -3s; }
+.de-cloud--e { width: 100px; right: -20px; top: 7%; animation-duration: 13s; }
+.de-cloud--f { width: 150px; left: -46px; top: 5%; animation-duration: 15s; }
+.de-cloud--g { width: 110px; right: -30px; top: 16%; animation-duration: 12s; animation-delay: -6s; }
+
+/* 1 · banderín meciéndose */
+.de-bunting { top: -6px; left: -6%; width: 112%; transform-origin: 50% 0; animation: de-sway-s 5s ease-in-out infinite; z-index: 2; }
+.de-s1 { padding-top: 120px; }
+
+/* 2 · moño dorado, flores y zapatitos */
+.de-bow-gold { top: -30px; left: 50%; width: 96px; margin-left: -48px; transform-origin: 50% 30%; }
+.is-in .de-bow-gold { animation: de-sway 4s ease-in-out 1s infinite; }
+.de-flor--tr { top: -28px; right: -26px; width: 128px; }
+.de-booties { left: -18px; bottom: -34px; width: 108px; z-index: 5; }
+.is-in .de-booties { animation: de-bob 3.4s ease-in-out 1.2s infinite; }
+.de-s2 { padding-bottom: 96px; }
+
+/* 3 · arco con moño azul, luna colgante y estrellitas */
+.de-bow-blue { top: -66px; left: 50%; width: 178px; margin-left: -89px; transform-origin: 50% 22%; animation: de-sway 5s ease-in-out infinite; z-index: 6; }
+.de-s3 { padding-top: 120px; }
+.de-s3 .de-eyebrow--big { margin-top: 10px; }
+.de-moon { top: 0; right: 4%; width: 92px; transform-origin: 50% 0; animation: de-sway 4.6s ease-in-out infinite; z-index: 5; }
+.de-hstars { top: 0; left: 6%; width: 46px; transform-origin: 50% 0; animation: de-sway 3.8s ease-in-out infinite reverse; z-index: 5; }
+
+/* 4 · tendedero sobre la tarjeta */
+.de-s4 .de-frame { padding-top: 126px; }
+.de-line { top: 6px; left: -6%; width: 112%; transform-origin: 50% 10%; animation: de-sway-s 4.2s ease-in-out infinite; }
+.de-ramito { bottom: 150px; right: -22px; width: 84px; rotate: 18deg; }
+
+/* 5 · flores en las esquinas del nacimiento */
+.de-flor--bl { left: -30px; bottom: -34px; width: 118px; z-index: 7; }
+.de-flor--br { right: -30px; bottom: -34px; width: 118px; z-index: 7; scale: -1 1; }
+.de-s5.is-in .de-flor--br { scale: -1 1; }
+.de-s5 { padding-bottom: 80px; }
+
+/* 6 · datos con moño, osito y cubitos */
+.de-bow-gold--tl { top: -26px; left: 18px; margin-left: 0; width: 82px; rotate: -14deg; }
+.de-frame--details { padding-bottom: 150px; }
+.de-teddy { left: -20px; bottom: -40px; width: 132px; z-index: 5; }
+.de-blocks { right: -20px; bottom: -34px; width: 124px; z-index: 5; }
+.is-in .de-teddy { animation: de-bob 4s ease-in-out 1.5s infinite; }
+.de-s6 { padding-bottom: 100px; }
+
+/* botón festoneado de confirmar */
+.de .de-badge { width: 136px; height: 136px; padding: 0; border-radius: 0; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23b98f5e'%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3C/g%3E%3Cg fill='%23b98f5e'%3E%3Ccircle cx='50' cy='4.5' r='5.5'/%3E%3Ccircle cx='50' cy='95.5' r='5.5'/%3E%3Ccircle cx='4.5' cy='50' r='5.5'/%3E%3Ccircle cx='95.5' cy='50' r='5.5'/%3E%3Ccircle cx='17.8' cy='17.8' r='5.5'/%3E%3Ccircle cx='82.2' cy='17.8' r='5.5'/%3E%3Ccircle cx='17.8' cy='82.2' r='5.5'/%3E%3Ccircle cx='82.2' cy='82.2' r='5.5'/%3E%3Ccircle cx='32.6' cy='7.9' r='5.5'/%3E%3Ccircle cx='67.4' cy='7.9' r='5.5'/%3E%3Ccircle cx='32.6' cy='92.1' r='5.5'/%3E%3Ccircle cx='67.4' cy='92.1' r='5.5'/%3E%3Ccircle cx='7.9' cy='32.6' r='5.5'/%3E%3Ccircle cx='92.1' cy='32.6' r='5.5'/%3E%3Ccircle cx='7.9' cy='67.4' r='5.5'/%3E%3Ccircle cx='92.1' cy='67.4' r='5.5'/%3E%3C/g%3E%3Ccircle cx='50' cy='50' r='37' fill='none' stroke='%23f6eedf' stroke-width='1' stroke-dasharray='2 2.4'/%3E%3C/svg%3E") center / 100% 100% no-repeat; box-shadow: none; filter: drop-shadow(0 12px 14px rgba(139,90,50,.35)); animation: de-badge 4s ease-in-out infinite; }
+.de .de-badge span { font-size: 11px; letter-spacing: .26em; }
+.de .de-badge em { font-family: 'Great Vibes', cursive; font-style: normal; font-size: 26px; letter-spacing: 0; text-transform: none; line-height: 1; }
+@keyframes de-badge { 0%,100% { rotate: -4deg; scale: 1; } 50% { rotate: 4deg; scale: 1.04; } }
+
+@media (min-width: 900px) {
+  .de-cloud--a { width: 260px; left: 8%; } .de-cloud--b { width: 160px; right: 10%; }
+  .de-cloud--c { width: 200px; left: 10%; } .de-cloud--d { width: 180px; right: 12%; }
+  .de-cloud--e { width: 160px; right: 14%; } .de-cloud--f { width: 220px; left: 10%; } .de-cloud--g { width: 170px; right: 12%; }
+  .de-moon { right: 22%; width: 130px; } .de-hstars { left: 26%; width: 60px; }
+  .de-bunting { left: 10%; width: 80%; }
+}
+@media (prefers-reduced-motion: reduce) { .de-deco, .de-blue, .de-cream { animation: none !important; } }
+.de-bow-blue { top: -58px; width: 132px; margin-left: -66px; }
+.de-arch { padding-top: 158px !important; }
+.de-s4 .de-frame { padding-top: 214px; }
+.de-frame--details { padding-bottom: 116px; }
+@media (min-width: 900px) { .de-s4 .de-frame { padding-top: 250px; } .de-bow-blue { width: 150px; margin-left: -75px; } .de-arch { padding-top: 178px !important; } }
+.de-hint { position: relative; z-index: 3; color: #6f4a2a; text-shadow: 0 0 6px #f5f7fa, 0 0 12px #f5f7fa, 0 0 18px #f5f7fa; }
