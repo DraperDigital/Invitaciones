@@ -493,3 +493,6 @@
 .theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:has(iframe)::before,
 .theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:has(iframe)::after { display: none; }
 @media (min-width: 900px) { .de-cloud { display: none; } }
+
+/* sin mesa de regalos: el cierre toma el toile para no repetir papel después de Ubicación */
+.theme-dulce-espera:not(:has(#gifts)) .invitation-closing { background: var(--de-toile-bg) !important; }
