@@ -504,6 +504,90 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#EEF4FB',
         typographyPreset: 'divertida'
     },
+    'piloto': {
+        label: 'Pequeño Piloto',
+        desc: 'Cumpleaños de aviador vintage: avión, globos aerostáticos y cielo nocturno dorado, con parallax',
+        icon: '✈️',
+        primaryColor: '#1F2F52',
+        accentColor: '#C9A14A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F6EFE0',
+        textPrimary: '#1F2F52',
+        textSecondary: '#556080',
+        heroTextColor: '#1F2F52',
+        heroBgColor: '#EFE4CF',
+        typographyPreset: 'divertida'
+    },
+    'babyshower': {
+        label: 'Baby Shower Nubes',
+        desc: 'Baby shower 3D tierno: osito, elefantito, luna dormida y nubes en azul y crema, con parallax',
+        icon: '🧸',
+        primaryColor: '#6F8FC4',
+        accentColor: '#8FADD8',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF7EF',
+        textPrimary: '#5B5147',
+        textSecondary: '#8A7F73',
+        heroTextColor: '#6F8FC4',
+        heroBgColor: '#E9F1FA',
+        typographyPreset: 'divertida'
+    },
+    'bomberos': {
+        label: 'Bomberos',
+        desc: 'Cumpleaños de bomberos: camión rojo, escudo con la edad, escalera y pared de ladrillo, con parallax',
+        icon: '🚒',
+        primaryColor: '#D62B2B',
+        accentColor: '#D62B2B',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFF8F2',
+        textPrimary: '#3A2A24',
+        textSecondary: '#6E5A50',
+        heroTextColor: '#D62B2B',
+        heroBgColor: '#FFF1E3',
+        typographyPreset: 'divertida'
+    },
+    'policias': {
+        label: 'Policías',
+        desc: 'Cumpleaños de policías en acuarela: patrulla, helicóptero, estación y perrito, con parallax',
+        icon: '🚓',
+        primaryColor: '#44597A',
+        accentColor: '#44597A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F2F5F7',
+        textPrimary: '#44597A',
+        textSecondary: '#6B7A8F',
+        heroTextColor: '#44597A',
+        heroBgColor: '#E9EEF2',
+        typographyPreset: 'divertida'
+    },
+    'hadas': {
+        label: 'Jardín de Hadas',
+        desc: 'Cumpleaños de hadas en acuarela: casita de pétalos, hadas, hongos y mariposas, con parallax',
+        icon: '🧚',
+        primaryColor: '#C64C56',
+        accentColor: '#D9767A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FDF7F6',
+        textPrimary: '#7A4A4D',
+        textSecondary: '#946A6C',
+        heroTextColor: '#C64C56',
+        heroBgColor: '#FCEFEE',
+        typographyPreset: 'romantica'
+    },
+    'hadita': {
+        label: 'Hadita Mágica 3D',
+        desc: 'Primer añito de niña en 3D con diamantina: bebé hada, corona con la edad y mariposas de cristal, con parallax',
+        icon: '🦋',
+        primaryColor: '#D06C8F',
+        accentColor: '#E08AA8',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FDF3EF',
+        textPrimary: '#7A4F5E',
+        textSecondary: '#9A7582',
+        heroTextColor: '#D06C8F',
+        heroBgColor: '#F9E6DF',
+        typographyPreset: 'romantica'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -626,6 +710,12 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Perritos', slug: 'cumple-perritos', icon: '🐶', plan: 'Pro', thumbnail: '/images/templates/perritos.jpg' },
     { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Mariposas', slug: 'cumple-mariposas', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/mariposas.jpg' },
     { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Globos 3D', slug: 'cumple-globos3d', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/globos3d.jpg' },
+    { id: 'piloto', name: 'Pequeño Piloto', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Piloto', slug: 'cumple-piloto', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/piloto.jpg' },
+    { id: 'babyshower', name: 'Baby Shower Nubes', category: 'baby_shower', categories: ['baby_shower'], categoryLabel: 'Baby Shower / Nubes', slug: 'baby-babyshower', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/babyshower.jpg' },
+    { id: 'bomberos', name: 'Bomberos', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Bomberos', slug: 'cumple-bomberos', icon: '🚒', plan: 'Pro', thumbnail: '/images/templates/bomberos.jpg' },
+    { id: 'policias', name: 'Policías', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Policías', slug: 'cumple-policias', icon: '🚓', plan: 'Pro', thumbnail: '/images/templates/policias.jpg' },
+    { id: 'hadas', name: 'Jardín de Hadas', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Hadas', slug: 'cumple-hadas', icon: '🧚', plan: 'Pro', thumbnail: '/images/templates/hadas.jpg' },
+    { id: 'hadita', name: 'Hadita Mágica 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Primer añito', slug: 'cumple-hadita', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/hadita.jpg' },
     { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=800&auto=format&fit=crop' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=800&auto=format&fit=crop' },
@@ -723,7 +813,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

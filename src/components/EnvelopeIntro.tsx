@@ -300,6 +300,12 @@ export default function EnvelopeIntro({
         'perritos': '#D39B2A',
         'mariposas': '#E890B8',
         'globos3d': '#EC96B4',
+        'piloto': '#C9A14A',
+        'babyshower': '#8FADD8',
+        'bomberos': '#D62B2B',
+        'policias': '#44597A',
+        'hadas': '#E9837C',
+        'hadita': '#E08AA8',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico
