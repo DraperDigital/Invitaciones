@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Droplet, HelpCircle, Calendar } from 'lucide-react';
+import { HeartHandshake, PartyPopper, GraduationCap, Cake, Baby, Church, LayoutGrid, ArrowRight, Droplet, HelpCircle, Calendar, TreePine } from 'lucide-react';
 import Seo from '../components/Seo';
 import { CANONICAL_TEMPLATES } from '../lib/themePresets';
 import { STD_TEMPLATES, SAVE_THE_DATE_PRICE } from '../lib/saveTheDate';
@@ -18,6 +18,7 @@ const categories = [
     { id: 'gender_reveal', name: 'Revelación', icon: HelpCircle },
     { id: 'graduacion', name: 'Graduaciones', icon: GraduationCap },
     { id: 'comunion', name: 'Primera Comunión', icon: Church },
+    { id: 'navidad', name: 'Posada / Navidad', icon: TreePine },
 ];
 
 export default function ExamplesPage() {

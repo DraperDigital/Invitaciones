@@ -436,6 +436,42 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la festejada o festejado; se muestra redonda.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'pueblo-papel': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'bordado-lujo': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'epoca-bonita': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'noche-velas': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

@@ -1,0 +1,236 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Navidad por capas (parallax): Pueblo de Papel, Bordado de Lujo,
+   La Época Más Bonita y Noche de Velas.
+   Capas .nv-l: usar translate/rotate/scale, nunca transform (parallax).
+   ────────────────────────────────────────────────────────────────────── */
+
+.nv {
+  position: relative; overflow: hidden; min-height: 100svh; isolation: isolate;
+  background: var(--nv-bg-color);
+  font-family: 'Montserrat', sans-serif; color: var(--nv-ink); text-align: center;
+}
+.nv::before { content: ''; position: absolute; inset: -90px 0; z-index: -1; background: var(--nv-bg-img, none) center / cover no-repeat; translate: 0 var(--py-bg, 0px); }
+.nv-l { position: absolute; z-index: 1; pointer-events: none; user-select: none; }
+.nv-inner {
+  position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 20px;
+  padding: var(--nv-pad, 120px 22px 220px);
+  opacity: 0; translate: 0 18px; transition: opacity .9s ease, translate .9s ease;
+}
+.nv.is-shown .nv-inner { opacity: 1; translate: 0 0; }
+.nv-card { width: 100%; max-width: 360px; padding: var(--nv-card-pad, 0); background: var(--nv-card-bg, transparent); border-radius: var(--nv-card-radius, 0); box-shadow: var(--nv-card-shadow, none); }
+.nv-kicker { font-size: 10px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--nv-soft); margin-bottom: 6px; }
+.nv .nv-script { font-family: 'Pinyon Script', cursive !important; font-size: 2.2rem; line-height: 1.1; color: var(--nv-script); }
+.nv .nv-title { margin-top: 4px; font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 500; line-height: .95; letter-spacing: .08em; text-transform: uppercase; color: var(--nv-title); }
+.nv-title span { display: block; font-size: clamp(2.4rem, 11.5vw, 3.2rem); }
+.nv-title span + span { font-size: clamp(1.6rem, 7.5vw, 2.1rem); letter-spacing: .26em; margin-top: 6px; }
+.nv-rule { display: block; width: 120px; height: 1px; margin: 16px auto; background: linear-gradient(90deg, transparent, var(--nv-accent), transparent); }
+.nv-date { display: flex; justify-content: center; align-items: center; gap: 20px; color: var(--nv-ink); }
+.nv-date > i { width: 1px; height: 64px; background: var(--nv-accent); opacity: .6; }
+.nv-date small { display: block; font-size: 10px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; color: var(--nv-soft); }
+.nv-date b { display: block; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 2.8rem; line-height: 1; color: var(--nv-title); }
+.nv .nv-venue { margin-top: 14px; font-family: 'Pinyon Script', cursive !important; font-size: 1.7rem; color: var(--nv-script); }
+.nv-city { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--nv-soft); }
+.nv-side { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; max-width: 340px; }
+.nv-photo { position: relative; width: 190px; aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 5px solid var(--nv-photo-ring); box-shadow: 0 18px 30px -16px rgba(0,0,0,.45); }
+.nv-photo img { width: 100%; height: 100%; object-fit: cover; }
+.nv-photo.is-editable { cursor: pointer; }
+.nv-edit { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0,0,0,.4); color: #fff; font-size: 12px; opacity: 0; transition: opacity .2s; }
+.nv-photo:hover .nv-edit { opacity: 1; }
+.nv-count { width: 100%; padding: 12px; background: var(--nv-count-bg); border-radius: 14px; box-shadow: 0 0 0 1px var(--nv-line); }
+.nv .nv-count p { font-family: 'Pinyon Script', cursive !important; font-size: 1.6rem; color: var(--nv-script); }
+.nv-count div { display: grid; grid-template-columns: repeat(4, 1fr); }
+.nv-count span + span { border-left: 1px solid var(--nv-line); }
+.nv-count b { display: block; font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 1.8rem; line-height: 1; color: var(--nv-title); }
+.nv-count small { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--nv-soft); }
+.nv-btn { padding: 12px 28px; border-radius: 999px; background: var(--nv-btn); color: var(--nv-btn-ink); font-size: 11px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; box-shadow: 0 12px 22px -14px rgba(0,0,0,.6); }
+
+@keyframes nv-swing { 0%, 100% { rotate: -3deg; } 50% { rotate: 3deg; } }
+@keyframes nv-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes nv-glow { 0%, 100% { opacity: .92; } 50% { opacity: 1; } }
+
+@media (min-width: 900px) {
+  .nv-inner { flex-direction: row; justify-content: center; align-items: center; gap: 70px; min-height: 100svh; padding: var(--nv-pad-d, 90px 48px 120px); }
+  .nv-card { max-width: 420px; }
+  .nv-title span { font-size: 3.8rem; }
+}
+@media (prefers-reduced-motion: reduce) { .nv * { animation: none !important; } }
+
+/* ═══════════════════════ PUEBLO DE PAPEL ═══════════════════════ */
+.nv--pueblo-papel {
+  --nv-bg-color: #f4efe4; --nv-bg-img: url('/images/themes/nav-papel/fondo.webp');
+  --nv-ink: #47513f; --nv-soft: #7a816f; --nv-title: #a8873f; --nv-script: #a8873f; --nv-accent: #a8873f;
+  --nv-line: rgba(122,129,111,.3); --nv-count-bg: rgba(255,253,247,.8); --nv-btn: #6f7f62; --nv-btn-ink: #fff; --nv-photo-ring: #fffdf7;
+  --nv-pad: 210px 30px 300px;
+}
+.nv-l--star { top: 50px; left: 50%; width: 120px; translate: -50% 0; animation: nv-float 6s ease-in-out infinite; }
+.nv-l--pines { bottom: 150px; left: 50%; width: min(150vw, 700px); translate: -50% 0; z-index: 1; }
+.nv-l--village { bottom: 104px; left: 50%; width: min(80vw, 360px); translate: -50% 0; z-index: 2; }
+.nv-l--hills { bottom: -6px; left: 50%; width: min(220vw, 1200px); translate: -50% 0; z-index: 3; mix-blend-mode: multiply; }
+.nv-l--branch { bottom: -20px; left: -40px; width: min(60vw, 280px); z-index: 4; mix-blend-mode: multiply; }
+.nv--pueblo-papel .nv-inner { z-index: 2; }
+@media (min-width: 900px) {
+  .nv--pueblo-papel { --nv-pad-d: 140px 48px 330px; }
+  .nv-l--star { width: 150px; top: 30px; }
+  .nv-l--pines { width: 1200px; bottom: 120px; }
+  .nv-l--village { width: 460px; bottom: 60px; }
+  .nv-l--hills { width: 1900px; bottom: -90px; }
+  .nv-l--branch { width: 380px; }
+}
+
+/* ═══════════════════════ BORDADO DE LUJO ═══════════════════════ */
+.nv--bordado-lujo {
+  --nv-bg-color: #f6f1e6;
+  --nv-bg-img: repeating-linear-gradient(0deg, rgba(140,120,90,.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(140,120,90,.05) 0 1px, transparent 1px 3px);
+  --nv-ink: #3e3a30; --nv-soft: #7d7464; --nv-title: #8e2b2b; --nv-script: #9c7a2f; --nv-accent: #b0903f;
+  --nv-line: rgba(156,122,47,.3); --nv-count-bg: rgba(255,252,244,.85); --nv-btn: #8e2b2b; --nv-btn-ink: #fff; --nv-photo-ring: #e9d9a8;
+  --nv-pad: 330px 26px 220px;
+}
+.nv--bordado-lujo::before { background-size: auto; }
+.nv-l--garland { top: -6px; left: 50%; width: min(190vw, 900px); translate: -50% 0; z-index: 3; }
+.nv-l--orn1, .nv-l--orn2, .nv-l--orn3 { top: -40px; transform-origin: top center; z-index: 2; animation: nv-swing 5s ease-in-out infinite; }
+.nv-l--orn1 { left: 6%; width: min(26vw, 110px); }
+.nv-l--orn2 { left: 50%; margin-left: calc(min(30vw, 130px) / -2); width: min(30vw, 130px); top: 20px; animation-delay: -1.6s; }
+.nv-l--orn3 { right: 6%; width: min(24vw, 100px); top: -70px; animation-delay: -3s; }
+.nv-l--poin1 { bottom: -30px; left: -40px; width: min(60vw, 260px); z-index: 3; }
+.nv-l--poin2 { top: 46%; right: -60px; width: min(46vw, 200px); z-index: 1; rotate: 180deg; scale: -1 1; opacity: .95; }
+@media (min-width: 900px) {
+  .nv--bordado-lujo { --nv-pad-d: 300px 48px 120px; }
+  .nv-l--garland { width: 1900px; }
+  .nv-l--orn1 { left: 14%; width: 150px; } .nv-l--orn2 { width: 170px; margin-left: -85px; } .nv-l--orn3 { right: 14%; width: 140px; }
+  .nv-l--poin1 { width: 360px; } .nv-l--poin2 { width: 300px; top: 40%; }
+}
+
+/* ═══════════════════════ LA ÉPOCA MÁS BONITA ═══════════════════════ */
+.nv--epoca-bonita {
+  --nv-bg-color: #f6efe4;
+  --nv-ink: #4a3a2e; --nv-soft: #8a7663; --nv-title: #9b2f2a; --nv-script: #a8873f; --nv-accent: #c9a14a;
+  --nv-line: rgba(168,135,63,.3); --nv-count-bg: rgba(255,251,244,.85); --nv-btn: #9b2f2a; --nv-btn-ink: #fff; --nv-photo-ring: #fffaf2;
+  --nv-pad: 230px 40px 270px;
+}
+.nv--epoca-bonita .nv-script { font-size: 1.9rem; }
+.nv-l--corner { top: -20px; left: -30px; width: min(62vw, 270px); z-index: 1; }
+.nv-l--ball { top: -30px; right: 8px; width: min(26vw, 110px); transform-origin: top center; animation: nv-swing 6s ease-in-out infinite; }
+.nv-l--cookie { top: 42%; right: -14px; width: 64px; rotate: 14deg; z-index: 1; }
+.nv-l--candle { top: 58%; right: -10px; width: 96px; z-index: 1; }
+.nv-l--gift { top: 50%; left: -50px; width: 130px; rotate: -16deg; z-index: 1; }
+.nv-l--land { bottom: 0; left: 50%; width: min(200vw, 1000px); translate: -50% 0; z-index: 1; }
+.nv-l--mug { bottom: 10px; right: -14px; width: min(36vw, 150px); z-index: 3; }
+@media (min-width: 900px) {
+  .nv--epoca-bonita { --nv-pad-d: 130px 48px 220px; }
+  .nv-l--corner { width: 380px; } .nv-l--ball { width: 150px; right: 10%; }
+  .nv-l--cookie { width: 90px; right: 6%; } .nv-l--candle { width: 140px; right: 4%; }
+  .nv-l--gift { width: 190px; left: 4%; } .nv-l--land { width: 1900px; } .nv-l--mug { width: 200px; right: 12%; }
+}
+
+/* ═══════════════════════ NOCHE DE VELAS ═══════════════════════ */
+.nv--noche-velas {
+  --nv-bg-color: #17110d; --nv-bg-img: url('/images/themes/nav-velas/fondo.webp');
+  --nv-ink: #efe6d6; --nv-soft: #c8b89c; --nv-title: #f7efe1; --nv-script: #d9b46a; --nv-accent: #d9b46a;
+  --nv-line: rgba(217,180,106,.3); --nv-count-bg: rgba(23,17,13,.55); --nv-btn: #d9b46a; --nv-btn-ink: #17110d; --nv-photo-ring: #d9b46a;
+  --nv-pad: 110px 24px 290px;
+}
+.nv--noche-velas .nv-script { font-size: 1.6rem; }
+.nv--noche-velas .nv-title span:first-child { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(3rem, 15vw, 4rem); color: #d9b46a; }
+.nv--noche-velas .nv-title span + span { letter-spacing: .4em; color: #f7efe1; }
+.nv-l--pine { top: -20px; right: -40px; width: min(56vw, 240px); z-index: 1; }
+.nv-l--lantern { bottom: 60px; left: -10px; width: min(34vw, 150px); z-index: 3; animation: nv-glow 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(255,190,90,.35)); }
+.nv-l--balls { bottom: -10px; left: 50%; width: min(150vw, 680px); translate: -50% 0; z-index: 2; }
+@media (min-width: 900px) {
+  .nv--noche-velas { --nv-pad-d: 90px 48px 220px 30%; }
+  .nv-l--pine { width: 340px; } .nv-l--lantern { width: 230px; left: 8%; bottom: 80px; } .nv-l--balls { width: 1100px; }
+}
+
+/* ═══════════════════════ MÓDULOS ═══════════════════════ */
+.theme-pueblo-papel {
+  --kp-bg: #f8f4eb; --kp-alt: #f4efe4;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #a8873f; --kp-ink: #47513f; --kp-soft: #7a816f; --kp-accent: #a8873f;
+  --kp-btn: #6f7f62; --kp-btn-ink: #fff; --kp-card-border: rgba(122,129,111,.25); --kp-icon-bg: #e9ecdf; --kp-icon: #6f7f62;
+  --kp-shadow: rgba(71,81,63,.3);
+  --kp-title-deco: url('/images/themes/nav-papel/estrella.webp');
+  --kp-art-message: url('/images/themes/nav-papel/pueblo.webp'); --kp-art-message-w: 200px; --kp-art-message-h: 134px;
+  --kp-art-location: url('/images/themes/nav-papel/pinos.webp'); --kp-art-location-w: 220px; --kp-art-location-h: 130px;
+  --kp-art-gifts: url('/images/themes/nav-papel/estrella.webp'); --kp-art-gifts-w: 90px; --kp-art-gifts-h: 90px;
+  --kp-art-rsvp: url('/images/themes/nav-papel/pueblo.webp'); --kp-art-rsvp-w: 200px; --kp-art-rsvp-h: 134px;
+  --kp-rsvp-bg: #f4efe4 url('/images/themes/nav-papel/fondo.webp') center / cover;
+  --kp-closing-bg: #f4efe4 url('/images/themes/nav-papel/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/nav-papel/estrella.webp'); --kp-closing-title: #a8873f;
+}
+.theme-bordado-lujo {
+  --kp-bg: #f8f4eb; --kp-alt: #f3ecdd;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #8e2b2b; --kp-ink: #3e3a30; --kp-soft: #7d7464; --kp-accent: #b0903f;
+  --kp-btn: #8e2b2b; --kp-btn-ink: #fff; --kp-card-border: rgba(176,144,63,.3); --kp-icon-bg: #f1e6cc; --kp-icon: #8e2b2b;
+  --kp-shadow: rgba(62,58,48,.3);
+  --kp-title-deco: url('/images/themes/nav-bordado/esfera-1.webp');
+  --kp-art-message: url('/images/themes/nav-bordado/esfera-x-1.webp'); --kp-art-message-w: 80px; --kp-art-message-h: 130px;
+  --kp-art-location: url('/images/themes/nav-bordado/nochebuena.webp'); --kp-art-location-w: 130px; --kp-art-location-h: 130px;
+  --kp-art-gifts: url('/images/themes/nav-bordado/esfera-x-2.webp'); --kp-art-gifts-w: 80px; --kp-art-gifts-h: 130px;
+  --kp-art-rsvp: url('/images/themes/nav-bordado/guirnalda.webp'); --kp-art-rsvp-w: 300px; --kp-art-rsvp-h: 96px;
+  --kp-rsvp-bg: #f3ecdd; --kp-closing-bg: #f3ecdd;
+  --kp-art-closing: url('/images/themes/nav-bordado/esfera-1.webp'); --kp-closing-title: #8e2b2b;
+}
+.theme-epoca-bonita {
+  --kp-bg: #fbf6ee; --kp-alt: #f6efe4;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.5rem, 11vw, 3rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #9b2f2a; --kp-ink: #4a3a2e; --kp-soft: #8a7663; --kp-accent: #c9a14a;
+  --kp-btn: #9b2f2a; --kp-btn-ink: #fff; --kp-card-border: rgba(168,135,63,.28); --kp-icon-bg: #f6e5dc; --kp-icon: #9b2f2a;
+  --kp-shadow: rgba(74,58,46,.3);
+  --kp-title-deco: url('/images/themes/nav-acuarela/gv-1.webp');
+  --kp-art-message: url('/images/themes/nav-acuarela/taza.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 114px;
+  --kp-art-location: url('/images/themes/nav-acuarela/gv-2.webp'); --kp-art-location-w: 110px; --kp-art-location-h: 92px;
+  --kp-art-gifts: url('/images/themes/nav-acuarela/regalo.webp'); --kp-art-gifts-w: 160px; --kp-art-gifts-h: 92px;
+  --kp-art-rsvp: url('/images/themes/nav-acuarela/esfera.webp'); --kp-art-rsvp-w: 80px; --kp-art-rsvp-h: 116px;
+  --kp-rsvp-bg: #f6efe4; --kp-closing-bg: #f6efe4;
+  --kp-art-closing: url('/images/themes/nav-acuarela/paisaje.webp'); --kp-closing-title: #9b2f2a;
+}
+.theme-epoca-bonita .invitation-closing::before { width: 320px; height: 90px; margin-left: -160px; }
+.theme-noche-velas {
+  --kp-bg: #1d1611; --kp-alt: #241b15;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #d9b46a; --kp-ink: #efe6d6; --kp-soft: #c8b89c; --kp-accent: #d9b46a;
+  --kp-btn: #d9b46a; --kp-btn-ink: #17110d; --kp-card-border: rgba(217,180,106,.3); --kp-icon-bg: rgba(217,180,106,.12); --kp-icon: #d9b46a;
+  --kp-shadow: rgba(0,0,0,.6);
+  --kp-title-deco: url('/images/themes/nav-velas/farol.webp');
+  --kp-art-message: url('/images/themes/nav-velas/rama.webp'); --kp-art-message-w: 130px; --kp-art-message-h: 100px;
+  --kp-art-location: url('/images/themes/nav-velas/farol.webp'); --kp-art-location-w: 70px; --kp-art-location-h: 140px;
+  --kp-art-gifts: url('/images/themes/nav-velas/esferas.webp'); --kp-art-gifts-w: 260px; --kp-art-gifts-h: 66px;
+  --kp-art-rsvp: url('/images/themes/nav-velas/esferas.webp'); --kp-art-rsvp-w: 260px; --kp-art-rsvp-h: 66px;
+  --kp-rsvp-bg: linear-gradient(rgba(23,17,13,.6), rgba(23,17,13,.8)), url('/images/themes/nav-velas/fondo.webp') center / cover;
+  --kp-closing-bg: linear-gradient(rgba(23,17,13,.5), rgba(23,17,13,.8)), url('/images/themes/nav-velas/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/nav-velas/farol.webp'); --kp-closing-title: #d9b46a; --kp-closing-text: #c8b89c;
+  --text-primary: #efe6d6; --text-secondary: #c8b89c; --card-bg: #241b15;
+}
+.theme-noche-velas section [class*="bg-[var(--card-bg)]"] { background: #241b15 !important; }
+.theme-noche-velas section :is(input, textarea, select) { background: #2b211a !important; color: #efe6d6 !important; }
+.theme-noche-velas section :is(h4, h3, label, label *) { color: #efe6d6 !important; }
+.theme-noche-velas .invitation-closing::before { width: 90px; height: 170px; margin-left: -45px; }
+
+:is(.theme-pueblo-papel, .theme-bordado-lujo, .theme-epoca-bonita, .theme-noche-velas) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 12px !important; }
+:is(.theme-pueblo-papel, .theme-bordado-lujo, .theme-epoca-bonita, .theme-noche-velas) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-pueblo-papel, .theme-bordado-lujo) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .12em !important; }
+:is(.theme-pueblo-papel, .theme-bordado-lujo, .theme-epoca-bonita, .theme-noche-velas) :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 34px; height: 34px; }
+:is(.theme-pueblo-papel, .theme-bordado-lujo, .theme-epoca-bonita, .theme-noche-velas) #gallery img { border-radius: 8px !important; border-width: 5px; }
+/* Ajustes de legibilidad y acomodo */
+.nv--pueblo-papel { --nv-title: #8a6a2a; --nv-script: #8a6a2a; }
+.nv--pueblo-papel::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 70% 45% at 50% 38%, rgba(248,244,235,.88), rgba(248,244,235,.55) 70%, rgba(248,244,235,0)); }
+.nv-l--poin2 { top: auto; bottom: 34%; right: -80px; width: min(40vw, 170px); }
+@media (min-width: 900px) {
+  .nv--pueblo-papel { --nv-pad-d: 70px 48px 380px; }
+  .nv-l--pines { width: 1000px; bottom: 40px; opacity: .9; }
+  .nv-l--village { width: 420px; bottom: 20px; }
+  .nv-l--hills { bottom: -160px; }
+  .nv--pueblo-papel .nv-inner { min-height: auto; }
+  .nv-l--poin2 { bottom: 30%; width: 260px; right: -60px; }
+}
+@media (min-width: 900px) {
+  .nv-l--pines { width: 760px; bottom: -70px; }
+  .nv-l--village { width: 340px; bottom: 0; }
+  .nv-l--hills { bottom: -200px; }
+  .nv--pueblo-papel { --nv-pad-d: 80px 48px 420px; }
+}
+.theme-noche-velas.theme-noche-velas section [class*="bg-[var(--card-bg)]"],
+.theme-noche-velas.theme-noche-velas section [class*="bg-white"] { background: #241b15 !important; border-color: rgba(217,180,106,.3) !important; }
+.theme-noche-velas.theme-noche-velas section [class*="bg-[var(--card-bg)]"] :is(p, span, h3, h4) { color: #efe6d6 !important; }
+.theme-noche-velas.theme-noche-velas section :is(input, textarea, select) { background: #2b211a !important; color: #efe6d6 !important; border-color: rgba(217,180,106,.3) !important; }
+.theme-pueblo-papel { --kp-rsvp-bg: #f4efe4; --kp-closing-bg: #efe8da; }

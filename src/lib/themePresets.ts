@@ -728,6 +728,62 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#EFE6FB',
         typographyPreset: 'divertida'
     },
+    'pueblo-papel': {
+        label: 'Pueblo de Papel',
+        desc: 'Navidad en papel recortado: pueblito, pinos y colinas nevadas en capas con estrella dorada, con parallax',
+        icon: '🏘️',
+        primaryColor: '#6F7F62',
+        accentColor: '#A8873F',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F4EB',
+        textPrimary: '#47513F',
+        textSecondary: '#7A816F',
+        heroTextColor: '#6F7F62',
+        heroBgColor: '#F4EFE4',
+        typographyPreset: 'elegante'
+    },
+    'bordado-lujo': {
+        label: 'Bordado de Lujo',
+        desc: 'Navidad de lujo bordada: esferas que se mecen, guirnalda y nochebuenas sobre lino, con parallax',
+        icon: '🎄',
+        primaryColor: '#8E2B2B',
+        accentColor: '#B0903F',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F4EB',
+        textPrimary: '#3E3A30',
+        textSecondary: '#7D7464',
+        heroTextColor: '#8E2B2B',
+        heroBgColor: '#F3ECDD',
+        typographyPreset: 'elegante'
+    },
+    'epoca-bonita': {
+        label: 'La Época Más Bonita',
+        desc: 'Navidad en acuarela: moños, esfera de vidrio, galleta, vela, regalo kraft y chocolate caliente, con parallax',
+        icon: '🎁',
+        primaryColor: '#9B2F2A',
+        accentColor: '#C9A14A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF6EE',
+        textPrimary: '#4A3A2E',
+        textSecondary: '#8A7663',
+        heroTextColor: '#9B2F2A',
+        heroBgColor: '#F6EFE4',
+        typographyPreset: 'elegante'
+    },
+    'noche-velas': {
+        label: 'Noche de Velas',
+        desc: 'Navidad elegante de noche: árbol con luces, farol con vela y esferas rojas y doradas, con parallax',
+        icon: '🕯️',
+        primaryColor: '#D9B46A',
+        accentColor: '#D9B46A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#1D1611',
+        textPrimary: '#EFE6D6',
+        textSecondary: '#C8B89C',
+        heroTextColor: '#D9B46A',
+        heroBgColor: '#241B15',
+        typographyPreset: 'elegante'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -877,7 +933,13 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
 
     // ── Revelación de Género ──
     { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / B&W', slug: 'gender-reveal-secreto-bw-premium', icon: '❓', plan: 'Clásica', thumbnail: '/images/templates/reveal-bw.jpg' },
-    { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Pro', thumbnail: '/images/templates/reveal-duo.jpg' }
+    { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Pro', thumbnail: '/images/templates/reveal-duo.jpg' },
+
+    // ── Posada / Navidad ──
+    { id: 'pueblo-papel', name: 'Pueblo de Papel', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Pueblo de Papel', slug: 'navidad-pueblo-papel', icon: '🏘️', plan: 'Pro', thumbnail: '/images/templates/pueblo-papel.jpg' },
+    { id: 'bordado-lujo', name: 'Bordado de Lujo', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Bordado de Lujo', slug: 'navidad-bordado-lujo', icon: '🎄', plan: 'Pro', thumbnail: '/images/templates/bordado-lujo.jpg' },
+    { id: 'epoca-bonita', name: 'La Época Más Bonita', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / La Época Más Bonita', slug: 'navidad-epoca-bonita', icon: '🎁', plan: 'Pro', thumbnail: '/images/templates/epoca-bonita.jpg' },
+    { id: 'noche-velas', name: 'Noche de Velas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Noche de Velas', slug: 'navidad-noche-velas', icon: '🕯️', plan: 'Pro', thumbnail: '/images/templates/noche-velas.jpg' }
 ];
 
 export const EVENT_CATEGORY_LABELS: Record<string, string> = {
@@ -891,6 +953,7 @@ export const EVENT_CATEGORY_LABELS: Record<string, string> = {
     comunion: 'Primera Comunión',
     graduacion: 'Graduaciones',
     corporate: 'Corporativo',
+    navidad: 'Posada / Navidad',
     todas: 'Todas las Categorías',
 };
 
@@ -916,6 +979,7 @@ export function normalizeEventCategory(eventTypeOrCategory?: string, currentThem
     }
     if (['graduacion', 'graduaciones'].includes(lower)) return 'graduacion';
     if (['corporate', 'corporativo', 'gala'].includes(lower)) return 'corporate';
+    if (['navidad', 'posada', 'posadas', 'christmas'].includes(lower)) return 'navidad';
     return lower;
 }
 
@@ -976,7 +1040,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;
