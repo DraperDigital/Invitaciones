@@ -9,7 +9,7 @@ export type Event = {
     id: string;
     user_id: string;
     title: string;
-    event_type: 'wedding' | 'xv' | 'birthday' | 'bautizo' | 'graduacion' | 'comunion' | 'corporate' | 'gender_reveal' | 'baby_shower' | 'navidad' | 'other';
+    event_type: 'wedding' | 'xv' | 'birthday' | 'bautizo' | 'graduacion' | 'comunion' | 'corporate' | 'gender_reveal' | 'baby_shower' | 'navidad' | 'fin_de_ano' | 'other';
     date_time: string;
     venue_name: string | null;
     venue_address: string | null;

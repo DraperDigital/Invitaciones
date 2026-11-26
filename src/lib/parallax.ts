@@ -331,5 +331,63 @@ PARALLAX_BY_THEME['posada-mexicana'] = [
     { selector: '.nv-l--pm-gifts', speed: -0.25 },
     ...sectionLayers('posada-mexicana'),
 ];
+PARALLAX_BY_THEME['brindis-oro'] = [
+    { selector: '.nv--brindis-oro', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--bo-glass', speed: -0.2 },
+    { selector: '.nv-l--bo-serp1', speed: 0.4 },
+    { selector: '.nv-l--bo-serp2', speed: -0.35 },
+    { selector: '.nv-l--bo-d1', speed: 0.5 },
+    { selector: '.nv-l--bo-d2', speed: -0.45 },
+    { selector: '.nv-l--bo-d3', speed: -0.6 },
+    { selector: '.nv-l--bo-d4', speed: 0.3 },
+    ...sectionLayers('brindis-oro'),
+];
+PARALLAX_BY_THEME['globos-champana'] = [
+    { selector: '.nv--globos-champana', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--gc-cluster', speed: 0.45 },
+    { selector: '.nv-l--gc-b1', speed: 0.6 },
+    { selector: '.nv-l--gc-b2', speed: 0.35 },
+    { selector: '.nv-l--gc-bottle', speed: -0.15 },
+    ...sectionLayers('globos-champana'),
+];
+PARALLAX_BY_THEME['noche-disco'] = [
+    { selector: '.nv-l--nd-bow', speed: 0.25 },
+    { selector: '.nv-l--nd-s1', speed: -0.4 },
+    { selector: '.nv-l--nd-s2', speed: -0.55 },
+    { selector: '.nv-l--nd-s3', speed: -0.3 },
+    { selector: '.nv-l--nd-bot1', speed: 0.35 },
+    { selector: '.nv-l--nd-bot2', speed: 0.45 },
+    { selector: '.nv-l--nd-leg', speed: -0.15 },
+    { selector: '.nv-l--nd-ball', speed: -0.25 },
+    ...sectionLayers('noche-disco'),
+];
+PARALLAX_BY_THEME['cena-gala'] = [
+    { selector: '.nv--cena-gala', speed: 0.35, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--cg-plume1', speed: 0.3 },
+    { selector: '.nv-l--cg-plume2', speed: 0.3 },
+    { selector: '.nv-l--cg-star', speed: -0.4 },
+    ...sectionLayers('cena-gala'),
+];
+PARALLAX_BY_THEME['cierre-brillante'] = [
+    { selector: '.nv--cierre-brillante', speed: 0.35, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--cb-h1', speed: -0.5 },
+    { selector: '.nv-l--cb-h2', speed: -0.35 },
+    { selector: '.nv-l--cb-h3', speed: -0.6 },
+    { selector: '.nv-l--cb-h4', speed: -0.45 },
+    { selector: '.nv-l--cb-h5', speed: 0.4 },
+    { selector: '.nv-l--cb-seq', speed: -0.1 },
+    ...sectionLayers('cierre-brillante'),
+];
+PARALLAX_BY_THEME['perlas-champana'] = [
+    { selector: '.nv--perlas-champana', speed: 0.25, cssVar: '--py-bg', varOnly: true },
+    { selector: '.nv-l--pc-balloons', speed: 0.45 },
+    { selector: '.nv-l--pc-vase', speed: -0.15 },
+    { selector: '.nv-l--pc-tower', speed: -0.2 },
+    { selector: '.nv-l--pc-c1', speed: -0.5 },
+    { selector: '.nv-l--pc-c2', speed: -0.4 },
+    { selector: '.nv-l--pc-c3', speed: 0.5 },
+    { selector: '.nv-l--pc-c4', speed: -0.6 },
+    ...sectionLayers('perlas-champana'),
+];
 
 export const PARALLAX_MAX_PX = 160;
