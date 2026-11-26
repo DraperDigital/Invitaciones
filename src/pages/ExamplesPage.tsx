@@ -8,6 +8,8 @@ import { STD_TEMPLATES, SAVE_THE_DATE_PRICE } from '../lib/saveTheDate';
 
 const categories = [
     { id: 'todas', name: 'Todas', icon: LayoutGrid },
+    { id: 'navidad', name: 'Posada / Navidad', icon: TreePine },
+    { id: 'fin_de_ano', name: 'Fin de Año', icon: Wine },
     { id: 'save_the_date', name: 'Save the Date (10)', icon: Calendar },
     { id: 'boda', name: 'Bodas', icon: HeartHandshake },
     { id: 'xv', name: 'XV Años', icon: PartyPopper },
@@ -18,8 +20,6 @@ const categories = [
     { id: 'gender_reveal', name: 'Revelación', icon: HelpCircle },
     { id: 'graduacion', name: 'Graduaciones', icon: GraduationCap },
     { id: 'comunion', name: 'Primera Comunión', icon: Church },
-    { id: 'navidad', name: 'Posada / Navidad', icon: TreePine },
-    { id: 'fin_de_ano', name: 'Fin de Año', icon: Wine },
 ];
 
 export default function ExamplesPage() {

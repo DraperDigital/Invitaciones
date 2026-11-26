@@ -8,17 +8,17 @@ import { useLocation } from 'react-router-dom';
  * - Guirnalda de luces rojas/verdes/doradas arriba.
  * - Botón flotante 🎄 para prender/apagar todo (se recuerda en localStorage).
  * - Música opcional opt-in (un clic en la bocina; los navegadores NO permiten
- *   audio automático). Pon un archivo libre de regalías en MUSIC_SRC.
+ *   audio automático). Archivo libre de regalías en MUSIC_SRC.
  *
  * Montar UNA vez dentro del Router (ej. en App, junto al resto del layout).
- * Se auto-oculta en las rutas de EXCLUDED_PREFIXES (invitaciones de clientes y dashboard).
+ * Se auto-oculta en las invitaciones normales de clientes (bodas, xv, etc.) y dashboard,
+ * pero se activa en el sitio público Y en las invitaciones de la edición Navidad (Plan Pro / Clásica).
  */
 
-// Archivo de música libre de regalías. Déjalo en /public y ajusta la ruta.
-// Si el archivo no existe, el botón de música simplemente no sonará.
+// Archivo de música libre de regalías (We Wish You a Merry Christmas)
 const MUSIC_SRC = '/sounds/christmas.mp3';
 
-// No mostrar el modo navideño en estas rutas (invitaciones publicadas de clientes, demos de invitaciones y dashboard).
+// Rutas excluidas por defecto (invitaciones regulares de clientes y panel de dashboard).
 const EXCLUDED_PREFIXES = ['/i/', '/std/', '/preview/', '/invitacion/', '/dashboard', '/carlos-y-frida', '/carlosyfrida'];
 
 const SNOWFLAKE_COUNT = 50;
@@ -56,7 +56,35 @@ export default function ChristmasOverlay() {
   const [musicOn, setMusicOn] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const excluded = EXCLUDED_PREFIXES.some((p) => location.pathname.startsWith(p));
+  // Escuchar si la invitación actual en pantalla pertenece a la edición Navidad
+  const [isChristmasEventActive, setIsChristmasEventActive] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return Boolean((window as any).__INVITTO_CHRISTMAS_EVENT__);
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleXmasEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<boolean>;
+      setIsChristmasEventActive(Boolean(customEvent.detail));
+    };
+    window.addEventListener('invitto:xmas-event-active', handleXmasEvent);
+    return () => window.removeEventListener('invitto:xmas-event-active', handleXmasEvent);
+  }, []);
+
+  const path = location.pathname.toLowerCase();
+  const isChristmasPath = 
+    path.startsWith('/i/navidad-') ||
+    path.includes('navidad') ||
+    path.includes('posada') ||
+    path.includes('christmas');
+
+  // Permitir la skin navideña si es el sitio público O si es una invitación de edición Navidad
+  const isChristmasAllowed = isChristmasPath || isChristmasEventActive;
+  const isExcluded = (!isChristmasAllowed && EXCLUDED_PREFIXES.some((p) => path.startsWith(p))) || path.startsWith('/dashboard');
+
+  const isInvitationRoute = path.startsWith('/i/') || path.startsWith('/preview/') || path.startsWith('/invitacion/');
 
   const flakes = useMemo<Flake[]>(() => {
     return Array.from({ length: SNOWFLAKE_COUNT }, () => ({
@@ -75,18 +103,24 @@ export default function ChristmasOverlay() {
   }, [enabled]);
 
   useEffect(() => {
+    if (isExcluded && musicOn) {
+      setMusicOn(false);
+    }
+  }, [isExcluded, musicOn]);
+
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (musicOn) {
+    if (musicOn && !isExcluded) {
       audio.volume = 0.35;
       audio.play().catch(() => setMusicOn(false)); // autoplay bloqueado o sin archivo
     } else {
       audio.pause();
     }
-  }, [musicOn]);
+  }, [musicOn, isExcluded]);
 
   // En las rutas excluidas no renderizamos nada (ni el botón).
-  if (excluded) return null;
+  if (isExcluded) return null;
 
   return (
     <>
@@ -187,16 +221,11 @@ export default function ChristmasOverlay() {
         </>
       )}
 
-      {/* Controles flotantes (abajo-izquierda para no chocar con widgets de la derecha) */}
+      {/* Controles flotantes (abajo-izquierda, elevado en preview móvil para no tapar barra de plantillas) */}
       <div
-        style={{
-          position: 'fixed',
-          left: '16px',
-          bottom: '16px',
-          display: 'flex',
-          gap: '8px',
-          zIndex: 9999,
-        }}
+        className={`fixed left-4 flex gap-2 z-[9999] transition-all duration-300 ${
+          isInvitationRoute ? 'bottom-28 sm:bottom-6 sm:left-6' : 'bottom-4 sm:bottom-6'
+        }`}
       >
         <button
           type="button"
