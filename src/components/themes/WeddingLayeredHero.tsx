@@ -286,7 +286,139 @@ function EditorialHero({ event, cfg, countdown, heroImageUrl, scrollToSection, o
     );
 }
 
-export const WEDDING_LAYERED_THEMES = ['pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn'];
+function MonthCalendar({ date }: { date: Date }) {
+    const y = date.getFullYear(), m = date.getMonth(), day = date.getDate();
+    const first = (new Date(y, m, 1).getDay() + 6) % 7;
+    const days = new Date(y, m + 1, 0).getDate();
+    const cells: (number | null)[] = [...Array(first).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
+    return (
+        <div className="wn-cal" aria-label="Calendario">
+            <p className="wn-cal-m">{format(date, 'MMMM yyyy', { locale: es })}</p>
+            <div className="wn-cal-g">
+                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => <small key={i}>{d}</small>)}
+                {cells.map((c, i) => <span key={i} className={c === day ? 'is-day' : ''}>{c || ''}</span>)}
+            </div>
+        </div>
+    );
+}
+
+function NocheHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    return (
+        <>
+            <img className="wh-l wn-pt wn-pt--1" src={P('noche', 'p-1')} alt="" aria-hidden="true" />
+            <img className="wh-l wn-pt wn-pt--2" src={P('noche', 'p-4')} alt="" aria-hidden="true" />
+            <img className="wh-l wn-pt wn-pt--3" src={P('noche', 'p-6')} alt="" aria-hidden="true" />
+            <img className="wh-l wn-pt wn-pt--4" src={P('noche', 'p-3')} alt="" aria-hidden="true" />
+            <div className="wh-inner">
+                <div className="wn-head">
+                    <h1 className="wn-names">
+                        <span>{d.nameA}</span>
+                        {d.nameB && <span>{d.nameB}</span>}
+                    </h1>
+                    <p className="wn-kicker">{labels?.tagline || 'Nuestra boda'}</p>
+                    {d.date && <p className="wn-date">{format(d.date, 'dd.MM.yyyy')}</p>}
+                    <Photo cls="wh-photo wn-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+                </div>
+                <div className="wn-card">
+                    <img className="wh-l wn-rose wn-rose--tl" src={P('noche', 'esquina')} alt="" aria-hidden="true" />
+                    <img className="wh-l wn-rose wn-rose--br" src={P('noche', 'esquina')} alt="" aria-hidden="true" />
+                    <h2 className="wn-title">Queridos invitados</h2>
+                    <p className="wn-text">Nos encantará celebrar contigo el día más importante de nuestras vidas.</p>
+                    {d.date && <MonthCalendar date={d.date} />}
+                    {d.venue && <p className="wn-venue">{d.venue}{d.city ? ` · ${d.city}` : ''}</p>}
+                    {d.showCountdown && <Countdown countdown={countdown} title="Faltan" />}
+                    <button type="button" className="wh-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                </div>
+            </div>
+            <img className="wh-l wn-garland" src={P('noche', 'guirnalda')} alt="" aria-hidden="true" />
+        </>
+    );
+}
+
+function SalviaHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    const quote = cfg?.hero_phrase || 'Tres cosas permanecen: la fe, la esperanza y el amor; pero la más grande es el amor.';
+    return (
+        <>
+            <img className="wh-l wg-corner wg-corner--l" src={P('salvia', 'esquina')} alt="" aria-hidden="true" />
+            <img className="wh-l wg-corner wg-corner--r" src={P('salvia', 'esquina')} alt="" aria-hidden="true" />
+            <img className="wh-l wg-hang wg-hang--l" src={P('salvia', 'colgante')} alt="" aria-hidden="true" />
+            <img className="wh-l wg-hang wg-hang--r" src={P('salvia', 'colgante')} alt="" aria-hidden="true" />
+            <div className="wh-inner">
+                <div className="wg-col">
+                    <p className="wg-quote">“{quote}”</p>
+                    <p className="wg-mono"><span>{d.nameA[0] || ''}</span><i />{d.nameB && <span>{d.nameB[0]}</span>}</p>
+                    <p className="wg-kicker">Nuestra boda</p>
+                    <img className="wg-sprig" src={P('salvia', 'ramita')} alt="" aria-hidden="true" />
+                    <Photo cls="wh-photo wg-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+                </div>
+                <div className="wg-col">
+                    <h1 className="wg-names">
+                        <span>{d.nameA}</span>
+                        {d.nameB && <><em>&amp;</em><span>{d.nameB}</span></>}
+                    </h1>
+                    <p className="wg-invite">Tenemos el honor de invitarte a nuestra boda</p>
+                    {d.date && (
+                        <div className="wg-date">
+                            <small>{format(d.date, 'MMMM', { locale: es })}</small>
+                            <div><span>{format(d.date, 'EEEE', { locale: es })}</span><b>{format(d.date, 'd')}</b><span>{format(d.date, 'yyyy')}</span></div>
+                        </div>
+                    )}
+                    {d.venue && <p className="wg-venue">{d.venue}{d.city ? ` · ${d.city}` : ''}</p>}
+                    {d.showCountdown && <Countdown countdown={countdown} title="Faltan" />}
+                    <button type="button" className="wh-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+function MalvaHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    return (
+        <>
+            <img className="wh-l wm-hang wm-hang--l" src={P('malva', 'colgante')} alt="" aria-hidden="true" />
+            <img className="wh-l wm-hang wm-hang--r" src={P('malva', 'colgante')} alt="" aria-hidden="true" />
+            <div className="wh-inner">
+                <div className="wm-card">
+                    <p className="wm-kicker">{labels?.tagline || 'Nuestra boda'}</p>
+                    <div className="wm-top">
+                        <Photo cls="wh-photo wm-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+                        <img className="wm-wave" src={P('malva', 'ola')} alt="" aria-hidden="true" />
+                        <img className="wh-l wm-flowers" src={P('malva', 'esquina')} alt="" aria-hidden="true" />
+                    </div>
+                    <h1 className="wm-names">
+                        <span>{d.nameA}</span>
+                        {d.nameB && <><em>y</em><span>{d.nameB}</span></>}
+                    </h1>
+                    {d.date && <p className="wm-date">{format(d.date, 'dd · MM · yyyy')}</p>}
+                    <p className="wm-wait">¡Te esperamos con mucha ilusión!</p>
+                    {d.showCountdown && (
+                        <div className="wm-count" aria-label="Cuenta regresiva">
+                            <p>Para la boda faltan</p>
+                            <div>
+                                {[
+                                    { v: countdown.days, l: 'días' },
+                                    { v: countdown.hours, l: 'horas' },
+                                    { v: countdown.minutes, l: 'min' },
+                                    { v: countdown.seconds, l: 'seg' },
+                                ].map((it) => <span key={it.l}><b>{pad(it.v)}</b><small>{it.l}</small></span>)}
+                            </div>
+                        </div>
+                    )}
+                    <button type="button" className="wh-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                    <img className="wm-sprig" src={P('malva', 'ramita')} alt="" aria-hidden="true" />
+                </div>
+                <div className="wh-side wm-side">
+                    <img className="wm-bouquet" src={P('malva', 'ramo')} alt="" aria-hidden="true" />
+                </div>
+            </div>
+        </>
+    );
+}
+
+export const WEDDING_LAYERED_THEMES = ['rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn'];
 
 export default function WeddingLayeredHero(props: Props) {
     const [shown, setShown] = useState(false);
@@ -297,6 +429,9 @@ export default function WeddingLayeredHero(props: Props) {
         'terciopelo-vino': ['wh--vino', VinoHero],
         'azul-acuarela': ['wh--azul', AzulHero],
         'editorial-bn': ['wh--edit', EditorialHero],
+        'rosas-noche': ['wh--noche', NocheHero],
+        'salvia-eucalipto': ['wh--salvia', SalviaHero],
+        'malva-empolvado': ['wh--malva', MalvaHero],
     };
     const [cls, Comp] = variants[props.theme] || variants['sobre-marino'];
     return (

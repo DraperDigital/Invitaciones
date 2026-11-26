@@ -245,5 +245,32 @@ PARALLAX_BY_THEME['editorial-bn'] = [
     { selector: '.wh--edit .wh-inner', speed: -0.12 },
     ...sectionLayers('editorial-bn'),
 ];
+PARALLAX_BY_THEME['rosas-noche'] = [
+    { selector: '.wh--noche', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wn-pt--1', speed: -0.5 },
+    { selector: '.wn-pt--2', speed: -0.35 },
+    { selector: '.wn-pt--3', speed: -0.6 },
+    { selector: '.wn-pt--4', speed: 0.4 },
+    { selector: '.wn-rose--tl', speed: -0.12, max: 40 },
+    { selector: '.wn-rose--br', speed: 0.12, max: 40 },
+    { selector: '.wn-garland', speed: -0.1 },
+    ...sectionLayers('rosas-noche'),
+];
+PARALLAX_BY_THEME['salvia-eucalipto'] = [
+    { selector: '.wh--salvia', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wg-corner--l', speed: 0.3 },
+    { selector: '.wg-corner--r', speed: 0.3 },
+    { selector: '.wg-hang--l', speed: -0.3 },
+    { selector: '.wg-hang--r', speed: -0.4 },
+    ...sectionLayers('salvia-eucalipto'),
+];
+PARALLAX_BY_THEME['malva-empolvado'] = [
+    { selector: '.wh--malva', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wm-hang--l', speed: 0.25 },
+    { selector: '.wm-hang--r', speed: -0.3 },
+    { selector: '.wm-flowers', speed: -0.12, max: 40 },
+    { selector: '.wm-bouquet', speed: -0.2 },
+    ...sectionLayers('malva-empolvado'),
+];
 
 export const PARALLAX_MAX_PX = 160;
