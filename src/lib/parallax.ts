@@ -272,5 +272,18 @@ PARALLAX_BY_THEME['malva-empolvado'] = [
     { selector: '.wm-bouquet', speed: -0.2 },
     ...sectionLayers('malva-empolvado'),
 ];
+PARALLAX_BY_THEME.dulcelandia = [
+    { selector: '.kh--dulcelandia', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.kh-l--castle', speed: 0.35 },
+    { selector: '.kh-l--dl-pop', speed: 0.2 },
+    { selector: '.kh-l--dl-c1', speed: -0.5 },
+    { selector: '.kh-l--dl-c2', speed: -0.35 },
+    { selector: '.kh-l--dl-c3', speed: -0.6 },
+    { selector: '.kh-l--dl-c4', speed: 0.45 },
+    { selector: '.kh-l--dl-ground', speed: -0.1 },
+    { selector: '.kh-l--dl-cupcake', speed: -0.2 },
+    { selector: '.kh-l--dl-bear', speed: -0.25 },
+    ...sectionLayers('dulcelandia'),
+];
 
 export const PARALLAX_MAX_PX = 160;

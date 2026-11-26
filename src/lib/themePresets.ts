@@ -700,6 +700,34 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F0E6E4',
         typographyPreset: 'romantica'
     },
+    'dulcelandia': {
+        label: 'Dulcelandia 3D',
+        desc: 'Mundo de dulces en 3D: castillo de betún, osito de gomita, paletas y galleta con moño, con parallax',
+        icon: '🍭',
+        primaryColor: '#E0528B',
+        accentColor: '#F0679B',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FFF6F8',
+        textPrimary: '#5B4057',
+        textSecondary: '#8D7189',
+        heroTextColor: '#E0528B',
+        heroBgColor: '#FDEEF5',
+        typographyPreset: 'divertida'
+    },
+    'tienda-dulces': {
+        label: 'Tienda de Dulces',
+        desc: 'Tienda de dulces 3D en lila: paletas, máquina de chicles, cupcake y frasco alrededor de la tarjeta',
+        icon: '🍬',
+        primaryColor: '#8F6AD6',
+        accentColor: '#EF5D93',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF7FF',
+        textPrimary: '#4F3F63',
+        textSecondary: '#7F6F93',
+        heroTextColor: '#8F6AD6',
+        heroBgColor: '#EFE6FB',
+        typographyPreset: 'divertida'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -830,6 +858,8 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Perritos', slug: 'cumple-perritos', icon: '🐶', plan: 'Pro', thumbnail: '/images/templates/perritos.jpg' },
     { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Mariposas', slug: 'cumple-mariposas', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/mariposas.jpg' },
     { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Globos 3D', slug: 'cumple-globos3d', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/globos3d.jpg' },
+    { id: 'dulcelandia', name: 'Dulcelandia 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dulces', slug: 'cumple-dulcelandia', icon: '🍭', plan: 'Pro', thumbnail: '/images/templates/dulcelandia.jpg' },
+    { id: 'tienda-dulces', name: 'Tienda de Dulces', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dulces', slug: 'cumple-tienda-dulces', icon: '🍬', plan: 'Clásica', thumbnail: '/images/templates/tienda-dulces.jpg' },
     { id: 'piloto', name: 'Pequeño Piloto', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Piloto', slug: 'cumple-piloto', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/piloto.jpg' },
     { id: 'babyshower', name: 'Baby Shower Nubes', category: 'baby_shower', categories: ['baby_shower'], categoryLabel: 'Baby Shower / Nubes', slug: 'baby-babyshower', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/babyshower.jpg' },
     { id: 'bomberos', name: 'Bomberos', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Bomberos', slug: 'cumple-bomberos', icon: '🚒', plan: 'Pro', thumbnail: '/images/templates/bomberos.jpg' },
@@ -946,7 +976,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;
