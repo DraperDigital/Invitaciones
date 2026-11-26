@@ -1,7 +1,8 @@
+import type React from 'react';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Edit2 } from 'lucide-react';
+import { Edit2, MapPin, CalendarHeart, Gift, MailCheck } from 'lucide-react';
 import { getHeroImageStyle } from '../../lib/heroImagePosition';
 import './WeddingLayered.css';
 
@@ -160,15 +161,113 @@ function SobreHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSectio
     );
 }
 
-export const WEDDING_LAYERED_THEMES = ['pase-abordar', 'sobre-marino'];
+function VinoHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    return (
+        <>
+            <img className="wh-l wv-curtain wv-curtain--l" src={P('vino', 'cortina')} alt="" aria-hidden="true" />
+            <img className="wh-l wv-curtain wv-curtain--r" src={P('vino', 'cortina')} alt="" aria-hidden="true" />
+            <img className="wh-l wv-pt wv-pt--1" src={P('vino', 'p-4')} alt="" aria-hidden="true" />
+            <img className="wh-l wv-pt wv-pt--2" src={P('vino', 'p-2')} alt="" aria-hidden="true" />
+            <img className="wh-l wv-pt wv-pt--3" src={P('vino', 'p-8')} alt="" aria-hidden="true" />
+            <img className="wh-l wv-pt wv-pt--4" src={P('vino', 'p-11')} alt="" aria-hidden="true" />
+            <div className="wh-inner">
+                <div className="wv-cover">
+                    <Photo cls="wh-photo wv-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+                    <img className="wh-l wv-roses" src={P('vino', 'esquina')} alt="" aria-hidden="true" />
+                    <div className="wv-cover-text">
+                        <p className="wv-kicker">{labels?.tagline || 'Nos casamos'}</p>
+                        <h1 className="wv-names">
+                            <span>{d.nameA}</span>
+                            {d.nameB && <><em>y</em><span>{d.nameB}</span></>}
+                        </h1>
+                        {d.date && <p className="wv-date">{format(d.date, 'dd · MM · yyyy')}</p>}
+                    </div>
+                </div>
+                <div className="wv-paper">
+                    <p className="wv-small">Con amor te invitamos a compartir con nosotros</p>
+                    <h2 className="wv-title">Un día.<br />Nuestra eternidad.</h2>
+                    {d.venue && <p className="wv-venue">{d.venue}{d.city ? ` · ${d.city}` : ''}</p>}
+                    {d.showCountdown && <Countdown countdown={countdown} title="Faltan" />}
+                    <button type="button" className="wh-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                    <img className="wh-l wv-garland" src={P('vino', 'guirnalda')} alt="" aria-hidden="true" />
+                </div>
+            </div>
+        </>
+    );
+}
+
+function AzulHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    const links = [
+        { id: 'location', l: 'Ubicación', I: MapPin },
+        { id: 'rsvp', l: 'Confirmar', I: MailCheck },
+        { id: 'itinerary', l: 'Itinerario', I: CalendarHeart },
+        { id: 'gifts', l: 'Regalos', I: Gift },
+    ];
+    const go = (id: string) => scrollToSection(document.getElementById(id) ? id : 'rsvp');
+    return (
+        <>
+            <img className="wh-l wa-corner wa-corner--tr" src={P('azul', 'esquina')} alt="" aria-hidden="true" />
+            <img className="wh-l wa-corner wa-corner--bl" src={P('azul', 'esquina')} alt="" aria-hidden="true" />
+            <div className="wh-inner">
+                <div className="wa-card">
+                    <div className="wa-top">
+                        <Photo cls="wh-photo wa-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+                        <img className="wh-l wa-photo-flowers" src={P('azul', 'esquina')} alt="" aria-hidden="true" />
+                        <div className="wa-seal" aria-hidden="true">
+                            <img src={P('azul', 'sello')} alt="" />
+                            <span>{d.initials.split('').join(' | ')}</span>
+                        </div>
+                    </div>
+                    <p className="wa-kicker">{labels?.tagline || 'Junto con sus familias'}</p>
+                    <h1 className="wa-names">
+                        <span>{d.nameA}</span>
+                        {d.nameB && <><em>y</em><span>{d.nameB}</span></>}
+                    </h1>
+                    <p className="wa-invite">Te invitan a celebrar su boda</p>
+                    <img className="wa-sprig" src={P('azul', 'ramita')} alt="" aria-hidden="true" />
+                    {d.date && (
+                        <div className="wa-date">
+                            <small>{format(d.date, 'EEEE', { locale: es })}</small>
+                            <div><span>{format(d.date, 'MMMM', { locale: es })}</span><b>{format(d.date, 'd')}</b><span>{format(d.date, 'yyyy')}</span></div>
+                            <small>{format(d.date, 'h:mm a')}</small>
+                        </div>
+                    )}
+                    {d.venue && <p className="wa-venue">{d.venue}</p>}
+                    {d.city && <p className="wa-city">{d.city}</p>}
+                    <div className="wa-links">
+                        {links.map(({ id, l, I }) => (
+                            <button key={id} type="button" onClick={() => go(id)}><i><I className="h-5 w-5" /></i><span>{l}</span></button>
+                        ))}
+                    </div>
+                    <p className="wa-wait">¡Te esperamos para celebrar!</p>
+                    <img className="wh-l wa-wash" src={P('azul', 'mancha')} alt="" aria-hidden="true" />
+                </div>
+                <div className="wh-side">
+                    <img className="wa-bouquet" src={P('azul', 'ramo')} alt="" aria-hidden="true" />
+                    {d.showCountdown && <Countdown countdown={countdown} title="Faltan" />}
+                </div>
+            </div>
+        </>
+    );
+}
+
+export const WEDDING_LAYERED_THEMES = ['pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela'];
 
 export default function WeddingLayeredHero(props: Props) {
     const [shown, setShown] = useState(false);
     useEffect(() => { const t = setTimeout(() => setShown(true), 120); return () => clearTimeout(t); }, []);
-    const isPase = props.theme === 'pase-abordar';
+    const variants: Record<string, [string, (p: Props) => React.ReactElement]> = {
+        'pase-abordar': ['wh--pase', PaseHero],
+        'sobre-marino': ['wh--sobre', SobreHero],
+        'terciopelo-vino': ['wh--vino', VinoHero],
+        'azul-acuarela': ['wh--azul', AzulHero],
+    };
+    const [cls, Comp] = variants[props.theme] || variants['sobre-marino'];
     return (
-        <section id="hero" className={`wh ${isPase ? 'wh--pase' : 'wh--sobre'} ${shown ? 'is-shown' : ''}`}>
-            {isPase ? <PaseHero {...props} /> : <SobreHero {...props} />}
+        <section id="hero" className={`wh ${cls} ${shown ? 'is-shown' : ''}`}>
+            <Comp {...props} />
         </section>
     );
 }
