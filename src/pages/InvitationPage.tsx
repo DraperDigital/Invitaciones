@@ -18,6 +18,7 @@ import VideoEnvelopeIntro from '../components/concierge/VideoEnvelopeIntro';
 import type { SectionId } from '../lib/sectionRegistry';
 import { trackEvent } from '../lib/analytics';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
+import { applyCategoryDemoOverlay } from '../lib/categoryDemoData';
 import ModernMinimalistHero from '../components/themes/ModernMinimalistHero';
 import InlineSectionEditor from '../components/InlineSectionEditor';
 import ClassicEleganceHero from '../components/themes/ClassicEleganceHero';
@@ -734,10 +735,11 @@ export default function InvitationPage() {
         }
     }, [event, guestName]);
 
+    const currentCategoryParam = searchParams.get('category');
     useEffect(() => {
         if (!slug) return;
         fetchEventAndGuest();
-    }, [slug, guestToken]);
+    }, [slug, guestToken, currentCategoryParam]);
 
     useEffect(() => {
         if (!event) return;
@@ -965,11 +967,17 @@ export default function InvitationPage() {
         const encodedSlug = encodeURIComponent(decodedSlug);
 
         const isWizardPreview = searchParams.get('wizard_preview') === '1';
+        const categoryParam = searchParams.get('category');
+
+        const prepareDemoEvent = (ev: Event): Event => {
+            const withWiz = applyWizardPreviewOverlay(ev);
+            return applyCategoryDemoOverlay(withWiz, categoryParam);
+        };
 
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
         if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-'))) {
-            setEvent(applyWizardPreviewOverlay(mockMatch));
+            setEvent(prepareDemoEvent(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
@@ -980,7 +988,7 @@ export default function InvitationPage() {
         }
 
         if (!import.meta.env.VITE_SUPABASE_URL) {
-            setEvent(mockMatch ? applyWizardPreviewOverlay(mockMatch) : null);
+            setEvent(mockMatch ? prepareDemoEvent(mockMatch) : null);
             if (guestToken && mockMatch) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                 setGuest(mockGuest || null);
@@ -1001,7 +1009,7 @@ export default function InvitationPage() {
             // FALLBACK TO MOCK_EVENTS FOR EXAMPLES SHOWCASE
             const mockEventFallback = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
             if (mockEventFallback) {
-                setEvent(applyWizardPreviewOverlay(mockEventFallback));
+                setEvent(prepareDemoEvent(mockEventFallback));
                 if (guestToken) {
                     const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
                     setGuest(mockGuest || null);
@@ -2697,6 +2705,7 @@ END:VCALENDAR`;
                 newParams.set('category', catId);
             }
             navigate(`?${newParams.toString()}`, { replace: true });
+            setEvent(prev => prev ? applyCategoryDemoOverlay(prev, catId) : prev);
         }
     };
 
