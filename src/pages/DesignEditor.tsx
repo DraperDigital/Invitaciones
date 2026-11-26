@@ -1085,6 +1085,7 @@ export default function DesignEditor() {
                             { id: 'sobre-marino', label: 'Sobre Azul Marino', desc: 'Sobre azul marino con sello de cera dorado, flores de papel navy y blancas y aro dorado, con parallax', icon: '💌' },
                             { id: 'terciopelo-vino', label: 'Terciopelo Vino', desc: 'Boda en vino: cortinas de terciopelo, rosas vino y blancas, papel rasgado y foto a sangre, con parallax', icon: '🥀' },
                             { id: 'azul-acuarela', label: 'Azul Acuarela', desc: 'Boda en acuarela azul polvo: flores pintadas, sello de cera azul y accesos rápidos con íconos, con parallax', icon: '💙' },
+                            { id: 'editorial-bn', label: 'Editorial B&N', desc: 'Boda editorial en blanco y negro: foto a sangre, tipografía de revista y secciones negras y blancas, con parallax', icon: '🖤' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },

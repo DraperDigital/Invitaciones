@@ -382,6 +382,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la pareja con el sello de cera encima.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'editorial-bn': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto a pantalla completa',
+        heroHelpText: 'Foto vertical de la pareja; se muestra en blanco y negro a toda la pantalla.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,
