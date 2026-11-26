@@ -11,7 +11,7 @@ import PhotoGallery from '../components/invitation/PhotoGallery';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
-import { buildSectionQueue, buildFullPlanQueue, normalizePlan, DEFAULT_SECTION_ORDER, SECTION_REGISTRY, getDefaultClosingMessage, isConciergePlan } from '../lib/sectionRegistry';
+import { buildSectionQueue, buildFullPlanQueue, normalizePlan, getLayoutForEventType, SECTION_REGISTRY, getDefaultClosingMessage, isConciergePlan } from '../lib/sectionRegistry';
 import VideoCoverHero from '../components/concierge/VideoCoverHero';
 import ParallaxLayers from '../components/ParallaxLayers';
 import VideoEnvelopeIntro from '../components/concierge/VideoEnvelopeIntro';
@@ -74,6 +74,7 @@ import ScrollReveal from '../components/invitation/ScrollReveal';
 export const DEMO_CATEGORIES = [
     { id: 'todas', name: 'Todas', emoji: '📂' },
     { id: 'navidad', name: 'Posadas / Navidad', emoji: '🎄' },
+    { id: 'fin_de_ano', name: 'Fin de Año', emoji: '🥂' },
     { id: 'boda', name: 'Bodas', emoji: '💍' },
     { id: 'xv', name: 'XV Años', emoji: '👑' },
     { id: 'baby_shower', name: 'Baby Shower', emoji: '🍼' },
@@ -1297,7 +1298,7 @@ export default function InvitationPage() {
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
         const isOfficialTemplateSlug = CANONICAL_TEMPLATES.some(t => t.slug === slug || t.slug === decodedSlug);
-        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || isOfficialTemplateSlug || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-') || slug?.startsWith('navidad-') || slug?.startsWith('posada-') || slug?.startsWith('graduacion-') || slug?.startsWith('baby-') || slug?.startsWith('gender-'))) {
+        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || isOfficialTemplateSlug || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-') || slug?.startsWith('navidad-') || slug?.startsWith('posada-') || slug?.startsWith('fin-') || slug?.startsWith('graduacion-') || slug?.startsWith('baby-') || slug?.startsWith('gender-'))) {
             setEvent(prepareDemoEvent(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
@@ -3066,9 +3067,10 @@ END:VCALENDAR`;
     // Portada y sobre en video: solo plan Concierge (y en los ejemplos públicos, como escaparate)
     const conciergeVideoAllowed = cfg.isConcierge === true || isConciergePlan(event?.plan) || isConciergePlan(cfg.plan) || isDemo;
 
-    const rawSavedOrder = (cfg.sectionOrder ?? DEFAULT_SECTION_ORDER) as SectionId[];
+    const defaultLayout = getLayoutForEventType(effectiveEventCategory);
+    const rawSavedOrder = (cfg.sectionOrder ?? defaultLayout) as SectionId[];
     const cleanSavedOrder = rawSavedOrder.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
-    const cleanDefaultOrder = DEFAULT_SECTION_ORDER.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
+    const cleanDefaultOrder = defaultLayout.filter(id => id !== 'hero' && id !== 'guest_welcome' && id !== 'footer');
     const reorderableSavedOrder = [
         ...cleanSavedOrder,
         ...cleanDefaultOrder.filter(id => !cleanSavedOrder.includes(id))

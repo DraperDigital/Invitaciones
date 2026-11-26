@@ -117,13 +117,13 @@ export default class ErrorBoundary extends Component<Props, State> {
             </a>
           </div>
 
-          {/* Technical detail (in dev mode) */}
-          {import.meta.env.DEV && this.state.error && (
-            <details className="text-left bg-slate-50 rounded-2xl p-4 text-xs text-slate-600 font-mono border border-slate-100">
+          {/* Technical detail */}
+          {this.state.error && (
+            <details className="text-left bg-slate-50 rounded-2xl p-4 text-xs text-slate-600 font-mono border border-slate-100 mt-4">
               <summary className="cursor-pointer font-sans font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2">
                 Detalle técnico
               </summary>
-              <pre className="whitespace-pre-wrap break-all text-[11px]">
+              <pre className="whitespace-pre-wrap break-all text-[11px] text-rose-600">
                 {this.state.error.message}
               </pre>
             </details>

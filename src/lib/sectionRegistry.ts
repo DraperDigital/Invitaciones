@@ -363,6 +363,8 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
 // ── Incompatibilidad de Secciones por Naturaleza de Evento ─────────────────
 export const INCOMPATIBLE_SECTIONS_BY_EVENT_TYPE: Record<string, SectionId[]> = {
   gender_reveal: ['chambelanes', 'itinerary', 'hotels'],
+  fin_de_ano: ['chambelanes'],
+  navidad: ['chambelanes'],
 };
 
 export const INCOMPATIBLE_SECTIONS_BY_THEME: Record<string, SectionId[]> = {

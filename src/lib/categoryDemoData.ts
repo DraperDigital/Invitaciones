@@ -402,6 +402,40 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
             enabled: false,
             description: '¡Tu presencia y compañía es nuestro mejor regalo navideño!'
         }
+    },
+    fin_de_ano: {
+        title: 'Cena de Fin de Año',
+        subtitle: 'BIENVENIDO 2027',
+        bannerTitle: 'Fin de Año',
+        eventType: 'fin_de_ano',
+        heroImageUrl: '/images/templates/brindis-oro.jpg',
+        welcomeMessage: 'Te invitamos a despedir el año con una noche llena de buenos deseos, una cena inolvidable y el tradicional brindis.',
+        venueName: 'Terraza Altavista',
+        venueAddress: 'León, Guanajuato',
+        mapsLink: 'https://maps.google.com/?q=Leon+Guanajuato',
+        dressCode: 'Formal / Rigurosa Etiqueta',
+        closingMessage: '¡Gracias por compartir este gran año con nosotros! ¡Feliz Año Nuevo!',
+        ceremony: {
+            name: 'Brindis de Bienvenida',
+            location: 'Terraza Principal',
+            time: '21:00'
+        },
+        reception: {
+            name: 'Gran Cena de Fin de Año',
+            location: 'Salón Candiles',
+            time: '22:00'
+        },
+        schedule: [
+            { time: '21:00', event: 'Cóctel y Brindis de Bienvenida 🥂', location: 'Terraza Principal' },
+            { time: '22:00', event: 'Cena de Gala a Cuatro Tiempos 🍽️', location: 'Salón Candiles' },
+            { time: '23:45', event: 'Campanadas y Las 12 Uvas de los Deseos 🍇', location: 'Terraza Panorámica' },
+            { time: '00:00', event: 'Gran Brindis de Año Nuevo 🍾', location: 'Terraza Panorámica' },
+            { time: '00:30', event: 'Apertura de Pista y Fiesta de Inicio de Año 🎷', location: 'Pista Central' }
+        ],
+        giftTable: {
+            enabled: false,
+            description: '¡El mejor regalo es recibir juntos el nuevo año!'
+        }
     }
 };
 
@@ -418,6 +452,7 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
 
     let normCat = requestedCategory.toLowerCase().trim();
     if (['posada', 'posadas', 'christmas'].includes(normCat)) normCat = 'navidad';
+    if (['fin_de_ano', 'fin de año', 'fin de ano', 'año nuevo', 'new year', 'nochevieja'].includes(normCat)) normCat = 'fin_de_ano';
 
     const profile = CATEGORY_DEMO_PROFILES[normCat];
     if (!profile) return baseEvent;
@@ -432,7 +467,8 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         (normCat === 'graduacion' && nativeType === 'graduacion') ||
         (normCat === 'gender_reveal' && nativeType === 'gender_reveal') ||
         (normCat === 'boda' && nativeType === 'wedding') ||
-        (normCat === 'navidad' && nativeType === 'navidad')
+        (normCat === 'navidad' && nativeType === 'navidad') ||
+        (normCat === 'fin_de_ano' && nativeType === 'fin_de_ano')
     )) {
         return baseEvent;
     }
