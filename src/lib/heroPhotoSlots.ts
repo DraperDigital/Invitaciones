@@ -364,6 +364,24 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la pareja; se muestra redonda dentro del aro.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'terciopelo-vino': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto a sangre',
+        heroHelpText: 'Foto de la pareja a lo ancho; el nombre va encima.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'azul-acuarela': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto arriba de la tarjeta',
+        heroHelpText: 'Foto de la pareja con el sello de cera encima.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

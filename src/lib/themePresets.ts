@@ -616,6 +616,34 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F2ECE0',
         typographyPreset: 'romantica'
     },
+    'terciopelo-vino': {
+        label: 'Terciopelo Vino',
+        desc: 'Boda en vino: cortinas de terciopelo, rosas vino y blancas, papel rasgado y foto a sangre, con parallax',
+        icon: '🥀',
+        primaryColor: '#6B1626',
+        accentColor: '#6B1626',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F6EFE6',
+        textPrimary: '#3A0D17',
+        textSecondary: '#6E4D55',
+        heroTextColor: '#6B1626',
+        heroBgColor: '#EFE4D8',
+        typographyPreset: 'romantica'
+    },
+    'azul-acuarela': {
+        label: 'Azul Acuarela',
+        desc: 'Boda en acuarela azul polvo: flores pintadas, sello de cera azul y accesos rápidos con íconos, con parallax',
+        icon: '💙',
+        primaryColor: '#5B7598',
+        accentColor: '#6F88AA',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF9F5',
+        textPrimary: '#2D3A52',
+        textSecondary: '#56647E',
+        heroTextColor: '#5B7598',
+        heroBgColor: '#F7F4EE',
+        typographyPreset: 'romantica'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -715,6 +743,8 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Pro', thumbnail: '/images/templates/anturio-vino.jpg' },
     { id: 'pase-abordar', name: 'Pase de Abordar', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Destino', slug: 'boda-pase-abordar', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/pase-abordar.jpg' },
     { id: 'sobre-marino', name: 'Sobre Azul Marino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Clásica', slug: 'boda-sobre-marino', icon: '💌', plan: 'Pro', thumbnail: '/images/templates/sobre-marino.jpg' },
+    { id: 'terciopelo-vino', name: 'Terciopelo Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-terciopelo-vino', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/terciopelo-vino.jpg' },
+    { id: 'azul-acuarela', name: 'Azul Acuarela', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Acuarela', slug: 'boda-azul-acuarela', icon: '💙', plan: 'Pro', thumbnail: '/images/templates/azul-acuarela.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
 
@@ -843,7 +873,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

@@ -412,6 +412,20 @@ export default function InvitationPage() {
             accentOverride: '#B8913F', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '14px',
         },
+        'terciopelo-vino': {
+            sectionBg: '#F6EFE6', sectionBgAlt: '#EFE4D8', cardBg: '#FFFFFF',
+            textPrimary: '#3A0D17', textSecondary: '#6E4D55',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#6B1626', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
+        'azul-acuarela': {
+            sectionBg: '#FBF9F5', sectionBgAlt: '#F7F4EE', cardBg: '#FFFFFF',
+            textPrimary: '#2D3A52', textSecondary: '#56647E',
+            borderColor: '#DDD3C6', cardBorder: '#DDD3C6',
+            accentOverride: '#6F88AA', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '10px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -2910,7 +2924,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino') {
+        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela') {
             return <WeddingLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {

@@ -219,5 +219,26 @@ PARALLAX_BY_THEME['sobre-marino'] = [
     { selector: '.ws-garland', speed: -0.1 },
     ...sectionLayers('sobre-marino'),
 ];
+PARALLAX_BY_THEME['terciopelo-vino'] = [
+    { selector: '.wh--vino', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wv-curtain--l', speed: 0.12 },
+    { selector: '.wv-curtain--r', speed: 0.12 },
+    { selector: '.wv-roses', speed: -0.2 },
+    { selector: '.wv-pt--1', speed: -0.5 },
+    { selector: '.wv-pt--2', speed: -0.35 },
+    { selector: '.wv-pt--3', speed: -0.6 },
+    { selector: '.wv-pt--4', speed: -0.4 },
+    { selector: '.wv-garland', speed: -0.08 },
+    ...sectionLayers('terciopelo-vino'),
+];
+PARALLAX_BY_THEME['azul-acuarela'] = [
+    { selector: '.wh--azul', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wa-corner--tr', speed: 0.3 },
+    { selector: '.wa-corner--bl', speed: -0.25 },
+    { selector: '.wa-photo-flowers', speed: -0.15 },
+    { selector: '.wa-wash', speed: 0.08 },
+    { selector: '.wa-bouquet', speed: -0.2 },
+    ...sectionLayers('azul-acuarela'),
+];
 
 export const PARALLAX_MAX_PX = 160;
