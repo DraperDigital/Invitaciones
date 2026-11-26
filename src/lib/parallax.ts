@@ -389,5 +389,18 @@ PARALLAX_BY_THEME['perlas-champana'] = [
     { selector: '.nv-l--pc-c4', speed: -0.6 },
     ...sectionLayers('perlas-champana'),
 ];
+PARALLAX_BY_THEME['dulce-espera'] = [
+    { selector: '.de-s3 .de-star-wrap', speed: 0.25, max: 60 },
+    { selector: '.de-angel-pray', speed: -0.12, max: 50 },
+    { selector: '.de-nat-star', speed: 0.3, max: 70 },
+    { selector: '.de-nat-angel', speed: 0.18, max: 60 },
+    { selector: '.de-nat-deer', speed: 0.1, max: 40 },
+    { selector: '.de-nat-lamb', speed: -0.08, max: 40 },
+    { selector: '.de-nat-dog', speed: -0.12, max: 40 },
+    { selector: '.de-nat-bunny', speed: -0.14, max: 40 },
+    { selector: '.de-nat-lantern', speed: -0.1, max: 40 },
+    { selector: '.de-pair', speed: -0.1, max: 40 },
+    ...sectionLayers('dulce-espera'),
+];
 
 export const PARALLAX_MAX_PX = 160;

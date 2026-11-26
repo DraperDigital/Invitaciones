@@ -37,6 +37,7 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
+import DulceEsperaHero from '../components/themes/DulceEsperaHero';
 import NavidadLayeredHero from '../components/themes/NavidadLayeredHero';
 import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
@@ -633,6 +634,13 @@ export default function InvitationPage() {
             borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
             accentOverride: '#9C2B2B', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '12px',
+        },
+        'dulce-espera': {
+            sectionBg: '#F8F1E5', sectionBgAlt: '#E3EBF4', cardBg: '#FFFAF1',
+            textPrimary: '#3D3129', textSecondary: '#6E5C4D',
+            borderColor: '#E4D3B2', cardBorder: '#E4D3B2',
+            accentOverride: '#B8863E', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '6px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -1298,7 +1306,7 @@ export default function InvitationPage() {
         // Fast-path: Check for mock demo events directly to load instantly without network latency
         const mockMatch = MOCK_EVENTS.find(e => e.slug === slug || e.slug === decodedSlug || e.slug === encodedSlug || e.id === slug || (slug?.includes('cecilia') && (e.slug === 'cecilia-70' || e.slug === 'cumpleaños-cecilia-h2657')));
         const isOfficialTemplateSlug = CANONICAL_TEMPLATES.some(t => t.slug === slug || t.slug === decodedSlug);
-        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || isOfficialTemplateSlug || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-') || slug?.startsWith('navidad-') || slug?.startsWith('posada-') || slug?.startsWith('fin-') || slug?.startsWith('graduacion-') || slug?.startsWith('baby-') || slug?.startsWith('gender-'))) {
+        if (mockMatch && (isWizardPreview || !import.meta.env.VITE_SUPABASE_URL || isOfficialTemplateSlug || slug?.endsWith('-premium') || slug?.endsWith('-pro') || slug?.startsWith('cumple-') || slug?.startsWith('boda-') || slug?.startsWith('xv-') || slug?.startsWith('bautizo-') || slug?.startsWith('navidad-') || slug?.startsWith('posada-') || slug?.startsWith('fin-') || slug?.startsWith('graduacion-') || slug?.startsWith('baby-') || slug?.startsWith('gender-') || slug?.startsWith('dulce-espera-'))) {
             setEvent(prepareDemoEvent(mockMatch));
             if (guestToken) {
                 const mockGuest = MOCK_GUESTS.find(g => g.guest_token === guestToken);
@@ -3166,6 +3174,9 @@ END:VCALENDAR`;
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
+        if (cfg.theme === 'dulce-espera') {
+            return <DulceEsperaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
         if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly' || cfg.theme === 'casita-nevada' || cfg.theme === 'brindis-oro' || cfg.theme === 'globos-champana' || cfg.theme === 'noche-disco' || cfg.theme === 'cena-gala' || cfg.theme === 'cierre-brillante' || cfg.theme === 'perlas-champana' || cfg.theme === 'soiree-deco' || cfg.theme === 'esmoquin' || cfg.theme === 'fuegos-plata' || cfg.theme === 'arco-dorado' || cfg.theme === 'brillo-oro' || cfg.theme === 'monos-rojos' || cfg.theme === 'mesa-nochevieja') {
             return <NavidadLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
@@ -4905,7 +4916,7 @@ END:VCALENDAR`;
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
-            {((cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
+            {(cfg.theme !== 'dulce-espera' && (cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
                 conciergeVideoAllowed && (cfg.envelope_video_url || cfg.envelopeVideoUrl) ? (
                     <VideoEnvelopeIntro key="envelope-screen" cfg={cfg} onOpen={() => setEnvelopeOpened(true)} />
                 ) :

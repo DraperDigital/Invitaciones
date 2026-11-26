@@ -643,6 +643,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
         fields: ['hero_image_url', 'heroImage']
     },
+    'dulce-espera': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo (opcional)',
+        heroHelpText: 'Foto de los papás; se muestra redonda junto a los datos.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

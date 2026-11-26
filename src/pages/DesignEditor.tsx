@@ -1120,9 +1120,13 @@ export default function DesignEditor() {
                             { id: 'collage', label: 'Collage Elegante', desc: 'Composición dinámica de fotos inolvidables y tonos tierra cálidos', icon: '🖼️' }
                         ];
 
+                        const privateUnlock = new URLSearchParams(window.location.search).get('tema');
+                        if (privateUnlock === 'dulce-espera' || privateUnlock === 'dulce-espera-matias' || config.theme === 'dulce-espera') {
+                            allTemplateItems.unshift({ id: 'dulce-espera', label: 'Dulce Espera · Matías (privada)', desc: 'Baby Posada de Matías: sobre que se abre, polvo de estrellas, nacimiento animado y música', icon: '⭐' });
+                        }
                         const displayedTemplates = templateViewFilter === 'all'
                             ? allTemplateItems
-                            : allTemplateItems.filter(item => categoryTemplates.some(ct => ct.id === item.id) || item.id === config.theme);
+                            : allTemplateItems.filter(item => categoryTemplates.some(ct => ct.id === item.id) || item.id === config.theme || item.id === 'dulce-espera');
 
                         return (
                             <div className="space-y-4">
