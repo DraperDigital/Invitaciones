@@ -12,8 +12,15 @@ export interface CategoryDemoProfile {
     mapsLink: string;
     dressCode: string;
     schedule: Array<{ time: string; event: string; location?: string }>;
-    parents?: string;
-    padrinos?: string;
+    parents?: {
+        father?: string;
+        mother?: string;
+        bride?: { father?: string; mother?: string };
+        groom?: { father?: string; mother?: string };
+    } | string;
+    padrinos?: Array<{ role: string; names: string }>;
+    chambelanes?: string[];
+    damas?: string[];
     closingMessage?: string;
     giftTable?: {
         enabled: boolean;
@@ -37,6 +44,54 @@ export interface CategoryDemoProfile {
 }
 
 export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
+    boda: {
+        title: 'Ana Sofía & Carlos Eduardo',
+        subtitle: 'NUESTRA BODA',
+        bannerTitle: 'Nuestra Boda',
+        eventType: 'wedding',
+        heroImageUrl: '/images/templates/moderna.jpg',
+        welcomeMessage: 'Con la bendición de Dios y de nuestros padres, tenemos el honor de invitarte a celebrar la unión de nuestras vidas.',
+        venueName: 'Hacienda San José',
+        venueAddress: 'Carretera Nacional Km 250, Santiago, N.L.',
+        mapsLink: 'https://maps.google.com/?q=Hacienda+San+Jose',
+        dressCode: 'Rigurosa Etiqueta / Smoking o Traje Oscuro',
+        parents: {
+            bride: { father: 'Roberto Villarreal', mother: 'Laura Mendoza' },
+            groom: { father: 'Carlos Martínez', mother: 'Patricia Morales' }
+        },
+        padrinos: [
+            { role: 'Padrinos de Velación', names: 'Fernando Garza & Mariana Silva' },
+            { role: 'Padrinos de Anillos', names: 'David Morales & Sofía Castillo' },
+            { role: 'Padrinos de Arras', names: 'Alejandro Ruiz & Carolina Sánchez' }
+        ],
+        closingMessage: 'Gracias por ser parte fundamental de nuestras vidas y por acompañarnos en el día más feliz de nuestro amor.',
+        ceremony: {
+            name: 'Parroquia del Sagrado Corazón de Jesús',
+            location: 'Zaragoza #450, Centro de Monterrey',
+            time: '18:00'
+        },
+        reception: {
+            name: 'Gran Recepción — Hacienda San José',
+            location: 'Carretera Nacional Km 250',
+            time: '20:00'
+        },
+        schedule: [
+            { time: '18:00', event: 'Ceremonia Religiosa ⛪', location: 'Parroquia del Sagrado Corazón' },
+            { time: '19:30', event: 'Cóctel de Bienvenida 🍸', location: 'Jardín Principal' },
+            { time: '21:00', event: 'Entrada de los Novios & Vals 🥂', location: 'Salón Candiles' },
+            { time: '21:30', event: 'Cena de Gala a Cuatro Tiempos 🍽️', location: 'Salón Candiles' },
+            { time: '23:00', event: 'Apertura de Pista & Fiesta 🎷', location: 'Pista Central' }
+        ],
+        giftTable: {
+            enabled: true,
+            description: 'Nuestro mejor regalo es compartir este momento contigo. Si deseas hacernos un presente:',
+            liverpoolCode: 'BODA-77441199',
+            amazonWishlist: 'https://amazon.com.mx/wedding/ana-y-carlos',
+            bank: 'BBVA',
+            clabe: '012180004567891234',
+            beneficiary: 'Ana Sofía Villarreal'
+        }
+    },
     xv: {
         title: 'Valeria Sofía',
         subtitle: 'MIS XV AÑOS',
@@ -48,8 +103,13 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Av. Paseo de las Palmas #850, Col. Lomas',
         mapsLink: 'https://maps.google.com/?q=Av.+Paseo+de+las+Palmas+850',
         dressCode: 'Rigurosa Etiqueta / Vestido Largo (Se reserva el color esmeralda para la festejada)',
-        parents: 'Mis Papás: Carlos Mendoza & Mariana Villarreal',
-        padrinos: 'Padrinos de Honor: Roberto Mendoza & Laura Villarreal',
+        parents: { father: 'Carlos Mendoza', mother: 'Mariana Villarreal' },
+        padrinos: [
+            { role: 'Padrinos de Honor', names: 'Roberto Mendoza & Laura Villarreal' },
+            { role: 'Padrinos de Brindis', names: 'Fernando Garza & Patricia Morales' }
+        ],
+        chambelanes: ['Santiago Ruiz (Chambelán de Honor)', 'Emiliano Torres', 'Mateo Castillo', 'Leonardo Vega'],
+        damas: ['Camila Flores (Dama de Honor)', 'Regina Morales', 'Ximena Garza', 'Renata Silva'],
         closingMessage: 'Gracias por ser parte fundamental de mi vida y celebrar conmigo una noche que guardaré por siempre en mi corazón.',
         ceremony: {
             name: 'Misa de Acción de Gracias — Parroquia San Juan Bautista',
@@ -88,8 +148,10 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Camino Real a Cholula #45',
         mapsLink: 'https://maps.google.com/?q=Hacienda+Los+Laureles',
         dressCode: 'Blanco / Guayabera o Vestido de Día',
-        parents: 'Mis Papás: David Morales & Sofía Castillo',
-        padrinos: 'Mis Padrinos: Alejandro Castillo & Carolina Ruiz',
+        parents: { father: 'David Morales', mother: 'Sofía Castillo' },
+        padrinos: [
+            { role: 'Padrinos de Bautizo', names: 'Alejandro Castillo & Carolina Ruiz' }
+        ],
         closingMessage: 'Gracias por bendecir el inicio de mi camino espiritual con tu cariño y compañía.',
         ceremony: {
             name: 'Ceremonia de Bautismo — Parroquia San Francisco',
@@ -126,7 +188,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Av. Manuel Gómez Morín #300, San Pedro',
         mapsLink: 'https://maps.google.com/?q=Av.+Manuel+Gomez+Morin+300',
         dressCode: 'Casual Elegante / Tonos Pastel',
-        parents: 'Futuros Papás: Daniel & Daniela',
+        parents: { father: 'Daniel Garza', mother: 'Daniela Flores' },
         closingMessage: 'Gracias por acompañarnos y colmar de amor y buenos deseos la llegada de Emma.',
         reception: {
             name: 'Celebración Baby Shower — Jardín Magnolia',
@@ -160,8 +222,10 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Calzada del Valle #800, Colonia del Valle',
         mapsLink: 'https://maps.google.com/?q=Calzada+del+Valle+800',
         dressCode: 'Formal / Guayabera o Traje Claro',
-        parents: 'Mis Papás: Fernando Ruiz & Patricia Morales',
-        padrinos: 'Mis Padrinos: Héctor Morales & Claudia Sánchez',
+        parents: { father: 'Fernando Ruiz', mother: 'Patricia Morales' },
+        padrinos: [
+            { role: 'Padrinos de Comunión', names: 'Héctor Morales & Claudia Sánchez' }
+        ],
         closingMessage: 'Gracias por ser testigo de mi primer encuentro con Jesús en la Eucaristía.',
         ceremony: {
             name: 'Misa de Primera Comunión — Templo de San Agustín',
@@ -261,7 +325,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Carretera Nacional Km 245, El Uro',
         mapsLink: 'https://maps.google.com/?q=Carretera+Nacional+Km+245',
         dressCode: 'Usa un detalle Azul o Rosa según tu predicción',
-        parents: 'Futuros Papás: Jorge & Andrea',
+        parents: { father: 'Jorge Fuentes', mother: 'Andrea Salinas' },
         closingMessage: 'Sea niño o niña, ya es inmensamente amado por todos nosotros. ¡Gracias por compartir este momento mágico!',
         reception: {
             name: 'Fiesta de Revelación — Quinta San Mateo',
@@ -293,7 +357,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
         venueAddress: 'Av. Eugenio Garza Sada #3200',
         mapsLink: 'https://maps.google.com/?q=Av.+Eugenio+Garza+Sada+3200',
         dressCode: 'Casual / Ropa cómoda para jugar',
-        parents: 'Mis Papás: Javier & Marcela',
+        parents: { father: 'Javier Morales', mother: 'Marcela Garza' },
         closingMessage: '¡Gracias por venir a mi fiesta y hacer mi cumpleaños tan especial!',
         reception: {
             name: 'Festejo Infantil — Aventura Kids',
@@ -316,7 +380,7 @@ export const CATEGORY_DEMO_PROFILES: Record<string, CategoryDemoProfile> = {
 /**
  * Aplica sobre un evento demo los datos contextuales de la categoría solicitada
  * cuando el usuario está navegando en el catálogo en una pestaña específica (ej. ?category=xv).
- * Si la plantilla ya pertenece nativamente a esa categoría, o si la categoría es 'todas' o 'boda',
+ * Si la plantilla ya pertenece nativamente a esa categoría, o si la categoría es 'todas' o 'auto',
  * el evento conserva su diseño y datos originales.
  */
 export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: string | null): Event {
@@ -336,7 +400,8 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         (normCat === 'baby_shower' && nativeType === 'baby_shower') ||
         (normCat === 'comunion' && nativeType === 'comunion') ||
         (normCat === 'graduacion' && nativeType === 'graduacion') ||
-        (normCat === 'gender_reveal' && nativeType === 'gender_reveal')
+        (normCat === 'gender_reveal' && nativeType === 'gender_reveal') ||
+        (normCat === 'boda' && nativeType === 'wedding')
     )) {
         return baseEvent;
     }
@@ -365,13 +430,36 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
         dressCode: profile.dressCode,
         schedule: profile.schedule,
         itinerary: profile.schedule,
-        parents: profile.parents,
-        padrinos: profile.padrinos,
         closing_message: profile.closingMessage,
         closingMessage: profile.closingMessage,
         venue_name: profile.venueName,
         venue_address: profile.venueAddress,
+        venueAddress: profile.venueAddress,
     };
+
+    if (profile.parents) {
+        updatedCfg.parents = profile.parents;
+    } else {
+        delete updatedCfg.parents;
+    }
+
+    if (profile.padrinos && profile.padrinos.length > 0) {
+        updatedCfg.padrinos = profile.padrinos;
+    } else {
+        delete updatedCfg.padrinos;
+    }
+
+    if (profile.chambelanes && profile.chambelanes.length > 0) {
+        updatedCfg.chambelanes = profile.chambelanes;
+    } else {
+        delete updatedCfg.chambelanes;
+    }
+
+    if (profile.damas && profile.damas.length > 0) {
+        updatedCfg.damas = profile.damas;
+    } else {
+        delete updatedCfg.damas;
+    }
 
     if (profile.heroImageUrl) {
         updatedCfg.hero_image_url = profile.heroImageUrl;
@@ -382,10 +470,28 @@ export function applyCategoryDemoOverlay(baseEvent: Event, requestedCategory?: s
 
     if (profile.ceremony) {
         updatedCfg.ceremony = profile.ceremony;
+        updatedCfg.misa_name = profile.ceremony.name;
+        updatedCfg.misa_address = profile.ceremony.location;
+        updatedCfg.misa_time = profile.ceremony.time;
+    } else {
+        delete updatedCfg.ceremony;
+        delete updatedCfg.misa_name;
+        delete updatedCfg.misa_address;
+        delete updatedCfg.misa_time;
     }
+
     if (profile.reception) {
         updatedCfg.reception = profile.reception;
+        updatedCfg.fiesta_name = profile.reception.name;
+        updatedCfg.fiesta_address = profile.reception.location;
+        updatedCfg.fiesta_time = profile.reception.time;
+    } else {
+        delete updatedCfg.reception;
+        delete updatedCfg.fiesta_name;
+        delete updatedCfg.fiesta_address;
+        delete updatedCfg.fiesta_time;
     }
+
     if (profile.giftTable) {
         updatedCfg.gift_table = {
             ...(baseCfg.gift_table || {}),

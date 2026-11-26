@@ -3402,7 +3402,7 @@ END:VCALENDAR`;
 
     const renderItinerary = () => {
         if ((effectiveEventCategory === 'gender_reveal' && cfg.theme !== 'cinematic-motion') || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
-        const items = (cfg?.itinerary?.length > 0 ? cfg.itinerary : cfg?.schedule) || [];
+        const items = (Array.isArray(cfg?.itinerary) && cfg.itinerary.length > 0 ? cfg.itinerary : (Array.isArray(cfg?.schedule) ? cfg.schedule : []));
         if (items.length === 0) return null;
         
         const itineraryAccentColor = isMonochromeTheme ? '#FFFFFF' : accentColor;
@@ -3822,8 +3822,9 @@ END:VCALENDAR`;
             || cfg?.giftRegistry?.options 
             || cfg?.gift_registry?.options 
             || [];
+        const safeRegistryOptions = Array.isArray(rawRegistryOptions) ? rawRegistryOptions : [];
 
-        const storeItems = rawRegistryOptions
+        const storeItems = safeRegistryOptions
             .map((item: any) => ({
                 store: item.store || item.type || item.name || 'Mesa de Regalos',
                 link: item.link || item.url || '',
@@ -3928,25 +3929,41 @@ END:VCALENDAR`;
 
     const renderChambelanes = () => {
         if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
-        const hasChambelanes = cfg.chambelanes && cfg.chambelanes.length > 0;
-        const hasDamas = cfg.damas && cfg.damas.length > 0;
-        const hasPadrinos = cfg.padrinos && cfg.padrinos.length > 0;
+        const chambelanesList = Array.isArray(cfg.chambelanes) ? cfg.chambelanes : [];
+        const damasList = Array.isArray(cfg.damas) ? cfg.damas : [];
+        const padrinosList = Array.isArray(cfg.padrinos)
+            ? cfg.padrinos
+            : (typeof cfg.padrinos === 'string' && cfg.padrinos.trim().length > 0)
+                ? [{ role: 'Padrinos de Honor', names: cfg.padrinos.replace(/^Padrinos(?: de Honor)?:\s*/i, '').replace(/^Mis Padrinos:\s*/i, '') }]
+                : [];
+
+        const hasChambelanes = chambelanesList.length > 0;
+        const hasDamas = damasList.length > 0;
+        const hasPadrinos = padrinosList.length > 0;
         const hasParents = !!cfg.parents;
 
         if (!hasChambelanes && !hasDamas && !hasPadrinos && !hasParents) return null;
+
+        const parentsTitle = (effectiveEventCategory === 'xv' || effectiveEventCategory === 'bautizo' || effectiveEventCategory === 'comunion')
+            ? 'Mis Padres'
+            : 'Nuestros Padres';
 
         return (
             <section id="chambelanes" key="chambelanes" className="py-24 bg-[var(--section-bg)]">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h3 className="text-4xl sm:text-5xl font-serif font-light text-[var(--text-primary)] mb-4">Corte de Honor</h3>
-                        <p className="text-[var(--text-secondary)]">Mis acompañantes especiales</p>
+                        <p className="text-[var(--text-secondary)]">Acompañantes especiales</p>
                     </div>
 
                     {hasParents && (
                         <div className="mb-16">
-                            <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Nuestros Padres</h4>
-                            {cfg.parents.bride || cfg.parents.groom ? (
+                            <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">{parentsTitle}</h4>
+                            {typeof cfg.parents === 'string' ? (
+                                <div className="max-w-md mx-auto bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                    <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents}</p>
+                                </div>
+                            ) : (cfg.parents?.bride || cfg.parents?.groom) ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     {cfg.parents.bride && (
                                         <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
@@ -3965,8 +3982,8 @@ END:VCALENDAR`;
                                 </div>
                             ) : (
                                 <div className="max-w-md mx-auto bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
-                                    {cfg.parents.father && <p className="text-lg font-serif text-[var(--text-primary)] mb-2">{cfg.parents.father}</p>}
-                                    {cfg.parents.mother && <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents.mother}</p>}
+                                    {cfg.parents?.father && <p className="text-lg font-serif text-[var(--text-primary)] mb-2">{cfg.parents.father}</p>}
+                                    {cfg.parents?.mother && <p className="text-lg font-serif text-[var(--text-primary)]">{cfg.parents.mother}</p>}
                                 </div>
                             )}
                         </div>
@@ -3977,9 +3994,9 @@ END:VCALENDAR`;
                             <div>
                                 <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Chambelanes</h4>
                                 <div className="space-y-4">
-                                    {cfg.chambelanes.map((name: string, idx: number) => (
+                                    {chambelanesList.map((name: any, idx: number) => (
                                         <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-4 text-center">
-                                            <p className="text-lg text-[var(--text-primary)]">{name}</p>
+                                            <p className="text-lg text-[var(--text-primary)]">{typeof name === 'string' ? name : name?.name || String(name)}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -3989,9 +4006,9 @@ END:VCALENDAR`;
                             <div>
                                 <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Damas</h4>
                                 <div className="space-y-4">
-                                    {cfg.damas.map((name: string, idx: number) => (
+                                    {damasList.map((name: any, idx: number) => (
                                         <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-4 text-center">
-                                            <p className="text-lg text-[var(--text-primary)]">{name}</p>
+                                            <p className="text-lg text-[var(--text-primary)]">{typeof name === 'string' ? name : name?.name || String(name)}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -4001,12 +4018,16 @@ END:VCALENDAR`;
                             <div className={hasChambelanes || hasDamas ? 'md:col-span-2' : ''}>
                                 <h4 className="text-2xl font-serif text-center mb-8 text-[var(--text-primary)]">Padrinos</h4>
                                 <div className="invitation-chambelanes-grid grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {cfg.padrinos.map((padrino: {role: string, names: string}, idx: number) => (
-                                        <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
-                                            <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-2 font-bold" style={{color: accentColor}}>{padrino.role}</p>
-                                            <p className="text-lg font-serif text-[var(--text-primary)]">{padrino.names}</p>
-                                        </div>
-                                    ))}
+                                    {padrinosList.map((padrino: any, idx: number) => {
+                                        const role = (typeof padrino === 'object' && padrino?.role) ? padrino.role : 'Padrinos';
+                                        const names = (typeof padrino === 'object' && padrino?.names) ? padrino.names : String(padrino || '');
+                                        return (
+                                            <div key={idx} className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-xl p-6 text-center">
+                                                <p className="text-sm uppercase tracking-wider text-[var(--text-secondary)] mb-2 font-bold" style={{color: accentColor}}>{role}</p>
+                                                <p className="text-lg font-serif text-[var(--text-primary)]">{names}</p>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -4018,7 +4039,8 @@ END:VCALENDAR`;
 
     const renderAccommodation = () => {
         if (effectiveEventCategory === 'gender_reveal' || cfg.theme === 'reveal-bw' || cfg.theme === 'reveal-duo') return null;
-        const hotelList = cfg.hotels || cfg.accommodations?.hotels || [];
+        const rawHotelList = cfg.hotels || cfg.accommodations?.hotels || [];
+        const hotelList = Array.isArray(rawHotelList) ? rawHotelList : [];
         if (hotelList.length === 0) return null;
 
         return (
