@@ -328,3 +328,4 @@
 .de .de-nat-angel { bottom: 16%; }
 .de .de-nat-deer { bottom: 18%; }
 .de .de-s3 .de-name { margin-top: -.05em; }
+.de .de-nat-angel { transform: scaleX(-1); } /* mira hacia el pesebre */
