@@ -2305,6 +2305,8 @@ export const MOCK_EVENTS: Event[] = [
             gift_message: 'Tu presencia es nuestro mejor regalo.',
             showCountdown: true,
             showEnvelope: false,
+            showGifts: false,
+            show_gifts: false,
             show_closing_message: true,
             closing_message: 'Nos hará muy felices compartir esta alegría con ustedes. ¡Los esperamos!',
         },
