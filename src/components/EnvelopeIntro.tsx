@@ -306,6 +306,8 @@ export default function EnvelopeIntro({
         'policias': '#44597A',
         'hadas': '#E9837C',
         'hadita': '#E08AA8',
+        'pase-abordar': '#0F1E3A',
+        'sobre-marino': '#B8913F',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

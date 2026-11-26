@@ -36,6 +36,7 @@ import GamerPartyHero from '../components/themes/GamerPartyHero';
 import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
+import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
 import KidsLayeredHero from '../components/themes/KidsLayeredHero';
 import ArcoirisHero from '../components/themes/ArcoirisHero';
@@ -396,6 +397,20 @@ export default function InvitationPage() {
             borderColor: '#F4DCDF', cardBorder: '#F4DCDF',
             accentOverride: '#E08AA8', fontPreset: 'romantica',
             heroRadius: '30px', cardRadius: '30px',
+        },
+        'pase-abordar': {
+            sectionBg: '#F3EEE4', sectionBgAlt: '#EBE4D6', cardBg: '#FFFFFF',
+            textPrimary: '#1B2742', textSecondary: '#4F5A72',
+            borderColor: '#D9D0BF', cardBorder: '#D9D0BF',
+            accentOverride: '#0F1E3A', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '14px',
+        },
+        'sobre-marino': {
+            sectionBg: '#FBF8F2', sectionBgAlt: '#F2ECE0', cardBg: '#FFFFFF',
+            textPrimary: '#13213F', textSecondary: '#4B5670',
+            borderColor: '#D9D0BF', cardBorder: '#D9D0BF',
+            accentOverride: '#B8913F', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '14px',
         },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
@@ -2894,6 +2909,9 @@ END:VCALENDAR`;
         }
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
+        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino') {
+            return <WeddingLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {
             return <AnturioVinoHero key="hero" event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;

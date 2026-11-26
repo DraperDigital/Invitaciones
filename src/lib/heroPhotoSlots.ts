@@ -346,6 +346,24 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto del festejado; se muestra redonda.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'pase-abordar': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Foto junto al boleto',
+        heroHelpText: 'Foto de la pareja junto al pase de abordar.',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'sobre-marino': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto dentro del aro dorado',
+        heroHelpText: 'Foto de la pareja; se muestra redonda dentro del aro.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

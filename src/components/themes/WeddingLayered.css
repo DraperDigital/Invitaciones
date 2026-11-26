@@ -1,0 +1,258 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Bodas por capas (parallax): Pase de Abordar y Sobre Azul Marino.
+   Portada (.wh) + piel de módulos. Los módulos usan KidsPastel.css
+   (variables --kp-*); aquí se ajusta a un tono de boda: esquinas finas,
+   títulos serif en versalitas o caligrafía.
+   Capas con parallax: NO usar `transform` en ellas (ver parallax.ts).
+   ────────────────────────────────────────────────────────────────────── */
+
+.wh {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  background: var(--wh-bg-color);
+  font-family: var(--wh-text);
+  color: var(--wh-ink);
+  isolation: isolate;
+}
+.wh::before {
+  content: '';
+  position: absolute;
+  inset: -90px 0;
+  z-index: -1;
+  background: var(--wh-bg-img) center / cover no-repeat;
+  translate: 0 var(--py-bg, 0px);
+  opacity: var(--wh-bg-op, 1);
+}
+.wh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--wh-veil, transparent);
+  pointer-events: none;
+}
+.wh-l { position: absolute; pointer-events: none; z-index: 1; user-select: none; }
+.wh-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: var(--wh-pad, 54px 18px 150px);
+  opacity: 0;
+  translate: 0 18px;
+  transition: opacity .9s ease, translate .9s ease;
+}
+.wh.is-shown .wh-inner { opacity: 1; translate: 0 0; }
+.wh-side { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; max-width: 360px; }
+
+.wh-photo { position: relative; overflow: hidden; cursor: default; }
+.wh-photo.is-editable { cursor: pointer; }
+.wh-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wh-photo-empty { width: 100%; height: 100%; background: linear-gradient(135deg, #d9d4cb, #b9b2a6); }
+.wh-edit { position: absolute; left: 50%; bottom: 12px; translate: -50% 0; display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; white-space: nowrap; }
+
+.wh-count { width: 100%; text-align: center; padding: 14px 12px 16px; background: var(--wh-count-bg); color: var(--wh-ink); border-radius: var(--wh-radius, 14px); box-shadow: var(--wh-count-shadow, none); }
+.wh-count-title { font-family: var(--wh-title); font-size: 1.25rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; color: var(--wh-accent); }
+.wh-count-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+.wh-count-grid div + div { border-left: 1px solid var(--wh-line); }
+.wh .wh-count-grid b { display: block; font-family: var(--wh-title) !important; font-weight: 500; font-size: 2rem; line-height: 1; }
+.wh-count-grid small { display: block; margin-top: 4px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.wh-btn {
+  padding: 13px 28px;
+  border-radius: var(--wh-btn-radius, 4px);
+  background: var(--wh-btn); color: var(--wh-btn-ink);
+  font-family: var(--wh-text); font-size: 12px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase;
+  box-shadow: 0 14px 26px -16px rgba(0,0,0,.6);
+}
+
+@keyframes wh-drift { 0%, 100% { translate: 0 0; rotate: -2deg; } 50% { translate: 0 -10px; rotate: 2deg; } }
+@keyframes wh-fly { 0% { translate: -6vw 0; } 50% { translate: 4vw -14px; } 100% { translate: -6vw 0; } }
+
+/* ═════════════════════════ PASE DE ABORDAR ═════════════════════════ */
+.wh--pase {
+  --wh-bg-color: #0f1e3a; --wh-bg-img: url('/images/themes/boleto/fondo.webp');
+  --wh-veil: linear-gradient(180deg, rgba(15,30,58,.55), rgba(15,30,58,.82) 70%, rgba(15,30,58,.95));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #1b2742; --wh-accent: #0f1e3a; --wh-line: rgba(15,30,58,.2);
+  --wh-count-bg: #f3eee4; --wh-btn: #f3eee4; --wh-btn-ink: #0f1e3a;
+  --wh-paper: #f3eee4;
+  --wh-pad: 40px 18px 170px;
+}
+.wh--pase::before { filter: grayscale(1); }
+.wp-path { top: 0; left: 0; width: 100%; height: 100%; color: rgba(243,238,228,.55); z-index: 1; }
+.wp-plane { top: 70px; right: -40px; width: min(44vw, 200px); opacity: .95; filter: drop-shadow(0 10px 14px rgba(0,0,0,.35)); animation: wh-fly 14s ease-in-out infinite; z-index: 3; }
+.wp-clouds { bottom: -26px; left: 50%; width: min(220vw, 1100px); margin-left: calc(min(220vw, 1100px) / -2); z-index: 3; opacity: .97; }
+
+/* Boleto con muescas a los lados y bordes troquelados */
+.wp-ticket {
+  --notch: 16px;
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 26px 24px 22px;
+  background: var(--wh-paper);
+  text-align: center;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 62%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 62%, #0000 97%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle var(--notch) at 0 62%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 62%, #0000 97%, #000) right / 51% 100% no-repeat;
+  filter: drop-shadow(0 26px 30px rgba(0,0,0,.45));
+}
+.wp-ticket::before, .wp-ticket::after {
+  content: ''; position: absolute; left: 0; right: 0; height: 8px;
+  background: radial-gradient(circle 4px at 6px 50%, #0f1e3a 96%, transparent) 0 0 / 12px 8px repeat-x;
+}
+.wp-ticket::before { top: -4px; }
+.wp-ticket::after { bottom: -4px; }
+.wp-side { position: absolute; left: 8px; top: 140px; writing-mode: vertical-rl; rotate: 180deg; font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: #1b2742; opacity: .75; }
+.wp-kicker { font-size: 10px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px dashed rgba(15,30,58,.35); }
+.wp-globe { width: 104px; margin: 14px auto 6px; animation: wh-drift 9s ease-in-out infinite; }
+.wh .wp-names { font-family: 'Cormorant Garamond', Georgia, serif !important; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: #0f1e3a; line-height: 1; }
+.wp-names span { display: block; font-size: clamp(2.3rem, 11vw, 2.9rem); }
+.wh .wp-names em { display: block; font-family: 'Pinyon Script', cursive !important; text-transform: none; font-size: 1.7rem; letter-spacing: 0; margin: 2px 0 4px; color: #45506a; }
+.wp-grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 18px; border: 1px solid rgba(15,30,58,.35); text-align: left; }
+.wp-grid div { padding: 8px 10px; }
+.wp-grid div:nth-child(odd) { border-right: 1px solid rgba(15,30,58,.35); }
+.wp-grid div:nth-child(-n+2) { border-bottom: 1px solid rgba(15,30,58,.35); }
+.wp-grid small { display: block; font-size: 8.5px; letter-spacing: .2em; text-transform: uppercase; opacity: .65; }
+.wp-grid b { display: block; margin-top: 3px; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #0f1e3a; line-height: 1.25; }
+.wp-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+.wp-stamp img { width: 132px; opacity: .9; rotate: -8deg; }
+.wp-sign { font-family: 'Pinyon Script', cursive; font-size: 2rem; color: #34405c; padding-right: 6px; }
+.wp-boarding { margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(15,30,58,.35); font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
+.wp-photo { width: 100%; aspect-ratio: 4 / 3.4; border-radius: 16px; border: 6px solid var(--wh-paper); box-shadow: 0 24px 34px -20px rgba(0,0,0,.6); }
+.wp-photo img { filter: grayscale(.15); }
+.wh--pase .wh-count { border-radius: 14px; }
+.wh--pase .wh-count-title { font-size: 1.1rem; }
+
+/* ═════════════════════════ SOBRE AZUL MARINO ═════════════════════════ */
+.wh--sobre {
+  --wh-bg-color: #0d1730; --wh-bg-img: url('/images/themes/sobre/fondo.webp');
+  --wh-veil: radial-gradient(ellipse at 50% 40%, rgba(13,23,48,.15), rgba(9,15,32,.55));
+  --wh-title: 'Cormorant Garamond', Georgia, serif; --wh-text: 'Montserrat', sans-serif;
+  --wh-ink: #13213f; --wh-accent: #b8913f; --wh-line: rgba(184,145,63,.35);
+  --wh-count-bg: rgba(251,248,242,.96); --wh-btn: #b8913f; --wh-btn-ink: #fff; --wh-btn-radius: 999px;
+  --wh-pad: 70px 16px 140px;
+}
+.wh--sobre::before { background-size: 560px auto; background-repeat: repeat; }
+.ws-corner { width: min(64vw, 300px); filter: drop-shadow(0 16px 20px rgba(0,0,0,.45)); z-index: 3; }
+.ws-corner--tl { top: -26px; left: -40px; }
+.ws-corner--br { bottom: 120px; right: -44px; rotate: 180deg; }
+.ws-f { width: 46px; filter: drop-shadow(0 8px 10px rgba(0,0,0,.4)); animation: wh-drift 7s ease-in-out infinite; z-index: 3; }
+.ws-f--1 { top: 30%; right: 6px; width: 58px; }
+.ws-f--2 { top: 46%; left: 4px; animation-delay: -2s; }
+.ws-f--3 { top: 6%; right: 8%; width: 34px; animation-delay: -4s; }
+.ws-f--4 { top: 64%; left: 10%; width: 40px; animation-delay: -1s; }
+.ws-f--5 { top: 78%; right: 14%; width: 30px; animation-delay: -3s; }
+.ws-garland { bottom: 34px; left: 50%; width: min(120vw, 560px); margin-left: calc(min(120vw, 560px) / -2); filter: drop-shadow(0 14px 16px rgba(0,0,0,.45)); z-index: 3; }
+
+.ws-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 34px 22px 26px;
+  background: #fbf8f2;
+  border-radius: 180px 180px 18px 18px;
+  text-align: center;
+  box-shadow: 0 0 0 1px rgba(184,145,63,.5), 0 0 0 7px #fbf8f2, 0 0 0 8px rgba(184,145,63,.55), 0 34px 50px -26px rgba(0,0,0,.7);
+}
+.ws-kicker { margin-top: 26px; font-size: 10px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; color: #13213f; }
+.wh .ws-names { font-family: 'Pinyon Script', cursive !important; font-weight: 400; color: #13213f; line-height: 1.02; margin-top: 6px; }
+.ws-names span { display: block; font-size: clamp(2.9rem, 14vw, 3.6rem); }
+.wh .ws-names em { display: block; font-family: 'Cormorant Garamond', serif !important; font-style: italic; font-size: 2.2rem; line-height: 1.1; color: #b8913f; }
+.ws-heart { color: #b8913f; font-size: 12px; letter-spacing: 1em; margin: 6px 0 14px; }
+.ws-heart::before, .ws-heart::after { content: ''; display: inline-block; width: 46px; height: 1px; background: rgba(184,145,63,.6); vertical-align: middle; margin: 0 10px; }
+.ws-envelope { position: relative; width: 92%; margin: 0 auto; }
+.ws-envelope img { width: 100%; display: block; filter: drop-shadow(0 16px 18px rgba(13,23,48,.35)); }
+.ws-initials { position: absolute; left: 47.3%; top: 48.6%; translate: -50% -50%; font-family: 'Pinyon Script', cursive; font-size: clamp(1.3rem, 6vw, 1.7rem); color: #7a5a1c; text-shadow: 0 1px 0 rgba(255,236,180,.7); letter-spacing: -.02em; }
+.ws-env-text { position: absolute; left: 0; right: 0; top: 12%; font-family: var(--wh-title); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: #e9e2d2; line-height: 1.5; display: none; }
+.ws-date { margin-top: 18px; display: flex; flex-direction: column; align-items: center; color: #13213f; }
+.ws-date small { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; }
+.ws-date b { font-family: var(--wh-title); font-weight: 400; font-size: 4rem; line-height: 1; color: #b8913f; }
+.ws-date > span { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+.ws-date em { margin-top: 10px; font-family: 'Pinyon Script', cursive; font-style: normal; font-size: 1.6rem; }
+.ws-hoop { position: relative; width: min(78vw, 300px); aspect-ratio: 708 / 636; }
+.ws-photo { position: absolute; left: 6%; top: 2%; width: 86%; height: 95.8%; border-radius: 50%; }
+.ws-hoop-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 12px 14px rgba(0,0,0,.4)); }
+.wh--sobre .wh-count { border-radius: 16px; box-shadow: 0 0 0 1px rgba(184,145,63,.5); }
+.wh--sobre .wh-count-title { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: 1.8rem; margin-bottom: 4px; }
+
+/* ── Escritorio ── */
+@media (min-width: 900px) {
+  .wh-inner { flex-direction: row; justify-content: center; align-items: center; gap: 56px; padding: var(--wh-pad-d, 70px 48px 190px); min-height: 100svh; }
+  .wh-side { max-width: 380px; }
+  .wp-ticket, .ws-card { max-width: 400px; }
+  .wp-plane { width: 280px; right: 6%; top: 50px; }
+  .wp-clouds { width: 112%; left: -6%; margin-left: 0; bottom: -70px; }
+  .wh--pase { --wh-pad-d: 60px 48px 260px; }
+  .ws-corner { width: 380px; }
+  .ws-corner--br { bottom: 40px; }
+  .ws-garland { width: 560px; margin-left: -280px; bottom: 6px; }
+  .wh--sobre { --wh-pad-d: 70px 48px 210px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wh * { animation: none !important; }
+}
+
+/* ═════════════════════ MÓDULOS (sobre KidsPastel) ═════════════════════ */
+.theme-pase-abordar {
+  --kp-bg: #f3eee4; --kp-alt: #ebe4d6;
+  --kp-title-font: 'Cormorant Garamond', Georgia, serif; --kp-title-weight: 500; --kp-title-size: clamp(1.9rem, 8vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #0f1e3a; --kp-ink: #1b2742; --kp-soft: #4f5a72; --kp-accent: #0f1e3a;
+  --kp-btn: #0f1e3a; --kp-btn-ink: #f3eee4; --kp-card-border: rgba(15,30,58,.25); --kp-icon-bg: #e4ddcf; --kp-icon: #0f1e3a;
+  --kp-shadow: rgba(15, 30, 58, .35);
+  --kp-title-deco: url('/images/themes/boleto/avion.webp');
+  --kp-art-message: url('/images/themes/boleto/globo.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 150px;
+  --kp-art-location: url('/images/themes/boleto/sello.webp'); --kp-art-location-w: 160px; --kp-art-location-h: 126px;
+  --kp-art-gifts: url('/images/themes/boleto/maleta.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 124px;
+  --kp-art-rsvp: url('/images/themes/boleto/avion.webp'); --kp-art-rsvp-w: 220px; --kp-art-rsvp-h: 80px;
+  --kp-rsvp-bg: #0f1e3a;
+  --kp-closing-bg: linear-gradient(rgba(15,30,58,.82), rgba(15,30,58,.92)), url('/images/themes/boleto/fondo.webp') center / cover;
+  --kp-art-closing: url('/images/themes/boleto/globo.webp'); --kp-closing-title: #f3eee4; --kp-closing-text: #d8d2c4;
+}
+.theme-sobre-marino {
+  --kp-bg: #fbf8f2; --kp-alt: #f2ece0;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #13213f; --kp-ink: #13213f; --kp-soft: #4b5670; --kp-accent: #b8913f;
+  --kp-btn: #13213f; --kp-btn-ink: #fbf8f2; --kp-card-border: rgba(184,145,63,.45); --kp-icon-bg: #efe7d6; --kp-icon: #13213f;
+  --kp-shadow: rgba(19, 33, 63, .35);
+  --kp-title-deco: url('/images/themes/sobre/sello.webp');
+  --kp-art-message: url('/images/themes/sobre/guirnalda.webp'); --kp-art-message-w: 300px; --kp-art-message-h: 110px;
+  --kp-art-location: url('/images/themes/sobre/aro.webp'); --kp-art-location-w: 150px; --kp-art-location-h: 134px;
+  --kp-art-gifts: url('/images/themes/sobre/sobre.webp'); --kp-art-gifts-w: 190px; --kp-art-gifts-h: 136px;
+  --kp-art-rsvp: url('/images/themes/sobre/sello.webp'); --kp-art-rsvp-w: 86px; --kp-art-rsvp-h: 86px;
+  --kp-rsvp-bg: linear-gradient(rgba(13,23,48,.78), rgba(13,23,48,.86)), url('/images/themes/sobre/fondo.webp') center / 560px auto;
+  --kp-closing-bg: linear-gradient(rgba(13,23,48,.7), rgba(13,23,48,.85)), url('/images/themes/sobre/fondo.webp') center / 560px auto;
+  --kp-art-closing: url('/images/themes/sobre/esquina.webp'); --kp-closing-title: #f1e6c8; --kp-closing-text: #d9d4c8;
+}
+/* Tono de boda: menos redondeo, títulos con aire */
+:is(.theme-pase-abordar, .theme-sobre-marino) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 14px !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { border-radius: 4px !important; letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section :is(input, textarea, select) { border-radius: 6px !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) #gallery img { border-radius: 10px !important; border-width: 5px; }
+:is(.theme-pase-abordar, .theme-sobre-marino) .invitation-content section#rsvp { border-radius: 0; }
+.theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .1em !important; }
+.theme-pase-abordar :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 60px; height: 24px; }
+.theme-sobre-marino :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 30px; height: 30px; }
+/* Tarjetas de boleto con muescas en el Pase */
+.theme-pase-abordar section:not(#hero) [class*="bg-[var(--card-bg)]"]:not([class*="bg-[var(--card-bg)]"] [class*="bg-[var(--card-bg)]"]) {
+  background: #fbf8f1 !important;
+  -webkit-mask: radial-gradient(circle 12px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle 12px at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat, radial-gradient(circle 12px at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+/* Confirmación y pie oscuros */
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(h2, h3) { color: #f3eee4 !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(p, label, label *) { color: #ddd7ca !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp label:has(input[type="checkbox"]) { background: rgba(255,255,255,.07) !important; border-color: rgba(255,255,255,.2) !important; }
+:is(.theme-pase-abordar, .theme-sobre-marino) section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #f3eee4 !important; color: #0f1e3a !important; }
+.theme-sobre-marino section#rsvp :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { background: #b8913f !important; color: #fff !important; }
+.theme-sobre-marino .invitation-closing::before { width: 170px; height: 170px; margin-left: -85px; }
+:is(.theme-pase-abordar, .theme-sobre-marino) .invitation-content section#rsvp :is(h2, h3, h2 *, h3 *) { color: #f3eee4 !important; -webkit-text-fill-color: #f3eee4 !important; background: none !important; }
+@media (max-width: 899px) { .ws-corner--br { width: 44vw; bottom: 170px; right: -30px; } }
+.theme-sobre-marino #rsvp h2::before { display: none !important; }

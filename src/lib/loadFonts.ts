@@ -62,6 +62,8 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'policias': ['Fredoka:wght@500;600', 'Nunito:wght@400;600;700;800'],
     'hadas': ['Dancing+Script:wght@600;700', 'Quicksand:wght@400;500;600;700'],
     'hadita': ['Dancing+Script:wght@600;700', 'Quicksand:wght@400;500;600;700'],
+    'pase-abordar': ['Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@400;500;600'],
+    'sobre-marino': ['Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@400;500;600'],
     'anturio-vino': ['Italiana', 'Pinyon+Script', 'Libre+Caslon+Text:ital,wght@0,400;0,700;1,400', 'La+Belle+Aurore'],
     'dinosaurios': ['Fredoka:wght@400;500;600;700', 'Nunito:wght@400;600;700'],
     'lirio-vainilla': ['Pinyon+Script', 'Marcellus', 'Josefin+Sans:wght@300;400;600', 'Cormorant+Garamond:ital@1'],

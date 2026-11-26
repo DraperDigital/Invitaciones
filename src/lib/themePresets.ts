@@ -588,6 +588,34 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F9E6DF',
         typographyPreset: 'romantica'
     },
+    'pase-abordar': {
+        label: 'Pase de Abordar',
+        desc: 'Boda destino: boleto de avión en navy y marfil, globo terráqueo, matasellos y avión que vuela con el parallax',
+        icon: '✈️',
+        primaryColor: '#0F1E3A',
+        accentColor: '#0F1E3A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F3EEE4',
+        textPrimary: '#1B2742',
+        textSecondary: '#4F5A72',
+        heroTextColor: '#0F1E3A',
+        heroBgColor: '#EBE4D6',
+        typographyPreset: 'romantica'
+    },
+    'sobre-marino': {
+        label: 'Sobre Azul Marino',
+        desc: 'Sobre azul marino con sello de cera dorado, flores de papel navy y blancas y aro dorado, con parallax',
+        icon: '💌',
+        primaryColor: '#13213F',
+        accentColor: '#B8913F',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#FBF8F2',
+        textPrimary: '#13213F',
+        textSecondary: '#4B5670',
+        heroTextColor: '#13213F',
+        heroBgColor: '#F2ECE0',
+        typographyPreset: 'romantica'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -685,6 +713,8 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Pro', thumbnail: '/images/templates/lacre-rojo.jpg' },
     { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
     { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Pro', thumbnail: '/images/templates/anturio-vino.jpg' },
+    { id: 'pase-abordar', name: 'Pase de Abordar', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Destino', slug: 'boda-pase-abordar', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/pase-abordar.jpg' },
+    { id: 'sobre-marino', name: 'Sobre Azul Marino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Clásica', slug: 'boda-sobre-marino', icon: '💌', plan: 'Pro', thumbnail: '/images/templates/sobre-marino.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Pro', thumbnail: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop' },
 
@@ -813,7 +843,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

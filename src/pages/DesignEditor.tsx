@@ -1081,6 +1081,8 @@ export default function DesignEditor() {
                             { id: 'policias', label: 'Policías', desc: 'Cumpleaños de policías en acuarela: patrulla, helicóptero, estación y perrito, con parallax', icon: '🚓' },
                             { id: 'hadas', label: 'Jardín de Hadas', desc: 'Cumpleaños de hadas en acuarela: casita de pétalos, hadas, hongos y mariposas, con parallax', icon: '🧚' },
                             { id: 'hadita', label: 'Hadita Mágica 3D', desc: 'Primer añito de niña en 3D con diamantina: bebé hada, corona con la edad y mariposas de cristal, con parallax', icon: '🦋' },
+                            { id: 'pase-abordar', label: 'Pase de Abordar', desc: 'Boda destino: boleto de avión en navy y marfil, globo terráqueo, matasellos y avión que vuela con el parallax', icon: '✈️' },
+                            { id: 'sobre-marino', label: 'Sobre Azul Marino', desc: 'Sobre azul marino con sello de cera dorado, flores de papel navy y blancas y aro dorado, con parallax', icon: '💌' },
                             { id: 'anturio-vino', label: 'Anturio Vino', desc: 'Collage flat lay en vino, papel rasgado y oro, con sello de cera y anturios', icon: '🍷' },
                             { id: 'dinosaurios', label: 'Dinosaurios', desc: 'Cumpleaños con dinos en ilustración plana pastel: T-rex, volcán, huevo y hojas tropicales', icon: '🦖' },
                             { id: 'lirio-vainilla', label: 'Lirio Vainilla', desc: 'Estilo flat lay: sobre con lirios, tarjetas de papel y sello de cera en tonos salvia', icon: '🤍' },
