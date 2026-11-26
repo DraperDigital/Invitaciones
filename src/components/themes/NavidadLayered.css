@@ -509,3 +509,373 @@
 .theme-casita-nevada section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 12px !important; }
 .theme-casita-nevada section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .18em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
 .theme-casita-nevada :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 40px; height: 34px; }
+
+/* ════════════════════════════ FIN DE AÑO ════════════════════════════ */
+.nv .nv-year { font-family: 'Bodoni Moda', 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(4.4rem, 22vw, 6rem); line-height: .9; letter-spacing: .02em; color: var(--nv-year, var(--nv-title)); }
+:is(.nv--brindis-oro, .nv--globos-champana, .nv--noche-disco, .nv--cena-gala, .nv--cierre-brillante, .nv--perlas-champana, .nv--soiree-deco, .nv--esmoquin, .nv--fuegos-plata, .nv--arco-dorado, .nv--brillo-oro, .nv--monos-rojos, .nv--mesa-nochevieja) .nv-title span:first-child { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: clamp(3.6rem, 18vw, 4.6rem); }
+:is(.nv--brindis-oro, .nv--globos-champana, .nv--noche-disco, .nv--cena-gala, .nv--cierre-brillante, .nv--perlas-champana, .nv--soiree-deco, .nv--esmoquin, .nv--fuegos-plata, .nv--arco-dorado, .nv--brillo-oro, .nv--monos-rojos, .nv--mesa-nochevieja) .nv-title span + span { font-size: clamp(1.4rem, 6.6vw, 1.9rem); letter-spacing: .2em; margin-top: 2px; }
+@keyframes nv-twinkle { 0%, 100% { opacity: .55; scale: .9; } 50% { opacity: 1; scale: 1.08; } }
+
+/* A1 · Brindis de Oro (Pro) */
+.nv--brindis-oro {
+  --nv-bg-color: #0b0a09; --nv-bg-img: url('/images/themes/fin-ano/fondo-marmol.webp');
+  --nv-ink: #efe4cc; --nv-soft: #cbb98f; --nv-title: #f3d58a; --nv-script: #e7c879; --nv-accent: #d9b15a; --nv-year: #ffd98a;
+  --nv-line: rgba(217,177,90,.35); --nv-count-bg: rgba(10,9,8,.55); --nv-btn: #d9b15a; --nv-btn-ink: #0b0a09; --nv-photo-ring: #d9b15a;
+  --nv-pad: 90px 24px 330px;
+}
+.nv--brindis-oro .nv-year { text-shadow: 0 0 10px rgba(255,190,90,.8), 0 0 28px rgba(255,170,60,.55), 0 0 60px rgba(255,150,40,.35); -webkit-text-stroke: 1px #fff1c9; color: #ffe3a1; }
+.nv--brindis-oro .nv-script { font-size: 1.5rem; }
+.nv-l--bo-glass { bottom: 0; left: -24px; width: min(70vw, 300px); z-index: 3; filter: drop-shadow(0 0 26px rgba(255,200,110,.35)); }
+.nv-l--bo-serp1 { top: -20px; left: -30px; width: 110px; rotate: 20deg; }
+.nv-l--bo-serp2 { bottom: 40px; right: -20px; width: 120px; rotate: -30deg; z-index: 3; }
+.nv-l--bo-d1, .nv-l--bo-d2, .nv-l--bo-d3, .nv-l--bo-d4 { animation: nv-twinkle 3s ease-in-out infinite; }
+.nv-l--bo-d1 { top: 12%; right: 10%; width: 46px; } .nv-l--bo-d2 { top: 30%; left: 6%; width: 38px; animation-delay: -1s; }
+.nv-l--bo-d3 { top: 55%; right: 6%; width: 34px; animation-delay: -2s; } .nv-l--bo-d4 { top: 6%; left: 40%; width: 30px; animation-delay: -1.5s; }
+@media (min-width: 900px) { .nv--brindis-oro { --nv-pad-d: 80px 48px 120px 32%; } .nv-l--bo-glass { width: 420px; left: 4%; } .nv-l--bo-serp1 { width: 160px; } .nv-l--bo-serp2 { width: 170px; } }
+
+/* A2 · Globos de Champaña (Pro) */
+.nv--globos-champana {
+  --nv-bg-color: #0b0907; --nv-bg-img: url('/images/themes/fin-ano/fondo-polvo.webp');
+  --nv-ink: #e9dcc3; --nv-soft: #bfae8c; --nv-title: #e8cf9a; --nv-script: #d8b56c; --nv-accent: #d8b56c;
+  --nv-line: rgba(216,181,108,.35); --nv-count-bg: rgba(11,9,7,.6); --nv-btn: #d8b56c; --nv-btn-ink: #0b0907; --nv-photo-ring: #d8b56c;
+  --nv-pad: 330px 24px 120px;
+}
+.nv--globos-champana .nv-script { font-size: 2.6rem; }
+.nv--globos-champana .nv-title span:first-child { font-family: 'Cormorant Garamond', serif; text-transform: uppercase; letter-spacing: .06em; font-weight: 500; font-size: clamp(2.6rem, 12vw, 3.2rem); color: #e8cf9a; }
+.nv-l--gc-cluster { top: -10px; right: -20px; width: min(52vw, 230px); animation: nv-float 7s ease-in-out infinite; }
+.nv-l--gc-b1 { top: 30px; left: 6px; width: 70px; animation: nv-float 6s ease-in-out infinite; animation-delay: -2s; }
+.nv-l--gc-b2 { top: 150px; left: 26%; width: 56px; animation: nv-float 8s ease-in-out infinite; }
+.nv-l--gc-bottle { top: 70px; left: 50%; width: 92px; translate: -10% 0; rotate: 8deg; z-index: 1; }
+@media (min-width: 900px) {
+  .nv--globos-champana { --nv-pad-d: 90px 40% 90px 48px; }
+  .nv-l--gc-cluster { width: 320px; right: 8%; } .nv-l--gc-bottle { left: auto; right: 22%; top: auto; bottom: -20px; width: 180px; translate: none; rotate: 0deg; }
+  .nv-l--gc-b1 { left: auto; right: 34%; width: 100px; } .nv-l--gc-b2 { left: auto; right: 4%; top: 55%; width: 90px; }
+}
+
+/* A3 · Noche Disco (Pro) */
+.nv--noche-disco {
+  --nv-bg-color: #f3efe7;
+  --nv-bg-img: radial-gradient(circle at 30% 20%, rgba(255,255,255,.9) 0 1px, transparent 2px), radial-gradient(circle at 70% 60%, rgba(190,190,190,.5) 0 1px, transparent 2px), linear-gradient(#f5f1ea, #ece6dc);
+  --nv-ink: #1b1b1b; --nv-soft: #555; --nv-title: #111; --nv-script: #111; --nv-accent: #8c8c8c; --nv-year: #111;
+  --nv-line: rgba(0,0,0,.2); --nv-count-bg: #fbf9f5; --nv-btn: #111; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-pad: 150px 30px 330px;
+}
+.nv--noche-disco::before { inset: 0; translate: none; background-size: 23px 23px, 31px 31px, auto; }
+.nv--noche-disco::after { content: ''; position: absolute; inset: 14px; border: 1px solid #bdbdbd; outline: 1px solid #d8d8d8; outline-offset: -6px; pointer-events: none; z-index: 0; }
+.nv--noche-disco .nv-year { font-family: 'Montserrat', sans-serif; font-weight: 200; font-size: clamp(4rem, 20vw, 5.6rem); }
+.nv--noche-disco .nv-year::before { content: 'Adiós '; font-family: 'Bodoni Moda', serif; font-weight: 700; font-size: .5em; vertical-align: middle; }
+.nv--noche-disco .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .95rem; font-weight: 500; letter-spacing: .06em; margin-top: 6px; }
+.nv--noche-disco .nv-title span:first-child { font-family: 'Pinyon Script', cursive; color: #111; }
+.nv--noche-disco .nv-title span + span { font-family: 'Bodoni Moda', serif; font-weight: 700; letter-spacing: .04em; }
+.nv-l--nd-bow { top: -10px; left: -20px; width: min(38vw, 160px); z-index: 2; }
+.nv-l--nd-s1 { top: 120px; right: -26px; width: 120px; animation: nv-twinkle 4s ease-in-out infinite; }
+.nv-l--nd-s2 { top: 46%; right: -14px; width: 70px; animation: nv-twinkle 3s ease-in-out infinite; animation-delay: -1s; }
+.nv-l--nd-s3 { bottom: 210px; left: 12px; width: 54px; animation: nv-twinkle 5s ease-in-out infinite; }
+.nv-l--nd-bot1 { top: 20px; right: 64px; width: 34px; rotate: 12deg; }
+.nv-l--nd-bot2 { top: 26px; right: 22px; width: 40px; rotate: -8deg; }
+.nv-l--nd-leg { bottom: -30px; left: 6px; width: min(36vw, 150px); z-index: 3; rotate: 6deg; }
+.nv-l--nd-ball { bottom: -50px; right: -60px; width: min(70vw, 300px); z-index: 3; }
+@media (min-width: 900px) {
+  .nv--noche-disco { --nv-pad-d: 90px 48px 140px; }
+  .nv-l--nd-bow { width: 240px; } .nv-l--nd-ball { width: 420px; } .nv-l--nd-leg { width: 210px; left: 8%; }
+  .nv-l--nd-s1 { right: 18%; width: 150px; } .nv-l--nd-bot1 { right: 8%; width: 50px; } .nv-l--nd-bot2 { right: 4%; width: 58px; }
+}
+
+/* A4 · Cena de Gala (Pro) */
+.nv--cena-gala {
+  --nv-bg-color: #120c07; --nv-bg-img: url('/images/themes/fin-ano/fondo-mesa.webp');
+  --nv-ink: #f2e6cf; --nv-soft: #d6c39b; --nv-title: #f4e3bd; --nv-script: #e2be6c; --nv-accent: #e2be6c;
+  --nv-line: rgba(226,190,108,.35); --nv-count-bg: rgba(18,12,7,.6); --nv-btn: transparent; --nv-btn-ink: #f4e3bd; --nv-photo-ring: #e2be6c;
+  --nv-pad: 120px 26px 120px;
+}
+.nv--cena-gala::after { content: ''; position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% 40%, rgba(18,12,7,.35), rgba(18,12,7,.8)); pointer-events: none; }
+.nv--cena-gala .nv-btn { border: 1px solid #e2be6c; }
+.nv--cena-gala .nv-title span:first-child { color: #e2be6c; }
+.nv--cena-gala .nv-title span + span { font-family: 'Pinyon Script', cursive; letter-spacing: 0; text-transform: none; font-size: clamp(2.8rem, 13vw, 3.6rem); color: #fbf3e4; }
+.nv--cena-gala .nv-card { position: relative; }
+.nv--cena-gala .nv-card::after { content: ''; position: absolute; left: -10%; right: -10%; top: 40%; height: 120px; border: 2px solid transparent; border-top-color: rgba(255,214,140,.9); border-bottom-color: rgba(255,214,140,.55); border-radius: 50%; rotate: -8deg; filter: drop-shadow(0 0 6px rgba(255,200,110,.9)); pointer-events: none; }
+.nv-l--cg-plume1 { top: 0; left: -40px; width: min(60vw, 260px); scale: -1 1; z-index: 1; opacity: .95; }
+.nv-l--cg-plume2 { top: 0; right: -40px; width: min(60vw, 260px); z-index: 1; opacity: .95; }
+.nv-l--cg-star { top: 56%; right: 8%; width: 56px; z-index: 3; animation: nv-twinkle 4s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,200,110,.7)); }
+@media (min-width: 900px) { .nv-l--cg-plume1, .nv-l--cg-plume2 { width: 400px; } .nv-l--cg-star { width: 70px; right: 30%; } }
+
+/* A5 · Cierre Brillante (Pro) */
+.nv--cierre-brillante {
+  --nv-bg-color: #0c1424; --nv-bg-img: url('/images/themes/fin-ano/fondo-brindis.webp');
+  --nv-ink: #f2ead9; --nv-soft: #d0c4a5; --nv-title: #f3d58a; --nv-script: #fbf3e2; --nv-accent: #d8b05a;
+  --nv-line: rgba(216,176,90,.4); --nv-count-bg: rgba(8,12,22,.7); --nv-btn: #d8b05a; --nv-btn-ink: #0c1424; --nv-photo-ring: #d8b05a;
+  --nv-pad: 90px 24px 230px;
+}
+.nv--cierre-brillante::after { content: ''; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(8,12,22,.55), rgba(8,12,22,.45) 40%, rgba(8,12,22,.85)); pointer-events: none; }
+.nv--cierre-brillante .nv-script { font-size: 2.5rem; color: #fbf3e2; }
+.nv--cierre-brillante .nv-title span:first-child { font-family: 'Montserrat', sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: clamp(3rem, 15vw, 4.2rem); color: transparent; -webkit-text-stroke: 2px #f3d58a; text-shadow: 0 0 18px rgba(243,213,138,.45); }
+.nv--cierre-brillante .nv-title span + span { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(.9rem, 4.2vw, 1.15rem); letter-spacing: .3em; color: #fbf3e2; border-bottom: 3px solid #d8b05a; padding-bottom: 10px; }
+.nv-l--cb-h1, .nv-l--cb-h2, .nv-l--cb-h3, .nv-l--cb-h4, .nv-l--cb-h5 { z-index: 3; animation: nv-float 6s ease-in-out infinite; }
+.nv-l--cb-h1 { top: 20px; left: 10px; width: 46px; rotate: -20deg; } .nv-l--cb-h2 { top: 60px; right: 20px; width: 40px; animation-delay: -2s; }
+.nv-l--cb-h3 { top: 40%; left: 4px; width: 34px; animation-delay: -1s; } .nv-l--cb-h4 { top: 52%; right: 10px; width: 30px; animation-delay: -3s; }
+.nv-l--cb-h5 { top: 22%; left: 46%; width: 22px; }
+.nv-l--cb-seq { bottom: -6px; left: 50%; width: min(220vw, 1100px); translate: -50% 0; z-index: 3; }
+@media (min-width: 900px) { .nv--cierre-brillante { --nv-pad-d: 80px 48px 220px; } .nv-l--cb-seq { width: 1900px; } }
+
+/* A6 · Perlas y Champaña (Pro) */
+.nv--perlas-champana {
+  --nv-bg-color: #f3ece1; --nv-bg-img: url('/images/themes/fin-ano/fondo-crema.webp');
+  --nv-ink: #5a4733; --nv-soft: #8c7659; --nv-title: #8a6a3a; --nv-script: #8a6a3a; --nv-accent: #c9a15b; --nv-year: #5a4733;
+  --nv-line: rgba(138,106,58,.25); --nv-count-bg: rgba(255,252,246,.85); --nv-btn: #b08a4a; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-pad: 70px 30px 330px;
+}
+.nv--perlas-champana .nv-year { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+.nv--perlas-champana .nv-title span:first-child { color: #8a6a3a; }
+.nv--perlas-champana .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .8rem; letter-spacing: .3em; text-transform: uppercase; color: #5a4733; margin-top: 6px; }
+.nv-l--pc-balloons { top: -30px; right: -50px; width: min(46vw, 200px); z-index: 1; animation: nv-float 8s ease-in-out infinite; }
+.nv-l--pc-vase { bottom: 0; left: -20px; width: min(36vw, 150px); z-index: 3; }
+.nv-l--pc-tower { bottom: 0; right: -10px; width: min(44vw, 190px); z-index: 3; }
+.nv-l--pc-c1, .nv-l--pc-c2, .nv-l--pc-c3, .nv-l--pc-c4 { z-index: 2; animation: nv-float 5s ease-in-out infinite; }
+.nv-l--pc-c1 { top: 36%; right: 12px; width: 16px; } .nv-l--pc-c2 { top: 60%; left: 14px; width: 20px; animation-delay: -1s; }
+.nv-l--pc-c3 { top: 24%; left: 10px; width: 14px; animation-delay: -2s; } .nv-l--pc-c4 { top: 70%; right: 26px; width: 18px; animation-delay: -3s; }
+@media (min-width: 900px) { .nv--perlas-champana { --nv-pad-d: 70px 48px 120px; } .nv-l--pc-balloons { width: 300px; right: 4%; } .nv-l--pc-vase { width: 230px; left: 6%; } .nv-l--pc-tower { width: 280px; right: 8%; } }
+
+/* B1 · Soirée Art Déco (Clásica, sin imágenes) */
+.nv--soiree-deco {
+  --nv-bg-color: #1f2638;
+  --nv-bg-img: linear-gradient(90deg, transparent calc(50% - 70px), transparent calc(50% - 70px)), repeating-linear-gradient(90deg, #c4a46a 0 2px, transparent 2px 12px);
+  --nv-ink: #e8e3d6; --nv-soft: #b9b3a3; --nv-title: #f3efe6; --nv-script: #f3efe6; --nv-accent: #c4a46a;
+  --nv-line: rgba(196,164,106,.4); --nv-count-bg: #1f2638; --nv-btn: #c4a46a; --nv-btn-ink: #1f2638; --nv-photo-ring: #c4a46a;
+  --nv-pad: 50px 22px 60px;
+}
+.nv--soiree-deco::before { inset: 0; translate: none; background: repeating-linear-gradient(90deg, #c4a46a 0 2px, transparent 2px 12px) center / 132px 100% no-repeat; }
+.nv--soiree-deco .nv-card {
+  position: relative; padding: 120px 34px 120px;
+  background: #1f2638;
+  clip-path: polygon(50% 0, 100% 16%, 100% 84%, 50% 100%, 0 84%, 0 16%);
+}
+.nv--soiree-deco .nv-card::before, .nv--soiree-deco .nv-card::after { content: ''; position: absolute; pointer-events: none; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><polygon points='50,1 99,16.5 99,83.5 50,99 1,83.5 1,16.5' fill='none' stroke='%23c4a46a' stroke-width='0.6' vector-effect='non-scaling-stroke'/></svg>") center / 100% 100% no-repeat; }
+.nv--soiree-deco .nv-card::before { inset: 0; }
+.nv--soiree-deco .nv-card::after { inset: 10px; }
+.nv--soiree-deco .nv-script { font-family: 'Cinzel', serif !important; font-size: .8rem; letter-spacing: .26em; text-transform: uppercase; color: #d8d2c3; }
+.nv--soiree-deco .nv-title span:first-child { font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; font-size: clamp(1.8rem, 8.5vw, 2.3rem); color: #f3efe6; }
+.nv--soiree-deco .nv-title span + span { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(3.2rem, 15vw, 4.2rem); color: #f3efe6; }
+.nv--soiree-deco .nv-date b { color: #f3efe6; }
+@media (min-width: 900px) { .nv--soiree-deco .nv-card { max-width: 440px; } }
+
+/* B2 · Esmoquin (Clásica, sin imágenes) */
+.nv--esmoquin {
+  --nv-bg-color: #08080a;
+  --nv-ink: #f2f2f2; --nv-soft: #bdbdbd; --nv-title: #fff; --nv-script: #fff; --nv-accent: #fff;
+  --nv-line: rgba(255,255,255,.25); --nv-count-bg: #111114; --nv-btn: #fff; --nv-btn-ink: #08080a; --nv-photo-ring: #fff;
+  --nv-pad: 330px 24px 70px;
+}
+.nv--esmoquin::before { inset: 0 0 auto 0; height: 360px; translate: none; background:
+  radial-gradient(circle 17px at 50% 150px, #08080a 98%, transparent) ,
+  radial-gradient(circle 17px at 50% 205px, #08080a 98%, transparent) ,
+  radial-gradient(circle 17px at 50% 260px, #08080a 98%, transparent) ,
+  linear-gradient(#fff, #fff);
+  clip-path: polygon(calc(50% - 130px) 0, calc(50% + 130px) 0, 50% 100%); }
+.nv--esmoquin::after { content: ''; position: absolute; top: 74px; right: 22px; width: 84px; height: 46px; background: linear-gradient(transparent 0 26px, #2a2a2e 26px) , conic-gradient(from 135deg at 50% 0, #fff 0 90deg, transparent 0); clip-path: polygon(0 56%, 50% 0, 100% 56%, 100% 100%, 0 100%); background: #fff; z-index: 1; }
+.nv-l--es-bow { top: 6px; left: 50%; width: 200px; translate: -50% 0; z-index: 2; }
+.nv--esmoquin .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: 1rem; letter-spacing: .04em; }
+.nv--esmoquin .nv-title span:first-child { font-family: 'Bodoni Moda', serif; font-size: clamp(3rem, 15vw, 4rem); font-weight: 400; }
+.nv--esmoquin .nv-title span + span { font-family: 'Bodoni Moda', serif; text-transform: none; letter-spacing: .02em; font-size: clamp(2.4rem, 11vw, 3rem); }
+.nv--esmoquin .nv-btn { box-shadow: none; }
+@media (min-width: 900px) { .nv--esmoquin { --nv-pad-d: 360px 48px 90px; } }
+
+/* B3 · Fuegos de Plata (Clásica) */
+.nv--fuegos-plata {
+  --nv-bg-color: #050505;
+  --nv-ink: #eaeaea; --nv-soft: #b8b8b8; --nv-title: #e8e8e8; --nv-script: #e8e8e8; --nv-accent: #d9d9d9;
+  --nv-line: rgba(255,255,255,.3); --nv-count-bg: #0e0e0e; --nv-btn: #e8e8e8; --nv-btn-ink: #050505; --nv-photo-ring: #e8e8e8;
+  --nv-pad: 150px 28px 200px;
+}
+.nv--fuegos-plata .nv-title span:first-child { color: #ececec; }
+.nv--fuegos-plata .nv-title span + span { font-family: 'Pinyon Script', cursive; letter-spacing: 0; text-transform: none; font-size: clamp(3.2rem, 15vw, 4.2rem); color: #ececec; }
+.nv--fuegos-plata .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; color: #cfcfcf; order: 3; }
+.nv--fuegos-plata .nv-date { border-top: 1px solid #bbb; border-bottom: 1px solid #bbb; padding: 8px 0; }
+.nv-l--fp-fw1 { top: -30px; left: -50px; width: 200px; opacity: .9; }
+.nv-l--fp-fw2 { bottom: -40px; right: -50px; width: 210px; opacity: .9; }
+.nv-l--fp-st1 { top: 40px; right: 40px; width: 64px; } .nv-l--fp-st2 { top: 26px; right: 20px; width: 34px; }
+.nv-l--fp-st3 { top: 100px; right: 96px; width: 26px; }
+.nv-l--fp-bottle { bottom: 20px; left: 6px; width: 110px; }
+@media (min-width: 900px) { .nv-l--fp-fw1, .nv-l--fp-fw2 { width: 320px; } .nv-l--fp-bottle { width: 160px; left: 6%; } .nv-l--fp-st1 { right: 10%; width: 90px; } }
+
+/* B4 · Arco Dorado (Clásica) */
+.nv--arco-dorado {
+  --nv-bg-color: #1c1b19;
+  --nv-ink: #e6cf9b; --nv-soft: #c7b07c; --nv-title: #e2c27e; --nv-script: #e2c27e; --nv-accent: #cda15c;
+  --nv-line: rgba(205,161,92,.4); --nv-count-bg: #1c1b19; --nv-btn: #cda15c; --nv-btn-ink: #1c1b19; --nv-photo-ring: #cda15c;
+  --nv-card-pad: 90px 26px 50px; --nv-card-radius: 220px 220px 0 0;
+  --nv-card-shadow: inset 0 0 0 1.5px #cda15c, inset 0 0 0 8px #1c1b19, inset 0 0 0 9.5px #cda15c;
+  --nv-card-bg: #1c1b19;
+  --nv-pad: 120px 30px 120px;
+}
+.nv--arco-dorado .nv-card { position: relative; z-index: 2; }
+.nv--arco-dorado .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; }
+.nv--arco-dorado .nv-title span:first-child { font-family: 'Cinzel', serif; text-transform: uppercase; font-weight: 500; letter-spacing: .02em; font-size: clamp(2.2rem, 10.5vw, 2.8rem); }
+.nv--arco-dorado .nv-title span + span { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 5.4vw, 1.5rem); letter-spacing: .18em; }
+.nv-l--ad-tl, .nv-l--ad-tr, .nv-l--ad-bl, .nv-l--ad-br { width: min(58vw, 260px); z-index: 1; }
+.nv-l--ad-tl { top: 0; left: 0; } .nv-l--ad-tr { top: 0; right: 0; scale: -1 1; }
+.nv-l--ad-bl { bottom: 0; left: 0; scale: 1 -1; } .nv-l--ad-br { bottom: 0; right: 0; scale: -1 -1; }
+@media (min-width: 900px) { .nv-l--ad-tl, .nv-l--ad-tr, .nv-l--ad-bl, .nv-l--ad-br { width: 340px; } }
+
+/* B5 · Brillo y Oro (Clásica) */
+.nv--brillo-oro {
+  --nv-bg-color: #e8e2d9;
+  --nv-bg-img: url('/images/themes/fin-ano/fondo-glitter.webp');
+  --nv-ink: #2b2620; --nv-soft: #6b6255; --nv-title: #1d1a16; --nv-script: #1d1a16; --nv-accent: #b38a3c;
+  --nv-line: rgba(43,38,32,.25); --nv-count-bg: #efe9e0; --nv-btn: #1d1a16; --nv-btn-ink: #efe9e0; --nv-photo-ring: #fff;
+  --nv-pad: 70px 24px 70px;
+}
+.nv--brillo-oro::before { inset: 0 0 auto 0; height: 470px; translate: none; }
+.nv--brillo-oro::after { content: ''; position: absolute; top: 470px; left: 0; right: 0; bottom: 0; background: #e8e2d9; z-index: -1; }
+.nv-l--bg-paper { top: 380px; left: 50%; width: min(240vw, 1000px); translate: -50% 0; z-index: 1; }
+.nv--brillo-oro .nv-title span:first-child { font-family: 'Bodoni Moda', serif; font-weight: 400; text-transform: uppercase; letter-spacing: .02em; font-size: clamp(3.6rem, 18vw, 4.8rem); color: #1d1a16; }
+.nv--brillo-oro .nv-title span + span { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(2.6rem, 12vw, 3.2rem); margin-top: -8px; }
+.nv--brillo-oro .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .8rem; letter-spacing: .24em; text-transform: uppercase; }
+.nv--brillo-oro .nv-rule { margin: 120px auto 16px; }
+.nv--brillo-oro .nv-date > i { background: #2b2620; }
+@media (min-width: 900px) {
+  .nv--brillo-oro::before { height: 100%; width: 50%; inset: 0 auto 0 0; }
+  .nv--brillo-oro::after { top: 0; left: 50%; }
+  .nv-l--bg-paper { display: none; }
+  .nv--brillo-oro .nv-rule { margin: 16px auto; }
+}
+
+/* B6 · Moños Rojos (Clásica) */
+.nv--monos-rojos {
+  --nv-bg-color: #f4f1ee;
+  --nv-ink: #7e1a1a; --nv-soft: #9b4a4a; --nv-title: #8e1b1b; --nv-script: #8e1b1b; --nv-accent: #8e1b1b;
+  --nv-line: rgba(142,27,27,.25); --nv-count-bg: #fbf9f7; --nv-btn: #8e1b1b; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-pad: 150px 40px 150px;
+}
+.nv--monos-rojos .nv-title span + span { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(2.8rem, 13vw, 3.6rem); }
+.nv--monos-rojos .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .9rem; line-height: 1.5; order: 3; margin-top: 10px; }
+.nv-l--mr-tl, .nv-l--mr-tr, .nv-l--mr-bl, .nv-l--mr-br { width: min(54vw, 230px); }
+.nv-l--mr-tl { top: 10px; left: 10px; } .nv-l--mr-tr { top: 10px; right: 10px; scale: -1 1; }
+.nv-l--mr-bl { bottom: 10px; left: 10px; scale: 1 -1; } .nv-l--mr-br { bottom: 10px; right: 10px; scale: -1 -1; }
+@media (min-width: 900px) { .nv-l--mr-tl, .nv-l--mr-tr, .nv-l--mr-bl, .nv-l--mr-br { width: 300px; } }
+
+/* B7 · Mesa de Nochevieja (Clásica) */
+.nv--mesa-nochevieja {
+  --nv-bg-color: #e7eadf; --nv-bg-img: url('/images/themes/fin-ano/fondo-cuadros.webp');
+  --nv-ink: #9c2b2b; --nv-soft: #a84a44; --nv-title: #9c2b2b; --nv-script: #9c2b2b; --nv-accent: #9c2b2b;
+  --nv-line: rgba(156,43,43,.25); --nv-count-bg: #f3ece2; --nv-btn: #9c2b2b; --nv-btn-ink: #fff; --nv-photo-ring: #fff;
+  --nv-pad: 40px 18px 70px;
+}
+.nv--mesa-nochevieja::before { inset: 0; translate: none; background-size: 420px auto; background-repeat: repeat; }
+.nv--mesa-nochevieja .nv-card { position: relative; padding: 110px 40px 90px; background: url('/images/themes/fin-ano/tarjeta-ondas.webp') center / 100% 100% no-repeat; filter: drop-shadow(0 20px 26px rgba(70,60,40,.35)); }
+.nv--mesa-nochevieja .nv-script { font-family: 'Montserrat', sans-serif !important; font-size: .82rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; line-height: 1.6; padding: 0 10px; }
+.nv--mesa-nochevieja .nv-title span:first-child { color: #9c2b2b; }
+.nv--mesa-nochevieja .nv-title span + span { font-family: 'Pinyon Script', cursive; text-transform: none; letter-spacing: 0; font-size: clamp(2.6rem, 12vw, 3.2rem); }
+.nv--mesa-nochevieja .nv-card .nv-l--mn-tag { top: 50px; right: -30px; width: 96px; rotate: 10deg; z-index: 3; filter: drop-shadow(0 8px 10px rgba(0,0,0,.2)); }
+.nv--mesa-nochevieja .nv-card::after { content: '¡Salud!'; position: absolute; top: 116px; right: -10px; width: 84px; rotate: 10deg; z-index: 4; font-family: 'Pinyon Script', cursive; font-size: 1.5rem; color: #9c2b2b; text-align: center; }
+@media (min-width: 900px) { .nv--mesa-nochevieja .nv-card { max-width: 440px; } }
+
+/* ═════════════ Módulos Fin de Año ═════════════ */
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata, .theme-arco-dorado) {
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title-deco: none; --kp-art-message: none; --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: none; --kp-art-closing: none;
+}
+.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado {
+  --kp-bg: #121010; --kp-alt: #1a1715; --kp-title: #e7c879; --kp-ink: #efe4cc; --kp-soft: #cbb98f; --kp-accent: #d9b15a;
+  --kp-btn: #d9b15a; --kp-btn-ink: #121010; --kp-card-border: rgba(217,177,90,.3); --kp-icon-bg: rgba(217,177,90,.12); --kp-icon: #d9b15a; --kp-shadow: rgba(0,0,0,.6);
+  --kp-rsvp-bg: #1a1715; --kp-closing-bg: #0b0a09; --kp-closing-title: #e7c879; --kp-closing-text: #cbb98f;
+  --text-primary: #efe4cc; --text-secondary: #cbb98f; --card-bg: #1d1a17;
+}
+.theme-brindis-oro { --kp-art-message: url('/images/themes/fin-ano/copas.webp'); --kp-art-message-w: 110px; --kp-art-message-h: 140px; --kp-closing-bg: #0b0a09 url('/images/themes/fin-ano/fondo-marmol.webp') center / cover; --kp-art-gifts: url('/images/themes/fin-ano/serp-2.webp'); --kp-art-gifts-w: 70px; --kp-art-gifts-h: 90px; }
+.theme-globos-champana { --kp-art-message: url('/images/themes/fin-ano/globos.webp'); --kp-art-message-w: 100px; --kp-art-message-h: 166px; --kp-art-rsvp: url('/images/themes/fin-ano/botella.webp'); --kp-art-rsvp-w: 70px; --kp-art-rsvp-h: 120px; --kp-closing-bg: #0b0907 url('/images/themes/fin-ano/fondo-polvo.webp') center / cover; }
+.theme-cena-gala { --kp-art-rsvp: url('/images/themes/fin-ano/estrella-oro.webp'); --kp-art-rsvp-w: 60px; --kp-art-rsvp-h: 58px; --kp-closing-bg: linear-gradient(rgba(18,12,7,.6), rgba(18,12,7,.85)), url('/images/themes/fin-ano/fondo-mesa.webp') center / cover; }
+.theme-arco-dorado { --kp-title-font: 'Cinzel', serif; --kp-title-weight: 500; --kp-title-size: clamp(1.7rem, 7.5vw, 2.2rem); --kp-art-closing: url('/images/themes/fin-ano/flores-oro.webp'); }
+.theme-cierre-brillante {
+  --kp-bg: #0f1828; --kp-alt: #142036; --kp-title: #f3d58a; --kp-ink: #f2ead9; --kp-soft: #d0c4a5; --kp-accent: #d8b05a;
+  --kp-btn: #d8b05a; --kp-btn-ink: #0c1424; --kp-card-border: rgba(216,176,90,.3); --kp-icon-bg: rgba(216,176,90,.12); --kp-icon: #d8b05a; --kp-shadow: rgba(0,0,0,.6);
+  --kp-rsvp-bg: #142036; --kp-closing-bg: #0c1424 url('/images/themes/fin-ano/lentejuelas.webp') center bottom / 140% auto no-repeat; --kp-closing-title: #f3d58a; --kp-closing-text: #d0c4a5;
+  --kp-art-message: url('/images/themes/fin-ano/hoja-6.webp'); --kp-art-message-w: 60px; --kp-art-message-h: 60px;
+  --text-primary: #f2ead9; --text-secondary: #d0c4a5; --card-bg: #172338;
+}
+.theme-soiree-deco {
+  --kp-bg: #1f2638; --kp-alt: #252d42; --kp-title: #f3efe6; --kp-ink: #e8e3d6; --kp-soft: #b9b3a3; --kp-accent: #c4a46a;
+  --kp-btn: #c4a46a; --kp-btn-ink: #1f2638; --kp-card-border: rgba(196,164,106,.4); --kp-icon-bg: rgba(196,164,106,.12); --kp-icon: #c4a46a; --kp-shadow: rgba(0,0,0,.5);
+  --kp-rsvp-bg: #252d42; --kp-closing-bg: #1f2638; --kp-closing-title: #f3efe6; --kp-closing-text: #b9b3a3;
+  --text-primary: #e8e3d6; --text-secondary: #b9b3a3; --card-bg: #283048;
+}
+.theme-esmoquin, .theme-fuegos-plata {
+  --kp-bg: #0b0b0d; --kp-alt: #131316; --kp-title: #f2f2f2; --kp-ink: #ececec; --kp-soft: #b4b4b4; --kp-accent: #e6e6e6;
+  --kp-btn: #f2f2f2; --kp-btn-ink: #0b0b0d; --kp-card-border: rgba(255,255,255,.2); --kp-icon-bg: rgba(255,255,255,.08); --kp-icon: #f2f2f2; --kp-shadow: rgba(0,0,0,.6);
+  --kp-rsvp-bg: #131316; --kp-closing-bg: #0b0b0d; --kp-closing-title: #f2f2f2; --kp-closing-text: #b4b4b4;
+  --text-primary: #ececec; --text-secondary: #b4b4b4; --card-bg: #18181c;
+}
+.theme-esmoquin { --kp-title-font: 'Bodoni Moda', serif; --kp-title-size: clamp(2rem, 9vw, 2.6rem); --kp-art-closing: url('/images/themes/fin-ano/corbatin.webp'); }
+.theme-fuegos-plata { --kp-art-message: url('/images/themes/fin-ano/fw-1.webp'); --kp-art-message-w: 90px; --kp-art-message-h: 92px; --kp-art-rsvp: url('/images/themes/fin-ano/fw-2.webp'); --kp-art-rsvp-w: 80px; --kp-art-rsvp-h: 116px; --kp-art-closing: url('/images/themes/fin-ano/fw-6.webp'); }
+
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata) section [class*="bg-[var(--card-bg)]"] { background: var(--card-bg) !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata) section [class*="bg-[var(--card-bg)]"] :is(p, span, h3, h4) { color: var(--text-primary) !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata) section :is(input, textarea, select) { background: rgba(255,255,255,.06) !important; color: var(--text-primary) !important; border-color: var(--kp-card-border) !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata) section :is(h4, label, label *) { color: var(--text-primary) !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-arco-dorado, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata) section label:has(input[type="checkbox"]) { background: rgba(255,255,255,.05) !important; }
+.theme-noche-disco {
+  --kp-bg: #f5f1ea; --kp-alt: #ece6dc;
+  --kp-title-font: 'Bodoni Moda', serif; --kp-title-weight: 700; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #111; --kp-ink: #1b1b1b; --kp-soft: #555; --kp-accent: #111;
+  --kp-btn: #111; --kp-btn-ink: #fff; --kp-card-border: rgba(0,0,0,.15); --kp-icon-bg: #e9e4db; --kp-icon: #111; --kp-shadow: rgba(0,0,0,.25);
+  --kp-title-deco: url('/images/themes/fin-ano/estrella-1.webp');
+  --kp-art-message: url('/images/themes/fin-ano/mono.webp'); --kp-art-message-w: 80px; --kp-art-message-h: 140px;
+  --kp-art-location: url('/images/themes/fin-ano/disco.webp'); --kp-art-location-w: 110px; --kp-art-location-h: 110px;
+  --kp-art-gifts: url('/images/themes/fin-ano/bot-3.webp'); --kp-art-gifts-w: 40px; --kp-art-gifts-h: 140px;
+  --kp-art-rsvp: url('/images/themes/fin-ano/pierna.webp'); --kp-art-rsvp-w: 70px; --kp-art-rsvp-h: 156px;
+  --kp-rsvp-bg: #ece6dc; --kp-closing-bg: #111; --kp-art-closing: url('/images/themes/fin-ano/disco.webp'); --kp-closing-title: #fff; --kp-closing-text: #ccc;
+}
+.theme-perlas-champana {
+  --kp-bg: #f8f3eb; --kp-alt: #f3ece1;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #8a6a3a; --kp-ink: #5a4733; --kp-soft: #8c7659; --kp-accent: #c9a15b;
+  --kp-btn: #b08a4a; --kp-btn-ink: #fff; --kp-card-border: rgba(138,106,58,.22); --kp-icon-bg: #f1e6d3; --kp-icon: #8a6a3a; --kp-shadow: rgba(90,71,51,.25);
+  --kp-title-deco: url('/images/themes/fin-ano/conf-7.webp');
+  --kp-art-message: url('/images/themes/fin-ano/florero.webp'); --kp-art-message-w: 80px; --kp-art-message-h: 126px;
+  --kp-art-location: url('/images/themes/fin-ano/globos-perla.webp'); --kp-art-location-w: 90px; --kp-art-location-h: 120px;
+  --kp-art-gifts: url('/images/themes/fin-ano/torre.webp'); --kp-art-gifts-w: 100px; --kp-art-gifts-h: 134px;
+  --kp-art-rsvp: url('/images/themes/fin-ano/torre.webp'); --kp-art-rsvp-w: 100px; --kp-art-rsvp-h: 134px;
+  --kp-rsvp-bg: #f3ece1 url('/images/themes/fin-ano/fondo-crema.webp') center / cover; --kp-closing-bg: #f3ece1 url('/images/themes/fin-ano/fondo-crema.webp') center / cover;
+  --kp-art-closing: url('/images/themes/fin-ano/globos-perla.webp'); --kp-closing-title: #8a6a3a;
+}
+.theme-brillo-oro {
+  --kp-bg: #efe9e0; --kp-alt: #e8e2d9;
+  --kp-title-font: 'Bodoni Moda', serif; --kp-title-weight: 400; --kp-title-size: clamp(1.9rem, 8.5vw, 2.4rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #1d1a16; --kp-ink: #2b2620; --kp-soft: #6b6255; --kp-accent: #b38a3c;
+  --kp-btn: #1d1a16; --kp-btn-ink: #efe9e0; --kp-card-border: rgba(43,38,32,.18); --kp-icon-bg: #e4dccf; --kp-icon: #1d1a16; --kp-shadow: rgba(43,38,32,.2);
+  --kp-title-deco: none; --kp-art-message: none; --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: none;
+  --kp-rsvp-bg: #e8e2d9; --kp-closing-bg: #e8e2d9 url('/images/themes/fin-ano/fondo-glitter.webp') center / cover; --kp-art-closing: none; --kp-closing-title: #1d1a16;
+}
+.theme-monos-rojos {
+  --kp-bg: #f7f4f1; --kp-alt: #f1ece7;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #8e1b1b; --kp-ink: #7e1a1a; --kp-soft: #9b4a4a; --kp-accent: #8e1b1b;
+  --kp-btn: #8e1b1b; --kp-btn-ink: #fff; --kp-card-border: rgba(142,27,27,.2); --kp-icon-bg: #f6e1e1; --kp-icon: #8e1b1b; --kp-shadow: rgba(126,26,26,.2);
+  --kp-title-deco: none; --kp-art-message: url('/images/themes/fin-ano/liston.webp'); --kp-art-message-w: 120px; --kp-art-message-h: 120px;
+  --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: url('/images/themes/fin-ano/liston.webp'); --kp-art-rsvp-w: 120px; --kp-art-rsvp-h: 120px;
+  --kp-rsvp-bg: #f1ece7; --kp-closing-bg: #f1ece7; --kp-art-closing: url('/images/themes/fin-ano/liston.webp'); --kp-closing-title: #8e1b1b;
+}
+.theme-mesa-nochevieja {
+  --kp-bg: #f3ece2; --kp-alt: #e7eadf url('/images/themes/fin-ano/fondo-cuadros.webp') center / 420px auto;
+  --kp-title-font: 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.6rem, 12vw, 3.2rem); --kp-text: 'Montserrat', sans-serif;
+  --kp-title: #9c2b2b; --kp-ink: #6e2a24; --kp-soft: #94574f; --kp-accent: #9c2b2b;
+  --kp-btn: #9c2b2b; --kp-btn-ink: #fff; --kp-card-border: rgba(156,43,43,.2); --kp-icon-bg: #f4e0da; --kp-icon: #9c2b2b; --kp-shadow: rgba(110,42,36,.2);
+  --kp-title-deco: none; --kp-art-message: url('/images/themes/fin-ano/copa-tag.webp'); --kp-art-message-w: 56px; --kp-art-message-h: 122px;
+  --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: url('/images/themes/fin-ano/copa-tag.webp'); --kp-art-rsvp-w: 56px; --kp-art-rsvp-h: 122px;
+  --kp-rsvp-bg: #f3ece2; --kp-closing-bg: #e7eadf url('/images/themes/fin-ano/fondo-cuadros.webp') center / 420px auto; --kp-art-closing: none; --kp-closing-title: #9c2b2b;
+}
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-noche-disco, .theme-cena-gala, .theme-cierre-brillante, .theme-perlas-champana, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata, .theme-arco-dorado, .theme-brillo-oro, .theme-monos-rojos, .theme-mesa-nochevieja) section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 12px !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-noche-disco, .theme-cena-gala, .theme-cierre-brillante, .theme-perlas-champana, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata, .theme-arco-dorado, .theme-brillo-oro, .theme-monos-rojos, .theme-mesa-nochevieja) section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .18em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 600 !important; }
+:is(.theme-brindis-oro, .theme-globos-champana, .theme-cena-gala, .theme-cierre-brillante, .theme-soiree-deco, .theme-esmoquin, .theme-fuegos-plata, .theme-arco-dorado, .theme-brillo-oro, .theme-mesa-nochevieja, .theme-monos-rojos) :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
+/* Ajustes Fin de Año */
+.nv--noche-disco { --nv-pad: 200px 30px 330px; }
+.nv--esmoquin { --nv-pad: 390px 24px 70px; }
+.nv--esmoquin::after { top: 70px; right: 20px; width: 92px; height: 50px; background: linear-gradient(#fff, #fff) top / 100% 30px no-repeat, #2a2a2e; clip-path: polygon(0 60%, 30% 20%, 50% 0, 70% 20%, 100% 60%, 100% 100%, 0 100%); }
+.nv--esmoquin::after { background: linear-gradient(to bottom, #fff 0 60%, #2a2a2e 60%); }
+.nv--brillo-oro::before { height: 380px; }
+.nv--brillo-oro::after { top: 380px; }
+.nv-l--bg-paper { top: 300px; }
+.nv--brillo-oro .nv-rule { margin: 110px auto 16px; }
+.nv--mesa-nochevieja .nv-card .nv-l--mn-tag { top: -40px; right: -26px; width: 78px; }
+.nv--mesa-nochevieja .nv-card::after { top: 6px; right: -16px; width: 70px; font-size: 1.25rem; }
+.nv--mesa-nochevieja .nv-script { padding: 0 36px 0 6px; }
+@media (min-width: 900px) { .nv--brillo-oro .nv-rule { margin: 16px auto; } }
+@media (max-width: 899px) { .nv--brillo-oro .nv-rule { margin: 150px auto 16px; } }

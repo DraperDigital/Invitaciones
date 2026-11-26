@@ -526,6 +526,123 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la familia o del anfitrión; se muestra redonda (opcional).',
         fields: ['hero_image_url', 'heroImage']
     },
+    'brindis-oro': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'globos-champana': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'noche-disco': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'cena-gala': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'cierre-brillante': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'perlas-champana': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'soiree-deco': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'esmoquin': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'fuegos-plata': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'arco-dorado': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'brillo-oro': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'monos-rojos': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
+    'mesa-nochevieja': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: true,
+        heroLabel: 'Foto en el Círculo',
+        heroHelpText: 'Foto de los anfitriones o del equipo; se muestra redonda (opcional).',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'anturio-vino': {
         type: 'single',
         photoCount: 1,

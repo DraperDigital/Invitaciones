@@ -542,6 +542,97 @@ export default function InvitationPage() {
             accentOverride: '#B02A2A', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '12px',
         },
+        'brindis-oro': {
+            sectionBg: '#121010', sectionBgAlt: '#1A1715', cardBg: '#1D1A17',
+            textPrimary: '#EFE4CC', textSecondary: '#CBB98F',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#D9B15A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'globos-champana': {
+            sectionBg: '#121010', sectionBgAlt: '#1A1715', cardBg: '#1D1A17',
+            textPrimary: '#EFE4CC', textSecondary: '#CBB98F',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#D8B56C', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'noche-disco': {
+            sectionBg: '#F5F1EA', sectionBgAlt: '#ECE6DC', cardBg: '#FFFFFF',
+            textPrimary: '#1B1B1B', textSecondary: '#555555',
+            borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
+            accentOverride: '#111111', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'cena-gala': {
+            sectionBg: '#121010', sectionBgAlt: '#1A1715', cardBg: '#1D1A17',
+            textPrimary: '#EFE4CC', textSecondary: '#CBB98F',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#E2BE6C', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'cierre-brillante': {
+            sectionBg: '#0F1828', sectionBgAlt: '#142036', cardBg: '#1D1A17',
+            textPrimary: '#F2EAD9', textSecondary: '#D0C4A5',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#D8B05A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'perlas-champana': {
+            sectionBg: '#F8F3EB', sectionBgAlt: '#F3ECE1', cardBg: '#FFFFFF',
+            textPrimary: '#5A4733', textSecondary: '#8C7659',
+            borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
+            accentOverride: '#B08A4A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'soiree-deco': {
+            sectionBg: '#1F2638', sectionBgAlt: '#252D42', cardBg: '#1D1A17',
+            textPrimary: '#E8E3D6', textSecondary: '#B9B3A3',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#C4A46A', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'esmoquin': {
+            sectionBg: '#0B0B0D', sectionBgAlt: '#131316', cardBg: '#1D1A17',
+            textPrimary: '#ECECEC', textSecondary: '#B4B4B4',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#F2F2F2', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'fuegos-plata': {
+            sectionBg: '#0B0B0D', sectionBgAlt: '#131316', cardBg: '#1D1A17',
+            textPrimary: '#ECECEC', textSecondary: '#B4B4B4',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#E6E6E6', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'arco-dorado': {
+            sectionBg: '#121010', sectionBgAlt: '#1A1715', cardBg: '#1D1A17',
+            textPrimary: '#EFE4CC', textSecondary: '#CBB98F',
+            borderColor: '#3A332B', cardBorder: '#3A332B',
+            accentOverride: '#CDA15C', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'brillo-oro': {
+            sectionBg: '#EFE9E0', sectionBgAlt: '#E8E2D9', cardBg: '#FFFFFF',
+            textPrimary: '#2B2620', textSecondary: '#6B6255',
+            borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
+            accentOverride: '#1D1A16', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'monos-rojos': {
+            sectionBg: '#F7F4F1', sectionBgAlt: '#F1ECE7', cardBg: '#FFFFFF',
+            textPrimary: '#7E1A1A', textSecondary: '#9B4A4A',
+            borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
+            accentOverride: '#8E1B1B', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
+        'mesa-nochevieja': {
+            sectionBg: '#F3ECE2', sectionBgAlt: '#E7EADF', cardBg: '#FFFFFF',
+            textPrimary: '#6E2A24', textSecondary: '#94574F',
+            borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
+            accentOverride: '#9C2B2B', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '12px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -3013,6 +3104,7 @@ END:VCALENDAR`;
         graduacion:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Mi Graduación', welcome: 'Mi Graduación' },
         graduation:       { ceremony: 'Ceremonia de Graduación', reception: 'Festejo de Graduación', tagline: 'Graduación', welcome: 'Mi Graduación' },
         corporate:        { ceremony: 'Conferencia', reception: 'Recepción', tagline: 'Evento Corporativo', welcome: 'Bienvenidos' },
+        fin_de_ano:       { ceremony: 'Brindis', reception: 'Cena de Fin de Año', tagline: 'Cena de Fin de Año', welcome: 'Nuestra Celebración' },
         navidad:          { ceremony: 'Posada', reception: 'Cena Navideña', tagline: 'Posada Navideña', welcome: 'Nuestra Posada' },
         other:            { ceremony: 'Ceremonia', reception: 'Celebración', tagline: 'Nuestra Celebración', welcome: 'Bienvenidos' }
     };
@@ -3067,7 +3159,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly' || cfg.theme === 'casita-nevada') {
+        if (cfg.theme === 'pueblo-papel' || cfg.theme === 'bordado-lujo' || cfg.theme === 'epoca-bonita' || cfg.theme === 'noche-velas' || cfg.theme === 'posada-mexicana' || cfg.theme === 'posada-linea' || cfg.theme === 'cuadros-escoceses' || cfg.theme === 'rayas-rojas' || cfg.theme === 'holly-jolly' || cfg.theme === 'casita-nevada' || cfg.theme === 'brindis-oro' || cfg.theme === 'globos-champana' || cfg.theme === 'noche-disco' || cfg.theme === 'cena-gala' || cfg.theme === 'cierre-brillante' || cfg.theme === 'perlas-champana' || cfg.theme === 'soiree-deco' || cfg.theme === 'esmoquin' || cfg.theme === 'fuegos-plata' || cfg.theme === 'arco-dorado' || cfg.theme === 'brillo-oro' || cfg.theme === 'monos-rojos' || cfg.theme === 'mesa-nochevieja') {
             return <NavidadLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn' || cfg.theme === 'rosas-noche' || cfg.theme === 'salvia-eucalipto' || cfg.theme === 'malva-empolvado') {

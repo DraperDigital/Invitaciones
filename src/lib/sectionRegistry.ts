@@ -66,6 +66,7 @@ export type EventType =
   | 'graduacion'
   | 'corporate'
   | 'navidad'
+  | 'fin_de_ano'
   | 'other';
 
 export type SectionDef = {
@@ -321,6 +322,18 @@ export const EVENT_LAYOUT_PRESETS: Record<EventType, SectionId[]> = {
     'itinerary',
     'location',
     'dress_code',
+    'footer',
+  ],
+  fin_de_ano: [
+    'hero',
+    'guest_welcome',
+    'message',
+    'rsvp',
+    'location',
+    'itinerary',
+    'dress_code',
+    'gallery',
+    'countdown',
     'footer',
   ],
   navidad: [

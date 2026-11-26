@@ -868,6 +868,188 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F1F4F1',
         typographyPreset: 'elegante'
     },
+    'brindis-oro': {
+        label: 'Brindis de Oro',
+        desc: 'Fin de año de lujo: copas brindando, serpentinas, mármol negro y el año en neón dorado, con parallax',
+        icon: '🥂',
+        primaryColor: '#D9B15A',
+        accentColor: '#D9B15A',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#121010',
+        textPrimary: '#EFE4CC',
+        textSecondary: '#CBB98F',
+        heroTextColor: '#D9B15A',
+        heroBgColor: '#1A1715',
+        typographyPreset: 'elegante'
+    },
+    'globos-champana': {
+        label: 'Globos de Champaña',
+        desc: 'Fiesta de año nuevo: globos con diamantina que flotan y botella de champaña explotando, con parallax',
+        icon: '🍾',
+        primaryColor: '#D8B56C',
+        accentColor: '#D8B56C',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#121010',
+        textPrimary: '#EFE4CC',
+        textSecondary: '#CBB98F',
+        heroTextColor: '#D8B56C',
+        heroBgColor: '#1A1715',
+        typographyPreset: 'elegante'
+    },
+    'noche-disco': {
+        label: 'Noche Disco',
+        desc: 'Fin de año disco: bola de espejos, moño negro de satín, estrellas plateadas y tacón con copa, con parallax',
+        icon: '🪩',
+        primaryColor: '#111111',
+        accentColor: '#111111',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F5F1EA',
+        textPrimary: '#1B1B1B',
+        textSecondary: '#555555',
+        heroTextColor: '#111111',
+        heroBgColor: '#ECE6DC',
+        typographyPreset: 'elegante'
+    },
+    'cena-gala': {
+        label: 'Cena de Gala',
+        desc: 'Cena de fin de año de empresa: mesa con velas, plumas de diamantina dorada y una línea de luz, con parallax',
+        icon: '✨',
+        primaryColor: '#E2BE6C',
+        accentColor: '#E2BE6C',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#121010',
+        textPrimary: '#EFE4CC',
+        textSecondary: '#CBB98F',
+        heroTextColor: '#E2BE6C',
+        heroBgColor: '#1A1715',
+        typographyPreset: 'elegante'
+    },
+    'cierre-brillante': {
+        label: 'Cierre Brillante',
+        desc: 'Cierre de año de empresa: brindis con vasos de cristal, hojuelas de oro y lentejuelas, con parallax',
+        icon: '🥃',
+        primaryColor: '#D8B05A',
+        accentColor: '#D8B05A',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#0F1828',
+        textPrimary: '#F2EAD9',
+        textSecondary: '#D0C4A5',
+        heroTextColor: '#D8B05A',
+        heroBgColor: '#142036',
+        typographyPreset: 'elegante'
+    },
+    'perlas-champana': {
+        label: 'Perlas y Champaña',
+        desc: 'Año nuevo elegante y luminoso: globos perla y champaña, florero de nube y torre de copas, con parallax',
+        icon: '🎈',
+        primaryColor: '#B08A4A',
+        accentColor: '#B08A4A',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F8F3EB',
+        textPrimary: '#5A4733',
+        textSecondary: '#8C7659',
+        heroTextColor: '#B08A4A',
+        heroBgColor: '#F3ECE1',
+        typographyPreset: 'elegante'
+    },
+    'soiree-deco': {
+        label: 'Soirée Art Déco',
+        desc: 'Soirée de año nuevo Art Déco: hexágono dorado y rayas sobre azul marino',
+        icon: '🔷',
+        primaryColor: '#C4A46A',
+        accentColor: '#C4A46A',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#1F2638',
+        textPrimary: '#E8E3D6',
+        textSecondary: '#B9B3A3',
+        heroTextColor: '#C4A46A',
+        heroBgColor: '#252D42',
+        typographyPreset: 'elegante'
+    },
+    'esmoquin': {
+        label: 'Esmoquin',
+        desc: 'Gala de fin de año de etiqueta: esmoquin con moño, botones y pañuelo en blanco y negro',
+        icon: '🎩',
+        primaryColor: '#F2F2F2',
+        accentColor: '#F2F2F2',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#0B0B0D',
+        textPrimary: '#ECECEC',
+        textSecondary: '#B4B4B4',
+        heroTextColor: '#F2F2F2',
+        heroBgColor: '#131316',
+        typographyPreset: 'elegante'
+    },
+    'fuegos-plata': {
+        label: 'Fuegos de Plata',
+        desc: 'Cena de fin de año en negro y plata: fuegos artificiales, estrellas y botella en línea',
+        icon: '🎆',
+        primaryColor: '#E6E6E6',
+        accentColor: '#E6E6E6',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#0B0B0D',
+        textPrimary: '#ECECEC',
+        textSecondary: '#B4B4B4',
+        heroTextColor: '#E6E6E6',
+        heroBgColor: '#131316',
+        typographyPreset: 'elegante'
+    },
+    'arco-dorado': {
+        label: 'Arco Dorado',
+        desc: 'Fin de año clásico: arco con flores de línea dorada sobre negro',
+        icon: '🌙',
+        primaryColor: '#CDA15C',
+        accentColor: '#CDA15C',
+        cardBgColor: '#1D1A17',
+        sectionBgColor: '#121010',
+        textPrimary: '#EFE4CC',
+        textSecondary: '#CBB98F',
+        heroTextColor: '#CDA15C',
+        heroBgColor: '#1A1715',
+        typographyPreset: 'elegante'
+    },
+    'brillo-oro': {
+        label: 'Brillo y Oro',
+        desc: 'Año nuevo minimalista: diamantina champaña arriba y papel rasgado con filo dorado',
+        icon: '💫',
+        primaryColor: '#1D1A16',
+        accentColor: '#1D1A16',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#EFE9E0',
+        textPrimary: '#2B2620',
+        textSecondary: '#6B6255',
+        heroTextColor: '#1D1A16',
+        heroBgColor: '#E8E2D9',
+        typographyPreset: 'elegante'
+    },
+    'monos-rojos': {
+        label: 'Moños Rojos',
+        desc: 'Cena de año nuevo sencilla y elegante: listones rojos en las esquinas',
+        icon: '🎀',
+        primaryColor: '#8E1B1B',
+        accentColor: '#8E1B1B',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F7F4F1',
+        textPrimary: '#7E1A1A',
+        textSecondary: '#9B4A4A',
+        heroTextColor: '#8E1B1B',
+        heroBgColor: '#F1ECE7',
+        typographyPreset: 'elegante'
+    },
+    'mesa-nochevieja': {
+        label: 'Mesa de Nochevieja',
+        desc: 'Nochevieja en casa: mantel de cuadros, tarjeta ondulada con moño y copa de ¡Salud!',
+        icon: '🍷',
+        primaryColor: '#9C2B2B',
+        accentColor: '#9C2B2B',
+        cardBgColor: '#FFFFFF',
+        sectionBgColor: '#F3ECE2',
+        textPrimary: '#6E2A24',
+        textSecondary: '#94574F',
+        heroTextColor: '#9C2B2B',
+        heroBgColor: '#E7EADF',
+        typographyPreset: 'elegante'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
@@ -1029,7 +1211,22 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'cuadros-escoceses', name: 'Cuadros Escoceses', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Cuadros Escoceses', slug: 'navidad-cuadros-escoceses', icon: '🎅', plan: 'Clásica', thumbnail: '/images/templates/cuadros-escoceses.jpg' },
     { id: 'rayas-rojas', name: 'Rayas Rojas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Rayas Rojas', slug: 'navidad-rayas-rojas', icon: '🎀', plan: 'Clásica', thumbnail: '/images/templates/rayas-rojas.jpg' },
     { id: 'holly-jolly', name: 'Holly Jolly Vintage', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Holly Jolly Vintage', slug: 'navidad-holly-jolly', icon: '🎄', plan: 'Clásica', thumbnail: '/images/templates/holly-jolly.jpg' },
-    { id: 'casita-nevada', name: 'Casita Nevada', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Casita Nevada', slug: 'navidad-casita-nevada', icon: '🏡', plan: 'Clásica', thumbnail: '/images/templates/casita-nevada.jpg' }
+    { id: 'casita-nevada', name: 'Casita Nevada', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Casita Nevada', slug: 'navidad-casita-nevada', icon: '🏡', plan: 'Clásica', thumbnail: '/images/templates/casita-nevada.jpg' },
+
+    // ── Fin de Año ──
+    { id: 'brindis-oro', name: 'Brindis de Oro', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Brindis de Oro', slug: 'fin-brindis-oro', icon: '🥂', plan: 'Pro', thumbnail: '/images/templates/brindis-oro.jpg' },
+    { id: 'globos-champana', name: 'Globos de Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Globos de Champaña', slug: 'fin-globos-champana', icon: '🍾', plan: 'Pro', thumbnail: '/images/templates/globos-champana.jpg' },
+    { id: 'noche-disco', name: 'Noche Disco', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Noche Disco', slug: 'fin-noche-disco', icon: '🪩', plan: 'Pro', thumbnail: '/images/templates/noche-disco.jpg' },
+    { id: 'cena-gala', name: 'Cena de Gala', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cena de Gala', slug: 'fin-cena-gala', icon: '✨', plan: 'Pro', thumbnail: '/images/templates/cena-gala.jpg' },
+    { id: 'cierre-brillante', name: 'Cierre Brillante', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cierre Brillante', slug: 'fin-cierre-brillante', icon: '🥃', plan: 'Pro', thumbnail: '/images/templates/cierre-brillante.jpg' },
+    { id: 'perlas-champana', name: 'Perlas y Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Perlas y Champaña', slug: 'fin-perlas-champana', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/perlas-champana.jpg' },
+    { id: 'soiree-deco', name: 'Soirée Art Déco', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Soirée Art Déco', slug: 'fin-soiree-deco', icon: '🔷', plan: 'Clásica', thumbnail: '/images/templates/soiree-deco.jpg' },
+    { id: 'esmoquin', name: 'Esmoquin', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Esmoquin', slug: 'fin-esmoquin', icon: '🎩', plan: 'Clásica', thumbnail: '/images/templates/esmoquin.jpg' },
+    { id: 'fuegos-plata', name: 'Fuegos de Plata', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Fuegos de Plata', slug: 'fin-fuegos-plata', icon: '🎆', plan: 'Clásica', thumbnail: '/images/templates/fuegos-plata.jpg' },
+    { id: 'arco-dorado', name: 'Arco Dorado', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Arco Dorado', slug: 'fin-arco-dorado', icon: '🌙', plan: 'Clásica', thumbnail: '/images/templates/arco-dorado.jpg' },
+    { id: 'brillo-oro', name: 'Brillo y Oro', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Brillo y Oro', slug: 'fin-brillo-oro', icon: '💫', plan: 'Clásica', thumbnail: '/images/templates/brillo-oro.jpg' },
+    { id: 'monos-rojos', name: 'Moños Rojos', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Moños Rojos', slug: 'fin-monos-rojos', icon: '🎀', plan: 'Clásica', thumbnail: '/images/templates/monos-rojos.jpg' },
+    { id: 'mesa-nochevieja', name: 'Mesa de Nochevieja', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Mesa de Nochevieja', slug: 'fin-mesa-nochevieja', icon: '🍷', plan: 'Clásica', thumbnail: '/images/templates/mesa-nochevieja.jpg' }
 ];
 
 export const EVENT_CATEGORY_LABELS: Record<string, string> = {
@@ -1044,6 +1241,7 @@ export const EVENT_CATEGORY_LABELS: Record<string, string> = {
     graduacion: 'Graduaciones',
     corporate: 'Corporativo',
     navidad: 'Posada / Navidad',
+    fin_de_ano: 'Fin de Año',
     todas: 'Todas las Categorías',
 };
 
@@ -1070,6 +1268,7 @@ export function normalizeEventCategory(eventTypeOrCategory?: string, currentThem
     if (['graduacion', 'graduaciones'].includes(lower)) return 'graduacion';
     if (['corporate', 'corporativo', 'gala'].includes(lower)) return 'corporate';
     if (['navidad', 'posada', 'posadas', 'christmas'].includes(lower)) return 'navidad';
+    if (['fin_de_ano', 'fin de año', 'fin de ano', 'año nuevo', 'new year', 'nochevieja'].includes(lower)) return 'fin_de_ano';
     return lower;
 }
 
@@ -1130,7 +1329,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana'];
+export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'brindis-oro', 'globos-champana', 'noche-disco', 'cena-gala', 'cierre-brillante', 'perlas-champana'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

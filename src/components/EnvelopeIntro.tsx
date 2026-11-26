@@ -86,6 +86,7 @@ function getEventLabel(eventType?: string): string {
     if (t.includes('graduacion') || t.includes('graduación')) return 'Mi graduación';
     if (t.includes('corporate') || t.includes('corporativo')) return 'Evento Especial';
     if (t.includes('navidad') || t.includes('posada')) return 'Nuestra posada';
+    if (t.includes('fin_de_ano') || t.includes('año nuevo')) return 'Cena de fin de año';
     return 'Nuestra celebración';
 }
 
@@ -327,6 +328,19 @@ export default function EnvelopeIntro({
         'rayas-rojas': '#A5162A',
         'holly-jolly': '#B03A2E',
         'casita-nevada': '#B02A2A',
+        'brindis-oro': '#D9B15A',
+        'globos-champana': '#D8B56C',
+        'noche-disco': '#111111',
+        'cena-gala': '#E2BE6C',
+        'cierre-brillante': '#D8B05A',
+        'perlas-champana': '#B08A4A',
+        'soiree-deco': '#C4A46A',
+        'esmoquin': '#F2F2F2',
+        'fuegos-plata': '#E6E6E6',
+        'arco-dorado': '#CDA15C',
+        'brillo-oro': '#1D1A16',
+        'monos-rojos': '#8E1B1B',
+        'mesa-nochevieja': '#9C2B2B',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico
