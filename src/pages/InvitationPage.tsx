@@ -1574,6 +1574,28 @@ export default function InvitationPage() {
         return () => clearInterval(interval);
     }, [event]);
 
+    // Broadcast para activar el modo/skin navideño en invitaciones de edición Navidad (Pro y Clásica)
+    useEffect(() => {
+        const currentTheme = event?.theme_config?.theme;
+        const requestedCat = searchParams.get('category')?.toLowerCase().trim();
+        const eventType = (event?.event_type || requestedCat || '').toLowerCase().trim();
+        const isXmas = eventType === 'navidad' ||
+            eventType === 'posada' ||
+            Boolean(currentTheme?.startsWith('nav-')) ||
+            (currentTheme ? ['pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'posada-linea', 'cuadros-escoceses', 'rayas-rojas', 'holly-jolly', 'casita-nevada'].includes(currentTheme) : false);
+
+        if (typeof window !== 'undefined') {
+            (window as any).__INVITTO_CHRISTMAS_EVENT__ = isXmas;
+            window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: isXmas }));
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                (window as any).__INVITTO_CHRISTMAS_EVENT__ = false;
+                window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: false }));
+            }
+        };
+    }, [event?.event_type, event?.theme_config?.theme, searchParams]);
+
     // Generate calendar links
     const generateGoogleCalendarLink = () => {
         if (!event) return '';
@@ -3039,23 +3061,6 @@ END:VCALENDAR`;
     const categoryTemplates = getTemplatesForCategory(effectiveEventCategory, cfg.theme);
     const otherTemplates = CANONICAL_TEMPLATES.filter(t => !categoryTemplates.some(ct => ct.id === t.id));
     const categoryLabel = EVENT_CATEGORY_LABELS[effectiveEventCategory] || 'Evento';
-
-    // Broadcast para activar el modo/skin navideño en invitaciones de edición Navidad (Pro y Clásica)
-    useEffect(() => {
-        const isXmas = effectiveEventCategory === 'navidad' ||
-            cfg.theme?.startsWith('nav-') ||
-            ['pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'posada-linea', 'cuadros-escoceses', 'rayas-rojas', 'holly-jolly', 'casita-nevada'].includes(cfg.theme);
-        if (typeof window !== 'undefined') {
-            (window as any).__INVITTO_CHRISTMAS_EVENT__ = isXmas;
-            window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: isXmas }));
-        }
-        return () => {
-            if (typeof window !== 'undefined') {
-                (window as any).__INVITTO_CHRISTMAS_EVENT__ = false;
-                window.dispatchEvent(new CustomEvent('invitto:xmas-event-active', { detail: false }));
-            }
-        };
-    }, [effectiveEventCategory, cfg.theme]);
 
     const isPro     = cfg.isPro     === true
                    || normalizePlan(event.plan) === 'pro'
