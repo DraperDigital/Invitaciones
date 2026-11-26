@@ -426,6 +426,13 @@ export default function InvitationPage() {
             accentOverride: '#6F88AA', fontPreset: 'romantica',
             heroRadius: '0px', cardRadius: '10px',
         },
+        'editorial-bn': {
+            sectionBg: '#0C0C0C', sectionBgAlt: '#F4F2EE', cardBg: '#151515',
+            textPrimary: '#F4F2EE', textSecondary: '#BDBAB4',
+            borderColor: '#333333', cardBorder: '#333333',
+            accentOverride: '#F4F2EE', fontPreset: 'elegante',
+            heroRadius: '0px', cardRadius: '0px',
+        },
         'anturio-vino': {
             sectionBg: '#D9D7D3', sectionBgAlt: '#E3E0DA', cardBg: '#F4EFE6',
             textPrimary: '#3B1A1F', textSecondary: '#6A4A4A',
@@ -2924,7 +2931,7 @@ END:VCALENDAR`;
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela') {
+        if (cfg.theme === 'pase-abordar' || cfg.theme === 'sobre-marino' || cfg.theme === 'terciopelo-vino' || cfg.theme === 'azul-acuarela' || cfg.theme === 'editorial-bn') {
             return <WeddingLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'anturio-vino') {

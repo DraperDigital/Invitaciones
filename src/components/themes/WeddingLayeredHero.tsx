@@ -253,7 +253,40 @@ function AzulHero({ event, cfg, countdown, labels, heroImageUrl, scrollToSection
     );
 }
 
-export const WEDDING_LAYERED_THEMES = ['pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela'];
+function EditorialHero({ event, cfg, countdown, heroImageUrl, scrollToSection, onEditHero }: Props) {
+    const d = useHeroData(event, cfg, countdown);
+    const phrase = cfg?.hero_phrase || 'Éramos una promesa y hoy la cumplimos';
+    return (
+        <>
+            <div className="wh-l we-bg">
+                <Photo cls="wh-photo we-photo" heroImageUrl={heroImageUrl} cfg={cfg} onEditHero={onEditHero} />
+            </div>
+            <div className="wh-inner">
+                {d.date && <p className="we-date">{format(d.date, "d MMMM yyyy", { locale: es })}</p>}
+                <h1 className="we-names">
+                    <span>{d.nameA}{d.nameB ? ' &' : ''}</span>
+                    {d.nameB && <span>{d.nameB}</span>}
+                </h1>
+                {d.city && <p className="we-city">{d.city}</p>}
+                <p className="we-phrase">{phrase}</p>
+                <i className="we-line" aria-hidden="true" />
+                {d.showCountdown && (
+                    <div className="we-count" aria-label="Cuenta regresiva">
+                        {[
+                            { v: countdown.days, l: 'Días' },
+                            { v: countdown.hours, l: 'Horas' },
+                            { v: countdown.minutes, l: 'Min' },
+                            { v: countdown.seconds, l: 'Seg' },
+                        ].map((it) => <div key={it.l}><b>{pad(it.v)}</b><small>{it.l}</small></div>)}
+                    </div>
+                )}
+                <button type="button" className="we-btn" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+            </div>
+        </>
+    );
+}
+
+export const WEDDING_LAYERED_THEMES = ['pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn'];
 
 export default function WeddingLayeredHero(props: Props) {
     const [shown, setShown] = useState(false);
@@ -263,6 +296,7 @@ export default function WeddingLayeredHero(props: Props) {
         'sobre-marino': ['wh--sobre', SobreHero],
         'terciopelo-vino': ['wh--vino', VinoHero],
         'azul-acuarela': ['wh--azul', AzulHero],
+        'editorial-bn': ['wh--edit', EditorialHero],
     };
     const [cls, Comp] = variants[props.theme] || variants['sobre-marino'];
     return (

@@ -310,6 +310,7 @@ export default function EnvelopeIntro({
         'sobre-marino': '#B8913F',
         'terciopelo-vino': '#6B1626',
         'azul-acuarela': '#6F88AA',
+        'editorial-bn': '#1A1A1A',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

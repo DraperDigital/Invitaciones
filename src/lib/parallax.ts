@@ -240,5 +240,10 @@ PARALLAX_BY_THEME['azul-acuarela'] = [
     { selector: '.wa-bouquet', speed: -0.2 },
     ...sectionLayers('azul-acuarela'),
 ];
+PARALLAX_BY_THEME['editorial-bn'] = [
+    { selector: '.we-bg', speed: 0.4 },
+    { selector: '.wh--edit .wh-inner', speed: -0.12 },
+    ...sectionLayers('editorial-bn'),
+];
 
 export const PARALLAX_MAX_PX = 160;

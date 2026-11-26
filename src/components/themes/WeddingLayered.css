@@ -405,3 +405,87 @@
   .wv-curtain--r { right: -112px; }
   .wv-roses { width: 170px; right: -30px; top: -20px; }
 }
+
+/* ═════════════════════════ EDITORIAL B&N ═════════════════════════ */
+.wh--edit {
+  --wh-bg-color: #0c0c0c; --wh-bg-img: none;
+  --wh-title: 'Bodoni Moda', Didot, serif; --wh-text: 'Jost', sans-serif;
+  --wh-ink: #f4f2ee;
+  color: #f4f2ee;
+}
+.we-bg { inset: -80px 0 auto 0; height: calc(100% + 80px); z-index: 0; }
+.we-photo { width: 100%; height: 100%; }
+.we-photo img { filter: grayscale(1) contrast(1.08) brightness(.92); }
+.we-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,12,12,.05) 0%, rgba(12,12,12,.15) 30%, rgba(12,12,12,.78) 62%, #0c0c0c 92%); pointer-events: none; }
+.wh--edit .wh-inner { justify-content: flex-end; min-height: 100svh; gap: 0; padding: 120px 22px 70px; text-align: center; pointer-events: none; }
+.wh--edit .wh-inner > * { pointer-events: auto; }
+.we-date { font-family: 'Jost', sans-serif; font-weight: 400; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+.wh .we-names { margin-top: 8px; font-family: 'Bodoni Moda', Didot, serif !important; font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .01em; color: #fff; }
+.we-names span { display: block; font-size: clamp(2.6rem, 12.5vw, 3.6rem); }
+.we-city { margin-top: 8px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; opacity: .85; }
+.wh .we-phrase { margin-top: 34px; font-family: 'Pinyon Script', cursive !important; font-size: 1.55rem; line-height: 1.35; color: #e9e6e0; max-width: 300px; }
+.we-line { display: block; width: 1px; height: 54px; margin: 26px auto 22px; background: rgba(244,242,238,.7); }
+.we-count { display: grid; grid-template-columns: repeat(4, 64px); justify-content: center; }
+.we-count div + div { border-left: 1px solid rgba(244,242,238,.25); }
+.we-count b { display: block; font-family: 'Bodoni Moda', serif; font-weight: 400; font-size: 1.9rem; line-height: 1; }
+.we-count small { display: block; margin-top: 6px; font-size: 9px; letter-spacing: .24em; text-transform: uppercase; opacity: .7; }
+.we-btn { margin-top: 28px; padding: 10px 26px; border-bottom: 1px solid #f4f2ee; border-top: 1px solid #f4f2ee; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #f4f2ee; }
+@media (min-width: 900px) {
+  .wh--edit .wh-inner { flex-direction: column; justify-content: flex-end; align-items: center; padding: 120px 48px 80px; }
+  .we-names span { font-size: 5.4rem; }
+  .we-photo img { object-position: center 30%; }
+}
+
+/* Módulos editoriales: negro con secciones blancas */
+.theme-editorial-bn {
+  --kp-bg: #0c0c0c; --kp-alt: #f4f2ee;
+  --kp-title-font: 'Bodoni Moda', Didot, serif; --kp-title-weight: 400; --kp-title-size: clamp(2.3rem, 11vw, 3rem); --kp-text: 'Jost', sans-serif;
+  --kp-title: #f4f2ee; --kp-ink: #f4f2ee; --kp-soft: #bdbab4; --kp-accent: #f4f2ee;
+  --kp-btn: transparent; --kp-btn-ink: #f4f2ee; --kp-card-border: rgba(244,242,238,.25); --kp-icon-bg: transparent; --kp-icon: #f4f2ee;
+  --kp-shadow: rgba(0,0,0,.5);
+  --kp-title-deco: none; --kp-art-message: none; --kp-art-location: none; --kp-art-gifts: none; --kp-art-rsvp: none; --kp-art-closing: none;
+  --kp-rsvp-bg: #0c0c0c; --kp-closing-bg: #0c0c0c; --kp-closing-title: #f4f2ee; --kp-closing-text: #bdbab4;
+  --text-primary: #f4f2ee; --text-secondary: #bdbab4; --card-bg: #151515;
+}
+.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) {
+  --kp-title: #0c0c0c; --kp-ink: #0c0c0c; --kp-soft: #55524d; --kp-icon: #0c0c0c; --kp-btn-ink: #0c0c0c; --kp-card-border: rgba(12,12,12,.2);
+  --text-primary: #0c0c0c; --text-secondary: #55524d; --card-bg: #ffffff;
+  background: #f4f2ee !important;
+}
+.theme-editorial-bn :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2, #guest_welcome h2) { text-transform: uppercase !important; letter-spacing: .02em !important; line-height: 1 !important; }
+.theme-editorial-bn :is(section:not(#hero) h3, #gallery h2, #rsvp h2)::before { display: none !important; }
+.theme-editorial-bn :is(#message, #location, #gifts, #rsvp) > div::before { display: none !important; }
+.theme-editorial-bn .invitation-closing { padding-top: 70px !important; }
+.theme-editorial-bn .invitation-closing::before { display: none; }
+.theme-editorial-bn section p[class*="italic"], .theme-editorial-bn section .italic { font-family: 'Pinyon Script', cursive !important; font-style: normal !important; font-size: 1.35rem; }
+.theme-editorial-bn section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) {
+  background: transparent !important; color: var(--kp-btn-ink) !important; border-radius: 0 !important;
+  border: 0 !important; border-top: 1px solid currentColor !important; border-bottom: 1px solid currentColor !important;
+  box-shadow: none !important; letter-spacing: .28em !important; text-transform: uppercase; font-size: 11px !important; font-weight: 500 !important;
+}
+.theme-editorial-bn section#rsvp :is(button[type="submit"], button[class*="rounded-2xl"]) { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; }
+.theme-editorial-bn section :is(input, textarea, select) { border-radius: 0 !important; background: transparent !important; color: #f4f2ee !important; border: 0 !important; border-bottom: 1px solid rgba(244,242,238,.4) !important; }
+.theme-editorial-bn section#rsvp :is(h2, h3, p, label, label *) { color: #f4f2ee !important; }
+.theme-editorial-bn section#rsvp label:has(input[type="checkbox"]) { background: transparent !important; border-color: rgba(244,242,238,.25) !important; }
+.theme-editorial-bn #gallery img { filter: grayscale(1) contrast(1.05); border: 0 !important; border-radius: 0 !important; box-shadow: none !important; outline: 1px solid rgba(12,12,12,.25); outline-offset: 6px; }
+.theme-editorial-bn section:not(#hero):not(#gallery) img:not([class*="icon"]) { filter: grayscale(1); }
+.theme-editorial-bn section:not(#hero) .rounded-full:not(a):not(button) { border: 1px solid currentColor; }
+/* Editorial: ajustes de contraste y formas (más específicos que KidsPastel) */
+.theme-editorial-bn.theme-editorial-bn { --accent: #f4f2ee; --accent-color: #f4f2ee; --button-color: #f4f2ee; }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) { --accent: #0c0c0c; --accent-color: #0c0c0c; --button-color: #0c0c0c; }
+.theme-editorial-bn.theme-editorial-bn section [class*="bg-[var(--card-bg)]"] { background: transparent !important; border: 1px solid var(--kp-card-border) !important; border-radius: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(#message, #dress_code, #gallery, #hotels, #gifts) [class*="bg-[var(--card-bg)]"],
+.theme-editorial-bn.theme-editorial-bn .invitation-content section:is(#message, #dress_code, #gallery, #hotels, #gifts) [class*="bg-[var(--card-bg)]"] { background: #ffffff !important; }
+.theme-editorial-bn.theme-editorial-bn section [class*="text-accent"], .theme-editorial-bn.theme-editorial-bn section .text-accent { color: var(--kp-ink) !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(h4, h3) { color: var(--kp-title) !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(a, button) { color: var(--kp-btn-ink) !important; }
+.theme-editorial-bn.theme-editorial-bn section#rsvp :is(button[type="submit"]) { background: #f4f2ee !important; color: #0c0c0c !important; }
+.theme-editorial-bn.theme-editorial-bn section :is(input, textarea, select) { border-radius: 0 !important; background: transparent !important; color: #f4f2ee !important; border: 0 !important; border-bottom: 1px solid rgba(244,242,238,.45) !important; padding-left: 0 !important; }
+.theme-editorial-bn.theme-editorial-bn #gallery img { border-radius: 0 !important; border: 0 !important; box-shadow: none !important; }
+.theme-editorial-bn.theme-editorial-bn section:not(#hero) .rounded-full:not(a):not(button) { background: transparent !important; }
+@media (min-width: 900px) { .we-photo img { object-position: center 12% !important; } }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp form button:not([class*="text-xs"]):first-of-type,
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp button[type="submit"] { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; border-radius: 0 !important; }
+.theme-editorial-bn.theme-editorial-bn section:not(#hero):not(#rsvp) :is(a[class*="rounded-full"], button[class*="rounded-full"], button[class*="rounded-2xl"]) { border-top: 1px solid currentColor !important; border-bottom: 1px solid currentColor !important; }
+.theme-editorial-bn.theme-editorial-bn .invitation-content section#rsvp button[class*="h-16"] { background: #f4f2ee !important; color: #0c0c0c !important; border: 0 !important; border-radius: 0 !important; }

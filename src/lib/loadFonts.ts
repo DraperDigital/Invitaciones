@@ -66,6 +66,7 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'sobre-marino': ['Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@400;500;600'],
     'terciopelo-vino': ['Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@400;500;600'],
     'azul-acuarela': ['Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@400;500;600'],
+    'editorial-bn': ['Bodoni+Moda:ital,wght@0,400;0,500;1,400', 'Pinyon+Script', 'Jost:wght@300;400;500'],
     'anturio-vino': ['Italiana', 'Pinyon+Script', 'Libre+Caslon+Text:ital,wght@0,400;0,700;1,400', 'La+Belle+Aurore'],
     'dinosaurios': ['Fredoka:wght@400;500;600;700', 'Nunito:wght@400;600;700'],
     'lirio-vainilla': ['Pinyon+Script', 'Marcellus', 'Josefin+Sans:wght@300;400;600', 'Cormorant+Garamond:ital@1'],

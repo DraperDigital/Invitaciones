@@ -1326,6 +1326,43 @@ export const MOCK_EVENTS: Event[] = [
         slug: 'boda-azul-acuarela',
         created_at: new Date().toISOString(),
     },
+    // LIDIA & ALEJANDRO - EDITORIAL B&N
+    {
+        id: 'evt-editorial-bn',
+        user_id: MOCK_USER.id,
+        title: 'Lidia & Alejandro',
+        event_type: 'wedding',
+        date_time: '2027-02-22T18:00:00',
+        venue_name: 'Hacienda Las Quintas',
+        venue_address: 'Cuernavaca, Morelos',
+        maps_link: 'https://maps.google.com/?q=Cuernavaca',
+        dress_code: 'Etiqueta',
+        rsvp_deadline: '2027-01-31T23:59:00',
+        is_published: true,
+        plan: 'premium',
+        theme_config: {
+            isPremium: true,
+            theme: 'editorial-bn',
+            welcome_quote: 'Gracias por ser parte de nuestra historia.',
+            welcome_message: 'Con la bendición de nuestros padres, te invitamos a celebrar el inicio de esta nueva etapa.',
+            venue_time: '18:00',
+            dress_code_notes: 'Etiqueta rigurosa en blanco y negro.',
+            gift_registry_type: 'registry',
+            registry_items: [
+                { store: 'Liverpool', link: 'https://mesaderegalos.liverpool.com.mx', description: 'Evento: Lidia & Alejandro' },
+            ],
+            gallery_images: [
+                { url: '/images/couples/helena-austin-hero.jpg', caption: '' },
+                { url: '/images/couples/helena-austin-gallery-1.jpg', caption: '' },
+            ],
+            hero_image_url: '/images/couples/helena-austin-hero.jpg',
+            showCountdown: true,
+            showEnvelope: true,
+            show_closing_message: true,
+        },
+        slug: 'boda-editorial-bn',
+        created_at: new Date().toISOString(),
+    },
     // ANA & JULIÁN - ANTURIO VINO
     {
         id: 'evt-anturio-vino',
