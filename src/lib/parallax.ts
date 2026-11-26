@@ -200,5 +200,24 @@ PARALLAX_BY_THEME.hadita = [
     { selector: '.kh-l--baby', speed: -0.15 },
     ...sectionLayers('hadita'),
 ];
+PARALLAX_BY_THEME['pase-abordar'] = [
+    { selector: '.wh--pase', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.wp-plane', speed: -0.45 },
+    { selector: '.wp-path', speed: 0.15 },
+    { selector: '.wp-clouds', speed: -0.12 },
+    ...sectionLayers('pase-abordar'),
+];
+PARALLAX_BY_THEME['sobre-marino'] = [
+    { selector: '.wh--sobre', speed: 0.3, cssVar: '--py-bg', varOnly: true },
+    { selector: '.ws-corner--tl', speed: 0.25 },
+    { selector: '.ws-corner--br', speed: -0.2 },
+    { selector: '.ws-f--1', speed: -0.5 },
+    { selector: '.ws-f--2', speed: -0.35 },
+    { selector: '.ws-f--3', speed: 0.4 },
+    { selector: '.ws-f--4', speed: -0.6 },
+    { selector: '.ws-f--5', speed: -0.3 },
+    { selector: '.ws-garland', speed: -0.1 },
+    ...sectionLayers('sobre-marino'),
+];
 
 export const PARALLAX_MAX_PX = 160;
