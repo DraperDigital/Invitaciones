@@ -1,0 +1,209 @@
+/* ──────────────────────────────────────────────────────────────────────
+   Dulce Espera · Baby Posada de Matías (experiencia privada)
+   Capas con parallax (.de-l y escenas): usar translate/rotate/scale.
+   ────────────────────────────────────────────────────────────────────── */
+.de {
+  --de-blue: #e3ebf4; --de-cream: #f8f1e5; --de-gold: #b8863e; --de-gold-l: #e2bf74;
+  --de-ink: #3d3129; --de-brown: #8b5a32; --de-navy: #6c86ad;
+  position: relative; overflow: hidden; font-family: 'Lora', 'Cormorant Garamond', Georgia, serif; color: var(--de-ink);
+}
+.de-dust { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+.de-music { position: fixed; left: 14px; bottom: 16px; z-index: 70; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,250,240,.92); color: var(--de-gold); box-shadow: 0 0 0 1px rgba(184,134,62,.45), 0 10px 22px -10px rgba(0,0,0,.45); }
+.de-music.is-on { animation: de-pulse 2.4s ease-in-out infinite; }
+@keyframes de-pulse { 0%,100% { box-shadow: 0 0 0 1px rgba(184,134,62,.45), 0 0 0 0 rgba(226,191,116,.55); } 50% { box-shadow: 0 0 0 1px rgba(184,134,62,.45), 0 0 0 10px rgba(226,191,116,0); } }
+
+.de-scene { position: relative; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 70px 22px; text-align: center; isolation: isolate; }
+.de-blue { background: var(--de-blue) url('/images/themes/matias/papel-azul.webp') center / 500px auto repeat; }
+.de-cream { background: var(--de-cream) url('/images/themes/matias/papel-crema.webp') center / 560px auto repeat; }
+.de-scene::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, rgba(255,250,235,.55), transparent 65%); }
+
+.de-frame { position: relative; width: 100%; max-width: 380px; padding: 56px 24px; }
+.de-frame::before, .de-frame::after { content: ''; position: absolute; pointer-events: none; border: 1.5px solid var(--de-gold-l); }
+.de-frame::before { inset: 0; } .de-frame::after { inset: 7px; border-width: 1px; opacity: .8; }
+
+.de-eyebrow { font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; color: var(--de-gold); }
+.de-eyebrow--big { font-size: 14px; letter-spacing: .28em; }
+.de-rule { display: block; width: 46px; height: 2px; margin: 12px 0; background: var(--de-gold-l); }
+
+/* twinkles (estrellitas de cuatro picos) */
+.de-twinkles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.de-twinkles i { position: absolute; width: 18px; height: 18px; background: #e7c372; clip-path: polygon(50% 0, 58% 42%, 100% 50%, 58% 58%, 50% 100%, 42% 58%, 0 50%, 42% 42%); filter: drop-shadow(0 0 6px rgba(255,214,130,.9)); animation: de-twinkle calc(2.2s + var(--k) * .37s) ease-in-out infinite; animation-delay: calc(var(--k) * -.6s); }
+.de-twinkles i:nth-child(1) { left: 14%; top: 18%; } .de-twinkles i:nth-child(2) { left: 82%; top: 26%; width: 11px; height: 11px; }
+.de-twinkles i:nth-child(3) { left: 88%; top: 64%; } .de-twinkles i:nth-child(4) { left: 10%; top: 72%; width: 12px; height: 12px; }
+.de-twinkles i:nth-child(5) { left: 74%; top: 86%; width: 14px; height: 14px; } .de-twinkles i:nth-child(6) { left: 30%; top: 8%; width: 10px; height: 10px; }
+.de-twinkles i:nth-child(7) { left: 52%; top: 92%; width: 12px; height: 12px; }
+@keyframes de-twinkle { 0%,100% { opacity: .2; scale: .5; rotate: 0deg; } 50% { opacity: 1; scale: 1.15; rotate: 45deg; } }
+
+/* ═══ 1 · Sobre ═══ */
+.de-s1 { justify-content: center; gap: 26px; }
+.de-env { position: relative; width: min(84vw, 380px); aspect-ratio: 662 / 900; cursor: pointer; outline: none; }
+.de-env-closed { position: absolute; left: 0; right: 0; top: 50%; width: 100%; translate: 0 -50%; transition: opacity .6s ease, scale .6s ease; filter: drop-shadow(0 22px 26px rgba(70,90,120,.35)); animation: de-breathe 3.6s ease-in-out infinite; z-index: 3; }
+@keyframes de-breathe { 0%,100% { scale: 1; } 50% { scale: 1.025; } }
+.de-env-open { position: absolute; inset: 0; opacity: 0; transition: opacity .5s ease .1s; }
+.de-env-back { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 22px 26px rgba(70,90,120,.35)); }
+.de-env-front { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; z-index: 2; background: url('/images/themes/matias/sobre-abierto.webp') center bottom / 100% auto no-repeat; clip-path: polygon(0 18%, 50% 0, 100% 18%, 100% 100%, 0 100%); }
+.de-card { position: absolute; left: 9%; right: 9%; top: 30%; height: 62%; z-index: 1; opacity: 0; translate: 0 10%; transition: translate 1.4s cubic-bezier(.2,.8,.2,1) .35s, opacity .4s ease .3s; }
+.de-card-in { position: relative; height: 100%; padding: 22px 18px; text-align: left; background: #edf3f9 url('/images/themes/matias/papel-azul.webp') center / 500px auto; box-shadow: inset 0 0 0 6px #edf3f9, inset 0 0 0 7.5px var(--de-gold-l), 0 10px 24px -12px rgba(60,80,110,.5); }
+.de-card-title { font-family: 'Great Vibes', 'Pinyon Script', cursive; font-size: clamp(2.6rem, 12vw, 3.4rem); line-height: .95; color: var(--de-brown); background: linear-gradient(100deg, #8b5a32 20%, #d8a95c 45%, #8b5a32 70%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: de-shine 5s linear infinite; }
+.de-card-title--lg { font-size: clamp(3rem, 15vw, 4rem); margin-top: 4px; }
+@keyframes de-shine { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.de-card-date { font-style: italic; font-size: 15px; }
+.de-card-star { position: absolute; right: 10px; top: 14px; width: 64px; filter: drop-shadow(0 0 10px rgba(255,210,120,.8)); animation: de-twinkle-soft 3s ease-in-out infinite; }
+@keyframes de-twinkle-soft { 0%,100% { filter: drop-shadow(0 0 6px rgba(255,210,120,.5)); scale: 1; } 50% { filter: drop-shadow(0 0 18px rgba(255,220,140,1)); scale: 1.06; } }
+.de.is-open .de-env-closed { opacity: 0; scale: 1.08; pointer-events: none; animation: none; }
+.de.is-open .de-env-open { opacity: 1; }
+.de.is-open .de-card { opacity: 1; translate: 0 -46%; }
+.de-hint { font-style: italic; font-size: 15px; color: var(--de-brown); animation: de-hint 2s ease-in-out infinite; }
+@keyframes de-hint { 0%,100% { opacity: .55; translate: 0 0; } 50% { opacity: 1; translate: 0 4px; } }
+
+/* ═══ 2 · Frase letra por letra ═══ */
+.de-quote { font-style: italic; font-size: clamp(1.9rem, 8.6vw, 2.5rem); line-height: 1.2; color: var(--de-brown); padding: 60px 0 10px; }
+.de-line { display: block; }
+.de-word { display: inline-block; white-space: nowrap; }
+.de-ch { display: inline-block; opacity: 0; translate: 0 .4em; filter: blur(4px); transition: opacity .5s ease, translate .5s ease, filter .5s ease; transition-delay: calc(var(--i) * 32ms); }
+.is-in .de-ch { opacity: 1; translate: 0 0; filter: blur(0); }
+.de-flourish { width: 120px; margin: 18px auto 50px; color: var(--de-gold); opacity: 0; transition: opacity 1s ease 1.6s; }
+.is-in .de-flourish { opacity: 1; }
+
+/* ═══ Motita se asoma ═══ */
+.de-peek { position: absolute; width: 118px; z-index: 5; cursor: pointer; filter: drop-shadow(0 10px 12px rgba(0,0,0,.2)); }
+.de-peek--r { right: -130px; bottom: 12%; rotate: -8deg; }
+.de-peek--l { left: -130px; bottom: 8%; scale: -1 1; rotate: 8deg; }
+.de-peek--top { top: 26px; right: 18%; width: 96px; translate: 0 -120%; }
+.is-in .de-peek--r { animation: de-peek-r 7s ease-in-out 1.2s infinite; }
+.is-in .de-peek--l { animation: de-peek-l 7.5s ease-in-out .8s infinite; }
+.is-in .de-peek--top { animation: de-peek-top 8s ease-in-out 1s infinite; }
+@keyframes de-peek-r { 0%,100% { right: -130px; rotate: -8deg; } 14%,40% { right: -36px; rotate: -8deg; } 22% { rotate: -18deg; } 30% { rotate: 2deg; } 52% { right: -130px; } }
+@keyframes de-peek-l { 0%,100% { left: -130px; } 14%,42% { left: -34px; } 24% { rotate: 18deg; } 34% { rotate: 0deg; } 54% { left: -130px; } }
+@keyframes de-peek-top { 0%,100% { translate: 0 -120%; } 14%,40% { translate: 0 -38%; } 24% { rotate: -12deg; } 32% { rotate: 6deg; } 52% { translate: 0 -120%; } }
+
+/* ═══ 3 · Gran noticia ═══ */
+.de-frame--gold::before { border-color: var(--de-gold-l); }
+.de-star-wrap { position: relative; width: 140px; height: 160px; margin: 18px auto 0; }
+.de-star { position: relative; width: 100%; z-index: 2; animation: de-twinkle-soft 3s ease-in-out infinite; }
+.de-star-glow { position: absolute; inset: -40%; border-radius: 50%; background: radial-gradient(circle, rgba(255,226,150,.85), rgba(255,226,150,0) 60%); animation: de-glow 3s ease-in-out infinite; z-index: 1; }
+@keyframes de-glow { 0%,100% { opacity: .45; scale: .85; } 50% { opacity: 1; scale: 1.1; } }
+.de-tw-star { inset: -30%; }
+.de-name { margin-top: 10px; font-family: 'Great Vibes', 'Pinyon Script', cursive; font-weight: 400; font-size: clamp(4.2rem, 21vw, 5.6rem); line-height: 1.05; color: #7389b1; background: linear-gradient(100deg, #6f86ad 30%, #dfe8f7 48%, #6f86ad 66%); background-size: 240% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 10px rgba(255,236,190,.8)) drop-shadow(0 2px 0 rgba(184,134,62,.6)); animation: de-shine 4s linear infinite; opacity: 0; scale: .7; transition: opacity 1s ease .4s, scale 1.2s cubic-bezier(.2,1.4,.4,1) .4s; }
+.is-in .de-name { opacity: 1; scale: 1; }
+.de-sub { margin-top: 6px; font-style: italic; font-size: 19px; line-height: 1.35; }
+.de-angel-pray { display: block; width: 150px; margin: 26px auto 0; cursor: pointer; animation: de-float 4.5s ease-in-out infinite; transform-origin: 70% 40%; }
+@keyframes de-float { 0%,100% { translate: 0 0; rotate: -1.5deg; } 50% { translate: 0 -10px; rotate: 1.5deg; } }
+.de-s3 .de-star-wrap { translate: 0 -40px; opacity: 0; transition: translate 1.4s ease, opacity 1s ease; }
+.de-s3.is-in .de-star-wrap { translate: 0 0; opacity: 1; }
+
+/* ═══ 4 · Celebremos ═══ */
+.de-script { font-family: 'Great Vibes', 'Pinyon Script', cursive; font-weight: 400; font-size: clamp(3.6rem, 18vw, 4.8rem); line-height: .95; color: var(--de-brown); }
+.de-divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 18px 0; color: var(--de-gold); }
+.de-divider i { width: 70px; height: 1px; background: var(--de-gold-l); }
+.de-body { font-style: italic; font-size: 19px; line-height: 1.45; }
+.de-pair { position: relative; height: 150px; margin-top: 30px; }
+.de-lamb { position: absolute; left: 8%; bottom: 0; width: 160px; cursor: pointer; transform-origin: 70% 60%; animation: de-nod 4s ease-in-out infinite; }
+.de-bunny { position: absolute; right: 12%; bottom: 6px; width: 86px; cursor: pointer; animation: de-hop 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes de-nod { 0%,100% { rotate: 0deg; } 20% { rotate: -3deg; } 40% { rotate: 1deg; } }
+@keyframes de-hop { 0%,58%,100% { translate: 0 0; scale: 1 1; } 64% { scale: 1.08 .9; } 72% { translate: -6px -34px; scale: .95 1.06; } 80% { translate: -10px 0; scale: 1.06 .94; } 86% { translate: -10px 0; scale: 1 1; } }
+
+/* ═══ 5 · Nacimiento (diorama) ═══ */
+.de-s5 { padding-top: 60px; justify-content: flex-start; }
+.de-s5 .de-card-title { margin-bottom: 6px; }
+.de-nat { position: relative; width: min(96vw, 440px); aspect-ratio: 1 / 1.08; margin-top: 10px; }
+.de-nat img { user-select: none; }
+.de-nat > * { position: absolute; cursor: pointer; }
+.de-nat-star { right: 4%; top: 0; width: 90px; cursor: default; }
+.de-nat-star img { position: relative; width: 100%; z-index: 2; animation: de-twinkle-soft 3s ease-in-out infinite; }
+.de-nat-angel { left: 2%; top: 14%; width: 40%; animation: de-float 5s ease-in-out infinite; z-index: 2; }
+.de-nat-deer { right: 4%; top: 30%; width: 34%; z-index: 1; transform-origin: 30% 30%; animation: de-sniff 6s ease-in-out infinite; }
+@keyframes de-sniff { 0%,100% { rotate: 0deg; } 30%,45% { rotate: -5deg; translate: -4px 4px; } }
+.de-nat-manger { left: 20%; top: 50%; width: 58%; z-index: 3; animation: de-breathe 4s ease-in-out infinite; }
+.de-nat-straw { left: -30%; bottom: -4%; width: 160%; z-index: 4; cursor: default; }
+.de-nat-lamb { left: -4%; bottom: 6%; width: 38%; z-index: 5; transform-origin: 75% 60%; animation: de-nod 5s ease-in-out infinite; }
+.de-nat-dog { left: 28%; bottom: 0; width: 27%; z-index: 6; transform-origin: 50% 100%; animation: de-wiggle 3.4s ease-in-out infinite; }
+@keyframes de-wiggle { 0%,100% { rotate: 0deg; } 10% { rotate: -4deg; } 20% { rotate: 4deg; } 30% { rotate: 0deg; } }
+.de-nat-bunny { right: 0; bottom: 2%; width: 18%; z-index: 6; transform-origin: 50% 100%; animation: de-hop 3.6s ease-in-out infinite; animation-delay: -1.2s; }
+.de-nat-lantern { right: 18%; bottom: 0; width: 16%; z-index: 6; }
+.de-nat-lantern img { position: relative; width: 100%; z-index: 2; }
+.de-lantern-glow { position: absolute; left: 50%; top: 58%; width: 380%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, rgba(255,196,96,.55), rgba(255,196,96,.18) 35%, transparent 65%); mix-blend-mode: screen; z-index: 1; animation: de-flicker 2.4s infinite steps(1); pointer-events: none; }
+.de-flame { position: absolute; left: 50%; top: 52%; width: 22%; aspect-ratio: 1 / 1.7; translate: -50% -50%; z-index: 3; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: radial-gradient(ellipse at 50% 70%, #fff8d6 0 25%, #ffd36a 45%, rgba(255,150,40,.85) 65%, transparent 72%); filter: blur(.6px) drop-shadow(0 0 8px rgba(255,190,80,1)); animation: de-flame .18s ease-in-out infinite alternate; pointer-events: none; }
+.de-flame--sm { top: 8%; width: 13%; }
+@keyframes de-flame { from { scale: 1 1; rotate: -3deg; } to { scale: .9 1.12; rotate: 3deg; } }
+@keyframes de-flicker { 0% { opacity: .85; } 12% { opacity: 1; } 24% { opacity: .75; } 37% { opacity: .95; } 52% { opacity: .8; } 66% { opacity: 1; } 81% { opacity: .7; } }
+
+/* entrada escalonada del diorama */
+.de-s5 .de-nat > * { opacity: 0; translate: 0 26px; transition: opacity .8s ease, translate .9s cubic-bezier(.2,.9,.3,1.3); }
+.de-s5.is-in .de-nat > * { opacity: 1; translate: 0 0; }
+.de-s5.is-in .de-nat-straw { transition-delay: 0s; } .de-s5.is-in .de-nat-manger { transition-delay: .2s; }
+.de-s5.is-in .de-nat-angel { transition-delay: .45s; } .de-s5.is-in .de-nat-deer { transition-delay: .6s; }
+.de-s5.is-in .de-nat-lamb { transition-delay: .8s; } .de-s5.is-in .de-nat-dog { transition-delay: 1s; }
+.de-s5.is-in .de-nat-bunny { transition-delay: 1.15s; } .de-s5.is-in .de-nat-lantern { transition-delay: 1.3s; }
+.de-s5.is-in .de-nat-star { transition-delay: 1.5s; }
+
+/* ═══ 6 · Datos ═══ */
+.de-frame--details { padding: 40px 22px 34px; }
+.de-detail { display: flex; flex-direction: column; align-items: center; }
+.de-ico { position: relative; width: 84px; height: 110px; display: grid; place-items: center; }
+.de-ico img { max-width: 100%; max-height: 100%; }
+.de-ico--lantern img { transform-origin: 50% 0; animation: de-swing 4s ease-in-out infinite; }
+.de-ico--pinata img { transform-origin: 50% 0; animation: de-swing 3s ease-in-out infinite; }
+@keyframes de-swing { 0%,100% { rotate: -6deg; } 50% { rotate: 6deg; } }
+.de-label { margin-top: 10px; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: .4em; text-transform: uppercase; color: var(--de-gold); }
+.de-value { font-style: italic; font-size: clamp(1.5rem, 7vw, 1.9rem); line-height: 1.2; }
+.de-value--sm { font-size: clamp(1.15rem, 5.4vw, 1.35rem); }
+.de-hr { display: block; width: 80%; height: 1px; margin: 22px auto; background: var(--de-gold-l); }
+.de-count { display: grid; grid-template-columns: repeat(4, 1fr); margin: 26px 0 18px; border-top: 1px solid var(--de-gold-l); border-bottom: 1px solid var(--de-gold-l); padding: 10px 0; }
+.de-count span + span { border-left: 1px solid rgba(184,134,62,.3); }
+.de-count b { display: block; font-size: 1.8rem; font-weight: 500; color: var(--de-brown); line-height: 1; }
+.de-count small { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--de-gold); }
+.de-btn { padding: 13px 28px; border-radius: 999px; background: var(--de-gold); color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; box-shadow: 0 12px 22px -12px rgba(139,90,50,.8); }
+.de-photo { position: relative; width: 170px; aspect-ratio: 1; margin: 26px auto 0; border-radius: 50%; overflow: hidden; border: 5px solid #fff; outline: 1.5px solid var(--de-gold-l); outline-offset: 3px; }
+.de-photo img { width: 100%; height: 100%; object-fit: cover; }
+.de-photo span { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; gap: 6px; color: #fff; background: rgba(0,0,0,.4); font-size: 12px; }
+.de-photo.is-editable { cursor: pointer; } .de-photo.is-editable:hover span { display: flex; }
+
+/* tocar un animalito */
+.is-poked { animation: de-boing .6s cubic-bezier(.3,1.6,.5,1) !important; }
+@keyframes de-boing { 0% { translate: 0 0; } 35% { translate: 0 -26px; scale: 1.06; } 70% { translate: 0 0; scale: .97 1.03; } 100% { scale: 1; } }
+
+@media (min-width: 900px) {
+  .de-frame { max-width: 460px; }
+  .de-nat { width: 560px; }
+  .de-peek { width: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .de *, .de *::before, .de *::after { animation: none !important; transition: none !important; }
+  .de-ch, .de-name, .de-s5 .de-nat > * { opacity: 1 !important; translate: none !important; filter: none !important; scale: 1 !important; }
+}
+
+/* ═══ Módulos (sobre KidsPastel) ═══ */
+.theme-dulce-espera {
+  --kp-bg: #f8f1e5; --kp-alt: #e3ebf4 url('/images/themes/matias/papel-azul.webp') center / 500px auto;
+  --kp-title-font: 'Great Vibes', 'Pinyon Script', cursive; --kp-title-weight: 400; --kp-title-size: clamp(2.8rem, 13vw, 3.4rem); --kp-text: 'Lora', Georgia, serif;
+  --kp-title: #8b5a32; --kp-ink: #3d3129; --kp-soft: #6e5c4d; --kp-accent: #b8863e;
+  --kp-btn: #b8863e; --kp-btn-ink: #fff; --kp-card-border: rgba(184,134,62,.35); --kp-icon-bg: #f3e6cd; --kp-icon: #b8863e;
+  --kp-shadow: rgba(139,90,50,.3);
+  --kp-title-deco: url('/images/themes/matias/estrella.webp');
+  --kp-art-message: url('/images/themes/matias/borrego-conejo.webp'); --kp-art-message-w: 170px; --kp-art-message-h: 120px;
+  --kp-art-location: url('/images/themes/matias/farol.webp'); --kp-art-location-w: 70px; --kp-art-location-h: 108px;
+  --kp-art-gifts: url('/images/themes/matias/conejo.webp'); --kp-art-gifts-w: 70px; --kp-art-gifts-h: 84px;
+  --kp-art-rsvp: url('/images/themes/matias/motita.webp'); --kp-art-rsvp-w: 86px; --kp-art-rsvp-h: 120px;
+  --kp-rsvp-bg: #e3ebf4 url('/images/themes/matias/papel-azul.webp') center / 500px auto;
+  --kp-closing-bg: #f8f1e5 url('/images/themes/matias/papel-crema.webp') center / 560px auto;
+  --kp-art-closing: url('/images/themes/matias/pesebre.webp'); --kp-closing-title: #8b5a32;
+}
+.theme-dulce-espera .invitation-closing::before { width: 220px; height: 164px; margin-left: -110px; }
+.theme-dulce-espera section [class*="bg-[var(--card-bg)]"] { border-width: 1px !important; border-radius: 6px !important; box-shadow: inset 0 0 0 5px #fffaf1, inset 0 0 0 6px rgba(184,134,62,.35) !important; }
+.theme-dulce-espera section:not(#hero) :is(a[class*="rounded-full"], button[class*="rounded-2xl"], button[class*="rounded-full"]) { letter-spacing: .2em !important; text-transform: uppercase; font-size: 12px !important; font-weight: 700 !important; }
+.theme-dulce-espera :is(section:not(#hero) h3[class*="text-4xl"], section:not(#hero) h3[class*="text-3xl"], #gallery h2, #rsvp h2)::before { width: 40px; height: 46px; }
+/* ajustes */
+.de-blue { background-size: 500px auto; }
+.de-cream { background-size: 560px auto; }
+.de .de-name { font-family: 'Great Vibes', 'Pinyon Script', cursive !important; font-weight: 400 !important; letter-spacing: 0 !important; text-transform: none !important; }
+.de .de-script { font-family: 'Great Vibes', 'Pinyon Script', cursive !important; font-weight: 400 !important; letter-spacing: 0 !important; }
+.de .de-card-title { font-family: 'Great Vibes', 'Pinyon Script', cursive !important; }
+.de-card { left: 12%; right: 12%; }
+.de-nat-deer { right: 10%; top: 36%; width: 32%; }
+.de-nat-star { right: 2%; top: -4%; }
+.de-scene { overflow: hidden; }
+.de .de-name { font-size: clamp(3.8rem, 18.5vw, 5.4rem) !important; line-height: 1.1 !important; }
+.de .de-script { font-size: clamp(3.6rem, 18vw, 4.8rem) !important; line-height: .95 !important; }
+.de .de-card-title { font-size: clamp(2.6rem, 12vw, 3.4rem) !important; line-height: .95 !important; }
+.de .de-card-title--lg { font-size: clamp(3rem, 15vw, 4rem) !important; }

@@ -341,6 +341,7 @@ export default function EnvelopeIntro({
         'brillo-oro': '#1D1A16',
         'monos-rojos': '#8E1B1B',
         'mesa-nochevieja': '#9C2B2B',
+        'dulce-espera': '#B8863E',
         'anturio-vino': '#7D2536',     // vino tinto noble
         'dinosaurios': '#6E9A72',      // verde dino
         'lirio-vainilla': '#7F9446',   // salvia botánico

@@ -1050,6 +1050,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#E7EADF',
         typographyPreset: 'elegante'
     },
+    'dulce-espera': {
+        label: 'Dulce Espera (privada)',
+        desc: 'Baby Posada de Matías: sobre que se abre, polvo de estrellas, nacimiento animado y música',
+        icon: '⭐',
+        primaryColor: '#B8863E',
+        accentColor: '#B8863E',
+        cardBgColor: '#FFFAF1',
+        sectionBgColor: '#F8F1E5',
+        textPrimary: '#3D3129',
+        textSecondary: '#6E5C4D',
+        heroTextColor: '#8B5A32',
+        heroBgColor: '#E3EBF4',
+        typographyPreset: 'elegante'
+    },
     'anturio-vino': {
         label: 'Anturio Vino',
         desc: 'Collage flat lay en vino, papel rasgado y oro: arco con foto, sello de cera y anturios',
