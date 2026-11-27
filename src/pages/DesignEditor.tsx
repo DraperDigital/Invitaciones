@@ -1429,11 +1429,11 @@ export default function DesignEditor() {
                                     </div>
                                     <div className="pt-2">
                                         <Link
-                                            to={event?.id ? `/dashboard/checkout?eventId=${event.id}&plan=premium` : '/planes'}
+                                            to={event?.id ? `/dashboard/checkout?eventId=${event.id}&plan=pro` : '/planes'}
                                             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B2E1D] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#2A432D] shadow-sm transition-all"
                                         >
                                             <Crown className="h-3.5 w-3.5 text-amber-300" />
-                                            <span>Disponible en {upgradePlan}</span>
+                                            <span>Disponible desde Plan {upgradePlan}</span>
                                         </Link>
                                     </div>
                                 </div>

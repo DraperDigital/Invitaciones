@@ -5611,11 +5611,18 @@ export default function InvitationPage() {
             )}
             </AnimatePresence>
 
-            {/* Reproductor de música de fondo */}
-            <InvitationMusicPlayer
-                musicUrl={userCfg.music_url ?? userCfg.musicUrl}
-                accentColor={_buttonColor || '#1B2E1D'}
-            />
+            {/* Reproductor de música de fondo (para temas generales, evitando doble reproducción en dulce-espera que tiene su propio audio nativo) */}
+            {cfg.theme !== 'dulce-espera' && (
+                <InvitationMusicPlayer
+                    musicUrl={
+                        // Gating: disponible en Pro, Premium y Concierge (o modo demo / admin)
+                        (planTier !== 'clasico' || isDemo || isAdminMode)
+                            ? (userCfg.music_url ?? userCfg.musicUrl)
+                            : null
+                    }
+                    accentColor={_buttonColor || '#1B2E1D'}
+                />
+            )}
         </div>
     );
 }

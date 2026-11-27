@@ -32,7 +32,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                         { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                         { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                         { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'background_music', status: (planCode === 'premium' || planCode === 'concierge') ? 'enabled' : 'disabled', upgrade_plan: 'Premium' }
+                        { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
                     ]
                 } as any);
             }
@@ -63,7 +63,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                     { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                     { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                     { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'background_music', status: (plan === 'premium' || plan === 'concierge') ? 'enabled' : 'disabled', upgrade_plan: 'Premium' }
+                    { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
                 ]
             } as any);
             setIsLoading(false);
@@ -159,7 +159,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                             { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                             { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
                             { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'background_music', status: (planCode === 'premium' || planCode === 'concierge') ? 'enabled' : 'disabled', upgrade_plan: 'Premium' }
+                            { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
                         ]
                     } as any);
                 } catch (fallbackErr) {

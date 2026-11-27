@@ -37,12 +37,12 @@ BEGIN
     INSERT INTO plan_features (plan_id, feature_id)
     SELECT p.id, f.id
     FROM plans p, features f
-    WHERE p.code IN ('premium', 'concierge')
+    WHERE p.code IN ('pro', 'premium', 'concierge')
       AND f.code = 'background_music'
     ON CONFLICT DO NOTHING;
 
     DELETE FROM plan_features
     WHERE feature_id IN (SELECT id FROM features WHERE code = 'background_music')
-      AND plan_id IN (SELECT id FROM plans WHERE code IN ('clasico', 'pro'));
+      AND plan_id IN (SELECT id FROM plans WHERE code IN ('clasico'));
   END IF;
 END $$;
