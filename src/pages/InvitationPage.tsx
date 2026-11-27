@@ -9,6 +9,7 @@ import type { Event, Guest } from '../types/database.types';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import PhotoGallery from '../components/invitation/PhotoGallery';
+import InvitationMusicPlayer from '../components/invitation/InvitationMusicPlayer';
 import { MOCK_EVENTS, MOCK_GUESTS } from '../lib/mockData';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toPng } from 'html-to-image';
@@ -5609,6 +5610,12 @@ export default function InvitationPage() {
                 </motion.div>
             )}
             </AnimatePresence>
+
+            {/* Reproductor de música de fondo */}
+            <InvitationMusicPlayer
+                musicUrl={userCfg.music_url ?? userCfg.musicUrl}
+                accentColor={_buttonColor || '#1B2E1D'}
+            />
         </div>
     );
 }

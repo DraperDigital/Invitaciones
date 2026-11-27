@@ -3,7 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive, Palette, Crown } from 'lucide-react';
+import { Loader2, Save, ArrowLeft, ArrowRight, Image as ImageIcon, Trash2, Plus, Gift, Clock, Heart, Music, PartyPopper, Wine, Utensils, Moon, Eye, Award, Shield, ChevronDown, Upload, X, MapPin, Link2, HardDrive, Palette, Crown, Check } from 'lucide-react';
 import { useFeatureAccess } from '../hooks/useFeatureAccess';
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../lib/sectionRegistry';
 import CelebrationModal from '../components/CelebrationModal';
@@ -14,6 +14,7 @@ import { STD_TEMPLATES, SAVE_THE_DATE_PRICE, DEFAULT_STD_TEMPLATE } from '../lib
 import { loadGoogleFonts, ALL_TYPOGRAPHY_PRESET_FONTS } from '../lib/loadFonts';
 import { syncCheckoutIntent, getPublishCta } from '../lib/draftCheckout';
 import { syncHeroPhotoForNewTheme } from '../lib/heroPhotoSlots';
+import { MUSIC_LIBRARY } from '../lib/musicLibrary';
 
 type DesignConfig = {
     primaryColor: string;
@@ -316,7 +317,9 @@ export default function DesignEditor() {
     const [event, setEvent] = useState<any>(null);
     const [hasWhatsAppAddon, setHasWhatsAppAddon] = useState<boolean>(false);
     const eventPlanFromConfig = event?.theme_config?.plan_tier || (event?.theme_config?.isPremium ? 'premium' : event?.theme_config?.isPro ? 'pro' : 'clasico');
-    const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
+    const { isLoading: loadingAccess, currentPlan, hasFeature, getUpgradePlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
+    const [musicSource, setMusicSource] = useState<'library' | 'upload' | 'link'>('library');
+    const [uploadingMusic, setUploadingMusic] = useState(false);
 
     const isWhatsAppAvailableInEditor = Boolean(
         hasWhatsAppAddon ||
@@ -751,6 +754,38 @@ export default function DesignEditor() {
             toast.error('Error al subir imagen. Alternativa: pega la URL de la imagen en el campo de texto.');
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handleMusicUpload = async (file: File) => {
+        if (!id || !file) return;
+        if (!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|wav|ogg|m4a|aac)$/i)) {
+            toast.error('El archivo debe ser un audio válido (MP3, WAV, OGG, M4A)');
+            return;
+        }
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            toast.error('El archivo excede el límite máximo de 5MB');
+            return;
+        }
+        setUploadingMusic(true);
+        try {
+            const ext = file.name.split('.').pop() || 'mp3';
+            const path = `events/${id}/music.${ext}`;
+            const { error: uploadError } = await supabase.storage
+                .from('event-images')
+                .upload(path, file, { upsert: true, contentType: file.type || 'audio/mpeg' });
+            if (uploadError) throw uploadError;
+
+            const { data: urlData } = supabase.storage.from('event-images').getPublicUrl(path);
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+            setConfig(prev => ({ ...prev, musicUrl: publicUrl }));
+            toast.success('¡Canción subida correctamente!');
+        } catch (err: any) {
+            console.error('Error al subir música:', err);
+            toast.error('Error al subir audio: ' + (err.message || 'Error desconocido'));
+        } finally {
+            setUploadingMusic(false);
         }
     };
 
@@ -1367,31 +1402,210 @@ export default function DesignEditor() {
                     </div>
                 </CollapsibleCard>
 
-                <CollapsibleCard
-                    id="music"
-                    title="Música de Fondo"
-                    subtitle={config.musicUrl ? "Pista de audio configurada" : "Sin música de fondo"}
-                    icon="🎵"
-                    activeSection={activeSection}
-                    setActiveSection={setActiveSection}
-                >
-                    <div className="space-y-4">
-                        <label className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-500">Enlace a canción o archivo MP3</label>
-                        <input
-                            type="url"
-                            placeholder="https://... enlace directo a archivo MP3 o audio"
-                            value={config.musicUrl || ''}
-                            onChange={(e) => setConfig({ ...config, musicUrl: e.target.value })}
-                            className="w-full p-4 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
-                        />
-                        {config.musicUrl && (
-                            <div className="p-3 bg-stone-50 rounded-xl border border-stone-100 flex items-center gap-3">
-                                <audio controls src={config.musicUrl} className="w-full h-8" />
-                            </div>
-                        )}
-                        <p className="text-[10px] text-stone-400">Inserta un enlace MP3 para reproducir la canción automáticamente al abrir la invitación.</p>
-                    </div>
-                </CollapsibleCard>
+                {/* Card Música de Fondo */}
+                {(() => {
+                    const hasMusicAccess = hasFeature('background_music');
+                    const upgradePlan = getUpgradePlan('background_music') || 'Premium';
+
+                    return (
+                        <CollapsibleCard
+                            id="music"
+                            title="Música de Fondo"
+                            subtitle={!hasMusicAccess ? `Disponible en ${upgradePlan}` : (config.musicUrl ? "Pista de audio configurada" : "Sin música de fondo")}
+                            icon="🎵"
+                            activeSection={activeSection}
+                            setActiveSection={setActiveSection}
+                        >
+                            {!hasMusicAccess ? (
+                                <div className="p-6 text-center space-y-4 bg-stone-50/60 rounded-2xl border border-dashed border-stone-200">
+                                    <div className="h-12 w-12 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center mx-auto text-amber-600">
+                                        <Crown className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-bold text-stone-800">Música de fondo en tu invitación</h4>
+                                        <p className="text-xs text-stone-500 max-w-sm mx-auto mt-1">
+                                            Sorprende a tus invitados con una experiencia inmersiva que reproduce su canción favorita o de nuestra biblioteca al abrir la invitación.
+                                        </p>
+                                    </div>
+                                    <div className="pt-2">
+                                        <Link
+                                            to={event?.id ? `/dashboard/checkout?eventId=${event.id}&plan=premium` : '/planes'}
+                                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B2E1D] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#2A432D] shadow-sm transition-all"
+                                        >
+                                            <Crown className="h-3.5 w-3.5 text-amber-300" />
+                                            <span>Disponible en {upgradePlan}</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-5">
+                                    {/* Selector de fuente: Pestañas */}
+                                    <div className="flex p-1 bg-stone-100 rounded-2xl gap-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => setMusicSource('library')}
+                                            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                                                musicSource === 'library'
+                                                    ? 'bg-white text-[#1B2E1D] shadow-sm'
+                                                    : 'text-stone-500 hover:text-stone-800'
+                                            }`}
+                                        >
+                                            <Music className="h-3.5 w-3.5" />
+                                            <span>Biblioteca</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMusicSource('upload')}
+                                            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                                                musicSource === 'upload'
+                                                    ? 'bg-white text-[#1B2E1D] shadow-sm'
+                                                    : 'text-stone-500 hover:text-stone-800'
+                                            }`}
+                                        >
+                                            <Upload className="h-3.5 w-3.5" />
+                                            <span>Subir MP3</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMusicSource('link')}
+                                            className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                                                musicSource === 'link'
+                                                    ? 'bg-white text-[#1B2E1D] shadow-sm'
+                                                    : 'text-stone-500 hover:text-stone-800'
+                                            }`}
+                                        >
+                                            <Link2 className="h-3.5 w-3.5" />
+                                            <span>Enlace</span>
+                                        </button>
+                                    </div>
+
+                                    {/* Fuente A: Biblioteca de pistas */}
+                                    {musicSource === 'library' && (
+                                        <div className="space-y-3">
+                                            <p className="text-[11px] text-stone-500">
+                                                Selecciona una canción libre de regalías para tu celebración:
+                                            </p>
+                                            <div className="grid gap-2 max-h-72 overflow-y-auto pr-1">
+                                                {MUSIC_LIBRARY.map((track) => {
+                                                    const isSelected = config.musicUrl === track.url;
+                                                    return (
+                                                        <div
+                                                            key={track.id}
+                                                            className={`p-3 rounded-2xl border transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
+                                                                isSelected
+                                                                    ? 'bg-[#1B2E1D]/5 border-[#1B2E1D] shadow-sm'
+                                                                    : 'bg-stone-50/50 border-stone-100 hover:border-stone-200 hover:bg-stone-50'
+                                                            }`}
+                                                        >
+                                                            <div className="min-w-0 flex-1">
+                                                                <div className="flex items-center gap-2">
+                                                                    <p className="text-xs font-bold text-stone-800 truncate">{track.name}</p>
+                                                                    {isSelected && (
+                                                                        <span className="text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                                                            <Check className="h-2.5 w-2.5" /> Activa
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="text-[10px] text-stone-400">{track.category}</p>
+                                                            </div>
+
+                                                            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                                                                <audio controls src={track.url} className="h-7 w-36 sm:w-44" preload="none" />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => setConfig(prev => ({ ...prev, musicUrl: track.url }))}
+                                                                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+                                                                        isSelected
+                                                                            ? 'bg-[#1B2E1D] text-white shadow-sm'
+                                                                            : 'bg-white border border-stone-200 text-stone-700 hover:border-stone-300'
+                                                                    }`}
+                                                                >
+                                                                    {isSelected ? 'Elegida' : 'Elegir'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Fuente B: Subir archivo MP3 */}
+                                    {musicSource === 'upload' && (
+                                        <div className="space-y-3">
+                                            <p className="text-[11px] text-stone-500">
+                                                Sube tu archivo de audio personalizado en formato MP3, WAV, OGG o M4A (máximo 5MB):
+                                            </p>
+                                            <label className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-2xl cursor-pointer transition-all ${
+                                                uploadingMusic
+                                                    ? 'bg-stone-50 border-stone-300 opacity-60 pointer-events-none'
+                                                    : 'border-stone-200 bg-stone-50/40 hover:bg-stone-50 hover:border-[#DF3B94]/40'
+                                            }`}>
+                                                <input
+                                                    type="file"
+                                                    accept="audio/mp3,audio/mpeg,audio/wav,audio/ogg,audio/aac,audio/m4a"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) handleMusicUpload(file);
+                                                    }}
+                                                    disabled={uploadingMusic}
+                                                    className="hidden"
+                                                />
+                                                <div className="h-10 w-10 rounded-full bg-white shadow-sm flex items-center justify-center text-stone-600 mb-2">
+                                                    {uploadingMusic ? <Loader2 className="h-5 w-5 animate-spin text-[#DF3B94]" /> : <Upload className="h-5 w-5" />}
+                                                </div>
+                                                <span className="text-xs font-bold text-stone-700">
+                                                    {uploadingMusic ? 'Subiendo canción a tu evento...' : 'Toca para seleccionar un archivo de audio (≤ 5MB)'}
+                                                </span>
+                                                <span className="text-[10px] text-stone-400 mt-1">Formatos soportados: MP3, M4A, WAV, OGG</span>
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    {/* Fuente C: Enlace directo */}
+                                    {musicSource === 'link' && (
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] md:text-xs uppercase font-bold tracking-wider text-stone-500">
+                                                Enlace directo a archivo MP3 o audio en la web
+                                            </label>
+                                            <input
+                                                type="url"
+                                                placeholder="https://... enlace directo a archivo MP3 o audio"
+                                                value={config.musicUrl || ''}
+                                                onChange={(e) => setConfig(prev => ({ ...prev, musicUrl: e.target.value }))}
+                                                className="w-full p-4 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-mono outline-none focus:ring-2 focus:ring-[#DF3B94]/20 focus:border-[#DF3B94]"
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Preview activo común a las 3 opciones */}
+                                    {config.musicUrl && (
+                                        <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200/60 space-y-3 mt-4">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] uppercase font-black tracking-widest text-emerald-800 flex items-center gap-1.5">
+                                                    <Music className="h-3.5 w-3.5 text-emerald-600" />
+                                                    Pista de audio configurada
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setConfig(prev => ({ ...prev, musicUrl: '' }))}
+                                                    className="text-[10px] text-stone-400 hover:text-red-500 font-bold uppercase tracking-wider transition-colors flex items-center gap-1 cursor-pointer"
+                                                    title="Quitar música"
+                                                >
+                                                    <Trash2 className="h-3 w-3" /> Quitar
+                                                </button>
+                                            </div>
+                                            <audio controls src={config.musicUrl} className="w-full h-8" preload="none" />
+                                            <p className="text-[10px] text-stone-500">
+                                                La música comenzará a reproducirse automáticamente al abrir la invitación o al primer toque de pantalla.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </CollapsibleCard>
+                    );
+                })()}
 
                 <CollapsibleCard
                     id="logo"
