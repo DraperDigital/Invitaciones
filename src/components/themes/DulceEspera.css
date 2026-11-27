@@ -510,3 +510,32 @@
 .de-flor--tr { width: 120px; top: -34px; right: -24px; }
 .de-flor--bl, .de-flor--br { width: 112px; bottom: -40px; }
 .de-flor--bl, .de-flor--br { width: 92px; bottom: -36px; } .de-flor--bl { left: -26px; } .de-flor--br { right: -26px; } @media (min-width: 900px) { .de-flor--bl, .de-flor--br { width: 118px; } }
+
+/* ================= v9 · poses nuevas de Motita ================= */
+/* se asoma con las patitas sobre el borde de la tarjeta */
+.de-peekbox--bottom { width: 112px; height: 106px; right: 10%; }
+.de-peekbox--top { width: 104px; height: 98px; }
+.de-peekbox img { filter: drop-shadow(0 4px 6px rgba(0,0,0,.14)); }
+.de-s2.is-in .de-peekbox--bottom img { animation: de-peek-full 7s ease-in-out 1s infinite; }
+.de-s6.is-in .de-peekbox--top img { animation: de-peek-full 8s ease-in-out .8s infinite; }
+@keyframes de-peek-full {
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  12%, 48% { translate: 0 -100%; rotate: 0deg; }
+  22% { rotate: -7deg; } 32% { rotate: 6deg; } 40% { rotate: 0deg; }
+  58% { translate: 0 0; }
+}
+.de-peekbox img { transform-origin: 50% 100%; }
+
+/* Celebremos: en pose de "¿jugamos?" mirando al conejito */
+.de .de-pair-dog { left: 33%; width: 33%; bottom: 0; animation: de-play 3.2s ease-in-out infinite; transform-origin: 30% 100%; }
+.de .de-bunny { left: 70%; width: 16%; }
+@keyframes de-play {
+  0%, 55%, 100% { translate: 0 0; rotate: 0deg; scale: 1; }
+  62% { translate: 0 0; rotate: -3deg; scale: 1.02 .97; }
+  70% { translate: 4px -10px; rotate: 2deg; scale: 1; }
+  78% { translate: 0 0; rotate: 0deg; scale: 1.02 .98; }
+  86% { rotate: -2deg; }
+}
+
+/* Nacimiento: echadita mirando al bebé */
+.de .de-nat-dog { left: 26%; bottom: 2%; width: 25%; z-index: 6; }
