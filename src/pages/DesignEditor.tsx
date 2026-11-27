@@ -314,8 +314,16 @@ export default function DesignEditor() {
     const { id } = useParams<{ id: string }>();
     const [searchParams, setSearchParams] = useSearchParams();
     const [event, setEvent] = useState<any>(null);
+    const [hasWhatsAppAddon, setHasWhatsAppAddon] = useState<boolean>(false);
     const eventPlanFromConfig = event?.theme_config?.plan_tier || (event?.theme_config?.isPremium ? 'premium' : event?.theme_config?.isPro ? 'pro' : 'clasico');
     const { isLoading: loadingAccess, currentPlan } = useFeatureAccess(id || undefined, eventPlanFromConfig);
+
+    const isWhatsAppAvailableInEditor = Boolean(
+        hasWhatsAppAddon ||
+        event?.theme_config?.confirma_whatsapp === true ||
+        event?.plan === 'concierge' ||
+        currentPlan?.code?.toLowerCase() === 'concierge'
+    );
 
     const checkoutIntent = syncCheckoutIntent(event?.id || id, searchParams);
     const publishCta = (event?.id || id) ? getPublishCta(checkoutIntent, event?.id || id!) : null;
@@ -481,6 +489,15 @@ export default function DesignEditor() {
 
             if (data && !error) {
                 setEvent(data);
+                // Verificar si tiene add-on activo de WhatsApp
+                supabase
+                    .from('confirma_settings')
+                    .select('enabled')
+                    .eq('event_id', data.id)
+                    .maybeSingle()
+                    .then(({ data: cs }) => {
+                        if (cs?.enabled) setHasWhatsAppAddon(true);
+                    }, () => {});
                 // Merge existing config — support both old camelCase and new snake_case keys
                 const c = data.theme_config || {};
                 setConfig({
@@ -2354,7 +2371,7 @@ export default function DesignEditor() {
                                 icon: '👥',
                                 color: 'text-emerald-600 bg-emerald-50',
                                 features: [
-                                    { id: 'showWhatsAppRSVP',      label: 'RSVP WhatsApp', desc: 'Confirmación directa', icon: '💬', plans: ['clasico', 'pro', 'premium'] },
+                                    { id: 'showWhatsAppRSVP',      label: 'Casilla WhatsApp RSVP', desc: 'Pase y avisos en confirmación', icon: '💬', plans: ['clasico', 'pro', 'premium'] },
                                     { id: 'enableGuestList',       label: 'Listado', desc: 'Gestión administrativa',     icon: '📋', plans: ['pro', 'premium'] },
                                     { id: 'enableQr',              label: 'Pases QR',           desc: 'Escaneo inteligente',       icon: '📱', plans: ['pro', 'premium'] },
                                     { id: 'enableAccessControl',   label: 'Check-in',  desc: 'Control de entrada',     icon: '🛡️', plans: ['pro', 'premium'] },
@@ -2383,7 +2400,13 @@ export default function DesignEditor() {
                                     <div className="flex-1 h-px bg-stone-100" />
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                                    {(module.features as readonly { id: string; label: string; desc: string; icon: string; plans: readonly string[] }[]).map((feat) => {
+                                    {(module.features as readonly { id: string; label: string; desc: string; icon: string; plans: readonly string[] }[])
+                                        .filter((feat) => {
+                                            // Solo mostrar el toggle de WhatsApp si el evento cuenta con WhatsApp (add-on o concierge)
+                                            if (feat.id === 'showWhatsAppRSVP' && !isWhatsAppAvailableInEditor) return false;
+                                            return true;
+                                        })
+                                        .map((feat) => {
                                         // Concierge tiene acceso a todo lo de Premium
                                         const rawPlanCode = currentPlan?.code?.toLowerCase() || 'clasico';
                                         const planCode = rawPlanCode === 'concierge' ? 'premium' : rawPlanCode;

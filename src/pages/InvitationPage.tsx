@@ -176,6 +176,20 @@ export default function InvitationPage() {
     // y NUNCA si es un evento real de usuario o modo admin / creador
     const isDemo = !isAdminMode && rawToken !== 'admin' && (rawToken === 'token-preview' || isCanonicalDemoSlug);
 
+    // Disponibilidad de WhatsApp: Add-on Confirma por WhatsApp o plan Concierge
+    const isWhatsAppAvailable = Boolean(
+        confirmaSettings?.enabled ||
+        event?.theme_config?.confirma_whatsapp === true ||
+        (event?.plan === 'concierge' && confirmaSettings?.enabled !== false)
+    );
+
+    // Visibilidad de la casilla en RSVP: requiere WhatsApp disponible Y toggle activo (true por defecto)
+    const isWhatsAppRsvpVisible = Boolean(
+        isWhatsAppAvailable &&
+        event?.theme_config?.show_whatsapp_rsvp !== false &&
+        event?.theme_config?.showWhatsAppRSVP !== false
+    );
+
     // ── Theme name — derived from event config ──
     const themeName = event?.theme_config?.theme || 'classic';
     const isOwner = Boolean(user && event && user.id === event.user_id);
@@ -1579,7 +1593,7 @@ export default function InvitationPage() {
                     supabase
                         .from('guests')
                         .update({
-                            whatsapp_opt_in: status === 'yes' ? whatsappOptIn : false,
+                            whatsapp_opt_in: (status === 'yes' && isWhatsAppRsvpVisible) ? whatsappOptIn : false,
                             decline_reason: status === 'no' ? (finalReason || null) : null
                         })
                         .eq('id', guest.id)
@@ -3838,11 +3852,7 @@ END:VCALENDAR`;
     };
 
     const renderRSVP = () => {
-        const isConfirmaActive = Boolean(
-            confirmaSettings?.enabled ||
-            event?.theme_config?.confirma_whatsapp === true ||
-            (event?.plan === 'concierge' && confirmaSettings?.enabled !== false)
-        );
+        const isConfirmaActive = isWhatsAppAvailable;
         const guestRefToken = guest?.guest_token || guestToken || guest?.id || '';
         const rawBusinessNumber = (confirmaSettings?.business_number || event?.theme_config?.confirma_number || '').trim();
         const cleanBusinessNumber = rawBusinessNumber.replace(/\D/g, '') || '525512345678';
@@ -4020,18 +4030,20 @@ END:VCALENDAR`;
                                     {error && <p className="text-red-500 text-sm font-semibold bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</p>}
 
                                     <div className="space-y-4 pt-4">
-                                        {/* Opt-in WhatsApp Checkbox */}
-                                        <label className="flex items-start gap-3 cursor-pointer group p-3 rounded-xl bg-[var(--section-bg-alt)] border border-[var(--border-color)]">
-                                            <input
-                                                type="checkbox"
-                                                checked={whatsappOptIn}
-                                                onChange={(e) => setWhatsappOptIn(e.target.checked)}
-                                                className="mt-0.5 h-4 w-4 rounded border-stone-300 text-[#25D366] focus:ring-[#25D366] cursor-pointer"
-                                            />
-                                            <span className="text-xs text-[var(--text-secondary)] leading-snug">
-                                                Deseo recibir mi pase digital y recordatorios de la celebración por WhatsApp
-                                            </span>
-                                        </label>
+                                        {/* Opt-in WhatsApp Checkbox: solo si el evento tiene WhatsApp y está habilitado en config */}
+                                        {isWhatsAppRsvpVisible && (
+                                            <label className="flex items-start gap-3 cursor-pointer group p-3 rounded-xl bg-[var(--section-bg-alt)] border border-[var(--border-color)]">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={whatsappOptIn}
+                                                    onChange={(e) => setWhatsappOptIn(e.target.checked)}
+                                                    className="mt-0.5 h-4 w-4 rounded border-stone-300 text-[#25D366] focus:ring-[#25D366] cursor-pointer"
+                                                />
+                                                <span className="text-xs text-[var(--text-secondary)] leading-snug">
+                                                    Deseo recibir mi pase digital y recordatorios de la celebración por WhatsApp
+                                                </span>
+                                            </label>
+                                        )}
 
                                         <button onClick={() => handleRsvp('yes')} disabled={submitting} className="w-full h-16 md:h-20 rounded-2xl text-[var(--button-contrast)] font-bold text-[10px] md:text-xs uppercase tracking-[0.35em] transition-all disabled:opacity-50 shadow-xl hover:shadow-2xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center subtle-shimmer cursor-pointer" style={{ background: buttonColor, color: buttonContrast }}>
                                             {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}

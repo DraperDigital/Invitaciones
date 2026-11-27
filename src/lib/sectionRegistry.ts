@@ -141,7 +141,6 @@ export const SECTION_REGISTRY: SectionDef[] = [
     label: 'Confirmación RSVP',
     icon: '💌',
     planRequired: 'clasico',
-    configKey: 'showWhatsAppRSVP',
     defaultOrder: 7,
   },
   {
