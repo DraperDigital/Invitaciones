@@ -972,7 +972,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       },
       {
         title: 'Recibe confirmaciones al instante',
-        description: 'Sabes exactamente cuántos adultos y niños asistirán a la comida.',
+        description: 'Sabes quién ya respondió, sin llamar a nadie.',
       },
     ],
     whyTitle: 'Claridad para la familia, tranquilidad para los papás.',

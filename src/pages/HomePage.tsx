@@ -515,7 +515,7 @@ export default function HomePage() {
                                 </h1>
 
                                 <p className="text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
-                                    Tus invitados confirman con un toque. Tú ves en tiempo real quién asiste, quién no y sus acompañantes. Sin saturar tu WhatsApp ni hojas de cálculo.
+                                    Tus invitados confirman con un toque. Tú ves en tiempo real quién respondió que sí, quién no y sus acompañantes. Sin saturar tu WhatsApp ni hojas de cálculo.
                                 </p>
 
                                 <div className="space-y-3 pt-1">
@@ -806,7 +806,7 @@ export default function HomePage() {
                             <h2 className="text-2xl md:text-4xl font-display font-extrabold leading-tight">
                                 Así de fácil funciona Invitto
                             </h2>
-                            <p className="text-slate-300 text-sm">Cuatro pasos simples para tener el control total de tu evento</p>
+                            <p className="text-slate-300 text-sm">Cuatro pasos y las respuestas llegan solas a tu panel</p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -1091,7 +1091,7 @@ export default function HomePage() {
                                 
                                 <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
                                     <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                                    <span><strong>Garantía:</strong> Lista final cerrada 15 días antes del evento o devolución 100% · Add-on $2,000 MXN o incluido en Concierge.</span>
+                                    <span><strong>Garantía:</strong> Lista final cerrada 15 días antes del evento o devolución 100% · $3,499 MXN con tu invitación Pro incluida, o incluido en Concierge.</span>
                                 </div>
                             </div>
 
@@ -1136,7 +1136,7 @@ export default function HomePage() {
                                         </div>
                                         <h3 className="text-lg font-display font-extrabold text-white">Pases QR y Reconfirmación</h3>
                                         <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                            Envío del pase digital individual con código QR y ubicación GPS 48-72 horas antes del gran día.
+                                            Envío del pase digital individual con código QR y ubicación GPS 7 días antes del evento.
                                         </p>
                                     </div>
                                     <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
@@ -1150,13 +1150,13 @@ export default function HomePage() {
                                         <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
                                             <Check className="h-6 w-6" />
                                         </div>
-                                        <h3 className="text-lg font-display font-extrabold text-white">Lista Lista para Banquete</h3>
+                                        <h3 className="text-lg font-display font-extrabold text-white">Lista final 15 días antes</h3>
                                         <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                            Reporte final ordenado por mesas, confirmados y dietas especiales entregado 15 días antes para que no pagues platillos de más.
+                                            Te entregamos la respuesta de cada invitación (sí con sus pases, no, o 'no respondió tras 4 intentos') en hoja de cálculo y en tu panel, 15 días antes del evento.
                                         </p>
                                     </div>
                                     <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
-                                        <span>Cero desperdicio</span>
+                                        <span>Lista cerrada</span>
                                         <span>Garantía 100%</span>
                                     </div>
                                 </div>
@@ -1166,7 +1166,7 @@ export default function HomePage() {
                             <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
                                 <div className="space-y-0.5 text-center md:text-left">
                                     <p className="text-base font-bold text-white">¿Prefieres delegar completamente el seguimiento de invitados?</p>
-                                    <p className="text-xs text-slate-400">Disponible como add-on para cualquier plan por $2,000 MXN o incluido en Concierge.</p>
+                                    <p className="text-xs text-slate-400">Disponible como $3,499 MXN con tu invitación Pro incluida, o incluido en Concierge.</p>
                                 </div>
                                 <div className="flex flex-wrap items-center justify-center gap-3">
                                     <Link
@@ -1206,7 +1206,7 @@ export default function HomePage() {
                             <div className="bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                                 <div className="space-y-4">
                                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                                        <span>Tú tienes el control</span>
+                                        <span>HAZLO TÚ</span>
                                     </div>
                                     <h3 className="text-2xl font-display font-extrabold text-[#222B38]">
                                         La armas tú
@@ -1340,10 +1340,6 @@ export default function HomePage() {
                                             <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
                                             <span>Save the Date digital (+ $299 MXN opcional)</span>
                                         </li>
-                                        <li className="flex items-center gap-2.5 text-slate-600">
-                                            <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
-                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
-                                        </li>
                                     </ul>
                                 </div>
 
@@ -1399,10 +1395,6 @@ export default function HomePage() {
                                             <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
                                             <span>Límite de pases y acompañantes por familia</span>
                                         </li>
-                                        <li className="flex items-center gap-2.5 text-slate-300">
-                                            <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
-                                        </li>
                                     </ul>
                                 </div>
 
@@ -1454,10 +1446,6 @@ export default function HomePage() {
                                         <li className="flex items-center gap-2.5">
                                             <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
                                             <span>Música de fondo personalizada</span>
-                                        </li>
-                                        <li className="flex items-center gap-2.5 text-slate-600">
-                                            <Check className="h-4 w-4 text-slate-400 flex-shrink-0" />
-                                            <span>Confirma por WhatsApp (<span className="line-through text-slate-400">$3,499</span> <strong>$2,000 en paquete</strong>)</span>
                                         </li>
                                     </ul>
                                 </div>

@@ -361,7 +361,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
                   </div>
 
                   {/* Passes reservation */}
-                  {data.phone?.category !== 'cumpleanos' && (
+                  {data.phone?.category !== 'cumpleanos' && data.phone?.category !== 'bautizo' && (
                     <div
                       className="w-full rounded-xl p-2.5 text-center text-xs space-y-0.5 border"
                       style={{ backgroundColor: `${th.bg2}99`, borderColor: th.line }}
