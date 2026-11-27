@@ -148,11 +148,10 @@ export function googleCalendarUrl(data: StdData, event: any): string {
     const params = new URLSearchParams({
         action: 'TEMPLATE',
         text: `${data.kicker}: ${data.title}`,
-        dates: `${fmtUtc(data.date)}/${fmtUtc(end)}`,
         details: `${data.note ? data.note + '. ' : ''}${typeof window !== 'undefined' ? window.location.href : ''}`,
         location: event?.venue_address || data.city || '',
     });
-    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+    return `https://calendar.google.com/calendar/render?${params.toString()}&dates=${fmtUtc(data.date)}/${fmtUtc(end)}`;
 }
 
 export function downloadIcs(data: StdData, event: any): void {

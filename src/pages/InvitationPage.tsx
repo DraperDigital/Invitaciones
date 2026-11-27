@@ -1689,33 +1689,72 @@ export default function InvitationPage() {
     }, [event?.event_type, event?.theme_config?.theme, searchParams]);
 
     // Generate calendar links
-    const generateGoogleCalendarLink = () => {
-        if (!event) return '';
-        const eventDate = new Date(event.date_time);
-        const startDate = format(eventDate, "yyyyMMdd'T'HHmmss");
-        const endDate = format(new Date(eventDate.getTime() + 3 * 60 * 60 * 1000), "yyyyMMdd'T'HHmmss");
-
-        return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(`Te esperamos en nuestra ${event.event_type === 'wedding' ? 'boda' : 'celebración'}`)}&location=${encodeURIComponent(event.venue_name || '')}`;
+    const parseCalendarEventDate = (dt?: string | null): Date => {
+        if (!dt) return new Date();
+        const normalized = typeof dt === 'string' ? dt.trim().replace(' ', 'T') : dt;
+        const d = new Date(normalized);
+        return isNaN(d.getTime()) ? new Date() : d;
     };
 
-    const generateICalLink = () => {
-        if (!event) return '';
-        const eventDate = new Date(event.date_time);
-        const startDate = format(eventDate, "yyyyMMdd'T'HHmmss");
-        const endDate = format(new Date(eventDate.getTime() + 3 * 60 * 60 * 1000), "yyyyMMdd'T'HHmmss");
+    const fmtCalendarUtc = (d: Date) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 
-        const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-DTSTART:${startDate}
-DTEND:${endDate}
-SUMMARY:${event.title}
-DESCRIPTION:Te esperamos en nuestra ${event.event_type === 'wedding' ? 'boda' : 'celebración'}
-LOCATION:${event.venue_name || ''}
-END:VEVENT
-END:VCALENDAR`;
+    const generateGoogleCalendarLink = () => {
+        if (!event) return '#';
+        const start = parseCalendarEventDate(event.date_time);
+        const end = new Date(start.getTime() + 4 * 60 * 60 * 1000);
 
-        return 'data:text/calendar;charset=utf8,' + encodeURIComponent(icsContent);
+        const title = event.title || 'Evento';
+        const details = `Te esperamos en nuestra ${event.event_type === 'wedding' ? 'boda' : 'celebración'}.${typeof window !== 'undefined' ? `\n\nMás información: ${window.location.href}` : ''}`;
+        const location = [event.venue_name, event.venue_address].filter(Boolean).join(', ');
+
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: title,
+            details,
+            location,
+        });
+
+        return `https://calendar.google.com/calendar/render?${params.toString()}&dates=${fmtCalendarUtc(start)}/${fmtCalendarUtc(end)}`;
+    };
+
+    const handleDownloadICal = () => {
+        if (!event) return;
+        const start = parseCalendarEventDate(event.date_time);
+        const end = new Date(start.getTime() + 4 * 60 * 60 * 1000);
+        const esc = (s: string) => (s || '').replace(/[\\,;]/g, m => '\\' + m).replace(/\r?\n/g, '\\n');
+
+        const icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Invitto//Invitaciones Digitales//ES',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            `UID:${(event.id || slug || 'evento')}-${start.getTime()}@invitto.com.mx`,
+            `DTSTAMP:${fmtCalendarUtc(new Date())}`,
+            `DTSTART:${fmtCalendarUtc(start)}`,
+            `DTEND:${fmtCalendarUtc(end)}`,
+            `SUMMARY:${esc(event.title || 'Evento')}`,
+            `DESCRIPTION:${esc(`Te esperamos en nuestra ${event.event_type === 'wedding' ? 'boda' : 'celebración'}.${typeof window !== 'undefined' ? `\\n\\nMás información: ${window.location.href}` : ''}`)}`,
+            `LOCATION:${esc([event.venue_name, event.venue_address].filter(Boolean).join(', '))}`,
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR',
+        ].join('\r\n');
+
+        try {
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${(event.slug || slug || 'evento').replace(/[^a-zA-Z0-9_-]/g, '_')}.ics`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+        } catch (err) {
+            console.error('Error al generar archivo de calendario:', err);
+        }
     };
 
     if (loading) {
@@ -3917,12 +3956,12 @@ END:VCALENDAR`;
 
                                         <div className="w-full max-w-xs space-y-2">
                                             <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] mb-3 text-center">Agendar en mi calendario</p>
-                                            <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
+                                            <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
                                                 <Calendar className="h-3.5 w-3.5" /> Google Calendar
                                             </a>
-                                            <a href={generateICalLink()} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">
-                                                <Calendar className="h-3.5 w-3.5" /> iCal / Outlook
-                                            </a>
+                                            <button type="button" onClick={handleDownloadICal} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
+                                                <Calendar className="h-3.5 w-3.5" /> iCal / Apple / Outlook
+                                            </button>
                                         </div>
 
                                         {isConfirmaActive && (
@@ -4074,6 +4113,15 @@ END:VCALENDAR`;
                                     <button onClick={() => downloadQR(true)} className="mt-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors border border-[var(--card-border)] hover:border-stone-400 rounded-xl px-6 py-3 shadow-sm cursor-pointer">
                                         <Download className="h-4 w-4" /> Guardar Código
                                     </button>
+                                    <div className="w-full max-w-xs space-y-2 pt-2">
+                                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] mb-2 text-center">Agendar en mi calendario</p>
+                                        <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
+                                            <Calendar className="h-3.5 w-3.5" /> Google Calendar
+                                        </a>
+                                        <button type="button" onClick={handleDownloadICal} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
+                                            <Calendar className="h-3.5 w-3.5" /> iCal / Apple / Outlook
+                                        </button>
+                                    </div>
                                     {isConfirmaActive && (
                                         <a
                                             href={`https://wa.me/${cleanBusinessNumber}?text=${encodeURIComponent(`Hola! Ya confirmé mi asistencia a ${eventTitle} y autorizo recibir mi pase digital y recordatorios [ref:${guestRefToken}]`)}`}
