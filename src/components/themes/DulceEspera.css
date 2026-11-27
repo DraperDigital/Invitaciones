@@ -496,3 +496,10 @@
 
 /* sin mesa de regalos: el cierre toma el toile para no repetir papel después de Ubicación */
 .theme-dulce-espera:not(:has(#gifts)) .invitation-closing { background: var(--de-toile-bg) !important; }
+
+/* conejito más cerca del grupo para que no lo tapen las flores */
+.de .de-nat-lantern { right: 33%; }
+.de .de-nat-bunny { right: 19%; bottom: 8%; width: 11%; z-index: 8; }
+.de .de-bunny { right: auto; left: 63%; width: 18%; }
+.de .de-nat-lantern { right: 37%; }
+.de .de-nat-bunny { right: 24%; }
