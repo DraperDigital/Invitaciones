@@ -229,7 +229,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                     <img className="de-deco de-booties de-pop" src={A('zapatitos')} alt="Zapatitos" onClick={poke} />
                     <p className="de-quote"><Letters text={'Esta Navidad,\nnuestro mejor regalo\nestá por llegar…'} /></p>
                     <svg className="de-flourish" viewBox="0 0 120 30" aria-hidden="true"><path d="M8 15c18-14 34-14 52 0s34 14 52 0M8 15c18 14 34 14 52 0s34-14 52 0" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M60 5l2 4-2 4-2-4zM60 21l2 4-2 4-2-4z" fill="currentColor" /></svg>
-                    <div className="de-peekbox de-peekbox--bottom"><img src={A('motita')} alt="Motita" onClick={poke} /></div>
+                    <div className="de-peekbox de-peekbox--bottom"><img src={A('motita-asoma')} alt="Motita" onClick={poke} /></div>
                 </div>
             </div>
 
@@ -260,7 +260,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                     <p className="de-body">La magia de la Navidad<br />y la alegría de nuestra familia<br />se unen en la dulce espera<br />de una nueva vida.</p>
                     <div className="de-pair">
                         <img className="de-lamb de-l" src={A('borrego')} alt="Borreguito" onClick={poke} />
-                        <img className="de-pair-dog de-l" src={A('motita')} alt="Motita" onClick={poke} />
+                        <img className="de-pair-dog de-l" src={A('motita-juega')} alt="Motita" onClick={poke} />
                         <img className="de-bunny de-l" src={A('conejo')} alt="Conejito" onClick={poke} />
                     </div>
                 </div>
@@ -282,7 +282,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                     <img className="de-nat-manger de-l" src={A('pesebre')} alt={`Bebé ${baby}`} onClick={poke} />
                     <img className="de-nat-straw de-l" src={A('paja')} alt="" />
                     <img className="de-nat-lamb de-l" src={A('borrego')} alt="Borreguito" onClick={poke} />
-                    <img className="de-nat-dog de-l" src={A('motita')} alt="Motita" onClick={poke} />
+                    <img className="de-nat-dog de-l" src={A('motita-echada')} alt="Motita" onClick={poke} />
                     <img className="de-nat-bunny de-l" src={A('conejo')} alt="Conejito" onClick={poke} />
                     <div className="de-nat-lantern de-l" onClick={poke}>
                         <span className="de-lantern-glow" />
@@ -299,7 +299,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
                     <img className="de-deco de-bow-gold de-bow-gold--tl de-pop" src={A('mono-oro')} alt="" />
                     <img className="de-deco de-teddy de-pop" src={A('osito')} alt="Osito" onClick={poke} />
                     <img className="de-deco de-blocks de-pop" src={A('cubos')} alt="Cubitos" onClick={poke} />
-                    <div className="de-peekbox de-peekbox--top"><img src={A('motita')} alt="Motita" onClick={poke} /></div>
+                    <div className="de-peekbox de-peekbox--top"><img src={A('motita-asoma')} alt="Motita" onClick={poke} /></div>
                     <div className="de-detail">
                         <div className="de-ico de-ico--candle"><img src={A('ico-vela')} alt="" /><span className="de-flame de-flame--sm" /></div>
                         <p className="de-label">Fecha</p>
