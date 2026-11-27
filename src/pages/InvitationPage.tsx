@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -862,6 +863,18 @@ export default function InvitationPage() {
     const [showPlusOnesModal, setShowPlusOnesModal] = useState(false);
     const [adultsCount, setAdultsCount] = useState(1);
     const [kidsCount, setKidsCount] = useState(0);
+
+    // Bloquear scroll de document.body mientras haya un modal abierto (declinación o acompañantes)
+    useEffect(() => {
+        if (typeof document === 'undefined') return;
+        if (showDeclineModal || showPlusOnesModal) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
+    }, [showDeclineModal, showPlusOnesModal]);
 
     const KEY_MAPPINGS: Record<string, string> = {
         showMap:          'show_map',
@@ -4075,8 +4088,14 @@ END:VCALENDAR`;
             </div>
 
             {/* Modal de Motivo de Declinación */}
-            {showDeclineModal && (
-                <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+            {showDeclineModal && typeof document !== 'undefined' && createPortal(
+                <div 
+                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+                    style={{ position: 'fixed', inset: 0, zIndex: 9999 }}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowDeclineModal(false);
+                    }}
+                >
                     <div className="bg-[var(--card-bg,#ffffff)] rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-[var(--border-color,#e5e7eb)] space-y-5 animate-in zoom-in-95 duration-200">
                         <div className="text-center space-y-2">
                             <span className="text-3xl">💌</span>
@@ -4110,7 +4129,8 @@ END:VCALENDAR`;
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </section>
         );
@@ -5432,8 +5452,11 @@ END:VCALENDAR`;
                     )}
 
                     {/* Plus Ones Modal */}
-                    {showPlusOnesModal && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    {showPlusOnesModal && typeof document !== 'undefined' && createPortal(
+                        <div 
+                            className="fixed inset-0 z-[9999] flex items-center justify-center p-6 animate-in fade-in duration-300"
+                            style={{ position: 'fixed', inset: 0, zIndex: 9999 }}
+                        >
                             <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowPlusOnesModal(false)} />
                             <div className="relative w-full max-w-sm bg-[var(--section-bg)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl animate-in zoom-in duration-500">
                                 <div className="text-center mb-6">
@@ -5498,7 +5521,8 @@ END:VCALENDAR`;
                                 </div>
                                 <button onClick={() => setShowPlusOnesModal(false)} className="w-full mt-6 py-4 bg-[#1B2E1D] text-white rounded-2xl text-xs uppercase font-black tracking-widest shadow-lg hover:opacity-95 transition-opacity">Confirmar</button>
                             </div>
-                        </div>
+                        </div>,
+                        document.body
                     )}
                 </motion.div>
             )}
