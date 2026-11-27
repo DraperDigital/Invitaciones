@@ -225,7 +225,7 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
             <div className="de-scene de-s2 de-cream">
                 <div className="de-frame de-paper de-paper--cream de-round">
                     <img className="de-deco de-bow-gold de-pop" src={A('mono-oro')} alt="" />
-                    <img className="de-deco de-flor de-flor--tr de-pop" src={A('flores-der')} alt="" />
+                    <img className="de-deco de-flor de-flor--tr de-pop" src={A('nochebuena-der')} alt="" />
                     <img className="de-deco de-booties de-pop" src={A('zapatitos')} alt="Zapatitos" onClick={poke} />
                     <p className="de-quote"><Letters text={'Esta Navidad,\nnuestro mejor regalo\nestá por llegar…'} /></p>
                     <svg className="de-flourish" viewBox="0 0 120 30" aria-hidden="true"><path d="M8 15c18-14 34-14 52 0s34 14 52 0M8 15c18 14 34 14 52 0s34-14 52 0" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M60 5l2 4-2 4-2-4zM60 21l2 4-2 4-2-4z" fill="currentColor" /></svg>
@@ -269,8 +269,8 @@ export default function DulceEsperaHero({ event, cfg, countdown, heroImageUrl, s
             {/* 5 · El nacimiento */}
             <div className="de-scene de-s5 de-blue">
                 <div className="de-frame de-frame--nat de-paper de-paper--blue">
-                    <img className="de-deco de-flor de-flor--bl de-pop" src={A('flores-izq')} alt="" />
-                    <img className="de-deco de-flor de-flor--br de-pop" src={A('flores-der')} alt="" />
+                    <img className="de-deco de-flor de-flor--bl de-pop" src={A('nochebuena-izq')} alt="" />
+                    <img className="de-deco de-flor de-flor--br de-pop" src={A('nochebuena-der')} alt="" />
                 <p className="de-eyebrow">Dulce espera</p>
                 <p className="de-card-title de-card-title--lg">Baby Posada</p>
                 <div className="de-nat">

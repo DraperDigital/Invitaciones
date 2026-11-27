@@ -470,7 +470,7 @@
 .theme-dulce-espera .invitation-content section:is(#guest_welcome, #message, #rsvp)::after { content: ''; position: absolute; z-index: 0; pointer-events: none; background: center top / contain no-repeat; transform-origin: 50% 0; }
 .theme-dulce-espera #guest_welcome::before { top: 0; right: 7%; width: 84px; height: 150px; background-image: url('/images/themes/matias/luna.webp') !important; animation: de-sway 4.6s ease-in-out infinite; }
 .theme-dulce-espera #guest_welcome::after { top: 0; left: 8%; width: 44px; height: 116px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 3.8s ease-in-out infinite reverse; }
-.theme-dulce-espera #message::before { top: 10px; right: -14px; width: 120px; height: 150px; background-image: url('/images/themes/matias/flores-der.webp') !important; }
+.theme-dulce-espera #message::before { top: 10px; right: -14px; width: 120px; height: 150px; background-image: url('/images/themes/matias/nochebuena-der.webp') !important; }
 .theme-dulce-espera #message::after { bottom: 14px; left: -6px; width: 80px; height: 90px; background-image: url('/images/themes/matias/ramito.webp') !important; background-position: center bottom !important; rotate: -12deg; }
 .theme-dulce-espera #rsvp::before { top: 0; left: 6%; width: 40px; height: 104px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 4s ease-in-out infinite; }
 .theme-dulce-espera #rsvp::after { top: 0; right: 6%; width: 40px; height: 104px; background-image: url('/images/themes/matias/estrellas-colgantes.webp') !important; animation: de-sway 3.6s ease-in-out infinite reverse; }
@@ -481,7 +481,7 @@
 
 /* tarjetas de ubicación y regalos con adornos encimados */
 .theme-dulce-espera .invitation-content :is(#location, #gifts) [class*="bg-[var(--card-bg)]"] { position: relative; overflow: visible !important; }
-.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:first-of-type::after { content: ''; position: absolute; left: -22px; bottom: -30px; width: 110px; height: 130px; background: url('/images/themes/matias/flores-izq.webp') center / contain no-repeat; pointer-events: none; }
+.theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:first-of-type::after { content: ''; position: absolute; left: -22px; bottom: -30px; width: 110px; height: 130px; background: url('/images/themes/matias/nochebuena-izq.webp') center / contain no-repeat; pointer-events: none; }
 .theme-dulce-espera .invitation-content #location [class*="bg-[var(--card-bg)]"]:first-of-type::before { content: ''; position: absolute; top: -26px; right: 22px; width: 80px; height: 54px; background: url('/images/themes/matias/mono-oro.webp') center / contain no-repeat; rotate: 12deg; pointer-events: none; }
 .theme-dulce-espera .invitation-content #gifts [class*="bg-[var(--card-bg)]"]::after { content: ''; position: absolute; right: -16px; bottom: -34px; width: 104px; height: 104px; background: url('/images/themes/matias/regalo.webp') center / contain no-repeat; pointer-events: none; animation: de-bob 3.6s ease-in-out infinite; }
 .theme-dulce-espera .invitation-content #gifts [class*="bg-[var(--card-bg)]"]::before { content: ''; position: absolute; left: -14px; bottom: -26px; width: 96px; height: 70px; background: url('/images/themes/matias/zapatitos.webp') center / contain no-repeat; pointer-events: none; }
@@ -503,3 +503,10 @@
 .de .de-bunny { right: auto; left: 63%; width: 18%; }
 .de .de-nat-lantern { right: 37%; }
 .de .de-nat-bunny { right: 24%; }
+
+/* nochebuenas: la versión derecha ya viene volteada */
+.de .de-flor--br, .de-s5.is-in .de-flor--br { scale: 1; }
+.de-s5:not(.is-in) .de-flor--br { scale: .6; }
+.de-flor--tr { width: 120px; top: -34px; right: -24px; }
+.de-flor--bl, .de-flor--br { width: 112px; bottom: -40px; }
+.de-flor--bl, .de-flor--br { width: 92px; bottom: -36px; } .de-flor--bl { left: -26px; } .de-flor--br { right: -26px; } @media (min-width: 900px) { .de-flor--bl, .de-flor--br { width: 118px; } }
