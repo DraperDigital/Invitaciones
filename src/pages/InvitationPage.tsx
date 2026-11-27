@@ -4102,13 +4102,16 @@ END:VCALENDAR`;
             {/* Modal de Motivo de Declinación */}
             {showDeclineModal && typeof document !== 'undefined' && createPortal(
                 <div 
-                    className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
-                    style={{ position: 'fixed', inset: 0, zIndex: 9999 }}
+                    className={`theme-${themeName} fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200`}
+                    style={{ ...globalStyles, position: 'fixed', inset: 0, zIndex: 9999 }}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setShowDeclineModal(false);
                     }}
                 >
-                    <div className="bg-[var(--card-bg,#ffffff)] rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-[var(--border-color,#e5e7eb)] space-y-5 animate-in zoom-in-95 duration-200">
+                    <div 
+                        className="rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-[var(--border-color,#e5e7eb)] space-y-5 animate-in zoom-in-95 duration-200"
+                        style={{ backgroundColor: cardBg || '#ffffff' }}
+                    >
                         <div className="text-center space-y-2">
                             <span className="text-3xl">💌</span>
                             <h3 className="text-xl font-serif text-[var(--text-primary,#111827)]">Lamentamos que no puedas acompañarnos</h3>
@@ -5466,34 +5469,41 @@ END:VCALENDAR`;
                     {/* Plus Ones Modal */}
                     {showPlusOnesModal && typeof document !== 'undefined' && createPortal(
                         <div 
-                            className="fixed inset-0 z-[9999] flex items-center justify-center p-6 animate-in fade-in duration-300"
-                            style={{ position: 'fixed', inset: 0, zIndex: 9999 }}
+                            className={`theme-${themeName} fixed inset-0 z-[9999] flex items-center justify-center p-6 animate-in fade-in duration-300`}
+                            style={{ ...globalStyles, position: 'fixed', inset: 0, zIndex: 9999 }}
                         >
-                            <div className="absolute inset-0 bg-[#1B2E1D]/40 backdrop-blur-sm" onClick={() => setShowPlusOnesModal(false)} />
-                            <div className="relative w-full max-w-sm bg-[var(--section-bg)] rounded-[2.5rem] p-8 md:p-10 shadow-2xl animate-in zoom-in duration-500">
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={() => setShowPlusOnesModal(false)} />
+                            <div 
+                                className="relative w-full max-w-sm rounded-[2.5rem] p-8 md:p-10 shadow-2xl animate-in zoom-in duration-500 border border-[var(--card-border,#e5e7eb)]"
+                                style={{ backgroundColor: cardBg || '#ffffff' }}
+                            >
                                 <div className="text-center mb-6">
                                     <UsersIcon className="h-10 w-10 mx-auto mb-3 text-[#BD7474]" />
-                                    <h3 className="text-2xl font-serif text-[#1B2E1D]">Acompañantes</h3>
+                                    <h3 className="text-2xl font-serif text-[var(--text-primary,#111827)]">Acompañantes</h3>
                                     {guest && guest.max_plus_ones > 0 && (
-                                        <p className="text-xs text-[var(--text-secondary)] mt-1">
+                                        <p className="text-xs text-[var(--text-secondary,#6b7280)] mt-1">
                                             Máximo {guest.max_plus_ones} acompañante{guest.max_plus_ones > 1 ? 's' : ''} adicional{guest.max_plus_ones > 1 ? 'es' : ''} (Total: {guest.max_plus_ones + 1} pases)
                                         </p>
                                     )}
                                 </div>
                                 <div className="space-y-4">
                                     {/* Contador Adultos */}
-                                    <div className="flex items-center justify-between bg-[var(--section-bg-alt)] p-4 md:p-5 rounded-2xl">
+                                    <div 
+                                        className="flex items-center justify-between p-4 md:p-5 rounded-2xl border border-[var(--border-color,#e5e7eb)]"
+                                        style={{ backgroundColor: sectionBgAlt || '#f9fafb' }}
+                                    >
                                         <div>
-                                            <p className="text-xs uppercase font-bold tracking-widest text-[var(--text-secondary)]">Adultos</p>
+                                            <p className="text-xs uppercase font-bold tracking-widest text-[var(--text-secondary,#6b7280)]">Adultos</p>
                                             <p className="text-[10px] text-slate-400">Papás / Acompañantes</p>
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <button 
                                                 type="button"
                                                 onClick={() => setAdultsCount(Math.max(0, adultsCount - 1))} 
-                                                className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors"
+                                                className="h-10 w-10 rounded-xl border border-[var(--border-color,#e5e7eb)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors cursor-pointer text-[var(--text-primary,#111827)]"
+                                                style={{ backgroundColor: sectionBg || '#ffffff' }}
                                             >-</button>
-                                            <span className="text-xl font-bold w-6 text-center">{adultsCount}</span>
+                                            <span className="text-xl font-bold w-6 text-center text-[var(--text-primary,#111827)]">{adultsCount}</span>
                                             <button 
                                                 type="button"
                                                 onClick={() => {
@@ -5501,24 +5511,29 @@ END:VCALENDAR`;
                                                     setAdultsCount(adultsCount + 1);
                                                 }} 
                                                 disabled={Boolean(guest && guest.max_plus_ones > 0 && (adultsCount + kidsCount) >= guest.max_plus_ones)}
-                                                className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                                className="h-10 w-10 rounded-xl border border-[var(--border-color,#e5e7eb)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-[var(--text-primary,#111827)]"
+                                                style={{ backgroundColor: sectionBg || '#ffffff' }}
                                             >+</button>
                                         </div>
                                     </div>
 
                                     {/* Contador Niños */}
-                                    <div className="flex items-center justify-between bg-[var(--section-bg-alt)] p-4 md:p-5 rounded-2xl">
+                                    <div 
+                                        className="flex items-center justify-between p-4 md:p-5 rounded-2xl border border-[var(--border-color,#e5e7eb)]"
+                                        style={{ backgroundColor: sectionBgAlt || '#f9fafb' }}
+                                    >
                                         <div>
-                                            <p className="text-xs uppercase font-bold tracking-widest text-[var(--text-secondary)]">Niños</p>
+                                            <p className="text-xs uppercase font-bold tracking-widest text-[var(--text-secondary,#6b7280)]">Niños</p>
                                             <p className="text-[10px] text-slate-400">Hermanitos / Menores</p>
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <button 
                                                 type="button"
                                                 onClick={() => setKidsCount(Math.max(0, kidsCount - 1))} 
-                                                className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors"
+                                                className="h-10 w-10 rounded-xl border border-[var(--border-color,#e5e7eb)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors cursor-pointer text-[var(--text-primary,#111827)]"
+                                                style={{ backgroundColor: sectionBg || '#ffffff' }}
                                             >-</button>
-                                            <span className="text-xl font-bold w-6 text-center">{kidsCount}</span>
+                                            <span className="text-xl font-bold w-6 text-center text-[var(--text-primary,#111827)]">{kidsCount}</span>
                                             <button 
                                                 type="button"
                                                 onClick={() => {
@@ -5526,12 +5541,19 @@ END:VCALENDAR`;
                                                     setKidsCount(kidsCount + 1);
                                                 }} 
                                                 disabled={Boolean(guest && guest.max_plus_ones > 0 && (adultsCount + kidsCount) >= guest.max_plus_ones)}
-                                                className="h-10 w-10 rounded-xl bg-[var(--section-bg)] border border-[var(--border-color)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                                className="h-10 w-10 rounded-xl border border-[var(--border-color,#e5e7eb)] text-lg font-bold flex items-center justify-center hover:bg-slate-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-[var(--text-primary,#111827)]"
+                                                style={{ backgroundColor: sectionBg || '#ffffff' }}
                                             >+</button>
                                         </div>
                                     </div>
                                 </div>
-                                <button onClick={() => setShowPlusOnesModal(false)} className="w-full mt-6 py-4 bg-[#1B2E1D] text-white rounded-2xl text-xs uppercase font-black tracking-widest shadow-lg hover:opacity-95 transition-opacity">Confirmar</button>
+                                <button 
+                                    onClick={() => setShowPlusOnesModal(false)} 
+                                    className="w-full mt-6 py-4 rounded-2xl text-xs uppercase font-black tracking-widest shadow-lg hover:opacity-95 transition-opacity cursor-pointer text-[var(--button-contrast,#ffffff)]"
+                                    style={{ background: buttonColor, color: buttonContrast }}
+                                >
+                                    Confirmar
+                                </button>
                             </div>
                         </div>,
                         document.body
