@@ -539,3 +539,9 @@
 
 /* Nacimiento: echadita mirando al bebé */
 .de .de-nat-dog { left: 26%; bottom: 2%; width: 25%; z-index: 6; }
+
+/* Celebremos: Motita separada del borreguito, frente al conejito */
+.de .de-lamb { left: -2%; width: 34%; }
+.de .de-pair-dog { left: 39%; width: 31%; }
+.de .de-bunny { left: 79%; width: 15%; }
+.de-s4 .de-frame { padding-bottom: 46px; }
