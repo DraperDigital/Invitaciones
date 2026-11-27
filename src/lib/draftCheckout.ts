@@ -6,7 +6,7 @@ export interface DraftCheckoutIntent {
 export const PLAN_PRICES: Record<string, { name: string; price: number; formatted: string }> = {
     clasico:   { name: 'Clásica',    price: 499,  formatted: '$499' },
     pro:       { name: 'Pro',        price: 1699, formatted: '$1,699' },
-    premium:   { name: 'Diseño Pro', price: 2499, formatted: '$2,499' },
+    premium:   { name: 'Premium',    price: 2499, formatted: '$2,499' },
     concierge: { name: 'Concierge',  price: 4499, formatted: '$4,499' }
 };
 

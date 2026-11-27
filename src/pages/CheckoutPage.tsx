@@ -175,7 +175,7 @@ export default function CheckoutPage() {
             ]
         },
         premium: {
-            name: 'Diseño Pro',
+            name: 'Premium',
             price: 2499,
             icon: Crown,
             color: 'text-emerald-500',
@@ -197,7 +197,7 @@ export default function CheckoutPage() {
             color: 'text-amber-500',
             bg: 'bg-amber-50',
             features: [
-                'Todo lo del plan Diseño Pro',
+                'Todo lo del plan Premium',
                 'Incluye Invitto Confirma',
                 'Save the Date digital incluido',
                 '3 rondas + llamada + reconfirmación',

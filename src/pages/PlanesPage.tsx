@@ -74,7 +74,7 @@ export default function PlanesPage() {
         },
         {
             id: 'premium',
-            name: 'Diseño Pro',
+            name: 'Premium',
             price: '$2,499',
             period: 'MXN',
             description: 'Diseño a tu medida',
@@ -99,11 +99,11 @@ export default function PlanesPage() {
             price: '$4,499',
             period: 'MXN',
             description: 'Nosotros hacemos todo',
-            subcopy: '“Diseño Pro + Invitto Confirma”',
+            subcopy: '“Premium + Invitto Confirma”',
             icon: Crown,
             color: 'gold',
             features: [
-                'Todo lo del plan Diseño Pro (incluye Planeador)',
+                'Todo lo del plan Premium (incluye Planeador)',
                 'Incluye Invitto Confirma: confirmamos a cada invitado por ti',
                 'Save the Date digital incluido',
                 'Lista final confirmada 15 días antes, o te devolvemos tu dinero',
@@ -135,7 +135,7 @@ export default function PlanesPage() {
         <div className="min-h-screen bg-[#FFFFFF] selection:bg-[#fdf2f8] pb-20 md:pb-32 overflow-x-hidden">
             <Seo
                 title="Planes y precios — Invitaciones digitales desde $499 MXN | Invitto"
-                description="4 planes diseñados para tu evento: Clásica $499, Pro $1,699, Diseño Pro $2,499 y Concierge $4,499. Un solo pago, sin suscripciones."
+                description="4 planes diseñados para tu evento: Clásica $499, Pro $1,699, Premium $2,499 y Concierge $4,499. Un solo pago, sin suscripciones."
                 path="/planes"
                 jsonLd={productJsonLd}
             />

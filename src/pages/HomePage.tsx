@@ -935,7 +935,7 @@ export default function HomePage() {
                                         <Check className="h-4 w-4 text-[#4E7B55]" /> Enlace propio (/std/evento)
                                     </span>
                                     <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl shadow-xs border border-stone-200/80">
-                                        <Check className="h-4 w-4 text-[#4E7B55]" /> Incluido en Diseño Pro y Concierge
+                                        <Check className="h-4 w-4 text-[#4E7B55]" /> Incluido en Premium y Concierge
                                     </span>
                                 </div>
 
@@ -1045,7 +1045,7 @@ export default function HomePage() {
                                     
                                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
                                         <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
-                                        <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Diseño Pro y Concierge. <em>(No disponible en Clásica).</em></span>
+                                        <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Premium y Concierge. <em>(No disponible en Clásica).</em></span>
                                     </div>
                                 </div>
 
@@ -1388,12 +1388,12 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            {/* Plan Diseño Pro */}
+                            {/* Plan Premium */}
                             <div className="bg-[#F8F9FA] rounded-3xl p-7 border border-slate-200/80 flex flex-col justify-between hover:shadow-lg transition-all">
                                 <div className="space-y-5">
                                     <div>
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">PERSONALIZADO</span>
-                                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Diseño Pro</h3>
+                                        <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Premium</h3>
                                         <p className="text-xs text-slate-600 mt-1">Plantillas exclusivas, paleta y tipografía adaptadas a tu concepto por diseñador.</p>
                                     </div>
 
@@ -1438,7 +1438,7 @@ export default function HomePage() {
                                         to="/dashboard/new?plan=premium"
                                         className="w-full min-h-[44px] py-3.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-white hover:border-[#DF3B94] hover:text-[#DF3B94] transition-all flex items-center justify-center text-center no-underline"
                                     >
-                                        Elegir Diseño Pro
+                                        Elegir Premium
                                     </Link>
                                     <p className="text-[11px] text-slate-600 text-center mt-2 font-medium">Empieza tu borrador gratis · Pagas al publicar</p>
                                 </div>
@@ -1450,7 +1450,7 @@ export default function HomePage() {
                                     <div>
                                         <span className="text-[10px] font-bold uppercase tracking-widest text-[#C2287B]">TODO INCLUIDO · LLAVE EN MANO</span>
                                         <h3 className="text-2xl font-display font-extrabold text-[#222B38] mt-1">Concierge</h3>
-                                        <p className="text-xs text-slate-600 mt-1">Diseño Pro + Invitto Confirma (llamamos y confirmamos a tus invitados por ti).</p>
+                                        <p className="text-xs text-slate-600 mt-1">Premium + Invitto Confirma (llamamos y confirmamos a tus invitados por ti).</p>
                                     </div>
 
                                     <div className="py-2 border-y border-slate-200/60">
@@ -1464,7 +1464,7 @@ export default function HomePage() {
                                     <ul className="space-y-2.5 text-xs text-slate-700 font-medium">
                                         <li className="flex items-center gap-2.5">
                                             <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />
-                                            <span><strong>Todo lo del plan Diseño Pro</strong> (incluye Planeador)</span>
+                                            <span><strong>Todo lo del plan Premium</strong> (incluye Planeador)</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <Check className="h-4 w-4 text-[#4E7B55] flex-shrink-0" />

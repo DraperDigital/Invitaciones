@@ -2,7 +2,7 @@
  * Save the Date — una sola pantalla con los datos principales del evento.
  *
  * Vive en su propio enlace: /std/<slug del evento>.
- * Incluido en Diseño Pro (premium) y Concierge. En Clásica y Pro es un extra de $299
+ * Incluido en Premium (premium) y Concierge. En Clásica y Pro es un extra de $299
  * (theme_config.save_the_date_paid = true lo marca el webhook de Stripe).
  */
 import { normalizePlan } from './sectionRegistry';
@@ -132,7 +132,7 @@ export function hasSaveTheDateAccess(event: any): boolean {
     return normalizePlan(p) === 'premium';
 }
 
-/** ¿El plan ya incluye el Save the Date? (Diseño Pro y Concierge) */
+/** ¿El plan ya incluye el Save the Date? (Premium y Concierge) */
 export function saveTheDateIncluded(plan?: string | null, cfg?: any): boolean {
     if (cfg?.isPremium === true || cfg?.isConcierge === true) return true;
     return normalizePlan(plan) === 'premium';

@@ -209,7 +209,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
   },
   premium: {
     id: 'premium',
-    name: 'Diseño Pro',
+    name: 'Premium',
     price: '$2,499',
     period: 'MXN',
     description: 'Diseño exclusivo creado desde cero por profesionales para tu evento.',
@@ -217,7 +217,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     icon: Crown,
     demoUrl: '/i/xv-regina-2026-premium',
     seo: {
-      title: 'Plan Diseño Pro — Invitaciones Digitales a Medida con Diseñadores',
+      title: 'Plan Premium — Invitaciones Digitales a Medida con Diseñadores',
       description: 'Colabora con un diseñador experto para crear una invitación digital única. Incluye dominio propio (.com), sistema Pro de pases y check-in QR. $2,499 MXN.',
       path: '/planes/premium',
     },
@@ -225,11 +225,11 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
       badge: 'Diseño Exclusivo',
       title: 'Diseño 100% único a la medida de tu boda o evento',
       subtitle: 'Trabaja de la mano con nuestro equipo de diseñadores gráficos. Recreamos la papelería física de tu evento, agregamos música de fondo, animaciones personalizadas y dominio propio.',
-      cta: 'Adquirir Plan Diseño Pro',
+      cta: 'Adquirir Plan Premium',
     },
     details: {
       introTitle: 'Lleva tu diseño al siguiente nivel de sofisticación',
-      introDesc: 'Si tienes una identidad de boda muy específica, tipografías personalizadas, ilustraciones de tu locación o acuarelas que deseas incluir, el plan Diseño Pro es tu mejor opción. Incluye todas las ventajas del Plan Pro y un dominio personalizado como "maria-y-alejandro.com".',
+      introDesc: 'Si tienes una identidad de boda muy específica, tipografías personalizadas, ilustraciones de tu locación o acuarelas que deseas incluir, el plan Premium es tu mejor opción. Incluye todas las ventajas del Plan Pro y un dominio personalizado como "maria-y-alejandro.com".',
     },
     features: [
       {
@@ -274,7 +274,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Product',
-      name: 'Invitto Plan Diseño Pro',
+      name: 'Invitto Plan Premium',
       description: 'Invitación digital de alta costura diseñada por profesionales con dominio web exclusivo y sistema de registro QR.',
       brand: { '@type': 'Brand', name: 'Invitto' },
       offers: {
@@ -291,19 +291,19 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     name: 'Concierge',
     price: '$4,499',
     period: 'MXN',
-    description: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.',
-    subcopy: '“Diseño Pro + Invitto Confirma”',
+    description: 'Premium + Invitto Confirma + atención a tus invitados. Nosotros hacemos todo.',
+    subcopy: '“Premium + Invitto Confirma”',
     icon: Crown,
     demoUrl: '/i/boda-gabriela-arturo-premium',
     seo: {
       title: 'Plan Concierge — Gestión de Invitados y Envío por WhatsApp Humano',
-      description: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Cargamos tu lista, 3 rondas de seguimiento + 1 llamada a pendientes + reconfirmación 7 días antes, lista final entregada 15 días antes y garantía de devolución 100%. $4,499 MXN.',
+      description: 'Premium + Invitto Confirma + atención a tus invitados. Cargamos tu lista, 3 rondas de seguimiento + 1 llamada a pendientes + reconfirmación 7 días antes, lista final entregada 15 días antes y garantía de devolución 100%. $4,499 MXN.',
       path: '/planes/concierge',
     },
     hero: {
       badge: 'Servicio VIP',
       title: 'Despreocúpate por completo de las confirmaciones',
-      subtitle: 'Diseño Pro + Invitto Confirma + atención a tus invitados. Un equipo dedicado diseña tu invitación digital desde cero, carga tus listas, envía cada invitación personalizada por WhatsApp y realiza el seguimiento humano completo.',
+      subtitle: 'Premium + Invitto Confirma + atención a tus invitados. Un equipo dedicado diseña tu invitación digital desde cero, carga tus listas, envía cada invitación personalizada por WhatsApp y realiza el seguimiento humano completo.',
       cta: 'Adquirir Plan Concierge',
     },
     details: {
@@ -312,8 +312,8 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
     },
     features: [
       {
-        title: 'Diseño Pro Exclusivo y Dominio .com',
-        description: 'Todo lo del plan Diseño Pro: diseñador gráfico dedicado para tu invitación desde cero y dominio web propio .com.',
+        title: 'Diseño Exclusivo y Dominio .com',
+        description: 'Todo lo del plan Premium: diseñador gráfico dedicado para tu invitación desde cero y dominio web propio .com.',
       },
       {
         title: 'Asistente Humano Dedicado',
@@ -351,7 +351,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
       },
       {
         question: '¿Qué diferencia hay entre el Plan Concierge e Invitto Confirma?',
-        answer: 'Invitto Confirma tiene dos modalidades: como add-on sumado a cualquier plan Invitto ($2,000 MXN) o standalone si ya traes tu invitación de fuera ($3,499 MXN). El Plan Concierge ($4,499 MXN) incluye todo integrado: Diseño Pro ($2,499 MXN) + Invitto Confirma add-on ($2,000 MXN) + atención personalizada a las dudas de tus invitados.',
+        answer: 'Invitto Confirma tiene dos modalidades: como add-on sumado a cualquier plan Invitto ($2,000 MXN) o standalone si ya traes tu invitación de fuera ($3,499 MXN). El Plan Concierge ($4,499 MXN) incluye todo integrado: Premium ($2,499 MXN) + Invitto Confirma add-on ($2,000 MXN) + atención personalizada a las dudas de tus invitados.',
       },
       {
         question: '¿Los mensajes se envían de forma automática?',
@@ -366,7 +366,7 @@ export const PLANS_LANDING_DATA: Record<string, PlanLandingData> = {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: 'Invitto Plan Concierge',
-      description: 'Diseño Pro + Invitto Confirma + atención a tus invitados con seguimiento humano y garantía de entrega 15 días antes.',
+      description: 'Premium + Invitto Confirma + atención a tus invitados con seguimiento humano y garantía de entrega 15 días antes.',
       brand: { '@type': 'Brand', name: 'Invitto' },
       offers: {
         '@type': 'Offer',

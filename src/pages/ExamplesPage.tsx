@@ -148,7 +148,7 @@ export default function ExamplesPage() {
                                     ¿Quieres apartar la fecha antes de tu invitación formal?
                                 </h3>
                                 <p className="text-sm text-slate-600 max-w-xl">
-                                    10 diseños de una sola pantalla con cuenta regresiva, ciudad y botón para el calendario de Google y Apple. Incluido en Diseño Pro y Concierge, o por $299 MXN en Clásica y Pro.
+                                    10 diseños de una sola pantalla con cuenta regresiva, ciudad y botón para el calendario de Google y Apple. Incluido en Premium y Concierge, o por $299 MXN en Clásica y Pro.
                                 </p>
                             </div>
                             <Link
@@ -276,7 +276,7 @@ export default function ExamplesPage() {
                         <div>
                             <p className="text-xs font-bold uppercase tracking-wider text-[#DF3B94]">Nuevo · Save the Date</p>
                             <h2 className="mt-2 text-3xl sm:text-4xl font-display font-extrabold text-[#222B38]">Aparta la fecha antes de la invitación</h2>
-                            <p className="mt-2 text-slate-500 text-sm max-w-xl">Una sola pantalla con nombres, fecha, ciudad, cuenta regresiva y botón para el calendario. Incluido en Diseño Pro y Concierge; en Clásica y Pro, ${SAVE_THE_DATE_PRICE}.</p>
+                            <p className="mt-2 text-slate-500 text-sm max-w-xl">Una sola pantalla con nombres, fecha, ciudad, cuenta regresiva y botón para el calendario. Incluido en Premium y Concierge; en Clásica y Pro, ${SAVE_THE_DATE_PRICE}.</p>
                         </div>
                         <Link to="/std/demo-editorial" className="self-start md:self-auto inline-flex items-center gap-2 rounded-full bg-[#222B38] px-5 py-3 text-sm font-bold text-white">Ver los 10 diseños <ArrowRight className="h-4 w-4" /></Link>
                     </div>

@@ -377,13 +377,13 @@ const PLANS_META = [
     },
     {
         id: 'premium',
-        name: 'Diseño Pro',
+        name: 'Premium',
         tagline: 'Diseño a tu medida',
         price: '$2,499',
         currency: 'MXN',
         popular: false,
         icon: Crown,
-        cta: 'Elegir Diseño Pro',
+        cta: 'Elegir Premium',
         badge: 'PERSONALIZADO',
     },
     {
@@ -652,7 +652,7 @@ export default function PlanComparisonTable({ eventId, theme, tipo }: PlanCompar
                                                         {renderValue(feature.pro, true)}
                                                     </td>
 
-                                                    {/* Diseño Pro */}
+                                                    {/* Premium */}
                                                     <td className="p-3.5 sm:p-4 text-center align-middle">
                                                         {renderValue(feature.premium)}
                                                     </td>

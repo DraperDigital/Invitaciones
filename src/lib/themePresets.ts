@@ -1356,7 +1356,7 @@ export const CONCIERGE_PLAN_URL = '/planes/concierge';
 
 /**
  * Devuelve el plan mínimo requerido por una plantilla.
- * Las plantillas avanzadas del catálogo corresponden al plan Pro (o Diseño Pro / Premium si así está marcado).
+ * Las plantillas avanzadas del catálogo corresponden al plan Pro (o Premium si así está marcado).
  */
 export function getTemplateRequiredPlan(themeIdOrSlug?: string | null): 'clasico' | 'pro' | 'premium' {
     if (!themeIdOrSlug) return 'clasico';

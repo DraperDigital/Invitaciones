@@ -2610,7 +2610,7 @@ export default function DesignEditor() {
                                 ) : (
                                     <div className="p-4 rounded-2xl bg-stone-900 text-white space-y-3">
                                         <p className="text-sm font-bold">Agrega tu Save the Date por ${SAVE_THE_DATE_PRICE}</p>
-                                        <p className="text-xs text-stone-300">Pago único. Viene incluido en Diseño Pro y Concierge.</p>
+                                        <p className="text-xs text-stone-300">Pago único. Viene incluido en Premium y Concierge.</p>
                                         <div className="flex flex-wrap gap-2 pt-1">
                                             <button type="button" disabled={buyingStd} onClick={handleBuySaveTheDate} className="px-4 py-2.5 text-xs font-bold rounded-xl bg-[#DF3B94] hover:bg-[#c52a7c] text-white disabled:opacity-60 transition-colors">
                                                 {buyingStd ? 'Abriendo pago…' : `Comprar por $${SAVE_THE_DATE_PRICE}`}

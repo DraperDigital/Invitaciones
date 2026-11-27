@@ -14,7 +14,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                 const planCode = eventPlan.toLowerCase();
                 const isPro = planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado';
                 const isPremiumOrPro = isPro || planCode === 'premium' || planCode === 'concierge';
-                const planName = planCode === 'concierge' ? 'Concierge' : planCode === 'premium' ? 'Diseño Pro' : isPro ? 'Pro' : 'Clásica';
+                const planName = planCode === 'concierge' ? 'Concierge' : planCode === 'premium' ? 'Premium' : isPro ? 'Pro' : 'Clásica';
                 setAccess({
                     plan: { code: planCode, name: planName },
                     features: [
@@ -44,7 +44,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
             const plan = (eventPlan || 'clasico').toLowerCase();
             const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
             const isPremiumOrPro = isPro || plan === 'premium' || plan === 'concierge';
-            const planName = plan === 'concierge' ? 'Concierge' : plan === 'premium' ? 'Diseño Pro' : isPro ? 'Pro' : 'Clásica';
+            const planName = plan === 'concierge' ? 'Concierge' : plan === 'premium' ? 'Premium' : isPro ? 'Pro' : 'Clásica';
             setAccess({
                 plan: { code: plan, name: planName },
                 features: [
@@ -132,7 +132,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                     const planName = planCode === 'concierge'
                         ? 'Concierge'
                         : planCode === 'premium'
-                            ? 'Diseño Pro'
+                            ? 'Premium'
                             : isPro
                                 ? 'Pro'
                                 : 'Clásica';

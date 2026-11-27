@@ -347,7 +347,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       },
       {
         question: '“No tengo tiempo de armarla.”',
-        answer: 'Se arma en minutos. Y si prefieres que la hagamos nosotros, existe Diseño Pro.',
+        answer: 'Se arma en minutos. Y si prefieres que la hagamos nosotros, existe el plan Premium.',
       },
       {
         question: '“$1,699 es mucho para una invitación.”',
@@ -516,7 +516,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     objections: [
       {
         question: '“Ella quiere algo único, no una plantilla.”',
-        answer: 'Cambian colores, tipografía, fotos y música. Y si quieren diseño desde cero, existe Diseño Pro.',
+        answer: 'Cambian colores, tipografía, fotos y música. Y si quieren diseño desde cero, existe el plan Premium.',
       },
       {
         question: '“Las abuelitas no van a saber.”',
@@ -552,7 +552,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
     testimonials: [],
     faq: [
       { question: '¿Puedo poner chambelanes y padrinos?', answer: 'Sí, tienen su propia sección destacada con foto y nombre de lo que apadrinan.' },
-      { question: '¿Cuántas fotos puedo subir?', answer: 'Plan Clásica incluye 10 fotos, Plan Pro 20 y Diseño Pro fotos ilimitadas.' },
+      { question: '¿Cuántas fotos puedo subir?', answer: 'Plan Clásica incluye 10 fotos, Plan Pro 20 y Plan Premium fotos ilimitadas.' },
       { question: '¿Cómo puedo pagar?', answer: 'Tarjeta de crédito o débito, OXXO, meses sin intereses, Apple Pay y Google Pay.' },
       { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tus XV años.' },
     ],

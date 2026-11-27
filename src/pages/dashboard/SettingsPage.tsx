@@ -94,8 +94,8 @@ export default function SettingsPage() {
             'clasico':      'PLAN CLÁSICA',
             'classic':      'PLAN CLÁSICA',
             'pro':          'PLAN PRO',
-            'premium':      'DISEÑO PRO',
-            'personalized': 'DISEÑO PRO',
+            'premium':      'PLAN PREMIUM',
+            'personalized': 'PLAN PREMIUM',
             'concierge':    'PLAN CONCIERGE',
         };
         return labels[tier?.toLowerCase()] || 'PLAN PRO';

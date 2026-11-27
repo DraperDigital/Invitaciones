@@ -26,7 +26,7 @@ export function getEventPlanBadge(themeConfig: any): EventPlanBadge {
         case 'premium':
         case 'personalized':
             return {
-                label: 'Diseño Pro',
+                label: 'Premium',
                 classes: 'bg-amber-500/90 text-white border border-amber-300/40',
                 icon: '♛',
             };
