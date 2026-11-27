@@ -32,7 +32,7 @@ const ALL_EVENT_CROSS_LINKS = [
   { slug: 'invitaciones-digitales-bautizo', label: 'Bautizos', icon: '🕊️', desc: 'Padrinos, iglesia, recepción y confirmación fácil' },
   { slug: 'invitaciones-digitales-primera-comunion', label: 'Primera Comunión', icon: '⛪', desc: 'Ceremonia solemne, mapas y confirmación familiar' },
   { slug: 'invitaciones-digitales-baby-shower', label: 'Baby Shower', icon: '🍼', desc: 'Mesa de regalos, dinámicas y confirmación tierna' },
-  { slug: 'invitaciones-digitales-revelacion-de-genero', label: 'Revelación de Género', icon: '✨', desc: 'Cuenta regresiva, team rosa o azul y ubicación' },
+  { slug: 'invitaciones-digitales-revelacion-de-genero', label: 'Revelación de Género', icon: '🎀', desc: 'Cuenta regresiva, team rosa o azul y ubicación' },
   { slug: 'invitaciones-digitales-graduacion', label: 'Graduaciones', icon: '🎓', desc: 'Pases de gala individuales y acceso con QR en puerta' },
 ];
 

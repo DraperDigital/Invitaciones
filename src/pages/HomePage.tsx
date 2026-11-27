@@ -3,7 +3,7 @@ import {
     Check, ChevronDown, ArrowRight, ChevronLeft,
     X, Users, Gem, Menu, Calendar,
     Crown, Wallet, Store, ListChecks, CalendarHeart,
-    MessageCircle, Sparkles, Clock, QrCode
+    MessageCircle, Clock, QrCode
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -772,7 +772,6 @@ export default function HomePage() {
                         {/* Compact Header */}
                         <div className="text-center mb-10 space-y-3">
                             <div className="inline-flex items-center px-3.5 py-1.5 bg-[#fdf2f8] border border-[#fbcfe8] rounded-full text-xs font-bold text-[#C52A7C]">
-                                <Sparkles className="h-3.5 w-3.5 mr-1 text-[#C52A7C]" />
                                 <span>Galería Interactiva por Ocasión</span>
                             </div>
                             <h2 className="text-3xl md:text-5xl font-display font-extrabold text-[#222B38] tracking-tight">
