@@ -86,6 +86,15 @@ export const DEMO_CATEGORIES = [
     { id: 'graduacion', name: 'Graduaciones', emoji: '🎓' },
 ];
 
+export const DEMO_BASE_SLUGS = [
+    'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
+    'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
+    'boda-collage', 'boda-simetria-floral',
+    'cumple-emilia', 'cumpleanos-granja-zair', 'cumpleanos-zoologico-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'cumple-lucas-rainbow-pop', 'bautizo-victoria', 'bautizo-camila',
+    'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
+    'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
+];
+
 function getContrastColor(hexColor: string) {
     if (!hexColor) return '#ffffff';
     let hex = hexColor.replace('#', '');
@@ -149,6 +158,22 @@ export default function InvitationPage() {
     const [whatsappOptIn, setWhatsappOptIn] = useState(true);
     const [envelopeOpened, setEnvelopeOpened] = useState(false);
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    const baseSlug = slug?.replace(/-pro$|-premium$/, '');
+    const currentVersion = slug?.endsWith('-premium') ? 'premium' : slug?.endsWith('-pro') ? 'pro' : 'classic';
+
+    const demoIndex = CANONICAL_TEMPLATES.findIndex(
+        t => t.slug === slug || (baseSlug && t.slug.replace(/-pro$|-premium$/, '') === baseSlug)
+    );
+
+    const isCanonicalDemoSlug = Boolean(
+        (demoIndex !== -1) ||
+        (baseSlug && DEMO_BASE_SLUGS.includes(baseSlug))
+    );
+
+    // ÚNICAMENTE es demo si corresponde a un slug oficial del catálogo de ejemplos
+    // y NUNCA si es un evento real de usuario o modo admin / creador
+    const isDemo = !isAdminMode && rawToken !== 'admin' && (rawToken === 'token-preview' || isCanonicalDemoSlug);
 
     // ── Theme name — derived from event config ──
     const themeName = event?.theme_config?.theme || 'classic';
@@ -1454,10 +1479,18 @@ export default function InvitationPage() {
             setError('No se pudo cargar el evento. Recarga la página e intenta de nuevo.');
             return;
         }
-        const cleanedName = guestName.trim();
+
+        let cleanedName = guestName.trim();
         if (!cleanedName) {
-            setError('Por favor ingresa tu nombre completo');
-            return;
+            if (guest?.name) {
+                cleanedName = guest.name.trim();
+            } else if (rawToken === 'token-preview' || isDemo) {
+                cleanedName = 'Invitado de Ejemplo';
+                setGuestName('Invitado de Ejemplo');
+            } else {
+                setError('Por favor ingresa tu nombre completo');
+                return;
+            }
         }
 
         setSubmitting(true);
@@ -1482,11 +1515,35 @@ export default function InvitationPage() {
                 finalMessage
             });
 
-            if (activeToken === 'admin') {
-                // Simulate success for editor preview mode
-                console.log('Admin preview mode: simulating RSVP success');
+            // Detectar modo preview / demo para simular éxito sin tocar base de datos
+            const isPreviewRsvp = Boolean(
+                isDemo ||
+                activeToken === 'admin' ||
+                activeToken === 'token-preview' ||
+                rawToken === 'admin' ||
+                rawToken === 'token-preview' ||
+                guestToken === 'admin' ||
+                guestToken === 'token-preview' ||
+                activeToken?.startsWith('token-') ||
+                guest?.id?.startsWith('guest-') ||
+                event?.id?.startsWith('mock-') ||
+                event?.id?.startsWith('demo-') ||
+                event?.id?.startsWith('evt-') ||
+                searchParams.get('wizard_preview') === '1' ||
+                searchParams.get('preview') === 'true'
+            );
+
+            if (isPreviewRsvp) {
+                console.log('Preview / Demo RSVP simulation: bypassing database RPC', { status, activeToken });
                 setRsvpChoice(status);
                 setRsvpSuccess(true);
+                setShowDeclineModal(false);
+                if (guest) {
+                    setGuest(prev => prev ? ({
+                        ...prev,
+                        status: status === 'yes' ? 'confirmed' : 'declined'
+                    }) : null);
+                }
                 return;
             }
 
@@ -2986,32 +3043,6 @@ END:VCALENDAR`;
     `;
 
     // ── Layout modular: sección queue ────────────────────────────────
-    const baseSlug = slug?.replace(/-pro$|-premium$/, '');
-    const currentVersion = slug?.endsWith('-premium') ? 'premium' : slug?.endsWith('-pro') ? 'pro' : 'classic';
-
-    const DEMO_BASE_SLUGS = [
-        'xv-sofia-2026', 'xv-julia-2026', 'xv-regina-2026',
-        'boda-ana-y-carlos', 'boda-gabriela-arturo', 'boda-isabel-rodrigo',
-        'boda-collage', 'boda-simetria-floral',
-        'cumple-emilia', 'cumpleanos-granja-zair', 'cumpleanos-zoologico-zair', 'cumple-samuel-gamer', 'cumple-mateo-pixel-craft', 'cumple-lucas-rainbow-pop', 'bautizo-victoria', 'bautizo-camila',
-        'graduacion-ana-psicologia', 'graduacion-roberto-ingenieria', 'comunion-gael',
-        'boda-sofia-mateo', 'gala-aniversario', 'boda-destino', 'xv-valeria'
-    ];
-
-    // Index en CANONICAL_TEMPLATES para navegación secuencial entre ejemplos (únicamente por slug)
-    const demoIndex = CANONICAL_TEMPLATES.findIndex(
-        t => t.slug === slug || (baseSlug && t.slug.replace(/-pro$|-premium$/, '') === baseSlug)
-    );
-
-    const isCanonicalDemoSlug = Boolean(
-        (demoIndex !== -1) ||
-        (baseSlug && DEMO_BASE_SLUGS.includes(baseSlug))
-    );
-
-    // ÚNICAMENTE es demo si corresponde a un slug oficial del catálogo de ejemplos
-    // y NUNCA si es un evento real de usuario o modo admin / creador
-    const isDemo = !isAdminMode && rawToken !== 'admin' && (rawToken === 'token-preview' || isCanonicalDemoSlug);
-
     const currentDemo = demoIndex >= 0 ? CANONICAL_TEMPLATES[demoIndex] : CANONICAL_TEMPLATES[0];
 
     // Determine active category:
