@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom';
 import {
     Check, ChevronDown, ArrowRight, ChevronLeft,
     X, Users, Gem, Menu, Calendar,
-    Crown, Wallet, Store, ListChecks, CalendarHeart,
-    MessageCircle, Clock, QrCode
+    Clock, QrCode, MessageCircle
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
@@ -278,9 +277,6 @@ export default function HomePage() {
     // Gallery Tabs state
     const [activeOccasion, setActiveOccasion] = useState(0);
 
-    // Dark Band (Planeador + Confirma) Tabs state
-    const [darkTab, setDarkTab] = useState<'planeador' | 'confirma'>('planeador');
-
     // Autoplay hero slider
     useEffect(() => {
         if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -372,10 +368,6 @@ export default function HomePage() {
                             Save the Date
                             <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
-                        <a href="#planeador" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors flex items-center gap-1.5">
-                            Planeador
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#111827] text-white">Pro +</span>
-                        </a>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Planes
                         </Link>
@@ -440,14 +432,6 @@ export default function HomePage() {
                             <span>Save the Date</span>
                             <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
-                        <a
-                            href="#planeador"
-                            className="flex items-center justify-between text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
-                            onClick={() => setMobileMenuOpen(false)}
-                        >
-                            <span>Planeador de Eventos</span>
-                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#111827] text-white">Plan Pro +</span>
-                        </a>
                         <Link
                             to="/planes"
                             className="block text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#DF3B94] transition-colors py-2 border-b border-slate-50"
@@ -523,11 +507,11 @@ export default function HomePage() {
                                 </div>
 
                                 <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-display font-extrabold text-[#222B38] tracking-tight leading-[1.15]">
-                                    Deja de perseguir invitados.<br />
+                                    Tu invitación pregunta por ti.<br />
                                     <span className="bg-gradient-to-r from-[#C2287B] via-[#B45309] to-[#C2287B] bg-clip-text text-transparent">
-                                        Ten el control de tu evento
+                                        Sabes quién respondió
                                     </span><br />
-                                    desde el primer día.
+                                    sin escribirle a nadie.
                                 </h1>
 
                                 <p className="text-sm md:text-base text-slate-600 font-normal leading-relaxed max-w-xl mx-auto lg:mx-0">
@@ -622,7 +606,7 @@ export default function HomePage() {
                                     </div>
                                     <div className="space-y-2">
                                         <div className="flex justify-between text-xs font-semibold text-slate-600">
-                                            <span>142 Asistirán</span>
+                                            <span>142 confirmaron</span>
                                             <span className="text-slate-600">Meta: 170</span>
                                         </div>
                                         <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
@@ -719,6 +703,98 @@ export default function HomePage() {
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- 2b. ¿QUÉ CELEBRAS? (EVENTOS PRINCIPALES + CHIPS) --- */}
+                <section className="py-12 md:py-16 bg-[#FFFDF9] border-b border-slate-100 px-6">
+                    <div className="mx-auto max-w-5xl">
+                        <div className="text-center mb-8 space-y-2">
+                            <h2 className="text-2xl md:text-3xl font-display font-extrabold text-[#222B38] tracking-tight">
+                                ¿Qué celebras?
+                            </h2>
+                            <p className="text-slate-600 text-xs sm:text-sm">
+                                Diseños pensados para cada momento con confirmación en un toque
+                            </p>
+                        </div>
+
+                        {/* 4 Tarjetas Grandes */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                            {[
+                                {
+                                    name: 'Boda',
+                                    slug: '/invitaciones-digitales-boda',
+                                    badge: 'Lista cerrada sin rogar',
+                                    icon: '💍',
+                                    bg: 'from-amber-50 to-orange-50/50',
+                                    border: 'hover:border-amber-400',
+                                },
+                                {
+                                    name: 'XV Años',
+                                    slug: '/invitaciones-digitales-xv-anos',
+                                    badge: 'Padrinos, fotos y vals',
+                                    icon: '👑',
+                                    bg: 'from-pink-50 to-rose-50/50',
+                                    border: 'hover:border-pink-400',
+                                },
+                                {
+                                    name: 'Bautizo',
+                                    slug: '/invitaciones-digitales-bautizo',
+                                    badge: 'Misa y comida en 1 link',
+                                    icon: '🕊️',
+                                    bg: 'from-sky-50 to-blue-50/50',
+                                    border: 'hover:border-sky-400',
+                                },
+                                {
+                                    name: 'Cumpleaños',
+                                    slug: '/invitaciones-digitales-cumpleanos',
+                                    badge: 'Sin grupos de WhatsApp',
+                                    icon: '🎂',
+                                    bg: 'from-teal-50 to-emerald-50/50',
+                                    border: 'hover:border-teal-400',
+                                },
+                            ].map((card, i) => (
+                                <Link
+                                    key={i}
+                                    to={card.slug}
+                                    className={`group rounded-2xl p-4 sm:p-5 bg-gradient-to-br ${card.bg} border border-slate-200/80 ${card.border} transition-all hover:-translate-y-1 hover:shadow-md flex flex-col justify-between text-left`}
+                                >
+                                    <div className="space-y-2">
+                                        <div className="text-3xl sm:text-4xl">{card.icon}</div>
+                                        <h3 className="font-display font-extrabold text-base sm:text-lg text-[#222B38] group-hover:text-[#C2287B] transition-colors">
+                                            {card.name}
+                                        </h3>
+                                        <p className="text-[11px] sm:text-xs text-slate-600 leading-snug">
+                                            {card.badge}
+                                        </p>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-[#C2287B] mt-3 inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                                        Ver diseños →
+                                    </span>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Chips Pequeños */}
+                        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 pt-1">
+                            {[
+                                { name: 'Infantil', slug: '/invitaciones-digitales-infantiles', icon: '🎈' },
+                                { name: 'Primera Comunión', slug: '/invitaciones-digitales-primera-comunion', icon: '⛪' },
+                                { name: 'Baby Shower', slug: '/invitaciones-digitales-baby-shower', icon: '🍼' },
+                                { name: 'Revelación', slug: '/invitaciones-digitales-revelacion-de-genero', icon: '🎀' },
+                                { name: 'Graduación', slug: '/invitaciones-digitales-graduacion', icon: '🎓' },
+                            ].map((chip, idx) => (
+                                <Link
+                                    key={idx}
+                                    to={chip.slug}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:text-[#C2287B] hover:border-[#C2287B]/40 transition-all shadow-2xs"
+                                >
+                                    <span>{chip.icon}</span>
+                                    <span>{chip.name}</span>
+                                    <span className="text-slate-400">→</span>
+                                </Link>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -993,268 +1069,222 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* --- 7. PLANEADOR + INVITTO CONFIRMA (TABS EN BANDA OSCURA) (TAREA D) --- */}
-                <section id="planeador" className="py-16 md:py-24 bg-[#111827] text-white px-6 relative overflow-hidden border-b border-stone-800">
+                {/* --- 7. INVITTO CONFIRMA (BANDA OSCURA) --- */}
+                <section id="confirma" className="py-16 md:py-24 bg-[#111827] text-white px-6 relative overflow-hidden border-b border-stone-800">
                     {/* Decorative Ambient Background */}
-                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#DF3B94]/15 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#C2287B]/15 rounded-full blur-3xl pointer-events-none" />
                     <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FAC345]/10 rounded-full blur-3xl pointer-events-none" />
 
                     <div className="mx-auto max-w-7xl relative z-10">
-                        
-                        {/* Selector Tabs: Planeador vs Invitto Confirma */}
-                        <div className="flex justify-center mb-10">
-                            <div className="inline-flex p-1.5 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
-                                <button
-                                    onClick={() => setDarkTab('planeador')}
-                                    className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                                        darkTab === 'planeador'
-                                            ? 'bg-[#DF3B94] text-white shadow-lg shadow-[#DF3B94]/30'
-                                            : 'text-slate-300 hover:text-white'
-                                    }`}
-                                >
-                                    <Crown className="h-4 w-4 text-[#FAC345]" />
-                                    <span>Planeador de Eventos</span>
-                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-black/20 text-white ml-1">Pro +</span>
-                                </button>
+                        <div className="animate-in fade-in duration-300">
+                            <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C2287B]/20 border border-[#C2287B]/40 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#FF85C0]">
+                                    <Gem className="h-3 w-3" />
+                                    <span>Servicio VIP</span>
+                                </div>
+                                <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
+                                    ¿No tienes tiempo? Confirmamos a tus invitados por ti
+                                </h2>
+                                <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
+                                    Servicio VIP con asistente WhatsApp y equipo humano: cargamos tus invitados, enviamos cada invitación personalizada, hacemos 3 rondas de seguimiento y cerramos tu lista.
+                                </p>
+                                
+                                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                                    <span><strong>Garantía:</strong> Lista final cerrada 15 días antes del evento o devolución 100% · Add-on $2,000 MXN o incluido en Concierge.</span>
+                                </div>
+                            </div>
 
-                                <button
-                                    onClick={() => setDarkTab('confirma')}
-                                    className={`px-5 py-2.5 rounded-xl text-xs md:text-sm font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                                        darkTab === 'confirma'
-                                            ? 'bg-[#C2287B] text-white shadow-lg shadow-[#C2287B]/30'
-                                            : 'text-slate-300 hover:text-white'
-                                    }`}
-                                >
-                                    <Gem className="h-4 w-4 text-[#FF80BF]" />
-                                    <span>Invitto Confirma</span>
-                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-400 text-stone-950 ml-1">VIP</span>
-                                </button>
+                            {/* 4 Features Grid for Confirma */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <div className="h-12 w-12 rounded-2xl bg-[#C2287B]/20 border border-[#C2287B]/30 flex items-center justify-center text-[#FF80BF]">
+                                            <Users className="h-6 w-6" />
+                                        </div>
+                                        <h3 className="text-lg font-display font-extrabold text-white">Carga y Envío Individual</h3>
+                                        <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                            Nos das tu lista y nosotros enviamos cada invitación con su enlace y token individual directamente por WhatsApp.
+                                        </p>
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FF80BF] flex items-center justify-between">
+                                        <span>Tokens únicos</span>
+                                        <span>Cero fricción</span>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                            <Clock className="h-6 w-6" />
+                                        </div>
+                                        <h3 className="text-lg font-display font-extrabold text-white">3 Rondas de Seguimiento</h3>
+                                        <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                            Recordatorios amables en cadencia inteligente más 1 llamada de cortesía a los invitados con dudas o pendientes.
+                                        </p>
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
+                                        <span>Cadencia automática</span>
+                                        <span>Llamada de cortesía</span>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                            <QrCode className="h-6 w-6" />
+                                        </div>
+                                        <h3 className="text-lg font-display font-extrabold text-white">Pases QR y Reconfirmación</h3>
+                                        <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                            Envío del pase digital individual con código QR y ubicación GPS 48-72 horas antes del gran día.
+                                        </p>
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+                                        <span>Acceso rápido</span>
+                                        <span>Mapa GPS</span>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                            <Check className="h-6 w-6" />
+                                        </div>
+                                        <h3 className="text-lg font-display font-extrabold text-white">Lista Lista para Banquete</h3>
+                                        <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                            Reporte final ordenado por mesas, confirmados y dietas especiales entregado 15 días antes para que no pagues platillos de más.
+                                        </p>
+                                    </div>
+                                    <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+                                        <span>Cero desperdicio</span>
+                                        <span>Garantía 100%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Bottom Action Bar for Confirma */}
+                            <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div className="space-y-0.5 text-center md:text-left">
+                                    <p className="text-base font-bold text-white">¿Prefieres delegar completamente el seguimiento de invitados?</p>
+                                    <p className="text-xs text-slate-400">Disponible como add-on para cualquier plan por $2,000 MXN o incluido en Concierge.</p>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-center gap-3">
+                                    <Link
+                                        to="/confirma"
+                                        className="min-h-[44px] px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
+                                    >
+                                        <span>Saber más sobre Invitto Confirma</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Link>
+                                    <Link
+                                        to="/planes"
+                                        className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
+                                    >
+                                        <span>Ver en los Planes</span>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-
-                        {/* TAB 1: PLANEADOR DE EVENTOS */}
-                        {darkTab === 'planeador' && (
-                            <div className="animate-in fade-in duration-300">
-                                <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-                                    <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
-                                        Planeador de Eventos: Presupuesto, Proveedores y Día B
-                                    </h2>
-                                    <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
-                                        Tu evento no solo necesita una invitación hermosa, necesita orden. Centraliza pagos, cotizaciones, contratos y el itinerario minuto a minuto directamente dentro de tu panel de Invitto.
-                                    </p>
-                                    
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
-                                        <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
-                                        <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Premium y Concierge. <em>(No disponible en Clásica).</em></span>
-                                    </div>
-                                </div>
-
-                                {/* 4 Pillars Grid */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/20 border border-[#DF3B94]/30 flex items-center justify-center text-[#FF85C0]">
-                                                <Wallet className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Presupuesto y Pagos</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Desglosa rubros (salón, música, foto). Monitorea anticipos y fechas límite con alertas automáticas.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FAC345] flex items-center justify-between">
-                                            <span>Control de saldos</span>
-                                            <span>Exporta a CSV</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                                                <Store className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Directorio de Proveedores</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Fichas de cada proveedor con contacto directo a WhatsApp, cotizaciones comparativas y contratos.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
-                                            <span>WhatsApp directo</span>
-                                            <span>Compara ofertas</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                                                <ListChecks className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Pendientes por Fases</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Checklist cronológico calculado según la fecha de tu evento: 12 meses, 6 meses, 1 mes y última semana.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
-                                            <span>Cronograma vivo</span>
-                                            <span>Avance en %</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                                                <CalendarHeart className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Carpeta Día B en PDF</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Genera en 1 clic el itinerario minuto a minuto con cortejo, teléfonos clave y detalles para tu wedding planner.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
-                                            <span>Descarga PDF</span>
-                                            <span>Minuto a minuto</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Bottom Action Bar */}
-                                <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                                    <div className="space-y-0.5 text-center md:text-left">
-                                        <p className="text-base font-bold text-white">¿Quieres organizar tu evento sin estrés?</p>
-                                        <p className="text-xs text-slate-400">Elige Plan Pro al crear tu evento y desbloquea el Planeador de inmediato.</p>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-center gap-3">
-                                        <Link
-                                            to="/planes"
-                                            className="min-h-[44px] px-6 py-3 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
-                                        >
-                                            <span>Ver Planes con Planeador (desde $1,699)</span>
-                                            <ArrowRight className="h-4 w-4" />
-                                        </Link>
-                                        <Link
-                                            to="/dashboard/planeacion/demo"
-                                            className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
-                                        >
-                                            <span>Ver Demo Planeador</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* TAB 2: INVITTO CONFIRMA */}
-                        {darkTab === 'confirma' && (
-                            <div className="animate-in fade-in duration-300">
-                                <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-                                    <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
-                                        ¿No tienes tiempo? Confirmamos a tus invitados por ti
-                                    </h2>
-                                    <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
-                                        Servicio VIP con asistente WhatsApp y equipo humano: cargamos tus invitados, enviamos cada invitación personalizada, hacemos 3 rondas de seguimiento y cerramos tu lista.
-                                    </p>
-                                    
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
-                                        <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                                        <span><strong>Garantía:</strong> Lista final cerrada 15 días antes del evento o devolución 100% · Add-on $2,000 MXN o incluido en Concierge.</span>
-                                    </div>
-                                </div>
-
-                                {/* 4 Features Grid for Confirma */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-[#C2287B]/20 border border-[#C2287B]/30 flex items-center justify-center text-[#FF80BF]">
-                                                <Users className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Carga y Envío Individual</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Nos das tu lista y nosotros enviamos cada invitación con su enlace y token individual directamente por WhatsApp.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FF80BF] flex items-center justify-between">
-                                            <span>Tokens únicos</span>
-                                            <span>Cero fricción</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                                                <Clock className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">3 Rondas de Seguimiento</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Recordatorios amables en cadencia inteligente más 1 llamada de cortesía a los invitados con dudas o pendientes.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
-                                            <span>Cadencia automática</span>
-                                            <span>Llamada de cortesía</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                                                <QrCode className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Pases QR y Reconfirmación</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Envío del pase digital individual con código QR y ubicación GPS 48-72 horas antes del gran día.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
-                                            <span>Acceso rápido</span>
-                                            <span>Mapa GPS</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
-                                        <div className="space-y-3">
-                                            <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                                                <Check className="h-6 w-6" />
-                                            </div>
-                                            <h3 className="text-lg font-display font-extrabold text-white">Lista Lista para Banquete</h3>
-                                            <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                                                Reporte final ordenado por mesas, confirmados y dietas especiales entregado 15 días antes para que no pagues platillos de más.
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
-                                            <span>Cero desperdicio</span>
-                                            <span>Garantía 100%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Bottom Action Bar for Confirma */}
-                                <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                                    <div className="space-y-0.5 text-center md:text-left">
-                                        <p className="text-base font-bold text-white">¿Prefieres delegar completamente el seguimiento de invitados?</p>
-                                        <p className="text-xs text-slate-400">Disponible como add-on para cualquier plan por $2,000 MXN o incluido en Concierge.</p>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-center gap-3">
-                                        <Link
-                                            to="/confirma"
-                                            className="min-h-[44px] px-6 py-3 bg-[#C2287B] hover:bg-[#A81B65] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
-                                        >
-                                            <span>Saber más sobre Invitto Confirma</span>
-                                            <ArrowRight className="h-4 w-4" />
-                                        </Link>
-                                        <Link
-                                            to="/planes"
-                                            className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
-                                        >
-                                            <span>Ver en los Planes</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
 
                     </div>
                 </section>
 
+                {/* --- 7.5. BIFURCACIÓN: ¿LA ARMAS TÚ O CONFIRMAMOS POR TI? --- */}
+                <section className="py-12 md:py-16 bg-[#FFFDF9] border-t border-slate-100 px-6">
+                    <div className="mx-auto max-w-5xl">
+                        <div className="text-center mb-10 space-y-2">
+                            <h2 className="text-2xl md:text-4xl font-display font-extrabold text-[#222B38] tracking-tight">
+                                ¿La armas tú o confirmamos por ti?
+                            </h2>
+                            <p className="text-slate-600 text-xs sm:text-sm md:text-base max-w-xl mx-auto">
+                                Dos formas de tener la lista completa y a tiempo para tu evento
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch max-w-4xl mx-auto">
+                            {/* Opción 1: La armas tú */}
+                            <div className="bg-white rounded-3xl p-7 sm:p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                                <div className="space-y-4">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                                        <span>Tú tienes el control</span>
+                                    </div>
+                                    <h3 className="text-2xl font-display font-extrabold text-[#222B38]">
+                                        La armas tú
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                        Elige plantilla, personaliza con tus fotos, música y datos. Envías por WhatsApp y las respuestas llegan solas a tu panel.
+                                    </p>
+                                    <ul className="space-y-2 text-xs text-slate-700 pt-1">
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-emerald-600 font-bold">✓</span>
+                                            <span>Borrador gratis sin tarjeta</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-emerald-600 font-bold">✓</span>
+                                            <span>Planes desde $499 MXN (un solo pago)</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-emerald-600 font-bold">✓</span>
+                                            <span>Pagas únicamente al publicar</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="pt-6">
+                                    <a
+                                        href="#planes"
+                                        className="w-full min-h-[44px] py-3.5 px-6 rounded-2xl bg-[#222B38] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 no-underline text-center"
+                                    >
+                                        <span>Ver planes de invitación</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Opción 2: Confirmamos por ti */}
+                            <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-3xl p-7 sm:p-8 border-2 border-[#C2287B] shadow-xl shadow-[#C2287B]/15 flex flex-col justify-between relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-40 h-40 bg-[#C2287B]/10 rounded-full blur-2xl pointer-events-none" />
+                                <div className="relative z-10 space-y-4">
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C2287B]/20 border border-[#C2287B]/40 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#FF85C0]">
+                                        <Gem className="h-3 w-3" />
+                                        <span>Servicio Concierge</span>
+                                    </div>
+                                    <h3 className="text-2xl font-display font-extrabold text-white">
+                                        Confirmamos por ti · Invitto Confirma
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        Nos das tu lista y nosotros contactamos a cada invitado por WhatsApp, resolvemos dudas, registramos respuestas y te entregamos la lista cerrada 15 días antes.
+                                    </p>
+                                    <ul className="space-y-2 text-xs text-slate-200 pt-1">
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-[#FF85C0] font-bold">✓</span>
+                                            <span>3 rondas de seguimiento amable</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-[#FF85C0] font-bold">✓</span>
+                                            <span>Llamadas de cortesía a pendientes</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="text-[#FF85C0] font-bold">✓</span>
+                                            <span>Garantía de entrega o devolución 100%</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="pt-6 relative z-10">
+                                    <Link
+                                        to="/confirma"
+                                        className="w-full min-h-[44px] py-3.5 px-6 rounded-2xl bg-[#C2287B] hover:bg-[#A81B65] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-lg shadow-[#C2287B]/30 flex items-center justify-center gap-2 no-underline text-center"
+                                    >
+                                        <span>Conocer Invitto Confirma</span>
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* --- 8. PLANES Y PRECIOS (COMPACTO CON PATRÓN PRECIO TACHADO EN ADD-ONS) (TAREA E) --- */}
-                <section className="py-16 md:py-24 bg-white px-6 border-b border-slate-100">
+                <section id="planes" className="py-16 md:py-24 bg-white px-6 border-b border-slate-100">
                     <div className="mx-auto max-w-7xl">
                         
                         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
@@ -1336,9 +1366,8 @@ export default function HomePage() {
 
                                 <div className="space-y-5">
                                     <div>
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#FAC345]">CONTROL TOTAL</span>
                                         <h3 className="text-2xl font-display font-extrabold text-white mt-1">Pro</h3>
-                                        <p className="text-xs text-slate-300 mt-1">Control total: para quienes no quieren perseguir invitados ni pagar de más en el banquete.</p>
+                                        <p className="text-xs text-slate-300 mt-1">Para quienes no quieren perseguir invitados: cada familia con sus pases, recordatorios automáticos y la lista en tiempo real.</p>
                                     </div>
 
                                     <div className="py-2 border-y border-white/10">
@@ -1500,16 +1529,6 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                        </div>
-
-                        <div className="mt-10 text-center">
-                            <Link 
-                                to="/planes" 
-                                className="inline-flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#C2287B] hover:text-[#A81B65] transition-colors"
-                            >
-                                <span>¿Quieres ver la comparativa completa de 29 características?</span>
-                                <ArrowRight className="h-4 w-4" />
-                            </Link>
                         </div>
                     </div>
                 </section>

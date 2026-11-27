@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Heart, Gem, Crown, ArrowDown } from 'lucide-react';
+import { ArrowLeft, Heart, Gem, Crown, ArrowDown, Wallet, Store, ListChecks, CalendarHeart, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import Seo from '../components/Seo';
@@ -354,6 +354,122 @@ export default function PlanesPage() {
                         <span>Ver comparativa detallada de funciones</span>
                         <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
                     </a>
+                </div>
+            </section>
+
+            {/* SECCIÓN PLANEADOR DE EVENTOS (PRO, PREMIUM & CONCIERGE) */}
+            <section id="planeador" className="py-16 md:py-24 bg-[#111827] text-white px-6 relative overflow-hidden border-t border-b border-stone-800">
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#DF3B94]/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#FAC345]/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="mx-auto max-w-7xl relative z-10">
+                    <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-[11px] font-bold uppercase tracking-wider text-[#FAC345]">
+                            <Crown className="h-3.5 w-3.5" />
+                            <span>Herramienta Incluida</span>
+                        </div>
+                        <h2 className="text-3xl md:text-5xl font-display font-black tracking-tight leading-tight">
+                            Planeador de Eventos: Presupuesto, Proveedores y Día B
+                        </h2>
+                        <p className="text-slate-300 text-sm md:text-base leading-relaxed font-normal">
+                            Tu evento no solo necesita una invitación hermosa, necesita orden. Centraliza pagos, cotizaciones, contratos y el itinerario minuto a minuto directamente dentro de tu panel de Invitto.
+                        </p>
+                        
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-300">
+                            <span className="h-2 w-2 rounded-full bg-[#FAC345]" />
+                            <span><strong>Incluido en:</strong> Plan Pro ($1,699 MXN), Premium y Concierge. <em>(No disponible en Clásica).</em></span>
+                        </div>
+                    </div>
+
+                    {/* 4 Pillars Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="h-12 w-12 rounded-2xl bg-[#DF3B94]/20 border border-[#DF3B94]/30 flex items-center justify-center text-[#FF85C0]">
+                                    <Wallet className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-lg font-display font-extrabold text-white">Presupuesto y Pagos</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Desglosa rubros (salón, música, foto). Monitorea anticipos y fechas límite con alertas automáticas.
+                                </p>
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-[#FAC345] flex items-center justify-between">
+                                <span>Control de saldos</span>
+                                <span>Exporta a CSV</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                                    <Store className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-lg font-display font-extrabold text-white">Directorio de Proveedores</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Fichas de cada proveedor con contacto directo a WhatsApp, cotizaciones comparativas y contratos.
+                                </p>
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+                                <span>WhatsApp directo</span>
+                                <span>Compara ofertas</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                    <ListChecks className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-lg font-display font-extrabold text-white">Pendientes por Fases</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Checklist cronológico calculado según la fecha de tu evento: 12 meses, 6 meses, 1 mes y última semana.
+                                </p>
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-amber-400 flex items-center justify-between">
+                                <span>Cronograma vivo</span>
+                                <span>Avance en %</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-white/20 transition-all flex flex-col justify-between">
+                            <div className="space-y-3">
+                                <div className="h-12 w-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                    <CalendarHeart className="h-6 w-6" />
+                                </div>
+                                <h3 className="text-lg font-display font-extrabold text-white">Carpeta Día B en PDF</h3>
+                                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                                    Genera en 1 clic el itinerario minuto a minuto con cortejo, teléfonos clave y detalles para tu wedding planner.
+                                </p>
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-white/10 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+                                <span>Descarga PDF</span>
+                                <span>Minuto a minuto</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom Action Bar */}
+                    <div className="mt-10 p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div className="space-y-0.5 text-center md:text-left">
+                            <p className="text-base font-bold text-white">¿Quieres organizar tu evento sin estrés?</p>
+                            <p className="text-xs text-slate-400">Elige Plan Pro al crear tu evento y desbloquea el Planeador de inmediato.</p>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <Link
+                                to={user ? "/dashboard/new?plan=pro" : "/dashboard/new?plan=pro"}
+                                className="min-h-[44px] px-6 py-3 bg-[#DF3B94] hover:bg-[#C2287B] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 no-underline"
+                            >
+                                <span>Elegir Plan Pro ($1,699)</span>
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                            <Link
+                                to="/dashboard/planeacion/demo"
+                                className="min-h-[44px] px-5 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider transition-all inline-flex items-center no-underline"
+                            >
+                                <span>Ver Demo Planeador</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 

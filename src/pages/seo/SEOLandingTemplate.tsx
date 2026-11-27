@@ -147,6 +147,8 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
   if (data.isEventLanding && data.theme) {
     const th = data.theme;
     const recommended = data.recommendedPlan;
+    const isRecommendedPro = recommended?.name?.toLowerCase().includes('pro');
+    const planMicroText = isRecommendedPro ? 'Plan Pro $1,699' : 'Plan Clásica $499';
     const demos = data.demoCategory ? getTemplatesForCategory(data.demoCategory).slice(0, 3) : [];
     const allCategoryTemplates = data.demoCategory ? getTemplatesForCategory(data.demoCategory) : [];
     const otherEvents = ALL_EVENT_CROSS_LINKS.filter(ev => ev.slug !== data.slug);
@@ -243,7 +245,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
                 </Link>
 
                 <p className="text-xs leading-relaxed" style={{ color: th.muted }}>
-                  Ármala gratis y mírala terminada · <b style={{ color: th.ink }}>pagas solo al publicar</b> · desde $499 · garantía de 7 días
+                  Ármala gratis y mírala terminada · <b style={{ color: th.ink }}>pagas solo al publicar</b> · {planMicroText} · garantía de 7 días
                 </p>
 
                 <div>
@@ -359,13 +361,15 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
                   </div>
 
                   {/* Passes reservation */}
-                  <div
-                    className="w-full rounded-xl p-2.5 text-center text-xs space-y-0.5 border"
-                    style={{ backgroundColor: `${th.bg2}99`, borderColor: th.line }}
-                  >
-                    <div className="font-bold">{data.phone?.guestName}</div>
-                    <div className="text-[10px] opacity-75">{data.phone?.passesText}</div>
-                  </div>
+                  {data.phone?.category !== 'cumpleanos' && (
+                    <div
+                      className="w-full rounded-xl p-2.5 text-center text-xs space-y-0.5 border"
+                      style={{ backgroundColor: `${th.bg2}99`, borderColor: th.line }}
+                    >
+                      <div className="font-bold">{data.phone?.guestName}</div>
+                      <div className="text-[10px] opacity-75">{data.phone?.passesText}</div>
+                    </div>
+                  )}
 
                   {/* Interactive RSVP Button */}
                   <div className="w-full pb-2">
@@ -700,72 +704,34 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
               ))}
             </div>
 
-            <p className="text-xs" style={{ color: th.muted }}>
-              Testimonios: se agregan solo cuando haya reales y autorizados.
-            </p>
+            {/* Enlace al catálogo completo en /ejemplos */}
+            {data.demoCategory && allCategoryTemplates.length > 0 && (
+              <div className="pt-2">
+                <Link
+                  to={`/ejemplos?category=${data.demoCategory}`}
+                  className="inline-flex items-center gap-1.5 text-sm sm:text-base font-bold hover:underline"
+                  style={{ color: th.accentText }}
+                >
+                  <span>
+                    Ver los {allCategoryTemplates.length} diseños de {
+                      {
+                        boda: 'boda',
+                        xv: 'XV años',
+                        cumpleanos: 'cumpleaños',
+                        infantil: 'cumpleaños infantil',
+                        bautizo: 'bautizo',
+                        comunion: 'primera comunión',
+                        baby_shower: 'baby shower',
+                        gender_reveal: 'revelación de género',
+                        graduacion: 'graduación',
+                      }[data.demoCategory] || 'este evento'
+                    } →
+                  </span>
+                </Link>
+              </div>
+            )}
           </div>
         </section>
-
-        {/* ─── 7b. CATÁLOGO COMPLETO DE PLANTILLAS ──────────────────────────── */}
-        {allCategoryTemplates.length > 0 && (
-          <section className="py-16 md:py-24 px-4 md:px-6 border-t" style={{ backgroundColor: th.bg2, borderColor: th.line }}>
-            <div className="mx-auto max-w-6xl space-y-8">
-              <div className="max-w-2xl space-y-2">
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-                  style={{ backgroundColor: `${th.accent}20`, color: th.accentText }}
-                >
-                  Catálogo completo · {allCategoryTemplates.length} modelos disponibles
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold" style={{ fontFamily: th.fontHead || 'inherit' }}>
-                  Catálogo completo de plantillas
-                </h2>
-                <p className="text-sm sm:text-base" style={{ color: th.muted }}>
-                  Cada diseño incluye confirmación por WhatsApp, ubicación en Google Maps y Waze, cuenta regresiva y personalización total. Toca cualquiera para probarla en vivo:
-                </p>
-              </div>
-
-              {/* Grid de todas las plantillas de la categoría */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                {allCategoryTemplates.map((tpl) => (
-                  <a
-                    key={tpl.id}
-                    href={`/i/${tpl.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group rounded-2xl border overflow-hidden shadow-sm flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2"
-                    style={{ backgroundColor: th.bg, borderColor: th.line }}
-                  >
-                    <div className="relative aspect-[4/5] bg-slate-100 overflow-hidden">
-                      <img
-                        src={tpl.thumbnail}
-                        alt={`Plantilla ${tpl.name} · ${tpl.categoryLabel}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      {tpl.plan && tpl.plan !== 'classic' && (
-                        <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-black/75 text-white backdrop-blur-sm">
-                          {tpl.plan.toUpperCase()}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-3.5 space-y-1.5">
-                      <div className="flex items-center justify-between gap-1">
-                        <h3 className="font-bold text-xs sm:text-sm truncate group-hover:underline" style={{ color: th.ink }}>
-                          {tpl.name}
-                        </h3>
-                        <ExternalLink className="h-3 w-3 shrink-0 opacity-60 group-hover:opacity-100 transition-opacity" style={{ color: th.accentText }} />
-                      </div>
-                      <p className="text-[11px] truncate" style={{ color: th.muted }}>
-                        {tpl.categoryLabel}
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ─── 8. OBJECIONES ──────────────────────────────────────────────── */}
         {data.objections && data.objections.length > 0 && (
@@ -848,7 +814,7 @@ export default function SEOLandingTemplate({ data }: { data: LandingPageData }) 
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <p className="text-xs opacity-80">
-                Ármala gratis y mírala terminada · <b>pagas solo al publicar</b> · desde $499 · garantía de 7 días
+                Ármala gratis y mírala terminada · <b>pagas solo al publicar</b> · {planMicroText} · garantía de 7 días
               </p>
             </div>
           </div>
