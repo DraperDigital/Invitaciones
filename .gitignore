@@ -32,3 +32,6 @@ dist-ssr
 *.mov
 *.avi
 
+
+# Videos de apertura de plantillas
+!public/videos/**/*.mp4
