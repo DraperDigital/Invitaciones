@@ -316,6 +316,7 @@ export default function EnvelopeIntro({
         'rosas-noche': '#1D241F',
         'salvia-eucalipto': '#6F7F62',
         'malva-empolvado': '#8E5F71',
+        'hacienda': '#C4704F',
         'dulcelandia': '#F0679B',
         'tienda-dulces': '#EF5D93',
         'pueblo-papel': '#6F7F62',

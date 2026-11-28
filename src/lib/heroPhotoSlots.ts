@@ -409,6 +409,15 @@ export const HERO_PHOTO_SLOTS: Record<string, HeroPhotoSlotDef> = {
         heroHelpText: 'Foto de la pareja con bordes de papel rasgado.',
         fields: ['hero_image_url', 'heroImage']
     },
+    'hacienda': {
+        type: 'single',
+        photoCount: 1,
+        hasDecorativeImage: false,
+        isCircular: false,
+        heroLabel: 'Portada ilustrada',
+        heroHelpText: 'La portada es el portón de la hacienda; no lleva foto.',
+        fields: ['hero_image_url', 'heroImage']
+    },
     'malva-empolvado': {
         type: 'single',
         photoCount: 1,

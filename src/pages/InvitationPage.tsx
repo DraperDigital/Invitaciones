@@ -40,6 +40,7 @@ import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
 import DulceEsperaHero from '../components/themes/DulceEsperaHero';
+import HaciendaHero, { HA } from '../components/themes/HaciendaHero';
 import NavidadLayeredHero from '../components/themes/NavidadLayeredHero';
 import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
@@ -153,6 +154,8 @@ export default function InvitationPage() {
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
+    const [buzonOpen, setBuzonOpen] = useState(false);
+    const [buzonAnim, setBuzonAnim] = useState(false);
     const [rsvpChoice, setRsvpChoice] = useState<'yes' | 'no' | null>(null);
     const [confirmaSettings, setConfirmaSettings] = useState<{ enabled: boolean; business_number: string } | null>(null);
     const [showDeclineModal, setShowDeclineModal] = useState(false);
@@ -675,6 +678,13 @@ export default function InvitationPage() {
             borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
             accentOverride: '#9C2B2B', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '12px',
+        },
+        'hacienda': {
+            sectionBg: '#F8F1E6', sectionBgAlt: '#F4EFE6', cardBg: '#FCF8F0',
+            textPrimary: '#4A3328', textSecondary: '#7A5D4E',
+            borderColor: '#E8CFC0', cardBorder: '#E8CFC0',
+            accentOverride: '#C4704F', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '4px',
         },
         'dulce-espera': {
             sectionBg: '#F8F1E5', sectionBgAlt: '#E3EBF4', cardBg: '#FFFAF1',
@@ -3272,6 +3282,9 @@ export default function InvitationPage() {
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
+        if (cfg.theme === 'hacienda') {
+            return <HaciendaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+        }
         if (cfg.theme === 'dulce-espera') {
             return <DulceEsperaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
@@ -3760,10 +3773,11 @@ export default function InvitationPage() {
     const renderDressCode = () => (
         <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6 text-center">
-                <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />
+                {cfg.theme === 'hacienda' ? <img src={HA('vestimenta')} alt="" className="ha-dress-img" /> : <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />}
                 <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Código de Vestimenta</h3>
                 <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-8 sm:p-12 inline-block max-w-lg w-full">
                     <p className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)]">{event.dress_code || 'Formal'}</p>
+                    {cfg.theme === 'hacienda' && <img src={HA('paleta')} alt="Paleta sugerida" className="ha-paleta" />}
                     {(cfg.dress_code_notes || cfg.dressCodeNotes) && (
                         <p className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed whitespace-pre-line">
                             {cfg.dress_code_notes || cfg.dressCodeNotes}
@@ -3858,7 +3872,18 @@ export default function InvitationPage() {
                                     if (txt.includes('fogata') || txt.includes('ponche') || txt.includes('vela')) return '/images/icons/vela.png';
                                     return null;
                                 };
-                                const posadaIcon = getPosadaIcon();
+                                const getHaciendaIcon = () => {
+                                    if (cfg.theme !== 'hacienda') return null;
+                                    const txt = `${item.title || ''} ${item.event || ''} ${item.description || ''}`.toLowerCase();
+                                    if (txt.includes('pastel') || txt.includes('torta')) return HA('ico-pastel');
+                                    if (txt.includes('ceremonia') || txt.includes('misa') || txt.includes('capilla') || txt.includes('iglesia') || txt.includes('civil')) return HA('ico-ceremonia');
+                                    if (txt.includes('brindis') || txt.includes('coctel') || txt.includes('cóctel') || txt.includes('bebida')) return HA('ico-brindis');
+                                    if (txt.includes('cena') || txt.includes('banquete') || txt.includes('comida')) return HA('ico-cena');
+                                    if (txt.includes('fiesta') || txt.includes('baile') || txt.includes('vals') || txt.includes('música') || txt.includes('musica') || txt.includes('mariachi')) return HA('ico-fiesta');
+                                    if (txt.includes('llegada') || txt.includes('recepción') || txt.includes('recepcion') || txt.includes('bienvenida')) return HA('ico-llegada');
+                                    return HA(['ico-llegada', 'ico-ceremonia', 'ico-brindis', 'ico-cena', 'ico-fiesta', 'ico-pastel'][idx % 6]);
+                                };
+                                const posadaIcon = getHaciendaIcon() || getPosadaIcon();
 
                                 const itemTitle = item.title || item.event;
                                 const itemDesc = item.description || item.location;
@@ -3902,7 +3927,16 @@ export default function InvitationPage() {
         return (
         <section id="rsvp" key="rsvp" className="py-16 bg-[var(--section-bg)]">
             <div className="max-w-5xl mx-auto px-6">
-                <div className="invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center">
+                {cfg.theme === 'hacienda' && !buzonOpen && (
+                    <div className="ha-buzon-wrap">
+                        <h3 className="text-4xl font-serif">Confirma tu asistencia</h3>
+                        <img src={HA(buzonAnim ? 'buzon-abierto' : 'buzon-cerrado')} alt="Buzón: toca para confirmar" className="ha-buzon" role="button" tabIndex={0}
+                            onClick={() => { if (buzonAnim) return; setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); }}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); } }} />
+                        <p className="ha-buzon-hint">Toca el buzón para responder</p>
+                    </div>
+                )}
+                <div className={`invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center ${cfg.theme === 'hacienda' && buzonOpen ? 'ha-rsvp-in' : ''}`} style={cfg.theme === 'hacienda' && !buzonOpen ? { display: 'none' } : undefined}>
                     <div>
                         {guest && (
                             <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
@@ -5031,7 +5065,7 @@ export default function InvitationPage() {
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
-            {(cfg.theme !== 'dulce-espera' && (cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
+            {(cfg.theme !== 'dulce-espera' && cfg.theme !== 'hacienda' && (cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
                 conciergeVideoAllowed && (cfg.envelope_video_url || cfg.envelopeVideoUrl) ? (
                     <VideoEnvelopeIntro key="envelope-screen" cfg={cfg} onOpen={() => setEnvelopeOpened(true)} />
                 ) :
