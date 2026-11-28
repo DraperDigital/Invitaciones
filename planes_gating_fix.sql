@@ -1,17 +1,6 @@
--- =============================================================================
--- INVITTO — planes_gating_fix.sql
--- Migración Completa y Autosuficiente de Planes, Features, Gating y Música
--- Ejecutar en Supabase SQL Editor
--- =============================================================================
-
--- Habilitar extensión UUID si no está activa
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 1. TABLAS BASE (Crear con IF NOT EXISTS por si no existían en la DB)
--- ─────────────────────────────────────────────────────────────────────────────
-
--- Columnas en profiles
+/* 1. Tablas Base */
 DO $$
 BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'profiles') THEN
@@ -21,7 +10,6 @@ BEGIN
   END IF;
 END $$;
 
--- Tabla: plans
 CREATE TABLE IF NOT EXISTS plans (
   id           uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   code         text UNIQUE NOT NULL,
@@ -33,7 +21,6 @@ CREATE TABLE IF NOT EXISTS plans (
   created_at   timestamp with time zone DEFAULT timezone('utc', now()) NOT NULL
 );
 
--- Tabla: features
 CREATE TABLE IF NOT EXISTS features (
   id          uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   code        text UNIQUE NOT NULL,
@@ -44,7 +31,6 @@ CREATE TABLE IF NOT EXISTS features (
   is_active   boolean DEFAULT true
 );
 
--- Tabla: plan_features
 CREATE TABLE IF NOT EXISTS plan_features (
   id         uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   plan_id    uuid REFERENCES plans(id) ON DELETE CASCADE NOT NULL,
@@ -53,7 +39,6 @@ CREATE TABLE IF NOT EXISTS plan_features (
   UNIQUE (plan_id, feature_id)
 );
 
--- Tabla: event_subscriptions
 CREATE TABLE IF NOT EXISTS event_subscriptions (
   id           uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   event_id     uuid NOT NULL UNIQUE,
@@ -63,9 +48,7 @@ CREATE TABLE IF NOT EXISTS event_subscriptions (
   updated_at   timestamp with time zone DEFAULT timezone('utc', now()) NOT NULL
 );
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 2. POLÍTICAS RLS Y PERMISOS
--- ─────────────────────────────────────────────────────────────────────────────
+/* 2. RLS y Políticas */
 ALTER TABLE plans ENABLE ROW LEVEL SECURITY;
 ALTER TABLE features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE plan_features ENABLE ROW LEVEL SECURITY;
@@ -118,21 +101,17 @@ BEGIN
   END IF;
 END $$;
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 3. STORAGE: Habilitar audio (MP3, WAV, etc., hasta 5MB) en 'event-images'
--- ─────────────────────────────────────────────────────────────────────────────
+/* 3. Storage Audio */
 UPDATE storage.buckets
 SET 
-  file_size_limit = 5242880, -- 5MB
+  file_size_limit = 5242880,
   allowed_mime_types = ARRAY[
     'image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif',
     'audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/x-wav', 'audio/ogg', 'audio/aac', 'audio/m4a', 'audio/mp4', 'audio/x-m4a'
   ]
 WHERE id = 'event-images';
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 4. CATÁLOGO DE PLANES
--- ─────────────────────────────────────────────────────────────────────────────
+/* 4. Catálogo de Planes */
 INSERT INTO plans (code, name, description, price_mxn, billing_type) VALUES
   ('clasico', 'Clásica', 'Solo lo básico para tu evento', 499, 'one_time'),
   ('pro', 'Pro', 'Control total de invitados y pases', 1699, 'one_time'),
@@ -144,23 +123,17 @@ ON CONFLICT (code) DO UPDATE SET
   price_mxn = EXCLUDED.price_mxn,
   is_active = true;
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 5. CATÁLOGO CANÓNICO DE FEATURES (17 features)
--- ─────────────────────────────────────────────────────────────────────────────
--- Normalizar códigos antiguos si ya existían
+/* 5. Catálogo de Features */
 UPDATE features SET code = 'access_control' WHERE code = 'access_checkin';
 UPDATE features SET code = 'qr_passes' WHERE code = 'guest_qr_pass';
 UPDATE features SET is_active = false WHERE code IN ('basic_event_info', 'countdown', 'location_map', 'simple_rsvp');
 
 INSERT INTO features (code, name, description, category, ui_group, is_active) VALUES
-  -- Básicas (5)
   ('show_details', 'Información del Evento', 'Bloque de día, hora y dress code.', 'invitation', 'basic', true),
   ('show_countdown', 'Cuenta Regresiva', 'Temporizador interactivo hasta el evento.', 'invitation', 'basic', true),
   ('show_map', 'Ubicación con Mapa', 'Tarjeta interactiva con Google Maps y Waze.', 'invitation', 'basic', true),
   ('show_gallery', 'Galería de Fotos', 'Carrusel de fotografías del evento.', 'invitation', 'basic', true),
   ('show_whatsapp_rsvp', 'Confirmación WhatsApp Simple', 'Botón RSVP simple vía WhatsApp.', 'invitation', 'basic', true),
-
-  -- Pro (8 adicionales -> 13 acumuladas)
   ('guest_dashboard', 'Lista de Invitados', 'Gestión en línea con tabla de control completa y mensajes.', 'management', 'pro', true),
   ('reminders_automatic', 'Recordatorios Automáticos', 'Notificaciones masivas y programadas vía WhatsApp.', 'management', 'pro', true),
   ('guest_import_excel', 'Importar desde Excel', 'Carga masiva de asistentes desde archivo Excel o CSV.', 'management', 'pro', true),
@@ -169,12 +142,8 @@ INSERT INTO features (code, name, description, category, ui_group, is_active) VA
   ('access_control', 'Control de Acceso (Check-in)', 'Herramienta de escaneo QR en puerta para staff.', 'security', 'pro', true),
   ('table_management', 'Control de Mesas', 'Organizador de acomodo de invitados por mesas.', 'management', 'pro', true),
   ('background_music', 'Música de Fondo', 'Reproducción automática de música de fondo (biblioteca, mp3 o enlace).', 'invitation', 'pro', true),
-
-  -- Premium (2 adicionales -> 15 acumuladas)
   ('custom_domain', 'Dominio Propio', 'URL personalizada (.com) para tu invitación.', 'branding', 'premium', true),
   ('event_planning', 'Planeador de Eventos', 'Presupuesto, directorio de proveedores, contratos y Día B.', 'management', 'premium', true),
-
-  -- Concierge (2 adicionales -> 17 acumuladas)
   ('smart_concierge', 'Asistente IA Concierge', 'Atención automática con IA y dudas frecuentes.', 'ai', 'concierge', true),
   ('confirma_whatsapp', 'Invitto Confirma WhatsApp', 'Servicio de confirmación telefónica y asistente de WhatsApp con seguimiento humano.', 'management', 'concierge', true)
 ON CONFLICT (code) DO UPDATE SET
@@ -184,96 +153,45 @@ ON CONFLICT (code) DO UPDATE SET
   ui_group = EXCLUDED.ui_group,
   is_active = true;
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 6. RECONSTRUCCIÓN EXACTA DE plan_features (5 / 13 / 15 / 17)
--- ─────────────────────────────────────────────────────────────────────────────
+/* 6. Asignación de Features por Plan */
 DELETE FROM plan_features;
 
--- A. Clásica (5 features básicas)
+-- Clásica (5)
 INSERT INTO plan_features (plan_id, feature_id)
-SELECT p.id, f.id
-FROM plans p, features f
-WHERE p.code = 'clasico'
-  AND f.code IN (
-    'show_details',
-    'show_countdown',
-    'show_map',
-    'show_gallery',
-    'show_whatsapp_rsvp'
-  );
+SELECT p.id, f.id FROM plans p, features f
+WHERE p.code = 'clasico' AND f.code IN ('show_details', 'show_countdown', 'show_map', 'show_gallery', 'show_whatsapp_rsvp');
 
--- B. Pro (13 features: 5 básicas + 8 de Pro)
+-- Pro (13)
 INSERT INTO plan_features (plan_id, feature_id)
-SELECT p.id, f.id
-FROM plans p, features f
-WHERE p.code = 'pro'
-  AND f.code IN (
-    'show_details',
-    'show_countdown',
-    'show_map',
-    'show_gallery',
-    'show_whatsapp_rsvp',
-    'guest_dashboard',
-    'reminders_automatic',
-    'guest_import_excel',
-    'metrics_dashboard',
-    'qr_passes',
-    'access_control',
-    'table_management',
-    'background_music'
-  );
+SELECT p.id, f.id FROM plans p, features f
+WHERE p.code = 'pro' AND f.code IN (
+  'show_details', 'show_countdown', 'show_map', 'show_gallery', 'show_whatsapp_rsvp',
+  'guest_dashboard', 'reminders_automatic', 'guest_import_excel', 'metrics_dashboard',
+  'qr_passes', 'access_control', 'table_management', 'background_music'
+);
 
--- C. Premium (15 features: 13 de Pro + custom_domain + event_planning)
+-- Premium (15)
 INSERT INTO plan_features (plan_id, feature_id)
-SELECT p.id, f.id
-FROM plans p, features f
-WHERE p.code = 'premium'
-  AND f.code IN (
-    'show_details',
-    'show_countdown',
-    'show_map',
-    'show_gallery',
-    'show_whatsapp_rsvp',
-    'guest_dashboard',
-    'reminders_automatic',
-    'guest_import_excel',
-    'metrics_dashboard',
-    'qr_passes',
-    'access_control',
-    'table_management',
-    'background_music',
-    'custom_domain',
-    'event_planning'
-  );
+SELECT p.id, f.id FROM plans p, features f
+WHERE p.code = 'premium' AND f.code IN (
+  'show_details', 'show_countdown', 'show_map', 'show_gallery', 'show_whatsapp_rsvp',
+  'guest_dashboard', 'reminders_automatic', 'guest_import_excel', 'metrics_dashboard',
+  'qr_passes', 'access_control', 'table_management', 'background_music',
+  'custom_domain', 'event_planning'
+);
 
--- D. Concierge (17 features: 15 de Premium + smart_concierge + confirma_whatsapp)
+-- Concierge (17)
 INSERT INTO plan_features (plan_id, feature_id)
-SELECT p.id, f.id
-FROM plans p, features f
-WHERE p.code = 'concierge'
-  AND f.code IN (
-    'show_details',
-    'show_countdown',
-    'show_map',
-    'show_gallery',
-    'show_whatsapp_rsvp',
-    'guest_dashboard',
-    'reminders_automatic',
-    'guest_import_excel',
-    'metrics_dashboard',
-    'qr_passes',
-    'access_control',
-    'table_management',
-    'background_music',
-    'custom_domain',
-    'event_planning',
-    'smart_concierge',
-    'confirma_whatsapp'
-  );
+SELECT p.id, f.id FROM plans p, features f
+WHERE p.code = 'concierge' AND f.code IN (
+  'show_details', 'show_countdown', 'show_map', 'show_gallery', 'show_whatsapp_rsvp',
+  'guest_dashboard', 'reminders_automatic', 'guest_import_excel', 'metrics_dashboard',
+  'qr_passes', 'access_control', 'table_management', 'background_music',
+  'custom_domain', 'event_planning',
+  'smart_concierge', 'confirma_whatsapp'
+);
 
--- ─────────────────────────────────────────────────────────────────────────────
--- 7. RPC CANÓNICO get_event_feature_access(p_event_id uuid)
--- ─────────────────────────────────────────────────────────────────────────────
+/* 7. RPC get_event_feature_access */
 CREATE OR REPLACE FUNCTION get_event_feature_access(p_event_id uuid)
 RETURNS jsonb
 LANGUAGE plpgsql
@@ -286,16 +204,15 @@ DECLARE
   v_plan_name text;
   v_result    jsonb;
 BEGIN
-  -- Prioridad 1: event_subscriptions activa ligada al evento
+  -- 1. Suscripción activa
   SELECT es.plan_id, pl.code, pl.name
   INTO   v_plan_id, v_plan_code, v_plan_name
   FROM   event_subscriptions es
   JOIN   plans pl ON pl.id = es.plan_id
-  WHERE  es.event_id = p_event_id
-    AND  es.status   = 'active'
+  WHERE  es.event_id = p_event_id AND es.status = 'active'
   LIMIT 1;
 
-  -- Prioridad 2: plan declarado en la fila del evento
+  -- 2. Plan declarado en evento
   IF v_plan_id IS NULL AND EXISTS (
     SELECT 1 FROM information_schema.columns 
     WHERE table_schema = 'public' AND table_name = 'events' AND column_name = 'plan'
@@ -314,7 +231,7 @@ BEGIN
     ' INTO v_plan_id, v_plan_code, v_plan_name USING p_event_id;
   END IF;
 
-  -- Prioridad 3: plan_tier del perfil del creador del evento
+  -- 3. Plan del perfil
   IF v_plan_id IS NULL THEN
     SELECT pl.id, pl.code, pl.name
     INTO   v_plan_id, v_plan_code, v_plan_name
@@ -330,7 +247,7 @@ BEGIN
     LIMIT  1;
   END IF;
 
-  -- Prioridad 4: Fallback a clásico
+  -- 4. Fallback clásico
   IF v_plan_id IS NULL THEN
     SELECT id, code, name
     INTO   v_plan_id, v_plan_code, v_plan_name
@@ -339,7 +256,7 @@ BEGIN
     LIMIT  1;
   END IF;
 
-  -- Construir resultado
+  -- Construir JSON
   SELECT jsonb_build_object(
     'plan', jsonb_build_object(
       'code', v_plan_code,
@@ -350,10 +267,7 @@ BEGIN
         'code',         f.code,
         'name',         f.name,
         'ui_group',     f.ui_group,
-        'status',       CASE
-                          WHEN pf_active.feature_id IS NOT NULL THEN 'enabled'
-                          ELSE 'locked'
-                        END,
+        'status',       CASE WHEN pf_active.feature_id IS NOT NULL THEN 'enabled' ELSE 'locked' END,
         'upgrade_plan', CASE
                           WHEN pf_active.feature_id IS NOT NULL THEN NULL
                           ELSE (
@@ -382,7 +296,7 @@ $$;
 
 GRANT EXECUTE ON FUNCTION get_event_feature_access(uuid) TO anon, authenticated;
 
--- Verificación de totales de features por plan (debe arrojar exactamente 5, 13, 15, 17)
+-- Verificación final
 SELECT p.code, p.name, count(pf.feature_id) AS total_features
 FROM plans p
 LEFT JOIN plan_features pf ON pf.plan_id = p.id
