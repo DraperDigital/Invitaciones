@@ -40,7 +40,7 @@ import CollageHero from '../components/themes/CollageHero';
 import LirioVainillaHero from '../components/themes/LirioVainillaHero';
 import DinosauriosHero from '../components/themes/DinosauriosHero';
 import DulceEsperaHero from '../components/themes/DulceEsperaHero';
-import HaciendaHero, { HA } from '../components/themes/HaciendaHero';
+import HaciendaHero, { STORY_THEMES, storyAsset } from '../components/themes/HaciendaHero';
 import NavidadLayeredHero from '../components/themes/NavidadLayeredHero';
 import WeddingLayeredHero from '../components/themes/WeddingLayeredHero';
 import AnturioVinoHero from '../components/themes/AnturioVinoHero';
@@ -678,6 +678,13 @@ export default function InvitationPage() {
             borderColor: '#E3D9CB', cardBorder: '#E3D9CB',
             accentOverride: '#9C2B2B', fontPreset: 'elegante',
             heroRadius: '0px', cardRadius: '12px',
+        },
+        'rosas': {
+            sectionBg: '#F8F2EA', sectionBgAlt: '#F6EFE6', cardBg: '#FCF8F2',
+            textPrimary: '#4A2028', textSecondary: '#6F4B4F',
+            borderColor: '#E6D3C4', cardBorder: '#E6D3C4',
+            accentOverride: '#7A2E3A', fontPreset: 'romantica',
+            heroRadius: '0px', cardRadius: '4px',
         },
         'hacienda': {
             sectionBg: '#F8F1E6', sectionBgAlt: '#F4EFE6', cardBg: '#FCF8F0',
@@ -3282,7 +3289,7 @@ export default function InvitationPage() {
         if (cfg.theme === 'piloto' || cfg.theme === 'babyshower' || cfg.theme === 'bomberos' || cfg.theme === 'policias' || cfg.theme === 'hadas' || cfg.theme === 'hadita' || cfg.theme === 'dulcelandia' || cfg.theme === 'tienda-dulces' || cfg.theme === 'convivio' || cfg.theme === 'juguetes' || cfg.theme === 'capibaras' || cfg.theme === 'perritos' || cfg.theme === 'mariposas' || cfg.theme === 'globos3d') {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
-        if (cfg.theme === 'hacienda') {
+        if (STORY_THEMES.includes(cfg.theme)) {
             return <HaciendaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (cfg.theme === 'dulce-espera') {
@@ -3773,11 +3780,11 @@ export default function InvitationPage() {
     const renderDressCode = () => (
         <section id="dress_code" key="dress_code" className="py-20 bg-[var(--section-bg-alt)]">
             <div className="max-w-3xl mx-auto px-6 text-center">
-                {cfg.theme === 'hacienda' ? <img src={HA('vestimenta')} alt="" className="ha-dress-img" /> : <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />}
+                {STORY_THEMES.includes(cfg.theme) ? <img src={storyAsset(cfg.theme, 'vestimenta')} alt="" className="ha-dress-img" /> : <Shirt className="h-10 w-10 mx-auto mb-8 text-accent/70" strokeWidth={1.5} />}
                 <h3 className="text-4xl font-serif font-light text-[var(--text-primary)] mb-6">Código de Vestimenta</h3>
                 <div className="bg-[var(--card-bg)] border border-[var(--card-border)] shadow-xl rounded-3xl p-8 sm:p-12 inline-block max-w-lg w-full">
                     <p className="text-2xl sm:text-3xl font-serif text-[var(--text-primary)]">{event.dress_code || 'Formal'}</p>
-                    {cfg.theme === 'hacienda' && <img src={HA('paleta')} alt="Paleta sugerida" className="ha-paleta" />}
+                    {STORY_THEMES.includes(cfg.theme) && <img src={storyAsset(cfg.theme, 'paleta')} alt="Paleta sugerida" className="ha-paleta" />}
                     {(cfg.dress_code_notes || cfg.dressCodeNotes) && (
                         <p className="text-sm text-[var(--text-secondary)] mt-4 leading-relaxed whitespace-pre-line">
                             {cfg.dress_code_notes || cfg.dressCodeNotes}
@@ -3873,15 +3880,15 @@ export default function InvitationPage() {
                                     return null;
                                 };
                                 const getHaciendaIcon = () => {
-                                    if (cfg.theme !== 'hacienda') return null;
+                                    if (!STORY_THEMES.includes(cfg.theme)) return null;
                                     const txt = `${item.title || ''} ${item.event || ''} ${item.description || ''}`.toLowerCase();
-                                    if (txt.includes('pastel') || txt.includes('torta')) return HA('ico-pastel');
-                                    if (txt.includes('ceremonia') || txt.includes('misa') || txt.includes('capilla') || txt.includes('iglesia') || txt.includes('civil')) return HA('ico-ceremonia');
-                                    if (txt.includes('brindis') || txt.includes('coctel') || txt.includes('cóctel') || txt.includes('bebida')) return HA('ico-brindis');
-                                    if (txt.includes('cena') || txt.includes('banquete') || txt.includes('comida')) return HA('ico-cena');
-                                    if (txt.includes('fiesta') || txt.includes('baile') || txt.includes('vals') || txt.includes('música') || txt.includes('musica') || txt.includes('mariachi')) return HA('ico-fiesta');
-                                    if (txt.includes('llegada') || txt.includes('recepción') || txt.includes('recepcion') || txt.includes('bienvenida')) return HA('ico-llegada');
-                                    return HA(['ico-llegada', 'ico-ceremonia', 'ico-brindis', 'ico-cena', 'ico-fiesta', 'ico-pastel'][idx % 6]);
+                                    if (txt.includes('pastel') || txt.includes('torta')) return storyAsset(cfg.theme, 'ico-pastel');
+                                    if (txt.includes('ceremonia') || txt.includes('misa') || txt.includes('capilla') || txt.includes('iglesia') || txt.includes('civil')) return storyAsset(cfg.theme, 'ico-ceremonia');
+                                    if (txt.includes('brindis') || txt.includes('coctel') || txt.includes('cóctel') || txt.includes('bebida')) return storyAsset(cfg.theme, 'ico-brindis');
+                                    if (txt.includes('cena') || txt.includes('banquete') || txt.includes('comida')) return storyAsset(cfg.theme, 'ico-cena');
+                                    if (txt.includes('fiesta') || txt.includes('baile') || txt.includes('vals') || txt.includes('música') || txt.includes('musica') || txt.includes('mariachi')) return storyAsset(cfg.theme, 'ico-fiesta');
+                                    if (txt.includes('llegada') || txt.includes('recepción') || txt.includes('recepcion') || txt.includes('bienvenida')) return storyAsset(cfg.theme, 'ico-llegada');
+                                    return storyAsset(cfg.theme, ['ico-llegada', 'ico-ceremonia', 'ico-brindis', 'ico-cena', 'ico-fiesta', 'ico-pastel'][idx % 6]);
                                 };
                                 const posadaIcon = getHaciendaIcon() || getPosadaIcon();
 
@@ -3927,16 +3934,16 @@ export default function InvitationPage() {
         return (
         <section id="rsvp" key="rsvp" className="py-16 bg-[var(--section-bg)]">
             <div className="max-w-5xl mx-auto px-6">
-                {cfg.theme === 'hacienda' && !buzonOpen && (
+                {STORY_THEMES.includes(cfg.theme) && !buzonOpen && (
                     <div className="ha-buzon-wrap">
                         <h3 className="text-4xl font-serif">Confirma tu asistencia</h3>
-                        <img src={HA(buzonAnim ? 'buzon-abierto' : 'buzon-cerrado')} alt="Buzón: toca para confirmar" className="ha-buzon" role="button" tabIndex={0}
+                        <img src={storyAsset(cfg.theme, buzonAnim ? 'buzon-abierto' : 'buzon-cerrado')} alt="Buzón: toca para confirmar" className="ha-buzon" role="button" tabIndex={0}
                             onClick={() => { if (buzonAnim) return; setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); }}
                             onKeyDown={(e) => { if (e.key === 'Enter') { setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); } }} />
-                        <p className="ha-buzon-hint">Toca el buzón para responder</p>
+                        <p className="ha-buzon-hint">{cfg.theme === 'rosas' ? 'Toca la jaula para responder' : 'Toca el buzón para responder'}</p>
                     </div>
                 )}
-                <div className={`invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center ${cfg.theme === 'hacienda' && buzonOpen ? 'ha-rsvp-in' : ''}`} style={cfg.theme === 'hacienda' && !buzonOpen ? { display: 'none' } : undefined}>
+                <div className={`invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center ${STORY_THEMES.includes(cfg.theme) ? (buzonOpen ? 'ha-rsvp-in' : 'ha-hide') : ''}`}>
                     <div>
                         {guest && (
                             <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
@@ -5065,7 +5072,7 @@ export default function InvitationPage() {
 
             {/* PRE-RENDER Intro (Sobre Digital Animado a pantalla completa / Pantalla de Entrada) */}
             <AnimatePresence mode="wait">
-            {(cfg.theme !== 'dulce-espera' && cfg.theme !== 'hacienda' && (cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
+            {(cfg.theme !== 'dulce-espera' && !STORY_THEMES.includes(cfg.theme) && (cfg.show_envelope !== false && cfg.showEnvelope !== false) && (isPremium || cfg.showEnvelope === true || cfg.show_envelope === true)) && !envelopeOpened ? (
                 conciergeVideoAllowed && (cfg.envelope_video_url || cfg.envelopeVideoUrl) ? (
                     <VideoEnvelopeIntro key="envelope-screen" cfg={cfg} onOpen={() => setEnvelopeOpened(true)} />
                 ) :

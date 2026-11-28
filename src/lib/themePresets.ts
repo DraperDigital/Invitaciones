@@ -686,6 +686,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F5F1E8',
         typographyPreset: 'romantica'
     },
+    'rosas': {
+        label: 'Rosas de Terciopelo',
+        desc: 'Rosas de terciopelo: sobre vino con sello de rosa, libro antiguo que se abre, rosas pintadas a mano, damasco y jaula dorada para confirmar',
+        icon: '🌹',
+        primaryColor: '#7A2E3A',
+        accentColor: '#7A2E3A',
+        cardBgColor: '#FCF8F2',
+        sectionBgColor: '#F8F2EA',
+        textPrimary: '#4A2028',
+        textSecondary: '#6F4B4F',
+        heroTextColor: '#4A2028',
+        heroBgColor: '#F6EFE6',
+        typographyPreset: 'romantica'
+    },
     'hacienda': {
         label: 'Hacienda Bugambilia',
         desc: 'Hacienda mexicana: sobre y portón que se abren, arcos de cantera, bugambilias, talavera, íconos ilustrados y buzón para confirmar',
@@ -1182,6 +1196,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'editorial-bn', name: 'Editorial B&N', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Editorial', slug: 'boda-editorial-bn', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/editorial-bn.jpg' },
     { id: 'rosas-noche', name: 'Rosas Blancas de Noche', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Noche', slug: 'boda-rosas-noche', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/rosas-noche.jpg' },
     { id: 'salvia-eucalipto', name: 'Verde Salvia', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Botánica', slug: 'boda-salvia-eucalipto', icon: '🌿', plan: 'Pro', thumbnail: '/images/templates/salvia-eucalipto.jpg' },
+    { id: 'rosas', name: 'Rosas de Terciopelo', category: 'boda', categories: ['boda'], categoryLabel: '#7A2E3A', slug: 'boda-rosas', icon: '🌹', plan: 'Pro', thumbnail: '/images/templates/rosas.jpg' },
     { id: 'hacienda', name: 'Hacienda Bugambilia', category: 'boda', categories: ['boda'], categoryLabel: '#C4704F', slug: 'boda-hacienda', icon: '🌺', plan: 'Pro', thumbnail: '/images/templates/hacienda.jpg' },
     { id: 'malva-empolvado', name: 'Rosa Empolvado', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-malva-empolvado', icon: '🌸', plan: 'Pro', thumbnail: '/images/templates/malva-empolvado.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
@@ -1358,7 +1373,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['hacienda', 'astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'brindis-oro', 'globos-champana', 'noche-disco', 'cena-gala', 'cierre-brillante', 'perlas-champana'];
+export const PRO_ONLY_TEMPLATES = ['rosas', 'hacienda', 'astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'brindis-oro', 'globos-champana', 'noche-disco', 'cena-gala', 'cierre-brillante', 'perlas-champana'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

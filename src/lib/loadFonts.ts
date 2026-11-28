@@ -95,6 +95,7 @@ export const THEME_DECORATIVE_FONTS: Record<string, string[]> = {
     'brillo-oro': ['Bodoni+Moda:ital,wght@0,400;0,500;0,700;1,400', 'Cinzel:wght@500;700', 'Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@200;400;500;600;700;800'],
     'monos-rojos': ['Bodoni+Moda:ital,wght@0,400;0,500;0,700;1,400', 'Cinzel:wght@500;700', 'Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@200;400;500;600;700;800'],
     'mesa-nochevieja': ['Bodoni+Moda:ital,wght@0,400;0,500;0,700;1,400', 'Cinzel:wght@500;700', 'Cormorant+Garamond:wght@400;500;600', 'Pinyon+Script', 'Montserrat:wght@200;400;500;600;700;800'],
+    'rosas': ['Pinyon+Script', 'Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400', 'Montserrat:wght@400;500;600'],
     'hacienda': ['Pinyon+Script', 'Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400', 'Montserrat:wght@400;500;600'],
     'dulce-espera': ['Great+Vibes', 'Lora:ital,wght@0,400;0,500;1,400;1,500', 'Cormorant+Garamond:wght@500;600;700'],
     'anturio-vino': ['Italiana', 'Pinyon+Script', 'Libre+Caslon+Text:ital,wght@0,400;0,700;1,400', 'La+Belle+Aurore'],
