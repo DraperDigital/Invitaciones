@@ -368,6 +368,10 @@ export default function HomePage() {
                             Save the Date
                             <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
                         </Link>
+                        <Link to="/planeador-de-bodas" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#B8935A] transition-colors flex items-center gap-1.5">
+                            Planeador
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#B8935A]/15 text-[#8C6A35]">Nuevo</span>
+                        </Link>
                         <Link to="/planes" className="text-xs uppercase font-bold tracking-widest text-slate-600 hover:text-[#DF3B94] transition-colors">
                             Planes
                         </Link>
@@ -431,6 +435,14 @@ export default function HomePage() {
                         >
                             <span>Save the Date</span>
                             <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#DF3B94]/10 text-[#DF3B94]">Nuevo</span>
+                        </Link>
+                        <Link
+                            to="/planeador-de-bodas"
+                            className="flex items-center justify-between text-xs uppercase font-bold tracking-widest text-slate-700 hover:text-[#B8935A] transition-colors py-2 border-b border-slate-50"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            <span>Planeador de Bodas</span>
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#B8935A]/15 text-[#8C6A35]">Nuevo</span>
                         </Link>
                         <Link
                             to="/planes"
@@ -1381,7 +1393,7 @@ export default function HomePage() {
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
-                                            <span><strong>Planeador de Eventos Premium</strong> (pagos, proveedores, Día B)</span>
+                                            <span><Link to="/planeador-de-bodas" className="underline hover:text-[#FAC345] transition-colors"><strong>Planeador de Eventos Premium</strong></Link> (pagos, proveedores, Día B)</span>
                                         </li>
                                         <li className="flex items-center gap-2.5">
                                             <Check className="h-4 w-4 text-[#FAC345] flex-shrink-0" />
@@ -1674,6 +1686,7 @@ export default function HomePage() {
                             <p className="text-xs font-bold uppercase tracking-widest text-white">Invitaciones para…</p>
                             <ul className="space-y-2 text-xs text-slate-400">
                                 <li><Link to="/invitaciones-digitales-boda" className="hover:text-white transition-colors">Bodas</Link></li>
+                                <li><Link to="/invitaciones-digitales-de-boda" className="hover:text-white transition-colors text-[#FAC345]">Guía de Bodas 2026</Link></li>
                                 <li><Link to="/invitaciones-digitales-xv-anos" className="hover:text-white transition-colors">XV Años</Link></li>
                                 <li><Link to="/invitaciones-digitales-cumpleanos" className="hover:text-white transition-colors">Cumpleaños</Link></li>
                                 <li><Link to="/invitaciones-digitales-infantiles" className="hover:text-white transition-colors">Cumpleaños Infantiles</Link></li>
@@ -1700,6 +1713,7 @@ export default function HomePage() {
                         <div className="col-span-1 md:col-span-1 lg:col-span-2 space-y-3">
                             <p className="text-xs font-bold uppercase tracking-widest text-white">Producto</p>
                             <ul className="space-y-2 text-xs text-slate-400">
+                                <li><Link to="/planeador-de-bodas" className="hover:text-white transition-colors text-[#FAC345] font-semibold">Planeador de Bodas</Link></li>
                                 <li><Link to="/planes" className="hover:text-white transition-colors">Planes y precios</Link></li>
                                 <li><Link to="/ejemplos" className="hover:text-white transition-colors">Ejemplos</Link></li>
                                 <li><Link to="/save-the-date" className="hover:text-white transition-colors">Save the Date</Link></li>
