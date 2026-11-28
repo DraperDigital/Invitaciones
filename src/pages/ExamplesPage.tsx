@@ -230,7 +230,7 @@ export default function ExamplesPage() {
                                                 {/* Plan Badge */}
                                                 <div className="absolute top-4 right-4 z-10">
                                                     <span className={`px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold backdrop-blur-md border ${
-                                                        tpl.plan.toLowerCase().includes('pro')
+                                                        tpl.plan.toLowerCase().includes('premium') || tpl.plan.toLowerCase().includes('pro')
                                                             ? 'bg-slate-900/90 text-[#F5B837] border-[#F5B837]/30'
                                                             : 'bg-slate-900/80 text-slate-100 border-white/20'
                                                     }`}>

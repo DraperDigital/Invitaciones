@@ -264,7 +264,7 @@ export default function PlanesPage() {
                             <div className="mt-8 md:mt-10">
                                 {blockedByTemplate ? (
                                     <p className="w-full min-h-[44px] py-4 px-3 rounded-xl md:rounded-2xl text-[10px] font-bold uppercase tracking-[0.15em] text-center bg-stone-100 text-stone-500">
-                                        Tu plantilla con efectos animados requiere plan Pro o superior
+                                        Tu plantilla con efectos animados requiere plan Premium o superior
                                     </p>
                                 ) : (
                                 <Link 

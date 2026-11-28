@@ -57,7 +57,7 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         typographyPreset: 'elegante'
     },
     'classic-elegance-pro': {
-        label: 'Clásica Atemporal Pro',
+        label: 'Clásica Atemporal Premium',
         desc: 'Editorial oscuro — negro profundo, acentos en oro intenso y portada full-screen',
         icon: '👑',
         primaryColor: '#0A0A0A',
@@ -1179,27 +1179,27 @@ export interface CanonicalTemplate {
 export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     // ── Bodas ──
     { id: 'classic', name: 'Clásica Atemporal', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Elegante', slug: 'boda-isabel-rodrigo-premium', icon: '🏛️', plan: 'Clásica', thumbnail: '/images/templates/classic.jpg' },
-    { id: 'classic-elegance-pro', name: 'Clásica Atemporal Pro', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Lujo', slug: 'boda-ana-y-carlos-premium', icon: '👑', plan: 'Pro', thumbnail: '/images/templates/classic-elegance-pro.jpg' },
+    { id: 'classic-elegance-pro', name: 'Clásica Atemporal Premium', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Lujo', slug: 'boda-ana-y-carlos-premium', icon: '👑', plan: 'Premium', thumbnail: '/images/templates/classic-elegance-pro.jpg' },
     { id: 'modern-minimalist', name: 'Moderna Minimalista', category: 'boda', categories: ['boda', 'xv', 'graduacion', 'corporate', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-gabriela-arturo-premium', icon: '🖤', plan: 'Clásica', thumbnail: '/images/templates/modern-minimalist.jpg' },
     { id: 'split-screen', name: 'Vanguardia Dividida', category: 'boda', categories: ['boda', 'graduacion', 'corporate', 'gender_reveal'], categoryLabel: 'Boda / Vanguardia', slug: 'boda-sofia-mateo-premium', icon: '🌓', plan: 'Clásica', thumbnail: '/images/templates/split-screen.jpg' },
     { id: 'newspaper', name: 'Primera Plana', category: 'boda', categories: ['boda', 'graduacion', 'cumpleanos', 'comunion'], categoryLabel: 'Boda / Editorial', slug: 'boda-primera-plana-premium', icon: '📰', plan: 'Clásica', thumbnail: '/images/templates/newspaper.jpg' },
     { id: 'floral-symmetry', name: 'Simetría Floral', category: 'boda', categories: ['boda', 'xv', 'comunion', 'bautizo', 'baby_shower'], categoryLabel: 'Boda / Jardín', slug: 'boda-simetria-floral', icon: '🌸', plan: 'Clásica', thumbnail: '/images/templates/floral-symmetry.jpg' },
     { id: 'passport', name: 'Pase de Abordaje', category: 'boda', categories: ['boda', 'cumpleanos'], categoryLabel: 'Boda Destino', slug: 'boda-destino-premium', icon: '✈️', plan: 'Clásica', thumbnail: '/images/templates/passport.jpg' },
-    { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/gotico-suave.jpg' },
-    { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Pro', thumbnail: '/images/templates/lacre-rojo.jpg' },
-    { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
-    { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Pro', thumbnail: '/images/templates/anturio-vino.jpg' },
-    { id: 'pase-abordar', name: 'Pase de Abordar', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Destino', slug: 'boda-pase-abordar', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/pase-abordar.jpg' },
-    { id: 'sobre-marino', name: 'Sobre Azul Marino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Clásica', slug: 'boda-sobre-marino', icon: '💌', plan: 'Pro', thumbnail: '/images/templates/sobre-marino.jpg' },
-    { id: 'terciopelo-vino', name: 'Terciopelo Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-terciopelo-vino', icon: '🥀', plan: 'Pro', thumbnail: '/images/templates/terciopelo-vino.jpg' },
-    { id: 'azul-acuarela', name: 'Azul Acuarela', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Acuarela', slug: 'boda-azul-acuarela', icon: '💙', plan: 'Pro', thumbnail: '/images/templates/azul-acuarela.jpg' },
-    { id: 'editorial-bn', name: 'Editorial B&N', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Editorial', slug: 'boda-editorial-bn', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/editorial-bn.jpg' },
-    { id: 'rosas-noche', name: 'Rosas Blancas de Noche', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Noche', slug: 'boda-rosas-noche', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/rosas-noche.jpg' },
-    { id: 'salvia-eucalipto', name: 'Verde Salvia', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Botánica', slug: 'boda-salvia-eucalipto', icon: '🌿', plan: 'Pro', thumbnail: '/images/templates/salvia-eucalipto.jpg' },
-    { id: 'rosas', name: 'Rosas de Terciopelo', category: 'boda', categories: ['boda'], categoryLabel: '#7A2E3A', slug: 'boda-rosas', icon: '🌹', plan: 'Pro', thumbnail: '/images/templates/rosas.jpg' },
-    { id: 'hacienda', name: 'Hacienda Bugambilia', category: 'boda', categories: ['boda'], categoryLabel: '#C4704F', slug: 'boda-hacienda', icon: '🌺', plan: 'Pro', thumbnail: '/images/templates/hacienda.jpg' },
-    { id: 'malva-empolvado', name: 'Rosa Empolvado', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-malva-empolvado', icon: '🌸', plan: 'Pro', thumbnail: '/images/templates/malva-empolvado.jpg' },
-    { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
+    { id: 'gotico-suave', name: 'Gótico Suave', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Flat lay', slug: 'boda-gotico-suave', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/gotico-suave.jpg' },
+    { id: 'lacre-rojo', name: 'Lacre Rojo', category: 'boda', categories: ['boda', 'xv'], categoryLabel: 'Boda / Editorial', slug: 'boda-lacre-rojo', icon: '❤️', plan: 'Premium', thumbnail: '/images/templates/lacre-rojo.jpg' },
+    { id: 'bodegon-nocturno', name: 'Bodegón Nocturno', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Lujo', slug: 'boda-bodegon-nocturno', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/bodegon-nocturno.jpg' },
+    { id: 'anturio-vino', name: 'Anturio Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Flat lay', slug: 'boda-anturio-vino', icon: '🍷', plan: 'Premium', thumbnail: '/images/templates/anturio-vino.jpg' },
+    { id: 'pase-abordar', name: 'Pase de Abordar', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Destino', slug: 'boda-pase-abordar', icon: '✈️', plan: 'Premium', thumbnail: '/images/templates/pase-abordar.jpg' },
+    { id: 'sobre-marino', name: 'Sobre Azul Marino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Clásica', slug: 'boda-sobre-marino', icon: '💌', plan: 'Premium', thumbnail: '/images/templates/sobre-marino.jpg' },
+    { id: 'terciopelo-vino', name: 'Terciopelo Vino', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-terciopelo-vino', icon: '🥀', plan: 'Premium', thumbnail: '/images/templates/terciopelo-vino.jpg' },
+    { id: 'azul-acuarela', name: 'Azul Acuarela', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Acuarela', slug: 'boda-azul-acuarela', icon: '💙', plan: 'Premium', thumbnail: '/images/templates/azul-acuarela.jpg' },
+    { id: 'editorial-bn', name: 'Editorial B&N', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Editorial', slug: 'boda-editorial-bn', icon: '🖤', plan: 'Premium', thumbnail: '/images/templates/editorial-bn.jpg' },
+    { id: 'rosas-noche', name: 'Rosas Blancas de Noche', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Noche', slug: 'boda-rosas-noche', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/rosas-noche.jpg' },
+    { id: 'salvia-eucalipto', name: 'Verde Salvia', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Botánica', slug: 'boda-salvia-eucalipto', icon: '🌿', plan: 'Premium', thumbnail: '/images/templates/salvia-eucalipto.jpg' },
+    { id: 'rosas', name: 'Rosas de Terciopelo', category: 'boda', categories: ['boda'], categoryLabel: '#7A2E3A', slug: 'boda-rosas', icon: '🌹', plan: 'Premium', thumbnail: '/images/templates/rosas.jpg' },
+    { id: 'hacienda', name: 'Hacienda Bugambilia', category: 'boda', categories: ['boda'], categoryLabel: '#C4704F', slug: 'boda-hacienda', icon: '🌺', plan: 'Premium', thumbnail: '/images/templates/hacienda.jpg' },
+    { id: 'malva-empolvado', name: 'Rosa Empolvado', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-malva-empolvado', icon: '🌸', plan: 'Premium', thumbnail: '/images/templates/malva-empolvado.jpg' },
+    { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Premium', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Clásica', thumbnail: '/images/templates/collage.jpg' },
 
     // ── XV Años ──
@@ -1214,24 +1214,24 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     // ── Cumpleaños Infantiles / Fiestas Infantiles ──
     { id: 'dinosaurios', name: 'Dinosaurios', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dinosaurios', slug: 'cumple-dinosaurios', icon: '🦖', plan: 'Clásica', thumbnail: '/images/templates/dinosaurios.jpg' },
     { id: 'sirenita', name: 'Sirenita', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Sirenita', slug: 'cumple-sirenita', icon: '🧜‍♀️', plan: 'Clásica', thumbnail: '/images/templates/sirenita.jpg' },
-    { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Astronauta', slug: 'cumple-astronauta', icon: '🚀', plan: 'Pro', thumbnail: '/images/templates/astronauta.jpg' },
-    { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Unicornio', slug: 'cumple-unicornio', icon: '🦄', plan: 'Pro', thumbnail: '/images/templates/unicornio.jpg' },
-    { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Castillo', slug: 'cumple-castillo', icon: '🏰', plan: 'Pro', thumbnail: '/images/templates/castillo.jpg' },
-    { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Arcoíris', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Pro', thumbnail: '/images/templates/arcoiris.jpg' },
-    { id: 'convivio', name: 'Convivio Pastel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Convivio', slug: 'cumple-convivio', icon: '🎂', plan: 'Pro', thumbnail: '/images/templates/convivio.jpg' },
-    { id: 'juguetes', name: 'Mis Primeros Juguetes', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Juguetes', slug: 'cumple-juguetes', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/juguetes.jpg' },
-    { id: 'capibaras', name: 'Capibaras', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Capibaras', slug: 'cumple-capibaras', icon: '🐹', plan: 'Pro', thumbnail: '/images/templates/capibaras.jpg' },
-    { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Perritos', slug: 'cumple-perritos', icon: '🐶', plan: 'Pro', thumbnail: '/images/templates/perritos.jpg' },
-    { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Mariposas', slug: 'cumple-mariposas', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/mariposas.jpg' },
-    { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Globos 3D', slug: 'cumple-globos3d', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/globos3d.jpg' },
-    { id: 'dulcelandia', name: 'Dulcelandia 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dulces', slug: 'cumple-dulcelandia', icon: '🍭', plan: 'Pro', thumbnail: '/images/templates/dulcelandia.jpg' },
+    { id: 'astronauta', name: 'Astronauta', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Astronauta', slug: 'cumple-astronauta', icon: '🚀', plan: 'Premium', thumbnail: '/images/templates/astronauta.jpg' },
+    { id: 'unicornio', name: 'Unicornio', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Unicornio', slug: 'cumple-unicornio', icon: '🦄', plan: 'Premium', thumbnail: '/images/templates/unicornio.jpg' },
+    { id: 'castillo', name: 'Castillo de Princesa', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Castillo', slug: 'cumple-castillo', icon: '🏰', plan: 'Premium', thumbnail: '/images/templates/castillo.jpg' },
+    { id: 'arcoiris', name: 'Arcoíris Kawaii', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Arcoíris', slug: 'cumple-arcoiris', icon: '🌈', plan: 'Premium', thumbnail: '/images/templates/arcoiris.jpg' },
+    { id: 'convivio', name: 'Convivio Pastel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Convivio', slug: 'cumple-convivio', icon: '🎂', plan: 'Premium', thumbnail: '/images/templates/convivio.jpg' },
+    { id: 'juguetes', name: 'Mis Primeros Juguetes', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Juguetes', slug: 'cumple-juguetes', icon: '🧸', plan: 'Premium', thumbnail: '/images/templates/juguetes.jpg' },
+    { id: 'capibaras', name: 'Capibaras', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Capibaras', slug: 'cumple-capibaras', icon: '🐹', plan: 'Premium', thumbnail: '/images/templates/capibaras.jpg' },
+    { id: 'perritos', name: 'Perritos Salchicha', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Perritos', slug: 'cumple-perritos', icon: '🐶', plan: 'Premium', thumbnail: '/images/templates/perritos.jpg' },
+    { id: 'mariposas', name: 'Mariposas y Flores', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Mariposas', slug: 'cumple-mariposas', icon: '🦋', plan: 'Premium', thumbnail: '/images/templates/mariposas.jpg' },
+    { id: 'globos3d', name: 'Globos 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Globos 3D', slug: 'cumple-globos3d', icon: '🎈', plan: 'Premium', thumbnail: '/images/templates/globos3d.jpg' },
+    { id: 'dulcelandia', name: 'Dulcelandia 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dulces', slug: 'cumple-dulcelandia', icon: '🍭', plan: 'Premium', thumbnail: '/images/templates/dulcelandia.jpg' },
     { id: 'tienda-dulces', name: 'Tienda de Dulces', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Dulces', slug: 'cumple-tienda-dulces', icon: '🍬', plan: 'Clásica', thumbnail: '/images/templates/tienda-dulces.jpg' },
-    { id: 'piloto', name: 'Pequeño Piloto', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Piloto', slug: 'cumple-piloto', icon: '✈️', plan: 'Pro', thumbnail: '/images/templates/piloto.jpg' },
-    { id: 'babyshower', name: 'Baby Shower Nubes', category: 'baby_shower', categories: ['baby_shower'], categoryLabel: 'Baby Shower / Nubes', slug: 'baby-babyshower', icon: '🧸', plan: 'Pro', thumbnail: '/images/templates/babyshower.jpg' },
-    { id: 'bomberos', name: 'Bomberos', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Bomberos', slug: 'cumple-bomberos', icon: '🚒', plan: 'Pro', thumbnail: '/images/templates/bomberos.jpg' },
-    { id: 'policias', name: 'Policías', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Policías', slug: 'cumple-policias', icon: '🚓', plan: 'Pro', thumbnail: '/images/templates/policias.jpg' },
-    { id: 'hadas', name: 'Jardín de Hadas', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Hadas', slug: 'cumple-hadas', icon: '🧚', plan: 'Pro', thumbnail: '/images/templates/hadas.jpg' },
-    { id: 'hadita', name: 'Hadita Mágica 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Primer añito', slug: 'cumple-hadita', icon: '🦋', plan: 'Pro', thumbnail: '/images/templates/hadita.jpg' },
+    { id: 'piloto', name: 'Pequeño Piloto', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Piloto', slug: 'cumple-piloto', icon: '✈️', plan: 'Premium', thumbnail: '/images/templates/piloto.jpg' },
+    { id: 'babyshower', name: 'Baby Shower Nubes', category: 'baby_shower', categories: ['baby_shower'], categoryLabel: 'Baby Shower / Nubes', slug: 'baby-babyshower', icon: '🧸', plan: 'Premium', thumbnail: '/images/templates/babyshower.jpg' },
+    { id: 'bomberos', name: 'Bomberos', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Bomberos', slug: 'cumple-bomberos', icon: '🚒', plan: 'Premium', thumbnail: '/images/templates/bomberos.jpg' },
+    { id: 'policias', name: 'Policías', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Policías', slug: 'cumple-policias', icon: '🚓', plan: 'Premium', thumbnail: '/images/templates/policias.jpg' },
+    { id: 'hadas', name: 'Jardín de Hadas', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Hadas', slug: 'cumple-hadas', icon: '🧚', plan: 'Premium', thumbnail: '/images/templates/hadas.jpg' },
+    { id: 'hadita', name: 'Hadita Mágica 3D', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Primer añito', slug: 'cumple-hadita', icon: '🦋', plan: 'Premium', thumbnail: '/images/templates/hadita.jpg' },
     { id: 'kids-farm', name: 'Zoológico Aventura', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Zoológico', slug: 'cumpleanos-zoologico-zair', icon: '🦁', plan: 'Clásica', thumbnail: '/images/templates/kids-farm.jpg' },
     { id: 'gamer-party', name: 'Gamer Party', category: 'infantil', categories: ['infantil', 'cumpleanos'], categoryLabel: 'Infantil / Gamer', slug: 'cumple-samuel-gamer', icon: '🎮', plan: 'Clásica', thumbnail: '/images/templates/gamer-party.jpg' },
     { id: 'pixel-craft', name: 'Mundo Píxel', category: 'infantil', categories: ['infantil'], categoryLabel: 'Infantil / Minecraft', slug: 'cumple-mateo-pixel-craft', icon: '🟩', plan: 'Clásica', thumbnail: '/images/templates/pixel-craft.jpg' },
@@ -1239,18 +1239,18 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'whimsical-kids', name: 'Fantasía Infantil', category: 'infantil', categories: ['infantil', 'bautizo', 'baby_shower', 'comunion', 'gender_reveal'], categoryLabel: 'Infantil / Fantasía', slug: 'bautizo-victoria-premium', icon: '🎈', plan: 'Clásica', thumbnail: '/images/templates/whimsical-kids.jpg' },
 
     // ── Baby Shower & Bautizo ──
-    { id: 'nube-de-miel', name: 'Nube de Miel', category: 'baby_shower', categories: ['baby_shower', 'bautizo', 'infantil'], categoryLabel: 'Baby Shower / Tierno', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Pro', thumbnail: '/images/templates/nube-de-miel.jpg' },
+    { id: 'nube-de-miel', name: 'Nube de Miel', category: 'baby_shower', categories: ['baby_shower', 'bautizo', 'infantil'], categoryLabel: 'Baby Shower / Tierno', slug: 'baby-nube-de-miel', icon: '🐑', plan: 'Premium', thumbnail: '/images/templates/nube-de-miel.jpg' },
 
     // ── Revelación de Género ──
     { id: 'reveal-bw', name: 'Misterio Monocromático', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / B&W', slug: 'gender-reveal-secreto-bw-premium', icon: '❓', plan: 'Clásica', thumbnail: '/images/templates/reveal-bw.jpg' },
-    { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Pro', thumbnail: '/images/templates/reveal-duo.jpg' },
+    { id: 'reveal-duo', name: 'Dúo Rosa & Azul', category: 'gender_reveal', categories: ['gender_reveal'], categoryLabel: 'Gender Reveal / Dúo', slug: 'gender-reveal-mateo-o-sofia-premium', icon: '👶', plan: 'Premium', thumbnail: '/images/templates/reveal-duo.jpg' },
 
     // ── Posada / Navidad ──
-    { id: 'pueblo-papel', name: 'Pueblo de Papel', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Pueblo de Papel', slug: 'navidad-pueblo-papel', icon: '🏘️', plan: 'Pro', thumbnail: '/images/templates/pueblo-papel.jpg' },
-    { id: 'bordado-lujo', name: 'Bordado de Lujo', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Bordado de Lujo', slug: 'navidad-bordado-lujo', icon: '🎄', plan: 'Pro', thumbnail: '/images/templates/bordado-lujo.jpg' },
-    { id: 'epoca-bonita', name: 'La Época Más Bonita', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / La Época Más Bonita', slug: 'navidad-epoca-bonita', icon: '🎁', plan: 'Pro', thumbnail: '/images/templates/epoca-bonita.jpg' },
-    { id: 'noche-velas', name: 'Noche de Velas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Noche de Velas', slug: 'navidad-noche-velas', icon: '🕯️', plan: 'Pro', thumbnail: '/images/templates/noche-velas.jpg' },
-    { id: 'posada-mexicana', name: 'Posada Mexicana', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada Mexicana', slug: 'navidad-posada-mexicana', icon: '🪅', plan: 'Pro', thumbnail: '/images/templates/posada-mexicana.jpg' },
+    { id: 'pueblo-papel', name: 'Pueblo de Papel', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Pueblo de Papel', slug: 'navidad-pueblo-papel', icon: '🏘️', plan: 'Premium', thumbnail: '/images/templates/pueblo-papel.jpg' },
+    { id: 'bordado-lujo', name: 'Bordado de Lujo', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Bordado de Lujo', slug: 'navidad-bordado-lujo', icon: '🎄', plan: 'Premium', thumbnail: '/images/templates/bordado-lujo.jpg' },
+    { id: 'epoca-bonita', name: 'La Época Más Bonita', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / La Época Más Bonita', slug: 'navidad-epoca-bonita', icon: '🎁', plan: 'Premium', thumbnail: '/images/templates/epoca-bonita.jpg' },
+    { id: 'noche-velas', name: 'Noche de Velas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Noche de Velas', slug: 'navidad-noche-velas', icon: '🕯️', plan: 'Premium', thumbnail: '/images/templates/noche-velas.jpg' },
+    { id: 'posada-mexicana', name: 'Posada Mexicana', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada Mexicana', slug: 'navidad-posada-mexicana', icon: '🪅', plan: 'Premium', thumbnail: '/images/templates/posada-mexicana.jpg' },
     { id: 'posada-linea', name: 'Posada de Línea', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Posada de Línea', slug: 'navidad-posada-linea', icon: '⭐', plan: 'Clásica', thumbnail: '/images/templates/posada-linea.jpg' },
     { id: 'cuadros-escoceses', name: 'Cuadros Escoceses', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Cuadros Escoceses', slug: 'navidad-cuadros-escoceses', icon: '🎅', plan: 'Clásica', thumbnail: '/images/templates/cuadros-escoceses.jpg' },
     { id: 'rayas-rojas', name: 'Rayas Rojas', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Rayas Rojas', slug: 'navidad-rayas-rojas', icon: '🎀', plan: 'Clásica', thumbnail: '/images/templates/rayas-rojas.jpg' },
@@ -1258,12 +1258,12 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'casita-nevada', name: 'Casita Nevada', category: 'navidad', categories: ['navidad'], categoryLabel: 'Navidad / Casita Nevada', slug: 'navidad-casita-nevada', icon: '🏡', plan: 'Clásica', thumbnail: '/images/templates/casita-nevada.jpg' },
 
     // ── Fin de Año ──
-    { id: 'brindis-oro', name: 'Brindis de Oro', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Brindis de Oro', slug: 'fin-brindis-oro', icon: '🥂', plan: 'Pro', thumbnail: '/images/templates/brindis-oro.jpg' },
-    { id: 'globos-champana', name: 'Globos de Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Globos de Champaña', slug: 'fin-globos-champana', icon: '🍾', plan: 'Pro', thumbnail: '/images/templates/globos-champana.jpg' },
-    { id: 'noche-disco', name: 'Noche Disco', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Noche Disco', slug: 'fin-noche-disco', icon: '🪩', plan: 'Pro', thumbnail: '/images/templates/noche-disco.jpg' },
-    { id: 'cena-gala', name: 'Cena de Gala', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cena de Gala', slug: 'fin-cena-gala', icon: '✨', plan: 'Pro', thumbnail: '/images/templates/cena-gala.jpg' },
-    { id: 'cierre-brillante', name: 'Cierre Brillante', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cierre Brillante', slug: 'fin-cierre-brillante', icon: '🥃', plan: 'Pro', thumbnail: '/images/templates/cierre-brillante.jpg' },
-    { id: 'perlas-champana', name: 'Perlas y Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Perlas y Champaña', slug: 'fin-perlas-champana', icon: '🎈', plan: 'Pro', thumbnail: '/images/templates/perlas-champana.jpg' },
+    { id: 'brindis-oro', name: 'Brindis de Oro', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Brindis de Oro', slug: 'fin-brindis-oro', icon: '🥂', plan: 'Premium', thumbnail: '/images/templates/brindis-oro.jpg' },
+    { id: 'globos-champana', name: 'Globos de Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Globos de Champaña', slug: 'fin-globos-champana', icon: '🍾', plan: 'Premium', thumbnail: '/images/templates/globos-champana.jpg' },
+    { id: 'noche-disco', name: 'Noche Disco', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Noche Disco', slug: 'fin-noche-disco', icon: '🪩', plan: 'Premium', thumbnail: '/images/templates/noche-disco.jpg' },
+    { id: 'cena-gala', name: 'Cena de Gala', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cena de Gala', slug: 'fin-cena-gala', icon: '✨', plan: 'Premium', thumbnail: '/images/templates/cena-gala.jpg' },
+    { id: 'cierre-brillante', name: 'Cierre Brillante', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Cierre Brillante', slug: 'fin-cierre-brillante', icon: '🥃', plan: 'Premium', thumbnail: '/images/templates/cierre-brillante.jpg' },
+    { id: 'perlas-champana', name: 'Perlas y Champaña', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Perlas y Champaña', slug: 'fin-perlas-champana', icon: '🎈', plan: 'Premium', thumbnail: '/images/templates/perlas-champana.jpg' },
     { id: 'soiree-deco', name: 'Soirée Art Déco', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Soirée Art Déco', slug: 'fin-soiree-deco', icon: '🔷', plan: 'Clásica', thumbnail: '/images/templates/soiree-deco.jpg' },
     { id: 'esmoquin', name: 'Esmoquin', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Esmoquin', slug: 'fin-esmoquin', icon: '🎩', plan: 'Clásica', thumbnail: '/images/templates/esmoquin.jpg' },
     { id: 'fuegos-plata', name: 'Fuegos de Plata', category: 'fin_de_ano', categories: ['fin_de_ano'], categoryLabel: 'Fin de Año / Fuegos de Plata', slug: 'fin-fuegos-plata', icon: '🎆', plan: 'Clásica', thumbnail: '/images/templates/fuegos-plata.jpg' },
@@ -1393,9 +1393,9 @@ export function getTemplateRequiredPlan(themeIdOrSlug?: string | null): 'clasico
     const tpl = CANONICAL_TEMPLATES.find(t => t.id === themeIdOrSlug || t.slug === themeIdOrSlug);
     if (!tpl) return 'clasico';
     const p = (tpl.plan || '').toLowerCase();
-    if (p.includes('diseño pro') || p.includes('premium')) return 'premium';
+    if (p.includes('diseño pro') || p.includes('premium') || p.includes('pro')) return 'premium';
     if (p.includes('clásica') || p.includes('clasica') || p.includes('clasico')) return 'clasico';
-    return 'pro';
+    return 'premium';
 }
 
 

@@ -25,16 +25,11 @@ export function getEventPlanBadge(themeConfig: any): EventPlanBadge {
             };
         case 'premium':
         case 'personalized':
+        case 'pro':
             return {
                 label: 'Premium',
                 classes: 'bg-amber-500/90 text-white border border-amber-300/40',
                 icon: '♛',
-            };
-        case 'pro':
-            return {
-                label: 'Plan Pro',
-                classes: 'bg-emerald-600/90 text-white border border-emerald-400/40',
-                icon: '👑',
             };
         case 'clasico':
         case 'classic':

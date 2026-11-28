@@ -770,7 +770,7 @@ export default function EventWizard() {
                                                                 <img src={tpl.image} alt={tpl.name} className="w-full h-full object-cover" />
                                                                 {!conciergeOnly && isProOnlyTemplate(tpl.id) && (
                                                                     <div className="absolute top-1.5 left-1.5 bg-[#DF3B94] text-white px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wide">
-                                                                        PRO
+                                                                        PREMIUM
                                                                     </div>
                                                                 )}
                                                                 {conciergeOnly && (

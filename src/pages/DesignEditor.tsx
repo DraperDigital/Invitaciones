@@ -1224,7 +1224,7 @@ export default function DesignEditor() {
                                             onClick={() => {
                                                 // Plantillas Concierge: solo con plan Concierge
                                                 if (isProOnlyTemplate(item.id) && (config.plan || 'clasico').toLowerCase() === 'clasico') {
-                                                    toast.error('Esta plantilla tiene efectos animados y requiere plan Pro o superior.');
+                                                    toast.error('Esta plantilla tiene efectos animados y requiere plan Premium o superior.');
                                                     return;
                                                 }
                                                 if (isConciergeTemplate(item.id) && (config.plan || '').toLowerCase() !== 'concierge') {
