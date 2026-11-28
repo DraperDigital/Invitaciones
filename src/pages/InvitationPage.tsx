@@ -3308,7 +3308,6 @@ export default function InvitationPage() {
                 />
             );
         }
-        }
         if (cfg.theme === 'dulce-espera') {
             return <DulceEsperaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
