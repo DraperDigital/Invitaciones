@@ -1140,6 +1140,7 @@ export default function DesignEditor() {
                             { id: 'editorial-bn', label: 'Editorial B&N', desc: 'Boda editorial en blanco y negro: foto a sangre, tipografía de revista y secciones negras y blancas, con parallax', icon: '🖤' },
                             { id: 'rosas-noche', label: 'Rosas Blancas de Noche', desc: 'Boda de noche en jardín: rosas blancas, marco ornamentado marfil con calendario y guirnalda, con parallax', icon: '🤍' },
                             { id: 'salvia-eucalipto', label: 'Verde Salvia', desc: 'Boda en acuarela verde salvia: eucalipto, monograma con iniciales, foto con borde rasgado y nombres en caligrafía, con parallax', icon: '🌿' },
+                            { id: 'hacienda', label: 'Hacienda Bugambilia', desc: 'Hacienda mexicana: sobre y portón que se abren, arcos de cantera, bugambilias, talavera, íconos ilustrados y buzón para confirmar', icon: '🌺' },
                             { id: 'malva-empolvado', label: 'Rosa Empolvado', desc: 'Boda en rosa empolvado: flores en acuarela malva, foto con ola dorada y cuenta regresiva en cajitas, con parallax', icon: '🌸' },
                             { id: 'dulcelandia', label: 'Dulcelandia 3D', desc: 'Mundo de dulces en 3D: castillo de betún, osito de gomita, paletas y galleta con moño, con parallax', icon: '🍭' },
                             { id: 'tienda-dulces', label: 'Tienda de Dulces', desc: 'Tienda de dulces 3D en lila: paletas, máquina de chicles, cupcake y frasco alrededor de la tarjeta', icon: '🍬' },

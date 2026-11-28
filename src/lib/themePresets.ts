@@ -686,6 +686,20 @@ export const THEME_PRESET_PROFILES: Record<string, ThemeProfile> = {
         heroBgColor: '#F5F1E8',
         typographyPreset: 'romantica'
     },
+    'hacienda': {
+        label: 'Hacienda Bugambilia',
+        desc: 'Hacienda mexicana: sobre y portón que se abren, arcos de cantera, bugambilias, talavera, íconos ilustrados y buzón para confirmar',
+        icon: '🌺',
+        primaryColor: '#C4704F',
+        accentColor: '#C4704F',
+        cardBgColor: '#FCF8F0',
+        sectionBgColor: '#F8F1E6',
+        textPrimary: '#4A3328',
+        textSecondary: '#7A5D4E',
+        heroTextColor: '#4A3328',
+        heroBgColor: '#F4EFE6',
+        typographyPreset: 'romantica'
+    },
     'malva-empolvado': {
         label: 'Rosa Empolvado',
         desc: 'Boda en rosa empolvado: flores en acuarela malva, foto con ola dorada y cuenta regresiva en cajitas, con parallax',
@@ -1168,6 +1182,7 @@ export const CANONICAL_TEMPLATES: CanonicalTemplate[] = [
     { id: 'editorial-bn', name: 'Editorial B&N', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Editorial', slug: 'boda-editorial-bn', icon: '🖤', plan: 'Pro', thumbnail: '/images/templates/editorial-bn.jpg' },
     { id: 'rosas-noche', name: 'Rosas Blancas de Noche', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Noche', slug: 'boda-rosas-noche', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/rosas-noche.jpg' },
     { id: 'salvia-eucalipto', name: 'Verde Salvia', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Botánica', slug: 'boda-salvia-eucalipto', icon: '🌿', plan: 'Pro', thumbnail: '/images/templates/salvia-eucalipto.jpg' },
+    { id: 'hacienda', name: 'Hacienda Bugambilia', category: 'boda', categories: ['boda'], categoryLabel: '#C4704F', slug: 'boda-hacienda', icon: '🌺', plan: 'Pro', thumbnail: '/images/templates/hacienda.jpg' },
     { id: 'malva-empolvado', name: 'Rosa Empolvado', category: 'boda', categories: ['boda'], categoryLabel: 'Boda / Romántica', slug: 'boda-malva-empolvado', icon: '🌸', plan: 'Pro', thumbnail: '/images/templates/malva-empolvado.jpg' },
     { id: 'lirio-vainilla', name: 'Lirio Vainilla', category: 'boda', categories: ['boda', 'comunion', 'bautizo'], categoryLabel: 'Boda / Sacramental', slug: 'boda-lirio-vainilla', icon: '🤍', plan: 'Pro', thumbnail: '/images/templates/lirio-vainilla.jpg' },
     { id: 'collage', name: 'Collage Elegante', category: 'boda', categories: ['boda', 'xv', 'cumpleanos', 'graduacion', 'comunion', 'bautizo', 'baby_shower', 'gender_reveal'], categoryLabel: 'Boda / Álbum', slug: 'boda-collage-premium', icon: '🖼️', plan: 'Clásica', thumbnail: '/images/templates/collage.jpg' },
@@ -1343,7 +1358,7 @@ export function isConciergeTemplate(themeIdOrSlug?: string | null): boolean {
  * Plantillas con parallax (y efectos animados): requieren plan Pro o superior.
  * El plan Clásica no las incluye.
  */
-export const PRO_ONLY_TEMPLATES = ['astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'brindis-oro', 'globos-champana', 'noche-disco', 'cena-gala', 'cierre-brillante', 'perlas-champana'];
+export const PRO_ONLY_TEMPLATES = ['hacienda', 'astronauta', 'unicornio', 'castillo', 'arcoiris', 'convivio', 'juguetes', 'capibaras', 'perritos', 'mariposas', 'globos3d', 'piloto', 'babyshower', 'bomberos', 'policias', 'hadas', 'hadita', 'pase-abordar', 'sobre-marino', 'terciopelo-vino', 'azul-acuarela', 'editorial-bn', 'rosas-noche', 'salvia-eucalipto', 'malva-empolvado', 'dulcelandia', 'pueblo-papel', 'bordado-lujo', 'epoca-bonita', 'noche-velas', 'posada-mexicana', 'brindis-oro', 'globos-champana', 'noche-disco', 'cena-gala', 'cierre-brillante', 'perlas-champana'];
 
 export function isProOnlyTemplate(themeIdOrSlug?: string | null): boolean {
     if (!themeIdOrSlug) return false;

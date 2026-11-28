@@ -389,6 +389,12 @@ PARALLAX_BY_THEME['perlas-champana'] = [
     { selector: '.nv-l--pc-c4', speed: -0.6 },
     ...sectionLayers('perlas-champana'),
 ];
+PARALLAX_BY_THEME['hacienda'] = [
+    { selector: '.ha-bug-l', speed: 0.18, max: 50 },
+    { selector: '.ha-bug-r', speed: 0.24, max: 50 },
+    { selector: '.ha-picado', speed: -0.08, max: 30 },
+    ...sectionLayers('hacienda'),
+];
 PARALLAX_BY_THEME['dulce-espera'] = [
     { selector: '.de-s3 .de-star-wrap', speed: 0.25, max: 60 },
     { selector: '.de-angel-pray', speed: -0.12, max: 50 },
