@@ -103,9 +103,10 @@
 @keyframes ha-sway-s { 0%,100% { rotate: -1deg; } 50% { rotate: 1deg; } }
 
 /* Save the date */
-.ha-save { padding-top: 130px !important; }
-.ha-picado { top: -4px; left: -4%; width: 108%; transform-origin: 50% 0; animation: ha-sway-s 5s ease-in-out infinite; }
-.ha-save-date { font-size: 26px; font-weight: 600; color: var(--ha-terra); margin: -4px 0 26px; }
+.ha-save { padding-top: clamp(140px, 18vw, 190px) !important; position: relative; }
+.ha-picado { top: 0; left: 50%; width: min(100%, 720px); max-height: 125px; object-fit: contain; translate: -50% 0; transform-origin: 50% 0; animation: ha-sway-s 5s ease-in-out infinite; pointer-events: none; z-index: 1; }
+.ha-save .ha-title { position: relative; z-index: 2; margin: 0 0 6px; }
+.ha-save-date { font-size: clamp(20px, 4.5vw, 26px); font-weight: 600; color: var(--ha-terra); margin: 0 0 24px; position: relative; z-index: 2; }
 .ha-count { display: flex; justify-content: center; gap: 10px; margin: 0 auto 20px; }
 .ha-count-box { width: 70px; padding: 12px 0 10px; background: #fcf8f0; border: 2px solid var(--ha-cobalt); outline: 4px solid #fcf8f0; box-shadow: 0 0 0 5px var(--ha-cobalt-soft), 0 14px 22px -14px var(--ha-cobalt-soft); border-radius: 3px; }
 .ha-count-box b { display: block; font-size: 34px; font-weight: 600; line-height: 1; color: var(--ha-cobalt); }
@@ -184,8 +185,30 @@
 
 @media (min-width: 900px) {
   .ha-scene:not(.ha-cover) { padding: 110px 40px 100px; }
+  .ha-scene.ha-save { padding-top: 185px !important; padding-bottom: 90px; }
   .ha-bug-l { width: 220px; left: 6%; } .ha-bug-r { width: 205px; right: 6%; }
-  .ha-picado { left: 15%; width: 70%; }
+  .ha-picado { left: 50%; width: min(72%, 660px); max-height: 120px; translate: -50% 0; }
+}
+
+/* Modal de confirmación para Hacienda */
+.ha-rsvp-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fcf8f0;
+  color: var(--ha-ink);
+  border: 2px solid var(--ha-cantera);
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: 0 30px 60px -15px rgba(50, 30, 20, 0.5);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+@media (min-width: 640px) {
+  .ha-rsvp-modal-box {
+    padding: 36px 32px;
+  }
 }
 @media (prefers-reduced-motion: reduce) { .ha *, :is(.theme-hacienda, .theme-rosas) * { animation: none !important; } }
 

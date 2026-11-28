@@ -154,7 +154,6 @@ export default function InvitationPage() {
 
     // RSVP Status tracking
     const [rsvpSuccess, setRsvpSuccess] = useState(false);
-    const [buzonOpen, setBuzonOpen] = useState(false);
     const [buzonAnim, setBuzonAnim] = useState(false);
     const [rsvpChoice, setRsvpChoice] = useState<'yes' | 'no' | null>(null);
     const [confirmaSettings, setConfirmaSettings] = useState<{ enabled: boolean; business_number: string } | null>(null);
@@ -885,6 +884,7 @@ export default function InvitationPage() {
     const qrCanvasRef = useRef<HTMLCanvasElement>(null);
     const qrCardRef = useRef<HTMLDivElement>(null);
     const qrCardDesktopRef = useRef<HTMLDivElement>(null);
+    const qrCardModalRef = useRef<HTMLDivElement>(null);
     const [notFound, setNotFound] = useState(false);
     const [isAdminOpen, setIsAdminOpen] = useState(false);
     const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
@@ -893,20 +893,21 @@ export default function InvitationPage() {
     // PLUS ONES States
     const [isAccompanied, setIsAccompanied] = useState(false);
     const [showPlusOnesModal, setShowPlusOnesModal] = useState(false);
+    const [showRsvpModal, setShowRsvpModal] = useState(false);
     const [adultsCount, setAdultsCount] = useState(1);
     const [kidsCount, setKidsCount] = useState(0);
 
-    // Bloquear scroll de document.body mientras haya un modal abierto (declinación o acompañantes)
+    // Bloquear scroll de document.body mientras haya un modal abierto (declinación, acompañantes o popup RSVP)
     useEffect(() => {
         if (typeof document === 'undefined') return;
-        if (showDeclineModal || showPlusOnesModal) {
+        if (showDeclineModal || showPlusOnesModal || showRsvpModal) {
             const originalOverflow = document.body.style.overflow;
             document.body.style.overflow = 'hidden';
             return () => {
                 document.body.style.overflow = originalOverflow;
             };
         }
-    }, [showDeclineModal, showPlusOnesModal]);
+    }, [showDeclineModal, showPlusOnesModal, showRsvpModal]);
 
     const KEY_MAPPINGS: Record<string, string> = {
         showMap:          'show_map',
@@ -1107,8 +1108,8 @@ export default function InvitationPage() {
         }, 100);
     };
 
-    const downloadQR = useCallback(async (isDesktop: boolean = false) => {
-        const targetRef = isDesktop ? qrCardDesktopRef.current : qrCardRef.current;
+    const downloadQR = useCallback(async (isDesktop: boolean = false, isModal: boolean = false) => {
+        const targetRef = isModal ? qrCardModalRef.current : (isDesktop ? qrCardDesktopRef.current : qrCardRef.current);
         if (!targetRef || !event) return;
         
         try {
@@ -3208,6 +3209,10 @@ export default function InvitationPage() {
     const sectionQueue = buildSectionQueue(planTier, cfg as Record<string, unknown>, savedOrder, effectiveEventCategory);
 
     const scrollToSection = (id: string) => {
+        if (STORY_THEMES.includes(cfg?.theme) && id === 'rsvp') {
+            setShowRsvpModal(true);
+            return;
+        }
         const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -3290,7 +3295,19 @@ export default function InvitationPage() {
             return <KidsLayeredHero key="hero" theme={cfg.theme} event={event} cfg={cfg} countdown={countdown} labels={labels} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
         }
         if (STORY_THEMES.includes(cfg.theme)) {
-            return <HaciendaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
+            return (
+                <HaciendaHero
+                    key="hero"
+                    event={event}
+                    cfg={cfg}
+                    countdown={countdown}
+                    heroImageUrl={heroImageUrl}
+                    scrollToSection={scrollToSection}
+                    onOpenRsvp={() => setShowRsvpModal(true)}
+                    onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined}
+                />
+            );
+        }
         }
         if (cfg.theme === 'dulce-espera') {
             return <DulceEsperaHero key="hero" event={event} cfg={cfg} countdown={countdown} heroImageUrl={heroImageUrl} scrollToSection={scrollToSection} onEditHero={isAdminMode ? () => setEditingSection('hero') : undefined} />;
@@ -3934,16 +3951,45 @@ export default function InvitationPage() {
         return (
         <section id="rsvp" key="rsvp" className="py-16 bg-[var(--section-bg)]">
             <div className="max-w-5xl mx-auto px-6">
-                {STORY_THEMES.includes(cfg.theme) && !buzonOpen && (
+                {STORY_THEMES.includes(cfg.theme) && (
                     <div className="ha-buzon-wrap">
                         <h3 className="text-4xl font-serif">Confirma tu asistencia</h3>
-                        <img src={storyAsset(cfg.theme, buzonAnim ? 'buzon-abierto' : 'buzon-cerrado')} alt="Buzón: toca para confirmar" className="ha-buzon" role="button" tabIndex={0}
-                            onClick={() => { if (buzonAnim) return; setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); }}
-                            onKeyDown={(e) => { if (e.key === 'Enter') { setBuzonAnim(true); setTimeout(() => setBuzonOpen(true), 900); } }} />
+                        <img 
+                            src={storyAsset(cfg.theme, buzonAnim ? 'buzon-abierto' : 'buzon-cerrado')} 
+                            alt={cfg.theme === 'rosas' ? "Jaula: toca para confirmar" : "Buzón: toca para confirmar"}
+                            className="ha-buzon" 
+                            role="button" 
+                            tabIndex={0}
+                            onClick={() => { 
+                                if (buzonAnim) return; 
+                                setBuzonAnim(true); 
+                                setTimeout(() => {
+                                    setBuzonAnim(false);
+                                    setShowRsvpModal(true);
+                                }, 700); 
+                            }}
+                            onKeyDown={(e) => { 
+                                if (e.key === 'Enter') { 
+                                    setBuzonAnim(true); 
+                                    setTimeout(() => {
+                                        setBuzonAnim(false);
+                                        setShowRsvpModal(true);
+                                    }, 700); 
+                                } 
+                            }} 
+                        />
                         <p className="ha-buzon-hint">{cfg.theme === 'rosas' ? 'Toca la jaula para responder' : 'Toca el buzón para responder'}</p>
+                        <button
+                            type="button"
+                            onClick={() => setShowRsvpModal(true)}
+                            className="ha-btn-confirm mt-4 inline-flex items-center justify-center px-8 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest cursor-pointer shadow-md hover:scale-105 active:scale-95 transition-transform"
+                            style={{ background: buttonColor, color: buttonContrast }}
+                        >
+                            Confirmar Asistencia
+                        </button>
                     </div>
                 )}
-                <div className={`invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center ${STORY_THEMES.includes(cfg.theme) ? (buzonOpen ? 'ha-rsvp-in' : 'ha-hide') : ''}`}>
+                <div className="invitation-rsvp-grid grid lg:grid-cols-2 gap-12 items-center" style={STORY_THEMES.includes(cfg.theme) ? { display: 'none' } : undefined}>
                     <div>
                         {guest && (
                             <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
@@ -4233,6 +4279,249 @@ export default function InvitationPage() {
                                 Regresar
                             </button>
                         </div>
+                    </div>
+                </div>,
+                document.body
+            )}
+
+            {/* Modal Popup RSVP (Hacienda / Popup) */}
+            {showRsvpModal && typeof document !== 'undefined' && createPortal(
+                <div 
+                    className={`theme-${themeName} fixed inset-0 z-[9990] flex items-center justify-center p-4 bg-black/65 backdrop-blur-xs animate-in fade-in duration-200`}
+                    style={{ ...globalStyles, position: 'fixed', inset: 0, zIndex: 9990 }}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowRsvpModal(false);
+                    }}
+                >
+                    <div 
+                        className="ha-rsvp-modal-box relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl animate-in zoom-in-95 duration-200"
+                        style={{ backgroundColor: cardBg || '#FFFDF8' }}
+                    >
+                        <button
+                            type="button"
+                            onClick={() => setShowRsvpModal(false)}
+                            className="absolute top-4 right-4 p-2 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-100/70 transition-colors z-20 cursor-pointer"
+                            aria-label="Cerrar modal de confirmación"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+
+                        {guest && (
+                            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-700 pr-8">
+                                <span className="inline-block px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-black uppercase tracking-widest mb-2">
+                                    Invitación Personalizada
+                                </span>
+                                <h2 className="text-2xl sm:text-3xl font-serif text-[#1B2E1D]">¡Hola, {guest.name}!</h2>
+                            </div>
+                        )}
+
+                        {rsvpSuccess ? (
+                            <div className="animate-fade-in flex flex-col items-center text-center space-y-6 pt-2">
+                                <div className={`h-16 w-16 rounded-full flex items-center justify-center shadow-sm border ${
+                                    rsvpChoice === 'yes' ? 'bg-green-50 border-green-100' : 'bg-[var(--section-bg-alt)] border-[var(--border-color)]'
+                                }`}>
+                                    {rsvpChoice === 'yes' ? (
+                                        <CheckCircle2 className="h-8 w-8 text-green-500" />
+                                    ) : (
+                                        <X className="h-8 w-8 text-[var(--text-secondary)]" />
+                                    )}
+                                </div>
+
+                                <div>
+                                    <h2 className="text-3xl font-serif text-[var(--text-primary)] mb-1">
+                                        {rsvpChoice === 'yes' ? '¡Confirmado!' : '¡Anotado!'}
+                                    </h2>
+                                    <p className="text-[var(--text-secondary)] text-sm">
+                                        {rsvpChoice === 'yes' 
+                                            ? `Gracias ${guestName || 'por confirmar'}. Tu respuesta ha sido registrada.`
+                                            : `Lamentamos que no puedas acompañarnos, ${guestName || ''}. Se ha registrado tu respuesta.`}
+                                    </p>
+                                </div>
+
+                                {rsvpChoice === 'yes' && (
+                                    <div className="w-full flex flex-col items-center gap-6">
+                                        <div ref={qrCardModalRef} className="bg-[var(--section-bg-alt)] border border-[var(--border-color)] rounded-2xl p-6 flex flex-col items-center gap-4 w-full max-w-xs shadow-md">
+                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)]">Tu pase de entrada</p>
+                                            <div className="bg-white p-3 rounded-xl shadow-sm border border-stone-100">
+                                                <QRCodeCanvas
+                                                    value={`${window.location.origin}/i/${slug}?t=${guestToken || guest?.id}`}
+                                                    size={180}
+                                                    level="M"
+                                                    includeMargin={false}
+                                                />
+                                            </div>
+                                            <p className="text-[10px] text-[var(--text-secondary)] text-center">Muestra este código en la entrada del evento</p>
+                                            <button onClick={() => downloadQR(false, true)} className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors border border-[var(--card-border)] hover:border-stone-400 rounded-xl px-4 py-2 cursor-pointer">
+                                                <Download className="h-3.5 w-3.5" /> Descargar QR
+                                            </button>
+                                        </div>
+
+                                        <div className="w-full max-w-xs space-y-2">
+                                            <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] mb-3 text-center">Agendar en mi calendario</p>
+                                            <a href={generateGoogleCalendarLink()} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
+                                                <Calendar className="h-3.5 w-3.5" /> Google Calendar
+                                            </a>
+                                            <button type="button" onClick={handleDownloadICal} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[var(--card-border)] hover:border-stone-400 hover:bg-[var(--section-bg-alt)] transition-all text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text-secondary)] cursor-pointer">
+                                                <Calendar className="h-3.5 w-3.5" /> iCal / Apple / Outlook
+                                            </button>
+                                        </div>
+
+                                        {isConfirmaActive && (
+                                            <div className="w-full max-w-xs p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-center space-y-2">
+                                                <p className="text-[11px] font-medium text-[var(--text-secondary)]">
+                                                    ¿Deseas tener tu pase a la mano y recibir recordatorios 48 hrs antes?
+                                                </p>
+                                                <a
+                                                    href={`https://wa.me/${cleanBusinessNumber}?text=${encodeURIComponent(`Hola! Ya confirmé mi asistencia a ${eventTitle} y autorizo recibir mi pase digital y recordatorios [ref:${guestRefToken}]`)}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="w-full py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all"
+                                                >
+                                                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                                    </svg>
+                                                    <span>Enviar pase a mi WhatsApp</span>
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {!guestToken && (
+                                    <button onClick={() => setRsvpSuccess(false)} className="text-[10px] uppercase tracking-[0.2em] font-bold text-stone-400 hover:text-[var(--text-secondary)] transition-colors pt-2 cursor-pointer">
+                                        MODIFICAR RESPUESTA
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="space-y-6 pt-2">
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl sm:text-3xl font-serif font-light text-[var(--text-primary)]">Confirma tu asistencia</h3>
+                                    {event.rsvp_deadline && (
+                                        <p className="text-xs text-[var(--text-secondary)]">
+                                            Por favor confirma tu asistencia antes del {format(new Date(event.rsvp_deadline), "dd 'de' MMMM 'de' yyyy", { locale: es })}
+                                        </p>
+                                    )}
+                                    {cfg.rsvp_notes && (
+                                        <p className="text-xs text-[var(--text-secondary)] italic whitespace-pre-line">
+                                            {cfg.rsvp_notes}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {isConfirmaActive && guestRefToken && (
+                                    <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center text-white shrink-0 shadow-sm">
+                                                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xs font-bold text-[var(--text-primary)]">Invitto Confirma</h4>
+                                                <p className="text-[10px] text-[var(--text-secondary)]">¿Prefieres confirmar por WhatsApp? Te guía en segundos.</p>
+                                            </div>
+                                        </div>
+                                        <a
+                                            href={whatsappDeepLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-2 w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all"
+                                        >
+                                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                            </svg>
+                                            Confirmar por WhatsApp
+                                        </a>
+                                        <div className="relative flex py-2 items-center">
+                                            <div className="flex-grow border-t border-[var(--border-color)] opacity-60"></div>
+                                            <span className="flex-shrink mx-3 text-[9px] text-[var(--text-secondary)] uppercase tracking-wider font-bold">o confirma en el formulario</span>
+                                            <div className="flex-grow border-t border-[var(--border-color)] opacity-60"></div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-6">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--text-secondary)]">Nombre Completo</label>
+                                        <input 
+                                            required 
+                                            type="text" 
+                                            value={guestName} 
+                                            onChange={(e) => setGuestName(e.target.value)} 
+                                            placeholder="Tu nombre" 
+                                            disabled={submitting} 
+                                            className="w-full bg-transparent border-b border-[var(--card-border)] py-2.5 focus:border-stone-400 outline-none transition-colors font-light text-lg text-[var(--text-primary)] placeholder:text-stone-400" 
+                                            readOnly={!!guest && !!guestToken} 
+                                        />
+                                    </div>
+
+                                    {(!guest || guest.max_plus_ones > 0) && (
+                                        <div className="flex flex-col gap-4">
+                                            <label className="flex items-start gap-4 cursor-pointer group">
+                                                <div className="relative flex items-center justify-center mt-1">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={isAccompanied} 
+                                                        onChange={(e) => { 
+                                                            const checked = e.target.checked; 
+                                                            setIsAccompanied(checked); 
+                                                            if (checked) setShowPlusOnesModal(true); 
+                                                        }} 
+                                                        className="peer h-5 w-5 rounded-md border-2 border-[var(--card-border)] checked:bg-[#1B2E1D] checked:border-[#1B2E1D] transition-all appearance-none cursor-pointer" 
+                                                    />
+                                                    <X className="absolute h-3.5 w-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none rotate-45" />
+                                                </div>
+                                                <div className="flex flex-col gap-0.5">
+                                                    <span className="text-xs font-black uppercase tracking-widest text-[#1B2E1D] group-hover:text-[var(--text-primary)] transition-colors">
+                                                        {guest ? `CONFIRMAR ACOMPAÑANTES (TOTAL: ${(guest.max_plus_ones || 0) + 1} PERSONAS)` : `CONFIRMAR ACOMPAÑANTES`}
+                                                    </span>
+                                                    {isAccompanied && (
+                                                        <div onClick={(e) => { e.preventDefault(); setShowPlusOnesModal(true); }} className="text-[10px] text-[var(--text-secondary)] uppercase tracking-widest font-medium hover:text-[#BD7474] transition-colors cursor-pointer">
+                                                            {adultsCount} Adultos, {kidsCount} Niños • <span className="underline underline-offset-2">Editar</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    {error && <p className="text-red-500 text-xs font-semibold bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
+
+                                    <div className="space-y-3 pt-2">
+                                        {isWhatsAppRsvpVisible && (
+                                            <label className="flex items-start gap-3 cursor-pointer group p-3 rounded-xl bg-[var(--section-bg-alt)] border border-[var(--border-color)]">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={whatsappOptIn}
+                                                    onChange={(e) => setWhatsappOptIn(e.target.checked)}
+                                                    className="mt-0.5 h-4 w-4 rounded border-stone-300 text-[#25D366] focus:ring-[#25D366] cursor-pointer"
+                                                />
+                                                <span className="text-xs text-[var(--text-secondary)] leading-snug">
+                                                    Deseo recibir mi pase digital y recordatorios de la celebración por WhatsApp
+                                                </span>
+                                            </label>
+                                        )}
+
+                                        <button 
+                                            onClick={() => handleRsvp('yes')} 
+                                            disabled={submitting} 
+                                            className="w-full h-14 rounded-2xl text-[var(--button-contrast)] font-bold text-xs uppercase tracking-[0.25em] transition-all disabled:opacity-50 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center subtle-shimmer cursor-pointer" 
+                                            style={{ background: buttonColor, color: buttonContrast }}
+                                        >
+                                            {submitting ? 'PROCESANDO...' : 'SÍ, CONFIRMAR ASISTENCIA'}
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowDeclineModal(true)} 
+                                            disabled={submitting} 
+                                            className="w-full h-10 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold text-[10px] uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                                        >
+                                            No podré asistir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>,
                 document.body

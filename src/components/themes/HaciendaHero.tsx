@@ -18,6 +18,7 @@ interface Props {
     heroImageUrl: string | null;
     scrollToSection: (id: string) => void;
     onEditHero?: () => void;
+    onOpenRsvp?: () => void;
 }
 
 export const STORY_THEMES = ['hacienda', 'rosas'];
@@ -50,7 +51,7 @@ function calendarLink(event: any, date: Date | null) {
     return `https://calendar.google.com/calendar/render?${q.toString()}`;
 }
 
-export default function HaciendaHero({ event, cfg, countdown, scrollToSection, onEditHero }: Props) {
+export default function HaciendaHero({ event, cfg, countdown, scrollToSection, onEditHero, onOpenRsvp }: Props) {
     const skin = storySkin(cfg?.theme);
     const HA = (f: string) => storyAsset(skin, f);
     const rootRef = useRef<HTMLElement>(null);
@@ -189,7 +190,7 @@ export default function HaciendaHero({ event, cfg, countdown, scrollToSection, o
                 <p className="ha-body ha-save-sub">La cuenta regresiva para nuestro día favorito ya comenzó.</p>
                 <div className="ha-actions">
                     {calUrl && <a className="ha-btn" href={calUrl} target="_blank" rel="noopener noreferrer">Agregar al calendario</a>}
-                    <button type="button" className="ha-btn ha-btn--solid" onClick={() => scrollToSection('rsvp')}>Confirmar asistencia</button>
+                    <button type="button" className="ha-btn ha-btn--solid" onClick={() => { if (onOpenRsvp) onOpenRsvp(); else scrollToSection('rsvp'); }}>Confirmar asistencia</button>
                 </div>
                 {address && <p className="ha-caps ha-save-addr">{venue}{venue && address ? ' · ' : ''}{address}</p>}
                 <img className="ha-cenefa" src={HA('cenefa')} alt="" />
