@@ -317,6 +317,7 @@ export default function EnvelopeIntro({
         'salvia-eucalipto': '#6F7F62',
         'malva-empolvado': '#8E5F71',
         'hacienda': '#C4704F',
+        'rosas': '#7A2E3A',
         'dulcelandia': '#F0679B',
         'tienda-dulces': '#EF5D93',
         'pueblo-papel': '#6F7F62',

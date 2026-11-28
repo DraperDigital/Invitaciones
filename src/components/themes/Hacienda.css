@@ -1,8 +1,29 @@
 /* ================= Hacienda Bugambilia · boda ================= */
-.ha, .theme-hacienda {
+/* Recursos por estilo: Hacienda (por defecto) y Rosas */
+.ha, :is(.theme-hacienda, .theme-rosas) {
+  --ha-pattern: url('/images/themes/hacienda/talavera.webp');
+  --ha-marco-top: url('/images/themes/hacienda/marco-top.webp'); --ha-top-ar: 3.53;
+  --ha-marco-bot: url('/images/themes/hacienda/marco-bot.webp'); --ha-bot-ar: 4.545;
+  --ha-farol: url('/images/themes/hacienda/farol.webp');
+  --ha-regalo: url('/images/themes/hacienda/regalo.webp');
+  --ha-papel-picado: url('/images/themes/hacienda/papel-picado.webp'); --ha-picado-ar: 5.114;
+  --ha-cobalt-soft: rgba(47,79,143,.35); --ha-side: #edd9cd;
+}
+.ha--rosas, .theme-rosas {
+  --ha-pattern: url('/images/themes/rosas/talavera.webp');
+  --ha-marco-top: url('/images/themes/rosas/marco-top.webp'); --ha-top-ar: 3.659;
+  --ha-marco-bot: url('/images/themes/rosas/marco-bot.webp'); --ha-bot-ar: 6.618;
+  --ha-farol: url('/images/themes/rosas/farol.webp');
+  --ha-regalo: url('/images/themes/rosas/regalo.webp');
+  --ha-papel-picado: url('/images/themes/rosas/papel-picado.webp'); --ha-picado-ar: 3.381;
+  --ha-ivory: #f8f2ea; --ha-cantera: #e6d3c4; --ha-cobalt: #6e2433; --ha-cobalt-soft: rgba(110,36,51,.3);
+  --ha-terra: #7a2e3a; --ha-magenta: #b5707a; --ha-ink: #4a2028; --ha-soft: #6f4b4f; --ha-gold: #b8924e; --ha-side: #eadcc6;
+}
+
+.ha, :is(.theme-hacienda, .theme-rosas) {
   --ha-ivory: #f7f1e6; --ha-cantera: #e8cfc0; --ha-cobalt: #2f4f8f; --ha-terra: #c4704f;
   --ha-magenta: #b8366a; --ha-ink: #4a3328; --ha-soft: #7a5d4e; --ha-gold: #b8924e;
-  --ha-tile: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(247,241,230,.93), rgba(247,241,230,.7) 60%, rgba(247,241,230,.45)), url('/images/themes/hacienda/talavera.webp') 0 0 / 300px repeat, #f4efe6;
+  --ha-tile: radial-gradient(ellipse 70% 55% at 50% 50%, rgba(247,241,230,.93), rgba(247,241,230,.7) 60%, rgba(247,241,230,.45)), var(--ha-pattern) 0 0 / 300px repeat, #f4efe6;
   --ha-paper: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255,252,246,.6), rgba(232,207,192,.35) 100%), #f8f1e6;
 }
 .ha { position: relative; color: var(--ha-ink); font-family: 'Cormorant Garamond', Georgia, serif; overflow: hidden; }
@@ -63,17 +84,17 @@
 .is-in .ha-pop { opacity: 1; translate: 0 0; }
 
 /* Tarjeta con arco de cantera arriba y repisa abajo */
-.ha-card, .theme-hacienda .ha-frame {
+.ha-card, :is(.theme-hacienda, .theme-rosas) .ha-frame {
   position: relative; max-width: 420px; margin: 0 auto; padding: min(32vw, 128px) 30px min(27vw, 104px);
   background: #fcf8f0; border-radius: 4px;
-  box-shadow: inset 9px 0 0 #edd9cd, inset -9px 0 0 #edd9cd, inset 11px 0 0 #fcf8f0, inset -11px 0 0 #fcf8f0, inset 12px 0 0 rgba(184,146,78,.35), inset -12px 0 0 rgba(184,146,78,.35), 0 28px 44px -26px rgba(74,51,40,.55);
+  box-shadow: inset 9px 0 0 var(--ha-side), inset -9px 0 0 var(--ha-side), inset 11px 0 0 #fcf8f0, inset -11px 0 0 #fcf8f0, inset 12px 0 0 rgba(184,146,78,.35), inset -12px 0 0 rgba(184,146,78,.35), 0 28px 44px -26px rgba(74,51,40,.55);
 }
-.ha-card::before, .ha-card::after, .theme-hacienda .ha-frame::before, .theme-hacienda .ha-frame::after {
+.ha-card::before, .ha-card::after, :is(.theme-hacienda, .theme-rosas) .ha-frame::before, :is(.theme-hacienda, .theme-rosas) .ha-frame::after {
   content: ''; position: absolute; left: -5%; right: -5%; background: center / 100% 100% no-repeat; pointer-events: none; z-index: 2;
 }
-.ha-card::before, .theme-hacienda .ha-frame::before { top: 0; aspect-ratio: 3.53; background-image: url('/images/themes/hacienda/marco-top.webp'); translate: 0 -38%; }
-.ha-card::after, .theme-hacienda .ha-frame::after { bottom: 0; aspect-ratio: 4.545; background-image: url('/images/themes/hacienda/marco-bot.webp'); translate: 0 30%; }
-.ha-card > *, .theme-hacienda .ha-frame > * { position: relative; z-index: 3; }
+.ha-card::before, :is(.theme-hacienda, .theme-rosas) .ha-frame::before { top: 0; aspect-ratio: var(--ha-top-ar); background-image: var(--ha-marco-top); translate: 0 -38%; }
+.ha-card::after, :is(.theme-hacienda, .theme-rosas) .ha-frame::after { bottom: 0; aspect-ratio: var(--ha-bot-ar); background-image: var(--ha-marco-bot); translate: 0 30%; }
+.ha-card > *, :is(.theme-hacienda, .theme-rosas) .ha-frame > * { position: relative; z-index: 3; }
 
 .ha-big { padding-top: 120px !important; padding-bottom: 110px !important; }
 .ha-bug-l { top: -6px; left: -18px; width: 132px; transform-origin: 0 0; animation: ha-sway 6s ease-in-out infinite; }
@@ -86,66 +107,66 @@
 .ha-picado { top: -4px; left: -4%; width: 108%; transform-origin: 50% 0; animation: ha-sway-s 5s ease-in-out infinite; }
 .ha-save-date { font-size: 26px; font-weight: 600; color: var(--ha-terra); margin: -4px 0 26px; }
 .ha-count { display: flex; justify-content: center; gap: 10px; margin: 0 auto 20px; }
-.ha-count-box { width: 70px; padding: 12px 0 10px; background: #fcf8f0; border: 2px solid var(--ha-cobalt); outline: 4px solid #fcf8f0; box-shadow: 0 0 0 5px rgba(47,79,143,.35), 0 14px 22px -14px rgba(47,79,143,.6); border-radius: 3px; }
+.ha-count-box { width: 70px; padding: 12px 0 10px; background: #fcf8f0; border: 2px solid var(--ha-cobalt); outline: 4px solid #fcf8f0; box-shadow: 0 0 0 5px var(--ha-cobalt-soft), 0 14px 22px -14px var(--ha-cobalt-soft); border-radius: 3px; }
 .ha-count-box b { display: block; font-size: 34px; font-weight: 600; line-height: 1; color: var(--ha-cobalt); }
 .ha-count-box span { font: 600 9px 'Montserrat', sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--ha-soft); }
 .ha-save-sub { font-size: 17px; }
 .ha-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 4px 0 16px; }
-.ha-btn, .theme-hacienda .invitation-content a.ha-btn { display: inline-block; padding: 12px 22px; border: 1.5px solid var(--ha-terra); border-radius: 999px; color: var(--ha-terra); font: 600 10px 'Montserrat', sans-serif; letter-spacing: .22em; text-transform: uppercase; background: rgba(252,248,240,.8); }
+.ha-btn, :is(.theme-hacienda, .theme-rosas) .invitation-content a.ha-btn { display: inline-block; padding: 12px 22px; border: 1.5px solid var(--ha-terra); border-radius: 999px; color: var(--ha-terra); font: 600 10px 'Montserrat', sans-serif; letter-spacing: .22em; text-transform: uppercase; background: rgba(252,248,240,.8); }
 .ha-btn--solid { background: var(--ha-terra); color: #fff8ee; box-shadow: 0 10px 18px -10px rgba(196,112,79,.8); }
 .ha-save-addr { margin-bottom: 28px; }
 .ha-cenefa { display: block; width: min(92%, 520px); margin: 0 auto; height: auto; }
 
 /* ================= Módulos ================= */
-.theme-hacienda .invitation-content section:not(#hero) { position: relative; border: 0 !important; font-family: 'Cormorant Garamond', Georgia, serif; }
-.theme-hacienda.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts, #countdown, #guest_welcome) { background: var(--ha-tile) !important; }
-.theme-hacienda.theme-hacienda .invitation-content section:is(#itinerary, #hotels, #rsvp, #message, #gallery) { background: var(--ha-paper) !important; }
-.theme-hacienda .invitation-content section:not(#hero) h2,
-.theme-hacienda .invitation-content section:not(#hero) h3 { font-family: 'Pinyon Script', cursive !important; font-weight: 400 !important; color: var(--ha-ink) !important; font-size: clamp(44px, 12vw, 62px) !important; line-height: 1.1 !important; letter-spacing: 0 !important; }
-.theme-hacienda .invitation-content section:not(#hero) h4 { font-family: 'Cormorant Garamond', Georgia, serif !important; color: var(--ha-ink) !important; font-weight: 600 !important; }
-.theme-hacienda .invitation-content section:not(#hero) p { color: var(--ha-soft); }
-.theme-hacienda .invitation-content section:not(#hero) button[class*="bg-"],
-.theme-hacienda .invitation-content section:not(#hero) a[class*="bg-"] { background: var(--ha-terra) !important; color: #fff8ee !important; border-color: var(--ha-terra) !important; border-radius: 999px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) { position: relative; border: 0 !important; font-family: 'Cormorant Garamond', Georgia, serif; }
+:is(.theme-hacienda, .theme-rosas):is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts, #countdown, #guest_welcome) { background: var(--ha-tile) !important; }
+:is(.theme-hacienda, .theme-rosas):is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#itinerary, #hotels, #rsvp, #message, #gallery) { background: var(--ha-paper) !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) h2,
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) h3 { font-family: 'Pinyon Script', cursive !important; font-weight: 400 !important; color: var(--ha-ink) !important; font-size: clamp(44px, 12vw, 62px) !important; line-height: 1.1 !important; letter-spacing: 0 !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) h4 { font-family: 'Cormorant Garamond', Georgia, serif !important; color: var(--ha-ink) !important; font-weight: 600 !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) p { color: var(--ha-soft); }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) button[class*="bg-"],
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:not(#hero) a[class*="bg-"] { background: var(--ha-terra) !important; color: #fff8ee !important; border-color: var(--ha-terra) !important; border-radius: 999px !important; }
 
 /* Tarjetas de módulos: mismo marco de cantera */
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"] {
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"] {
   position: relative; overflow: visible !important; border: 0 !important; border-radius: 4px !important;
   background: #fcf8f0 !important; padding-top: min(32vw, 128px) !important; padding-bottom: min(27vw, 104px) !important; margin-top: 30px; max-width: 460px; margin-left: auto; margin-right: auto;
-  box-shadow: inset 9px 0 0 #edd9cd, inset -9px 0 0 #edd9cd, inset 11px 0 0 #fcf8f0, inset -11px 0 0 #fcf8f0, inset 12px 0 0 rgba(184,146,78,.35), inset -12px 0 0 rgba(184,146,78,.35), 0 28px 44px -26px rgba(74,51,40,.55) !important;
+  box-shadow: inset 9px 0 0 var(--ha-side), inset -9px 0 0 var(--ha-side), inset 11px 0 0 #fcf8f0, inset -11px 0 0 #fcf8f0, inset 12px 0 0 rgba(184,146,78,.35), inset -12px 0 0 rgba(184,146,78,.35), 0 28px 44px -26px rgba(74,51,40,.55) !important;
 }
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::before,
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::after {
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::before,
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::after {
   content: ''; position: absolute; left: -5%; right: -5%; background: center / 100% 100% no-repeat; pointer-events: none; z-index: 2;
 }
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::before { top: 0; aspect-ratio: 3.53; translate: 0 -38%; background-image: url('/images/themes/hacienda/marco-top.webp'); }
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::after { bottom: 0; aspect-ratio: 4.545; translate: 0 30%; background-image: url('/images/themes/hacienda/marco-bot.webp'); }
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe) { padding: 10px !important; }
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe)::before,
-.theme-hacienda .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe)::after { display: none; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::before { top: 0; aspect-ratio: var(--ha-top-ar); translate: 0 -38%; background-image: var(--ha-marco-top); }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]::after { bottom: 0; aspect-ratio: var(--ha-bot-ar); translate: 0 30%; background-image: var(--ha-marco-bot); }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe) { padding: 10px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe)::before,
+:is(.theme-hacienda, .theme-rosas) .invitation-content section:is(#location, #dress_code, #gifts) [class*="bg-[var(--card-bg)]"]:has(iframe)::after { display: none; }
 
 /* Ubicación: farol colgando */
-.theme-hacienda .invitation-content #location::before { content: ''; position: absolute; top: 0; right: 9%; width: 46px; height: 92px; background: url('/images/themes/hacienda/farol.webp') center top / contain no-repeat; transform-origin: 50% 0; animation: ha-sway 4.4s ease-in-out infinite; pointer-events: none; }
-.theme-hacienda .invitation-content #location > div { position: relative; z-index: 1; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #location::before { content: ''; position: absolute; top: 0; right: 9%; width: 46px; height: 92px; background: var(--ha-farol) center top / contain no-repeat; transform-origin: 50% 0; animation: ha-sway 4.4s ease-in-out infinite; pointer-events: none; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #location > div { position: relative; z-index: 1; }
 
 /* Itinerario con íconos ilustrados */
-.theme-hacienda .invitation-content #itinerary .timeline-line { background: repeating-linear-gradient(180deg, var(--ha-cantera) 0 6px, transparent 6px 12px) !important; width: 2px !important; }
-.theme-hacienda .invitation-content #itinerary .timeline-dot { width: 64px !important; height: 64px !important; left: -4px; background: #fcf8f0 !important; border: 2px solid var(--ha-cantera) !important; box-shadow: 0 8px 16px -8px rgba(74,51,40,.45) !important; }
-.theme-hacienda .invitation-content #itinerary .timeline-dot img { width: 46px !important; height: 46px !important; }
-.theme-hacienda .invitation-content #itinerary .timeline-item > div { background: rgba(252,248,240,.85) !important; border: 1px solid rgba(232,207,192,.9) !important; border-radius: 6px !important; }
-.theme-hacienda .invitation-content #itinerary .timeline-item span { background: transparent !important; color: var(--ha-terra) !important; padding: 0 !important; font-family: 'Montserrat', sans-serif; }
-@media (min-width: 768px) { .theme-hacienda .invitation-content #itinerary .timeline-dot { left: 50%; } }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-line { background: repeating-linear-gradient(180deg, var(--ha-cantera) 0 6px, transparent 6px 12px) !important; width: 2px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-dot { width: 64px !important; height: 64px !important; left: -4px; background: #fcf8f0 !important; border: 2px solid var(--ha-cantera) !important; box-shadow: 0 8px 16px -8px rgba(74,51,40,.45) !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-dot img { width: 46px !important; height: 46px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-item > div { background: rgba(252,248,240,.85) !important; border: 1px solid rgba(232,207,192,.9) !important; border-radius: 6px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-item span { background: transparent !important; color: var(--ha-terra) !important; padding: 0 !important; font-family: 'Montserrat', sans-serif; }
+@media (min-width: 768px) { :is(.theme-hacienda, .theme-rosas) .invitation-content #itinerary .timeline-dot { left: 50%; } }
 
 /* Vestimenta y regalos */
 .ha-dress-img { display: block; width: 150px; margin: 0 auto 10px; }
 .ha-paleta { display: block; width: 120px; margin: 18px auto 0; }
-.theme-hacienda .invitation-content #gifts [class*="bg-[var(--card-bg)]"] > svg:first-child { display: none; }
-.theme-hacienda .invitation-content #gifts [class*="bg-[var(--card-bg)]"] > svg:first-child + * { margin-top: 0; }
-.theme-hacienda .invitation-content #gifts::after { content: ''; position: absolute; right: 6%; bottom: 28px; width: 84px; height: 84px; background: url('/images/themes/hacienda/regalo.webp') center / contain no-repeat; pointer-events: none; animation: ha-bob2 3.6s ease-in-out infinite; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #gifts [class*="bg-[var(--card-bg)]"] > svg:first-child { display: none; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #gifts [class*="bg-[var(--card-bg)]"] > svg:first-child + * { margin-top: 0; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #gifts::after { content: ''; position: absolute; right: 6%; bottom: 28px; width: 84px; height: 84px; background: var(--ha-regalo) center / contain no-repeat; pointer-events: none; animation: ha-bob2 3.6s ease-in-out infinite; }
 @keyframes ha-bob2 { 0%,100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 
 /* Hospedaje */
-.theme-hacienda .invitation-content #hotels svg:first-child { display: none; }
-.theme-hacienda .invitation-content #hotels .invitation-hotels-grid > div { background: #fcf8f0 !important; border: 1px solid var(--ha-cantera) !important; border-top: 6px solid var(--ha-cobalt) !important; border-radius: 6px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #hotels svg:first-child { display: none; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #hotels .invitation-hotels-grid > div { background: #fcf8f0 !important; border: 1px solid var(--ha-cantera) !important; border-top: 6px solid var(--ha-cobalt) !important; border-radius: 6px !important; }
 
 /* Confirmación: buzón */
 .ha-buzon { display: block; margin: 0 auto 8px; width: min(62vw, 250px); cursor: pointer; filter: drop-shadow(0 18px 18px rgba(74,51,40,.3)); transition: scale .3s ease; animation: ha-bob2 3.4s ease-in-out infinite; }
@@ -154,19 +175,19 @@
 .ha-buzon-wrap { text-align: center; padding: 10px 0 20px; }
 .ha-rsvp-in { animation: ha-rise .8s ease both; }
 @keyframes ha-rise { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
-.theme-hacienda .invitation-content #rsvp .invitation-rsvp-grid > div:first-child { background: #fcf8f0; border: 1px solid var(--ha-cantera); border-radius: 8px; padding: 26px 20px; box-shadow: 0 24px 40px -24px rgba(74,51,40,.5); }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #rsvp .invitation-rsvp-grid > div:first-child { background: #fcf8f0; border: 1px solid var(--ha-cantera); border-radius: 8px; padding: 26px 20px; box-shadow: 0 24px 40px -24px rgba(74,51,40,.5); }
 
 /* Cierre con papel picado */
-.theme-hacienda.theme-hacienda .invitation-closing { position: relative; background: var(--ha-tile) !important; padding-top: 150px !important; }
-.theme-hacienda .invitation-closing::after { content: ''; position: absolute; top: 0; left: 50%; width: min(108%, 760px); aspect-ratio: 5.114; translate: -50% 0; background: url('/images/themes/hacienda/papel-picado.webp') center top / contain no-repeat; transform-origin: 50% 0; animation: ha-sway-s 5s ease-in-out infinite; pointer-events: none; }
-.theme-hacienda.theme-hacienda .invitation-closing .invitation-closing-title { font-family: 'Pinyon Script', cursive !important; font-size: clamp(36px, 10vw, 52px) !important; color: var(--ha-ink) !important; }
+:is(.theme-hacienda, .theme-rosas):is(.theme-hacienda, .theme-rosas) .invitation-closing { position: relative; background: var(--ha-tile) !important; padding-top: 150px !important; }
+:is(.theme-hacienda, .theme-rosas) .invitation-closing::after { content: ''; position: absolute; top: 0; left: 50%; width: min(108%, 760px); aspect-ratio: var(--ha-picado-ar); translate: -50% 0; background: var(--ha-papel-picado) center top / contain no-repeat; transform-origin: 50% 0; animation: ha-sway-s 5s ease-in-out infinite; pointer-events: none; }
+:is(.theme-hacienda, .theme-rosas):is(.theme-hacienda, .theme-rosas) .invitation-closing .invitation-closing-title { font-family: 'Pinyon Script', cursive !important; font-size: clamp(36px, 10vw, 52px) !important; color: var(--ha-ink) !important; }
 
 @media (min-width: 900px) {
   .ha-scene:not(.ha-cover) { padding: 110px 40px 100px; }
   .ha-bug-l { width: 220px; left: 6%; } .ha-bug-r { width: 205px; right: 6%; }
   .ha-picado { left: 15%; width: 70%; }
 }
-@media (prefers-reduced-motion: reduce) { .ha *, .theme-hacienda * { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .ha *, :is(.theme-hacienda, .theme-rosas) * { animation: none !important; } }
 
 .ha-cover-date { font-size: 19px; }
 .ha .ha-cover-venue { white-space: normal !important; max-width: 220px; margin: 2px auto 0; }
@@ -174,10 +195,30 @@
 .ha .ha-names--sm { font-size: clamp(38px, 10vw, 50px) !important; }
 .ha .ha-cover-venue { max-width: 200px !important; letter-spacing: .1em !important; }
 /* Talavera como columnas a los lados y centro claro para leer */
-.ha, .theme-hacienda {
-  --ha-tile: linear-gradient(90deg, rgba(247,241,230,.35), rgba(247,241,230,.93) 14%, rgba(247,241,230,.93) 86%, rgba(247,241,230,.35)), url('/images/themes/hacienda/talavera.webp') 0 0 / 300px repeat, #f4efe6;
+.ha, :is(.theme-hacienda, .theme-rosas) {
+  --ha-tile: linear-gradient(90deg, rgba(247,241,230,.35), rgba(247,241,230,.93) 14%, rgba(247,241,230,.93) 86%, rgba(247,241,230,.35)), var(--ha-pattern) 0 0 / 300px repeat, #f4efe6;
 }
 @media (min-width: 900px) {
-  .ha, .theme-hacienda { --ha-tile: linear-gradient(90deg, rgba(247,241,230,.3), rgba(247,241,230,.93) 26%, rgba(247,241,230,.93) 74%, rgba(247,241,230,.3)), url('/images/themes/hacienda/talavera.webp') 0 0 / 340px repeat, #f4efe6; }
+  .ha, :is(.theme-hacienda, .theme-rosas) { --ha-tile: linear-gradient(90deg, rgba(247,241,230,.3), rgba(247,241,230,.93) 26%, rgba(247,241,230,.93) 74%, rgba(247,241,230,.3)), var(--ha-pattern) 0 0 / 340px repeat, #f4efe6; }
 }
-.theme-hacienda .invitation-content #location::before { top: 4px; right: 4%; }
+:is(.theme-hacienda, .theme-rosas) .invitation-content #location::before { top: 4px; right: 4%; }
+
+/* ===== Rosas: ajustes propios ===== */
+.ha--rosas, .theme-rosas {
+  --ha-tile: linear-gradient(90deg, rgba(248,242,234,.45), rgba(248,242,234,.94) 14%, rgba(248,242,234,.94) 86%, rgba(248,242,234,.45)), var(--ha-pattern) 0 0 / 280px repeat, #f6efe6;
+  --ha-paper: radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255,252,248,.6), rgba(216,163,166,.22) 100%), #f8f2ea;
+}
+@media (min-width: 900px) {
+  .ha--rosas, .theme-rosas { --ha-tile: linear-gradient(90deg, rgba(248,242,234,.4), rgba(248,242,234,.94) 26%, rgba(248,242,234,.94) 74%, rgba(248,242,234,.4)), var(--ha-pattern) 0 0 / 320px repeat, #f6efe6; }
+}
+.ha--rosas .ha-cover-txt { top: 34%; left: 15%; right: 15%; text-shadow: 0 0 8px rgba(252,246,238,.95); }
+.ha--rosas .ha-names { flex-direction: row !important; justify-content: center; align-items: baseline; gap: .18em; flex-wrap: wrap; font-size: clamp(40px, 11vw, 60px) !important; }
+.ha--rosas .ha-cover-pre { color: var(--ha-magenta); }
+.ha--rosas .ha-cover-date { margin-top: 18px; }
+.ha--rosas .ha-tap { color: #fff6ee; text-shadow: 0 1px 8px rgba(60,20,30,.8); }
+.ha--rosas .ha-picado { left: 8%; width: 84%; }
+@media (min-width: 900px) { .ha--rosas .ha-picado { left: 25%; width: 50%; } }
+#rsvp .invitation-rsvp-grid.ha-hide { display: none !important; }
+.ha--rosas .ha-cover-txt { top: 40%; }
+.ha--rosas .ha-names { font-size: clamp(34px, 9.6vw, 52px) !important; }
+.ha--rosas .ha-cover-pre { font-size: clamp(20px, 5.6vw, 28px); }

@@ -20,7 +20,9 @@ interface Props {
     onEditHero?: () => void;
 }
 
-export const HA = (f: string) => `/images/themes/hacienda/${f}.webp`;
+export const STORY_THEMES = ['hacienda', 'rosas'];
+export const storySkin = (theme?: string) => (theme === 'rosas' ? 'rosas' : 'hacienda');
+export const storyAsset = (theme: string | undefined, f: string) => `/images/themes/${storySkin(theme)}/${f}.webp`;
 const pad = (n: number) => String(Math.max(0, n || 0)).padStart(2, '0');
 
 type Stage = 'sobre' | 'sobre-open' | 'porton' | 'porton-open' | 'done';
@@ -49,6 +51,8 @@ function calendarLink(event: any, date: Date | null) {
 }
 
 export default function HaciendaHero({ event, cfg, countdown, scrollToSection, onEditHero }: Props) {
+    const skin = storySkin(cfg?.theme);
+    const HA = (f: string) => storyAsset(skin, f);
     const rootRef = useRef<HTMLElement>(null);
     const v1 = useRef<HTMLVideoElement>(null);
     const v2 = useRef<HTMLVideoElement>(null);
@@ -69,8 +73,8 @@ export default function HaciendaHero({ event, cfg, countdown, scrollToSection, o
     const address = event?.venue_address || '';
     const showCount = countdown && (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0);
     const calUrl = calendarLink(event, valid ? date : null);
-    const vid1 = cfg?.intro_video_sobre || '/videos/hacienda/sobre.mp4';
-    const vid2 = cfg?.intro_video_porton || '/videos/hacienda/porton.mp4';
+    const vid1 = cfg?.intro_video_sobre || `/videos/${skin}/sobre.mp4`;
+    const vid2 = cfg?.intro_video_porton || `/videos/${skin}/porton.mp4`;
     const introOn = stage !== 'done';
 
     // Bloquea el scroll mientras corre la apertura
@@ -109,7 +113,7 @@ export default function HaciendaHero({ event, cfg, countdown, scrollToSection, o
     const skip = () => setStage('done');
 
     return (
-        <section id="hero" ref={rootRef} className={`ha ${introOn ? 'is-intro' : 'is-ready'}`}>
+        <section id="hero" ref={rootRef} className={`ha ha--${skin} ${introOn ? 'is-intro' : 'is-ready'}`}>
             {onEditHero && (
                 <button type="button" onClick={onEditHero} className="ha-edit" aria-label="Editar portada"><Edit2 className="h-4 w-4" /></button>
             )}
@@ -143,7 +147,7 @@ export default function HaciendaHero({ event, cfg, countdown, scrollToSection, o
             {/* ── 1 · Portada ── */}
             <div className="ha-scene ha-cover">
                 <div className="ha-col">
-                    <img className="ha-full" src={HA('porton-abierto')} alt="Portón de la hacienda abierto" />
+                    <img className="ha-full" src={HA('porton-abierto')} alt="Portada" />
                     <div className="ha-cover-txt">
                         <p className="ha-script ha-cover-pre">Nos casamos</p>
                         <h1 className="ha-names">
