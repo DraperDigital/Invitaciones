@@ -2,6 +2,41 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import type { FeatureAccessResponse } from '../types/database.types';
 
+// Matriz Canónica de Fallback estricta (no hardcodea permisos permisivos, refleja la DB)
+function buildFallbackFeatures(planCode: string) {
+    const code = planCode.toLowerCase();
+    const isConcierge = code === 'concierge';
+    const isPremium = isConcierge || code === 'premium';
+    const isPro = isPremium || code === 'pro' || code === 'personalized' || code === 'personalizado';
+
+    return [
+        // Básicas (5)
+        { code: 'show_details', status: 'enabled', upgrade_plan: null },
+        { code: 'show_countdown', status: 'enabled', upgrade_plan: null },
+        { code: 'show_map', status: 'enabled', upgrade_plan: null },
+        { code: 'show_gallery', status: 'enabled', upgrade_plan: null },
+        { code: 'show_whatsapp_rsvp', status: 'enabled', upgrade_plan: null },
+
+        // Pro (8 adicionales -> 13)
+        { code: 'guest_dashboard', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'reminders_automatic', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'guest_import_excel', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'metrics_dashboard', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'qr_passes', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'access_control', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'table_management', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+        { code: 'background_music', status: isPro ? 'enabled' : 'disabled', upgrade_plan: isPro ? null : 'Pro' },
+
+        // Premium (2 adicionales -> 15)
+        { code: 'custom_domain', status: isPremium ? 'enabled' : 'disabled', upgrade_plan: isPremium ? null : 'Premium' },
+        { code: 'event_planning', status: isPremium ? 'enabled' : 'disabled', upgrade_plan: isPremium ? null : 'Premium' },
+
+        // Concierge (2 adicionales -> 17)
+        { code: 'smart_concierge', status: isConcierge ? 'enabled' : 'disabled', upgrade_plan: isConcierge ? null : 'Concierge' },
+        { code: 'confirma_whatsapp', status: isConcierge ? 'enabled' : 'disabled', upgrade_plan: isConcierge ? null : 'Concierge' }
+    ];
+}
+
 export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasico' | 'pro' | 'premium' | 'concierge') {
     const [isLoading, setIsLoading] = useState(true);
     const [access, setAccess] = useState<FeatureAccessResponse | null>(null);
@@ -12,28 +47,10 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         if (!eventId) {
             if (eventPlan) {
                 const planCode = eventPlan.toLowerCase();
-                const isPro = planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado';
-                const isPremiumOrPro = isPro || planCode === 'premium' || planCode === 'concierge';
-                const planName = planCode === 'concierge' ? 'Concierge' : planCode === 'premium' ? 'Premium' : isPro ? 'Pro' : 'Clásica';
+                const planName = planCode === 'concierge' ? 'Concierge' : planCode === 'premium' ? 'Premium' : (planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado') ? 'Pro' : 'Clásica';
                 setAccess({
                     plan: { code: planCode, name: planName },
-                    features: [
-                        { code: 'show_details', status: 'enabled' },
-                        { code: 'show_countdown', status: 'enabled' },
-                        { code: 'show_map', status: 'enabled' },
-                        { code: 'show_gallery', status: 'enabled' },
-                        { code: 'show_whatsapp_rsvp', status: 'enabled' },
-                        { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                        { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
-                    ]
+                    features: buildFallbackFeatures(planCode)
                 } as any);
             }
             setIsLoading(false);
@@ -43,28 +60,10 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         // MOCK MODE: use the actual plan passed in (from theme_config)
         if (!import.meta.env.VITE_SUPABASE_URL) {
             const plan = (eventPlan || 'clasico').toLowerCase();
-            const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
-            const isPremiumOrPro = isPro || plan === 'premium' || plan === 'concierge';
-            const planName = plan === 'concierge' ? 'Concierge' : plan === 'premium' ? 'Premium' : isPro ? 'Pro' : 'Clásica';
+            const planName = plan === 'concierge' ? 'Concierge' : plan === 'premium' ? 'Premium' : (plan === 'pro' || plan === 'personalized' || plan === 'personalizado') ? 'Pro' : 'Clásica';
             setAccess({
                 plan: { code: plan, name: planName },
-                features: [
-                    { code: 'show_details', status: 'enabled' },
-                    { code: 'show_countdown', status: 'enabled' },
-                    { code: 'show_map', status: 'enabled' },
-                    { code: 'show_gallery', status: 'enabled' },
-                    { code: 'show_whatsapp_rsvp', status: 'enabled' },
-                    { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                    { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
-                ]
+                features: buildFallbackFeatures(plan)
             } as any);
             setIsLoading(false);
             return;
@@ -109,7 +108,7 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                             .maybeSingle();
 
                         if (!eventError && eventData) {
-                            resolvedPlan = eventData.plan || eventData.theme_config?.plan || null;
+                            resolvedPlan = eventData.plan || eventData.theme_config?.plan || eventData.theme_config?.plan_tier || null;
                         }
                     }
 
@@ -130,7 +129,6 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                     // Default to most restrictive: 'clasico'
                     const planCode = (resolvedPlan || 'clasico').toLowerCase();
                     const isPro = planCode === 'pro' || planCode === 'personalized' || planCode === 'personalizado';
-                    const isPremiumOrPro = isPro || planCode === 'premium' || planCode === 'concierge';
                     const planName = planCode === 'concierge'
                         ? 'Concierge'
                         : planCode === 'premium'
@@ -144,32 +142,14 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
                             code: planCode,
                             name: planName
                         },
-                        features: [
-                            { code: 'show_details', status: 'enabled' },
-                            { code: 'show_countdown', status: 'enabled' },
-                            { code: 'show_map', status: 'enabled' },
-                            { code: 'show_gallery', status: 'enabled' },
-                            { code: 'show_whatsapp_rsvp', status: 'enabled' },
-                            { code: 'guest_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'reminders_automatic', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'guest_import_excel', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'metrics_dashboard', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'table_management', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'event_planning', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'access_control', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'qr_passes', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'confirma_whatsapp', status: isPremiumOrPro ? 'enabled' : 'disabled' },
-                            { code: 'background_music', status: isPremiumOrPro ? 'enabled' : 'disabled', upgrade_plan: 'Pro' }
-                        ]
+                        features: buildFallbackFeatures(planCode)
                     } as any);
                 } catch (fallbackErr) {
                     console.error('Fallback also failed:', fallbackErr);
                     // Absolute safe default: clasico (disabled)
                     setAccess({
                         plan: { code: 'clasico', name: 'Clásica' },
-                        features: [
-                            { code: 'event_planning', status: 'disabled' }
-                        ]
+                        features: buildFallbackFeatures('clasico')
                     } as any);
                     setError(err);
                 }
@@ -181,45 +161,24 @@ export function useFeatureAccess(eventId: string | undefined, eventPlan?: 'clasi
         fetchAccess();
     }, [eventId, eventPlan]);
 
+    // La ÚNICA fuente de verdad es lo que indica el RPC / base de datos
     const hasFeature = (featureCode: string): boolean => {
         if (!access) return false;
-        
-        const plan = access.plan?.code?.toLowerCase() || '';
-        const isPro = plan === 'pro' || plan === 'personalized' || plan === 'personalizado';
-        const isPremium = plan === 'premium' || plan === 'concierge';
-
-        // Premium or Concierge has access to EVERYTHING
-        if (isPremium) return true;
-
-        // Pro has access to specific dashboard features
-        const proFeatures = [
-            'metrics_dashboard', 
-            'guest_dashboard', 
-            'reminders_automatic', 
-            'guest_import_excel',
-            'table_management',
-            'event_planning',
-            'confirma_whatsapp'
-        ];
-        if (isPro && proFeatures.includes(featureCode)) return true;
-
         const feature = access.features?.find(f => f.code === featureCode);
         return feature?.status === 'enabled';
     };
 
     const getFeatureStatus = (featureCode: string): 'enabled' | 'locked' | 'limited' | 'not_found' => {
         if (!access) return 'not_found';
-        if (hasFeature(featureCode)) return 'enabled';
-        
         const feature = access.features?.find(f => f.code === featureCode);
         if (!feature) return 'not_found';
         return feature.status === 'enabled' ? 'enabled' : 'locked';
     };
 
     const getUpgradePlan = (featureCode: string): string | undefined => {
-        if (!access) return featureCode === 'background_music' ? 'Premium' : undefined;
+        if (!access) return 'Pro';
         const feature = access.features?.find(f => f.code === featureCode);
-        return feature?.upgrade_plan || (featureCode === 'background_music' ? 'Premium' : undefined);
+        return feature?.upgrade_plan || 'Pro';
     };
 
     return {

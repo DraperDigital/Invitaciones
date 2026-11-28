@@ -1428,7 +1428,10 @@ const EventRSVPs: React.FC = () => {
                         { id: 'reminders', label: 'Avisos', feature: 'reminders_automatic' },
                         { id: 'confirma', label: 'Confirma WhatsApp', feature: 'confirma_whatsapp' }
                     ].map(t => {
-                        const isLocked = t.feature ? !hasFeature(t.feature as any) : false;
+                        const hasWhatsAppAccess = hasFeature('confirma_whatsapp') || Boolean(confirmaSettings?.enabled || event?.theme_config?.confirma_whatsapp === true);
+                        const isLocked = t.feature === 'confirma_whatsapp'
+                            ? !hasWhatsAppAccess
+                            : (t.feature ? !hasFeature(t.feature as any) : false);
                         
                         return (
                             <button 
@@ -1445,7 +1448,11 @@ const EventRSVPs: React.FC = () => {
                                 } ${isLocked ? 'opacity-70 hover:opacity-100' : ''}`}
                             >
                                 {t.label}
-                                {isLocked && <span className="text-[9px] bg-stone-200 text-stone-700 font-bold px-1.5 py-0.5 rounded-full">PRO</span>}
+                                {isLocked && (
+                                    <span className="text-[9px] bg-stone-200 text-stone-700 font-bold px-1.5 py-0.5 rounded-full">
+                                        {t.feature === 'confirma_whatsapp' ? 'CONCIERGE' : 'PRO'}
+                                    </span>
+                                )}
                                 {activeTab === t.id && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#DF3B94]" />}
                             </button>
                         );
@@ -2521,7 +2528,7 @@ const EventRSVPs: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                             <h3 className="text-xl font-display font-extrabold text-[#222B38]">
-                                Esta función es del plan Pro
+                                {proModalFeature === 'confirma_whatsapp' ? 'Invitto Confirma WhatsApp' : 'Esta función es del plan Pro'}
                             </h3>
                             <p className="text-sm text-stone-600 leading-relaxed">
                                 {proModalFeature === 'metrics_dashboard' && 'Consulta analíticas detalladas, tasa de confirmación por grupo y tiempos de respuesta con el plan Pro.'}
@@ -2530,7 +2537,7 @@ const EventRSVPs: React.FC = () => {
                                 {proModalFeature === 'reminders_automatic' && 'Envía recordatorios masivos y automáticos por WhatsApp con el plan Pro.'}
                                 {proModalFeature === 'guest_import_excel' && 'Importa cientos de invitados en segundos desde un archivo Excel o CSV con el plan Pro.'}
                                 {proModalFeature === 'access_control' && 'Controla el acceso en puerta con escáner de códigos QR y pases individuales con el plan Pro.'}
-                                {proModalFeature === 'confirma_whatsapp' && 'Confirma la asistencia de tus invitados de forma conversacional con el asistente de WhatsApp Invitto Confirma. Disponible en Pro+, Concierge o como Add-on.'}
+                                {proModalFeature === 'confirma_whatsapp' && 'Confirma la asistencia de tus invitados de forma conversacional con el asistente de WhatsApp Invitto Confirma. Incluido en Concierge o disponible como Add-on para cualquier plan.'}
                                 {!['metrics_dashboard', 'guest_dashboard', 'table_management', 'reminders_automatic', 'guest_import_excel', 'access_control', 'confirma_whatsapp'].includes(proModalFeature) &&
                                     'Mejora tu evento al plan Pro para desbloquear todas las herramientas avanzadas de gestión.'}
                             </p>
@@ -2548,7 +2555,7 @@ const EventRSVPs: React.FC = () => {
                                 className="flex-1 py-3 px-4 bg-[#DF3B94] hover:bg-[#C52A7C] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-[#DF3B94]/20 flex items-center justify-center gap-1.5"
                             >
                                 <Crown className="h-4 w-4" />
-                                Mejorar plan
+                                {proModalFeature === 'confirma_whatsapp' ? 'Ver Planes y Add-ons' : 'Mejorar plan'}
                             </Link>
                         </div>
                     </div>
