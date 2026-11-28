@@ -383,6 +383,7 @@ export const LANDING_PAGES: Record<string, LandingPageData> = {
       { question: '¿Puedo cambiar datos después de mandarla?', answer: 'Sí. El link es el mismo y se actualiza solo en tiempo real para todos tus invitados.' },
       { question: '¿Cómo puedo pagar?', answer: 'Aceptamos tarjeta de débito o crédito, OXXO, meses sin intereses, Apple Pay y Google Pay.' },
       { question: '¿Puedo poner mi mesa de regalos?', answer: 'Sí: Liverpool, Amazon, tiendas departamentales o datos para transferencia bancaria directa.' },
+      { question: '¿Tienen una guía completa sobre cómo funcionan?', answer: 'Sí, consulta nuestra Guía Completa de Invitaciones Digitales de Boda (/invitaciones-digitales-de-boda) donde explicamos la experiencia del sobre, música, protocolo para WhatsApp y consejos para novios.' },
       { question: '¿Cuánto tiempo sigue activa?', answer: 'Tu invitación queda activa desde que la publicas hasta 30 días después de tu boda, para que tú y tus invitados puedan consultar fotos, itinerario y mesa de regalos sin prisas.' },
     ],
     ctaFinal: {

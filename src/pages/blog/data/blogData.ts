@@ -159,6 +159,10 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: 'paragraph',
         content: 'Hoy en día, la sustentabilidad es una prioridad. La gran mayoría de las invitaciones impresas terminan en el bote de basura pocos días después de que concluye la boda. Optar por un formato digital reduce el desperdicio de papel y la huella de carbono asociada con la distribución física.'
+      },
+      {
+        type: 'paragraph',
+        content: '💡 ¿Quieres conocer todos los detalles sobre cómo crear una invitación interactiva con sobre animado, música y control de pases? Lee nuestra Guía Definitiva de Invitaciones Digitales de Boda en: /invitaciones-digitales-de-boda'
       }
     ]
   },

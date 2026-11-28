@@ -65,6 +65,8 @@ const BlogPost             = React.lazy(() => import('./pages/blog/BlogPostPage'
 
 // SEO programmatic landing pages
 const InvitacionesBoda       = React.lazy(() => import('./pages/seo/InvitacionesBodaPage'));
+const GuiaInvitacionesBoda   = React.lazy(() => import('./pages/seo/GuiaInvitacionesBodaPage'));
+const GuiaPlaneadorBoda      = React.lazy(() => import('./pages/seo/GuiaPlaneadorBodaPage'));
 const InvitacionesXV         = React.lazy(() => import('./pages/seo/InvitacionesXVPage'));
 const InvitacionesCumpleanos = React.lazy(() => import('./pages/seo/InvitacionesCumpleanosPage'));
 const InvitacionesInfantiles = React.lazy(() => import('./pages/seo/InvitacionesInfantilesPage'));
@@ -159,6 +161,11 @@ function AppRoutes() {
 
         {/* SEO Programmatic Landing Pages */}
         <Route path="/invitaciones-digitales-boda"                 element={<InvitacionesBoda />} />
+        <Route path="/invitaciones-digitales-de-boda"              element={<GuiaInvitacionesBoda />} />
+        <Route path="/guia-invitaciones-digitales-boda"            element={<GuiaInvitacionesBoda />} />
+        <Route path="/planeador-de-bodas"                          element={<GuiaPlaneadorBoda />} />
+        <Route path="/planeador-de-eventos"                        element={<GuiaPlaneadorBoda />} />
+        <Route path="/guia-planeador-de-bodas"                     element={<GuiaPlaneadorBoda />} />
         <Route path="/invitaciones-digitales-xv-anos"              element={<InvitacionesXV />} />
         <Route path="/invitaciones-digitales-cumpleanos"           element={<InvitacionesCumpleanos />} />
         <Route path="/invitaciones-digitales-infantiles"           element={<InvitacionesInfantiles />} />
